@@ -1,12 +1,18 @@
-import { IUser } from "../../../../../common_utils/types";
 import APIWrapper from "../../../../../server/utils/APIWrapper";
+import { getUserByEmail } from "../../../../../server/mongodb/actions/User";
 
-export const POST = APIWrapper({
+export const GET = APIWrapper({
   config: {
     requireToken: true,
   },
   handler: async (req) => {
-    const user = req.body._tokenUser as IUser;
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get("email");
+    if (!email) {
+      throw new Error("Email parameter is missing in the request.");
+    }
+
+    const user = await getUserByEmail(email);
     return user;
   },
 });
