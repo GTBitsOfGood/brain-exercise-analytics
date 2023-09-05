@@ -27,14 +27,10 @@ interface RouteConfig {
 
 interface Route<T> {
   config?: RouteConfig;
-  handler: (
-    req: ApiRequest,
-  ) => Promise<T>;
+  handler: (req: ApiRequest) => Promise<T>;
 }
 
-function APIWrapper(
-  route: Route<unknown>,
-) {
+function APIWrapper(route: Route<unknown>) {
   return async (req: ApiRequest) => {
     // await runMiddleware(req, res, cors);
     const { method } = req;
@@ -85,9 +81,15 @@ function APIWrapper(
       }
       const data = await handler(req);
       if (config?.handleResponse) {
-        return NextResponse.json({ success: true, payload: null }, { status: 200 });
+        return NextResponse.json(
+          { success: true, payload: null },
+          { status: 200 },
+        );
       }
-      return NextResponse.json({ success: true, payload: data }, { status: 200 });
+      return NextResponse.json(
+        { success: true, payload: data },
+        { status: 200 },
+      );
     } catch (e) {
       if (e instanceof mongoose.Error) {
         return NextResponse.json(

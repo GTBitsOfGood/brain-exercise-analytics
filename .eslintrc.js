@@ -28,5 +28,6 @@ module.exports = {
     "import/no-named-as-default": "off",
     "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
+    "implicit-arrow-linebreak": "off",
   },
 };

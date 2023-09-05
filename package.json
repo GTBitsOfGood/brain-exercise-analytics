@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "prettier --write .",
+    "lint:check": "prettier --check .",
+    "format": "eslint --fix .",
+    "format:check": "eslint .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@types/node": "20.5.9",
@@ -28,6 +32,9 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0"
+    "eslint-plugin-prettier": "^5.0.0",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "husky": "^8.0.0"
   }
 }
