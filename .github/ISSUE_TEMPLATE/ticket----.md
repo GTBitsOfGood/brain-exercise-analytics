@@ -1,3 +1,9 @@
+---
+name: "Sprint Ticket"
+about: Ticket for a feature or bug
+title: "Brief description of ticket"
+---
+
 ## Context
 
 Background information relevant to the ticket
