@@ -1,7 +1,7 @@
 ---
 name: "Sprint Ticket"
 about: Ticket for a feature or bug
-title: "Brief description of ticket"
+title: "[Fullstack|Frontend|Backend] Brief description of ticket"
 ---
 
 ## Context
