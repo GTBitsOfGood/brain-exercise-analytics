@@ -22,9 +22,17 @@ const UserSchema = new Schema({
     type: Date,
     default: new Date(),
   },
-  firstTimeLogin: {
+  signedUp: {
     type: Boolean,
     default: true,
+  },
+  secondaryContactName: {
+    type: String,
+    default: "",
+  },
+  secondaryContactPhone: {
+    type: String,
+    default: "",
   },
   role: {
     type: String,
