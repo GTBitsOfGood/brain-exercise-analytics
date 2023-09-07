@@ -2,14 +2,14 @@
 // import Cors, { CorsRequest } from "cors";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import { Role } from "../../common_utils/types";
-// import { getEmailFromIdToken } from "../firebase/auth";
-import dbConnect from "../mongodb/config";
-// import { getUserByEmail } from "../mongodb/actions/User";
+import { Role } from "@/common_utils/types";
+// import { getEmailFromIdToken } from "@server/firebase/auth";
+import dbConnect from "@server/mongodb/config";
+// import { getUserByEmail } from "@server/mongodb/actions/User";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Sets up the MongoDB models
-import User from "../mongodb/models/User";
+import User from "@server/mongodb/models/User";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 interface RouteConfig {

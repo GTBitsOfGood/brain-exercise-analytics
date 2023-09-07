@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Role } from "../../../common_utils/types";
+import { Role } from "@/common_utils/types";
 
 const { Schema } = mongoose;
 

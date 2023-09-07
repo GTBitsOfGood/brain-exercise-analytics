@@ -1,5 +1,5 @@
-import APIWrapper from "../../../../../server/utils/APIWrapper";
-import { getUserByEmail } from "../../../../../server/mongodb/actions/User";
+import APIWrapper from "@server/utils/APIWrapper";
+import { getUserByEmail } from "@server/mongodb/actions/User";
 
 export const GET = APIWrapper({
   config: {

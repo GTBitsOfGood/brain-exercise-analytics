@@ -29,5 +29,15 @@ module.exports = {
     "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
     "implicit-arrow-linebreak": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        js: "never",
+        jsx: "never",
+        ts: "never",
+        tsx: "never",
+      },
+    ],
   },
 };

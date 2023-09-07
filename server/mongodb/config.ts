@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { logError } from "../utils/log";
+import { logError } from "@server/utils/log";
 
 async function dbConnect(): Promise<void> {
   if (mongoose.connections[0].readyState) return;

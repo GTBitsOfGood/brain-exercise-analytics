@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { logError } from "../utils/log";
+import { logError } from "@server/utils/log";
 
 try {
   admin.initializeApp({
