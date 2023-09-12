@@ -3,6 +3,17 @@ export enum Role {
   NONPROFIT_USER = "Nonprofit User",
 }
 
+
+export enum Days {
+  SS = "Sunday",
+  M = "Monday",
+  T = "Tuesday",
+  W = "Wednesday",
+  R = "Thursday",
+  F = "Friday",
+  S = "Saturday",
+}
+
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
