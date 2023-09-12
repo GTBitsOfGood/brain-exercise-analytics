@@ -3,7 +3,6 @@ export enum Role {
   NONPROFIT_USER = "Nonprofit User",
 }
 
-
 export enum Days {
   SS = "Sunday",
   M = "Monday",
