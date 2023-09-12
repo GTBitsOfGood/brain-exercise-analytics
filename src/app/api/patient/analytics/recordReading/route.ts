@@ -18,7 +18,7 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
 
-    const data = await modifyReading(user._id!, completed, passagesRead);
+    await modifyReading(user._id!, completed, passagesRead);
 
     return null;
   },

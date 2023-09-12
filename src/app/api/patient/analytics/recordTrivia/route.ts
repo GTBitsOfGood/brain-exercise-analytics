@@ -7,8 +7,9 @@ export const POST = APIWrapper({
     requireToken: true,
   },
   handler: async (req) => {
-    const { email, questionsAttempted, questionsCorrect, timePerQuestion } =
-      await req.json();
+    const {
+      email, questionsAttempted, questionsCorrect, timePerQuestion,
+    } = await req.json();
 
     if (!email) {
       throw new Error("Email parameter is missing in the request.");
@@ -19,8 +20,8 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
 
-    //await createAnalyticsID(user._id!)
-    const data = await modifyTrivia(
+    // await createAnalyticsID(user._id!)
+    await modifyTrivia(
       user._id!,
       questionsAttempted,
       questionsCorrect,

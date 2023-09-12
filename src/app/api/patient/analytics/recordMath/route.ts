@@ -1,10 +1,7 @@
 import APIWrapper from "@server/utils/APIWrapper";
 import { getUserByEmail } from "@server/mongodb/actions/User";
-import {
-  getAnalyticsByID,
-  createAnalyticsID,
-  modifyMath,
-} from "@server/mongodb/actions/Analytics";
+import { modifyMath } from "@server/mongodb/actions/Analytics";
+// import { createAnalyticsID } from "@server/mongodb/actions/Analytics";
 
 export const POST = APIWrapper({
   config: {
@@ -28,8 +25,8 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
 
-    //await createAnalyticsID(user._id!)
-    const data = await modifyMath(
+    // await createAnalyticsID(user._id!)
+    await modifyMath(
       user._id!,
       questionsAttempted,
       questionsCorrect,
