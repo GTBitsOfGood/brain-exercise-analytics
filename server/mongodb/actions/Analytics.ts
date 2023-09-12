@@ -19,7 +19,8 @@ export const modifyMath = async (
   timePerQuestion: number,
   difficultyScore: number,
 ) => {
-  const weightedDiff = (Number(questionsAttempted) / 100) * Number(difficultyScore);
+  const weightedDiff =
+    (Number(questionsAttempted) / 100) * Number(difficultyScore);
 
   let data;
   try {
@@ -100,17 +101,23 @@ export const updateSessionComplete = async (userID: string) => {
   const getDayString = (day: number) => {
     if (day === 0) {
       return Days.SS;
-    } if (day === 1) {
+    }
+    if (day === 1) {
       return Days.M;
-    } if (day === 2) {
+    }
+    if (day === 2) {
       return Days.T;
-    } if (day === 3) {
+    }
+    if (day === 3) {
       return Days.W;
-    } if (day === 4) {
+    }
+    if (day === 4) {
       return Days.T;
-    } if (day === 5) {
+    }
+    if (day === 5) {
       return Days.F;
-    } if (day === 6) {
+    }
+    if (day === 6) {
       return Days.S;
     }
     return "";
