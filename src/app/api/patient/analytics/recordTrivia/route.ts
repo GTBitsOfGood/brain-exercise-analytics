@@ -7,9 +7,8 @@ export const POST = APIWrapper({
     requireToken: true,
   },
   handler: async (req) => {
-    const {
-      email, questionsAttempted, questionsCorrect, timePerQuestion,
-    } = await req.json();
+    const { email, questionsAttempted, questionsCorrect, timePerQuestion } =
+      await req.json();
 
     if (!email) {
       throw new Error("Email parameter is missing in the request.");

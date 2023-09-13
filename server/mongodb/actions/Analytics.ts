@@ -19,7 +19,8 @@ export const modifyMath = async (
   timePerQuestion: number,
   difficultyScore: number,
 ) => {
-  const weightedDiff = (Number(questionsAttempted) / 100) * Number(difficultyScore);
+  const weightedDiff =
+    (Number(questionsAttempted) / 100) * Number(difficultyScore);
 
   let data;
   try {

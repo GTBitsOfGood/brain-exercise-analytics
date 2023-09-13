@@ -110,5 +110,6 @@ const AnalyticsSchema = new Schema({
   },
 });
 
-const Analytics = mongoose.models?.Analytics ?? mongoose.model("Analytics", AnalyticsSchema);
+const Analytics =
+  mongoose.models?.Analytics ?? mongoose.model("Analytics", AnalyticsSchema);
 export default Analytics;
