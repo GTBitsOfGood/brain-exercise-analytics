@@ -10,9 +10,11 @@ export interface IUser {
   name: string;
   email: string;
   phoneNumber: string;
-  birthdate: string;
-  signedUp: boolean;
-  secondaryContactName: string;
-  secondaryContactPhone: string;
+  patientDetails: {
+    signedUp: boolean;
+    birthdate: string;
+    secondaryContactName: string;
+    secondaryContactPhone: string;
+  };
   role: Role;
 }
