@@ -19,22 +19,25 @@ export const POST = APIWrapper({
       throw new Error("User not found.");
     }
 
-    const result = await User.findOneAndUpdate(
-      { email },
-      {
-        $set: {
-          name,
-          phoneNumber,
-          birthDate,
-          secondaryContactName,
-          secondaryContactPhone,
-          signedUp: true,
+    try {
+      const result = await User.findOneAndUpdate(
+        { email },
+        {
+          $set: {
+            name,
+            phoneNumber,
+            birthDate,
+            secondaryContactName,
+            secondaryContactPhone,
+            signedUp: true,
+          },
         },
-      },
 
-      { returnNewDocument: true },
-    );
-
-    return result;
+        { new: true },
+      );
+      return result;
+    } catch (error) {
+      throw new Error("couldn't update database.");
+    }
   },
 });
