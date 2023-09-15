@@ -18,21 +18,14 @@ const UserSchema = new Schema({
     type: String,
     default: "",
   },
-  birthDate: {
-    type: Date,
-    default: new Date(),
-  },
-  signedUp: {
-    type: Boolean,
-    default: true,
-  },
-  secondaryContactName: {
-    type: String,
-    default: "",
-  },
-  secondaryContactPhone: {
-    type: String,
-    default: "",
+  patientDetails: {
+    type: Map,
+    default: {
+      birthDate: new Date(),
+      signedUp: false,
+      secondaryContactName: "",
+      secondaryContactPhone: "",
+    },
   },
   role: {
     type: String,

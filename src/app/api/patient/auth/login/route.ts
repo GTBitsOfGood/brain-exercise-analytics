@@ -19,7 +19,8 @@ export const GET = APIWrapper({
       try {
         newUser = await User.create({ email });
       } catch (err) {
-        console.log(`Couldn't create new user: ${err}`);
+        // console.log(`Couldn't create new user: ${err}`);
+        throw new Error("Couldn't create new user");
       }
     }
 
