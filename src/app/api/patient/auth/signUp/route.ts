@@ -1,18 +1,15 @@
-import { getUserByEmail } from "@server/mongodb/actions/User";
+import { getUserByEmail, patientSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
-import User from "@server/mongodb/models/User";
+import { SignupData } from "@/common_utils/types";
 
 export const POST = APIWrapper({
   config: {
     requireToken: true,
   },
   handler: async (req) => {
-    const { email, name, phoneNumber, patientDetails } = await req.json();
-    if (!email) {
-      throw new Error("Email parameter is missing in the request.");
-    }
+    const signupData = (await req.json()) as SignupData;
 
-    const user = await getUserByEmail(email);
+    const user = await getUserByEmail(signupData.email);
     if (!user) {
       throw new Error("User not found.");
     }
@@ -22,20 +19,8 @@ export const POST = APIWrapper({
     }
 
     try {
-      const result = await User.findOneAndUpdate(
-        { email },
-        {
-          $set: {
-            name,
-            phoneNumber,
-            patientDetails,
-            "patientDetails.signedUp": true,
-          },
-        },
-
-        { new: true },
-      );
-      return result;
+      const newSignUp = await patientSignUp(signupData);
+      return newSignUp;
     } catch (error) {
       throw new Error("couldn't update database.");
     }

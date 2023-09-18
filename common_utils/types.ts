@@ -18,3 +18,12 @@ export interface IUser {
   };
   role: Role;
 }
+
+export interface SignupData {
+  email: string;
+  name: string;
+  phoneNumber: string;
+  birthDate: Date;
+  secondaryContactName: string;
+  secondaryContactPhone: string;
+}

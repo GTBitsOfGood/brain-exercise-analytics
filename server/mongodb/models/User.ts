@@ -19,7 +19,12 @@ const UserSchema = new Schema({
     default: "",
   },
   patientDetails: {
-    type: Map,
+    type: {
+      birthDate: Date,
+      signedUp: Boolean,
+      secondaryContactName: String,
+      secondaryContactPhone: String,
+    },
     default: {
       birthDate: new Date(),
       signedUp: false,

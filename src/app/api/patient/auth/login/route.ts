@@ -1,6 +1,6 @@
-import { getUserByEmail } from "../../../../../../server/mongodb/actions/User";
-import APIWrapper from "../../../../../../server/utils/APIWrapper";
-import User from "../../../../../../server/mongodb/models/User";
+import { getUserByEmail } from "@server/mongodb/actions/User";
+import APIWrapper from "@server/utils/APIWrapper";
+import User from "@server/mongodb/models/User";
 
 export const GET = APIWrapper({
   config: {
@@ -19,7 +19,6 @@ export const GET = APIWrapper({
       try {
         newUser = await User.create({ email });
       } catch (err) {
-        // console.log(`Couldn't create new user: ${err}`);
         throw new Error("Couldn't create new user");
       }
     }
