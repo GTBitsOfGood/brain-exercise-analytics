@@ -24,8 +24,8 @@ export const patientSignUp = async (
           birthDate: data.birthDate,
           secondaryContactName: data.secondaryContactName,
           secondaryContactPhone: data.secondaryContactPhone,
+          signedUp: true,
         },
-        "patientDetails.signedUp": true,
       },
     },
 
