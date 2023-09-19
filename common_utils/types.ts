@@ -4,13 +4,13 @@ export enum Role {
 }
 
 export enum Days {
-  SS = "Sunday",
-  M = "Monday",
-  T = "Tuesday",
-  W = "Wednesday",
-  R = "Thursday",
-  F = "Friday",
-  S = "Saturday",
+  Sunday,
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
 }
 
 export interface IUser {
@@ -25,4 +25,15 @@ export interface IUser {
   secondaryContactName: string;
   secondaryContactPhone: string;
   role: Role;
+}
+
+export interface IAnalytics {
+  // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
+  // without any_id attribute
+  _id?: string;
+  userID: string;
+  totalSessionsCompleted: number;
+  streak: [string];
+  lastSessionMetrics: object;
+  weeklyMetrics: [object];
 }

@@ -2,12 +2,17 @@ import APIWrapper from "@server/utils/APIWrapper";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import { updateSessionComplete } from "@server/mongodb/actions/Analytics";
 
+type RequestData = {
+  email: string;
+};
+
 export const POST = APIWrapper({
   config: {
     requireToken: true,
   },
   handler: async (req) => {
-    const { email } = await req.json();
+    const reqdata: RequestData = (await req.json()) as RequestData;
+    const { email } = reqdata;
 
     if (!email) {
       throw new Error("Email parameter is missing in the request.");

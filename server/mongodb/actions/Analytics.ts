@@ -1,12 +1,16 @@
 import Analytics from "@server/mongodb/models/Analytics";
-import { Days } from "@/common_utils/types";
+import { Days, IAnalytics } from "@/common_utils/types";
 
-export const getAnalyticsByID = async (userID: string) => {
-  const analytics = await Analytics.findOne({ userID });
+export const getAnalyticsByID = async (
+  userID: string,
+): Promise<IAnalytics | null> => {
+  const analytics = await Analytics.findOne<IAnalytics>({ userID });
   return analytics;
 };
 
-export const createAnalyticsID = async (userID: string) => {
+export const createAnalyticsID = async (
+  userID: string,
+): Promise<IAnalytics> => {
   const analytics = await Analytics.create({ userID });
   return analytics;
 };
@@ -18,33 +22,27 @@ export const modifyMath = async (
   questionsCorrect: number,
   timePerQuestion: number,
   difficultyScore: number,
-) => {
-  const weightedDiff =
-    (Number(questionsAttempted) / 100) * Number(difficultyScore);
-
-  let data;
-  try {
-    data = await Analytics.findOneAndUpdate(
-      { userID },
-      {
-        $set: {
-          "lastSessionMetrics.math.questionsAttempted": questionsAttempted,
-          "lastSessionMetrics.math.questionsCorrect": questionsCorrect,
-          "lastSessionMetrics.math.timePerQuestion": timePerQuestion,
-          "lastSessionMetrics.math.finalDifficultyScore": weightedDiff,
-        },
-        $inc: {
-          "weeklyMetrics.0.math.sessionsCompleted": 1,
-          "weeklyMetrics.0.math.questionsAttempted": questionsAttempted,
-          "weeklyMetrics.0.math.questionsCorrect": questionsCorrect,
-          "weeklyMetrics.0.math.timePerQuestion": timePerQuestion, // this can be changed to total time to better account for different number of questions attempted
-          "weeklyMetrics.0.math.finalDifficultyScore": weightedDiff,
-        },
+): Promise<IAnalytics | null> => {
+  const data = await Analytics.findOneAndUpdate<IAnalytics>(
+    { userID },
+    {
+      $set: {
+        "lastSessionMetrics.math.questionsAttempted": questionsAttempted,
+        "lastSessionMetrics.math.questionsCorrect": questionsCorrect,
+        "lastSessionMetrics.math.timePerQuestion": timePerQuestion,
+        "lastSessionMetrics.math.finalDifficultyScore": difficultyScore,
       },
-    );
-  } catch (error) {
-    return error;
-  }
+      $inc: {
+        "weeklyMetrics.0.math.sessionsCompleted": 1,
+        "weeklyMetrics.0.math.questionsAttempted": questionsAttempted,
+        "weeklyMetrics.0.math.questionsCorrect": questionsCorrect,
+        "weeklyMetrics.0.math.timePerQuestion": timePerQuestion, // this can be changed to total time to better account for different number of questions attempted
+        "weeklyMetrics.0.math.finalDifficultyScore": difficultyScore,
+      },
+    },
+    { new: true },
+  );
+
   return data;
 };
 
@@ -54,8 +52,8 @@ export const modifyTrivia = async (
   questionsAttempted: number,
   questionsCorrect: number,
   timePerQuestion: number,
-) => {
-  await Analytics.findOneAndUpdate(
+): Promise<IAnalytics | null> => {
+  const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $set: {
@@ -70,7 +68,10 @@ export const modifyTrivia = async (
         "weeklyMetrics.0.trivia.timePerQuestion": timePerQuestion, // this can be changed to total time to better account for different number of questions attempted
       },
     },
+    { new: true },
   );
+
+  return data;
 };
 
 // modifyReading function
@@ -78,10 +79,10 @@ export const modifyReading = async (
   userID: string,
   completed: boolean,
   passagesRead: number,
-) => {
+): Promise<IAnalytics | null> => {
   const increment = completed ? 1 : 0;
 
-  await Analytics.findOneAndUpdate(
+  const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $set: {
@@ -93,40 +94,20 @@ export const modifyReading = async (
         "weeklyMetrics.0.reading.passagesRead": passagesRead,
       },
     },
+    { new: true },
   );
+
+  return data;
 };
 
 // modifySessionComplete function
-export const updateSessionComplete = async (userID: string) => {
-  const getDayString = (day: number) => {
-    if (day === 0) {
-      return Days.SS;
-    }
-    if (day === 1) {
-      return Days.M;
-    }
-    if (day === 2) {
-      return Days.T;
-    }
-    if (day === 3) {
-      return Days.W;
-    }
-    if (day === 4) {
-      return Days.T;
-    }
-    if (day === 5) {
-      return Days.F;
-    }
-    if (day === 6) {
-      return Days.S;
-    }
-    return "";
-  };
-
+export const updateSessionComplete = async (
+  userID: string,
+): Promise<IAnalytics | null> => {
   const today = new Date();
-  const dayOfWeek = getDayString(today.getDay());
+  const dayOfWeek = Days[today.getDay()];
 
-  await Analytics.findOneAndUpdate(
+  const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $addToSet: {
@@ -137,5 +118,8 @@ export const updateSessionComplete = async (userID: string) => {
         "weeklyMetrics.0.sessionsCompleted": 1,
       },
     },
+    { new: true },
   );
+
+  return data;
 };
