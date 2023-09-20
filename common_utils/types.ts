@@ -1,5 +1,6 @@
 export enum Role {
   NONPROFIT_ADMIN = "Nonprofit Admin",
+  NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_USER = "Nonprofit User",
 }
 
@@ -21,11 +22,11 @@ export interface IUser {
   email: string;
   phoneNumber: string;
   patientDetails: {
-    signedUp: boolean;
     birthdate: string;
     secondaryContactName: string;
     secondaryContactPhone: string;
   };
+  signedUp: boolean;
   role: Role;
 }
 
@@ -45,6 +46,45 @@ export interface IAnalytics {
   userID: string;
   totalSessionsCompleted: number;
   streak: [string];
-  lastSessionMetrics: object;
-  weeklyMetrics: [object];
+  lastSessionMetrics: {
+    math: {
+      questionsAttempted: number;
+      questionsCorrect: number;
+      finalDifficultyScore: number;
+      timePerQuestion: number;
+    };
+    trivia: {
+      questionsAttempted: number;
+      questionsCorrect: number;
+      timePerQuestion: number;
+    };
+    reading: {
+      passagesRead: number;
+    };
+  };
+  weeklyMetrics: [
+    {
+      date: Date;
+      sessionsCompleted: number;
+      streakLength: number;
+      math: {
+        sessionsCompleted: number;
+        questionsAttempted: number;
+        questionsCorrect: number;
+        finalDifficultyScore: number;
+        timePerQuestion: number;
+      };
+      trivia: {
+        sessionsCompleted: number;
+        questionsAttempted: number;
+        questionsCorrect: number;
+        timePerQuestion: number;
+      };
+      reading: {
+        sessionsAttempted: number;
+        sessionsCompleted: number;
+        passagesRead: number;
+      };
+    },
+  ];
 }
