@@ -19,6 +19,8 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "prettier"],
   rules: {
+    "operator-linebreak": "off",
+    "object-curly-newline": ["error", { consistent: true }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-var-requires": "off",
