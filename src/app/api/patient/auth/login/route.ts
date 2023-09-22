@@ -3,6 +3,8 @@ import APIWrapper from "@server/utils/APIWrapper";
 import User from "@server/mongodb/models/User";
 import { IUser } from "@/common_utils/types";
 
+export const dynamic = "force-dynamic";
+
 export const GET = APIWrapper({
   config: {
     requireToken: true,
