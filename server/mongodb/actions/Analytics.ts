@@ -11,7 +11,7 @@ export const getAnalyticsByID = async (
 export const createAnalyticsID = async (
   userID: string,
 ): Promise<IAnalytics> => {
-  const analytics = await Analytics.create({ userID });
+  const analytics = (await Analytics.create({ userID })) as IAnalytics;
   return analytics;
 };
 

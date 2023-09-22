@@ -21,16 +21,18 @@ const UserSchema = new Schema({
   patientDetails: {
     type: {
       birthDate: Date,
-      signedUp: Boolean,
       secondaryContactName: String,
       secondaryContactPhone: String,
     },
     default: {
       birthDate: new Date(),
-      signedUp: false,
       secondaryContactName: "",
       secondaryContactPhone: "",
     },
+  },
+  signedUp: {
+    type: Boolean,
+    default: false,
   },
   role: {
     type: String,

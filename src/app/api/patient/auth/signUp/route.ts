@@ -29,7 +29,7 @@ export const POST = APIWrapper({
       throw new Error("User not found.");
     }
 
-    if (user.patientDetails.signedUp === true) {
+    if (user.signedUp === true) {
       return user;
     }
 

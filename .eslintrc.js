@@ -4,10 +4,10 @@ module.exports = {
   extends: [
     "next/core-web-vitals",
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
     "airbnb-base",
     "airbnb-typescript",
+    "plugin:prettier/recommended",
   ],
   globals: { Atomics: "readonly", SharedArrayBuffer: "readonly" },
   parserOptions: {
@@ -19,18 +19,14 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "prettier"],
   rules: {
-    "operator-linebreak": "off",
-    "object-curly-newline": ["error", { consistent: true }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/quotes": "off",
     "react/react-in-jsx-scope": "off",
-    "linebreak-style": "off",
     "import/no-named-as-default": "off",
     "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
-    "implicit-arrow-linebreak": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -39,6 +35,12 @@ module.exports = {
         jsx: "never",
         ts: "never",
         tsx: "never",
+      },
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
       },
     ],
   },

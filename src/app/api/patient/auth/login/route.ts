@@ -1,6 +1,7 @@
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 import User from "@server/mongodb/models/User";
+import { IUser } from "@/common_utils/types";
 
 export const GET = APIWrapper({
   config: {
@@ -17,7 +18,7 @@ export const GET = APIWrapper({
     let newUser = await getUserByEmail(email);
     if (newUser === null) {
       try {
-        newUser = await User.create({ email });
+        newUser = (await User.create({ email })) as IUser;
       } catch (err) {
         throw new Error("Couldn't create new user");
       }

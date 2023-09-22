@@ -7,7 +7,7 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
 };
 
 export const createUserEmail = async (email: string): Promise<IUser> => {
-  const user: IUser = await User.create({ email });
+  const user = (await User.create({ email })) as IUser;
   return user;
 };
 
@@ -24,8 +24,8 @@ export const patientSignUp = async (
           birthDate: data.birthDate,
           secondaryContactName: data.secondaryContactName,
           secondaryContactPhone: data.secondaryContactPhone,
-          signedUp: true,
         },
+        signedUp: true,
       },
     },
 
