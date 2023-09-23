@@ -33,3 +33,33 @@ export const patientSignUp = async (
   );
   return result;
 };
+
+export const volunteerSignUp = async (
+  email: string,
+  name: string,
+  phoneNumber: string,
+  country: string,
+  state: string,
+  city: string,
+  chapter: string,
+): Promise<IUser | null> => {
+  const result = await User.findOneAndUpdate<IUser>(
+    { email },
+    {
+      $set: {
+        name,
+        phoneNumber,
+        signedUp: true,
+        location: {
+          country,
+          state,
+          city,
+        },
+        chapter,
+      },
+    },
+
+    { new: true },
+  );
+  return result;
+};
