@@ -1,0 +1,21 @@
+name: Average Metrics
+on: [pull_request]
+
+jobs:
+  averageWeek:
+    name: Average Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Post Request
+        uses: actions/http-request@v2
+        with:
+          method: POST
+          url: https://brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats
+          headers: |
+            Content-Type: application/json
+          data: '{"secret": ${secrets.INTERNAL_AVERAGE_SECRET}}'
+
+
