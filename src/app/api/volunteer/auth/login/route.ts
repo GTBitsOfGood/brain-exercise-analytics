@@ -27,6 +27,8 @@ export const GET = APIWrapper({
       } catch (err) {
         throw new Error("Couldn't create new user");
       }
+    } else if (newUser.role === Role.NONPROFIT_USER) {
+      throw new Error("App users canno sign up on analytics dashboard");
     }
 
     return newUser;

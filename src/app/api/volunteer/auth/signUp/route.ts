@@ -1,3 +1,4 @@
+import { Role } from "@/common_utils/types";
 import { getUserByEmail, volunteerSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 
@@ -14,6 +15,7 @@ type SignupData = {
 export const POST = APIWrapper({
   config: {
     requireToken: true,
+    roles: [Role.NONPROFIT_ADMIN, Role.NONPROFIT_VOLUNTEER],
   },
   handler: async (req: Request) => {
     const signupData = (await req.json()) as SignupData;
