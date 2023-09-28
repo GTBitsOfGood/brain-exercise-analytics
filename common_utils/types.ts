@@ -30,6 +30,12 @@ export interface IUser {
   role: Role;
 }
 
+export interface IPasswordReset {
+  email: string;
+  token: string;
+  expiryDate: Date;
+}
+
 export interface SignupData {
   email: string;
   name: string;
