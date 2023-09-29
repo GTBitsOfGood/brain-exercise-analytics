@@ -1,6 +1,8 @@
 name: Average Metrics
 on:
-  workflow_dispatch
+  workflow_dispatch:
+  schedule:
+  - cron: "0 4 * * 1"
 
 jobs:
   averageWeek:
