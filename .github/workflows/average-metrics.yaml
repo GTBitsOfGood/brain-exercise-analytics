@@ -28,8 +28,8 @@ jobs:
 
           echo $RESPONSE
 
-          if [[ $RESPONSE == *"success = false"* ]]; then
-            echo "POST request was successful."
+          if [[ $RESPONSE == *"\"success\":false"* ]]; then
+           echo "POST request was successful."
           else
             echo "POST request failed."
             exit 1 # Set a non-zero exit code to indicate failure
