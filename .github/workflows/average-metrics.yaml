@@ -18,7 +18,7 @@ jobs:
         env:
           INTERNAL_AVGERAGE_SECRET: ${{ secrets.INTERNAL_AVERAGE_SECRET }}
         run: |
-          SECRET=${INTERNAL_AVGERAGE_SECRET}
+          SECRET=${{ secrets.INTERNAL_AVERAGE_SECRET }}
 
           JSON_DATA="{ \"secret\": \"$SECRET\" }"
 
