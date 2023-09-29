@@ -1,4 +1,5 @@
 name: Average Metrics
+
 on:
   workflow_dispatch:
   push:
