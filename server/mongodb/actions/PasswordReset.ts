@@ -24,7 +24,10 @@ export const createPasswordReset = async (email: string): Promise<void> => {
 export const getPasswordByToken = async (
   token: string,
 ): Promise<IPasswordReset | null> => {
-  const password = await PasswordReset.findOne<IPasswordReset>({ token });
+  const password: IPasswordReset | null =
+    await PasswordReset.findOne<IPasswordReset>({
+      token,
+    });
   return password;
 };
 

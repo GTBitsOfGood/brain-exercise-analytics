@@ -1,3 +1,4 @@
+import { IPasswordReset } from "@/common_utils/types";
 import { updateUserPassword } from "@server/firebase/passwordReset";
 import {
   deletePasswordResetFieldByEmail,
@@ -25,7 +26,9 @@ export const POST = APIWrapper({
       throw new Error("Missing parameter(s)");
     }
 
-    const passwordDoc = await getPasswordByToken(requestData.token);
+    const passwordDoc: IPasswordReset | null = await getPasswordByToken(
+      requestData.token,
+    );
 
     if (!passwordDoc) {
       throw new Error("Password reset record is not found");
