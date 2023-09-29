@@ -20,7 +20,9 @@ jobs:
         run: |
           SECRET=${INTERNAL_AVGERAGE_SECRET}
 
-          RESPONSE=$(curl -X POST -d "secret=$SECRET" https://deploy-preview-17--brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats)
+          JSON_DATA="{ \"secret\": \"$SECRET\" }"
+
+          RESPONSE=$(curl -X POST -H "Content-Type: application/json" -d "$JSON_DATA" https://deploy-preview-17--brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats)
 
           echo $RESPONSE
 
