@@ -10,10 +10,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Post Request
+        env:
+          INTERNAL_AVGERAGE_SECRET: ${{ secrets.INTERNAL_AVERAGE_SECRET }}
         run:
           SECRET=$INTERNAL_AVGERAGE_SECRET
 
-          RESPONSE=$(curl -X POST -d "secret=$SECRET" https://app.netlify.com/sites/brain-exercise-initiative-analytics/deploys/6513b839abba8f0009d15c14/api/patient/internal/average-stats
+          RESPONSE=$(curl -X POST -d "secret=$SECRET" https://app.netlify.com/sites/brain-exercise-initiative-analytics/deploys/6513b839abba8f0009d15c14/api/patient/internal/average-stats)
           
           if [[ $RESPONSE == *"success = true"* ]]; then
             echo "POST request was successful."
@@ -21,8 +23,5 @@ jobs:
             echo "POST request failed."
             exit 1 # Set a non-zero exit code to indicate failure
           fi
-
-
-        env:
-          INTERNAL_AVGERAGE_SECRET: ${{ secrets.INTERNAL_AVERAGE_SECRET }}
+        
 
