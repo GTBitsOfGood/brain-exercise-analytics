@@ -2,9 +2,7 @@ name: Average Metrics
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      -'johannes/9/githubworkflow'
+  pull_request:
   schedule:
   - cron: "0 4 * * 1"
 
