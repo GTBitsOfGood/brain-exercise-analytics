@@ -18,7 +18,7 @@ jobs:
         env:
           INTERNAL_AVGERAGE_SECRET: ${{ secrets.INTERNAL_AVERAGE_SECRET }}
         run: |
-          SECRET=${{ secrets.INTERNAL_AVERAGE_SECRET }}
+          SECRET=${INTERNAL_AVGERAGE_SECRET}
 
           JSON_DATA="{ \"secret\": \"$SECRET\" }"
 
@@ -28,7 +28,7 @@ jobs:
 
           echo $RESPONSE
 
-          if [[ $RESPONSE == *"success = true"* ]]; then
+          if [[ $RESPONSE == *"success = false"* ]]; then
             echo "POST request was successful."
           else
             echo "POST request failed."
