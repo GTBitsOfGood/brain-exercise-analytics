@@ -1,5 +1,5 @@
 name: Average Metrics
-on: [pull_request]
+on: workflow_dispatch
 
 jobs:
   averageWeek:
@@ -10,12 +10,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Post Request
-        uses: actions/http-request@v2
-        with:
-          method: POST
-          url: https://brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats
-          headers: |
-            Content-Type: application/json
-          data: '{"secret": ${secrets.INTERNAL_AVERAGE_SECRET}}'
-
+        run:
+          curl -X POST \ https://app.netlify.com/sites/brain-exercise-initiative-analytics/deploys/6513b839abba8f0009d15c14/api/patient/internal/average-stats
+          -f body=' '
+        env:
+          secret: ${{ secrets.INTERNAL_AVERAGE_SECRET }}
 
