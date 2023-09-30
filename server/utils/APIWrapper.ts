@@ -5,15 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { Role } from "@/common_utils/types";
 import { getEmailFromIdToken } from "@server/firebase/auth";
 import dbConnect from "@server/mongodb/config";
+import firebaseConfig from "@server/firebase/config";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 // import * as admin from "firebase-admin";
 import { getAuth } from "firebase-admin/auth";
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// Sets up the MongoDB models
-import User from "@server/mongodb/models/User";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
 interface RouteConfig {
   requireToken?: boolean;
@@ -29,6 +24,7 @@ interface Route<T> {
 }
 
 function APIWrapper(route: Route<unknown>) {
+  console.log("Wrapping");
   return async (req: NextRequest) => {
     // await runMiddleware(req, res, cors);
     const { method } = req;
@@ -52,6 +48,9 @@ function APIWrapper(route: Route<unknown>) {
     try {
       // Connect to MongoDB Database
       await dbConnect();
+      // Connect to Firebase
+      console.log("connecting");
+      await firebaseConfig();
 
       // Handle unauthorised or invalid idTokens + user access token + roles restrictions
       if (config?.requireToken) {
