@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as admin from "firebase-admin";
 import { logError } from "@server/utils/log";
 
@@ -9,7 +13,6 @@ try {
       privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
     }),
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } catch (err: any) {
   if (!/already exists/u.test(err.message)) {
     logError("Firebase admin initialization error", err.stack);
