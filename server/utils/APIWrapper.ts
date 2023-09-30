@@ -70,8 +70,8 @@ function APIWrapper(route: Route<unknown>) {
           );
         }
 
-        const email = await getEmailFromIdToken(idToken as string);
-        const user = await getUserByEmail(email as string);
+        const email: string = await getEmailFromIdToken(idToken as string);
+        const user = await getUserByEmail(email);
         if (config.roles) {
           if (
             config.roles.length !== 0 &&
