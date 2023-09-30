@@ -128,7 +128,7 @@ export const updateSessionComplete = async (
 // average weekly stats function
 export const averageWeeklyStats = async () => {
   // divide all values by completed sessions and added streaklength
-  await Analytics.updateMany({ _id: "6500ab5fb837932f99797538" }, [
+  await Analytics.updateMany({}, [
     {
       $set: {
         weeklyMetrics: {
@@ -337,7 +337,7 @@ export const averageWeeklyStats = async () => {
 
   // set streak to empty array and push new empty array
   await Analytics.updateMany(
-    { _id: "6500ab5fb837932f99797538" },
+    {},
     {
       $push: {
         weeklyMetrics: {

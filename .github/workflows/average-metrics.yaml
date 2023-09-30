@@ -22,7 +22,7 @@ jobs:
 
           JSON_DATA="{ \"secret\": \"$SECRET\" }"
 
-          RESPONSE=$(curl -X POST -H "Content-Type: application/json" -d "$JSON_DATA" https://deploy-preview-19--brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats)
+          RESPONSE=$(curl -X POST -H "Content-Type: application/json" -d "$JSON_DATA" https://brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats)
 
           if [[ $RESPONSE == *"\"success\":true"* ]]; then
            echo "POST request was successful."
