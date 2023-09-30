@@ -52,11 +52,11 @@ function APIWrapper(route: Route<unknown>) {
     try {
       // Connect to MongoDB Database
       await dbConnect();
+
       // Handle unauthorised or invalid idTokens + user access token + roles restrictions
       if (config?.requireToken) {
         // Retrieve idToken from params
         const idToken: string | undefined = req.cookies.get("idToken");
-        // Handle unauthorised or invalid idTokens
         try {
           if (idToken === undefined) throw Error();
           await getAuth().verifyIdToken(idToken);
