@@ -49,15 +49,14 @@ function APIWrapper(route: Route<unknown>) {
       // Connect to MongoDB Database
       await dbConnect();
       // Connect to Firebase
-      console.log("connecting");
       await firebaseConfig();
 
       // Handle unauthorised or invalid idTokens + user access token + roles restrictions
       if (config?.requireToken) {
         // Retrieve idToken from params
-        const idToken: string | undefined = req.cookies.get("idToken");
+        const idToken: string | null = req.nextUrl.searchParams.get("idToken");
         try {
-          if (idToken === undefined) throw Error();
+          if (idToken === null) throw Error();
           await getAuth().verifyIdToken(idToken);
         } catch (e) {
           return NextResponse.json(
@@ -69,7 +68,7 @@ function APIWrapper(route: Route<unknown>) {
           );
         }
 
-        const email: string = await getEmailFromIdToken(idToken as string);
+        const email: string = await getEmailFromIdToken(idToken);
         const user = await getUserByEmail(email);
         if (config.roles) {
           if (

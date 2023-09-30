@@ -30,12 +30,13 @@ export const GET = APIWrapper({
       }
     }
     let analyticsRecord: IAnalytics = (await getAnalyticsByID(
-      newUser._id as string
+      newUser._id as string,
     )) as IAnalytics;
     if (analyticsRecord === null) {
       analyticsRecord = await createAnalyticsID(newUser._id as string);
     }
-
+    newUser._id = newUser._id as string;
+    console.log("Got user: ", analyticsRecord);
     return {
       user: newUser,
       gameDetails: {
