@@ -1,6 +1,6 @@
 import { getUserByEmail, patientSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
-import { IUser } from "@/common_utils/types";
+import { IUser, RecursivePartial } from "@/common_utils/types";
 import { NextRequest } from "next/server";
 
 export const POST = APIWrapper({
@@ -8,24 +8,25 @@ export const POST = APIWrapper({
     requireToken: true,
   },
   handler: async (req: NextRequest) => {
-    const signupData: Partial<IUser> = {
+    const signupData: RecursivePartial<IUser> = {
       email: req.nextUrl.searchParams.get("email") ?? undefined,
       name: req.nextUrl.searchParams.get("name") ?? undefined,
       phoneNumber: req.nextUrl.searchParams.get("phoneNumber") ?? undefined,
       patientDetails: {
-        birthdate:
-          req.nextUrl.searchParams.get("patientDetails[birthdate]") ??
-          undefined,
+        birthdate: req.nextUrl.searchParams.get(
+          "patientDetails[birthdate]",
+        ) as string,
         secondaryContactName:
           req.nextUrl.searchParams.get(
             "patientDetails[secondaryContactName]",
           ) ?? undefined,
-        secondaryContactPhone: req.nextUrl.searchParams.get(
-          "patientDetails[secondaryContactPhone]",
-        ),
+        secondaryContactPhone:
+          req.nextUrl.searchParams.get(
+            "patientDetails[secondaryContactPhone]",
+          ) ?? undefined,
       },
-      signedUp: req.nextUrl.searchParams.get("signedUp"),
-      role: req.nextUrl.searchParams.get("role"),
+      signedUp: req.nextUrl.searchParams.get("signedUp") === "true",
+      // role: req.nextUrl.searchParams.get("role"),
     };
 
     if (!signupData) {
@@ -36,9 +37,9 @@ export const POST = APIWrapper({
       !signupData.email ||
       !signupData.name ||
       !signupData.phoneNumber ||
-      !signupData?.patientDetails.birthdate ||
-      !signupData?.patientDetails.secondaryContactName ||
-      !signupData?.patientDetails.secondaryContactPhone
+      !signupData.patientDetails?.birthdate ||
+      !signupData.patientDetails.secondaryContactName ||
+      !signupData.patientDetails.secondaryContactPhone
     ) {
       throw new Error("missing parameter(s)");
     }
@@ -53,7 +54,7 @@ export const POST = APIWrapper({
     }
 
     try {
-      const newSignUp = await patientSignUp(signupData);
+      const newSignUp = await patientSignUp(signupData as IUser);
       return newSignUp;
     } catch (error) {
       throw new Error("couldn't update database.");
