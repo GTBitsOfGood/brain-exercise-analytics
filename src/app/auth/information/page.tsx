@@ -56,7 +56,7 @@ export default function SignUp() {
     const numberPattern = /^\d+$/;
     if (number.trim() === "" || !numberPattern.test(number)) {
       setNumberError(
-        "Invalid number. Please enter a valid contact number containing only digits.",
+        "Invalid number. Please try again.",
       );
       isValid = false;
     }
