@@ -68,6 +68,7 @@ function APIWrapper(route: Route<unknown>) {
         }
 
         const email: string = await getEmailFromIdToken(idToken);
+        req.nextUrl.searchParams.set("email", email);
         const user = await getUserByEmail(email);
         if (config.roles) {
           if (
