@@ -24,7 +24,6 @@ interface Route<T> {
 }
 
 function APIWrapper(route: Route<unknown>) {
-  console.log("Wrapping");
   return async (req: NextRequest) => {
     // await runMiddleware(req, res, cors);
     const { method } = req;
@@ -39,7 +38,7 @@ function APIWrapper(route: Route<unknown>) {
           success: false,
           message: errorMessage,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -64,7 +63,7 @@ function APIWrapper(route: Route<unknown>) {
               success: false,
               message: "You do not have permissions to access this API route",
             },
-            { status: 403 }
+            { status: 403 },
           );
         }
 
@@ -80,7 +79,7 @@ function APIWrapper(route: Route<unknown>) {
                 success: false,
                 message: "You do not have permissions to access this API route",
               },
-              { status: 403 }
+              { status: 403 },
             );
           }
         }
@@ -89,12 +88,12 @@ function APIWrapper(route: Route<unknown>) {
       if (config?.handleResponse) {
         return NextResponse.json(
           { success: true, payload: null },
-          { status: 200 }
+          { status: 200 },
         );
       }
       return NextResponse.json(
         { success: true, payload: data },
-        { status: 200 }
+        { status: 200 },
       );
     } catch (e) {
       if (e instanceof mongoose.Error) {
@@ -103,12 +102,18 @@ function APIWrapper(route: Route<unknown>) {
             success: false,
             message: "An Internal Server error occurred.",
           },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
       const error = e as Error;
-      return NextResponse.json({ success: false, message: error.message });
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
   };
 }

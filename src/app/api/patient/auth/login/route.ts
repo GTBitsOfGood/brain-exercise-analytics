@@ -36,7 +36,6 @@ export const GET = APIWrapper({
       analyticsRecord = await createAnalyticsID(newUser._id as string);
     }
     newUser._id = newUser._id as string;
-    console.log("Got user: ", analyticsRecord);
     return {
       user: newUser,
       gameDetails: {

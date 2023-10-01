@@ -6,7 +6,6 @@ import * as admin from "firebase-admin";
 import { logError } from "@server/utils/log";
 
 async function firebaseConfig() {
-  console.log("init");
   try {
     admin.initializeApp({
       credential: admin.credential.cert({
@@ -14,11 +13,10 @@ async function firebaseConfig() {
         clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
         privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(
           /\\n/g,
-          "\n"
+          "\n",
         ),
       }),
     });
-    console.log("Configed admin");
   } catch (err: any) {
     if (!/already exists/u.test(err.message)) {
       logError("Firebase admin initialization error", err.stack);
