@@ -55,9 +55,7 @@ export default function SignUp() {
 
     const numberPattern = /^\d+$/;
     if (number.trim() === "" || !numberPattern.test(number)) {
-      setNumberError(
-        "Invalid number. Please try again.",
-      );
+      setNumberError("Invalid number. Please try again.");
       isValid = false;
     }
 

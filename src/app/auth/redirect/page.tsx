@@ -1,9 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import dynamic from 'next/dynamic';
 
-export default function Redirect() {
-  const router = useRouter();
+const DynamicRedirect = dynamic(() => import('../information/page'), {
+  ssr: false,
+});
 
-  router.push("/auth/information", { scroll: false });
+function MyPage() {
+  return <DynamicRedirect />;
 }
+
+export default MyPage;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import Button from "@src/components/buttons/Buttons";
 import Checkbox from "@src/components/checkbox/Checkbox";
 import Saly from "@src/components/saly/Saly";
@@ -11,7 +11,6 @@ import styles from "./page.module.css";
 
 export default function SignUp() {
   const [isClient, setIsClient] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -23,11 +22,11 @@ export default function SignUp() {
   const [isChecked, setIsChecked] = useState(true);
 
   const handleGoogleSignIn = () => {
-    router.push("/auth/redirect");
+    redirect("/auth/redirect");
   };
 
   const handleSubmit = () => {
-    router.push("/auth/redirect");
+    redirect("/auth/redirect");
   };
 
   if (!isClient) {
