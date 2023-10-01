@@ -1,0 +1,514 @@
+.signIn {
+  background-color: #ffffff;
+  height: 100vh;
+  position: absolute;
+  width: 100vw;
+  display: flex;
+  overflow: hidden;
+}
+
+.group {
+  height: 402px;
+  left: 1000px;
+  position: absolute;
+  top: 115px;
+  width: 210px;
+}
+
+.signUpOffer {
+  align-items: flex-start;
+  display: inline-flex;
+  gap: 8px;
+  left: 90px;
+  position: absolute;
+  top: 650px;
+}
+
+.description {
+  color: #000000;
+  font-family: "Poppins", Helvetica;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  line-height: 20px;
+  margin-top: -1px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.description2 {
+  color: #007aff;
+  font-family: "Poppins", Helvetica;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  line-height: 20px;
+  margin-top: -1px;
+  position: relative;
+  text-align: right;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.buttonWrapper {
+  height: 54px;
+  left: 0;
+  position: absolute;
+  top: 584px;
+  width: 410px;
+}
+
+.buttonInstance {
+  background-color: #005aa3 !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  height: 54px !important;
+  width: 410px !important;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.designComponentInstanceNode {
+  color: #ffffff !important;
+  font-family: "Poppins", Helvetica !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.28px !important;
+  line-height: 14px !important;
+  margin-bottom: unset !important;
+  margin-top: unset !important;
+  text-align: center !important;
+}
+
+.frame {
+  align-items: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 24px;
+  left: 0;
+  position: absolute;
+  top: 120px;
+}
+
+.google {
+  height: 50px;
+  margin-right: -2px;
+  position: relative;
+  width: 412px;
+}
+
+.googleButton {
+  background: none;
+  border: 1px solid #a3aed0;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  display: block;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+.overlapGroup {
+  background-color: var(--secondarygrey-300);
+  border-radius: 16px;
+  height: 50px;
+  position: relative;
+  width: 410px;
+}
+
+.googleGLogo {
+  height: 20px;
+  left: 127px;
+  position: absolute;
+  top: 15px;
+  width: 20px;
+}
+
+.textWrapper3 {
+  color: #2b3674;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  left: 156px;
+  letter-spacing: -0.28px;
+  line-height: 20px;
+  position: absolute;
+  top: 14px;
+  white-space: nowrap;
+}
+
+.separator {
+  height: 24px;
+  margin-right: -2px;
+  position: relative;
+  width: 412px;
+}
+
+.textWrapper4 {
+  color: #a3aed0;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  left: 198px;
+  letter-spacing: -0.28px;
+  line-height: 24px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  white-space: nowrap;
+}
+
+.line {
+  height: 1px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 13px;
+  width: 182px;
+}
+
+.img {
+  height: 1px;
+  left: 227px;
+  object-fit: cover;
+  position: absolute;
+  top: 13px;
+  width: 183px;
+}
+
+.div2 {
+  height: 77px;
+  margin-right: -2px;
+  position: relative;
+  width: 412px;
+}
+
+.p {
+  color: transparent;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  left: 0;
+  letter-spacing: -0.28px;
+  line-height: 14px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.span {
+  color: #2b3674;
+}
+
+.textWrapper5 {
+  color: #005aa3;
+}
+
+.largeInput {
+  height: 50px;
+  left: 0;
+  position: absolute;
+  top: 27px;
+  width: 410px;
+  background-color: #ffffff;
+  border: 1px solid #a3aed0;
+  border-radius: 16px;
+  color: #a3aed0;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.28px;
+  line-height: 14px;
+  padding-left: 24px;
+  vertical-align: middle;
+}
+
+.largeInput::placeholder {
+  color: #a3aed0;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.28px;
+  line-height: 14px;
+  padding-left: 24px;
+  vertical-align: middle;
+}
+
+.overlapGroup2 {
+  height: 50px;
+  position: relative;
+}
+
+.background {
+  height: 50px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 410px;
+}
+
+.rectangle {
+  border: 1px solid;
+  border-color: #e0e5f2;
+  border-radius: 16px;
+  height: 50px;
+}
+
+.text {
+  height: 14px;
+  left: 24px;
+  position: absolute;
+  top: 17px;
+  width: 153px;
+}
+
+.textWrapper6 {
+  color: #a3aed0;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  left: 0;
+  letter-spacing: -0.28px;
+  line-height: 14px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.overlap {
+  border-radius: 16px;
+  height: 50px;
+  left: 0;
+  position: absolute;
+  top: 27px;
+  width: 410px;
+}
+
+.divWrapper {
+  border: 1px solid;
+  border-color: #e0e5f2;
+  border-radius: 16px;
+  height: 50px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 410px;
+}
+
+.text2 {
+  height: 14px;
+  left: 23px;
+  position: relative;
+  top: 16px;
+  width: 118px;
+}
+
+.removeRedEye {
+  height: 20px !important;
+  left: 372px !important;
+  position: absolute !important;
+  top: 17px !important;
+  width: 20px !important;
+}
+
+.forgotAndCheckbox {
+  height: 20px;
+  position: relative;
+  width: 402px;
+}
+
+.checkbox2 {
+  height: 20px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 158px;
+}
+
+.textWrapper7 {
+  color: #2b3674;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  left: 29px;
+  letter-spacing: -0.28px;
+  line-height: 20px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.checkboxInstance {
+  background-color: #ffffff !important;
+  height: 18px !important;
+  left: 0 !important;
+  position: absolute !important;
+  top: 2px !important;
+  width: 18px !important;
+}
+
+.checkboxInstance:hover,
+.checkboxInstance:active {
+  background-color: white !important;
+}
+
+.checkbox3 {
+  height: 16px !important;
+  left: 1px !important;
+  position: absolute !important;
+  top: 1px !important;
+  width: 16px !important;
+}
+
+.forgotPass {
+  height: 20px;
+  left: 280px;
+  position: absolute;
+  top: 0;
+  width: 124px;
+}
+
+.textWrapper8 {
+  color: #005aa3;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  left: 0;
+  letter-spacing: -0.28px;
+  line-height: 20px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.header {
+  background-color: transparent;
+  height: 80px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 322px;
+}
+
+.title {
+  color: #2b3674;
+  font-family: "Poppins", Helvetica;
+  font-size: 36px;
+  font-weight: 700;
+  left: 0;
+  letter-spacing: -0.72px;
+  line-height: 56px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.textWrapper9 {
+  color: #a3aed0;
+  font-family: "Poppins", Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  left: 1px;
+  letter-spacing: -0.32px;
+  line-height: 16px;
+  position: absolute;
+  top: 64px;
+  white-space: nowrap;
+}
+
+.overlapWrapper {
+  height: 800px;
+  left: 124px;
+  position: absolute;
+  top: 115px;
+  width: 520px;
+}
+
+.overlap2 {
+  height: 833px;
+  position: relative;
+}
+
+.groupWrapper {
+  height: 169px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 520px;
+}
+
+.group2 {
+  height: 169px;
+  position: relative;
+  width: 524px;
+}
+
+.textWrapper10 {
+  color: #000000;
+  font-family: "Poppins", Helvetica;
+  font-size: 64px;
+  font-weight: 600;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 0;
+}
+
+.textWrapper11 {
+  color: #000000;
+  font-family: "Poppins", Helvetica;
+  font-size: 40.8px;
+  font-weight: 500;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 102px;
+  width: 520px;
+}
+
+.saly14 {
+  left: 5px;
+  position: absolute;
+  top: 225px;
+  width: 70%;
+}
+
+.largeInputBackground {
+  height: 50px;
+  width: 410px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.largeInputRectangle {
+  border: 1px solid #e0e5f2;
+  border-radius: 16px;
+  height: 50px;
+  width: 100%;
+}
+
+.largeInputText {
+  height: 14px;
+  left: 24px;
+  position: absolute;
+  top: 17px;
+  width: 153px;
+}
+
+.largeInputTextWrapper6 {
+  color: #a3aed0;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.28px;
+  line-height: 14px;
+}
