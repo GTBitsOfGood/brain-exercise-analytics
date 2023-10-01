@@ -1,8 +1,8 @@
 "use client";
 
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const DynamicRedirect = dynamic(() => import('../information/page'), {
+const DynamicRedirect = dynamic(() => import("../information/page"), {
   ssr: false,
 });
 
