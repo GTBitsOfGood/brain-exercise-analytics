@@ -1,0 +1,131 @@
+.split-screen {
+  display: flex;
+  height: 100vh;
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+.account-recovery {
+  color: #2b3674;
+  font-size: 36px;
+  font-family: Poppins;
+  font-weight: 700;
+  line-height: 56px;
+  word-wrap: break-word;
+}
+
+.description {
+  color: #a3aed0;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 20.37px;
+  word-wrap: break-word;
+  padding-bottom: 40px;
+}
+
+.input-label {
+  color: #2b3674;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: 500;
+  line-height: 14px;
+  word-wrap: break-word;
+}
+
+.password-input {
+  color: #000000;
+  background-color: transparent;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 35px;
+  word-wrap: break-word;
+  resize: none;
+  height: 40px;
+  width: 80%;
+  border-radius: 16px;
+  border: 1px #e0e5f2 solid;
+  padding-left: 5%;
+}
+
+.confirm-password-input {
+  color: #000000;
+  background-color: transparent;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 35px;
+  word-wrap: break-word;
+  resize: none;
+  height: 40px;
+  width: 80%;
+  border-radius: 16px;
+  border: 1px #e0e5f2 solid;
+  padding-left: 5%;
+}
+
+.sign-in-button {
+  color: white;
+  background-color: #005aa3;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: 700;
+  line-height: 14px;
+  word-wrap: break-word;
+  text-align: center;
+  width: 80%;
+  height: 6%;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #005aa3;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+  position: relative;
+  top: 10%;
+}
+
+.sign-up {
+  display: flex;
+  position: relative;
+  top: 10%;
+  padding-top: 3%;
+}
+
+.no-account {
+  color: #1a1a1a;
+  font-size: 12px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  word-wrap: break-word;
+  padding-right: 1%;
+}
+
+.link {
+  color: #007aff;
+  font-size: 12px;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  word-wrap: break-word;
+}
