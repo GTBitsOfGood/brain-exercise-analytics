@@ -171,7 +171,7 @@ export default function SignUp() {
 
           <div className={styles.div2}>
             <p className={styles.p}>
-              <span className={styles.span}>Location</span>
+              <span className={styles.span}>Chapter</span>
               <span className={styles.textWrapper5}>*</span>
             </p>
             <Dropdown
