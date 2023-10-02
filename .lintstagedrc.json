@@ -1,10 +1,5 @@
 {
-<<<<<<< HEAD
-  "*.{ts,tsx,js,jsx}": ["prettier --write", "eslint --fix"],
-  "*.{css,scss}": "prettier --write"
-=======
   "*.{ts,tsx}": "bash -c tsc --noEmit",
   "*.{ts,tsx,js,jsx}": "eslint --fix",
   "*.{css,scss,yaml,md}": "prettier --write"
->>>>>>> d15955aaa9d420b0550d913c66702046e93e13af
 }
