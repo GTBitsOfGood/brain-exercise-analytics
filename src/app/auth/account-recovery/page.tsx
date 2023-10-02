@@ -9,21 +9,17 @@ export default function Page() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [continueClicked, setContinueClicked] = useState(false);
-
-  const validateInputs = () => {
-    return (
-      firstName.trim() !== "" && lastName.trim() !== "" && email.trim() !== ""
-    );
-  };
+  const [validateInputs, setValidateInputs] = useState(true);
 
   const redirect = () => {
-    if (validateInputs()) {
+    const isValid =
+      firstName.trim() !== "" && lastName.trim() !== "" && email.trim() !== "";
+    setValidateInputs(isValid);
+    if (isValid) {
       setContinueClicked(true);
       setTimeout(() => {
         window.location.href = "/auth/login";
       }, 30000);
-    } else {
-      alert("Please fill in all the required fields.");
     }
   };
 
@@ -37,12 +33,22 @@ export default function Page() {
           {!continueClicked && (
             <div>
               <h1 className="account-recovery">Account Recovery</h1>
-              <p className="description">
-                If you&apos;ve forgotten your password, you&apos;ll need to
-                reset your password to proceed.
-                <br />
-                Please complete the form below to reset your account.
-              </p>
+              {validateInputs && (
+                <p className="description">
+                  If you&apos;ve forgotten your password, you&apos;ll need to
+                  reset your password to proceed.
+                  <br />
+                  Please complete the form below to reset your account.
+                </p>
+              )}
+              {!validateInputs && (
+                <p className="invalid-input">
+                  We&apos;re sorry, the information you&apos;ve entered is not
+                  valid.
+                  <br />
+                  Please try again.
+                </p>
+              )}
               <div className="first-last-name">
                 <div className="first-name">
                   <label className="input-label">First Name*</label>
