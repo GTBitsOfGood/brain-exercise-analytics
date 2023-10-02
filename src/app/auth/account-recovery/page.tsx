@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import LeftSideOfPage from "../../../components/leftSideOfPage";
 
 export default function Page() {
   const [firstName, setFirstName] = useState("");
@@ -16,12 +17,7 @@ export default function Page() {
 
   return (
     <div>
-      <h1>Welcome!</h1>
-      <h2>Brain Exercise Initiative</h2>
-      <img src={"../../../assets/bei.jpg"} alt="BEI Image" />
-      <br />
-      <br />
-
+      <LeftSideOfPage />
       {!continueClicked && (
         <div>
           <h1>Account Recovery</h1>
