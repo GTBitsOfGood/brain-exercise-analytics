@@ -52,8 +52,8 @@ function APIWrapper(route: Route<unknown>) {
 
       // Handle unauthorised or invalid idTokens + user access token + roles restrictions
       if (config?.requireToken) {
-        // Retrieve idToken from params
-        const idToken: string | null = req.nextUrl.searchParams.get("idToken");
+        // Retrieve idToken from HEADERS
+        const idToken: string | null = req.headers.get("accesstoken");
         try {
           if (idToken === null) throw Error();
           await getAuth().verifyIdToken(idToken);
@@ -68,7 +68,7 @@ function APIWrapper(route: Route<unknown>) {
         }
 
         const email: string = await getEmailFromIdToken(idToken);
-        req.nextUrl.searchParams.set("email", email);
+        // req.nextUrl.searchParams.set("email", email);
         const user = await getUserByEmail(email);
         if (config.roles) {
           if (

@@ -1,45 +1,25 @@
 import { getUserByEmail, patientSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
-import { IUser, RecursivePartial } from "@/common_utils/types";
-import { NextRequest } from "next/server";
+import { IUser, Role, SignupData } from "@/common_utils/types";
 
 export const POST = APIWrapper({
   config: {
     requireToken: true,
   },
-  handler: async (req: NextRequest) => {
-    const signupData: RecursivePartial<IUser> = {
-      email: req.nextUrl.searchParams.get("email") ?? undefined,
-      name: req.nextUrl.searchParams.get("name") ?? undefined,
-      phoneNumber: req.nextUrl.searchParams.get("phoneNumber") ?? undefined,
-      patientDetails: {
-        birthdate: req.nextUrl.searchParams.get(
-          "patientDetails[birthdate]",
-        ) as string,
-        secondaryContactName:
-          req.nextUrl.searchParams.get(
-            "patientDetails[secondaryContactName]",
-          ) ?? undefined,
-        secondaryContactPhone:
-          req.nextUrl.searchParams.get(
-            "patientDetails[secondaryContactPhone]",
-          ) ?? undefined,
-      },
-      signedUp: req.nextUrl.searchParams.get("signedUp") === "true",
-      // role: req.nextUrl.searchParams.get("role"),
-    };
+  handler: async (req) => {
+    const signupData: SignupData = (await req.json()) as SignupData;
 
     if (!signupData) {
       throw new Error("missing request data");
     }
 
     if (
+      !signupData.birthDate ||
       !signupData.email ||
       !signupData.name ||
       !signupData.phoneNumber ||
-      !signupData.patientDetails?.birthdate ||
-      !signupData.patientDetails.secondaryContactName ||
-      !signupData.patientDetails.secondaryContactPhone
+      !signupData.secondaryContactName ||
+      !signupData.secondaryContactPhone
     ) {
       throw new Error("missing parameter(s)");
     }
@@ -54,9 +34,21 @@ export const POST = APIWrapper({
     }
 
     try {
-      const newSignUp = await patientSignUp(signupData as IUser);
+      const newSignUp = await patientSignUp({
+        email: signupData.email,
+        name: signupData.name,
+        phoneNumber: signupData.phoneNumber,
+        patientDetails: {
+          birthdate: signupData.birthDate.toString(),
+          secondaryContactName: signupData.secondaryContactName,
+          secondaryContactPhone: signupData.secondaryContactPhone,
+        },
+        signedUp: true,
+        role: Role.NONPROFIT_USER,
+      } as IUser);
       return newSignUp;
     } catch (error) {
+      console.log(error);
       throw new Error("couldn't update database.");
     }
   },
