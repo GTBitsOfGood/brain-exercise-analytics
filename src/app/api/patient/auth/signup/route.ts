@@ -1,6 +1,15 @@
 import { getUserByEmail, patientSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
-import { IUser, Role, SignupData } from "@/common_utils/types";
+import { IUser, Role } from "@/common_utils/types";
+
+interface SignupData {
+  email: string;
+  name: string;
+  phoneNumber: string;
+  birthDate: Date;
+  secondaryContactName: string;
+  secondaryContactPhone: string;
+}
 
 export const POST = APIWrapper({
   config: {
