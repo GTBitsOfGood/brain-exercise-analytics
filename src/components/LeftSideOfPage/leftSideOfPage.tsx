@@ -4,9 +4,11 @@ import "./leftSideOfPage.css";
 const LeftSideOfPage = () => {
   return (
     <div className="wrapper">
-      <h1 className="welcome">Welcome!</h1>
-      <h2 className="BEI">Brain Exercise Initiative</h2>
-      <img src="/assets/bei_edited.png" alt="BEI Image" />
+      <div className="text-wrapper">
+        <span className="welcome">Welcome!</span>
+        <span className="BEI">Brain Exercise Initiative</span>
+      </div>
+      <img className="BEI-image" src="/assets/bei_edited.png" alt="BEI Image" />
     </div>
   );
 };
