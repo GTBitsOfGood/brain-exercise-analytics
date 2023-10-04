@@ -30,15 +30,6 @@ export interface IUser {
   role: Role;
 }
 
-export interface SignupData {
-  email: string;
-  name: string;
-  phoneNumber: string;
-  birthDate: Date;
-  secondaryContactName: string;
-  secondaryContactPhone: string;
-}
-
 export interface IAnalytics {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
@@ -88,3 +79,7 @@ export interface IAnalytics {
     },
   ];
 }
+
+export type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};

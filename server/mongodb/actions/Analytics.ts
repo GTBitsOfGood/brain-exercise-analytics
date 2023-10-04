@@ -126,8 +126,28 @@ export const updateSessionComplete = async (
 };
 
 // average weekly stats function
-export const averageWeeklyStats = async () => {
+export const averageWeeklyStats = async (): Promise<null> => {
   // divide all values by completed sessions and added streaklength
+
+  function getDivideQuery(numeratorField: string, denominatorField: string) {
+    return {
+      $cond: [
+        {
+          $eq: [denominatorField, 0],
+        },
+        0,
+        {
+          $round: [
+            {
+              $divide: [numeratorField, denominatorField],
+            },
+            2,
+          ],
+        },
+      ],
+    };
+  }
+
   await Analytics.updateMany({}, [
     {
       $set: {
@@ -154,74 +174,22 @@ export const averageWeeklyStats = async () => {
                           in: {
                             sessionsCompleted:
                               "$$firstItem.math.sessionsCompleted",
-                            questionsAttempted: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.math.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.math.questionsAttempted",
-                                    "$$firstItem.math.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
-                            questionsCorrect: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.math.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.math.questionsCorrect",
-                                    "$$firstItem.math.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
-                            finalDifficultyScore: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.math.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.math.finalDifficultyScore",
-                                    "$$firstItem.math.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
-                            timePerQuestion: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.math.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.math.timePerQuestion",
-                                    "$$firstItem.math.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
+                            questionsAttempted: getDivideQuery(
+                              "$$firstItem.math.questionsAttempted",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                            questionsCorrect: getDivideQuery(
+                              "$$firstItem.math.questionsCorrect",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                            finalDifficultyScore: getDivideQuery(
+                              "$$firstItem.math.finalDifficultyScore",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                            timePerQuestion: getDivideQuery(
+                              "$$firstItem.math.timePerQuestion",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
                           },
                         },
                       },
@@ -235,57 +203,18 @@ export const averageWeeklyStats = async () => {
                           in: {
                             sessionsCompleted:
                               "$$firstItem.trivia.sessionsCompleted",
-                            questionsAttempted: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.trivia.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.trivia.questionsAttempted",
-                                    "$$firstItem.trivia.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
-                            questionsCorrect: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.trivia.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.trivia.questionsCorrect",
-                                    "$$firstItem.trivia.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
-                            timePerQuestion: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.trivia.sessionsCompleted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.trivia.timePerQuestion",
-                                    "$$firstItem.trivia.sessionsCompleted",
-                                  ],
-                                },
-                              ],
-                            },
+                            questionsAttempted: getDivideQuery(
+                              "$$firstItem.trivia.questionsAttempted",
+                              "$$firstItem.trivia.sessionsCompleted",
+                            ),
+                            questionsCorrect: getDivideQuery(
+                              "$$firstItem.trivia.questionsCorrect",
+                              "$$firstItem.trivia.sessionsCompleted",
+                            ),
+                            timePerQuestion: getDivideQuery(
+                              "$$firstItem.trivia.timePerQuestion",
+                              "$$firstItem.trivia.sessionsCompleted",
+                            ),
                           },
                         },
                       },
@@ -301,23 +230,10 @@ export const averageWeeklyStats = async () => {
                               "$$firstItem.reading.sessionsAttempted",
                             sessionsCompleted:
                               "$$firstItem.reading.sessionsCompleted",
-                            passagesRead: {
-                              $cond: [
-                                {
-                                  $eq: [
-                                    "$$firstItem.reading.sessionsAttempted",
-                                    0,
-                                  ],
-                                },
-                                0,
-                                {
-                                  $divide: [
-                                    "$$firstItem.reading.passagesRead",
-                                    "$$firstItem.reading.sessionsAttempted",
-                                  ],
-                                },
-                              ],
-                            },
+                            passagesRead: getDivideQuery(
+                              "$$firstItem.reading.passagesRead",
+                              "$$firstItem.reading.sessionsAttempted",
+                            ),
                           },
                         },
                       },
