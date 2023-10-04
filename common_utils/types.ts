@@ -26,6 +26,11 @@ export interface IUser {
     secondaryContactName: string;
     secondaryContactPhone: string;
   };
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  };
   signedUp: boolean;
   role: Role;
 }

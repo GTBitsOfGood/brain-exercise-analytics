@@ -30,6 +30,18 @@ const UserSchema = new Schema({
       secondaryContactPhone: "",
     },
   },
+  location: {
+    type: {
+      country: String,
+      state: String,
+      city: String,
+    },
+    default: {
+      country: "",
+      state: "",
+      city: "",
+    },
+  },
   signedUp: {
     type: Boolean,
     default: false,
