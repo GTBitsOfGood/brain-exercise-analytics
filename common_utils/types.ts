@@ -35,6 +35,12 @@ export interface IUser {
   role: Role;
 }
 
+export interface IPasswordReset {
+  email: string;
+  token: string;
+  expiryDate: Date;
+}
+
 export interface IAnalytics {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
