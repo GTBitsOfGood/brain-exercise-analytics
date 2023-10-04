@@ -33,7 +33,7 @@ export const POST = APIWrapper({
       !signupData.phoneNumber ||
       !signupData.state
     ) {
-      throw new Error("missing parameter(s)");
+      throw new Error("Missing parameter(s)");
     }
 
     const user = await getUserByEmail(signupData.email);
@@ -45,19 +45,15 @@ export const POST = APIWrapper({
       return user;
     }
 
-    try {
-      const newSignUp = await volunteerSignUp(
-        signupData.email,
-        signupData.name,
-        signupData.phoneNumber,
-        signupData.country,
-        signupData.state,
-        signupData.city,
-        signupData.chapter,
-      );
-      return newSignUp;
-    } catch (error) {
-      throw new Error("couldn't update database.");
-    }
+    const newSignUp = await volunteerSignUp(
+      signupData.email,
+      signupData.name,
+      signupData.phoneNumber,
+      signupData.country,
+      signupData.state,
+      signupData.city,
+      signupData.chapter,
+    );
+    return newSignUp;
   },
 });

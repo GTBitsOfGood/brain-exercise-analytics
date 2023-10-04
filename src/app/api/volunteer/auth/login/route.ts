@@ -19,16 +19,12 @@ export const GET = APIWrapper({
 
     let newUser = await getUserByEmail(email);
     if (newUser === null) {
-      try {
-        newUser = (await User.create({
-          email,
-          role: Role.NONPROFIT_VOLUNTEER,
-        })) as IUser;
-      } catch (err) {
-        throw new Error("Couldn't create new user");
-      }
+      newUser = (await User.create({
+        email,
+        role: Role.NONPROFIT_VOLUNTEER,
+      })) as IUser;
     } else if (newUser.role === Role.NONPROFIT_USER) {
-      throw new Error("App users canno sign up on analytics dashboard");
+      throw new Error("App users cannot sign up on analytics dashboard");
     }
 
     return newUser;
