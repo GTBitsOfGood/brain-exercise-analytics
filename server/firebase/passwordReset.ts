@@ -1,9 +1,7 @@
-// import admin from "./config";
-import { UserRecord } from "firebase-admin/auth";
-import auth from "./auth";
+import { getAuth, UserRecord } from "firebase-admin/auth";
 
 const getUserByEmail = async (email: string): Promise<UserRecord | null> => {
-  const value = await auth.getUserByEmail(email);
+  const value = await getAuth().getUserByEmail(email);
   return value;
 };
 
@@ -16,7 +14,7 @@ export const updateUserPassword = async (
     throw new Error("User not found");
   }
 
-  await auth.updateUser(userRecord.uid, {
+  await getAuth().updateUser(userRecord.uid, {
     password,
   });
 

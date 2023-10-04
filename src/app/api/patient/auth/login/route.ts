@@ -1,7 +1,11 @@
 import { getUserByEmail } from "@server/mongodb/actions/User";
+import {
+  getAnalyticsByID,
+  createAnalyticsID,
+} from "@server/mongodb/actions/Analytics";
 import APIWrapper from "@server/utils/APIWrapper";
 import User from "@server/mongodb/models/User";
-import { IUser } from "@/common_utils/types";
+import { IUser, IAnalytics } from "@/common_utils/types";
 
 export const dynamic = "force-dynamic";
 
@@ -19,13 +23,24 @@ export const GET = APIWrapper({
 
     let newUser = await getUserByEmail(email);
     if (newUser === null) {
-      try {
-        newUser = (await User.create({ email })) as IUser;
-      } catch (err) {
-        throw new Error("Couldn't create new user");
-      }
+      newUser = (await User.create({ email })) as IUser;
     }
-
-    return newUser;
+    let analyticsRecord: IAnalytics = (await getAnalyticsByID(
+      newUser._id as string,
+    )) as IAnalytics;
+    if (analyticsRecord === null) {
+      analyticsRecord = await createAnalyticsID(newUser._id as string);
+    }
+    newUser._id = newUser._id as string;
+    return {
+      user: newUser,
+      gameDetails: {
+        streak: analyticsRecord.streak,
+        math: {
+          difficultyScore:
+            analyticsRecord.lastSessionMetrics.math.finalDifficultyScore,
+        },
+      },
+    };
   },
 });

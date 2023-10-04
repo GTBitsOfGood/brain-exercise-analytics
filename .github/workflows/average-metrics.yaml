@@ -1,0 +1,31 @@
+name: Average Metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * 1"
+
+jobs:
+  averageWeek:
+    name: Average Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Post Request
+        env:
+          INTERNAL_AVERAGE_SECRET: ${{ secrets.INTERNAL_AVERAGE_SECRET }}
+        run: |
+          SECRET=${INTERNAL_AVERAGE_SECRET}
+
+          JSON_DATA="{ \"secret\": \"$SECRET\" }"
+
+          RESPONSE=$(curl -X POST -H "Content-Type: application/json" -d "$JSON_DATA" https://brain-exercise-initiative-analytics.netlify.app/api/patient/internal/average-stats)
+
+          if [[ $RESPONSE == *"\"success\":true"* ]]; then
+           echo "POST request was successful."
+          else
+            echo "POST request failed."
+            exit 1 # Set a non-zero exit code to indicate failure
+          fi

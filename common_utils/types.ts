@@ -26,6 +26,11 @@ export interface IUser {
     secondaryContactName: string;
     secondaryContactPhone: string;
   };
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  };
   signedUp: boolean;
   role: Role;
 }
@@ -34,15 +39,6 @@ export interface IPasswordReset {
   email: string;
   token: string;
   expiryDate: Date;
-}
-
-export interface SignupData {
-  email: string;
-  name: string;
-  phoneNumber: string;
-  birthDate: Date;
-  secondaryContactName: string;
-  secondaryContactPhone: string;
 }
 
 export interface IAnalytics {
@@ -94,3 +90,7 @@ export interface IAnalytics {
     },
   ];
 }
+
+export type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};
