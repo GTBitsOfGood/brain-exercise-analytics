@@ -27,11 +27,11 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
     if (
-      !questionsAttempted ||
+      questionsAttempted === undefined ||
       questionsAttempted < 0 ||
-      !questionsCorrect ||
+      questionsCorrect === undefined ||
       questionsCorrect < 0 ||
-      !timePerQuestion ||
+      timePerQuestion === undefined ||
       timePerQuestion < 0 ||
       questionsCorrect > questionsAttempted
     ) {

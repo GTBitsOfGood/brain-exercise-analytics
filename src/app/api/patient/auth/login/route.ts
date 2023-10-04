@@ -23,11 +23,7 @@ export const GET = APIWrapper({
 
     let newUser = await getUserByEmail(email);
     if (newUser === null) {
-      try {
-        newUser = (await User.create({ email })) as IUser;
-      } catch (err) {
-        throw new Error("Couldn't create new user");
-      }
+      newUser = (await User.create({ email })) as IUser;
     }
     let analyticsRecord: IAnalytics = (await getAnalyticsByID(
       newUser._id as string,

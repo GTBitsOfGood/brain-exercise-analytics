@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Days } from "@/common_utils/types";
+import { getCurrentMonday } from "@server/utils/utils";
 
 const { Schema } = mongoose;
 
@@ -84,7 +85,7 @@ const AnalyticsSchema = new Schema({
     ],
     default: [
       {
-        date: new Date(),
+        date: getCurrentMonday(),
         sessionsCompleted: 0,
         streakLength: 0,
         math: {

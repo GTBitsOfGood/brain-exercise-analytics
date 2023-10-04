@@ -30,13 +30,13 @@ export const POST = APIWrapper({
       throw new Error("Email parameter is missing in the request.");
     }
     if (
-      !questionsAttempted ||
+      questionsAttempted === undefined ||
       questionsAttempted < 0 ||
-      !questionsCorrect ||
+      questionsCorrect === undefined ||
       questionsCorrect < 0 ||
-      !difficultyScore ||
+      difficultyScore === undefined ||
       difficultyScore < 0 ||
-      !timePerQuestion ||
+      timePerQuestion === undefined ||
       timePerQuestion < 0 ||
       questionsCorrect > questionsAttempted
     ) {
