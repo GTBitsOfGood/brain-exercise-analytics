@@ -3,14 +3,12 @@
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { Role } from "@/common_utils/types";
-// import { getEmailFromIdToken } from "@server/firebase/auth";
+import { getEmailFromIdToken } from "@server/firebase/auth";
 import dbConnect from "@server/mongodb/config";
-// import { getUserByEmail } from "@server/mongodb/actions/User";
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// Sets up the MongoDB models
-import User from "@server/mongodb/models/User";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+import firebaseConfig from "@server/firebase/config";
+import { getUserByEmail } from "@server/mongodb/actions/User";
+// import * as admin from "firebase-admin";
+import { getAuth } from "firebase-admin/auth";
 
 interface RouteConfig {
   requireToken?: boolean;
@@ -49,26 +47,44 @@ function APIWrapper(route: Route<unknown>) {
     try {
       // Connect to MongoDB Database
       await dbConnect();
+      // Connect to Firebase
+      await firebaseConfig();
 
-      // Handle user access token + roles restrictions
-      // if (config?.requireToken) {
-      // const email = await getEmailFromIdToken(idToken as string);
-      // const user = await getUserByEmail(email as string);
-      // if (config.roles) {
-      // if (
-      // config.roles.length !== 0
-      // && !config.roles.some((role) => user?.role?.includes(role))
-      // ) {
-      // return NextResponse.json(
-      // {
-      // success: false,
-      // message: "You do not have permissions to access this API route",
-      // },
-      // { status: 403 },
-      // );
-      // }
-      // }
-      // }
+      // Handle unauthorised or invalid idTokens + user access token + roles restrictions
+      if (config?.requireToken) {
+        // Retrieve idToken from HEADERS
+        const idToken: string | null = req.headers.get("accesstoken");
+        try {
+          if (idToken === null) throw Error();
+          await getAuth().verifyIdToken(idToken);
+        } catch (e) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "You do not have permissions to access this API route",
+            },
+            { status: 403 },
+          );
+        }
+
+        const email: string = await getEmailFromIdToken(idToken);
+        // req.nextUrl.searchParams.set("email", email);
+        const user = await getUserByEmail(email);
+        if (config.roles) {
+          if (
+            config.roles.length !== 0 &&
+            !config.roles.some((role) => user?.role?.includes(role))
+          ) {
+            return NextResponse.json(
+              {
+                success: false,
+                message: "You do not have permissions to access this API route",
+              },
+              { status: 403 },
+            );
+          }
+        }
+      }
       const data = await handler(req);
       if (config?.handleResponse) {
         return NextResponse.json(
@@ -92,7 +108,13 @@ function APIWrapper(route: Route<unknown>) {
       }
 
       const error = e as Error;
-      return NextResponse.json({ success: false, message: error.message });
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
   };
 }
