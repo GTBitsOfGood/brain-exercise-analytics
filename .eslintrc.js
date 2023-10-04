@@ -37,6 +37,13 @@ module.exports = {
         tsx: "never",
       },
     ],
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        checksVoidReturn: false,
+      },
+    ],
     "prettier/prettier": [
       "error",
       {
