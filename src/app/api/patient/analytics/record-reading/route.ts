@@ -19,7 +19,11 @@ export const POST = APIWrapper({
     if (!email) {
       throw new Error("Email parameter is missing in the request.");
     }
-    if (!completed || !passagesRead || passagesRead < 0) {
+    if (
+      completed === undefined ||
+      passagesRead === undefined ||
+      passagesRead < 0
+    ) {
       throw new Error("Parameters are missing or invalid.");
     }
 
