@@ -1,5 +1,6 @@
 import Analytics from "@server/mongodb/models/Analytics";
 import { Days, IAnalytics } from "@/common_utils/types";
+import { getCurrentMonday } from "@server/utils/utils";
 
 export const getAnalyticsByID = async (
   userID: string,
@@ -122,4 +123,173 @@ export const updateSessionComplete = async (
   );
 
   return data;
+};
+
+// average weekly stats function
+export const averageWeeklyStats = async (): Promise<null> => {
+  // divide all values by completed sessions and added streaklength
+
+  function getDivideQuery(numeratorField: string, denominatorField: string) {
+    return {
+      $cond: [
+        {
+          $eq: [denominatorField, 0],
+        },
+        0,
+        {
+          $round: [
+            {
+              $divide: [numeratorField, denominatorField],
+            },
+            2,
+          ],
+        },
+      ],
+    };
+  }
+
+  await Analytics.updateMany({}, [
+    {
+      $set: {
+        weeklyMetrics: {
+          $map: {
+            input: {
+              $range: [0, { $size: "$weeklyMetrics" }],
+            },
+            in: {
+              $cond: [
+                { $eq: ["$$this", 0] },
+                {
+                  $mergeObjects: [
+                    { $arrayElemAt: ["$weeklyMetrics", "$$this"] },
+                    {
+                      streakLength: { $size: "$streak" },
+                      math: {
+                        $let: {
+                          vars: {
+                            firstItem: {
+                              $arrayElemAt: ["$weeklyMetrics", 0],
+                            },
+                          },
+                          in: {
+                            sessionsCompleted:
+                              "$$firstItem.math.sessionsCompleted",
+                            questionsAttempted: getDivideQuery(
+                              "$$firstItem.math.questionsAttempted",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                            questionsCorrect: getDivideQuery(
+                              "$$firstItem.math.questionsCorrect",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                            finalDifficultyScore: getDivideQuery(
+                              "$$firstItem.math.finalDifficultyScore",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                            timePerQuestion: getDivideQuery(
+                              "$$firstItem.math.timePerQuestion",
+                              "$$firstItem.math.sessionsCompleted",
+                            ),
+                          },
+                        },
+                      },
+                      trivia: {
+                        $let: {
+                          vars: {
+                            firstItem: {
+                              $arrayElemAt: ["$weeklyMetrics", 0],
+                            },
+                          },
+                          in: {
+                            sessionsCompleted:
+                              "$$firstItem.trivia.sessionsCompleted",
+                            questionsAttempted: getDivideQuery(
+                              "$$firstItem.trivia.questionsAttempted",
+                              "$$firstItem.trivia.sessionsCompleted",
+                            ),
+                            questionsCorrect: getDivideQuery(
+                              "$$firstItem.trivia.questionsCorrect",
+                              "$$firstItem.trivia.sessionsCompleted",
+                            ),
+                            timePerQuestion: getDivideQuery(
+                              "$$firstItem.trivia.timePerQuestion",
+                              "$$firstItem.trivia.sessionsCompleted",
+                            ),
+                          },
+                        },
+                      },
+                      reading: {
+                        $let: {
+                          vars: {
+                            firstItem: {
+                              $arrayElemAt: ["$weeklyMetrics", 0],
+                            },
+                          },
+                          in: {
+                            sessionsAttempted:
+                              "$$firstItem.reading.sessionsAttempted",
+                            sessionsCompleted:
+                              "$$firstItem.reading.sessionsCompleted",
+                            passagesRead: getDivideQuery(
+                              "$$firstItem.reading.passagesRead",
+                              "$$firstItem.reading.sessionsAttempted",
+                            ),
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+                {
+                  $arrayElemAt: ["$weeklyMetrics", "$$this"],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  // set streak to empty array and push new empty array
+  await Analytics.updateMany(
+    {},
+    {
+      $push: {
+        weeklyMetrics: {
+          $each: [
+            {
+              date: getCurrentMonday(),
+              sessionsCompleted: 0,
+              streakLength: 0,
+              math: {
+                sessionsCompleted: 0,
+                questionsAttempted: 0,
+                questionsCorrect: 0,
+                finalDifficultyScore: 0,
+                timePerQuestion: 0,
+              },
+              trivia: {
+                sessionsCompleted: 0,
+                questionsAttempted: 0,
+                questionsCorrect: 0,
+                timePerQuestion: 0,
+              },
+              reading: {
+                sessionsAttempted: 0,
+                sessionsCompleted: 0,
+                passagesRead: 0,
+              },
+            },
+          ],
+          $position: 0,
+        },
+      },
+      $set: {
+        streak: [],
+      },
+    },
+  );
+
+  return null;
 };
