@@ -3,6 +3,7 @@ import { updateUserPassword } from "@server/firebase/passwordReset";
 import {
   deletePasswordResetFieldByEmail,
   getPasswordByToken,
+  deletePasswordResetField,
 } from "@server/mongodb/actions/PasswordReset";
 import APIWrapper from "@server/utils/APIWrapper";
 
@@ -12,9 +13,7 @@ type RequestData = {
 };
 
 export const POST = APIWrapper({
-  config: {
-    requireToken: true,
-  },
+  config: {},
   handler: async (req) => {
     const requestData = (await req.json()) as RequestData;
 
@@ -32,6 +31,12 @@ export const POST = APIWrapper({
 
     if (!passwordDoc) {
       throw new Error("Password reset record is not found");
+    }
+
+    const currDate = new Date();
+    if (passwordDoc.expiryDate <= currDate) {
+      await deletePasswordResetField(passwordDoc);
+      throw new Error("Password reset token has expired.");
     }
 
     const value = await updateUserPassword(

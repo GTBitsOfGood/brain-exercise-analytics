@@ -13,7 +13,7 @@ export const updateUserPassword = async (
 ): Promise<boolean> => {
   const userRecord = await getUserByEmail(email);
   if (!userRecord) {
-    throw new Error("user not found");
+    throw new Error("User not found");
   }
 
   await auth.updateUser(userRecord.uid, {

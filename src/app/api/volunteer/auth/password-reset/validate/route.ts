@@ -1,13 +1,14 @@
+import { IPasswordReset } from "@/common_utils/types";
 import {
   deletePasswordResetField,
   getPasswordByToken,
 } from "@server/mongodb/actions/PasswordReset";
 import APIWrapper from "@server/utils/APIWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const GET = APIWrapper({
-  config: {
-    requireToken: true,
-  },
+  config: {},
 
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
@@ -15,13 +16,15 @@ export const GET = APIWrapper({
     if (!token) {
       throw new Error("Token parameter is missing in the request.");
     }
-    const passwordResetField = await getPasswordByToken(token);
+    const passwordResetField: IPasswordReset | null =
+      await getPasswordByToken(token);
     const currDate = new Date();
     if (passwordResetField === null) {
-      throw new Error("Password is pasy its expiry");
+      throw new Error("Password reset record was not found");
     }
-    if (passwordResetField.expiryDate < currDate) {
+    if (passwordResetField.expiryDate <= currDate) {
       await deletePasswordResetField(passwordResetField);
+      throw new Error("Password reset token has expired.");
     }
     return true;
   },
