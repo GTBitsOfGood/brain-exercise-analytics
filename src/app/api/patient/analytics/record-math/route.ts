@@ -1,7 +1,10 @@
 import APIWrapper from "@server/utils/APIWrapper";
 import { getUserByEmail } from "@server/mongodb/actions/User";
-import { modifyMath } from "@server/mongodb/actions/Analytics";
-// import { createAnalyticsID } from "@server/mongodb/actions/Analytics";
+import {
+  modifyMath,
+  //createAnalyticsID,
+} from "@server/mongodb/actions/Analytics";
+//import { createOverallAnalytics } from "@server/mongodb/actions/OverallAnalytics";
 
 type RequestData = {
   email: string;
@@ -48,7 +51,8 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
 
-    // await createAnalyticsID(user._id!)
+    //await createOverallAnalytics();
+    //await createAnalyticsID(user._id!);
     await modifyMath(
       user._id!,
       questionsAttempted,

@@ -1,13 +1,12 @@
 import APIWrapper from "@server/utils/APIWrapper";
 import { getUserByEmail } from "@server/mongodb/actions/User";
-import { modifyReading } from "@server/mongodb/actions/Analytics";
+import { modifyWriting } from "@server/mongodb/actions/Analytics";
 
 type RequestData = {
   email: string;
   completed: boolean;
-  passagesRead: number;
-  timePerPassage: number;
-  wordsPerMinute: number;
+  questionsAnswered: number;
+  timePerQuestion: number;
 };
 
 export const POST = APIWrapper({
@@ -16,18 +15,15 @@ export const POST = APIWrapper({
   },
   handler: async (req) => {
     const reqbody: RequestData = (await req.json()) as RequestData;
-    const { email, completed, passagesRead, timePerPassage, wordsPerMinute } =
-      reqbody;
+    const { email, completed, questionsAnswered, timePerQuestion } = reqbody;
 
     if (!email) {
       throw new Error("Email parameter is missing in the request.");
     }
     if (
       completed === undefined ||
-      passagesRead === undefined ||
-      timePerPassage === undefined ||
-      wordsPerMinute === undefined ||
-      passagesRead < 0
+      questionsAnswered === undefined ||
+      timePerQuestion === undefined
     ) {
       throw new Error("Parameters are missing or invalid.");
     }
@@ -37,12 +33,11 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
 
-    await modifyReading(
+    await modifyWriting(
       user._id!,
       completed,
-      passagesRead,
-      timePerPassage,
-      wordsPerMinute,
+      questionsAnswered,
+      timePerQuestion,
     );
 
     return null;

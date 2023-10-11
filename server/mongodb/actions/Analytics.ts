@@ -1,6 +1,8 @@
 import Analytics from "@server/mongodb/models/Analytics";
 import { Days, IAnalytics } from "@/common_utils/types";
 import { getCurrentMonday } from "@server/utils/utils";
+import { incrementActiveUsers, incrementTotalUsers } from "./OverallAnalytics";
+import OverallAnalytics from "../models/OverallAnalytics";
 
 export const getAnalyticsByID = async (
   userID: string,
@@ -12,7 +14,11 @@ export const getAnalyticsByID = async (
 export const createAnalyticsID = async (
   userID: string,
 ): Promise<IAnalytics> => {
-  const analytics = (await Analytics.create({ userID })) as IAnalytics;
+  const today = new Date();
+  const analytics = (await Analytics.create({
+    userID,
+    startDate: today,
+  })) as IAnalytics;
   return analytics;
 };
 
@@ -80,6 +86,8 @@ export const modifyReading = async (
   userID: string,
   completed: boolean,
   passagesRead: number,
+  timePerPassage: number,
+  wordsPerMinute: number,
 ): Promise<IAnalytics | null> => {
   const increment = completed ? 1 : 0;
 
@@ -88,11 +96,43 @@ export const modifyReading = async (
     {
       $set: {
         "lastSessionMetrics.reading.passagesRead": passagesRead,
+        "lastSessionMetrics.reading.timePerPassage": timePerPassage,
+        "lastSessionMetrics.reading.wordsPerMinute": wordsPerMinute,
       },
       $inc: {
         "weeklyMetrics.0.reading.sessionsCompleted": increment,
         "weeklyMetrics.0.reading.sessionsAttempted": 1,
         "weeklyMetrics.0.reading.passagesRead": passagesRead,
+        "weeklyMetrics.0.reading.timePerPassage": timePerPassage,
+        "weeklyMetrics.0.reading.wordsPerMinute": wordsPerMinute,
+      },
+    },
+    { new: true },
+  );
+
+  return data;
+};
+
+export const modifyWriting = async (
+  userID: string,
+  completed: boolean,
+  questionsAnswered: number,
+  timePerQuestion: number,
+): Promise<IAnalytics | null> => {
+  const increment = completed ? 1 : 0;
+
+  const data = await Analytics.findOneAndUpdate<IAnalytics>(
+    { userID },
+    {
+      $set: {
+        "lastSessionMetrics.writing.questionsAnswered": questionsAnswered,
+        "lastSessionMetrics.writing.timePerQuestion": timePerQuestion,
+      },
+      $inc: {
+        "weeklyMetrics.0.writing.sessionsCompleted": increment,
+        "weeklyMetrics.0.writing.sessionsAttempted": 1,
+        "weeklyMetrics.0.writing.questionsAnswered": questionsAnswered,
+        "weeklyMetrics.0.writing.timePerQuestion": timePerQuestion,
       },
     },
     { new: true },
@@ -117,6 +157,9 @@ export const updateSessionComplete = async (
       $inc: {
         totalSessionsCompleted: 1,
         "weeklyMetrics.0.sessionsCompleted": 1,
+      },
+      $set: {
+        "lastSessionMetrics.date": today,
       },
     },
     { new: true },
@@ -145,6 +188,85 @@ export const averageWeeklyStats = async (): Promise<null> => {
           ],
         },
       ],
+    };
+  }
+
+  function getActiveQuery(size: number, firstValue: number) {
+    return {
+      $switch: {
+        branches: [
+          {
+            case: {
+              $eq: [
+                {
+                  $size: "$weeklyMetrics",
+                },
+                size,
+              ],
+            },
+            then: {
+              $cond: [
+                {
+                  $gte: [
+                    {
+                      $arrayElemAt: [
+                        "$weeklyMetrics.sessionsCompleted",
+                        firstValue,
+                      ],
+                    },
+                    2,
+                  ],
+                },
+                true,
+                false,
+              ],
+            },
+          },
+          {
+            case: {
+              $gt: [
+                {
+                  $size: "$weeklyMetrics",
+                },
+                size,
+              ],
+            },
+            then: {
+              $cond: [
+                {
+                  $and: [
+                    {
+                      $gte: [
+                        {
+                          $arrayElemAt: [
+                            "$weeklyMetrics.sessionsCompleted",
+                            firstValue,
+                          ],
+                        },
+                        2,
+                      ],
+                    },
+                    {
+                      $gte: [
+                        {
+                          $arrayElemAt: [
+                            "$weeklyMetrics.sessionsCompleted",
+                            firstValue + 1,
+                          ],
+                        },
+                        2,
+                      ],
+                    },
+                  ],
+                },
+                true,
+                false,
+              ],
+            },
+          },
+        ],
+        default: true,
+      },
     };
   }
 
@@ -182,10 +304,38 @@ export const averageWeeklyStats = async (): Promise<null> => {
                               "$$firstItem.math.questionsCorrect",
                               "$$firstItem.math.sessionsCompleted",
                             ),
-                            finalDifficultyScore: getDivideQuery(
-                              "$$firstItem.math.finalDifficultyScore",
-                              "$$firstItem.math.sessionsCompleted",
-                            ),
+                            finalDifficultyScore: {
+                              $cond: [
+                                {
+                                  $and: [
+                                    {
+                                      $eq: [
+                                        "$$firstItem.math.sessionsCompleted",
+                                        0,
+                                      ],
+                                    },
+                                    {
+                                      $gte: [
+                                        {
+                                          $size: "$weeklyMetrics",
+                                        },
+                                        2,
+                                      ],
+                                    },
+                                  ],
+                                },
+                                {
+                                  $arrayElemAt: [
+                                    "$weeklyMetrics.math.finalDifficultyScore",
+                                    1,
+                                  ],
+                                },
+                                getDivideQuery(
+                                  "$$firstItem.math.finalDifficultyScore",
+                                  "$$firstItem.math.sessionsCompleted",
+                                ),
+                              ],
+                            },
                             timePerQuestion: getDivideQuery(
                               "$$firstItem.math.timePerQuestion",
                               "$$firstItem.math.sessionsCompleted",
@@ -234,6 +384,65 @@ export const averageWeeklyStats = async (): Promise<null> => {
                               "$$firstItem.reading.passagesRead",
                               "$$firstItem.reading.sessionsAttempted",
                             ),
+                            timePerPassage: getDivideQuery(
+                              "$$firstItem.reading.timePerPassage",
+                              "$$firstItem.reading.sessionsAttempted",
+                            ),
+                            wordsPerMinute: {
+                              $cond: [
+                                {
+                                  $and: [
+                                    {
+                                      $eq: [
+                                        "$$firstItem.reading.sessionsAttempted",
+                                        0,
+                                      ],
+                                    },
+                                    {
+                                      $gte: [
+                                        {
+                                          $size: "$weeklyMetrics",
+                                        },
+                                        2,
+                                      ],
+                                    },
+                                  ],
+                                },
+                                {
+                                  $arrayElemAt: [
+                                    "$weeklyMetrics.reading.wordsPerMinute",
+                                    1,
+                                  ],
+                                },
+                                getDivideQuery(
+                                  "$$firstItem.reading.wordsPerMinute",
+                                  "$$firstItem.reading.sessionsAttempted",
+                                ),
+                              ],
+                            },
+                          },
+                        },
+                      },
+                      writing: {
+                        $let: {
+                          vars: {
+                            firstItem: {
+                              $arrayElemAt: ["$weeklyMetrics", 0],
+                            },
+                          },
+                          in: {
+                            sessionsAttempted:
+                              "$$firstItem.writing.sessionsAttempted",
+                            sessionsCompleted:
+                              "$$firstItem.writing.sessionsCompleted",
+                            questionsAnswered: getDivideQuery(
+                              "$$firstItem.writing.questionsAnswered",
+                              "$$firstItem.writing.sessionsAttempted",
+                            ),
+                            timePerQuestion: getDivideQuery(
+                              "$$firstItem.writing.timePerQuestion",
+                              "$$firstItem.writing.sessionsAttempted",
+                            ),
                           },
                         },
                       },
@@ -254,42 +463,94 @@ export const averageWeeklyStats = async (): Promise<null> => {
   // set streak to empty array and push new empty array
   await Analytics.updateMany(
     {},
-    {
-      $push: {
-        weeklyMetrics: {
-          $each: [
-            {
-              date: getCurrentMonday(),
-              sessionsCompleted: 0,
-              streakLength: 0,
-              math: {
-                sessionsCompleted: 0,
-                questionsAttempted: 0,
-                questionsCorrect: 0,
-                finalDifficultyScore: 0,
-                timePerQuestion: 0,
-              },
-              trivia: {
-                sessionsCompleted: 0,
-                questionsAttempted: 0,
-                questionsCorrect: 0,
-                timePerQuestion: 0,
-              },
-              reading: {
-                sessionsAttempted: 0,
-                sessionsCompleted: 0,
-                passagesRead: 0,
-              },
-            },
-          ],
-          $position: 0,
+    [
+      {
+        $set: {
+          weeklyMetrics: {
+            $concatArrays: [
+              [
+                {
+                  date: getCurrentMonday(),
+                  sessionsCompleted: 0,
+                  streakLength: 0,
+                  active: getActiveQuery(1, 0),
+                  math: {
+                    sessionsCompleted: 0,
+                    questionsAttempted: 0,
+                    questionsCorrect: 0,
+                    finalDifficultyScore: 0,
+                    timePerQuestion: 0,
+                  },
+                  trivia: {
+                    sessionsCompleted: 0,
+                    questionsAttempted: 0,
+                    questionsCorrect: 0,
+                    timePerQuestion: 0,
+                  },
+                  reading: {
+                    sessionsAttempted: 0,
+                    sessionsCompleted: 0,
+                    passagesRead: 0,
+                    timePerPassage: 0,
+                    wordsPerMinute: 0,
+                  },
+                  writing: {
+                    sessionsAttempted: 0,
+                    sessionsCompleted: 0,
+                    questionsAnswered: 0,
+                    timePerQuestion: 0,
+                  },
+                },
+              ],
+              "$weeklyMetrics",
+            ],
+          },
+          streak: [],
         },
       },
-      $set: {
-        streak: [],
+      {
+        $set: {
+          active: getActiveQuery(2, 1),
+        },
+      },
+    ],
+    { multi: true },
+  );
+
+  const result = await Analytics.aggregate([
+    {
+      $match: {
+        active: true,
       },
     },
-  );
+    {
+      $count: "totalActiveUsers",
+    },
+  ]);
+
+  const totalActiveUsers = result.length > 0 ? result[0].totalActiveUsers : 0;
+
+  //await incrementActiveUsers(totalActiveUsers);
+
+  await OverallAnalytics.updateMany({}, [
+    {
+      $set: {
+        activeUsers: totalActiveUsers,
+        weeklyMetrics: {
+          $concatArrays: [
+            [
+              {
+                date: getCurrentMonday(),
+                totalUsers: "$totalUsers",
+                activeUsers: totalActiveUsers,
+              },
+            ],
+            "$weeklyMetrics",
+          ],
+        },
+      },
+    },
+  ]);
 
   return null;
 };
