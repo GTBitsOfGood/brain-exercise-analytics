@@ -1,8 +1,12 @@
 import Analytics from "@server/mongodb/models/Analytics";
 import { Days, IAnalytics } from "@/common_utils/types";
 import { getCurrentMonday } from "@server/utils/utils";
-import { incrementActiveUsers, incrementTotalUsers } from "./OverallAnalytics";
+// import { incrementActiveUsers, incrementTotalUsers } from "./OverallAnalytics";
 import OverallAnalytics from "../models/OverallAnalytics";
+
+interface IActiveUsers {
+  totalActiveUsers: number;
+}
 
 export const getAnalyticsByID = async (
   userID: string,
@@ -517,7 +521,7 @@ export const averageWeeklyStats = async (): Promise<null> => {
     { multi: true },
   );
 
-  const result = await Analytics.aggregate([
+  const result = await Analytics.aggregate<IActiveUsers>([
     {
       $match: {
         active: true,
@@ -530,7 +534,7 @@ export const averageWeeklyStats = async (): Promise<null> => {
 
   const totalActiveUsers = result.length > 0 ? result[0].totalActiveUsers : 0;
 
-  //await incrementActiveUsers(totalActiveUsers);
+  // await incrementActiveUsers(totalActiveUsers);
 
   await OverallAnalytics.updateMany({}, [
     {
