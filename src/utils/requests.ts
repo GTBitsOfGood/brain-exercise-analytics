@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { getAuth } from "firebase/auth";
+import firebaseInit from "@src/firebase/config";
 import { InternalRequestData, InternalResponseData } from "./types";
 
 export async function internalRequest<T>({
@@ -14,6 +15,7 @@ export async function internalRequest<T>({
     let newParams = queryParams;
     let newBody = body;
     if (authRequired) {
+      firebaseInit();
       const { currentUser } = getAuth();
       if (!currentUser) {
         throw new Error("Unable to get user");
