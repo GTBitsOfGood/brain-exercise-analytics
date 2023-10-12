@@ -13,21 +13,24 @@
 .welcome {
   color: black;
   font-size: 48px;
-  font-family: Poppins;
+  font: Poppins;
+  font-weight: 700;
   word-wrap: break-word;
+  padding-bottom: 6%;
 }
 
 .BEI {
   color: black;
   font-size: 33px;
-  font-family: Poppins;
+  font: Poppins;
+  font-weight: 600;
   word-wrap: break-word;
   width: 100%;
 }
 
 .BEI-image {
-  padding-top: 22%;
-  padding-bottom: 22%;
+  padding-top: 25%;
+  padding-bottom: 25%;
   width: 85%;
   height: 40%;
 }

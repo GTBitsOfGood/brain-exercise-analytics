@@ -1,36 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 .input-label {
   color: #2b3674;
   font-size: 14px;
-  font-family: Poppins;
-  /* font-weight: 500; */
+  font: Poppins;
+  font-weight: 600;
   line-height: 14px;
   word-wrap: break-word;
-  padding-bottom: 3%;
+  padding-bottom: 8px;
+}
+
+.input-container {
+  position: relative;
 }
 
 .input-field {
   color: #000000;
+  width: 100%;
   background-color: transparent;
-  font-size: 14px;
-  font-family: Poppins;
-  /* font-weight: 400; */
+  font-size: 12px;
+  font: Poppins;
+  font-weight: 500;
   line-height: 35px;
   word-wrap: break-word;
   resize: none;
   height: 40px;
   border-radius: 16px;
   border: 1px #e0e5f2 solid;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 17px;
+  padding-right: 17px;
 }
 
-.error {
-  font-family: “Poppins”, Helvetica;
-  color: red;
-  font-size: 12px;
-  margin-top: 80px;
+.input-field::placeholder {
+  color: #a3aed0;
 }
+
+.eye-icon {
+  position: absolute;
+  top: 20%;
+  right: 17px;
+  cursor: pointer;
+  color: lightgray;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
 .error-icon {
-  margin-right: 10px;
-  color: red;
+  color: #ff0000;
+}
+
+.error-message {
+  font: Poppins;
+  font-weight: 500;
+  color: #ff0000;
+  padding-left: 5px;
+  font-size: 10px;
 }

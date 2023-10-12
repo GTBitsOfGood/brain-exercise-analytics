@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "./inputField.css";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type InputFieldProps = {
@@ -15,26 +15,43 @@ type InputFieldProps = {
 };
 
 const InputField = (InputFieldProps: InputFieldProps) => {
+  const [passwordOrText, setPasswordOrText] = useState(InputFieldProps.type);
+
+  const toggleHidePassword = () => {
+    setPasswordOrText(passwordOrText === "text" ? "password" : "text");
+  };
+
   return (
-    <div>
+    <div className="container">
       <label className="input-label">{InputFieldProps.title}*</label>
-      <input
-        className="input-field"
-        type={InputFieldProps.type}
-        required={InputFieldProps.required}
-        placeholder={InputFieldProps.placeholder}
-        value={InputFieldProps.value}
-        onChange={InputFieldProps.onChange}
-      ></input>
+      <div className="input-container">
+        <input
+          className="input-field"
+          type={passwordOrText}
+          required={InputFieldProps.required}
+          placeholder={InputFieldProps.placeholder}
+          value={InputFieldProps.value}
+          onChange={InputFieldProps.onChange}
+        ></input>
+        {InputFieldProps.type !== null &&
+          InputFieldProps.type === "password" && (
+            <FontAwesomeIcon
+              className="eye-icon"
+              icon={faEye}
+              size="lg"
+              onClick={() => toggleHidePassword()}
+            />
+          )}
+      </div>
       {InputFieldProps.showError && (
-        <p className="error">
+        <div className="error-container">
           <FontAwesomeIcon
             className="error-icon"
             icon={faExclamationCircle}
-            size="lg"
+            size="sm"
           />
-          {InputFieldProps.error}
-        </p>
+          <p className="error-message">{InputFieldProps.error}</p>
+        </div>
       )}
     </div>
   );
