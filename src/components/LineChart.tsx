@@ -1,17 +1,7 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useState } from "react";
-
-interface D3Data {
-  data: { interval: string; value: number }[];
-  width?: number;
-  height?: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
-  style?: object;
-}
+import { D3Data } from "./types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -31,7 +21,16 @@ export default function LineChart({
   marginBottom = 40,
   marginLeft = 40,
   style = {},
+  yAxis = {
+    min: 0,
+    max: 1,
+    numDivisions: 5,
+    format: (d: d3.NumberValue) => JSON.stringify(d),
+  },
 }: D3Data) {
+  const yAxisFormat = yAxis?.format
+    ? yAxis.format
+    : (d: d3.NumberValue) => JSON.stringify(d);
   const [activeIndex, setActiveIndex] = useState(-1);
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
@@ -57,22 +56,31 @@ export default function LineChart({
     [0, data.length - 1],
     [marginLeft, width - marginRight],
   );
-  const xAxis = d3
+  const xAxisLabel = d3
     .axisBottom(x)
-    .ticks(5)
+    .ticks(data.length)
     .tickSizeOuter(0)
     .tickSizeInner(0)
     .tickPadding(15)
     .tickFormat((d) => data[d.valueOf()].interval);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  const y = d3.scaleLinear([0, 1], [height - marginBottom, marginTop]);
-  const yAxis = d3
+
+  const y = d3.scaleLinear(
+    [yAxis.min, yAxis.max],
+    [height - marginBottom, marginTop],
+  );
+  const yAxisLabel = d3
     .axisLeft(y)
-    .tickValues([0, 0.25, 0.5, 0.75, 1])
+    .tickValues(
+      d3.range(
+        yAxis.min,
+        yAxis.max + 1,
+        (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+      ),
+    )
     .tickSizeOuter(0)
     .tickSizeInner(0)
     .tickPadding(15)
-    .tickFormat(d3.format(".0%"));
+    .tickFormat(yAxisFormat);
   const line = d3
     .line()
     .x((d, i) => x(i))
@@ -85,14 +93,14 @@ export default function LineChart({
     .attr("class", "x-axis")
     .style("font", `9px ${poppins600.style.fontFamily}`)
     .style("color", "#B0BBD5")
-    .call(xAxis)
+    .call(xAxisLabel)
     .call((g) => g.select(".domain").remove());
   svg
     .append("g")
     .attr("transform", `translate(${marginLeft}, 0)`)
     .style("font", `9.5px ${poppins400.style.fontFamily}`)
     .style("color", "#A5A5A5")
-    .call(yAxis)
+    .call(yAxisLabel)
     .call((g) => g.select(".domain").remove());
 
   return (
