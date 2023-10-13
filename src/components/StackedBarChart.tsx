@@ -30,11 +30,11 @@ export default function StackedBarChart({
   const barWidth = 20;
   const x = d3.scaleLinear(
     [0, data.length - 1],
-    [marginLeft, width - marginRight]
+    [marginLeft, width - marginRight],
   );
   const y = d3.scaleLinear(
     [yAxis.min, yAxis.max],
-    [height - marginBottom, marginTop]
+    [height - marginBottom, marginTop],
   );
   return (
     <BarChart
@@ -78,7 +78,7 @@ export default function StackedBarChart({
             y={y(0)}
             width={barWidth}
             height={barWidth / 2}
-            color='white'
+            color="white"
             style={{ borderRadius: 10 }}
           />
         </Fragment>
