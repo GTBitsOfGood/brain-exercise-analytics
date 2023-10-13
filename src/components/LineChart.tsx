@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import { Fragment, MouseEvent, useState } from "react";
 
 interface D3Data {
-  data: [number, number][];
+  data: { interval: string; value: number }[];
   width?: number;
   height?: number;
   marginTop?: number;
@@ -62,8 +62,8 @@ export default function LineChart({
     .ticks(5)
     .tickSizeOuter(0)
     .tickSizeInner(0)
-    .tickPadding(15);
-  // xAxis.tickFormat(data).tickFont("12px sans-serif");
+    .tickPadding(15)
+    .tickFormat((d) => data[d.valueOf()].interval);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
   const y = d3.scaleLinear([0, 1], [height - marginBottom, marginTop]);
   const yAxis = d3
@@ -75,7 +75,7 @@ export default function LineChart({
     .tickFormat(d3.format(".0%"));
   const line = d3
     .line()
-    .x((d) => x(d[0]))
+    .x((d, i) => x(i))
     .y((d) => y(d[1]))
     .curve(d3.curveCatmullRom);
 
@@ -84,7 +84,6 @@ export default function LineChart({
     .attr("transform", `translate(0, ${height - marginBottom})`)
     .attr("class", "x-axis")
     .style("font", `9px ${poppins600.style.fontFamily}`)
-    // .style("margin-left", "20px")
     .style("color", "#B0BBD5")
     .call(xAxis)
     .call((g) => g.select(".domain").remove());
@@ -151,14 +150,14 @@ export default function LineChart({
           fill="none"
           stroke="#008AFC"
           strokeWidth="6"
-          d={line(data) as string | undefined}
+          d={line(data.map((d, i) => [i, d.value])) as string | undefined}
           radius={"10px"}
         />
         <g fill="white" stroke="currentColor" strokeWidth="1.5">
           <circle
             key={-1}
-            cx={x(data[0][0])}
-            cy={y(data[0][1])}
+            cx={x(0)}
+            cy={y(data[0].value)}
             r="2.5"
             strokeWidth={1}
             color="#008AFC"
@@ -166,8 +165,8 @@ export default function LineChart({
           />
           <circle
             key={-2}
-            cx={x(data[data.length - 1][0])}
-            cy={y(data[data.length - 1][1])}
+            cx={x(data.length - 1)}
+            cy={y(data[data.length - 1].value)}
             r="2.5"
             strokeWidth={1}
             color="#008AFC"
@@ -178,21 +177,21 @@ export default function LineChart({
               activeIndex === i && (
                 <Fragment key={i}>
                   <circle
-                    cx={x(d[0])}
-                    cy={y(d[1])}
+                    cx={x(i)}
+                    cy={y(d.value)}
                     r="7.5"
                     strokeWidth={5}
                     color="#008AFC"
-                  ></circle>
+                  />
                   <foreignObject
-                    x={x(d[0])}
-                    y={y(d[1] + 0.2)}
+                    x={x(i)}
+                    y={y(d.value + 0.2)}
                     width="30"
                     height="30"
                     fontSize={8}
                   >
                     <div style={{ color: "#A5A5A5" }}>
-                      {Math.round(d[1] * 100) / 100}
+                      {Math.round(d.value * 100) / 100}
                     </div>
                   </foreignObject>
                 </Fragment>
