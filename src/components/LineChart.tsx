@@ -1,6 +1,6 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
-import { MouseEvent, useState } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 
 interface D3Data {
   data: [number, number][];
@@ -154,36 +154,48 @@ export default function LineChart({
           d={line(data) as string | undefined}
           radius={"10px"}
         />
-        <circle
-          key={0}
-          cx={x(data[0][0])}
-          cy={y(data[0][1])}
-          r="3"
-          strokeWidth={1}
-          color="#008AFC"
-          fill="#008AFC"
-        />
-        <circle
-          key={data.length - 1}
-          cx={x(data[data.length - 1][0])}
-          cy={y(data[data.length - 1][1])}
-          r="3"
-          strokeWidth={1}
-          color="#008AFC"
-          fill="#008AFC"
-        />
         <g fill="white" stroke="currentColor" strokeWidth="1.5">
+          <circle
+            key={-1}
+            cx={x(data[0][0])}
+            cy={y(data[0][1])}
+            r="2.5"
+            strokeWidth={1}
+            color="#008AFC"
+            fill="#008AFC"
+          />
+          <circle
+            key={-2}
+            cx={x(data[data.length - 1][0])}
+            cy={y(data[data.length - 1][1])}
+            r="2.5"
+            strokeWidth={1}
+            color="#008AFC"
+            fill="#008AFC"
+          />
           {data.map(
             (d, i) =>
               activeIndex === i && (
-                <circle
-                  key={i}
-                  cx={x(d[0])}
-                  cy={y(d[1])}
-                  r="7.5"
-                  strokeWidth={5}
-                  color="#008AFC"
-                />
+                <Fragment key={i}>
+                  <circle
+                    cx={x(d[0])}
+                    cy={y(d[1])}
+                    r="7.5"
+                    strokeWidth={5}
+                    color="#008AFC"
+                  ></circle>
+                  <foreignObject
+                    x={x(d[0])}
+                    y={y(d[1] + 0.2)}
+                    width="30"
+                    height="30"
+                    fontSize={8}
+                  >
+                    <div style={{ color: "#A5A5A5" }}>
+                      {Math.round(d[1] * 100) / 100}
+                    </div>
+                  </foreignObject>
+                </Fragment>
               ),
           )}
         </g>
