@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./inputField.css";
-import { faExclamationCircle, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 type InputFieldProps = {
   title: string;
@@ -26,7 +27,9 @@ const InputField = (InputFieldProps: InputFieldProps) => {
       <label className="input-label">{InputFieldProps.title}*</label>
       <div className="input-container">
         <input
-          className="input-field"
+          className={
+            InputFieldProps.showError ? "input-field-error" : "input-field"
+          }
           type={passwordOrText}
           required={InputFieldProps.required}
           placeholder={InputFieldProps.placeholder}
@@ -35,10 +38,8 @@ const InputField = (InputFieldProps: InputFieldProps) => {
         ></input>
         {InputFieldProps.type !== null &&
           InputFieldProps.type === "password" && (
-            <FontAwesomeIcon
+            <RemoveRedEyeIcon
               className="eye-icon"
-              icon={faEye}
-              size="lg"
               onClick={() => toggleHidePassword()}
             />
           )}

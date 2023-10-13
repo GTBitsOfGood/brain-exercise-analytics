@@ -1,6 +1,7 @@
 "use client";
 
 import React, { FC, useState, useEffect } from "react";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import LeftSideOfPage from "../../../../components/LeftSideOfPage/leftSideOfPage";
 import InputField from "../../../../components/InputField/inputField";
 import "./page.css";
@@ -17,17 +18,34 @@ const Page: FC<PageProps> = ({ params }) => { // eslint-disable-line
   const [confirmClicked, setConfirmClicked] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const directToSignIn = async () => {
+  useEffect(() => {
+    const validateToken = async () => {
+      try {
+        await internalRequest({
+          url: "/api/volunteer/auth/password-reset/validate",
+          queryParams: { token: params.token },
+          method: HttpMethod.GET,
+          authRequired: false,
+        });
+      } catch (error) {
+        window.location.href = "/auth/password-reset/error";
+      }
+    };
+    validateToken();
+  }, [params.token]);
+
+  const confirmButtonFunction = async () => {
     setConfirmClicked(true);
     setPasswordError(
       password.length < 8
-        ? "Password must be at least 8 characters. Please try again."
+        ? "Password must have a minimum of 8 characters. Please try again."
         : "",
     );
     if (password.length >= 8 && confirmPassword.length < 8) {
@@ -45,7 +63,6 @@ const Page: FC<PageProps> = ({ params }) => { // eslint-disable-line
       password === confirmPassword;
     if (inputsValid) {
       try {
-        // Make the internalRequest
         await internalRequest({
           url: "/api/volunteer/auth/password-reset/update-password",
           method: HttpMethod.POST,
@@ -55,15 +72,17 @@ const Page: FC<PageProps> = ({ params }) => { // eslint-disable-line
           },
           authRequired: true,
         });
+
+        setPasswordSuccess(true);
+
+        setTimeout(() => {
+          window.location.href = "/auth/login";
+        }, 5000);
       } catch (error) {
         setConfirmPasswordError(
           "Error: An internal server error has occurred. Please try again later.",
         );
       }
-
-      setTimeout(() => {
-        window.location.href = "/auth/login";
-      }, 5000);
     }
   };
 
@@ -94,11 +113,10 @@ const Page: FC<PageProps> = ({ params }) => { // eslint-disable-line
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
+                    setPasswordError("");
                   }}
                   showError={confirmClicked && passwordError.length !== 0}
-                  error={
-                    "Password must be at least 8 characters. Please try again."
-                  }
+                  error={passwordError}
                 />
               </div>
               <div className="passwords">
@@ -108,19 +126,30 @@ const Page: FC<PageProps> = ({ params }) => { // eslint-disable-line
                   required={true}
                   value={confirmPassword}
                   placeholder={"Min. 8 characters"}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
                   showError={
                     confirmClicked && confirmPasswordError.length !== 0
                   }
                   error={confirmPasswordError}
                 />
               </div>
+              {passwordSuccess && (
+                <div className="success-container">
+                  <CheckCircleOutlineIcon className="check-icon" />
+                  <p className="success-text">
+                    Password has been reset successfully.
+                  </p>
+                </div>
+              )}
               <div className="button-container">
                 <button
                   className="confirm-button"
-                  onChange={() => directToSignIn()}
+                  onClick={() => confirmButtonFunction()}
                 >
-                  Confirm
+                  {passwordSuccess ? "Go to Sign in" : "Confirm"}
                 </button>
               </div>
             </div>

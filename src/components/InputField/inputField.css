@@ -38,6 +38,27 @@
   color: #a3aed0;
 }
 
+.input-field-error {
+  color: #000000;
+  width: 100%;
+  background-color: #f300001a;
+  font-size: 12px;
+  font: Poppins;
+  font-weight: 500;
+  line-height: 35px;
+  word-wrap: break-word;
+  resize: none;
+  height: 40px;
+  border-radius: 16px;
+  border: 1px #f30000 solid;
+  padding-left: 17px;
+  padding-right: 17px;
+}
+
+.input-field-error::placeholder {
+  color: #a3aed0;
+}
+
 .eye-icon {
   position: absolute;
   top: 20%;

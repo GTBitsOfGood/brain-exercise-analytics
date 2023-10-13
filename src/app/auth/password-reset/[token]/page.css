@@ -54,6 +54,32 @@
   padding-top: 4%;
 }
 
+.success-container {
+  display: flex;
+  flex-direction: row;
+  background-color: #e3f5df;
+  height: 45px;
+  padding-left: 7%;
+  align-items: center;
+  position: absolute;
+  top: 220px;
+  width: 100%;
+}
+
+.check-icon {
+  color: #34a853;
+  padding-right: 4px;
+}
+
+.success-text {
+  color: #313144;
+  font-size: 14px;
+  font: Poppins;
+  font-weight: 500;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
 .button-container {
   position: absolute;
   top: 280px;
@@ -80,4 +106,5 @@
   border: none;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }

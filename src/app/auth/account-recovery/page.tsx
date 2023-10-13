@@ -22,13 +22,13 @@ export default function Page() {
     setIsClient(true);
   }, []);
 
-  const redirect = async () => {
+  const continueButtonFunction = async () => {
     setContinueClicked(true);
-    setEmailError(email.length === 0 ? "Email can't be empty." : "");
+    setEmailError(email.length === 0 ? "Email can't be blank." : "");
     setFirstNameError(
-      firstName.length === 0 ? "First name can't be empty." : "",
+      firstName.length === 0 ? "First name can't be blank." : "",
     );
-    setLastNameError(lastName.length === 0 ? "Last name can't be empty." : "");
+    setLastNameError(lastName.length === 0 ? "Last name can't be blank." : "");
 
     const anyInputEmpty =
       firstName.length === 0 || lastName.length === 0 || email.length === 0;
@@ -41,7 +41,7 @@ export default function Page() {
             email,
             name: `${firstName} ${lastName}`,
           },
-          authRequired: true,
+          authRequired: false,
         });
 
         setValidateInputs(true);
@@ -51,10 +51,7 @@ export default function Page() {
       } catch (e) {
         const error = e as Error;
         setValidateInputs(false);
-        if (
-          error.message ===
-          "You do not have permissions to access this API route."
-        ) {
+        if (error.message === "User not found.") {
           setEmailError(
             "Email address not found. Please try again or contact bei2023@gmail.com to retrieve it.",
           );
@@ -98,7 +95,10 @@ export default function Page() {
                       placeholder="Your first name"
                       required={true}
                       value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
+                      onChange={(e) => {
+                        setFirstName(e.target.value);
+                        setFirstNameError("");
+                      }}
                       showError={firstNameError !== ""}
                       error={firstNameError}
                     />
@@ -109,7 +109,10 @@ export default function Page() {
                       placeholder="Your last name"
                       required={true}
                       value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
+                      onChange={(e) => {
+                        setLastName(e.target.value);
+                        setLastNameError("");
+                      }}
                       showError={lastNameError !== ""}
                       error={lastNameError}
                     />
@@ -121,7 +124,10 @@ export default function Page() {
                     placeholder="mail@simmmple.com"
                     required={true}
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError("");
+                    }}
                     showError={emailError !== ""}
                     error={emailError}
                   />
@@ -129,7 +135,7 @@ export default function Page() {
                 <div className="continue-button-container">
                   <button
                     className="continue-button"
-                    onClick={() => redirect()}
+                    onClick={() => continueButtonFunction()}
                   >
                     Continue
                   </button>
