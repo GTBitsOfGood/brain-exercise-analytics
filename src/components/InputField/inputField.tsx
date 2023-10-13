@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import "./inputField.css";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import { Poppins } from "next/font/google";
+import styles from "./inputField.module.css";
+
+const poppins = Poppins({
+  subsets: ["latin-ext"],
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 type InputFieldProps = {
   title: string;
@@ -23,37 +30,48 @@ const InputField = (InputFieldProps: InputFieldProps) => {
   };
 
   return (
-    <div className="container">
-      <label className="input-label">{InputFieldProps.title}*</label>
-      <div className="input-container">
-        <input
-          className={
-            InputFieldProps.showError ? "input-field-error" : "input-field"
-          }
-          type={passwordOrText}
-          required={InputFieldProps.required}
-          placeholder={InputFieldProps.placeholder}
-          value={InputFieldProps.value}
-          onChange={InputFieldProps.onChange}
-        ></input>
-        {InputFieldProps.type !== null &&
-          InputFieldProps.type === "password" && (
-            <RemoveRedEyeIcon
-              className="eye-icon"
-              onClick={() => toggleHidePassword()}
-            />
-          )}
-      </div>
-      {InputFieldProps.showError && (
-        <div className="error-container">
-          <FontAwesomeIcon
-            className="error-icon"
-            icon={faExclamationCircle}
-            size="sm"
-          />
-          <p className="error-message">{InputFieldProps.error}</p>
+    <div className={styles.container}>
+      <main className={poppins.variable}>
+        <div className={styles["label-container"]}>
+          <label className={styles["input-label"]}>
+            {InputFieldProps.title}
+          </label>
+          <label className={styles.asterisk}>*</label>
         </div>
-      )}
+        <div className={styles["input-container"]}>
+          <input
+            className={
+              InputFieldProps.showError
+                ? styles["input-field-error"]
+                : styles["input-field"]
+            }
+            type={passwordOrText}
+            required={InputFieldProps.required}
+            placeholder={InputFieldProps.placeholder}
+            value={InputFieldProps.value}
+            onChange={InputFieldProps.onChange}
+          ></input>
+          {InputFieldProps.type !== null &&
+            InputFieldProps.type === "password" && (
+              <RemoveRedEyeOutlinedIcon
+                className={styles["eye-icon"]}
+                onClick={() => toggleHidePassword()}
+              />
+            )}
+        </div>
+        {InputFieldProps.showError && (
+          <div className={styles["error-container"]}>
+            {InputFieldProps.error !== " " && (
+              <FontAwesomeIcon
+                className={styles["error-icon"]}
+                icon={faExclamationCircle}
+                size="sm"
+              />
+            )}
+            <p className={styles["error-message"]}>{InputFieldProps.error}</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

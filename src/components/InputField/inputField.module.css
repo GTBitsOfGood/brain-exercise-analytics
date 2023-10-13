@@ -3,17 +3,31 @@
   flex-direction: column;
 }
 
+.label-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .input-label {
   color: #2b3674;
-  font-size: 14px;
-  font: Poppins;
+  font-size: 13px;
+  font-family: var(--font-poppins);
   font-weight: 600;
   line-height: 14px;
   word-wrap: break-word;
-  padding-bottom: 8px;
+}
+
+.asterisk {
+  color: #005aa3;
+  font-size: 13px;
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  line-height: 14px;
+  word-wrap: break-word;
 }
 
 .input-container {
+  padding-top: 8px;
   position: relative;
 }
 
@@ -22,7 +36,7 @@
   width: 100%;
   background-color: transparent;
   font-size: 12px;
-  font: Poppins;
+  font-family: var(--font-poppins);
   font-weight: 500;
   line-height: 35px;
   word-wrap: break-word;
@@ -43,16 +57,17 @@
   width: 100%;
   background-color: #f300001a;
   font-size: 12px;
-  font: Poppins;
-  font-weight: 500;
+  font-family: var(--font-poppins);
+  font-weight: 400;
   line-height: 35px;
   word-wrap: break-word;
   resize: none;
   height: 40px;
   border-radius: 16px;
-  border: 1px #f30000 solid;
+  border: 1.5px #f30000 solid;
   padding-left: 17px;
   padding-right: 17px;
+  outline: none;
 }
 
 .input-field-error::placeholder {
@@ -61,10 +76,10 @@
 
 .eye-icon {
   position: absolute;
-  top: 20%;
+  top: 33%;
   right: 17px;
   cursor: pointer;
-  color: lightgray;
+  color: #a3aed0;
 }
 
 .error-container {
@@ -78,7 +93,7 @@
 }
 
 .error-message {
-  font: Poppins;
+  font-family: var(--font-poppins);
   font-weight: 500;
   color: #ff0000;
   padding-left: 5px;

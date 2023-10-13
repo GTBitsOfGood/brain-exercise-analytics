@@ -11,26 +11,26 @@
 }
 
 .welcome {
+  font-family: var(--font-poppins);
   color: black;
   font-size: 48px;
-  font: Poppins;
-  font-weight: 700;
+  font-weight: 600;
   word-wrap: break-word;
-  padding-bottom: 6%;
+  padding-bottom: 1%;
 }
 
-.BEI {
+.bei {
   color: black;
   font-size: 33px;
-  font: Poppins;
-  font-weight: 600;
+  font-family: var(--font-poppins);
+  font-weight: 500;
   word-wrap: break-word;
   width: 100%;
 }
 
 .BEI-image {
-  padding-top: 25%;
-  padding-bottom: 25%;
+  padding-top: 27%;
+  padding-bottom: 27%;
   width: 85%;
   height: 40%;
 }
