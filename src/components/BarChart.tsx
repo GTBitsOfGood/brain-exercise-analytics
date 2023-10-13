@@ -1,6 +1,6 @@
 import { Poppins } from "next/font/google";
 import * as d3 from "d3";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import { D3Data } from "./types";
 
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -10,6 +10,7 @@ const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 interface DataParams extends D3Data {
   highlightLargest?: boolean;
+  children?: ReactNode;
 }
 
 export default function BarChart({
@@ -28,6 +29,7 @@ export default function BarChart({
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
   highlightLargest = true,
+  children,
 }: DataParams) {
   const [largest, setLargest] = useState(-1);
   const barWidth = 20;
@@ -77,7 +79,7 @@ export default function BarChart({
       .tickValues(
         d3.range(
           yAxis.min,
-          yAxis.max + 1,
+          yAxis.max + 0.0001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -130,37 +132,38 @@ export default function BarChart({
       </div>
       <svg width={width} height={height} style={{ marginTop: 10 }}>
         <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
-          {data.map((d, i) => {
-            const color =
-              highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
-            return (
-              <Fragment key={i}>
-                <rect
-                  x={x(i)}
-                  y={y(d.value)}
-                  width={barWidth}
-                  height={height - y(d.value) - marginBottom}
-                  color={color}
-                  style={{ borderRadius: 10 }}
-                />
-                <circle
-                  cx={x(i) + barWidth / 2}
-                  cy={y(d.value)}
-                  width={barWidth}
-                  r={barWidth / 2}
-                  color={color}
-                />
-                <rect
-                  x={x(i)}
-                  y={y(0)}
-                  width={barWidth}
-                  height={barWidth / 2}
-                  color="white"
-                  style={{ borderRadius: 10 }}
-                />
-              </Fragment>
-            );
-          })}
+          {children ||
+            data.map((d, i) => {
+              const color =
+                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
+              return (
+                <Fragment key={i}>
+                  <rect
+                    x={x(i)}
+                    y={y(d.value)}
+                    width={barWidth}
+                    height={height - y(d.value) - marginBottom}
+                    color={color}
+                    style={{ borderRadius: 10 }}
+                  />
+                  <circle
+                    cx={x(i) + barWidth / 2}
+                    cy={y(d.value)}
+                    width={barWidth}
+                    r={barWidth / 2}
+                    color={color}
+                  />
+                  <rect
+                    x={x(i)}
+                    y={y(0)}
+                    width={barWidth}
+                    height={barWidth / 2}
+                    color="white"
+                    style={{ borderRadius: 10 }}
+                  />
+                </Fragment>
+              );
+            })}
         </g>
       </svg>
     </div>
