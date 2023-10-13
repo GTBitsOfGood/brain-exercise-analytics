@@ -1,6 +1,6 @@
 import { Poppins } from "next/font/google";
 import * as d3 from "d3";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { D3Data } from "./types";
 
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -12,7 +12,7 @@ interface DataParams extends D3Data {
   highlightLargest?: boolean;
 }
 
-export default function LineChart({
+export default function BarChart({
   data,
   width = 375,
   height = 180,
@@ -27,79 +27,81 @@ export default function LineChart({
     numDivisions: 5,
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
-  highlightLargest = false,
+  highlightLargest = true,
 }: DataParams) {
-  const yAxisFormat = yAxis?.format
-    ? yAxis.format
-    : (d: d3.NumberValue) => JSON.stringify(d);
+  const [largest, setLargest] = useState(-1);
   const barWidth = 20;
-  function indexOfMax() {
-    if (data.length === 0) {
-      return -1;
-    }
-
-    let max = data[0].value;
-    let maxIndex = 0;
-
-    for (let i = 1; i < data.length; i += 1) {
-      if (data[i].value > max) {
-        maxIndex = i;
-        max = data[i].value;
-      }
-    }
-
-    return maxIndex;
-  }
-  const largest = indexOfMax();
-
-  const svg = d3.select("svg");
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
   const x = d3.scaleLinear(
     [0, data.length - 1],
     [marginLeft, width - marginRight],
   );
-  const xAxisLabel = d3
-    .axisBottom(x)
-    .ticks(data.length)
-    .tickSizeOuter(0)
-    .tickSizeInner(0)
-    .tickPadding(15)
-    .tickFormat((d) => data[d.valueOf()].interval);
-
   const y = d3.scaleLinear(
     [yAxis.min, yAxis.max],
     [height - marginBottom, marginTop],
   );
-  const yAxisLabel = d3
-    .axisLeft(y)
-    .tickValues(
-      d3.range(
-        yAxis.min,
-        yAxis.max + 1,
-        (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-      ),
-    )
-    .tickSizeOuter(0)
-    .tickSizeInner(0)
-    .tickPadding(15)
-    .tickFormat(yAxisFormat);
+  useEffect(() => {
+    const yAxisFormat = yAxis?.format
+      ? yAxis.format
+      : (d: d3.NumberValue) => JSON.stringify(d);
+    function indexOfMax() {
+      if (data.length === 0) {
+        return -1;
+      }
 
-  svg
-    .append("g")
-    .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
-    .attr("class", "x-axis")
-    .style("font", `9px ${poppins600.style.fontFamily}`)
-    .style("color", "#B0BBD5")
-    .call(xAxisLabel)
-    .call((g) => g.select(".domain").remove());
-  svg
-    .append("g")
-    .attr("transform", `translate(${marginLeft}, 0)`)
-    .style("font", `9.5px ${poppins400.style.fontFamily}`)
-    .style("color", "#A5A5A5")
-    .call(yAxisLabel)
-    .call((g) => g.select(".domain").remove());
+      let max = data[0].value;
+      let maxIndex = 0;
+
+      for (let i = 1; i < data.length; i += 1) {
+        if (data[i].value > max) {
+          maxIndex = i;
+          max = data[i].value;
+        }
+      }
+
+      return maxIndex;
+    }
+    setLargest(indexOfMax());
+
+    const svg = d3.select("svg");
+
+    const xAxisLabel = d3
+      .axisBottom(x)
+      .ticks(data.length)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickPadding(15)
+      .tickFormat((d) => data[d.valueOf()].interval);
+
+    const yAxisLabel = d3
+      .axisLeft(y)
+      .tickValues(
+        d3.range(
+          yAxis.min,
+          yAxis.max + 1,
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+        ),
+      )
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickPadding(15)
+      .tickFormat(yAxisFormat);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
+      .attr("class", "x-axis")
+      .style("font", `9px ${poppins600.style.fontFamily}`)
+      .style("color", "#B0BBD5")
+      .call(xAxisLabel)
+      .call((g) => g.select(".domain").remove());
+    svg
+      .append("g")
+      .attr("transform", `translate(${marginLeft}, 0)`)
+      .style("font", `9.5px ${poppins400.style.fontFamily}`)
+      .style("color", "#A5A5A5")
+      .call(yAxisLabel)
+      .call((g) => g.select(".domain").remove());
+  }, []);
 
   return (
     <div
