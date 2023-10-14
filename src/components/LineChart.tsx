@@ -1,6 +1,6 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
-import { Fragment, MouseEvent, useState } from "react";
+import { Fragment, MouseEvent, useEffect, useState } from "react";
 import { D3Data } from "./types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
@@ -36,13 +36,8 @@ export default function LineChart({
   const yAxisFormat = yAxis?.format
     ? yAxis.format
     : (d: d3.NumberValue) => JSON.stringify(d);
-  const actualChange = data[data.length - 1].value - data[0].value;
+  const actualChange = data[data.length - 1].value / data[0].value - 1;
   const [activeIndex, setActiveIndex] = useState(-1);
-  console.log(
-    data[data.length - 1].value,
-    data[0].value,
-    data[data.length - 1].value / data[0].value - 1,
-  );
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
     const svg: Element = e.currentTarget as SVGElement;
@@ -60,59 +55,61 @@ export default function LineChart({
     setActiveIndex(-1);
   };
 
-  const svg = d3.select("svg");
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  const x = d3.scaleLinear(
-    [0, data.length - 1],
-    [marginLeft, width - marginRight],
-  );
-  const xAxisLabel = d3
-    .axisBottom(x)
-    .ticks(data.length)
-    .tickSizeOuter(0)
-    .tickSizeInner(0)
-    .tickPadding(15)
-    .tickFormat((d) => data[d.valueOf()].interval);
-
   const y = d3.scaleLinear(
     [yAxis.min, yAxis.max],
     [height - marginBottom, marginTop],
   );
-  const yAxisLabel = d3
-    .axisLeft(y)
-    .tickValues(
-      d3.range(
-        yAxis.min,
-        yAxis.max + 1,
-        (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-      ),
-    )
-    .tickSizeOuter(0)
-    .tickSizeInner(0)
-    .tickPadding(15)
-    .tickFormat(yAxisFormat);
+
+  const x = d3.scaleLinear(
+    [0, data.length - 1],
+    [marginLeft, width - marginRight],
+  );
   const line = d3
     .line()
     .x((d, i) => x(i))
     .y((d) => y(d[1]))
     .curve(d3.curveCatmullRom);
 
-  svg
-    .append("g")
-    .attr("transform", `translate(0, ${height - marginBottom})`)
-    .attr("class", "x-axis")
-    .style("font", `9px ${poppins600.style.fontFamily}`)
-    .style("color", "#B0BBD5")
-    .call(xAxisLabel)
-    .call((g) => g.select(".domain").remove());
-  svg
-    .append("g")
-    .attr("transform", `translate(${marginLeft}, 0)`)
-    .style("font", `9.5px ${poppins400.style.fontFamily}`)
-    .style("color", "#A5A5A5")
-    .call(yAxisLabel)
-    .call((g) => g.select(".domain").remove());
+  useEffect(() => {
+    const svg = d3.select("svg");
+
+    const xAxisLabel = d3
+      .axisBottom(x)
+      .ticks(data.length)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickPadding(15)
+      .tickFormat((d) => data[d.valueOf()].interval);
+    const yAxisLabel = d3
+      .axisLeft(y)
+      .tickValues(
+        d3.range(
+          yAxis.min,
+          yAxis.max + 1,
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+        ),
+      )
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickPadding(15)
+      .tickFormat(yAxisFormat);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(0, ${height - marginBottom})`)
+      .attr("class", "x-axis")
+      .style("font", `9px ${poppins600.style.fontFamily}`)
+      .style("color", "#B0BBD5")
+      .call(xAxisLabel)
+      .call((g) => g.select(".domain").remove());
+    svg
+      .append("g")
+      .attr("transform", `translate(${marginLeft}, 0)`)
+      .style("font", `9.5px ${poppins400.style.fontFamily}`)
+      .style("color", "#A5A5A5")
+      .call(yAxisLabel)
+      .call((g) => g.select(".domain").remove());
+  }, []);
 
   return (
     <div
