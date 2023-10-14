@@ -9,16 +9,15 @@ interface DataParams extends D3Data {
     value: number;
     stackedValue: number;
   }[];
+  title: string;
+  hoverable?: boolean;
 }
 
 export default function StackedBarChart({
+  title,
   data,
   width = 375,
   height = 180,
-  marginTop = 40,
-  marginRight = 25,
-  marginBottom = 25,
-  marginLeft = 35,
   style = {},
   yAxis = {
     min: 0,
@@ -26,7 +25,12 @@ export default function StackedBarChart({
     numDivisions: 5,
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
+  hoverable = false,
 }: DataParams) {
+  const marginTop = 40;
+  const marginRight = 25;
+  const marginBottom = 25;
+  const marginLeft = 35;
   const barWidth = 20;
   const x = d3.scaleLinear(
     [0, data.length - 1],
@@ -38,15 +42,13 @@ export default function StackedBarChart({
   );
   return (
     <BarChart
+      title={title}
       data={data}
       width={width}
       height={height}
-      marginBottom={marginBottom}
-      marginTop={marginTop}
-      marginLeft={marginLeft}
-      marginRight={marginRight}
       style={style}
       yAxis={yAxis}
+      hoverable={hoverable}
     >
       {data.map((d, i) => (
         <Fragment key={i}>

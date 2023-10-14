@@ -1,6 +1,6 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
-import { Fragment, MouseEvent, useEffect, useState } from "react";
+import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
 import { D3Data } from "./types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
@@ -36,7 +36,8 @@ export default function LineChart({
   const yAxisFormat = yAxis?.format
     ? yAxis.format
     : (d: d3.NumberValue) => JSON.stringify(d);
-  const actualChange = data[data.length - 1].value / data[0].value - 1;
+  const actualChange =
+    data[0].value !== 0 ? data[data.length - 1].value / data[0].value - 1 : 1;
   const [activeIndex, setActiveIndex] = useState(-1);
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
@@ -55,6 +56,8 @@ export default function LineChart({
     setActiveIndex(-1);
   };
 
+  const windowRef = useRef(null);
+
   const y = d3.scaleLinear(
     [yAxis.min, yAxis.max],
     [height - marginBottom, marginTop],
@@ -71,7 +74,7 @@ export default function LineChart({
     .curve(d3.curveCatmullRom);
 
   useEffect(() => {
-    const svg = d3.select("svg");
+    const svg = d3.select(windowRef.current);
 
     const xAxisLabel = d3
       .axisBottom(x)
@@ -159,6 +162,7 @@ export default function LineChart({
         </p>
       </div>
       <svg
+        ref={windowRef}
         width={width}
         height={height}
         onMouseMove={hoverable ? handleMouseMove : undefined}
@@ -204,14 +208,12 @@ export default function LineChart({
                   />
                   <foreignObject
                     x={x(i)}
-                    y={y(d.value + 0.2)}
+                    y={y(d.value) - 20}
                     width="30"
                     height="30"
                     fontSize={8}
                   >
-                    <div style={{ color: "#A5A5A5" }}>
-                      {Math.round(d.value * 100) / 100}
-                    </div>
+                    <div style={{ color: "#A5A5A5" }}>{d.value}</div>
                   </foreignObject>
                 </Fragment>
               ),
