@@ -6,6 +6,8 @@
   padding-bottom: 5%;
   padding-left: 10%;
   padding-right: 13%;
+
+  overflow: hidden;
 }
 
 .split-screen {

@@ -1,32 +1,97 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
-import LeftSideOfPage from "../../../components/LeftSideOfPage/leftSideOfPage";
-import "./page.css";
-
-// placeholder file
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSquareCheck,
+  faSquare,
+  faExclamationCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import LeftSideOfPage from "@src/components/LeftSideOfPage/leftSideOfPage";
+import InputField from "@src/components/InputField/inputField";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod } from "@src/utils/types";
+import googleSignIn from "@src/firebase/google_signin";
+import { emailSignIn } from "@src/firebase/email_signin";
+import styles from "./page.module.css";
 
 export default function Page() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [number, setNumber] = useState("");
-  const [validateInputs, setValidateInputs] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [keepLogged, setKeepLogged] = useState(true);
+  const [showGeneralError, setShowGeneralError] = useState(false);
 
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const redirect = () => {
-    const isValid =
-      firstName.trim() !== "" && lastName.trim() !== "" && number.trim() !== "";
-    setValidateInputs(isValid);
-    if (isValid) {
-      setTimeout(() => {
-        window.location.href = "/auth/login";
-      }, 30000);
+  const redirect = async () => {
+    let hasError = false;
+
+    if (email.trim() === "") {
+      setEmailError("Email can't be blank.");
+      hasError = true;
     }
+    if (password.trim() === "") {
+      setPasswordError("Password can't be blank.");
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    try {
+      await emailSignIn(email, password);
+      try {
+        await internalRequest({
+          url: "/api/volunteer/auth/login",
+          method: HttpMethod.GET,
+          body: {
+            email,
+          },
+        });
+
+        setTimeout(() => {
+          window.location.href = "/auth/redirect";
+        }, 30000);
+      } catch (error) {
+        setShowGeneralError(true);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        const firebaseError = error as { code?: string };
+
+        switch (firebaseError.code) {
+          case "auth/user-not-found":
+            setEmailError(
+              "Email address not found. Please try again or contact bei2023@gmail.com to retrieve it.",
+            );
+            break;
+          case "auth/wrong-password":
+            setPasswordError(
+              "Wrong password. Please try again or click Forgot Password to reset it.",
+            );
+            break;
+          default:
+            setShowGeneralError(true);
+        }
+      }
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+      window.location.href = "/auth/redirect";
+    } catch (error) {
+      setShowGeneralError(true);
+    }
+  };
+
+  const toggleKeepMeLoggedIn = () => {
+    setKeepLogged((prevState) => !prevState);
   };
 
   if (!isClient) {
@@ -34,62 +99,131 @@ export default function Page() {
   }
 
   return (
-    <div className="screen">
-      <div className="split-screen">
-        <div className="left">
+    <div className={styles.screen}>
+      <div className={styles.splitScreen}>
+        <div className={styles.leftPanel}>
           <LeftSideOfPage />
         </div>
-        <div className="middle-space" />
-        <div className="right">
-          <div>
-            <span className="account-recovery">Information</span>
-            {!validateInputs && (
-              <p className="invalid-input">
-                We&apos;re sorry, the information you&apos;ve entered is not
-                valid.
-                <br />
-                Please try again.
+        <div className={styles.middleSpace} />
+        <div className={styles.rightPanel}>
+          {
+            <div>
+              <span className={styles.accountRecovery}>Welcome</span>
+              <p className={styles.descriptionText}>
+                Enter your email and password to sign in!
               </p>
-            )}
-            <div className="inputs">
-              <div className="first-last-name">
-                <div className="name">
-                  <label className="input-label">First Name*</label>
-                  <input
-                    className="name-input"
-                    placeholder="Your first name"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  ></input>
+              <div className={styles.inputFields}>
+                <div className={styles.googleButtonContainer}>
+                  <button
+                    className={styles.googleButton}
+                    onClick={handleGoogleSignIn}
+                  >
+                    <img
+                      className={styles.googleGLogo}
+                      alt="Google g logo"
+                      src="https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg"
+                    />
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>Sign in with Google
+                  </button>
                 </div>
-                <div className="name">
-                  <label className="input-label">Last Name*</label>
-                  <input
-                    className="name-input"
-                    placeholder="Your last name"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  ></input>
+                <div className={styles.separator}>
+                  <img
+                    className={styles.line}
+                    alt="Line"
+                    src="https://c.animaapp.com/2gdwBOyI/img/line-17.svg"
+                  />
+                  <div className={styles.textWrapper4}>or</div>
+                  <img
+                    className={styles.line}
+                    alt="Line"
+                    src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
+                  />
                 </div>
-              </div>
-              <div className="email">
-                <label className="input-label">Contact Number*</label>
-                <input
-                  className="email-input"
-                  type="tel"
-                  placeholder="Your number"
-                  required
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value)}
-                ></input>
+
+                <div className={styles.emailField}>
+                  <InputField
+                    title="Email"
+                    placeholder="mail@simmmple.com"
+                    required={true}
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError("");
+                    }}
+                    showError={emailError !== ""}
+                    error={emailError}
+                  />
+                </div>
+                <div className={styles.passwords}>
+                  <InputField
+                    title="Password"
+                    type="password"
+                    required={true}
+                    placeholder="Min. 8 characters"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setPasswordError("");
+                      setShowGeneralError(false);
+                    }}
+                    showError={passwordError.length !== 0}
+                    error={passwordError}
+                  />
+                </div>
+                <div className={styles.checkboxContainer}>
+                  <div
+                    className={styles.checkboxLabel}
+                    onClick={toggleKeepMeLoggedIn}
+                  >
+                    <FontAwesomeIcon
+                      className={styles.checkboxIcon}
+                      icon={keepLogged ? faSquareCheck : faSquare}
+                      size="lg"
+                    />
+                    Keep me logged in
+                  </div>
+                  <a
+                    className={styles.forgotPassword}
+                    href="/auth/account-recovery"
+                  >
+                    Forget password?
+                  </a>
+                </div>
+
+                {showGeneralError && (
+                  <div className={styles.generalError}>
+                    <FontAwesomeIcon
+                      className={styles.errorIcon}
+                      icon={faExclamationCircle}
+                      size="sm"
+                    />
+                    <p className={styles.errorMessage}>
+                      Error: An internal server error has occurred. Please try
+                      again later.
+                    </p>
+                  </div>
+                )}
+                <div className={styles.continueButtonContainer}>
+                  <button
+                    className={styles.continueButton}
+                    onClick={() => redirect()}
+                  >
+                    Sign In
+                  </button>
+                </div>
+
+                <div className={styles.bottomTextContainer}>
+                  <div className={styles.checkboxLabel}>
+                    Don&apos;t have an Account?{" "}
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  </div>
+                  <a className={styles.forgotPassword} href="/auth/signup">
+                    Sign up now
+                  </a>
+                </div>
               </div>
             </div>
-            <button className="continue-button" onClick={() => redirect()}>
-              Sign Up
-            </button>
-          </div>
+          }
         </div>
       </div>
     </div>

@@ -21,7 +21,8 @@ interface PageProps {
   params: { token: string };
 }
 
-const Page: FC<PageProps> = ({ params }) => { // eslint-disable-line
+const Page: FC<PageProps> = ({ params }) => {
+  // eslint-disable-line
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmClicked, setConfirmClicked] = useState(false);

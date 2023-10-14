@@ -6,29 +6,30 @@
   padding-bottom: 6%;
   padding-left: 11%;
   padding-right: 8%;
+
   overflow: hidden;
 }
 
-.split-screen {
+.splitScreen {
   display: flex;
   height: 72%;
 }
 
-.left {
+.leftPanel {
   flex: 27;
 }
 
-.middle-space {
+.middleSpace {
   flex: 25;
 }
 
-.right {
+.rightPanel {
   flex: 30;
   display: flex;
   flex-direction: column;
 }
 
-.account-recovery {
+.accountRecovery {
   color: #2b3674;
   font-size: 28px;
   font-family: var(--font-poppins);
@@ -37,7 +38,7 @@
   word-wrap: break-word;
 }
 
-.description {
+.descriptionText {
   color: #a3aed0;
   font-size: 11px;
   font-family: var(--font-poppins);
@@ -46,12 +47,12 @@
   padding-bottom: 6%;
 }
 
-.inputs {
+.inputFields {
   position: relative;
   width: 74%;
 }
 
-.first-last-name {
+.firstLastName {
   display: flex;
   flex-direction: row;
   padding-bottom: 3%;
@@ -60,32 +61,63 @@
   width: 100%;
 }
 
-.name {
+.nameField {
   display: flex;
   flex-direction: column;
   width: 47%;
 }
 
-.email {
+.emailField {
   display: flex;
   flex-direction: column;
   padding-top: 4%;
   position: relative;
 }
 
-.general-error {
-  position: absolute;
-  top: 230px;
+.locationField {
+  display: flex;
+  flex-direction: column;
+  padding-top: 4%;
+  position: relative;
+}
+
+.chapterNotFound {
+  position: relative;
+  flex-direction: column;
   display: flex;
   flex-direction: row;
   padding-top: 10px;
 }
 
-.error-icon {
+.notFoundMessage {
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  color: #2b3674;
+  padding-left: 5px;
+  font-size: 10px;
+}
+
+.notFoundIcon {
+  color: #2b3674;
+}
+
+.generalError {
+  position: relative;
+  flex-direction: column;
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
+.googleGLogo {
+  display: block;
+  margin-right: 10px;
+}
+.errorIcon {
   color: #ff0000;
 }
 
-.error-message {
+.errorMessage {
   font-family: var(--font-poppins);
   font-weight: 500;
   color: #ff0000;
@@ -93,13 +125,15 @@
   font-size: 10px;
 }
 
-.continue-button-container {
-  position: absolute;
-  top: 280px;
+.continueButtonContainer {
+  display: flex;
+  padding-top: 10%;
+  flex-direction: column;
+  position: relative;
   width: 100%;
 }
 
-.continue-button {
+.continueButton {
   color: white;
   background-color: #005aa3;
   font-size: 14px;
@@ -122,7 +156,7 @@
   cursor: pointer;
 }
 
-.email-sent-text {
+.emailSentText {
   color: #2b3674;
   font-size: 33px;
   font-family: var(--font-poppins);
@@ -131,7 +165,7 @@
   word-wrap: break-word;
 }
 
-.email-sent-description {
+.emailSentDescription {
   color: #a3aed0;
   font-size: 12px;
   font-family: var(--font-poppins);
