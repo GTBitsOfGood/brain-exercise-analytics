@@ -142,6 +142,27 @@ export default function BarChart({
       .call((g) => g.select(".domain").remove());
   }, [windowRef]);
 
+  const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
+    activeIndex === i && (
+      <foreignObject
+        x={x(i)}
+        y={y(d.value) - 11 - barWidth / 2}
+        width={barWidth}
+        height="10"
+        fontSize={8}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            color: "#A5A5A5",
+            fontSize: 9,
+          }}
+        >
+          {d.value}
+        </div>
+      </foreignObject>
+    );
+
   return (
     <div
       style={{
@@ -211,7 +232,6 @@ export default function BarChart({
                   <circle
                     cx={x(i) + barWidth / 2}
                     cy={y(d.value)}
-                    width={barWidth}
                     r={barWidth / 2}
                     color={color}
                   />
@@ -223,20 +243,12 @@ export default function BarChart({
                     color="white"
                     style={{ borderRadius: 10 }}
                   />
-                  {activeIndex === i && (
-                    <foreignObject
-                      x={x(i)}
-                      y={y(d.value) - 20}
-                      width="30"
-                      height="30"
-                      fontSize={8}
-                    >
-                      <div style={{ color: "#A5A5A5" }}>{d.value}</div>
-                    </foreignObject>
-                  )}
                 </Fragment>
               );
             })}
+          {data.map((d, i) => (
+            <HoverableNode key={i} i={i} d={d} />
+          ))}
         </g>
       </svg>
     </div>

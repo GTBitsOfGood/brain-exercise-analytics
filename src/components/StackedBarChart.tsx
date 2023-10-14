@@ -27,7 +27,7 @@ export default function StackedBarChart({
   },
   hoverable = false,
 }: DataParams) {
-  const marginTop = 40;
+  const marginTop = 20;
   const marginRight = 25;
   const marginBottom = 25;
   const marginLeft = 35;

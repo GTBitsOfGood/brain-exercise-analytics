@@ -207,13 +207,15 @@ export default function LineChart({
                     color="#008AFC"
                   />
                   <foreignObject
-                    x={x(i)}
+                    x={x(i) - 7.5}
                     y={y(d.value) - 20}
-                    width="30"
-                    height="30"
+                    width="20"
+                    height="10"
                     fontSize={8}
                   >
-                    <div style={{ color: "#A5A5A5" }}>{d.value}</div>
+                    <div style={{ textAlign: "center", color: "#A5A5A5" }}>
+                      {d.value}
+                    </div>
                   </foreignObject>
                 </Fragment>
               ),
