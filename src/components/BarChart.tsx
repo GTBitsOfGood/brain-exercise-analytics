@@ -17,10 +17,6 @@ export default function BarChart({
   data,
   width = 375,
   height = 180,
-  marginTop = 40,
-  marginRight = 25,
-  marginBottom = 25,
-  marginLeft = 35,
   style = {},
   yAxis = {
     min: 0,
@@ -31,6 +27,10 @@ export default function BarChart({
   highlightLargest = true,
   children,
 }: DataParams) {
+  const marginTop = 40;
+  const marginRight = 25;
+  const marginBottom = 25;
+  const marginLeft = 35;
   const [largest, setLargest] = useState(-1);
   const barWidth = 20;
   const x = d3.scaleLinear(

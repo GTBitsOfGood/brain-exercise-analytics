@@ -8,18 +8,16 @@ const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
-const samplePerc = -2.45;
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+interface DataParams extends D3Data {
+  title: string;
+  hoverable?: boolean;
+  percentageChange?: boolean;
+}
 
 export default function LineChart({
   data,
   width = 410,
   height = 174,
-  marginTop = 20,
-  marginRight = 20,
-  marginBottom = 40,
-  marginLeft = 40,
   style = {},
   yAxis = {
     min: 0,
@@ -27,11 +25,24 @@ export default function LineChart({
     numDivisions: 5,
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
-}: D3Data) {
+  title,
+  hoverable = false,
+  percentageChange = false,
+}: DataParams) {
+  const marginTop = 20;
+  const marginRight = 20;
+  const marginBottom = 40;
+  const marginLeft = 40;
   const yAxisFormat = yAxis?.format
     ? yAxis.format
     : (d: d3.NumberValue) => JSON.stringify(d);
+  const actualChange = data[data.length - 1].value - data[0].value;
   const [activeIndex, setActiveIndex] = useState(-1);
+  console.log(
+    data[data.length - 1].value,
+    data[0].value,
+    data[data.length - 1].value / data[0].value - 1,
+  );
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
     const svg: Element = e.currentTarget as SVGElement;
@@ -125,17 +136,20 @@ export default function LineChart({
             fontSize: 12,
           }}
         >
-          Accuracy
+          {title}
         </p>
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
-            color: samplePerc < 0 ? "#EA4335" : "#05CD99",
+            color: actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
             marginTop: 11,
           }}
         >
-          {samplePerc < 0 ? `▾ \xa0 ${samplePerc}` : `⏶ \xa0 ${samplePerc}`}
+          {percentageChange &&
+            (actualChange < 0
+              ? `▾ \xa0 ${(actualChange * 100).toFixed(2)}%`
+              : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
         </p>
         <p
           style={{
@@ -144,14 +158,14 @@ export default function LineChart({
             fontSize: 10.2,
           }}
         >
-          Improved...
+          {percentageChange && "Improved..."}
         </p>
       </div>
       <svg
         width={width}
         height={height}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        onMouseMove={hoverable ? handleMouseMove : undefined}
+        onMouseLeave={hoverable ? handleMouseLeave : undefined}
         style={{ marginTop: 10 }}
       >
         <path

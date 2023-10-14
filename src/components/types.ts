@@ -10,10 +10,6 @@ interface D3Data {
   };
   width?: number;
   height?: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
   style?: object;
 }
 
