@@ -38,7 +38,7 @@ function APIWrapper(route: Route<unknown>) {
           success: false,
           message: errorMessage,
         },
-        { status: 400 },
+        { status: 200 },
       );
     }
 

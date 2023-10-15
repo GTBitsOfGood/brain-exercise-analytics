@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
+import { FirebaseError } from "firebase/app";
+
 import LeftSideOfPage from "@src/components/LeftSideOfPage/leftSideOfPage";
 import InputField from "@src/components/InputField/inputField";
 import { internalRequest } from "@src/utils/requests";
@@ -20,18 +23,38 @@ export default function Page() {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showGeneralError, setShowGeneralError] = useState(false);
 
+  const router = useRouter();
+
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const redirect = async () => {
-    if (email.trim() === "") setEmailError("Email can't be blank.");
-    if (password.trim() === "") setPasswordError("Password can't be blank.");
-    if (confirmPassword.trim() === "")
-      setConfirmPasswordError("Confirmed Password can't be blank.");
+  const resetErrors = () => {
+    setEmailError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
+    setShowGeneralError(false);
+  };
 
-    if (emailError || passwordError || confirmPasswordError) return;
+  const redirect = async () => {
+    resetErrors();
+
+    let hasError = false;
+    if (email.trim() === "") {
+      setEmailError("Email can't be blank.");
+      hasError = true;
+    }
+    if (password.trim() === "") {
+      setPasswordError("Password can't be blank.");
+      hasError = true;
+    }
+    if (confirmPassword.trim() === "") {
+      setConfirmPasswordError("Confirmed Password can't be blank.");
+      hasError = true;
+    }
+
+    if (hasError) return;
 
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
@@ -46,6 +69,7 @@ export default function Page() {
       return;
     }
     if (password !== confirmPassword) {
+      setPasswordError(" ");
       setConfirmPasswordError("Passwords do not match. Please try again.");
       return;
     }
@@ -60,16 +84,13 @@ export default function Page() {
             email,
           },
         });
-        setTimeout(() => {
-          window.location.href = "/auth/redirect";
-        }, 30000);
+        router.push("/auth/redirect");
       } catch (error) {
         setShowGeneralError(true);
       }
     } catch (error) {
-      if (error instanceof Error) {
-        const firebaseError = error as { code?: string };
-        switch (firebaseError.code) {
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
           case "auth/email-already-in-use":
             setEmailError("Email already exists.");
             break;
@@ -83,7 +104,7 @@ export default function Page() {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      window.location.href = "/auth/redirect";
+      router.push("/auth/redirect");
     } catch (error) {
       setShowGeneralError(true);
     }
@@ -101,121 +122,117 @@ export default function Page() {
         </div>
         <div className={styles.middleSpace} />
         <div className={styles.rightPanel}>
-          {
-            <div>
-              <span className={styles.accountRecovery}>Sign Up</span>
-              <p className={styles.descriptionText}>
-                Enter your email and password to sign up!
-              </p>
-              <div className={styles.inputFields}>
-                <div className={styles.googleButtonContainer}>
-                  <button
-                    className={styles.googleButton}
-                    onClick={handleGoogleSignIn}
-                  >
-                    <img
-                      className={styles.googleGLogo}
-                      alt="Google g logo"
-                      src="https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg"
-                    />
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>Sign up with Google
-                  </button>
-                </div>
-                <div className={styles.separator}>
-                  <img
-                    className={styles.line}
-                    alt="Line"
-                    src="https://c.animaapp.com/2gdwBOyI/img/line-17.svg"
-                  />
-                  <div className={styles.textWrapper4}>or</div>
-                  <img
-                    className={styles.line}
-                    alt="Line"
-                    src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
-                  />
-                </div>
+          <div className={styles.rightContainer}>
+            <span className={styles.signUpLabel}>Sign Up</span>
+            <p className={styles.descriptionText}>
+              Enter your email and password to sign up!
+            </p>
 
-                <div className={styles.emailField}>
-                  <InputField
-                    title="Email"
-                    placeholder="mail@simmmple.com"
-                    required={true}
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setEmailError("");
-                    }}
-                    showError={emailError !== ""}
-                    error={emailError}
-                  />
-                </div>
-                <div className={styles.passwords}>
-                  <InputField
-                    title="Password"
-                    type="password"
-                    required={true}
-                    placeholder="Min. 8 characters"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setPasswordError("");
-                      setShowGeneralError(false);
-                    }}
-                    showError={passwordError.length !== 0}
-                    error={passwordError}
-                  />
-                </div>
-                <div className={styles.passwords}>
-                  <InputField
-                    title="Confirm Password"
-                    type="password"
-                    required={true}
-                    placeholder="Min. 8 characters"
-                    value={confirmPassword}
-                    onChange={(e) => {
-                      setConfirmPassword(e.target.value);
-                      setConfirmPasswordError("");
-                      setShowGeneralError(false);
-                    }}
-                    showError={confirmPasswordError.length !== 0}
-                    error={confirmPasswordError}
-                  />
-                </div>
+            <div className={styles.googleButtonContainer}>
+              <button
+                className={styles.googleButton}
+                onClick={handleGoogleSignIn}
+              >
+                <img
+                  className={styles.googleGLogo}
+                  alt="Google g logo"
+                  src="https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg"
+                />
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>Sign up with Google
+              </button>
+            </div>
+            <div className={styles.separator}>
+              <img
+                className={styles.line}
+                alt="Line"
+                src="https://c.animaapp.com/2gdwBOyI/img/line-17.svg"
+              />
+              <div className={styles.textWrapper4}>or</div>
+              <img
+                className={styles.line}
+                alt="Line"
+                src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
+              />
+            </div>
 
-                {showGeneralError && (
-                  <div className={styles.generalError}>
-                    <FontAwesomeIcon
-                      className={styles.errorIcon}
-                      icon={faExclamationCircle}
-                      size="sm"
-                    />
-                    <p className={styles.errorMessage}>
-                      Error: An internal server error has occurred. Please try
-                      again later.
-                    </p>
-                  </div>
-                )}
-                <div className={styles.continueButtonContainer}>
-                  <button
-                    className={styles.continueButton}
-                    onClick={() => redirect()}
-                  >
-                    Continue
-                  </button>
-                </div>
-
-                <div className={styles.bottomTextContainer}>
-                  <div className={styles.checkboxLabel}>
-                    Already have an Account?{" "}
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  </div>
-                  <a className={styles.forgotPassword} href="/auth/login">
-                    Sign in now
-                  </a>
-                </div>
+            <div className={styles.inputFields}>
+              <div className={styles.emailField}>
+                <InputField
+                  title="Email"
+                  placeholder="mail@simple.com"
+                  required={true}
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError("");
+                    setShowGeneralError(false);
+                  }}
+                  showError={emailError !== ""}
+                  error={emailError}
+                />
+              </div>
+              <div className={styles.passwords}>
+                <InputField
+                  title="Password"
+                  type="password"
+                  required={true}
+                  placeholder="Min. 8 characters"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                    setShowGeneralError(false);
+                  }}
+                  showError={passwordError.length !== 0}
+                  error={passwordError}
+                />
+              </div>
+              <div className={styles.passwords}>
+                <InputField
+                  title="Confirm Password"
+                  type="password"
+                  required={true}
+                  placeholder="Min. 8 characters"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setConfirmPasswordError("");
+                    setShowGeneralError(false);
+                  }}
+                  showError={confirmPasswordError.length !== 0}
+                  error={confirmPasswordError}
+                />
               </div>
             </div>
-          }
+
+            {showGeneralError && (
+              <div className={styles.generalError}>
+                <FontAwesomeIcon
+                  className={styles.errorIcon}
+                  icon={faExclamationCircle}
+                  size="sm"
+                />
+                <p className={styles.errorMessage}>
+                  Error: An internal server error has occurred. Please try again
+                  later.
+                </p>
+              </div>
+            )}
+            <div className={styles.continueButtonContainer}>
+              <button className={styles.continueButton} onClick={redirect}>
+                Continue
+              </button>
+            </div>
+
+            <div className={styles.bottomTextContainer}>
+              <div className={styles.alreadyHaveAccountLabel}>
+                Already have an Account? <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </div>
+              <a className={styles.signInButton} href="/auth/login">
+                Sign in now
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

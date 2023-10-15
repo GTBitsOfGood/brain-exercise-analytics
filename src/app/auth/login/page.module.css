@@ -2,8 +2,9 @@
   width: 100vw;
   height: 100vh;
   background: white;
-  padding-top: 14%;
-  padding-bottom: 6%;
+  display: flex;
+  align-items: center;
+  padding-top: 8%;
   padding-left: 11%;
   padding-right: 8%;
   overflow: hidden;
@@ -11,7 +12,7 @@
 
 .splitScreen {
   display: flex;
-  height: 72%;
+  width: 100%;
 }
 
 .leftPanel {
@@ -28,7 +29,11 @@
   flex-direction: column;
 }
 
-.accountRecovery {
+.rightContainer {
+  width: 74%;
+}
+
+.welcome {
   color: #2b3674;
   font-size: 28px;
   font-family: var(--font-poppins);
@@ -37,27 +42,9 @@
   word-wrap: break-word;
 }
 
-.passwordReset {
-  color: #2b3674;
-  font-size: 32px;
-  font-family: var(--font-poppins);
-  font-weight: 700;
-  word-wrap: break-word;
-  padding-bottom: 2%;
-}
-
-.passwordsContainer {
-  position: relative;
-}
-
-.passwords {
-  position: relative;
-  padding-top: 3%;
-}
-
 .descriptionText {
   color: #a3aed0;
-  font-size: 11px;
+  font-size: 12px;
   font-family: var(--font-poppins);
   font-weight: 400;
   word-wrap: break-word;
@@ -65,61 +52,22 @@
 }
 
 .inputFields {
-  position: relative;
-  width: 74%;
-}
-
-.firstLastName {
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 3%;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-}
-
-.nameField {
   display: flex;
   flex-direction: column;
-  width: 47%;
+  row-gap: 10px;
 }
 
 .emailField {
   display: flex;
   flex-direction: column;
   padding-top: 7%;
-  position: relative;
 }
 
-.locationField {
-  display: flex;
-  flex-direction: column;
-  padding-top: 4%;
-  position: relative;
-}
-
-.chapterNotFound {
-  position: relative;
-  flex-direction: column;
-  display: flex;
-  flex-direction: row;
-  padding-top: 10px;
-}
-
-.notFoundMessage {
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  color: #2b3674;
-  padding-left: 5px;
-  font-size: 10px;
-}
-
-.notFoundIcon {
-  color: #2b3674;
+.passwords {
+  padding-top: 3%;
 }
 
 .generalError {
-  position: relative;
   flex-direction: column;
   display: flex;
   flex-direction: row;
@@ -138,11 +86,10 @@
   font-size: 10px;
 }
 
-.continueButtonContainer {
+.signInButtonContainer {
   display: flex;
   padding-top: 10%;
   flex-direction: column;
-  position: relative;
   width: 100%;
 }
 
@@ -150,7 +97,6 @@
   display: flex;
   padding-top: 2%;
   flex-direction: column;
-  position: relative;
   width: 100%;
 }
 
@@ -165,7 +111,7 @@
 
 .textWrapper4 {
   color: #a3aed0;
-  font-family: "Poppins", Helvetica;
+  font-family: var(--font-poppins);
   font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.28px;
@@ -181,7 +127,8 @@
   width: 20%;
   height: 1px;
 }
-.continueButton {
+
+.signInButton {
   color: white;
   background-color: #005aa3;
   font-size: 14px;
@@ -236,6 +183,22 @@
 
 .checkboxIcon {
   margin-right: 10px;
+}
+
+.dontHaveAccountLabel {
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.signUpButton {
+  color: #007aff;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  cursor: pointer;
 }
 
 .googleButton {
