@@ -12,6 +12,7 @@ interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
+  gradient?: boolean;
 }
 
 export default function LineChart({
@@ -28,6 +29,7 @@ export default function LineChart({
   title,
   hoverable = false,
   percentageChange = false,
+  gradient = false,
 }: DataParams) {
   const marginTop = 20;
   const marginRight = 20;
@@ -169,12 +171,24 @@ export default function LineChart({
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
         style={{ marginTop: 10 }}
       >
+        {gradient && (
+          <filter id="drop-shadow" height={"180%"}>
+            <feDropShadow
+              dx="0"
+              dy="13"
+              stdDeviation="6"
+              floodColor="rgb(216 211 232)"
+            />
+          </filter>
+        )}
         <path
           fill="none"
           stroke="#008AFC"
           strokeWidth="6"
           d={line(data.map((d, i) => [i, d.value])) as string | undefined}
           radius={"10px"}
+          height={"100%"}
+          filter="url(#drop-shadow)"
         />
         <g fill="white" stroke="currentColor" strokeWidth="1.5">
           <circle
