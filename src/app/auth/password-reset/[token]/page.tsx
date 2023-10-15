@@ -1,35 +1,33 @@
 "use client";
 
-import React, { FC, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Poppins } from "next/font/google";
-import LeftSideOfPage from "../../../../components/LeftSideOfPage/leftSideOfPage";
-import InputField from "../../../../components/InputField/inputField";
-import styles from "./page.module.css";
-import { internalRequest } from "../../../../utils/requests";
-import { HttpMethod } from "../../../../utils/types";
+import { useRouter } from "next/navigation";
 
-const poppins = Poppins({
-  subsets: ["latin-ext"],
-  variable: "--font-poppins",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
+import LeftSideOfPage from "@src/components/LeftSideOfPage/leftSideOfPage";
+import InputField from "@src/components/InputField/inputField";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod } from "@src/utils/types";
+import styles from "./page.module.css";
 
 interface PageProps {
   params: { token: string };
 }
 
-const Page: FC<PageProps> = ({ params }) => {
+export default function Page({ params }: PageProps) {
   // eslint-disable-line
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmClicked, setConfirmClicked] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [showGeneralError, setShowGeneralError] = useState(false);
+
+  const [validatingToken, setValidatingToken] = useState(true);
+
+  const router = useRouter();
 
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -45,15 +43,22 @@ const Page: FC<PageProps> = ({ params }) => {
           method: HttpMethod.GET,
           authRequired: false,
         });
+        setValidatingToken(false);
       } catch (error) {
-        window.location.href = "/auth/password-reset/error";
+        router.push("/auth/password-reset/error");
       }
     };
     validateToken();
-  }, [params.token]);
+  }, [router, params.token]);
+
+  const resetErrors = () => {
+    setPasswordError("");
+    setConfirmPasswordError("");
+    setShowGeneralError(false);
+  };
 
   const confirmButtonFunction = async () => {
-    setConfirmClicked(true);
+    resetErrors();
     setPasswordError(
       password.length < 8
         ? "Password must have a minimum of 8 characters. Please try again."
@@ -81,13 +86,13 @@ const Page: FC<PageProps> = ({ params }) => {
             token: params.token,
             password,
           },
-          authRequired: true,
+          authRequired: false,
         });
 
         setPasswordSuccess(true);
 
         setTimeout(() => {
-          window.location.href = "/auth/login";
+          router.push("/auth/login");
         }, 5000);
       } catch (error) {
         setShowGeneralError(true);
@@ -95,20 +100,20 @@ const Page: FC<PageProps> = ({ params }) => {
     }
   };
 
-  if (!isClient) {
+  if (!isClient || validatingToken) {
     return null;
   }
 
   return (
     <div>
       <div className={styles.screen}>
-        <main className={poppins.variable}>
-          <div className={styles["split-screen"]}>
-            <div className={styles.left}>
-              <LeftSideOfPage />
-            </div>
-            <div className={styles["middle-space"]} />
-            <div className={styles.right}>
+        <div className={styles["split-screen"]}>
+          <div className={styles.left}>
+            <LeftSideOfPage />
+          </div>
+          <div className={styles["middle-space"]} />
+          <div className={styles.right}>
+            <div className={styles["right-container"]}>
               <h1 className={styles["password-reset"]}>Password Reset</h1>
               <p className={styles.description}>
                 To ensure your account security, please enter and confirm a new
@@ -121,12 +126,13 @@ const Page: FC<PageProps> = ({ params }) => {
                     type="password"
                     required={true}
                     value={password}
+                    placeholder={"Min. 8 characters"}
                     onChange={(e) => {
                       setPassword(e.target.value);
                       setPasswordError("");
                       setShowGeneralError(false);
                     }}
-                    showError={confirmClicked && passwordError.length !== 0}
+                    showError={passwordError.length !== 0}
                     error={passwordError}
                   />
                 </div>
@@ -142,48 +148,44 @@ const Page: FC<PageProps> = ({ params }) => {
                       setConfirmPasswordError("");
                       setShowGeneralError(false);
                     }}
-                    showError={
-                      confirmClicked && confirmPasswordError.length !== 0
-                    }
+                    showError={confirmPasswordError.length !== 0}
                     error={confirmPasswordError}
                   />
                 </div>
-                {showGeneralError && (
-                  <div className={styles["general-error"]}>
-                    <FontAwesomeIcon
-                      className={styles["error-icon"]}
-                      icon={faExclamationCircle}
-                      size="sm"
-                    />
-                    <p className={styles["error-message"]}>
-                      Error: An internal server error has occurred. Please try
-                      again later.
-                    </p>
-                  </div>
-                )}
-                {passwordSuccess && (
-                  <div className={styles["success-container"]}>
-                    <CheckCircleOutlineIcon className={styles["check-icon"]} />
-                    <p className={styles["success-text"]}>
-                      Password has been reset successfully.
-                    </p>
-                  </div>
-                )}
-                <div className={styles["button-container"]}>
-                  <button
-                    className={styles["confirm-button"]}
-                    onClick={() => confirmButtonFunction()}
-                  >
-                    {passwordSuccess ? "Go to Sign in" : "Confirm"}
-                  </button>
+              </div>
+              {showGeneralError && (
+                <div className={styles["general-error"]}>
+                  <FontAwesomeIcon
+                    className={styles["error-icon"]}
+                    icon={faExclamationCircle}
+                    size="sm"
+                  />
+                  <p className={styles["error-message"]}>
+                    Error: An internal server error has occurred. Please try
+                    again later.
+                  </p>
                 </div>
+              )}
+              {passwordSuccess && (
+                <div className={styles["success-container"]}>
+                  <CheckCircleOutlineIcon className={styles["check-icon"]} />
+                  <p className={styles["success-text"]}>
+                    Password has been reset successfully.
+                  </p>
+                </div>
+              )}
+              <div className={styles["button-container"]}>
+                <button
+                  className={styles["confirm-button"]}
+                  onClick={() => confirmButtonFunction()}
+                >
+                  {passwordSuccess ? "Go to Sign in" : "Confirm"}
+                </button>
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
-};
-
-export default Page;
+}

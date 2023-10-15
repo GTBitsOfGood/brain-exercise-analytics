@@ -2,16 +2,16 @@
   width: 100vw;
   height: 100vh;
   background: white;
-  padding-top: 14%;
-  padding-bottom: 6%;
+  display: flex;
+  align-items: center;
+  padding-top: 8%;
   padding-left: 11%;
   padding-right: 8%;
-  overflow: hidden;
 }
 
 .split-screen {
   display: flex;
-  height: 72%;
+  width: 100%;
 }
 
 .left {
@@ -26,6 +26,10 @@
   flex: 30;
   display: flex;
   flex-direction: column;
+}
+
+.right-container {
+  width: 74%;
 }
 
 .account-recovery {
@@ -47,16 +51,16 @@
 }
 
 .inputs {
-  position: relative;
-  width: 74%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  padding-bottom: 5%;
 }
 
 .first-last-name {
   display: flex;
   flex-direction: row;
-  padding-bottom: 3%;
   justify-content: space-between;
-  position: relative;
   width: 100%;
 }
 
@@ -69,13 +73,9 @@
 .email {
   display: flex;
   flex-direction: column;
-  padding-top: 4%;
-  position: relative;
 }
 
 .general-error {
-  position: absolute;
-  top: 230px;
   display: flex;
   flex-direction: row;
   padding-top: 10px;
@@ -94,9 +94,8 @@
 }
 
 .continue-button-container {
-  position: absolute;
-  top: 280px;
   width: 100%;
+  padding-top: 20%;
 }
 
 .continue-button {

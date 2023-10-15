@@ -61,7 +61,6 @@
   flex-direction: row;
   padding-bottom: 3%;
   justify-content: space-between;
-  position: relative;
   width: 100%;
 }
 
@@ -75,14 +74,12 @@
   display: flex;
   flex-direction: column;
   padding-top: 4%;
-  position: relative;
 }
 
 .locationField {
   display: flex;
   flex-direction: column;
   padding-top: 4%;
-  position: relative;
 }
 
 .cityStateFields {
@@ -101,7 +98,6 @@
 }
 
 .chapterNotFound {
-  position: relative;
   flex-direction: column;
   display: flex;
   flex-direction: row;
@@ -121,7 +117,6 @@
 }
 
 .generalError {
-  position: relative;
   flex-direction: column;
   display: flex;
   flex-direction: row;
@@ -148,7 +143,6 @@
   display: flex;
   padding-top: 10%;
   flex-direction: column;
-  position: relative;
   width: 100%;
 }
 

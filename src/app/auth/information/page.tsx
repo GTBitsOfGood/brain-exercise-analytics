@@ -79,44 +79,41 @@ export default function Page() {
     setNumber(rawValue);
   };
 
+  const resetErrors = () => {
+    setFirstNameError("");
+    setLastNameError("");
+    setNumberError("");
+    setCountryError("");
+    setStateError("");
+    setCityError("");
+    setChapterError("");
+    setShowGeneralError(false);
+  };
+
   const redirect = async () => {
-    let hasError = false;
-
-    if (firstName.trim() === "") {
+    resetErrors();
+    if (firstName.trim() === "")
       setFirstNameError("First name can't be blank.");
-      hasError = true;
-    }
-
-    if (lastName.trim() === "") {
-      setLastNameError("Last name can't be blank.");
-      hasError = true;
-    }
-
-    if (number.trim().length !== 10) {
+    if (lastName.trim() === "") setLastNameError("Last name can't be blank.");
+    if (number.trim().length !== 10)
       setNumberError("Contact number must be 10 digits.");
-      hasError = true;
-    }
-
-    if (locCountry.trim() === "") {
-      setCountryError("Please select a country.");
-      hasError = true;
-    }
-
-    if (STATES.length !== 0 && locState.trim() === "") {
+    if (locCountry.trim() === "") setCountryError("Please select a country.");
+    if (STATES.length !== 0 && locState.trim() === "")
       setStateError("Please select a state.");
-      hasError = true;
-    }
-
-    if (CITIES.length !== 0 && locCity.trim() === "") {
+    if (CITIES.length !== 0 && locCity.trim() === "")
       setCityError("Please select a city.");
-      hasError = true;
-    }
+    if (chapter.trim() === "") setChapterError("Please select a chapter.");
 
-    if (chapter.trim() === "") {
-      setChapterError("Please select a chapter.");
-    }
-
-    if (hasError) return;
+    if (
+      firstName.trim() === "" ||
+      lastName.trim() === "" ||
+      number.trim().length !== 10 ||
+      locCountry.trim() === "" ||
+      (STATES.length !== 0 && locState.trim() === "") ||
+      (CITIES.length !== 0 && locCity.trim() === "") ||
+      chapter.trim() === ""
+    )
+      return;
     try {
       const name = `${firstName} ${lastName}`;
       await internalRequest({

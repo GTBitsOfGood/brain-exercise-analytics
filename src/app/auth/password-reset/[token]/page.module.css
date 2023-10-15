@@ -2,17 +2,16 @@
   width: 100vw;
   height: 100vh;
   background: white;
-  padding-top: 14%;
-  padding-bottom: 5%;
-  padding-left: 10%;
-  padding-right: 13%;
-
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding-top: 8%;
+  padding-left: 11%;
+  padding-right: 8%;
 }
 
 .split-screen {
   display: flex;
-  height: 72%;
+  width: 100%;
 }
 
 .left {
@@ -20,13 +19,17 @@
 }
 
 .middle-space {
-  flex: 22;
+  flex: 25;
 }
 
 .right {
-  flex: 25;
+  flex: 30;
   display: flex;
   flex-direction: column;
+}
+
+.right-container {
+  width: 84%;
 }
 
 .password-reset {
@@ -47,18 +50,18 @@
   padding-bottom: 7%;
 }
 
-.passwords-container {
-  position: relative;
-}
-
 .passwords {
-  position: relative;
   padding-top: 3%;
 }
 
+.passwords-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  padding-bottom: 5%;
+}
+
 .general-error {
-  position: absolute;
-  top: 235px;
   display: flex;
   flex-direction: row;
   padding-top: 10px;
@@ -80,12 +83,11 @@
   display: flex;
   flex-direction: row;
   background-color: #e3f5df;
-  height: 45px;
-  padding-left: 7%;
   align-items: center;
-  position: absolute;
-  top: 220px;
   width: 100%;
+  margin-top: 20%;
+  padding: 10px 7%;
+  column-gap: 3px;
 }
 
 .check-icon {
@@ -103,9 +105,8 @@
 }
 
 .button-container {
-  position: absolute;
-  top: 280px;
   width: 100%;
+  padding-top: 7%;
 }
 
 .confirm-button {
