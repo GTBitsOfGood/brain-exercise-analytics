@@ -37,7 +37,7 @@ export default function Page() {
     setShowGeneralError(false);
   };
 
-  const redirect = async () => {
+  const signUp = async () => {
     resetErrors();
 
     let hasError = false;
@@ -219,7 +219,7 @@ export default function Page() {
               </div>
             )}
             <div className={styles.continueButtonContainer}>
-              <button className={styles.continueButton} onClick={redirect}>
+              <button className={styles.continueButton} onClick={signUp}>
                 Continue
               </button>
             </div>

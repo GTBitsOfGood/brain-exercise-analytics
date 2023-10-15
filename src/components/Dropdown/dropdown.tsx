@@ -19,7 +19,7 @@ interface DropdownOption<T> {
 interface DropdownProps<T> {
   options: DropdownOption<T>[];
   value?: T;
-  title: string;
+  title?: string;
   required: boolean;
   showError: boolean;
   error?: string;
@@ -29,14 +29,15 @@ interface DropdownProps<T> {
 
 function Dropdown<T>(props: DropdownProps<T>) {
   const { options, title, required, placeholder, showError, error } = props;
-
   return (
     <div className={styles.container}>
       <main className={poppins.variable}>
-        <div className={styles["label-container"]}>
-          <label className={styles["input-label"]}>{title}</label>
-          {required && <label className={styles.asterisk}>*</label>}
-        </div>
+        {title !== undefined ? (
+          <div className={styles["label-container"]}>
+            <label className={styles["input-label"]}>{title}</label>
+            {required && <label className={styles.asterisk}>*</label>}
+          </div>
+        ) : null}
         <div className={styles["input-container"]}>
           <select
             className={
@@ -58,15 +59,13 @@ function Dropdown<T>(props: DropdownProps<T>) {
             ))}
           </select>
         </div>
-        {showError && (
+        {showError && error !== undefined && (
           <div className={styles["error-container"]}>
-            {error !== " " && (
-              <FontAwesomeIcon
-                className={styles["error-icon"]}
-                icon={faExclamationCircle}
-                size="sm"
-              />
-            )}
+            <FontAwesomeIcon
+              className={styles["error-icon"]}
+              icon={faExclamationCircle}
+              size="sm"
+            />
             <p className={styles["error-message"]}>{error}</p>
           </div>
         )}

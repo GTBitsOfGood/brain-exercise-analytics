@@ -40,11 +40,9 @@ const InputField = (InputFieldProps: InputFieldProps) => {
         </div>
         <div className={styles["input-container"]}>
           <input
-            className={
-              InputFieldProps.showError
-                ? styles["input-field-error"]
-                : styles["input-field"]
-            }
+            className={`${styles["input-field"]} ${
+              InputFieldProps.showError ? styles["input-field-error"] : ""
+            }`}
             type={passwordOrText}
             required={InputFieldProps.required}
             placeholder={InputFieldProps.placeholder}
@@ -59,15 +57,13 @@ const InputField = (InputFieldProps: InputFieldProps) => {
               />
             )}
         </div>
-        {InputFieldProps.showError && (
+        {InputFieldProps.showError && InputFieldProps.error !== undefined && (
           <div className={styles["error-container"]}>
-            {InputFieldProps.error !== " " && (
-              <FontAwesomeIcon
-                className={styles["error-icon"]}
-                icon={faExclamationCircle}
-                size="sm"
-              />
-            )}
+            <FontAwesomeIcon
+              className={styles["error-icon"]}
+              icon={faExclamationCircle}
+              size="sm"
+            />
             <p className={styles["error-message"]}>{InputFieldProps.error}</p>
           </div>
         )}
