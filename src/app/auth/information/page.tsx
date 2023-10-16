@@ -9,11 +9,11 @@ import {
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
-import LeftSideOfPage from "@src/components/LeftSideOfPage/leftSideOfPage";
-import InputField from "@src/components/InputField/inputField";
+import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
+import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
-import Dropdown from "@src/components/Dropdown/dropdown";
+import Dropdown from "@src/components/Dropdown/Dropdown";
 
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";

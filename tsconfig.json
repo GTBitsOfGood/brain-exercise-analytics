@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     ".eslintrc.js",
     "next.config.js",
-    "src/components/InputField/inputField.tsx"
+    "src/components/InputField/InputField.tsx"
   ],
   "exclude": ["node_modules"]
 }

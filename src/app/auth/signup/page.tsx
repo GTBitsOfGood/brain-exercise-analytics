@@ -6,8 +6,8 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 
-import LeftSideOfPage from "@src/components/LeftSideOfPage/leftSideOfPage";
-import InputField from "@src/components/InputField/inputField";
+import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
+import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
