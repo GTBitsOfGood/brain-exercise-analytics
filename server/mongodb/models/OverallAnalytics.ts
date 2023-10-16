@@ -1,3 +1,4 @@
+import { getCurrentMonday } from "@server/utils/utils";
 import mongoose from "mongoose";
 
 const { Schema } = mongoose;
@@ -21,7 +22,7 @@ const OverallAnalyticsSchema = new Schema({
     ],
     default: [
       {
-        date: Date(),
+        date: getCurrentMonday(),
         totalUsers: 0,
         activeUsers: 0,
       },
