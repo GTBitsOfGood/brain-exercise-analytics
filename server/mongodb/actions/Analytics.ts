@@ -1,6 +1,6 @@
 import Analytics from "@server/mongodb/models/Analytics";
 import { Days, IAnalytics } from "@/common_utils/types";
-import { getCurrentMonday } from "@server/utils/utils";
+// import { incrementActiveUsers, incrementTotalUsers } from "./OverallAnalytics";
 
 export const getAnalyticsByID = async (
   userID: string,
@@ -12,7 +12,11 @@ export const getAnalyticsByID = async (
 export const createAnalyticsID = async (
   userID: string,
 ): Promise<IAnalytics> => {
-  const analytics = (await Analytics.create({ userID })) as IAnalytics;
+  const today = new Date();
+  const analytics = (await Analytics.create({
+    userID,
+    startDate: today,
+  })) as IAnalytics;
   return analytics;
 };
 
@@ -80,6 +84,8 @@ export const modifyReading = async (
   userID: string,
   completed: boolean,
   passagesRead: number,
+  timePerPassage: number,
+  wordsPerMinute: number,
 ): Promise<IAnalytics | null> => {
   const increment = completed ? 1 : 0;
 
@@ -88,11 +94,43 @@ export const modifyReading = async (
     {
       $set: {
         "lastSessionMetrics.reading.passagesRead": passagesRead,
+        "lastSessionMetrics.reading.timePerPassage": timePerPassage,
+        "lastSessionMetrics.reading.wordsPerMinute": wordsPerMinute,
       },
       $inc: {
         "weeklyMetrics.0.reading.sessionsCompleted": increment,
         "weeklyMetrics.0.reading.sessionsAttempted": 1,
         "weeklyMetrics.0.reading.passagesRead": passagesRead,
+        "weeklyMetrics.0.reading.timePerPassage": timePerPassage,
+        "weeklyMetrics.0.reading.wordsPerMinute": wordsPerMinute,
+      },
+    },
+    { new: true },
+  );
+
+  return data;
+};
+
+export const modifyWriting = async (
+  userID: string,
+  completed: boolean,
+  questionsAnswered: number,
+  timePerQuestion: number,
+): Promise<IAnalytics | null> => {
+  const increment = completed ? 1 : 0;
+
+  const data = await Analytics.findOneAndUpdate<IAnalytics>(
+    { userID },
+    {
+      $set: {
+        "lastSessionMetrics.writing.questionsAnswered": questionsAnswered,
+        "lastSessionMetrics.writing.timePerQuestion": timePerQuestion,
+      },
+      $inc: {
+        "weeklyMetrics.0.writing.sessionsCompleted": increment,
+        "weeklyMetrics.0.writing.sessionsAttempted": 1,
+        "weeklyMetrics.0.writing.questionsAnswered": questionsAnswered,
+        "weeklyMetrics.0.writing.timePerQuestion": timePerQuestion,
       },
     },
     { new: true },
@@ -118,178 +156,12 @@ export const updateSessionComplete = async (
         totalSessionsCompleted: 1,
         "weeklyMetrics.0.sessionsCompleted": 1,
       },
+      $set: {
+        "lastSessionMetrics.date": today,
+      },
     },
     { new: true },
   );
 
   return data;
-};
-
-// average weekly stats function
-export const averageWeeklyStats = async (): Promise<null> => {
-  // divide all values by completed sessions and added streaklength
-
-  function getDivideQuery(numeratorField: string, denominatorField: string) {
-    return {
-      $cond: [
-        {
-          $eq: [denominatorField, 0],
-        },
-        0,
-        {
-          $round: [
-            {
-              $divide: [numeratorField, denominatorField],
-            },
-            2,
-          ],
-        },
-      ],
-    };
-  }
-
-  await Analytics.updateMany({}, [
-    {
-      $set: {
-        weeklyMetrics: {
-          $map: {
-            input: {
-              $range: [0, { $size: "$weeklyMetrics" }],
-            },
-            in: {
-              $cond: [
-                { $eq: ["$$this", 0] },
-                {
-                  $mergeObjects: [
-                    { $arrayElemAt: ["$weeklyMetrics", "$$this"] },
-                    {
-                      streakLength: { $size: "$streak" },
-                      math: {
-                        $let: {
-                          vars: {
-                            firstItem: {
-                              $arrayElemAt: ["$weeklyMetrics", 0],
-                            },
-                          },
-                          in: {
-                            sessionsCompleted:
-                              "$$firstItem.math.sessionsCompleted",
-                            questionsAttempted: getDivideQuery(
-                              "$$firstItem.math.questionsAttempted",
-                              "$$firstItem.math.sessionsCompleted",
-                            ),
-                            questionsCorrect: getDivideQuery(
-                              "$$firstItem.math.questionsCorrect",
-                              "$$firstItem.math.sessionsCompleted",
-                            ),
-                            finalDifficultyScore: getDivideQuery(
-                              "$$firstItem.math.finalDifficultyScore",
-                              "$$firstItem.math.sessionsCompleted",
-                            ),
-                            timePerQuestion: getDivideQuery(
-                              "$$firstItem.math.timePerQuestion",
-                              "$$firstItem.math.sessionsCompleted",
-                            ),
-                          },
-                        },
-                      },
-                      trivia: {
-                        $let: {
-                          vars: {
-                            firstItem: {
-                              $arrayElemAt: ["$weeklyMetrics", 0],
-                            },
-                          },
-                          in: {
-                            sessionsCompleted:
-                              "$$firstItem.trivia.sessionsCompleted",
-                            questionsAttempted: getDivideQuery(
-                              "$$firstItem.trivia.questionsAttempted",
-                              "$$firstItem.trivia.sessionsCompleted",
-                            ),
-                            questionsCorrect: getDivideQuery(
-                              "$$firstItem.trivia.questionsCorrect",
-                              "$$firstItem.trivia.sessionsCompleted",
-                            ),
-                            timePerQuestion: getDivideQuery(
-                              "$$firstItem.trivia.timePerQuestion",
-                              "$$firstItem.trivia.sessionsCompleted",
-                            ),
-                          },
-                        },
-                      },
-                      reading: {
-                        $let: {
-                          vars: {
-                            firstItem: {
-                              $arrayElemAt: ["$weeklyMetrics", 0],
-                            },
-                          },
-                          in: {
-                            sessionsAttempted:
-                              "$$firstItem.reading.sessionsAttempted",
-                            sessionsCompleted:
-                              "$$firstItem.reading.sessionsCompleted",
-                            passagesRead: getDivideQuery(
-                              "$$firstItem.reading.passagesRead",
-                              "$$firstItem.reading.sessionsAttempted",
-                            ),
-                          },
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  $arrayElemAt: ["$weeklyMetrics", "$$this"],
-                },
-              ],
-            },
-          },
-        },
-      },
-    },
-  ]);
-
-  // set streak to empty array and push new empty array
-  await Analytics.updateMany(
-    {},
-    {
-      $push: {
-        weeklyMetrics: {
-          $each: [
-            {
-              date: getCurrentMonday(),
-              sessionsCompleted: 0,
-              streakLength: 0,
-              math: {
-                sessionsCompleted: 0,
-                questionsAttempted: 0,
-                questionsCorrect: 0,
-                finalDifficultyScore: 0,
-                timePerQuestion: 0,
-              },
-              trivia: {
-                sessionsCompleted: 0,
-                questionsAttempted: 0,
-                questionsCorrect: 0,
-                timePerQuestion: 0,
-              },
-              reading: {
-                sessionsAttempted: 0,
-                sessionsCompleted: 0,
-                passagesRead: 0,
-              },
-            },
-          ],
-          $position: 0,
-        },
-      },
-      $set: {
-        streak: [],
-      },
-    },
-  );
-
-  return null;
 };

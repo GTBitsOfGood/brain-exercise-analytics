@@ -16,6 +16,14 @@ const AnalyticsSchema = new Schema({
     type: Number,
     default: 0,
   },
+  startDate: {
+    type: Date,
+    dafault: Date(),
+  },
+  active: {
+    type: Boolean,
+    default: true,
+  },
   streak: {
     type: [String],
     enum: {
@@ -25,6 +33,7 @@ const AnalyticsSchema = new Schema({
   },
   lastSessionMetrics: {
     type: {
+      date: Date,
       math: {
         questionsAttempted: Number,
         questionsCorrect: Number,
@@ -38,9 +47,16 @@ const AnalyticsSchema = new Schema({
       },
       reading: {
         passagesRead: Number,
+        timePerPassage: Number,
+        wordsPerMinute: Number,
+      },
+      writing: {
+        questionsAnswered: Number,
+        timePerQuestion: Number,
       },
     },
     default: {
+      date: Date(),
       math: {
         questionsAttempted: 0,
         questionsCorrect: 0,
@@ -54,6 +70,12 @@ const AnalyticsSchema = new Schema({
       },
       reading: {
         passagesRead: 0,
+        timePerPassage: 0,
+        wordsPerMinute: 0,
+      },
+      writing: {
+        questionsAnswered: 0,
+        timePerQuestion: 0,
       },
     },
   },
@@ -63,6 +85,7 @@ const AnalyticsSchema = new Schema({
         date: Date,
         sessionsCompleted: Number,
         streakLength: Number,
+        active: Boolean,
         math: {
           sessionsCompleted: Number,
           questionsAttempted: Number,
@@ -80,6 +103,14 @@ const AnalyticsSchema = new Schema({
           sessionsAttempted: Number,
           sessionsCompleted: Number,
           passagesRead: Number,
+          timePerPassage: Number,
+          wordsPerMinute: Number,
+        },
+        writing: {
+          sessionsAttempted: Number,
+          sessionsCompleted: Number,
+          questionsAnswered: Number,
+          timePerQuestion: Number,
         },
       },
     ],
@@ -88,6 +119,7 @@ const AnalyticsSchema = new Schema({
         date: getCurrentMonday(),
         sessionsCompleted: 0,
         streakLength: 0,
+        active: true,
         math: {
           sessionsCompleted: 0,
           questionsAttempted: 0,
@@ -105,6 +137,12 @@ const AnalyticsSchema = new Schema({
           sessionsAttempted: 0,
           sessionsCompleted: 0,
           passagesRead: 0,
+        },
+        writing: {
+          sessionsAttempted: 0,
+          sessionsCompleted: 0,
+          questionsAnswered: 0,
+          timePerQuestion: 0,
         },
       },
     ],
