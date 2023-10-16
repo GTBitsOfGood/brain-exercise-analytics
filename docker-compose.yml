@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - bitwarden.env
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    entrypoint: ./entrypoint.sh
+    depends_on:
+      - mongodb
+    networks:
+      - brain-analytics-net
+    
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - brain-analytics-net
+
+volumes:
+  mongodb_data:
+
+networks:
+  brain-analytics-net:
+    driver: bridge
