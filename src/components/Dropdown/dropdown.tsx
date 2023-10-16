@@ -3,7 +3,7 @@ import React from "react";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Poppins } from "next/font/google";
-import styles from "./dropdown.module.css";
+import styles from "./Dropdown.module.css";
 
 const poppins = Poppins({
   subsets: ["latin-ext"],

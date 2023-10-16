@@ -1,6 +1,6 @@
 import React from "react";
 import { Poppins } from "next/font/google";
-import styles from "./leftSideOfPage.module.css";
+import styles from "./LeftSideOfPage.module.css";
 
 const poppins = Poppins({
   subsets: ["latin-ext"],

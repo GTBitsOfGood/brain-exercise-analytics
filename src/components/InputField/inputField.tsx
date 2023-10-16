@@ -3,7 +3,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import { Poppins } from "next/font/google";
-import styles from "./inputField.module.css";
+import styles from "./InputField.module.css";
 
 const poppins = Poppins({
   subsets: ["latin-ext"],
