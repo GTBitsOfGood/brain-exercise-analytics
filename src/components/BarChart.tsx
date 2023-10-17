@@ -102,7 +102,8 @@ export default function BarChart({
     setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
-
+    svg.select(".x-axis").remove();
+    svg.select(".y-axis").remove();
     const xAxisLabel = d3
       .axisBottom(x)
       .ticks(data.length)
@@ -136,6 +137,7 @@ export default function BarChart({
     svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)
+      .attr("class", "y-axis")
       .style("font", `9.5px ${poppins400.style.fontFamily}`)
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
