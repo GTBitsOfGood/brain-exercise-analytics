@@ -101,7 +101,7 @@ export default function Home() {
         yAxis={{
           min: 0,
           max: 1,
-          numDivisions: 5,
+          numDivisions: 9,
           format: (d) => `${JSON.stringify(Math.round(100 * d.valueOf()))}%`,
         }}
         hoverable

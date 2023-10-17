@@ -47,9 +47,13 @@ export default function BarChart({
   const marginLeft = 35;
   const [largest, setLargest] = useState(-1);
   const barWidth = 20;
-  const actualChange =
-    data[0].value !== 0 ? data[data.length - 1].value / data[0].value - 1 : 1;
   const [activeIndex, setActiveIndex] = useState(-1);
+
+  const actualChange =
+    data.length < 2
+      ? null
+      : data[data.length - 1].value / data[data.length - 2].value - 1;
+
   const windowRef = useRef(null);
 
   function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
@@ -205,16 +209,18 @@ export default function BarChart({
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
-            color: actualChange < 0 ? "#EA4335" : "#05CD99",
+            color:
+              actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
             marginTop: "auto",
             marginBottom: "auto",
             marginLeft: 12,
           }}
         >
-          {percentageChange &&
+          {actualChange !== null &&
+            percentageChange &&
             (actualChange < 0
-              ? `▾ \xa0 ${(actualChange * 100).toFixed(2)}%`
+              ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
               : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
         </p>
       </div>

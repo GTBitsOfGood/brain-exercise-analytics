@@ -35,9 +35,13 @@ export default function LineChart({
   const marginRight = 20;
   const marginBottom = 40;
   const marginLeft = 40;
-  const actualChange =
-    data[0].value !== 0 ? data[data.length - 1].value / data[0].value - 1 : 1;
   const [activeIndex, setActiveIndex] = useState(-1);
+
+  const actualChange =
+    data.length < 2
+      ? null
+      : data[data.length - 1].value / data[data.length - 2].value - 1;
+
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
     const svg: Element = e.currentTarget as SVGElement;
@@ -91,7 +95,7 @@ export default function LineChart({
       .tickValues(
         d3.range(
           yAxis.min,
-          yAxis.max + 1,
+          yAxis.max + 0.0001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -154,14 +158,16 @@ export default function LineChart({
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
-            color: actualChange < 0 ? "#EA4335" : "#05CD99",
+            color:
+              actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
             marginTop: 11,
           }}
         >
-          {percentageChange &&
+          {actualChange !== null &&
+            percentageChange &&
             (actualChange < 0
-              ? `▾ \xa0 ${(actualChange * 100).toFixed(2)}%`
+              ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
               : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
         </p>
         <p
@@ -171,7 +177,7 @@ export default function LineChart({
             fontSize: 10.2,
           }}
         >
-          {percentageChange && "Improved..."}
+          {actualChange !== null && percentageChange && "Improved..."}
         </p>
       </div>
       <svg
