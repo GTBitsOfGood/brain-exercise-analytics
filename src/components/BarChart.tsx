@@ -31,8 +31,8 @@ export default function BarChart({
   height = 180,
   style = {},
   yAxis = {
-    min: 0,
-    max: 1,
+    min: d3.min(data.map((v) => v.value)) ?? 0,
+    max: d3.max(data.map((v) => v.value)) ?? 1,
     numDivisions: 5,
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
