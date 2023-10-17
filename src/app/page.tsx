@@ -138,6 +138,7 @@ export default function Home() {
         title="Session Completions"
         data={dataStacked}
         hoverable
+        percentageChange
       />
       <SmallDataBox
         title={"Number of questions completed"}

@@ -11,6 +11,7 @@ interface DataParams extends D3Data {
   }[];
   title: string;
   hoverable?: boolean;
+  percentageChange?: boolean;
 }
 
 export default function StackedBarChart({
@@ -26,6 +27,7 @@ export default function StackedBarChart({
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
   hoverable = false,
+  percentageChange = false,
 }: DataParams) {
   const marginTop = 20;
   const marginRight = 25;
@@ -49,6 +51,7 @@ export default function StackedBarChart({
       style={style}
       yAxis={yAxis}
       hoverable={hoverable}
+      percentageChange={percentageChange}
     >
       {data.map((d, i) => (
         <Fragment key={i}>
