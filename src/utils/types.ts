@@ -19,3 +19,5 @@ export interface InternalResponseData<T> {
   message?: string;
   payload?: T;
 }
+
+export class InternalResponseError extends Error {}

@@ -50,5 +50,6 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "@next/next/no-img-element": "off",
   },
 };

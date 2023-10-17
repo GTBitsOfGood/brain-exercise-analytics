@@ -38,7 +38,7 @@ function APIWrapper(route: Route<unknown>) {
           success: false,
           message: errorMessage,
         },
-        { status: 400 },
+        { status: 200 },
       );
     }
 
@@ -63,7 +63,7 @@ function APIWrapper(route: Route<unknown>) {
               success: false,
               message: "You do not have permissions to access this API route",
             },
-            { status: 403 },
+            { status: 200 },
           );
         }
 
@@ -80,7 +80,7 @@ function APIWrapper(route: Route<unknown>) {
                 success: false,
                 message: "You do not have permissions to access this API route",
               },
-              { status: 403 },
+              { status: 200 },
             );
           }
         }
@@ -103,7 +103,7 @@ function APIWrapper(route: Route<unknown>) {
             success: false,
             message: "An Internal Server error occurred.",
           },
-          { status: 500 },
+          { status: 200 },
         );
       }
 
@@ -113,7 +113,7 @@ function APIWrapper(route: Route<unknown>) {
           success: false,
           message: error.message,
         },
-        { status: 500 },
+        { status: 200 },
       );
     }
   };

@@ -15,6 +15,6 @@ export default function firebaseInit() {
   try {
     initializeApp(firebaseConfig);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }

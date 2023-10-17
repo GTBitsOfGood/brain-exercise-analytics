@@ -1,5 +1,5 @@
 import APIWrapper from "@server/utils/APIWrapper";
-import { averageWeeklyStats } from "@server/mongodb/actions/Analytics";
+import { averageWeeklyStats } from "@server/mongodb/actions/internal/average-metrics";
 
 export const dynamic = "force-dynamic";
 
