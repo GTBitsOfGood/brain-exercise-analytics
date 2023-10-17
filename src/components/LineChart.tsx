@@ -35,9 +35,6 @@ export default function LineChart({
   const marginRight = 20;
   const marginBottom = 40;
   const marginLeft = 40;
-  const yAxisFormat = yAxis?.format
-    ? yAxis.format
-    : (d: d3.NumberValue) => JSON.stringify(d);
   const actualChange =
     data[0].value !== 0 ? data[data.length - 1].value / data[0].value - 1 : 1;
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -76,6 +73,9 @@ export default function LineChart({
     .curve(d3.curveCatmullRom);
 
   useEffect(() => {
+    const yAxisFormat = yAxis?.format
+      ? yAxis.format
+      : (d: d3.NumberValue) => JSON.stringify(d);
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis").remove();
     svg.select(".y-axis").remove();
@@ -121,10 +121,10 @@ export default function LineChart({
     height,
     x,
     y,
+    yAxis.format,
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
-    yAxisFormat,
   ]);
 
   return (
