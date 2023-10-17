@@ -114,7 +114,16 @@ export default function LineChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
-  }, []);
+  }, [
+    data,
+    height,
+    x,
+    y,
+    yAxis.max,
+    yAxis.min,
+    yAxis.numDivisions,
+    yAxisFormat,
+  ]);
 
   return (
     <div

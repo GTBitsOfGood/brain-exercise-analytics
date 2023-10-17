@@ -140,7 +140,17 @@ export default function BarChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
-  }, [windowRef]);
+  }, [
+    data,
+    height,
+    windowRef,
+    x,
+    y,
+    yAxis.format,
+    yAxis.max,
+    yAxis.min,
+    yAxis.numDivisions,
+  ]);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
     activeIndex === i && (
