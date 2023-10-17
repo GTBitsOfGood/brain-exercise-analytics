@@ -1,95 +1,151 @@
-import Image from "next/image";
+"use client";
+
+import LineChart from "@src/components/LineChart";
+import BarChart from "@src/components/BarChart";
+import StackedBarChart from "@src/components/StackedBarChart";
+import SmallDataBox from "@src/components/SmallDataBox";
+import { Icon } from "./icons/barChartIcon";
 import styles from "./page.module.css";
+
+const dataLine = [
+  {
+    interval: "9/17",
+    value: 0.4,
+  },
+  {
+    interval: "9/24",
+    value: 0.23,
+  },
+  {
+    interval: "10/4",
+    value: 0.01,
+  },
+  {
+    interval: "10/12",
+    value: 0.25,
+  },
+  {
+    interval: "10/19",
+    value: 0.7,
+  },
+  {
+    interval: "10/25",
+    value: 0.55,
+  },
+];
+const dataBar = [
+  {
+    interval: "9/17",
+    value: 0,
+  },
+  {
+    interval: "9/24",
+    value: 2,
+  },
+  {
+    interval: "10/4",
+    value: 1,
+  },
+  {
+    interval: "10/12",
+    value: 6,
+  },
+  {
+    interval: "10/19",
+    value: 5,
+  },
+  {
+    interval: "10/25",
+    value: 7,
+  },
+];
+const dataStacked = [
+  {
+    interval: "9/17",
+    stackedValue: 0.3,
+    value: 0.5,
+  },
+  {
+    interval: "9/24",
+    stackedValue: 0.1,
+    value: 0.2,
+  },
+  {
+    interval: "10/4",
+    stackedValue: 0.1,
+    value: 0.7,
+  },
+  {
+    interval: "10/12",
+    stackedValue: 0.55,
+    value: 0.6,
+  },
+  {
+    interval: "10/19",
+    stackedValue: 0.2,
+    value: 0.5,
+  },
+  {
+    interval: "10/25",
+    stackedValue: 0.0,
+    value: 0.8,
+  },
+];
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <LineChart
+        title="Accuracy"
+        data={dataLine}
+        yAxis={{
+          min: 0,
+          max: 1,
+          numDivisions: 9,
+          format: (d) => `${JSON.stringify(Math.round(100 * d.valueOf()))}%`,
+        }}
+        hoverable
+        percentageChange
+        gradient
+      />
+      <BarChart
+        title="Reading Volume Analysis"
+        data={dataBar}
+        yAxis={{
+          min: 0,
+          max: 7,
+          numDivisions: 5,
+          format: (d) => {
+            if (d.valueOf() === 0) {
+              return JSON.stringify(d);
+            }
+            if (d.valueOf() <= 2) {
+              return "1-2";
+            }
+            if (d.valueOf() <= 4) {
+              return "3-4";
+            }
+            if (d.valueOf() <= 6) {
+              return "5-6";
+            }
+            return "6+";
+          },
+        }}
+        hoverable
+        percentageChange
+      />
+      <StackedBarChart
+        title="Session Completions"
+        data={dataStacked}
+        hoverable
+        percentageChange
+      />
+      <SmallDataBox
+        title={"Number of questions completed"}
+        Icon={Icon}
+        text={"20 / 1 hr 50 min"}
+      />
+      {/* <BarChart data={data} /> */}
     </main>
   );
 }
