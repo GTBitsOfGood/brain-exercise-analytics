@@ -70,6 +70,7 @@ export default function Page() {
         setShowGeneralError(true);
       }
     } catch (error) {
+      console.log(error);
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case "auth/invalid-email":
