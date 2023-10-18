@@ -48,8 +48,11 @@ export interface IAnalytics {
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
+  startDate: Date;
+  active: boolean;
   streak: [string];
   lastSessionMetrics: {
+    date: Date;
     math: {
       questionsAttempted: number;
       questionsCorrect: number;
@@ -63,6 +66,12 @@ export interface IAnalytics {
     };
     reading: {
       passagesRead: number;
+      timePerPassage: number;
+      wordsPerMinute: number;
+    };
+    writing: {
+      questionsAnswered: number;
+      timePerQuestion: number;
     };
   };
   weeklyMetrics: [
@@ -70,6 +79,7 @@ export interface IAnalytics {
       date: Date;
       sessionsCompleted: number;
       streakLength: number;
+      active: boolean;
       math: {
         sessionsCompleted: number;
         questionsAttempted: number;
@@ -87,6 +97,14 @@ export interface IAnalytics {
         sessionsAttempted: number;
         sessionsCompleted: number;
         passagesRead: number;
+        timePerPassage: number;
+        wordsPerMinute: number;
+      };
+      writing: {
+        sessionsAttempted: number;
+        sessionsCompleted: number;
+        questionsAnswered: number;
+        timePerQuestion: number;
       };
     },
   ];
