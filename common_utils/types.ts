@@ -102,3 +102,14 @@ export enum VerificationLogType {
   PASSWORD_RESET = "PASSWORD_RESET",
   EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
 }
+
+/* Analytics Data */
+
+export interface DataRecord {
+  interval: string;
+  value: number;
+}
+
+export interface StackedDataRecord extends DataRecord {
+  stackedValue: number;
+}

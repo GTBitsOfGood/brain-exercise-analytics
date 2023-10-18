@@ -1,7 +1,8 @@
+import { DataRecord } from "@/common_utils/types";
 import { NumberValue } from "d3";
 
 interface D3Data {
-  data: { interval: string; value: number }[];
+  data: DataRecord[];
   yAxis?: {
     min: number;
     max: number;

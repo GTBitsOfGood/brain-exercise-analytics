@@ -130,7 +130,7 @@ export default function Page() {
       });
 
       dispatch(login(user));
-      router.push("/auth/dashboard");
+      router.push("/patient/dashboard");
     } catch (error) {
       setShowGeneralError(true);
     }
