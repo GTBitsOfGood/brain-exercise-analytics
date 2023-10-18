@@ -49,7 +49,7 @@ export async function internalRequest<T>({
     },
     data: newBody,
   });
-  console.log(response.data.message);
+  console.log("here3", response.data.message);
   if (response.data.success === false) {
     throw new InternalResponseError(response.data.message);
   }

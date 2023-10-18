@@ -67,10 +67,11 @@ export default function Page() {
 
         router.push("/auth/redirect");
       } catch (error) {
+        console.log("here", error);
         setShowGeneralError(true);
       }
     } catch (error) {
-      console.log(error);
+      console.log("here2", error);
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case "auth/invalid-email":
