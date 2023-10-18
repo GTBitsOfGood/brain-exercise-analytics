@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faExclamationCircle,
@@ -9,6 +9,7 @@ import {
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
+import useAuthRedirect from "@src/hooks/useAuthRedirect";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
@@ -38,11 +39,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const authLoading = useAuthRedirect();
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -134,7 +131,7 @@ export default function Page() {
     }
   };
 
-  if (!isClient) {
+  if (authLoading) {
     return null;
   }
 

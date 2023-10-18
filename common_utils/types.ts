@@ -32,6 +32,7 @@ export interface IUser {
     city: string;
   };
   signedUp: boolean;
+  verified: boolean;
   role: Role;
 }
 

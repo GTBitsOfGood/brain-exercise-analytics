@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSquareCheck,
@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
+import { useDispatch } from "react-redux";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -16,6 +17,10 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
+import { IUser } from "@/common_utils/types";
+import { login } from "@src/redux/reducers/authReducer";
+import useAuthRedirect from "@src/hooks/useAuthRedirect";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -27,11 +32,9 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const authLoading = useAuthRedirect();
 
   const resetErrors = () => {
     setEmailError("");
@@ -57,7 +60,7 @@ export default function Page() {
     try {
       await emailSignIn(email, password);
       try {
-        await internalRequest({
+        const user = await internalRequest<IUser>({
           url: "/api/volunteer/auth/login",
           method: HttpMethod.GET,
           body: {
@@ -65,7 +68,7 @@ export default function Page() {
           },
         });
 
-        router.push("/auth/redirect");
+        dispatch(login(user));
       } catch (error) {
         setShowGeneralError(true);
       }
@@ -114,7 +117,7 @@ export default function Page() {
     setKeepLogged((prevState) => !prevState);
   };
 
-  if (!isClient) {
+  if (authLoading) {
     return null;
   }
 

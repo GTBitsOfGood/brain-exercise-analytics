@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,8 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignUp } from "@src/firebase/email_signin";
+import useAuthRedirect from "@src/hooks/useAuthRedirect";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -24,11 +26,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const authLoading = useAuthRedirect();
 
   const resetErrors = () => {
     setEmailError("");
@@ -110,7 +108,7 @@ export default function Page() {
     }
   };
 
-  if (!isClient) {
+  if (authLoading) {
     return null;
   }
 
