@@ -19,7 +19,6 @@ import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
 import { IUser } from "@/common_utils/types";
 import { login } from "@src/redux/reducers/authReducer";
-import useAuthRedirect from "@src/hooks/useAuthRedirect";
 
 import styles from "./page.module.css";
 
@@ -33,8 +32,6 @@ export default function Page() {
 
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const authLoading = useAuthRedirect();
 
   const resetErrors = () => {
     setEmailError("");
@@ -69,6 +66,7 @@ export default function Page() {
         });
 
         dispatch(login(user));
+        router.push("/auth/information");
       } catch (error) {
         setShowGeneralError(true);
       }
@@ -100,14 +98,16 @@ export default function Page() {
         throw new Error("Error signing in");
       }
 
-      await internalRequest({
+      const fetchedUser = await internalRequest<IUser>({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
         body: {
           email: user.email,
         },
       });
-      router.push("/auth/redirect");
+
+      dispatch(login(fetchedUser));
+      router.push("/auth/information");
     } catch (error) {
       setShowGeneralError(true);
     }
@@ -116,10 +116,6 @@ export default function Page() {
   const toggleKeepMeLoggedIn = () => {
     setKeepLogged((prevState) => !prevState);
   };
-
-  if (authLoading) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>

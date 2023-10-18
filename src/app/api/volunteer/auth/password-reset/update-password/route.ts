@@ -1,10 +1,10 @@
-import { IPasswordReset } from "@/common_utils/types";
+import { IVerificationLog } from "@/common_utils/types";
 import { updateUserPassword } from "@server/firebase/passwordReset";
 import {
-  deletePasswordResetFieldByEmail,
-  getPasswordByToken,
-  deletePasswordResetField,
-} from "@server/mongodb/actions/PasswordReset";
+  deleteVerificationLogByEmail,
+  getVerificationLogByToken,
+  deleteVerificationLog,
+} from "@server/mongodb/actions/VerificationLog";
 import APIWrapper from "@server/utils/APIWrapper";
 
 type RequestData = {
@@ -25,25 +25,24 @@ export const POST = APIWrapper({
       throw new Error("Missing parameter(s)");
     }
 
-    const passwordDoc: IPasswordReset | null = await getPasswordByToken(
-      requestData.token,
-    );
+    const verificationLog: IVerificationLog | null =
+      await getVerificationLogByToken(requestData.token);
 
-    if (!passwordDoc) {
-      throw new Error("Password reset record is not found");
+    if (!verificationLog) {
+      throw new Error("Verification log was not found");
     }
 
     const currDate = new Date();
-    if (passwordDoc.expiryDate <= currDate) {
-      await deletePasswordResetField(passwordDoc);
-      throw new Error("Password reset token has expired.");
+    if (verificationLog.expiryDate <= currDate) {
+      await deleteVerificationLog(verificationLog);
+      throw new Error("Verification log token has expired.");
     }
 
     const value = await updateUserPassword(
-      passwordDoc.email,
+      verificationLog.email,
       requestData.password,
     );
-    await deletePasswordResetFieldByEmail(passwordDoc.email);
+    await deleteVerificationLogByEmail(verificationLog.email);
     return value;
   },
 });
