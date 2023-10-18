@@ -9,6 +9,7 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
+import { VerificationLogType } from "@/common_utils/types";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -50,11 +51,12 @@ export default function Page() {
     if (!anyInputEmpty) {
       try {
         const res = await internalRequest({
-          url: "/api/volunteer/auth/password-reset/create",
+          url: "/api/volunteer/auth/verification/create",
           method: HttpMethod.POST,
           body: {
             email,
             name: `${firstName} ${lastName}`,
+            type: VerificationLogType.PASSWORD_RESET,
           },
           authRequired: false,
         });

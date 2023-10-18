@@ -1,10 +1,12 @@
-import { createPasswordReset } from "@server/mongodb/actions/PasswordReset";
+import { createVerificationLog } from "@server/mongodb/actions/VerificationLog";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
+import { VerificationLogType } from "@/common_utils/types";
 
 type RequestData = {
   email: string;
   name: string;
+  type: VerificationLogType;
 };
 
 export const POST = APIWrapper({
@@ -16,7 +18,12 @@ export const POST = APIWrapper({
       throw new Error("Missing request data");
     }
 
-    if (!requestData.email || !requestData.name) {
+    if (
+      !requestData.email ||
+      !requestData.type ||
+      (requestData.type === VerificationLogType.PASSWORD_RESET &&
+        !requestData.name)
+    ) {
       throw new Error("Missing parameter(s)");
     }
 
@@ -26,11 +33,17 @@ export const POST = APIWrapper({
       throw new Error("User not found.");
     }
 
-    if (user.name !== requestData.name) {
+    if (
+      requestData.type === VerificationLogType.PASSWORD_RESET &&
+      user.name !== requestData.name
+    ) {
       throw new Error("Name doesn't match to existing value");
     }
 
-    const passwordReset = await createPasswordReset(requestData.email);
-    return { token: passwordReset.token };
+    const verificationLog = await createVerificationLog(
+      requestData.email,
+      VerificationLogType.PASSWORD_RESET,
+    );
+    return { token: verificationLog.token };
   },
 });

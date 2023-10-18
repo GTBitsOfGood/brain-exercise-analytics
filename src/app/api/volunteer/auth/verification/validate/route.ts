@@ -1,8 +1,8 @@
-import { IPasswordReset } from "@/common_utils/types";
+import { IVerificationLog } from "@/common_utils/types";
 import {
-  deletePasswordResetField,
-  getPasswordByToken,
-} from "@server/mongodb/actions/PasswordReset";
+  deleteVerificationLog,
+  getVerificationLogByToken,
+} from "@server/mongodb/actions/VerificationLog";
 import APIWrapper from "@server/utils/APIWrapper";
 
 export const dynamic = "force-dynamic";
@@ -16,14 +16,14 @@ export const GET = APIWrapper({
     if (!token) {
       throw new Error("Token parameter is missing in the request.");
     }
-    const passwordResetField: IPasswordReset | null =
-      await getPasswordByToken(token);
+    const verificationLog: IVerificationLog | null =
+      await getVerificationLogByToken(token);
     const currDate = new Date();
-    if (passwordResetField === null) {
-      throw new Error("Password reset record was not found");
+    if (verificationLog === null) {
+      throw new Error("Verification log was not found");
     }
-    if (passwordResetField.expiryDate <= currDate) {
-      await deletePasswordResetField(passwordResetField);
+    if (verificationLog.expiryDate <= currDate) {
+      await deleteVerificationLog(verificationLog);
       throw new Error("Password reset token has expired.");
     }
     return true;

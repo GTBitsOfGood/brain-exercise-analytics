@@ -36,7 +36,7 @@ export interface IUser {
   role: Role;
 }
 
-export interface IPasswordReset {
+export interface IVerificationLog {
   email: string;
   token: string;
   expiryDate: Date;
@@ -95,3 +95,10 @@ export interface IAnalytics {
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
+/* VerificationLog MongoDB Schema Types */
+
+export enum VerificationLogType {
+  PASSWORD_RESET = "PASSWORD_RESET",
+  EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
+}
