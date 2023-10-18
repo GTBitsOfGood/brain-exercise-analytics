@@ -5,7 +5,10 @@ import { Error as ErrorIcon, Info as InfoIcon } from "@mui/icons-material";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
-import useAuthRedirect from "@src/hooks/useAuthRedirect";
+import { login } from "@src/redux/reducers/authReducer";
+import { IUser } from "@/common_utils/types";
+import { useDispatch } from "react-redux";
+
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
@@ -35,7 +38,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-  const authLoading = useAuthRedirect();
+  const dispatch = useDispatch();
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -110,7 +113,7 @@ export default function Page() {
       return;
     try {
       const name = `${firstName} ${lastName}`;
-      await internalRequest({
+      const user = await internalRequest<IUser>({
         url: "/api/volunteer/auth/signup",
         method: HttpMethod.POST,
         body: {
@@ -123,14 +126,12 @@ export default function Page() {
         },
       });
       router.push("/patient/search");
+
+      dispatch(login(user));
     } catch (error) {
       setShowGeneralError(true);
     }
   };
-
-  if (authLoading) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>
