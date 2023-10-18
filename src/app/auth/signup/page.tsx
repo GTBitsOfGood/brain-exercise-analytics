@@ -11,6 +11,8 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignUp } from "@src/firebase/email_signin";
+import useAuthRedirect from "@src/hooks/useAuthRedirect";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -23,6 +25,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
+  const authLoading = useAuthRedirect();
 
   const resetErrors = () => {
     setEmailError("");
@@ -103,6 +106,10 @@ export default function Page() {
       setShowGeneralError(true);
     }
   };
+
+  if (authLoading) {
+    return null;
+  }
 
   return (
     <div className={styles.screen}>
