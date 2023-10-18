@@ -108,6 +108,7 @@ export default function Page() {
       });
       router.push("/auth/redirect");
     } catch (error) {
+      console.log("here4", error);
       setShowGeneralError(true);
     }
   };
