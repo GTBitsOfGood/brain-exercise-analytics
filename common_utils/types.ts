@@ -1,3 +1,29 @@
+/* Internal Request & API Wrapper Types */
+
+export enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PATCH = "PATCH",
+  PUT = "PUT",
+  DELETE = "DELETE",
+}
+
+export interface InternalRequestData {
+  url: string;
+  method: HttpMethod;
+  body?: { [key: string]: unknown };
+  queryParams?: { [key: string]: string | number | boolean | undefined };
+  authRequired?: boolean;
+}
+
+export interface InternalResponseData<T> {
+  success: boolean;
+  message?: string;
+  payload?: T;
+}
+
+export class InternalResponseError extends Error {}
+
 export enum Role {
   NONPROFIT_ADMIN = "Nonprofit Admin",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
@@ -108,4 +134,15 @@ export type RecursivePartial<T> = {
 export enum VerificationLogType {
   PASSWORD_RESET = "PASSWORD_RESET",
   EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
+}
+
+/* Analytics Data */
+
+export interface DataRecord {
+  interval: string;
+  value: number;
+}
+
+export interface StackedDataRecord extends DataRecord {
+  stackedValue: number;
 }

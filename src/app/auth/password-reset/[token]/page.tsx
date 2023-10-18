@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
+import { HttpMethod } from "@/common_utils/types";
 import styles from "./page.module.css";
 
 interface PageProps {

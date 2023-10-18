@@ -13,10 +13,9 @@ import { useDispatch } from "react-redux";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
-import { IUser } from "@/common_utils/types";
+import { HttpMethod, IUser } from "@/common_utils/types";
 import { login } from "@src/redux/reducers/authReducer";
 
 import styles from "./page.module.css";

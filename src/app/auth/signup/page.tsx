@@ -8,7 +8,7 @@ import { FirebaseError } from "firebase/app";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
+import { HttpMethod } from "@/common_utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignUp } from "@src/firebase/email_signin";
 

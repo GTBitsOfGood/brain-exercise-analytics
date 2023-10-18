@@ -6,13 +6,12 @@ import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
 import { login } from "@src/redux/reducers/authReducer";
-import { IUser } from "@/common_utils/types";
+import { IUser, HttpMethod } from "@/common_utils/types";
 import { useDispatch } from "react-redux";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 
 import CHAPTERS from "@src/utils/chapters";
