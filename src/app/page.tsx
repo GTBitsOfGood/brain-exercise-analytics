@@ -1,9 +1,9 @@
 "use client";
 
-import LineChart from "@src/components/LineChart";
-import BarChart from "@src/components/BarChart";
-import StackedBarChart from "@src/components/StackedBarChart";
-import SmallDataBox from "@src/components/SmallDataBox";
+import LineChart from "@src/components/Graphs/LineChart";
+import BarChart from "@src/components/Graphs/BarChart";
+import StackedBarChart from "@src/components/Graphs/StackedBarChart";
+import SmallDataBox from "@src/components/Graphs/SmallDataBox";
 import { Icon } from "./icons/barChartIcon";
 import styles from "./page.module.css";
 
