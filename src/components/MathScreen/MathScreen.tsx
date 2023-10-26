@@ -3,12 +3,12 @@ import { RootXIcon } from "@src/app/icons/root_x";
 import { accuracyIcon } from "@src/app/icons/accuracyIcon";
 import { barChartIcon } from "@src/app/icons/barChartIcon";
 import { questionIcon } from "@src/app/icons/questionIcon";
+import { timeIcon } from "@src/app/icons/timeIcon";
 import LineChart from "../LineChart";
 import BarChart from "../BarChart";
 import SmallDataBox from "../SmallDataBox";
 import styles from "./MathScreen.module.css";
 import DateSelector from "../DateSelector/DateSelector";
-import { timeIcon } from "@src/app/icons/timeIcon";
 
 interface InputProp {
   accuracyData: { interval: string; value: number }[];

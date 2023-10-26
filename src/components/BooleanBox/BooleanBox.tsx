@@ -25,22 +25,22 @@ const BooleanBox = ({
   redText,
   Icon,
   showGreen,
-  height = 83,
+  height = 101,
   width = 421,
   style = {},
 }: InputPropType) => {
   return (
     <div
+      className={[styles.body, poppins.variable].join(" ")}
       style={{
         height,
         width,
-        marginTop: 16,
+        marginTop: "16px",
         ...style,
       }}
-      className={[styles.body, poppins.variable].join(" ")}
     >
       <Icon />
-      <p>{title}</p>
+      {title}
       {showGreen && (
         <div className={styles.infoBox} style={{ backgroundColor: "#70E975" }}>
           {greenText}

@@ -148,8 +148,23 @@ export default function Home() {
         totalQuestions="20"
         totalTime="1min 30sec"
       />
-      <ReadingScreen />
-      <WritingScreen />
+      <ReadingScreen
+        sessionHistory={dataStacked}
+        readingRate={dataLine}
+        avgPassage={dataBar}
+        timeData={dataBar}
+        totalPassage={"10"}
+        currentTime={"30 sec"}
+        completionStatus={true}
+      />
+      <WritingScreen
+        sessionHistory={dataStacked}
+        numCompleted={dataBar}
+        avgTime={dataBar}
+        totalPrompts={"10"}
+        currentTime={"2 min 20 sec"}
+        attemptStatus={false}
+      />
       <TriviaScreen
         accuracyData={dataLine}
         numQuestionData={numberOfQuestionData}

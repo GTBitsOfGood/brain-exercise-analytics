@@ -1,73 +1,14 @@
 import React from "react";
-import { WritingIcon } from "@src/app/icons/writingIcon";
+import { attemptIcon } from "@src/app/icons/attemptIcon";
+import { PromptsIcon } from "@src/app/icons/promptsIcon";
+import { timeIcon } from "@src/app/icons/timeIcon";
 import styles from "./ReadingScreen.module.css";
 import DateSelector from "../DateSelector/DateSelector";
 import StackedBarChart from "../StackedBarChart";
 import BarChart from "../BarChart";
 import SmallDataBox from "../SmallDataBox";
-import { PromptsIcon } from "@src/app/icons/promptsIcon";
-import { timeIcon } from "@src/app/icons/timeIcon";
 import BooleanBox from "../BooleanBox/BooleanBox";
-import { attemptIcon } from "@src/app/icons/attemptIcon";
-
-const dataStacked = [
-  {
-    interval: "9/17",
-    stackedValue: 0.3,
-    value: 0.5,
-  },
-  {
-    interval: "9/24",
-    stackedValue: 0.1,
-    value: 0.2,
-  },
-  {
-    interval: "10/4",
-    stackedValue: 0.1,
-    value: 0.7,
-  },
-  {
-    interval: "10/12",
-    stackedValue: 0.55,
-    value: 0.6,
-  },
-  {
-    interval: "10/19",
-    stackedValue: 0.2,
-    value: 0.5,
-  },
-  {
-    interval: "10/25",
-    stackedValue: 0.0,
-    value: 0.8,
-  },
-];
-const dataBar = [
-  {
-    interval: "9/17",
-    value: 0,
-  },
-  {
-    interval: "9/24",
-    value: 2,
-  },
-  {
-    interval: "10/4",
-    value: 1,
-  },
-  {
-    interval: "10/12",
-    value: 6,
-  },
-  {
-    interval: "10/19",
-    value: 5,
-  },
-  {
-    interval: "10/25",
-    value: 7,
-  },
-];
+import LineChart from "../LineChart";
 
 const ReadingIcon = () => {
   return (
@@ -88,9 +29,33 @@ const ReadingIcon = () => {
   );
 };
 
-export const ReadingScreen = () => {
+interface InputProp {
+  sessionHistory: {
+    interval: string;
+    value: number;
+    stackedValue: number;
+  }[];
+  readingRate: { interval: string; value: number }[];
+  avgPassage: { interval: string; value: number }[];
+  timeData: { interval: string; value: number }[];
+  totalPassage: string;
+  currentTime: string;
+  completionStatus: boolean;
+  style?: object;
+}
+
+export const ReadingScreen = ({
+  sessionHistory,
+  readingRate,
+  avgPassage,
+  timeData,
+  totalPassage,
+  currentTime,
+  completionStatus,
+  style,
+}: InputProp) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={style}>
       <div className={styles.header}>
         <ReadingIcon />
         <p>READING</p>
@@ -102,43 +67,49 @@ export const ReadingScreen = () => {
         <div className={styles.graphs}>
           <StackedBarChart
             title="Writing Session Completion History"
-            data={dataStacked}
+            data={sessionHistory}
             legend={{
-              valueText: "valueText",
-              stackedValueText: "stackedValueText",
+              valueText: "sessions completed without reading",
+              stackedValueText: "sessions completed with reading",
             }}
             hoverable
             percentageChange
           />
           <BarChart
-            title="Average Number of Prompts Completed"
-            data={dataBar}
+            title="Average Number of Passages Read Per Session"
+            data={avgPassage}
             hoverable
             percentageChange
             style={{ width: "100%", height: "100%" }}
           />
-          <StackedBarChart
-            title="Average Time Spent Per Prompt"
-            data={dataStacked}
-            legend={{
-              valueText: "valueText",
-              stackedValueText: "stackedValueText",
-            }}
+          <LineChart
+            title="Average Reading Rate (Words/Min)"
+            hoverable={true}
+            percentageChange={true}
+            gradient={true}
+            info="Vidushi"
+            data={readingRate}
+            style={{ width: "100%", height: "100%" }}
+          />
+          <BarChart
+            title="Average Time Spent Per Passage"
+            data={timeData}
             hoverable
             percentageChange
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
         <div className={styles.textStats}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
-            title="Number of Prompts Completed"
-            text={"hello"}
+            title="Number of Passages Completed"
+            text={totalPassage}
             Icon={PromptsIcon}
             style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
-            title="Current Time per Prompt"
-            text={"1 min 30 sec"}
+            title="Current Time per Passage"
+            text={currentTime}
             Icon={timeIcon}
             style={{ width: "80%", margin: "auto" }}
           />
@@ -147,8 +118,11 @@ export const ReadingScreen = () => {
             greenText="ATTEMPTED"
             redText="NOT ATTEMPTED"
             Icon={attemptIcon}
-            showGreen={true}
-            style={{ width: "80%", margin: "auto" }}
+            showGreen={completionStatus}
+            style={{
+              width: "80%",
+              margin: "auto",
+            }}
           />
         </div>
       </div>

@@ -4,11 +4,11 @@ import { timeIcon } from "@src/app/icons/timeIcon";
 import { attemptIcon } from "@src/app/icons/attemptIcon";
 import StackedBarChart from "@src/components/StackedBarChart";
 import SmallDataBox from "@src/components/SmallDataBox";
-import BooleanBox from "../BooleanBox/BooleanBox";
 import BarChart from "@src/components/BarChart";
-import styles from "./WritingScreen.module.css";
 import { WritingIcon } from "@src/app/icons/writingIcon";
 import DateSelector from "@src/components/DateSelector/DateSelector";
+import BooleanBox from "../BooleanBox/BooleanBox";
+import styles from "./WritingScreen.module.css";
 
 const dataStacked = [
   {
@@ -69,9 +69,31 @@ const dataBar = [
   },
 ];
 
-export const WritingScreen = () => {
+interface InputProp {
+  sessionHistory: {
+    interval: string;
+    value: number;
+    stackedValue: number;
+  }[];
+  numCompleted: { interval: string; value: number }[];
+  avgTime: { interval: string; value: number }[];
+  totalPrompts: string;
+  currentTime: string;
+  attemptStatus: boolean;
+  style?: object;
+}
+
+export const WritingScreen = ({
+  sessionHistory,
+  numCompleted,
+  avgTime,
+  totalPrompts,
+  currentTime,
+  attemptStatus,
+  style,
+}: InputProp) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={style}>
       <div className={styles.header}>
         <WritingIcon />
         <p>WRITING</p>
@@ -83,43 +105,40 @@ export const WritingScreen = () => {
         <div className={styles.graphs}>
           <StackedBarChart
             title="Writing Session Completion History"
-            data={dataStacked}
+            data={sessionHistory}
             legend={{
-              valueText: "valueText",
-              stackedValueText: "stackedValueText",
+              valueText: "sessions completed without writing",
+              stackedValueText: "sessions completed with writing",
             }}
             hoverable
             percentageChange
           />
           <BarChart
             title="Average Number of Prompts Completed"
-            data={dataBar}
+            data={numCompleted}
             hoverable
             percentageChange
             style={{ width: "100%", height: "100%" }}
           />
-          <StackedBarChart
+          <BarChart
             title="Average Time Spent Per Prompt"
-            data={dataStacked}
-            legend={{
-              valueText: "valueText",
-              stackedValueText: "stackedValueText",
-            }}
+            data={avgTime}
             hoverable
             percentageChange
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
         <div className={styles.textStats}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
             title="Number of Prompts Completed"
-            text={"hello"}
+            text={totalPrompts}
             Icon={PromptsIcon}
             style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             title="Current Time per Prompt"
-            text={"1 min 30 sec"}
+            text={currentTime}
             Icon={timeIcon}
             style={{ width: "80%", margin: "auto" }}
           />
@@ -128,7 +147,7 @@ export const WritingScreen = () => {
             greenText="ATTEMPTED"
             redText="NOT ATTEMPTED"
             Icon={attemptIcon}
-            showGreen={true}
+            showGreen={attemptStatus}
             style={{ width: "80%", margin: "auto" }}
           />
         </div>
