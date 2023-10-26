@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "ngrok": "ngrok http 3030",
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
