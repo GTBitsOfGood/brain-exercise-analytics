@@ -1,0 +1,23 @@
+.body {
+  display: flex;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #a3aed0;
+}
+
+.infoBox {
+  font-size: 13px;
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  border-radius: 20px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 10px;
+  color: #2b3674;
+  font-weight: 700;
+}

@@ -1,6 +1,8 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
+import InfoIconButton from "@mui/icons-material/Info";
+import PopupModal from "./PopulModal/PopupModal";
 import { D3Data } from "./types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
@@ -13,6 +15,7 @@ interface DataParams extends D3Data {
   hoverable?: boolean;
   percentageChange?: boolean;
   gradient?: boolean;
+  info?: string;
 }
 
 export default function LineChart({
@@ -30,12 +33,14 @@ export default function LineChart({
   hoverable = false,
   percentageChange = false,
   gradient = false,
+  info,
 }: DataParams) {
   const marginTop = 20;
   const marginRight = 20;
   const marginBottom = 40;
   const marginLeft = 40;
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [infoPopup, setInfoPopup] = useState(false);
 
   const actualChange =
     data.length < 2
@@ -144,8 +149,13 @@ export default function LineChart({
         paddingBottom: 38,
         ...style,
       }}
+      onClick={() => {
+        if (infoPopup) {
+          setInfoPopup(false);
+        }
+      }}
     >
-      <div className="titleBox">
+      <div className="titleBox" style={{ display: "inline-flex" }}>
         <p
           style={{
             fontFamily: poppins500.style.fontFamily,
@@ -161,7 +171,9 @@ export default function LineChart({
             color:
               actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
-            marginTop: 11,
+            marginTop: "auto",
+            marginBottom: "auto",
+            marginLeft: 12,
           }}
         >
           {actualChange !== null &&
@@ -177,8 +189,21 @@ export default function LineChart({
             fontSize: 10.2,
           }}
         >
-          {actualChange !== null && percentageChange && "Improved..."}
+          {actualChange !== null && percentageChange}
         </p>
+        {info !== null && (
+          <InfoIconButton
+            style={{
+              fontSize: 12,
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginLeft: 12,
+              cursor: "pointer",
+            }}
+            onClick={() => setInfoPopup(true)}
+          />
+        )}
+        <PopupModal show={infoPopup} info="Vidushi" />
       </div>
       <svg
         ref={windowRef}

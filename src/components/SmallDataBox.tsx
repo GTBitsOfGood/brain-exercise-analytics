@@ -8,9 +8,15 @@ interface DataParams {
   title: string;
   Icon: () => JSX.Element;
   text: string;
+  style?: object;
 }
 
-export default function SmallDataBox({ title, Icon, text }: DataParams) {
+export default function SmallDataBox({
+  title,
+  Icon,
+  text,
+  style = {},
+}: DataParams) {
   return (
     <div
       style={{
@@ -18,6 +24,7 @@ export default function SmallDataBox({ title, Icon, text }: DataParams) {
         borderRadius: "15px",
         width: 245,
         height: 101,
+        ...style,
       }}
     >
       <div className="titleBox" style={{ marginTop: 16, marginLeft: 20 }}>

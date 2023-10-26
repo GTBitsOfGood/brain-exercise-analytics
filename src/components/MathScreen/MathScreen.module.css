@@ -1,0 +1,43 @@
+.container {
+  width: 100%;
+  padding: 20px;
+  background-color: #ddebff;
+  height: 100%;
+}
+
+.dateSelector {
+  margin-left: auto;
+  padding-right: 20px;
+}
+
+.header {
+  display: flex;
+  font-size: 30px;
+  gap: 20px;
+}
+
+.body {
+  display: flex;
+  gap: 20px;
+}
+
+.textStats {
+  flex: 1;
+  text-align: center;
+}
+
+.graphs {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.sessionHeading {
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.graph {
+  width: 50%;
+}

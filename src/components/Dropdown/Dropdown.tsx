@@ -11,12 +11,12 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-interface DropdownOption<T> {
+export interface DropdownOption<T> {
   value: T;
   displayValue: string;
 }
 
-interface DropdownProps<T> {
+export interface DropdownProps<T> {
   options: DropdownOption<T>[];
   value?: T;
   title?: string;
@@ -28,7 +28,8 @@ interface DropdownProps<T> {
 }
 
 function Dropdown<T>(props: DropdownProps<T>) {
-  const { options, title, required, placeholder, showError, error } = props;
+  const { options, title, required, placeholder, showError, error } =
+    props.props;
   return (
     <div className={styles.container}>
       <main className={poppins.variable}>

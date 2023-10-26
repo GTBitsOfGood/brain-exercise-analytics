@@ -1,4 +1,5 @@
 import { Poppins, Inter } from "next/font/google";
+import { InfoIcon } from "@src/app/icons/InfoIcon";
 import * as d3 from "d3";
 import {
   Fragment,
@@ -9,6 +10,7 @@ import {
   useState,
 } from "react";
 import { D3Data } from "./types";
+import PopupModal from "./PopulModal/PopupModal";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -22,6 +24,7 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   highlightLargest?: boolean;
   children?: ReactNode;
+  info?: string;
 }
 
 export default function BarChart({
@@ -40,6 +43,7 @@ export default function BarChart({
   percentageChange = false,
   highlightLargest = true,
   children,
+  info,
 }: DataParams) {
   const marginTop = 20;
   const marginRight = 25;
@@ -48,6 +52,7 @@ export default function BarChart({
   const [largest, setLargest] = useState(-1);
   const barWidth = 20;
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [infoPopup, setInfoPopup] = useState(false);
 
   const actualChange =
     data.length < 2
@@ -192,6 +197,11 @@ export default function BarChart({
         paddingBottom: 30,
         ...style,
       }}
+      onClick={() => {
+        if (infoPopup) {
+          setInfoPopup(false);
+        }
+      }}
     >
       <div
         className="titleBox"
@@ -206,6 +216,21 @@ export default function BarChart({
         >
           {title}
         </p>
+        {info !== null && (
+          <div
+            style={{
+              fontSize: 12,
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginLeft: 12,
+              cursor: "pointer",
+            }}
+            onClick={() => setInfoPopup(true)}
+          >
+            <InfoIcon />
+          </div>
+        )}
+        <PopupModal show={infoPopup} info="Vidushi" />
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
@@ -269,6 +294,18 @@ export default function BarChart({
           ))}
         </g>
       </svg>
+      <div style={{ justifyContent: "center" }}>
+        <div>
+          {/* <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 50,
+              backgroundColor: "#008AFC",
+            }}
+          /> */}
+        </div>
+      </div>
     </div>
   );
 }
