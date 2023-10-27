@@ -1,4 +1,4 @@
-const Icon = () => (
+const barChartIcon = () => (
   <>
     <svg
       width="49"
@@ -28,4 +28,4 @@ const Icon = () => (
   </>
 );
 
-export { Icon };
+export default barChartIcon;
