@@ -1,4 +1,5 @@
 import { Poppins, Inter } from "next/font/google";
+import { CSSProperties, HTMLAttributes } from "react";
 
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
@@ -9,6 +10,7 @@ interface DataParams {
   Icon: () => JSX.Element;
   text: string;
   titleAboveText?: boolean;
+  style?: CSSProperties;
 }
 
 export default function SmallDataBox({
@@ -16,6 +18,7 @@ export default function SmallDataBox({
   Icon,
   text,
   titleAboveText = false,
+  style = {},
 }: DataParams) {
   return (
     <div
@@ -28,10 +31,11 @@ export default function SmallDataBox({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "center",
+        ...style,
       }}
     >
       <div
-        className="titleBox"
+        className='titleBox'
         style={{
           marginLeft: titleAboveText ? 65 : 20,
           marginBottom: titleAboveText ? -10 : 0,
@@ -51,7 +55,7 @@ export default function SmallDataBox({
         </p>
       </div>
       <div
-        className="Graphic"
+        className='Graphic'
         style={{
           marginLeft: 14.5,
           display: "flex",
