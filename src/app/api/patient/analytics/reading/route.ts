@@ -4,6 +4,9 @@ import { getAnalyticsByUserId } from "@server/mongodb/actions/Analytics";
 import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
 
 export const GET = APIWrapper({
+  config: {
+    requireToken: true,
+  },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
