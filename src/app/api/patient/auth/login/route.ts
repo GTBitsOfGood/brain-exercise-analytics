@@ -6,6 +6,7 @@ import {
 import APIWrapper from "@server/utils/APIWrapper";
 import User from "@server/mongodb/models/User";
 import { IUser, IAnalytics } from "@/common_utils/types";
+import { incrementTotalUsers } from "@server/mongodb/actions/OverallAnalytics";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export const GET = APIWrapper({
     )) as IAnalytics;
     if (analyticsRecord === null) {
       analyticsRecord = await createAnalyticsID(newUser._id as string);
+      await incrementTotalUsers();
     }
     newUser._id = newUser._id as string;
     return {

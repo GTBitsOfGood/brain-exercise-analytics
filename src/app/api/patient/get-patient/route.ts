@@ -1,5 +1,5 @@
 import APIWrapper from "@server/utils/APIWrapper";
-import { getUserByEmail } from "@server/mongodb/actions/User";
+import { getUserById } from "@server/mongodb/actions/User";
 
 export const dynamic = "force-dynamic";
 
@@ -9,12 +9,12 @@ export const GET = APIWrapper({
   },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
-    const email = searchParams.get("email");
-    if (!email) {
-      throw new Error("Email parameter is missing in the request.");
+    const id = searchParams.get("id");
+    if (!id) {
+      throw new Error("ID parameter is missing in the request.");
     }
 
-    const user = await getUserByEmail(email);
+    const user = await getUserById(id);
     return user;
   },
 });

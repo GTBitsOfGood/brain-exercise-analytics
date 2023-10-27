@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  padding-top: 13%;
+  padding-bottom: 3%;
+  padding-left: 17%;
+}
+
+.metrics-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard-icon {
+  color: #a3aed0;
+  padding-right: 35px;
+}
+
+.metric {
+  color: #2078c1;
+  font-size: 15px;
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  word-wrap: break-word;
+  cursor: pointer;
+}

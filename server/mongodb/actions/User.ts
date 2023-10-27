@@ -6,6 +6,11 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   return user;
 };
 
+export const getUserById = async (id: string): Promise<IUser | null> => {
+  const user = await User.findOne<IUser>({ id });
+  return user;
+};
+
 export const createUserEmail = async (email: string): Promise<IUser> => {
   const user = (await User.create({ email })) as IUser;
   return user;

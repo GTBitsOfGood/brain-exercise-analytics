@@ -25,13 +25,13 @@ export const POST = APIWrapper({
     }
 
     if (
-      !signupData.chapter ||
-      !signupData.city ||
-      !signupData.country ||
-      !signupData.email ||
-      !signupData.name ||
-      !signupData.phoneNumber ||
-      !signupData.state
+      signupData.chapter === undefined ||
+      signupData.city === undefined ||
+      signupData.country === undefined ||
+      signupData.email === undefined ||
+      signupData.name === undefined ||
+      signupData.phoneNumber === undefined ||
+      signupData.state === undefined
     ) {
       throw new Error("Missing parameter(s)");
     }

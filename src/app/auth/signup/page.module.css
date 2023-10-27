@@ -1,0 +1,212 @@
+.screen {
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  display: flex;
+  align-items: center;
+  padding-top: 8%;
+  padding-left: 11%;
+  padding-right: 8%;
+}
+
+.splitScreen {
+  display: flex;
+  width: 100%;
+}
+
+.leftPanel {
+  flex: 27;
+}
+
+.middleSpace {
+  flex: 25;
+}
+
+.rightPanel {
+  flex: 30;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightContainer {
+  width: 74%;
+}
+
+.signUpLabel {
+  color: #2b3674;
+  font-size: 28px;
+  font-family: var(--font-poppins);
+  font-weight: 700;
+  line-height: 56px;
+  word-wrap: break-word;
+}
+
+.passwordReset {
+  color: #2b3674;
+  font-size: 32px;
+  font-family: var(--font-poppins);
+  font-weight: 700;
+  word-wrap: break-word;
+  padding-bottom: 2%;
+}
+
+.passwords {
+  padding-top: 3%;
+}
+
+.descriptionText {
+  color: #a3aed0;
+  font-size: 11px;
+  font-family: var(--font-poppins);
+  font-weight: 400;
+  word-wrap: break-word;
+  padding-bottom: 6%;
+}
+
+.inputFields {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.emailField {
+  display: flex;
+  flex-direction: column;
+  padding-top: 7%;
+}
+
+.generalError {
+  flex-direction: column;
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
+.errorIcon {
+  color: #ff0000;
+}
+
+.errorMessage {
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  color: #ff0000;
+  padding-left: 5px;
+  font-size: 10px;
+}
+
+.continueButtonContainer {
+  display: flex;
+  padding-top: 10%;
+  flex-direction: column;
+  width: 100%;
+}
+
+.googleButtonContainer {
+  display: flex;
+  padding-top: 2%;
+  flex-direction: column;
+  width: 100%;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding-top: 7%;
+  width: 100%;
+}
+
+.textWrapper4 {
+  color: #a3aed0;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.28px;
+  line-height: 24px;
+  text-align: center;
+  white-space: nowrap;
+  margin: 0 10px;
+}
+
+.line,
+.img {
+  flex: 1;
+  width: 20%;
+  height: 1px;
+}
+
+.continueButton {
+  color: white;
+  background-color: #005aa3;
+  font-size: 14px;
+  font-family: var(--font-poppins);
+  font-weight: 700;
+  line-height: 14px;
+  word-wrap: break-word;
+  text-align: center;
+  width: 100%;
+  height: 43px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #005aa3;
+  border-radius: 16px;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.bottomTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.forgotPassword {
+  color: #005aa3;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  cursor: pointer;
+}
+
+.alreadyHaveAccountLabel {
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.signInButton {
+  color: #007aff;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  cursor: pointer;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  color: #2b3674;
+  background-color: #a3aed0;
+  font-size: 14px;
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  line-height: 14px;
+  word-wrap: break-word;
+  text-align: center;
+  width: 100%;
+  height: 43px;
+  background: #f4f7fe;
+  border-radius: 16px;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}

@@ -30,6 +30,7 @@ export const POST = APIWrapper({
       throw new Error("Name doesn't match to existing value");
     }
 
-    await createPasswordReset(requestData.email);
+    const passwordReset = await createPasswordReset(requestData.email);
+    return { token: passwordReset.token };
   },
 });
