@@ -8,19 +8,35 @@ interface DataParams {
   title: string;
   Icon: () => JSX.Element;
   text: string;
+  titleAboveText?: boolean;
 }
 
-export default function SmallDataBox({ title, Icon, text }: DataParams) {
+export default function SmallDataBox({
+  title,
+  Icon,
+  text,
+  titleAboveText = false,
+}: DataParams) {
   return (
     <div
       style={{
         backgroundColor: "white",
         borderRadius: "15px",
-        width: 245,
-        height: 101,
+        width: titleAboveText ? 192 : 245,
+        height: titleAboveText ? 75 : 101,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "center",
       }}
     >
-      <div className="titleBox" style={{ marginTop: 16, marginLeft: 20 }}>
+      <div
+        className="titleBox"
+        style={{
+          marginLeft: titleAboveText ? 65 : 20,
+          marginBottom: titleAboveText ? -10 : 0,
+        }}
+      >
         <p
           style={{
             fontFamily: poppins500.style.fontFamily,
@@ -36,7 +52,11 @@ export default function SmallDataBox({ title, Icon, text }: DataParams) {
       </div>
       <div
         className="Graphic"
-        style={{ marginLeft: 14.5, display: "flex", flexDirection: "row" }}
+        style={{
+          marginLeft: 14.5,
+          display: "flex",
+          flexDirection: "row",
+        }}
       >
         <Icon />
         <p
@@ -47,7 +67,9 @@ export default function SmallDataBox({ title, Icon, text }: DataParams) {
             lineHeight: "27px",
             letterSpacing: "-0.02em",
             textAlign: "left",
-            margin: "auto",
+            marginTop: "auto",
+            marginBottom: "auto",
+            marginLeft: 10,
             color: "#2B3674",
           }}
         >
