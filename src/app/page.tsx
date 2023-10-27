@@ -1,19 +1,5 @@
 "use client";
 
-import LineChart from "@src/components/LineChart";
-import BarChart from "@src/components/BarChart";
-import StackedBarChart from "@src/components/StackedBarChart";
-import SmallDataBox from "@src/components/SmallDataBox";
-import { Icon } from "./icons/barChartIcon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./page.module.css";
-import Dropdown from "../components/Dropdown/Dropdown";
-import {
-  IDropdownProps,
-  IDropdownOption,
-} from "../components/Dropdown/Dropdown";
-import DateSelector from "@src/components/DateSelector/DateSelector";
-import BooleanBox from "@src/components/BooleanBox/BooleanBox";
 import MathScreen from "@src/components/MathScreen/MathScreen";
 import { ReadingScreen } from "@src/components/ReadingScreen/ReadingScreen";
 import { WritingScreen } from "@src/components/WritingScreen/WritingScreen";
