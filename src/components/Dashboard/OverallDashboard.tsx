@@ -12,13 +12,11 @@ import {
   arrowDown as AD,
 } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
+import { Days } from "@/common_utils/types";
 import WeeklyProgress from "../Graphs/WeeklyProgress";
 
 interface Params {
-  usersOverTime: {
-    users: number;
-    date: string;
-  }[];
+  streak: Days[];
   style?: CSSProperties;
 }
 // For the name of the user it would be really useful to have a reducer store this information globally during authentication (like in the mobile app)
@@ -216,7 +214,7 @@ export default function OverallDashboard(params: Params) {
         <IGI />
         <Dropdown style={{ marginLeft: "auto" }} />
       </Stack>
-      <WeeklyProgress days={[]} />
+      <WeeklyProgress days={params.streak} />
     </Box>
   );
 }

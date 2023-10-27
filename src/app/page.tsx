@@ -11,6 +11,7 @@ import OverallDashboard from "@src/components/Dashboard/OverallDashboard";
 import { Divider } from "@mui/material";
 import { personIcon } from "./icons";
 import styles from "./page.module.css";
+import { Days } from "@/common_utils/types";
 
 const dataLine = [
   {
@@ -101,8 +102,12 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <OverviewReport activeUsers={10} totalUsers={200} />
-      <Divider orientation='horizontal' flexItem sx={{ marginTop: "50px", marginBottom: "50px" }} />
-      <OverallDashboard />
+      <Divider
+        orientation='horizontal'
+        flexItem
+        sx={{ marginTop: "50px", marginBottom: "50px" }}
+      />
+      <OverallDashboard streak={[Days.Monday, Days.Tuesday]} />
       <LineChart
         title='Accuracy'
         data={dataLine}
