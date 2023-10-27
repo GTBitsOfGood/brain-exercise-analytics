@@ -165,3 +165,11 @@ export const updateSessionComplete = async (
 
   return data;
 };
+
+export const getAnalyticsByUserId = async (
+  userID: string,
+): Promise<IAnalytics | null> => {
+  const analytics = await Analytics.findOne<IAnalytics>({ userID });
+
+  return analytics as IAnalytics;
+};

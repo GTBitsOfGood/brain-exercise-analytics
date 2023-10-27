@@ -55,6 +55,13 @@ export enum AdminApprovalStatus {
   REJECTED = "Rejected",
 }
 
+export enum DateRangeEnum {}
+// recent = <any>"recent",
+// quarter = <any>"3 months",
+// half = <any>"6 months",
+// year = <any>"1 year",
+// max = <any>"max",
+
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
@@ -90,8 +97,6 @@ export interface IVerificationLog {
 }
 
 export interface IAnalytics {
-  // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
-  // without any_id attribute
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
@@ -115,6 +120,7 @@ export interface IAnalytics {
       passagesRead: number;
       timePerPassage: number;
       wordsPerMinute: number;
+      questionsAnswered: number;
     };
     writing: {
       questionsAnswered: number;
@@ -231,4 +237,133 @@ export interface IPatientTableEntry
   > {
   active: boolean;
   startDate: Date;
+}
+
+export interface IAggregatedAnalyticsAll {
+  overall: {
+    streak: [string];
+    startDate: Date;
+    lastSessionDate: Date;
+    totalSessionsCompleted: number;
+    streakHistory: DataRecord[];
+    lastSession: {
+      mathQuestionsCompleted: number;
+      wordsRead: number;
+      promptsCompleted: number;
+      triviaQuestionsCompleted: number;
+    };
+  };
+  math: {
+    avgAccuracy: DataRecord[];
+    avgDifficultyScore: DataRecord[];
+    avgQuestionsCompleted: DataRecord[];
+    avgTimePerQuestion: DataRecord[];
+    lastSession: {
+      accuracy: number;
+      difficultyScore: number;
+      questionsCompleted: number;
+      timePerQuestion: number;
+    };
+  };
+  trivia: {
+    avgAccuracy: DataRecord[];
+    avgQuestionsCompleted: DataRecord[];
+    avgTimePerQuestion: DataRecord[];
+    lastSession: {
+      accuracy: number;
+      questionsCompleted: number;
+      timePerQuestion: number;
+    };
+  };
+  reading: {
+    sessionCompletion: StackedDataRecord[];
+    avgWordsPerMin: DataRecord[];
+    avgPassagesRead: DataRecord[];
+    avgTimePerPassage: DataRecord[];
+    lastSession: {
+      passagesRead: number;
+      timePerPassage: number;
+      completed: boolean;
+    };
+  };
+  writing: {
+    sessionCompletion: StackedDataRecord[];
+    avgPromptsAnswered: DataRecord[];
+    avgTimePerQuestion: DataRecord[];
+    lastSession: {
+      promptsAnswered: number;
+      timePerPrompt: number;
+      completed: boolean;
+    };
+  };
+}
+
+export interface IAggregatedAnalyticsMath {
+  math: {
+    avgAccuracy: [DataRecord];
+    avgDifficultyScore: [DataRecord];
+    avgQuestionsCompleted: [DataRecord];
+    avgTimePerQuestion: [DataRecord];
+    lastSession: {
+      accuracy: number;
+      difficultyScore: number;
+      questionsCompleted: number;
+      timePerQuestion: number;
+    };
+  };
+}
+export interface IAggregatedAnalyticsTrivia {
+  trivia: {
+    avgAccuracy: [DataRecord];
+    avgQuestionsCompleted: [DataRecord];
+    avgTimePerQuestion: [DataRecord];
+    lastSession: {
+      accuracy: number;
+      questionsCompleted: number;
+      timePerQuestion: number;
+    };
+  };
+}
+export interface IAggregatedAnalyticsReading {
+  reading: {
+    sessionCompletion: [StackedDataRecord];
+    avgWordsPerMin: [DataRecord];
+    avgPassagesRead: [DataRecord];
+    avgTimePerPassage: [DataRecord];
+    lastSession: {
+      passagesRead: number;
+      timePerPassage: number;
+      completed: boolean;
+    };
+  };
+}
+export interface IAggregatedAnalyticsWriting {
+  writing: {
+    sessionCompletion: [StackedDataRecord];
+    avgPromptsAnswered: [DataRecord];
+    avgTimePerQuestion: [DataRecord];
+    lastSession: {
+      promptsAnswered: number;
+      timePerPrompt: number;
+      completed: boolean;
+    };
+  };
+}
+
+export interface IAggregatedOverallAnalytics {
+  activeUsers: number;
+  totalUsers: number;
+  activeHistory: [DataRecord];
+}
+
+export interface IOverallAnalytics {
+  activeUsers: number;
+  totalUsers: number;
+  weeklyMetrics: [
+    {
+      date: Date;
+      totalUsers: number;
+      activeUsers: number;
+    },
+  ];
 }
