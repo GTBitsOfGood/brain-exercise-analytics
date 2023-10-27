@@ -25,13 +25,17 @@ export interface DropdownProps<T> {
   error?: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  style?: object;
 }
 
 function Dropdown<T>(props: DropdownProps<T>) {
-  const { options, title, required, placeholder, showError, error } =
-    props.props;
+  const { options, title, required, placeholder, showError, error } = props;
+  let { style } = props;
+  if (!style) {
+    style = {};
+  }
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={style}>
       <main className={poppins.variable}>
         {title !== undefined ? (
           <div className={styles["label-container"]}>
