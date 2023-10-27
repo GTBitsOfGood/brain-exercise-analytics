@@ -56,64 +56,71 @@ export const getAggregatedAnalytics = async (
   };
 
   type TempAggData = {
-    overall: {
-      streakLength: number;
+    [type: string]: {
+      [property: string]: number;
     };
-    math: {
-      // totalNum: item.math.questionsAttempted === 0 ? 0 : 1,
-      avgAccuracy: number;
-      avgDifficultyScore: number;
-      avgQuestionsCompleted: number;
-      avgTimePerQuestion: number;
-    };
-    reading: {
-      // totalNum: item.reading.sessionsAttempted === 0 ? 0 : 1,
-      sessionCompletion: number;
-      stackedValue: number;
-      avgWordsPerMin: number;
-      avgPassagesRead: number;
-      avgTimePerPassage: number;
-    };
-    writing: {
-      // totalNum: item.writing.sessionsAttempted === 0 ? 0 : 1,
-      sessionCompletion: number;
-      stackedValue: number;
-      avgPromptsAnswered: number;
-      avgTimePerQuestion: number;
-    };
-    trivia: {
-      // totalNum: item.trivia.questionsAttempted === 0 ? 0 : 1,
-      avgAccuracy: number;
-      avgQuestionsCompleted: number;
-      avgTimePerQuestion: number;
-    };
+    // overall: {
+    //   streakLength: number;
+    // };
+    // math: {
+    //   // totalNum: item.math.questionsAttempted === 0 ? 0 : 1,
+    //   avgAccuracy: number;
+    //   avgDifficultyScore: number;
+    //   avgQuestionsCompleted: number;
+    //   avgTimePerQuestion: number;
+    // };
+    // reading: {
+    //   // totalNum: item.reading.sessionsAttempted === 0 ? 0 : 1,
+    //   sessionCompletion: number;
+    //   stackedValue: number;
+    //   avgWordsPerMin: number;
+    //   avgPassagesRead: number;
+    //   avgTimePerPassage: number;
+    // };
+    // writing: {
+    //   // totalNum: item.writing.sessionsAttempted === 0 ? 0 : 1,
+    //   sessionCompletion: number;
+    //   stackedValue: number;
+    //   avgPromptsAnswered: number;
+    //   avgTimePerQuestion: number;
+    // };
+    // trivia: {
+    //   // totalNum: item.trivia.questionsAttempted === 0 ? 0 : 1,
+    //   avgAccuracy: number;
+    //   avgQuestionsCompleted: number;
+    //   avgTimePerQuestion: number;
+    // };
   };
   type Result = {
-    overall: {
-      streakHistory: DataRecord[];
+    [type: string]: {
+      [property: string]: DataRecord[];
     };
-    math: {
-      avgAccuracy: DataRecord[];
-      avgDifficultyScore: DataRecord[];
-      avgQuestionsCompleted: DataRecord[];
-      avgTimePerQuestion: DataRecord[];
-    };
-    reading: {
-      sessionCompletion: StackedDataRecord[];
-      avgWordsPerMin: DataRecord[];
-      avgPassagesRead: DataRecord[];
-      avgTimePerPassage: DataRecord[];
-    };
-    writing: {
-      sessionCompletion: StackedDataRecord[];
-      avgPromptsAnswered: DataRecord[];
-      avgTimePerQuestion: DataRecord[];
-    };
-    trivia: {
-      avgAccuracy: DataRecord[];
-      avgQuestionsCompleted: DataRecord[];
-      avgTimePerQuestion: DataRecord[];
-    };
+
+    // overall: {
+    //   streakHistory: DataRecord[];
+    // };
+    // math: {
+    //   avgAccuracy: DataRecord[];
+    //   avgDifficultyScore: DataRecord[];
+    //   avgQuestionsCompleted: DataRecord[];
+    //   avgTimePerQuestion: DataRecord[];
+    // };
+    // reading: {
+    //   sessionCompletion: StackedDataRecord[];
+    //   avgWordsPerMin: DataRecord[];
+    //   avgPassagesRead: DataRecord[];
+    //   avgTimePerPassage: DataRecord[];
+    // };
+    // writing: {
+    //   sessionCompletion: StackedDataRecord[];
+    //   avgPromptsAnswered: DataRecord[];
+    //   avgTimePerQuestion: DataRecord[];
+    // };
+    // trivia: {
+    //   avgAccuracy: DataRecord[];
+    //   avgQuestionsCompleted: DataRecord[];
+    //   avgTimePerQuestion: DataRecord[];
+    // };
   };
 
   const numOfWeeks = 7;
@@ -249,18 +256,45 @@ export const getAggregatedAnalytics = async (
     },
   };
 
-  for (const month in groupSumDict) {
-    for (const type in groupSumDict[month]) {
-      for (const property in groupSumDict[month][type]) {
+  // for (const month in groupSumDict) {
+  //   for (const type in groupSumDict[month]) {
+  //     for (const property in groupSumDict[month][type]) {
+  //       if (property === "totalNum" || property === "stackedValue") {
+  //         continue;
+  //       }
+  //       let dr = [
+  //         {
+  //           interval: month,
+  //           value: groupSumDict[month][type][property],
+  //         } as DataRecord,
+  //       ];
+  //       if (property === "sessionCompletion") {
+  //         dr = [
+  //           {
+  //             interval: month,
+  //             value: groupSumDict[month][type][property],
+  //             stackedValue: groupSumDict[month][type].sessionCompletion,
+  //           } as StackedDataRecord,
+  //         ];
+  //       }
+  //       result[type][property] = dr.concat(result[type][property]);
+  //     }
+  //   }
+  // }
+  Object.keys(groupSumDict).forEach((month) => {
+    Object.keys(groupSumDict[month]).forEach((type) => {
+      Object.keys(groupSumDict[month][type]).forEach((property) => {
         if (property === "totalNum" || property === "stackedValue") {
-          continue;
+          return;
         }
+
         let dr = [
           {
             interval: month,
             value: groupSumDict[month][type][property],
           } as DataRecord,
         ];
+
         if (property === "sessionCompletion") {
           dr = [
             {
@@ -270,10 +304,11 @@ export const getAggregatedAnalytics = async (
             } as StackedDataRecord,
           ];
         }
+
         result[type][property] = dr.concat(result[type][property]);
-      }
-    }
-  }
+      });
+    });
+  });
 
   // if overshoot, remove last element
   // const groupSumArray = Object.values(groupSumDict)

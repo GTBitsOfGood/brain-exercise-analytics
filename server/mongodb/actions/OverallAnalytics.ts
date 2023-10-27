@@ -88,15 +88,11 @@ export const getAggregatedOverallAnalytics =
       activeHistory: [],
     };
 
-    for (const month in groupSumDict) {
-      const dr = [
-        {
-          interval: month,
-          value: groupSumDict[month].activeHistory,
-        } as DataRecord,
-      ];
-      result.activeHistory = dr.concat(result.activeHistory);
-    }
+    const record = Object.keys(groupSumDict).map((month) => ({
+      interval: month,
+      value: groupSumDict[month].activeHistory,
+    }));
+    result.activeHistory = record.reverse();
 
     const aggOut = {
       ...singleAnalytics,
