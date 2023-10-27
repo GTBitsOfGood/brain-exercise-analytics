@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./PopupModal.module.css";
 
 interface InputProp {
   show: boolean;

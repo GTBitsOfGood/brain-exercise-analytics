@@ -42,6 +42,8 @@ export default function LineChart({
   const marginLeft = 40;
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
+  const [popupX, setPopupX] = useState(0);
+  const [popupY, setPopupY] = useState(0);
 
   const actualChange =
     data.length < 2
@@ -90,6 +92,13 @@ export default function LineChart({
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
+    if (infoButtonRef.current) {
+      const rect: Element = infoButtonRef.current;
+      const newTop = rect.getBoundingClientRect().y - 50;
+      setPopupY(newTop);
+      const left = rect.getBoundingClientRect().x;
+      setPopupX(left);
+    }
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis").remove();
     svg.select(".y-axis").remove();
@@ -191,17 +200,9 @@ export default function LineChart({
               info="Some information about line chart should come here."
               style={{
                 position: "fixed",
-                top: `${
-                  infoButtonRef.current != null
-                    ? infoButtonRef.current.getBoundingClientRect().y - 50
-                    : 0
-                }px`,
+                top: `${popupY}px`,
                 zIndex: 500,
-                left: `${
-                  infoButtonRef.current != null
-                    ? infoButtonRef.current.getBoundingClientRect().x
-                    : 0
-                }px`,
+                left: `${popupX}px`,
               }}
             />
           </div>

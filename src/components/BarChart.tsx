@@ -54,6 +54,8 @@ export default function BarChart({
   const barWidth = 20;
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
+  const [popupX, setPopupX] = useState<number | null>(null);
+  const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
     data.length < 2
@@ -93,6 +95,14 @@ export default function BarChart({
     // clean up code
     window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    if (infoButtonRef.current) {
+      const rect: Element = infoButtonRef.current;
+      const newTop = rect.getBoundingClientRect().y - 50;
+      setPopupY(newTop);
+      const left = rect.getBoundingClientRect().x;
+      setPopupX(left);
+    }
 
     const yAxisFormat = yAxis?.format
       ? yAxis.format
@@ -244,17 +254,9 @@ export default function BarChart({
               info={info}
               style={{
                 position: "fixed",
-                top: `${
-                  infoButtonRef.current != null
-                    ? infoButtonRef.current.getBoundingClientRect().y - 50
-                    : 0
-                }px`,
+                top: `${popupY}px`,
                 zIndex: 500,
-                left: `${
-                  infoButtonRef.current != null
-                    ? infoButtonRef.current.getBoundingClientRect().x
-                    : 0
-                }px`,
+                left: `${popupX}px`,
               }}
             />
           </div>
