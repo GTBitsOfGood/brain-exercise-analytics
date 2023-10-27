@@ -31,6 +31,7 @@ export default function StackedBarChart({
   hoverable = false,
   percentageChange = false,
   legend,
+  info = "",
 }: DataParams) {
   const marginTop = 20;
   const marginRight = 25;
@@ -56,6 +57,7 @@ export default function StackedBarChart({
         yAxis={yAxis}
         hoverable={hoverable}
         percentageChange={percentageChange}
+        info={info}
       >
         {data.map((d, i) => (
           <Fragment key={i}>

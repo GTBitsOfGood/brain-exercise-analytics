@@ -97,6 +97,7 @@ export const ReadingScreen = ({
             hoverable
             percentageChange
             style={{ width: "100%", height: "100%" }}
+            info="Hey this is just some info I thought you will find interesting."
           />
         </div>
         <div className={styles.textStats}>

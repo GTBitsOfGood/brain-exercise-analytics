@@ -10,65 +10,6 @@ import DateSelector from "@src/components/DateSelector/DateSelector";
 import BooleanBox from "../BooleanBox/BooleanBox";
 import styles from "./WritingScreen.module.css";
 
-const dataStacked = [
-  {
-    interval: "9/17",
-    stackedValue: 0.3,
-    value: 0.5,
-  },
-  {
-    interval: "9/24",
-    stackedValue: 0.1,
-    value: 0.2,
-  },
-  {
-    interval: "10/4",
-    stackedValue: 0.1,
-    value: 0.7,
-  },
-  {
-    interval: "10/12",
-    stackedValue: 0.55,
-    value: 0.6,
-  },
-  {
-    interval: "10/19",
-    stackedValue: 0.2,
-    value: 0.5,
-  },
-  {
-    interval: "10/25",
-    stackedValue: 0.0,
-    value: 0.8,
-  },
-];
-const dataBar = [
-  {
-    interval: "9/17",
-    value: 0,
-  },
-  {
-    interval: "9/24",
-    value: 2,
-  },
-  {
-    interval: "10/4",
-    value: 1,
-  },
-  {
-    interval: "10/12",
-    value: 6,
-  },
-  {
-    interval: "10/19",
-    value: 5,
-  },
-  {
-    interval: "10/25",
-    value: 7,
-  },
-];
-
 interface InputProp {
   sessionHistory: {
     interval: string;
@@ -110,6 +51,7 @@ export const WritingScreen = ({
               valueText: "sessions completed without writing",
               stackedValueText: "sessions completed with writing",
             }}
+            info="Some really extremely interesting information about stacked bar chart."
             hoverable
             percentageChange
           />
@@ -119,10 +61,12 @@ export const WritingScreen = ({
             hoverable
             percentageChange
             style={{ width: "100%", height: "100%" }}
+            info="Some info for testing purposes in bar chart"
           />
           <BarChart
             title="Average Time Spent Per Prompt"
             data={avgTime}
+            info="Some info for testing purposes in bar chart"
             hoverable
             percentageChange
             style={{ width: "100%", height: "100%" }}

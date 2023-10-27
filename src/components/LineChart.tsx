@@ -1,7 +1,7 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
-import InfoIconButton from "@mui/icons-material/Info";
+import { InfoIcon } from "@src/app/icons/InfoIcon";
 import PopupModal from "./PopulModal/PopupModal";
 import { D3Data } from "./types";
 
@@ -33,8 +33,9 @@ export default function LineChart({
   hoverable = false,
   percentageChange = false,
   gradient = false,
-  info,
+  info = "",
 }: DataParams) {
+  const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 20;
   const marginBottom = 40;
@@ -82,6 +83,10 @@ export default function LineChart({
     .curve(d3.curveCatmullRom);
 
   useEffect(() => {
+    const onScroll = () => setInfoPopup(false);
+    // clean up code
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
@@ -125,6 +130,7 @@ export default function LineChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+    return () => window.removeEventListener("scroll", onScroll);
   }, [
     data,
     height,
@@ -165,6 +171,41 @@ export default function LineChart({
         >
           {title}
         </p>
+        {info !== "" && (
+          <div
+            style={{
+              fontSize: 12,
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginLeft: 12,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setInfoPopup(true);
+            }}
+            ref={infoButtonRef}
+          >
+            <InfoIcon />
+            <PopupModal
+              show={infoPopup}
+              info="Some information about line chart should come here."
+              style={{
+                position: "fixed",
+                top: `${
+                  infoButtonRef.current != null
+                    ? infoButtonRef.current.getBoundingClientRect().y - 50
+                    : 0
+                }px`,
+                zIndex: 500,
+                left: `${
+                  infoButtonRef.current != null
+                    ? infoButtonRef.current.getBoundingClientRect().x
+                    : 0
+                }px`,
+              }}
+            />
+          </div>
+        )}
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
@@ -191,19 +232,6 @@ export default function LineChart({
         >
           {actualChange !== null && percentageChange}
         </p>
-        {info !== null && (
-          <InfoIconButton
-            style={{
-              fontSize: 12,
-              marginTop: "auto",
-              marginBottom: "auto",
-              marginLeft: 12,
-              cursor: "pointer",
-            }}
-            onClick={() => setInfoPopup(true)}
-          />
-        )}
-        <PopupModal show={infoPopup} info="Vidushi" />
       </div>
       <svg
         ref={windowRef}

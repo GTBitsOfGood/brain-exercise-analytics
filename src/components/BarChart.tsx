@@ -43,8 +43,9 @@ export default function BarChart({
   percentageChange = false,
   highlightLargest = true,
   children,
-  info,
+  info = "",
 }: DataParams) {
+  const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 25;
   const marginBottom = 25;
@@ -88,6 +89,11 @@ export default function BarChart({
   );
 
   useEffect(() => {
+    const onScroll = () => setInfoPopup(false);
+    // clean up code
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
@@ -151,6 +157,7 @@ export default function BarChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+    return () => window.removeEventListener("scroll", onScroll);
   }, [
     data,
     height,
@@ -216,7 +223,7 @@ export default function BarChart({
         >
           {title}
         </p>
-        {info !== null && (
+        {info !== "" && (
           <div
             style={{
               fontSize: 12,
@@ -224,13 +231,34 @@ export default function BarChart({
               marginBottom: "auto",
               marginLeft: 12,
               cursor: "pointer",
+              left: 500,
             }}
-            onClick={() => setInfoPopup(true)}
+            onClick={() => {
+              setInfoPopup(true);
+            }}
+            ref={infoButtonRef}
           >
             <InfoIcon />
+            <PopupModal
+              show={infoPopup}
+              info={info}
+              style={{
+                position: "fixed",
+                top: `${
+                  infoButtonRef.current != null
+                    ? infoButtonRef.current.getBoundingClientRect().y - 50
+                    : 0
+                }px`,
+                zIndex: 500,
+                left: `${
+                  infoButtonRef.current != null
+                    ? infoButtonRef.current.getBoundingClientRect().x
+                    : 0
+                }px`,
+              }}
+            />
           </div>
         )}
-        <PopupModal show={infoPopup} info="Vidushi" />
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
