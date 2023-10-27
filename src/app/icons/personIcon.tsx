@@ -1,4 +1,4 @@
-const peopleIcon = () => (
+const personIcon = () => (
   <>
     <svg
       width="45"
@@ -8,7 +8,7 @@ const peopleIcon = () => (
       xmlns="http://www.w3.org/2000/svg"
     >
       <circle cx="22.6386" cy="22.2167" r="21.7597" fill="#F4F7FE" />
-      <g clip-path="url(#clip0_1598_13671)">
+      <g clipPath="url(#clip0_1598_13671)">
         <path
           d="M23.0008 23.375C18.2648 23.375 15.8008 26 15.8008 27.5V28.25H30.2008V27.5C30.2008 26 27.7368 23.375 23.0008 23.375Z"
           fill="#008AFC"
@@ -32,4 +32,4 @@ const peopleIcon = () => (
   </>
 );
 
-export default peopleIcon;
+export default personIcon;

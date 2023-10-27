@@ -1,26 +1,24 @@
 import { Box, Typography } from "@mui/material";
 import { DM_Sans } from "next/font/google";
-import { personIcon, barChartIcon } from "@src/app/icons";
+import { personIcon, peopleIcon } from "@src/app/icons";
+import { CSSProperties } from "react";
 import { SmallDataBox } from "../Graphs";
-import peopleIcon from "@src/app/icons/personIcon";
 
 interface Params {
   activeUsers: number;
   totalUsers: number;
-  usersOverTime: {
-    users: number;
-    date: string;
-  }[];
-  style?: object;
+  style?: CSSProperties;
 }
 
 const dmSans700 = DM_Sans({ subsets: ["latin"], weight: "700" });
 
-export default function Overview(params: Params) {
+export default function OverviewReport(params: Params) {
   return (
     <Box
       sx={{
         height: 164,
+        width: "100%",
+        ...params.style,
       }}
     >
       <Typography

@@ -35,7 +35,7 @@ export default function SmallDataBox({
       }}
     >
       <div
-        className='titleBox'
+        className="titleBox"
         style={{
           marginLeft: titleAboveText ? 65 : 20,
           marginBottom: titleAboveText ? -10 : 0,
@@ -55,7 +55,7 @@ export default function SmallDataBox({
         </p>
       </div>
       <div
-        className='Graphic'
+        className="Graphic"
         style={{
           marginLeft: 14.5,
           display: "flex",

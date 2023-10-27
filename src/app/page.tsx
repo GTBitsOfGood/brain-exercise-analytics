@@ -1,10 +1,15 @@
 "use client";
 
-import LineChart from "@src/components/Graphs/LineChart";
-import BarChart from "@src/components/Graphs/BarChart";
-import StackedBarChart from "@src/components/Graphs/StackedBarChart";
-import SmallDataBox from "@src/components/Graphs/SmallDataBox";
-import { Icon } from "./icons/barChartIcon";
+import {
+  BarChart,
+  LineChart,
+  StackedBarChart,
+  SmallDataBox,
+} from "@src/components/Graphs";
+import OverviewReport from "@src/components/Dashboard/OverviewReport";
+import OverallDashboard from "@src/components/Dashboard/OverallDashboard";
+import { personIcon } from "./icons";
+import { Divider } from "@mui/material";
 import styles from "./page.module.css";
 
 const dataLine = [
@@ -95,8 +100,11 @@ const dataStacked = [
 export default function Home() {
   return (
     <main className={styles.main}>
+      <OverviewReport activeUsers={10} totalUsers={200} />
+      <Divider orientation='horizontal' flexItem sx={{ marginTop: "50px", marginBottom: "50px" }} />
+      <OverallDashboard />
       <LineChart
-        title="Accuracy"
+        title='Accuracy'
         data={dataLine}
         yAxis={{
           min: 0,
@@ -109,7 +117,7 @@ export default function Home() {
         gradient
       />
       <BarChart
-        title="Reading Volume Analysis"
+        title='Reading Volume Analysis'
         data={dataBar}
         yAxis={{
           min: 0,
@@ -135,14 +143,14 @@ export default function Home() {
         percentageChange
       />
       <StackedBarChart
-        title="Session Completions"
+        title='Session Completions'
         data={dataStacked}
         hoverable
         percentageChange
       />
       <SmallDataBox
         title={"Number of questions completed"}
-        Icon={Icon}
+        Icon={personIcon}
         text={"20 / 1 hr 50 min"}
       />
       {/* <BarChart data={data} /> */}
