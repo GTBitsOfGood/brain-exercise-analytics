@@ -8,8 +8,8 @@ import {
 } from "@src/components/Graphs";
 import OverviewReport from "@src/components/Dashboard/OverviewReport";
 import OverallDashboard from "@src/components/Dashboard/OverallDashboard";
-import { personIcon } from "./icons";
 import { Divider } from "@mui/material";
+import { personIcon } from "./icons";
 import styles from "./page.module.css";
 
 const dataLine = [

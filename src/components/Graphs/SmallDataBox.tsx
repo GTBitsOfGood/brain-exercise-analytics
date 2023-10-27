@@ -1,5 +1,5 @@
 import { Poppins, Inter } from "next/font/google";
-import { CSSProperties, HTMLAttributes } from "react";
+import { CSSProperties } from "react";
 
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });

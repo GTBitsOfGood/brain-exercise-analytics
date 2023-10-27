@@ -6,6 +6,7 @@ import checkCircle from "./checkCircle";
 import importantGrayIcon from "./importantGrayIcon";
 import calendarIcon from "./calendarIcon";
 import arrowDown from "./arrowDown";
+import grayCircle from "./grayCircle";
 
 export {
   barChartIcon,
@@ -16,4 +17,5 @@ export {
   importantGrayIcon,
   calendarIcon,
   arrowDown,
+  grayCircle,
 };

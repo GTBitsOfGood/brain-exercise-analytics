@@ -33,19 +33,33 @@ export default function OverviewReport(params: Params) {
       >
         Overview / Report
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "row", marginTop: "51px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          marginTop: "51px",
+        }}
+      >
         <SmallDataBox
           title={"Active Users"}
           Icon={personIcon}
           titleAboveText
           text={`${params.activeUsers} / ${params.totalUsers}`}
+          style={{
+            boxShadow:
+              "12.02189px 14.59801px 34.34826px 3.43483px rgba(112, 144, 176, 0.08)",
+          }}
         />
         <SmallDataBox
           title={"Total Users"}
           Icon={peopleIcon}
           titleAboveText
           text={`${params.totalUsers}`}
-          style={{ marginLeft: 15 }}
+          style={{
+            marginLeft: 15,
+            boxShadow:
+              "12.02189px 14.59801px 34.34826px 3.43483px rgba(112, 144, 176, 0.08)",
+          }}
         />
       </Box>
     </Box>

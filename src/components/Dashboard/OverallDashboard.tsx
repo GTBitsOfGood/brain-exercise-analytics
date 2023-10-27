@@ -12,6 +12,7 @@ import {
   arrowDown as AD,
 } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
+import WeeklyProgress from "../Graphs/WeeklyProgress";
 
 interface Params {
   usersOverTime: {
@@ -69,7 +70,7 @@ function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
   const [hover, setHover] = useState<number | null>(null);
   const handleChange = (_: unknown, newValue: number | null) => {
     setAge(newValue);
-    console.log(newValue)
+    console.log(newValue);
   };
   return (
     <Box
@@ -140,8 +141,14 @@ function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
                 alignItems: "center",
                 flexShrink: 0,
                 alignSelf: "stretch",
-                borderRadius: "0px 0px 3px 3px",
+                borderRadius: (() => {
+                  if (i === 0) return "3px 3px 0px 0px";
+                  if (i === 4) return "0px 0px 3px 3px";
+                  return "0px 0px 0px 0px";
+                })(),
                 backgroundColor: hover === i ? "#DDEBFF" : "white",
+                boxShadow:
+                  "12.02189px 14.59801px 34.34826px 3.43483px rgba(112, 144, 176, 0.08)",
               }}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
@@ -164,12 +171,17 @@ export default function OverallDashboard(params: Params) {
   return (
     <Box
       sx={{
-        height: 164,
+        height: 564,
         width: "100%",
         ...params.style,
       }}
     >
-      <Stack direction='row' alignItems='center' justifyContent='flex-start'>
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='flex-start'
+        marginBottom='51px'
+      >
         <DB />
         <Typography
           sx={{
@@ -204,9 +216,7 @@ export default function OverallDashboard(params: Params) {
         <IGI />
         <Dropdown style={{ marginLeft: "auto" }} />
       </Stack>
-      <Box
-        sx={{ display: "flex", flexDirection: "row", marginTop: "51px" }}
-      ></Box>
+      <WeeklyProgress days={[]} />
     </Box>
   );
 }
