@@ -59,6 +59,9 @@ export default function Page() {
           authRequired: false,
         });
 
+        const { token } = res as { token: string };
+        console.log(token);
+
         setValidateInputs(true);
         setTimeout(() => {
           router.push("/auth/login");
