@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Dropdown, { DropdownProps, DropdownOption } from "../Dropdown/Dropdown";
+import Dropdown, { DropdownOption } from "../Dropdown/Dropdown";
 
 function DateSelector() {
   const [selectedValue, setSelectedValue] = useState("Most Recent");
