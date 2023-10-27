@@ -1,7 +1,7 @@
 import React from "react";
 import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
-import { faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
+import { faChartSimple } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Metric from "./Metric/Metric";
 import styles from "./NavigationPanel.module.css";
@@ -33,33 +33,37 @@ const NavigationPanel = () => {
               className={styles["search-patient"]}
               onClick={() => router.push("/api/patient/search")}
             >
-              <FontAwesomeIcon
-                className={styles["statistics-icon"]}
-                icon={faSquarePollVertical}
-                size="lg"
-              />
-              SEARCH PATIENT
+              <div className={styles["icon-shadow"]}>
+                <FontAwesomeIcon
+                  className={styles["statistics-icon"]}
+                  icon={faChartSimple}
+                  size="sm"
+                />
+              </div>
+              <span className={styles["search-patient-text"]}>
+                SEARCH PATIENT
+              </span>
             </div>
           </div>
           <div className={styles["metrics-container"]}>
             <div className={styles["overall-metrics-container"]}>
-              <div className={styles["overall-metrics"]}>
+              <div className={styles["icon-shadow"]}>
                 <FontAwesomeIcon
                   className={styles["statistics-icon"]}
-                  icon={faSquarePollVertical}
-                  size="lg"
+                  icon={faChartSimple}
+                  size="sm"
                 />
+              </div>
+              <div className={styles["overall-metrics"]}>
                 <span onClick={() => router.push("/api/patient/dashboard")}>
                   PATIENT OVERALL METRICS
                 </span>
               </div>
             </div>
-            <div className={styles.metrics}>
-              <Metric title="math" />
-              <Metric title="reading" />
-              <Metric title="writing" />
-              <Metric title="trivia" />
-            </div>
+            <Metric title="math" />
+            <Metric title="reading" />
+            <Metric title="writing" />
+            <Metric title="trivia" />
           </div>
           <div className={styles.divider}>
             <hr />
