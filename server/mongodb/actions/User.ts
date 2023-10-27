@@ -110,11 +110,10 @@ export const getUsersFiltered = async (
   }
 
   let patientDOB;
-  
+
   if (paramsObject.dateOfBirth !== undefined) {
     patientDOB = new Date(paramsObject.dateOfBirth);
   }
-  console.log(patientDOB)
 
   const userParamsObject = JSON.parse(
     JSON.stringify({
@@ -130,8 +129,6 @@ export const getUsersFiltered = async (
       BEIChapter: paramsObject.BEIChapter,
     }),
   ) as UParam;
-
-  console.log(userParamsObject)
 
   const userFiltering = (await User.find(userParamsObject)
     .skip(numOfItems * page)
