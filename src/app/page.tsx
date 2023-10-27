@@ -9,9 +9,9 @@ import {
 import OverviewReport from "@src/components/Dashboard/OverviewReport";
 import OverallDashboard from "@src/components/Dashboard/OverallDashboard";
 import { Divider } from "@mui/material";
+import { Days } from "@/common_utils/types";
 import { personIcon } from "./icons";
 import styles from "./page.module.css";
-import { Days } from "@/common_utils/types";
 
 const dataLine = [
   {
@@ -103,13 +103,19 @@ export default function Home() {
     <main className={styles.main}>
       <OverviewReport activeUsers={10} totalUsers={200} />
       <Divider
-        orientation='horizontal'
+        orientation="horizontal"
         flexItem
         sx={{ marginTop: "50px", marginBottom: "50px" }}
       />
-      <OverallDashboard streak={[Days.Monday, Days.Tuesday]} />
+      <OverallDashboard
+        streak={[Days.Monday, Days.Tuesday]}
+        startDate={new Date("2020-12-10")}
+        endDate={new Date("2023-07-23")}
+        sessionCompletionHistory={dataBar}
+      />
       <LineChart
-        title='Accuracy'
+      style={{marginTop: "100px"}}
+        title="Accuracy"
         data={dataLine}
         yAxis={{
           min: 0,
@@ -122,7 +128,7 @@ export default function Home() {
         gradient
       />
       <BarChart
-        title='Reading Volume Analysis'
+        title="Reading Volume Analysis"
         data={dataBar}
         yAxis={{
           min: 0,
@@ -148,7 +154,7 @@ export default function Home() {
         percentageChange
       />
       <StackedBarChart
-        title='Session Completions'
+        title="Session Completions"
         data={dataStacked}
         hoverable
         percentageChange

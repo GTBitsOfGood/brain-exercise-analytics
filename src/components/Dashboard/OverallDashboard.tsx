@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, Grid } from "@mui/material";
 import { Select } from "@mui/base/Select";
 import { Option } from "@mui/base/Option";
 import { SelectOption } from "@mui/base/useOption";
@@ -10,13 +10,21 @@ import {
   checkCircle as CC,
   calendarIcon as CI,
   arrowDown as AD,
+  timeForward as TF,
+  lastPage as PF,
+  completedIcon as COI,
 } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
 import { Days } from "@/common_utils/types";
 import WeeklyProgress from "../Graphs/WeeklyProgress";
+import { BarChart, SmallDataBox } from "../Graphs";
+import { D3Data } from "../Graphs/types";
 
 interface Params {
   streak: Days[];
+  startDate: Date;
+  endDate: Date;
+  sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
 }
 // For the name of the user it would be really useful to have a reducer store this information globally during authentication (like in the mobile app)
@@ -24,6 +32,12 @@ const currentUser = "John Doe";
 
 const dmSans700 = DM_Sans({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
+
+const options = {
+  weekday: "short",
+  year: "numeric",
+  month: "short",
+};
 
 function ActiveIndicator({
   active = true,
@@ -164,6 +178,11 @@ function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
     </Box>
   );
 }
+function formatDate(date: Date) {
+  const str = date.toLocaleDateString("en-us", options);
+  const arr = str.split(" ");
+  return [arr[2], arr[0], arr[1]].join(" ");
+}
 
 export default function OverallDashboard(params: Params) {
   return (
@@ -175,6 +194,7 @@ export default function OverallDashboard(params: Params) {
       }}
     >
       <Stack
+        className='titleRow'
         direction='row'
         alignItems='center'
         justifyContent='flex-start'
@@ -215,6 +235,50 @@ export default function OverallDashboard(params: Params) {
         <Dropdown style={{ marginLeft: "auto" }} />
       </Stack>
       <WeeklyProgress days={params.streak} />
+      <Grid
+        className='mainGraphs'
+        container
+        spacing={2}
+        sx={{ width: "100%", marginTop: "26px" }}
+        columns={21}
+      >
+        <Grid item xs={6}>
+          <Stack direction='column' spacing='17px' width={"auto"}>
+            <SmallDataBox
+              title='Start Date'
+              text={formatDate(params.startDate)}
+              Icon={TF}
+              titleAboveText
+              style={{ width: "282px", height: "98px" }}
+            />
+            <SmallDataBox
+              title='End Date'
+              text={formatDate(params.endDate)}
+              Icon={PF}
+              titleAboveText
+              style={{ width: "282px", height: "98px" }}
+            />
+            <SmallDataBox
+              title='Total Completed Sessions'
+              text={formatDate(params.startDate)}
+              Icon={COI}
+              titleAboveText
+              style={{ width: "282px", height: "98px" }}
+            />
+          </Stack>
+        </Grid>
+        <Grid item xs={7}>
+          <BarChart
+            width={370}
+            height={250}
+            style={{ width: "447px", paddingLeft: "30px", height: "324px" }}
+            title='Session Completion History'
+            data={params.sessionCompletionHistory}
+            highlightLargest
+          />
+        </Grid>
+        <Grid item xs={8}></Grid>
+      </Grid>
     </Box>
   );
 }

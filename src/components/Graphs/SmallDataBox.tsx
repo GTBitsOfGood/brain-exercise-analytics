@@ -1,3 +1,4 @@
+import { Stack } from "@mui/material";
 import { Poppins, Inter } from "next/font/google";
 import { CSSProperties } from "react";
 
@@ -31,55 +32,107 @@ export default function SmallDataBox({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "center",
+        paddingLeft: "14.5px",
         ...style,
       }}
     >
-      <div
-        className="titleBox"
-        style={{
-          marginLeft: titleAboveText ? 65 : 20,
-          marginBottom: titleAboveText ? -10 : 0,
-        }}
-      >
-        <p
-          style={{
-            fontFamily: poppins500.style.fontFamily,
-            fontSize: 12,
-            lineHeight: "20px",
-            letterSpacing: "-0.02em",
-            textAlign: "left",
-            color: "#A3AED0",
-          }}
-        >
-          {title}
-        </p>
-      </div>
-      <div
-        className="Graphic"
-        style={{
-          marginLeft: 14.5,
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        <Icon />
-        <p
-          style={{
-            font: inter700.style.fontFamily,
-            fontWeight: 700,
-            fontSize: 20,
-            lineHeight: "27px",
-            letterSpacing: "-0.02em",
-            textAlign: "left",
-            marginTop: "auto",
-            marginBottom: "auto",
-            marginLeft: 10,
-            color: "#2B3674",
-          }}
-        >
-          {text}
-        </p>
-      </div>
+      {titleAboveText ? (
+        <>
+          <div
+            className="Graphic"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Icon />
+            <Stack
+              direction="column"
+              textAlign={"left"}
+              sx={{ marginLeft: "10px" }}
+            >
+              <div className="titleBox">
+                <p
+                  style={{
+                    fontFamily: poppins500.style.fontFamily,
+                    fontSize: 12,
+                    lineHeight: "20px",
+                    letterSpacing: "-0.02em",
+                    textAlign: "left",
+                    color: "#A3AED0",
+                  }}
+                >
+                  {title}
+                </p>
+              </div>
+              <p
+                style={{
+                  font: inter700.style.fontFamily,
+                  fontWeight: 700,
+                  fontSize: "18px",
+                  lineHeight: "27px",
+                  letterSpacing: "-0.02em",
+                  textAlign: "left",
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                  color: "#2B3674",
+                }}
+              >
+                {text}
+              </p>
+            </Stack>
+          </div>
+        </>
+      ) : (
+        <>
+          <div
+            className="titleBox"
+            style={{
+              marginLeft: titleAboveText ? 50 : 5,
+              marginBottom: titleAboveText ? -10 : 0,
+            }}
+          >
+            <p
+              style={{
+                fontFamily: poppins500.style.fontFamily,
+                fontSize: 12,
+                lineHeight: "20px",
+                letterSpacing: "-0.02em",
+                textAlign: "left",
+                color: "#A3AED0",
+              }}
+            >
+              {title}
+            </p>
+          </div>
+          <div
+            className="Graphic"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <Icon />
+            <p
+              style={{
+                font: inter700.style.fontFamily,
+                fontWeight: 700,
+                fontSize: "18px",
+                lineHeight: "27px",
+                letterSpacing: "-0.02em",
+                textAlign: "left",
+                marginTop: "auto",
+                marginBottom: "auto",
+                marginLeft: 10,
+                color: "#2B3674",
+              }}
+            >
+              {text}
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

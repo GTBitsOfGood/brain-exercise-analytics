@@ -8,6 +8,9 @@ import calendarIcon from "./calendarIcon";
 import arrowDown from "./arrowDown";
 import grayCircle from "./grayCircle";
 import checkMark from "./checkMark";
+import completedIcon from "./completedIcon";
+import lastPage from "./lastPage";
+import timeForward from "./timeForward";
 
 export {
   barChartIcon,
@@ -20,4 +23,7 @@ export {
   arrowDown,
   grayCircle,
   checkMark,
+  completedIcon,
+  lastPage,
+  timeForward,
 };
