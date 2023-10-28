@@ -11,12 +11,12 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-interface DropdownOption<T> {
+export interface DropdownOption<T> {
   value: T;
   displayValue: string;
 }
 
-interface DropdownProps<T> {
+export interface DropdownProps<T> {
   options: DropdownOption<T>[];
   value?: T;
   title?: string;

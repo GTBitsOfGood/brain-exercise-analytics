@@ -1,0 +1,13 @@
+.label {
+  vertical-align: "middle";
+  margin: auto;
+  display: inline-block;
+  background-color: #fafafa;
+  padding: 5;
+  flex: 1;
+  border: 1px solid #d9d9d9;
+}
+
+.secondInfoTitle {
+  font-size: 12px;
+}
