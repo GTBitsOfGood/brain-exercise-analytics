@@ -242,7 +242,7 @@ export default function OverallDashboard(params: Params) {
         sx={{ width: "100%", marginTop: "26px" }}
         columns={21}
       >
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <Stack direction='column' spacing='17px' width={"auto"}>
             <SmallDataBox
               title='Start Date'
@@ -277,7 +277,29 @@ export default function OverallDashboard(params: Params) {
             highlightLargest
           />
         </Grid>
-        <Grid item xs={8}></Grid>
+        <Grid item xs={7}>
+          <Stack
+            direction='row'
+            alignItems='center'
+            justifyContent='flex-start'
+            marginBottom='51px'
+          >
+            <DB />
+            <Typography
+              sx={{
+                color: "#2B3674",
+                fontFamily: dmSans700.style.fontFamily,
+                fontSize: "29.705px",
+                fontStyle: "normal",
+                lineHeight: "36.695px",
+                letterSpacing: "-0.594px",
+                marginLeft: "20px",
+              }}
+            >
+              Last Session
+            </Typography>
+          </Stack>
+        </Grid>
       </Grid>
     </Box>
   );
