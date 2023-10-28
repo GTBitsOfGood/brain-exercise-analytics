@@ -108,13 +108,13 @@ export default function Home() {
         sx={{ marginTop: "50px", marginBottom: "50px" }}
       />
       <OverallDashboard
-        streak={[Days.Monday, Days.Tuesday]}
+        streak={[Days.Monday, Days.Tuesday, Days.Friday]}
         startDate={new Date("2020-12-10")}
         endDate={new Date("2023-07-23")}
         sessionCompletionHistory={dataBar}
       />
       <LineChart
-      style={{marginTop: "100px"}}
+        style={{ marginTop: "100px" }}
         title="Accuracy"
         data={dataLine}
         yAxis={{

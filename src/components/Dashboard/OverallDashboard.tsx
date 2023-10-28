@@ -33,7 +33,7 @@ const currentUser = "John Doe";
 const dmSans700 = DM_Sans({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 
-const options = {
+const options: Intl.DateTimeFormatOptions = {
   weekday: "short",
   year: "numeric",
   month: "short",
