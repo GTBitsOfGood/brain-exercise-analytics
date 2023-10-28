@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.text-wrapper {
+  font-family: var(--font-poppins);
+}
+
+.navigation-panel {
+}
+
+.rest-of-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 80vw;
+  height: 100vh;
+}
+
+.intro-text {
+  color: #2b3674;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 36.69px;
+  word-wrap: break-word;
+  padding-bottom: 3%;
+}
