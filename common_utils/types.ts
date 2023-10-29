@@ -13,26 +13,31 @@ export enum Days {
   Friday,
   Saturday,
 }
-
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
   _id?: string;
   name: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   patientDetails: {
     birthdate: string;
-    secondaryContactName: string;
-    secondaryContactPhone: string;
+    secondaryContactName?: string;
+    secondaryContactPhone?: string;
   };
+  chapter: string;
   location: {
     country: string;
     state: string;
     city: string;
   };
-  signedUp: boolean;
-  role: Role;
+  signedUp?: boolean;
+  role?: Role;
+}
+
+export interface ITableEntry extends IUser {
+  status: boolean;
+  startDate: string;
 }
 
 export interface IPasswordReset {

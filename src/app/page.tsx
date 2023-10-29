@@ -4,6 +4,8 @@ import LineChart from "@src/components/LineChart";
 import BarChart from "@src/components/BarChart";
 import StackedBarChart from "@src/components/StackedBarChart";
 import SmallDataBox from "@src/components/SmallDataBox";
+import PatientGrid from "@src/components/PatientGrid/PatientGrid";
+import { IUser, ITableEntry } from "@/common_utils/types";
 import { Icon } from "./icons/barChartIcon";
 import styles from "./page.module.css";
 
@@ -92,11 +94,138 @@ const dataStacked = [
   },
 ];
 
+const sampleUsers: ITableEntry[] = [
+  {
+    name: "John Doe",
+    patientDetails: {
+      birthdate: "1990-01-01",
+    },
+    status: true,
+    email: "john.doe@example.com",
+    chapter: "Georgia Institute of Technology",
+    location: {
+      country: "USA",
+      state: "California",
+      city: "Los Angeles",
+    },
+  },
+  {
+    name: "Jane Smith",
+    patientDetails: {
+      birthdate: "1992-02-02",
+    },
+    email: "jane.smith@example.com",
+    chapter: "Yo",
+    location: {
+      country: "Canada",
+      state: "Ontario",
+      city: "Toronto",
+    },
+  },
+  {
+    name: "Alice Johnson",
+    patientDetails: {
+      birthdate: "1985-03-03",
+    },
+    email: "alice.johnson@example.com",
+    location: {
+      country: "UK",
+      state: "England",
+      city: "London",
+    },
+  },
+  {
+    name: "Bob Brown",
+    patientDetails: {
+      birthdate: "1987-04-04",
+    },
+    email: "bob.brown@example.com",
+    location: {
+      country: "Australia",
+      state: "New South Wales",
+      city: "Sydney",
+    },
+  },
+  {
+    name: "Charlie Davis",
+    patientDetails: {
+      birthdate: "1995-05-05",
+    },
+    email: "charlie.davis@example.com",
+    location: {
+      country: "India",
+      state: "Maharashtra",
+      city: "Mumbai",
+    },
+  },
+  {
+    name: "Diana Evans",
+    patientDetails: {
+      birthdate: "1980-06-06",
+    },
+    email: "diana.evans@example.com",
+    location: {
+      country: "Brazil",
+      state: "Rio de Janeiro",
+      city: "Rio de Janeiro",
+    },
+  },
+  {
+    name: "Evan Foster",
+    patientDetails: {
+      birthdate: "1988-07-07",
+    },
+    email: "evan.foster@example.com",
+    location: {
+      country: "Germany",
+      state: "Bavaria",
+      city: "Munich",
+    },
+  },
+  {
+    name: "Fiona Green",
+    patientDetails: {
+      birthdate: "1993-08-08",
+    },
+    email: "fiona.green@example.com",
+    location: {
+      country: "South Africa",
+      state: "Gauteng",
+      city: "Johannesburg",
+    },
+  },
+  {
+    name: "George Harris",
+    patientDetails: {
+      birthdate: "1975-09-09",
+    },
+    email: "george.harris@example.com",
+    location: {
+      country: "Japan",
+      state: "Tokyo",
+      city: "Tokyo",
+    },
+  },
+  {
+    name: "Hannah Adams",
+    patientDetails: {
+      birthdate: "1997-10-10",
+    },
+    email: "hannah.adams@example.com",
+    location: {
+      country: "New Zealand",
+      state: "Wellington",
+      city: "Wellington",
+    },
+  },
+];
+
 export default function Home() {
   return (
     <main className={styles.main}>
+      <PatientGrid data={sampleUsers} />
       <LineChart
-        title="Accuracy"
+        title='Accuracy'
         data={dataLine}
         yAxis={{
           min: 0,
@@ -109,7 +238,7 @@ export default function Home() {
         gradient
       />
       <BarChart
-        title="Reading Volume Analysis"
+        title='Reading Volume Analysis'
         data={dataBar}
         yAxis={{
           min: 0,
@@ -135,7 +264,7 @@ export default function Home() {
         percentageChange
       />
       <StackedBarChart
-        title="Session Completions"
+        title='Session Completions'
         data={dataStacked}
         hoverable
         percentageChange
