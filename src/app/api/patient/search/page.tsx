@@ -15,17 +15,23 @@ const poppins = Poppins({
 
 export default function Page() {
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
-  const [country, setCountry] = useState<string[]>([]); // values chosen before the aply button
-  const [state, setState] = useState<string[]>([]);
-  const [city, setCity] = useState<string[]>([]);
+  const [country, setCountry] = useState<Set<string>>(new Set<string>());
+  const [state, setState] = useState<Set<string>>(new Set<string>());
+  const [city, setCity] = useState<Set<string>>(new Set<string>());
   const [active, setActive] = useState(true);
-  const [dateOfBirth, setDateOfBirth] = useState<string[]>([]);
-  const [email, setEmail] = useState<string[]>([]);
-  const [additionalAffliction, setAdditionalAffliction] = useState<string[]>([]);
-  const [joinDate, setJoinDate] = useState<string[]>([]);
-  const [beiChapter, setBeiChapter] = useState<string[]>([]);
-  const [secondPhoneNumber, setSecondPhoneNumber] = useState<string[]>([]);
-  const [secondName, setSecondName] = useState<string[]>([]);
+  const [dateOfBirth, setDateOfBirth] = useState<Set<string>>(
+    new Set<string>(),
+  );
+  const [email, setEmail] = useState<Set<string>>(new Set<string>());
+  const [additionalAffliction, setAdditionalAffliction] = useState<Set<string>>(
+    new Set<string>(),
+  );
+  const [joinDate, setJoinDate] = useState<Set<string>>(new Set<string>());
+  const [beiChapter, setBeiChapter] = useState<Set<string>>(new Set<string>());
+  const [secondPhoneNumber, setSecondPhoneNumber] = useState<Set<string>>(
+    new Set<string>(),
+  );
+  const [secondName, setSecondName] = useState<Set<string>>(new Set<string>());
 
   return (
     <div className={styles.wrapper}>

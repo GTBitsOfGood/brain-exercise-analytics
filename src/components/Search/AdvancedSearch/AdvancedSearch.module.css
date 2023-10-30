@@ -1,3 +1,16 @@
+.body {
+  align-self: center;
+  justify-content: center;
+  width: 70vw;
+  font-size: 12px;
+  box-shadow: 0px 0px 4px 4px #e5e8ee;
+}
+
+.answer::placeholder {
+  color: #888888;
+}
+
+.button_row,
 .cities_row,
 .row_two,
 .row_three {
@@ -28,6 +41,7 @@
 .answer {
   flex: 1;
   padding-left: 10px;
+  border: 1px solid #d9d9d9;
 }
 
 .secondInfoTitle {

@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import Calendar from "react-calendar";
 import Switch from "react-switch";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
+import { CalendarInput } from "./CalendarInput";
 import "react-calendar/dist/Calendar.css";
 
 interface SelectDropdownProps {
@@ -35,99 +33,29 @@ const SelectDropdown = ({
   );
 };
 
-interface CalendarInputProp {
-  iconRef: Element;
-  showCalendar: boolean;
-  calendarValue: string;
-  setShowCalendar: (showCalendar: boolean) => void;
-  setCalendarValue: (value: string) => void;
-  calendarX: number;
-  calendarY: number;
-}
-
-const CalendarInput = ({
-  iconRef,
-  showCalendar,
-  calendarValue = "",
-  setShowCalendar,
-  setCalendarValue,
-  calendarX,
-  calendarY,
-}: CalendarInputProp) => {
-  return (
-    <div
-      className={styles.answer}
-      style={{
-        display: "flex",
-        backgroundColor: "white",
-        verticalAlign: "middle",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 0,
-        paddingBottom: 0,
-      }}
-      onClick={() => setShowCalendar(!showCalendar)}
-      ref={iconRef}
-    >
-      {calendarValue === "" && "MM/DD/YYYY"}
-      {calendarValue !== "" && calendarValue}
-      <FontAwesomeIcon
-        icon={faCalendarAlt}
-        style={{ cursor: "pointer", float: "right" }}
-      />
-      {showCalendar && (
-        <div
-          style={{
-            position: "fixed",
-            top: `${calendarY}px`,
-            left: `${calendarX}px`,
-            zIndex: 50,
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Calendar
-            onChange={(value) => {
-              if (!value) {
-                return;
-              }
-              const date = new Date(value.toString());
-              setCalendarValue(
-                `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
-              );
-              setShowCalendar(false);
-            }}
-          />
-        </div>
-      )}
-    </div>
-  );
-};
-
 interface UpdateParamProp {
-  country: string[];
-  setCountry: (country: string[]) => void;
-  state: string[];
-  setState: (state: string[]) => void;
-  city: string[];
-  setCity: (city: string[]) => void;
+  country: Set<string>;
+  setCountry: (country: Set<string>) => void;
+  state: Set<string>;
+  setState: (state: Set<string>) => void;
+  city: Set<string>;
+  setCity: (city: Set<string>) => void;
   active: boolean;
   setActive: (active: boolean) => void;
-  dateOfBirth: string[];
-  setDateOfBirth: (dob: string[]) => void;
-  email: string[];
-  setEmail: (email: string[]) => void;
-  joinDate: string[];
-  setJoinDate: (joinDate: string[]) => void;
-  beiChapter: string[];
-  setBEIChapter: (chapter: string[]) => void;
-  secondPhoneNumber: string[];
-  setSecondPhoneNumber: (phoneNumber: string[]) => void;
-  additionalAffiliation: string[];
-  setAdditionalAffiliation: (words: string[]) => void;
-  secondName: string[];
-  setSecondName: (name: string[]) => void;
+  dateOfBirth: Set<string>;
+  setDateOfBirth: (dob: Set<string>) => void;
+  email: Set<string>;
+  setEmail: (email: Set<string>) => void;
+  joinDate: Set<string>;
+  setJoinDate: (joinDate: Set<string>) => void;
+  beiChapter: Set<string>;
+  setBEIChapter: (chapter: Set<string>) => void;
+  secondPhoneNumber: Set<string>;
+  setSecondPhoneNumber: (phoneNumber: Set<string>) => void;
+  additionalAffiliation: Set<string>;
+  setAdditionalAffiliation: (words: Set<string>) => void;
+  secondName: Set<string>;
+  setSecondName: (name: Set<string>) => void;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
@@ -156,13 +84,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       setShowDOBCalendar(false);
       setShowJoinDateCalendar(false);
     };
-    // clean up code
+
     window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
 
     if (dobIconRef.current) {
       const dobIconRect: Element = dobIconRef.current;
-      const newTop = dobIconRect.getBoundingClientRect().y + 50;
+      const newTop = dobIconRect.getBoundingClientRect().y + 30;
       setDOBCalendarY(newTop);
       const left = dobIconRect.getBoundingClientRect().x;
       setDOBCalendarX(left);
@@ -170,7 +98,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
     if (joinIconRef.current) {
       const joinIconRect: Element = joinIconRef.current;
-      const joinIconTop = joinIconRect.getBoundingClientRect().y + 50;
+      const joinIconTop = joinIconRect.getBoundingClientRect().y + 30;
       setJoinDateCalendarY(joinIconTop);
       const joinIconLeft = joinIconRect.getBoundingClientRect().x;
       setJoinDateCalendarX(joinIconLeft);
@@ -192,38 +120,42 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
   const setFinal = () => {
     props.setActive(active);
-    if (country !== "") {
-      props.setCountry([...props.country, country]);
+    if (country !== "" && !props.country.has(country)) {
+      props.setCountry(props.country.add(country));
     }
-    if (city !== "") {
-      props.setCity([...props.city, city]);
+    if (city !== "" && !props.city.has(city)) {
+      props.setCity(props.city.add(city));
     }
-    if (state !== "") {
-      props.setState([...props.state, state]);
+    if (state !== "" && !props.state.has(state)) {
+      props.setState(props.state.add(state));
     }
-    if (dateOfBirth !== "") {
-      props.setDateOfBirth([...props.dateOfBirth, dateOfBirth]);
+    if (dateOfBirth !== "" && !props.dateOfBirth.has(dateOfBirth)) {
+      props.setDateOfBirth(props.dateOfBirth.add(dateOfBirth));
     }
-    if (email !== "") {
-      props.setEmail([...props.email, email]);
+    if (email !== "" && !props.email.has(email)) {
+      props.setEmail(props.email.add(email));
     }
-    if (additionalAffliction !== "") {
-      props.setAdditionalAffiliation([
-        ...props.additionalAffiliation,
-        additionalAffliction,
-      ]);
+    if (
+      additionalAffliction !== "" &&
+      !props.additionalAffiliation.has(additionalAffliction)
+    ) {
+      props.setAdditionalAffiliation(
+        props.additionalAffiliation.add(additionalAffliction),
+      );
     }
-    if (joinDate !== "") {
-      props.setJoinDate([...props.joinDate, joinDate]);
+    if (joinDate !== "" && !props.joinDate.has(joinDate)) {
+      props.setJoinDate(props.joinDate.add(joinDate));
     }
-    if (secondPhoneNumber !== "") {
-      props.setSecondPhoneNumber([
-        ...props.secondPhoneNumber,
-        secondPhoneNumber,
-      ]);
+    if (
+      secondPhoneNumber !== "" &&
+      !props.secondPhoneNumber.has(secondPhoneNumber)
+    ) {
+      props.setSecondPhoneNumber(
+        props.secondPhoneNumber.add(secondPhoneNumber),
+      );
     }
-    if (secondName !== "") {
-      props.setSecondName([...props.secondName, secondName]);
+    if (secondName !== "" && !props.secondName.has(secondName)) {
+      props.setSecondName(props.secondName.add(secondName));
     }
   };
 
@@ -257,15 +189,24 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         backgroundColor: "#E7EEFF",
         padding: 40,
         borderRadius: 20,
-        width: "100%",
       }}
     >
       <div
         className={styles.button_row}
-        style={{ display: "flex", justifyContent: "flex-end", gap: 20 }}
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 20,
+        }}
       >
-        <div>
-          Active Patient{" "}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span style={{ paddingRight: 5 }}>Active Patient</span>
           <Switch
             onChange={() => setActive(!active)}
             checked={active}
@@ -380,6 +321,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             type="email"
             className={styles.answer}
             value={email}
+            placeholder="***@****.***"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -387,6 +329,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={styles.label}>Additional Affiliation</div>
           <input
             className={styles.answer}
+            placeholder="input"
             maxLength={140}
             onChange={(e) => setAdditionalAffliction(e.target.value)}
             value={additionalAffliction}
@@ -419,7 +362,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               <input
                 className={styles.answer}
                 required={false}
-                placeholder="input"
+                placeholder="Anna White"
                 value={secondName}
                 onChange={(e) => setSecondName(e.target.value)}
               />
@@ -437,7 +380,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               <input
                 className={styles.answer}
                 required={false}
-                placeholder="input"
+                placeholder="***-***-****"
                 value={secondPhoneNumber}
                 onChange={(e) => setSecondPhoneNumber(e.target.value)}
               />

@@ -44,7 +44,10 @@ const InputField = ({
             />
             <span
               className={styles["advanced-filter"]}
-              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)} //eslint-disable-line
+              onClick={() => {
+                setShowAdvancedSearch(true);
+                console.log("advanced search has been changed");
+              }} //eslint-disable-line
             >
               Advanced Filter
             </span>
