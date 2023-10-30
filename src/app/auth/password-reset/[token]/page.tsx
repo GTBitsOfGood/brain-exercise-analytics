@@ -38,7 +38,7 @@ export default function Page({ params }: PageProps) {
     const validateToken = async () => {
       try {
         await internalRequest({
-          url: "/api/volunteer/auth/password-reset/validate",
+          url: "/api/volunteer/auth/verification/validate",
           queryParams: { token: params.token },
           method: HttpMethod.GET,
           authRequired: false,
