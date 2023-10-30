@@ -6,7 +6,7 @@ import StackedBarChart from "@src/components/StackedBarChart";
 import SmallDataBox from "@src/components/SmallDataBox";
 import { Icon } from "./icons/barChartIcon";
 import styles from "./page.module.css";
-import { AdvancedSearch } from "@src/components/AdvancedSearch/AdvancedSearch";
+import { AdvancedSearch } from "@src/components/Search/AdvancedSearch/AdvancedSearch";
 
 const dataLine = [
   {

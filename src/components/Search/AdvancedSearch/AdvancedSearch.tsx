@@ -5,7 +5,7 @@ import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
-import Dropdown, { DropdownProps } from "../Dropdown/Dropdown";
+import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
 

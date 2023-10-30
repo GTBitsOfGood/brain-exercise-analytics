@@ -13,7 +13,15 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-const InputField = () => {
+interface InputParamsProp {
+  setShowAdvancedSearch: (showAdvancedSearch: boolean) => void;
+  showAdvancedSearch: boolean;
+}
+
+const InputField = ({
+  setShowAdvancedSearch,
+  showAdvancedSearch,
+}: InputParamsProp) => {
   const [searchInput, setSearchInput] = useState("");
 
   return (
@@ -36,7 +44,7 @@ const InputField = () => {
             />
             <span
               className={styles["advanced-filter"]}
-              onClick={() => console.log("Advanced Filter clicked!")} //eslint-disable-line
+              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)} //eslint-disable-line
             >
               Advanced Filter
             </span>
