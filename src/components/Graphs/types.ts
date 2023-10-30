@@ -1,4 +1,5 @@
 import { NumberValue } from "d3";
+import { CSSProperties } from "react";
 
 interface D3Data {
   data: { interval: string; value: number }[];
@@ -10,7 +11,7 @@ interface D3Data {
   };
   width?: number;
   height?: number;
-  style?: object;
+  style?: CSSProperties;
 }
 
 export type { D3Data };

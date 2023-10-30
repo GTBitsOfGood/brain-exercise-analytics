@@ -85,11 +85,11 @@ export default function LineChart({
     svg.select(".y-axis").remove();
     const xAxisLabel = d3
       .axisBottom(x)
-      .ticks(data.length)
+      .ticks(data.length - 1)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval);
+      .tickFormat((d, i) => data[i].interval);
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(

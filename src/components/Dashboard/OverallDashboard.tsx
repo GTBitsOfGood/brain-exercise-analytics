@@ -240,9 +240,10 @@ export default function OverallDashboard(params: Params) {
         container
         spacing={2}
         sx={{ width: "100%", marginTop: "26px" }}
-        columns={21}
+        columns={23}
+        width={"100%"}
       >
-        <Grid item xs={7}>
+        <Grid item xs={5}>
           <Stack direction='column' spacing='17px' width={"auto"}>
             <SmallDataBox
               title='Start Date'
@@ -267,7 +268,7 @@ export default function OverallDashboard(params: Params) {
             />
           </Stack>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={8}>
           <BarChart
             width={370}
             height={250}
@@ -277,12 +278,12 @@ export default function OverallDashboard(params: Params) {
             highlightLargest
           />
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={10}>
           <Stack
             direction='row'
             alignItems='center'
             justifyContent='flex-start'
-            marginBottom='51px'
+            marginBottom='29px'
           >
             <DB />
             <Typography
@@ -299,6 +300,44 @@ export default function OverallDashboard(params: Params) {
               Last Session
             </Typography>
           </Stack>
+          <Grid
+            container
+            columns={9}
+            sx={{ overflow: "hidden" }}
+            rowSpacing={2}
+            columnSpacing={10}
+          >
+            <Grid item xs={4} width={"100%"}>
+              <SmallDataBox
+                title='Questions Completed'
+                text={formatDate(params.startDate)}
+                Icon={TF}
+                titleAboveText
+                style={{ width: "282px", height: "98px" }}
+                Chip={() => (
+                  <div style={{ backgroundColor: "blue" }}>Hello</div>
+                )}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <SmallDataBox
+                title='End Date'
+                text={formatDate(params.endDate)}
+                Icon={PF}
+                titleAboveText
+                style={{ width: "282px", height: "98px" }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <SmallDataBox
+                title='Total Completed Sessions'
+                text={formatDate(params.startDate)}
+                Icon={COI}
+                titleAboveText
+                style={{ width: "282px", height: "98px" }}
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
