@@ -1,7 +1,7 @@
-import { DM_Sans } from "next/font/google";
 import { personIcon, peopleIcon } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
 import { LineChart, SmallDataBox } from "../Graphs";
+import styles from "./OverviewReport.module.css";
 
 interface Params {
   activeUsers: number;
@@ -9,8 +9,6 @@ interface Params {
   style?: CSSProperties;
 }
 // Need data to pass to Linechart
-
-const dmSans700 = DM_Sans({ subsets: ["latin"], weight: "700" });
 
 export default function OverviewReport(params: Params) {
   const [showGraph, setShowGraph] = useState<boolean>(false);
@@ -22,26 +20,8 @@ export default function OverviewReport(params: Params) {
         ...params.style,
       }}
     >
-      <p
-        style={{
-          color: "#2B3674",
-          fontFamily: dmSans700.style.fontFamily,
-          fontSize: "29.705px",
-          fontStyle: "normal",
-          lineHeight: "36.695px",
-          letterSpacing: "-0.594px",
-        }}
-      >
-        Overview / Report
-      </p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          marginTop: "51px",
-          gap: "15px",
-        }}
-      >
+      <p className={styles.TitleTypography}>Overview / Report</p>
+      <div className={styles.DataGrid}>
         <SmallDataBox
           title={"Active Users"}
           Icon={personIcon}
@@ -84,7 +64,7 @@ export default function OverviewReport(params: Params) {
               style={{
                 position: "absolute",
                 marginTop: "-200px",
-                marginLeft: "50px",
+                marginLeft: "200px",
                 width: "305px",
                 height: "254px",
               }}

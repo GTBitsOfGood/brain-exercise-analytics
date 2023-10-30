@@ -1,0 +1,16 @@
+.TitleTypography {
+  color: #2b3674;
+  font-family: var(--font-dm-sans);
+  font-weight: 700;
+  font-size: 29.705px;
+  font-style: normal;
+  line-height: 36.695px;
+  letter-spacing: -0.594px;
+}
+
+.DataGrid {
+  display: flex;
+  flex-direction: row;
+  margin-top: 51px;
+  gap: 15px;
+}

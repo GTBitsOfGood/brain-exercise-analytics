@@ -11,6 +11,7 @@ interface DataParams {
   text: string;
   titleAboveText?: boolean;
   Chip?: () => ReactNode;
+  className?: string;
   style?: CSSProperties;
 }
 
@@ -21,9 +22,11 @@ export default function SmallDataBox({
   titleAboveText = false,
   style = {},
   Chip = () => <></>,
+  className,
 }: DataParams) {
   return (
     <div
+      className={className}
       style={{
         backgroundColor: "white",
         borderRadius: "15px",

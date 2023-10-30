@@ -1,9 +1,7 @@
-/* eslint-disable prettier/prettier */
-import { Box, Typography, Stack, Grid } from "@mui/material";
+import { Box, Stack, Grid } from "@mui/material";
 import { Select } from "@mui/base/Select";
 import { Option } from "@mui/base/Option";
 import { SelectOption } from "@mui/base/useOption";
-import { DM_Sans, Poppins } from "next/font/google";
 import {
   dashboardIcon as DB,
   importantGrayIcon as IGI,
@@ -23,6 +21,7 @@ import { Days } from "@/common_utils/types";
 import WeeklyProgress from "../Graphs/WeeklyProgress";
 import { BarChart, SmallDataBox } from "../Graphs";
 import { D3Data } from "../Graphs/types";
+import styles from "./OverallDashboard.module.css";
 
 interface Params {
   streak: Days[];
@@ -30,14 +29,11 @@ interface Params {
   endDate: Date;
   sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
-  
+
   // Need to update with the schema of the response we will get from the backend
 }
 // For the name of the user it would be really useful to have a reducer store this information globally during authentication (like in the mobile app)
 const currentUser = "John Doe";
-
-const dmSans700 = DM_Sans({ subsets: ["latin"], weight: "700" });
-const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 
 const options: Intl.DateTimeFormatOptions = {
   weekday: "short",
@@ -53,34 +49,19 @@ function ActiveIndicator({
   style?: CSSProperties;
 }) {
   return (
-    <Box
-      sx={{
-        width: "95.232px",
-        height: "41.937px",
-        borderRadius: "13.105px",
-        backgroundColor: "rgba(5, 205, 153, 0.10)",
-        paddingTop: "10.48px",
-        paddingBottom: "10.48px",
-        paddingLeft: "12px",
+    <div
+      className={styles.ActiveIndicatorBox}
+      style={{
         ...style,
       }}
     >
-      <Stack direction='row' alignItems='center' spacing={"4px"}>
+      <Stack direction="row" alignItems="center" spacing={"4px"}>
         <CC />
-        <Typography
-          sx={{
-            color: "#2B3674",
-            fontFamily: dmSans700.style.fontFamily,
-            fontSize: "12.232px",
-            fontStyle: "normal",
-            lineHeight: "20.968px",
-            letterSpacing: "-0.245px",
-          }}
-        >
+        <p className={styles.ActiveIndicatorTypography}>
           {active ? "Active" : "Inactive"}
-        </Typography>
+        </p>
       </Stack>
-    </Box>
+    </div>
   );
 }
 function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
@@ -96,45 +77,17 @@ function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
     >
       <Select
         value={age}
-        style={{
-          width: "154px",
-          height: "33px",
-          flexShrink: 0,
-          backgroundColor: "white",
-          border: 0,
-          borderRadius: 4,
-          paddingLeft: "13px",
-          paddingRight: "6px",
-          paddingTop: "auto",
-          paddingBottom: "auto",
-        }}
+        className={styles.Select}
         onChange={handleChange}
         renderValue={(option: SelectOption<number> | null) => {
           return (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
+            <div className={styles.SelectBox}>
               <CI />
-              <Typography
-                sx={{
-                  color: "#8D8D8D",
-                  fontFamily: poppins400.style.fontFamily,
-                  fontSize: "14px",
-                  lineHeight: "18px",
-                  letterSpacing: "0.42px",
-                  marginLeft: "16px",
-                  marginRight: "auto",
-                }}
-              >
+              <p className={styles.SelectTypography}>
                 {option ? option.label : "Select"}
-              </Typography>
+              </p>
               <AD />
-            </Box>
+            </div>
           );
         }}
       >
@@ -148,30 +101,21 @@ function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
             <Option
               key={i}
               value={i}
+              className={styles.SelectOptionTypography}
               style={{
-                display: "flex",
-                width: "153px",
-                height: "46px",
-                padding: "11px 24px",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexShrink: 0,
-                alignSelf: "stretch",
                 borderRadius: (() => {
                   if (i === 0) return "3px 3px 0px 0px";
                   if (i === 4) return "0px 0px 3px 3px";
                   return "0px 0px 0px 0px";
                 })(),
                 backgroundColor: hover === i ? "#DDEBFF" : "white",
-                boxShadow:
-                  "12.02189px 14.59801px 34.34826px 3.43483px rgba(112, 144, 176, 0.08)",
               }}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
             >
               {label}
             </Option>
-          )
+          ),
         )}
         <div
           style={{
@@ -195,26 +139,13 @@ function Chip(props: {
 }) {
   return (
     <div
+      className={styles.Chip}
       style={{
-        width: "fit-content",
-        padding: "0px 5px 0px 5px",
         backgroundColor: props.color,
         ...props.style,
-        borderRadius: "10px",
-        textAlign: "center",
       }}
     >
-      <p
-        style={{
-          color: "#2B3674",
-          fontFamily: dmSans700.style.fontFamily,
-          fontSize: "10px",
-          lineHeight: "20.968px",
-          letterSpacing: "-0.2px",
-        }}
-      >
-        {props.children}
-      </p>
+      <p className={styles.ChipTypography}>{props.children}</p>
     </div>
   );
 }
@@ -229,39 +160,25 @@ export default function OverallDashboard(params: Params) {
       }}
     >
       <Stack
-        className='titleRow'
-        direction='row'
-        alignItems='center'
-        justifyContent='flex-start'
-        marginBottom='51px'
+        className="titleRow"
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        marginBottom="51px"
       >
         <DB />
-        <Typography
-          sx={{
-            color: "#2B3674",
-            fontFamily: dmSans700.style.fontFamily,
-            fontSize: "29.705px",
-            fontStyle: "normal",
-            lineHeight: "36.695px",
-            letterSpacing: "-0.594px",
-            marginLeft: "20px",
-          }}
+        <p
+          className={styles.DashboardTitleTypography}
+          style={{ marginLeft: "20px", color: "#2b3674" }}
         >
           Overall Dashboard
-        </Typography>
-        <Typography
-          sx={{
-            color: "#A3AED0",
-            fontFamily: dmSans700.style.fontFamily,
-            fontSize: "29.705px",
-            fontStyle: "normal",
-            lineHeight: "36.695px",
-            letterSpacing: "-0.594px",
-            marginLeft: "62px",
-          }}
+        </p>
+        <p
+          className={styles.DashboardTitleTypography}
+          style={{ color: "#a3aed0", marginLeft: "62px" }}
         >
           {currentUser}
-        </Typography>
+        </p>
         <ActiveIndicator
           active
           style={{ marginLeft: "17px", marginRight: "10px" }}
@@ -271,7 +188,7 @@ export default function OverallDashboard(params: Params) {
       </Stack>
       <WeeklyProgress days={params.streak} />
       <Grid
-        className='mainGraphs'
+        className="mainGraphs"
         container
         spacing={2}
         sx={{ width: "100%", marginTop: "26px" }}
@@ -279,23 +196,23 @@ export default function OverallDashboard(params: Params) {
         width={"100%"}
       >
         <Grid item xs={5}>
-          <Stack direction='column' spacing='17px' width={"auto"}>
+          <Stack direction="column" spacing="17px" width={"auto"}>
             <SmallDataBox
-              title='Start Date'
+              title="Start Date"
               text={formatDate(params.startDate)}
               Icon={TF}
               titleAboveText
               style={{ width: "282px", height: "98px" }}
             />
             <SmallDataBox
-              title='End Date'
+              title="End Date"
               text={formatDate(params.endDate)}
               Icon={PF}
               titleAboveText
               style={{ width: "282px", height: "98px" }}
             />
             <SmallDataBox
-              title='Total Completed Sessions'
+              title="Total Completed Sessions"
               text={formatDate(params.startDate)}
               Icon={COI}
               titleAboveText
@@ -308,42 +225,33 @@ export default function OverallDashboard(params: Params) {
             width={370}
             height={250}
             style={{ width: "447px", paddingLeft: "30px", height: "324px" }}
-            title='Session Completion History'
+            title="Session Completion History"
             data={params.sessionCompletionHistory}
             highlightLargest
           />
         </Grid>
         <Grid item xs={10}>
           <Stack
-            direction='row'
-            alignItems='center'
-            justifyContent='flex-start'
-            marginBottom='29px'
+            direction="row"
+            alignItems="center"
+            justifyContent="flex-start"
+            marginBottom="29px"
           >
             <DB />
-            <Typography
-              sx={{
+            <p
+              className={styles.DashboardTitleTypography}
+              style={{
                 color: "#2B3674",
-                fontFamily: dmSans700.style.fontFamily,
-                fontSize: "29.705px",
-                fontStyle: "normal",
-                lineHeight: "36.695px",
-                letterSpacing: "-0.594px",
                 marginLeft: "20px",
               }}
             >
               Last Session
-            </Typography>
+            </p>
           </Stack>
-          <Grid
-            container
-            columns={9}
-            rowSpacing={4}
-            columnSpacing={10}
-          >
+          <Grid container columns={9} rowSpacing={4} columnSpacing={10}>
             <Grid item xs={4} width={"100%"}>
               <SmallDataBox
-                title='Questions Completed'
+                title="Questions Completed"
                 text={"Need data"}
                 Icon={SQ}
                 titleAboveText
@@ -353,7 +261,7 @@ export default function OverallDashboard(params: Params) {
             </Grid>
             <Grid item xs={4}>
               <SmallDataBox
-                title='Prompts Completed'
+                title="Prompts Completed"
                 text={"Need data"}
                 Icon={DI}
                 titleAboveText
@@ -363,7 +271,7 @@ export default function OverallDashboard(params: Params) {
             </Grid>
             <Grid item xs={4}>
               <SmallDataBox
-                title='Words Read Per Min'
+                title="Words Read Per Min"
                 text={"Need data"}
                 Icon={BI}
                 titleAboveText
@@ -373,7 +281,7 @@ export default function OverallDashboard(params: Params) {
             </Grid>
             <Grid item xs={4}>
               <SmallDataBox
-                title='Questions Completed'
+                title="Questions Completed"
                 text={"Need data"}
                 Icon={QI}
                 titleAboveText

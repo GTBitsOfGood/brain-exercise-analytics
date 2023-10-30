@@ -33,5 +33,5 @@ export {
   sqrtIcon,
   bookIcon,
   docIcon,
-  questionIcon
+  questionIcon,
 };
