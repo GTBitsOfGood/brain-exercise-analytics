@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./PopupModal.module.css";
 
 interface InputProp {
   show: boolean;
@@ -11,17 +12,7 @@ const PopupModal = ({ show, info, style = {} }: InputProp) => {
     return null;
   }
   return (
-    <div
-      style={{
-        zIndex: 500,
-        backgroundColor: "#CDCDCD",
-        width: 300,
-        borderRadius: 10,
-        padding: 10,
-        border: "0.8px solid black",
-        ...style,
-      }}
-    >
+    <div className={styles.modal} style={style}>
       {info}
     </div>
   );
