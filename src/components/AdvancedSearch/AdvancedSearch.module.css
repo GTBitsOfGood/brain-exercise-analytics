@@ -1,13 +1,36 @@
+.cities_row,
+.row_two,
+.row_three {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 40px;
+}
+
+.row_three {
+  margin-top: 40px;
+}
+
+.question_box {
+  display: flex;
+  flex: 1;
+}
+
 .label {
   vertical-align: "middle";
   margin: auto;
   display: inline-block;
   background-color: #fafafa;
-  padding: 5;
+  padding: 5px;
   flex: 1;
   border: 1px solid #d9d9d9;
 }
 
+.answer {
+  flex: 1;
+  padding-left: 10px;
+}
+
 .secondInfoTitle {
   font-size: 12px;
+  margin-top: -20px;
 }

@@ -22,17 +22,85 @@ const SelectDropdown = ({
 }: SelectDropdownProps) => {
   return (
     <div
+      className={styles.question_box}
       style={{
-        display: "flex",
-        gap: 20,
-        // paddingRight: 10,
         ...style,
       }}
     >
       <div className={styles.label}>{title}</div>
-      <div style={{ flex: 1 }}>
+      <div className={styles.answer}>
         <Dropdown {...dropdownprops} />
       </div>
+    </div>
+  );
+};
+
+interface CalendarInputProp {
+  iconRef: Element;
+  showCalendar: boolean;
+  calendarValue: string;
+  setShowCalendar: (showCalendar: boolean) => void;
+  setCalendarValue: (value: string) => void;
+  calendarX: number;
+  calendarY: number;
+}
+
+const CalendarInput = ({
+  iconRef,
+  showCalendar,
+  calendarValue = "",
+  setShowCalendar,
+  setCalendarValue,
+  calendarX,
+  calendarY,
+}: CalendarInputProp) => {
+  return (
+    <div
+      className={styles.answer}
+      style={{
+        display: "flex",
+        backgroundColor: "white",
+        verticalAlign: "middle",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 0,
+        paddingBottom: 0,
+      }}
+      onClick={() => setShowCalendar(!showCalendar)}
+      ref={iconRef}
+    >
+      {calendarValue === "" && "MM/DD/YYYY"}
+      {calendarValue !== "" && calendarValue}
+      <FontAwesomeIcon
+        icon={faCalendarAlt}
+        style={{ cursor: "pointer", float: "right" }}
+      />
+      {showCalendar && (
+        <div
+          style={{
+            position: "fixed",
+            top: `${calendarY}px`,
+            left: `${calendarX}px`,
+            zIndex: 50,
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Calendar
+            onChange={(value) => {
+              if (!value) {
+                return;
+              }
+              const date = new Date(value.toString());
+              setCalendarValue(
+                `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
+              );
+              setShowCalendar(false);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -76,12 +144,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [showJoinDateCalendar, setShowJoinDateCalendar] = useState(false);
   const [secondPhoneNumber, setSecondPhoneNumber] = useState("");
   const [secondName, setSecondName] = useState("");
-  const [dobCalendarX, setDOBCalendarX] = useState<number>();
-  const [dobCalendarY, setDOBCalendarY] = useState<number>();
-  const [joinDateCalendarX, setJoinDateCalendarX] = useState("");
-  const [joinDateCalendarY, setJoinDateCalendarY] = useState("");
-  const dobIconRef = useRef();
-  const joinIconRef = useRef();
+  const [dobCalendarX, setDOBCalendarX] = useState<number>(0);
+  const [dobCalendarY, setDOBCalendarY] = useState<number>(0);
+  const [joinDateCalendarX, setJoinDateCalendarX] = useState<number>(0);
+  const [joinDateCalendarY, setJoinDateCalendarY] = useState<number>(0);
+  const dobIconRef = useRef<Element>();
+  const joinIconRef = useRef<Element>();
 
   useEffect(() => {
     const onScroll = () => {
@@ -94,7 +162,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
     if (dobIconRef.current) {
       const dobIconRect: Element = dobIconRef.current;
-      const newTop = dobIconRect.getBoundingClientRect().y;
+      const newTop = dobIconRect.getBoundingClientRect().y + 50;
       setDOBCalendarY(newTop);
       const left = dobIconRect.getBoundingClientRect().x;
       setDOBCalendarX(left);
@@ -102,10 +170,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
     if (joinIconRef.current) {
       const joinIconRect: Element = joinIconRef.current;
-      const joinIconTop = joinIconRect.getBoundingClientRect().y - 50;
-      setDOBCalendarY(joinIconTop);
+      const joinIconTop = joinIconRect.getBoundingClientRect().y + 50;
+      setJoinDateCalendarY(joinIconTop);
       const joinIconLeft = joinIconRect.getBoundingClientRect().x;
-      setDOBCalendarX(joinIconLeft);
+      setJoinDateCalendarX(joinIconLeft);
     }
   }, []);
 
@@ -185,7 +253,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   return (
     <div
       className={styles.body}
-      style={{ backgroundColor: "#E7EEFF", padding: 40, borderRadius: 20 }}
+      style={{
+        backgroundColor: "#E7EEFF",
+        padding: 40,
+        borderRadius: 20,
+        width: "100%",
+      }}
     >
       <div
         className={styles.button_row}
@@ -207,6 +280,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             padding: 7,
             paddingLeft: 17,
             paddingRight: 17,
+            cursor: "pointer",
           }}
           onClick={reset}
         >
@@ -219,13 +293,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             paddingLeft: 17,
             paddingRight: 17,
             color: "white",
+            cursor: "pointer",
           }}
           onClick={setFinal}
         >
           Apply
         </div>
       </div>
-      <div className={styles.cities_name} style={{ display: "flex" }}>
+      <div className={styles.cities_row}>
         <SelectDropdown
           title="Country"
           dropdownprops={{
@@ -286,92 +361,87 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           style={{ flex: 1 }}
         />
       </div>
-      <div className={styles.row_two} style={{ display: "flex" }}>
-        <div style={{ display: "flex", gap: 20 }}>
+      <div className={styles.row_two}>
+        <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
-          <div
-            onClick={() => setShowDOBCalendar(!showDOBCalendar)}
-            ref={dobIconRef}
-          >
-            {dateOfBirth}{" "}
-            <FontAwesomeIcon
-              icon={faCalendarAlt}
-              style={{ cursor: "pointer" }}
-            />
-            {showDOBCalendar && (
-              <div
-                style={{
-                  position: "fixed",
-                  top: `${dobCalendarY}px`,
-                  left: `${dobCalendarX}px`,
-                }}
-              >
-                <Calendar
-                  onChange={(value, event) => {
-                    if (!value) {
-                      return;
-                    }
-                    const date = new Date(value.toString());
-                    setDateOfBirth(
-                      `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
-                    );
-                  }}
-                />
-              </div>
-            )}
-          </div>
+          <CalendarInput
+            iconRef={dobIconRef}
+            showCalendar={showDOBCalendar}
+            calendarValue={dateOfBirth}
+            setShowCalendar={setShowDOBCalendar}
+            setCalendarValue={setDateOfBirth}
+            calendarX={dobCalendarX}
+            calendarY={dobCalendarY}
+          />
         </div>
-        <div>
+        <div className={styles.question_box}>
           <div className={styles.label}>Email Address</div>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="email"
+            className={styles.answer}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
-        <div>
+        <div className={styles.question_box}>
           <div className={styles.label}>Additional Affiliation</div>
           <input
+            className={styles.answer}
             maxLength={140}
             onChange={(e) => setAdditionalAffliction(e.target.value)}
             value={additionalAffliction}
           />
         </div>
       </div>
-      <div className={styles.row_three} style={{ display: "flex" }}>
-        <div style={{ display: "flex", gap: 20 }}>
-          <div>Date of Join</div>
-          <div onClick={() => setShowJoinDateCalendar(!showJoinDateCalendar)}>
-            {joinDate}{" "}
-            <FontAwesomeIcon
-              icon={faCalendarAlt}
-              style={{ cursor: "pointer" }}
-            />
-            {showJoinDateCalendar && <Calendar />}
-          </div>
-        </div>
-
-        <div>
-          <div className={styles.secondInfoTitle}>
-            Secondary Contact Person Information
-          </div>
-          <div>First and Last Name</div>
-          <input
-            required={false}
-            placeholder="input"
-            value={secondName}
-            onChange={(e) => setSecondName(e.target.value)}
+      <div className={styles.row_three}>
+        <div className={styles.question_box}>
+          <div className={styles.label}>Date of Join</div>
+          <CalendarInput
+            iconRef={joinIconRef}
+            showCalendar={showJoinDateCalendar}
+            calendarValue={joinDate}
+            setShowCalendar={setShowJoinDateCalendar}
+            setCalendarValue={setJoinDate}
+            calendarX={joinDateCalendarX}
+            calendarY={joinDateCalendarY}
           />
         </div>
 
-        <div className={styles.secondaryInfo}>
-          <div className={styles.secondInfoTitle}>
-            Secondary Contact Person Information
+        <div className={styles.question_box}>
+          <div className={styles.secondaryInfo}>
+            <div className={styles.secondInfoTitle}>
+              Secondary Contact Person Information
+            </div>
+            <div className={styles.question_box}>
+              <div className={styles.label} style={{ whiteSpace: "nowrap" }}>
+                First and Last Name
+              </div>
+              <input
+                className={styles.answer}
+                required={false}
+                placeholder="input"
+                value={secondName}
+                onChange={(e) => setSecondName(e.target.value)}
+              />
+            </div>
           </div>
-          <div style={{ display: "flex" }}>
-            <div>Phone Number</div>
-            <input
-              required={false}
-              placeholder="input"
-              value={secondPhoneNumber}
-              onChange={(e) => setSecondPhoneNumber(e.target.value)}
-            />
+        </div>
+
+        <div className={styles.question_box}>
+          <div className={styles.secondaryInfo}>
+            <div className={styles.secondInfoTitle}>
+              Secondary Contact Person Information
+            </div>
+            <div className={styles.question_box}>
+              <div className={styles.label}>Phone Number</div>
+              <input
+                className={styles.answer}
+                required={false}
+                placeholder="input"
+                value={secondPhoneNumber}
+                onChange={(e) => setSecondPhoneNumber(e.target.value)}
+              />
+            </div>
           </div>
         </div>
       </div>
