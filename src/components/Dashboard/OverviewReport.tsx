@@ -39,6 +39,7 @@ export default function OverviewReport(params: Params) {
           display: "flex",
           flexDirection: "row",
           marginTop: "51px",
+          gap: "15px",
         }}
       >
         <SmallDataBox
@@ -61,7 +62,6 @@ export default function OverviewReport(params: Params) {
             titleAboveText
             text={`${params.totalUsers}`}
             style={{
-              marginLeft: 15,
               boxShadow:
                 "12.02189px 14.59801px 34.34826px 3.43483px rgba(112, 144, 176, 0.08)",
             }}

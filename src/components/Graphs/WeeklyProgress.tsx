@@ -96,7 +96,6 @@ export default function WeeklyProgress({ days, style = {} }: DataParams) {
                     position: "absolute",
                     width: "41px",
                     height: "41px",
-                    zIndex: 2,
                   }}
                 >
                   <GC />
@@ -118,7 +117,7 @@ export default function WeeklyProgress({ days, style = {} }: DataParams) {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      zIndex: 4,
+                      zIndex: 3,
                     }}
                   >
                     <CM />
@@ -183,7 +182,7 @@ export default function WeeklyProgress({ days, style = {} }: DataParams) {
                     marginTop: "16px",
                     backgroundColor: "#008AFC",
                     position: "absolute",
-                    zIndex: 3,
+                    zIndex: 2,
                   }}
                 />
               )}

@@ -13,8 +13,12 @@ import {
   timeForward as TF,
   lastPage as PF,
   completedIcon as COI,
+  sqrtIcon as SQ,
+  bookIcon as BI,
+  docIcon as DI,
+  questionIcon as QI,
 } from "@src/app/icons";
-import { CSSProperties, useState } from "react";
+import { CSSProperties, ReactNode, useState } from "react";
 import { Days } from "@/common_utils/types";
 import WeeklyProgress from "../Graphs/WeeklyProgress";
 import { BarChart, SmallDataBox } from "../Graphs";
@@ -26,6 +30,8 @@ interface Params {
   endDate: Date;
   sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
+  
+  // Need to update with the schema of the response we will get from the backend
 }
 // For the name of the user it would be really useful to have a reducer store this information globally during authentication (like in the mobile app)
 const currentUser = "John Doe";
@@ -80,13 +86,11 @@ function ActiveIndicator({
 function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
   const [age, setAge] = useState<number | null>(null);
   const [hover, setHover] = useState<number | null>(null);
-  const handleChange = (_: unknown, newValue: number | null) => {
+  const handleChange = (_: unknown, newValue: number | null) =>
     setAge(newValue);
-    console.log(newValue);
-  };
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         ...style,
       }}
     >
@@ -169,19 +173,50 @@ function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
             </Option>
           )
         )}
-        <Box
+        <div
           style={{
             height: "2px",
           }}
         />
       </Select>
-    </Box>
+    </div>
   );
 }
 function formatDate(date: Date) {
   const str = date.toLocaleDateString("en-us", options);
   const arr = str.split(" ");
   return [arr[2], arr[0], arr[1]].join(" ");
+}
+
+function Chip(props: {
+  color: string;
+  style?: CSSProperties;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        width: "fit-content",
+        padding: "0px 5px 0px 5px",
+        backgroundColor: props.color,
+        ...props.style,
+        borderRadius: "10px",
+        textAlign: "center",
+      }}
+    >
+      <p
+        style={{
+          color: "#2B3674",
+          fontFamily: dmSans700.style.fontFamily,
+          fontSize: "10px",
+          lineHeight: "20.968px",
+          letterSpacing: "-0.2px",
+        }}
+      >
+        {props.children}
+      </p>
+    </div>
+  );
 }
 
 export default function OverallDashboard(params: Params) {
@@ -303,38 +338,47 @@ export default function OverallDashboard(params: Params) {
           <Grid
             container
             columns={9}
-            sx={{ overflow: "hidden" }}
-            rowSpacing={2}
+            rowSpacing={4}
             columnSpacing={10}
           >
             <Grid item xs={4} width={"100%"}>
               <SmallDataBox
                 title='Questions Completed'
-                text={formatDate(params.startDate)}
-                Icon={TF}
+                text={"Need data"}
+                Icon={SQ}
                 titleAboveText
                 style={{ width: "282px", height: "98px" }}
-                Chip={() => (
-                  <div style={{ backgroundColor: "blue" }}>Hello</div>
-                )}
+                Chip={() => <Chip color={"#FF9FB34D"}>Math</Chip>}
               />
             </Grid>
             <Grid item xs={4}>
               <SmallDataBox
-                title='End Date'
-                text={formatDate(params.endDate)}
-                Icon={PF}
+                title='Prompts Completed'
+                text={"Need data"}
+                Icon={DI}
                 titleAboveText
+                Chip={() => <Chip color={"#32D29633"}>Writing</Chip>}
                 style={{ width: "282px", height: "98px" }}
               />
             </Grid>
             <Grid item xs={4}>
               <SmallDataBox
-                title='Total Completed Sessions'
-                text={formatDate(params.startDate)}
-                Icon={COI}
+                title='Words Read Per Min'
+                text={"Need data"}
+                Icon={BI}
                 titleAboveText
                 style={{ width: "282px", height: "98px" }}
+                Chip={() => <Chip color={"#008AFC1A"}>Reading</Chip>}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <SmallDataBox
+                title='Questions Completed'
+                text={"Need data"}
+                Icon={QI}
+                titleAboveText
+                style={{ width: "282px", height: "98px" }}
+                Chip={() => <Chip color={"#FBBC054D"}>Trivia</Chip>}
               />
             </Grid>
           </Grid>

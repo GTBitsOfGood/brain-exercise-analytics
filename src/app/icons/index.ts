@@ -11,6 +11,10 @@ import checkMark from "./checkMark";
 import completedIcon from "./completedIcon";
 import lastPage from "./lastPage";
 import timeForward from "./timeForward";
+import sqrtIcon from "./sqrtIcon";
+import bookIcon from "./bookIcon";
+import docIcon from "./docIcon";
+import questionIcon from "./questionIcon";
 
 export {
   barChartIcon,
@@ -26,4 +30,8 @@ export {
   completedIcon,
   lastPage,
   timeForward,
+  sqrtIcon,
+  bookIcon,
+  docIcon,
+  questionIcon
 };

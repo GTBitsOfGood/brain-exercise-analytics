@@ -40,13 +40,15 @@ export default function SmallDataBox({
           alignItems: "flex-start",
           justifyContent: "center",
           paddingLeft: "14.5px",
+          height: "100%",
+          width: "100%",
           ...style,
         }}
       >
         {titleAboveText ? (
           <>
             <div
-              className='Graphic'
+              className="Graphic"
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -55,11 +57,11 @@ export default function SmallDataBox({
             >
               <Icon />
               <Stack
-                direction='column'
+                direction="column"
                 textAlign={"left"}
                 sx={{ marginLeft: "10px" }}
               >
-                <div className='titleBox'>
+                <div className="titleBox">
                   <p
                     style={{
                       fontFamily: poppins500.style.fontFamily,
@@ -94,7 +96,7 @@ export default function SmallDataBox({
         ) : (
           <>
             <div
-              className='titleBox'
+              className="titleBox"
               style={{
                 marginLeft: titleAboveText ? 50 : 5,
                 marginBottom: titleAboveText ? -10 : 0,
@@ -114,7 +116,7 @@ export default function SmallDataBox({
               </p>
             </div>
             <div
-              className='Graphic'
+              className="Graphic"
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -144,10 +146,8 @@ export default function SmallDataBox({
       <div
         style={{
           position: "absolute",
-          width: "40px",
-          height: "20px",
-          bottom: "10px",
-          right: "40px"
+          bottom: "5px",
+          right: "20px",
         }}
       >
         <Chip />
