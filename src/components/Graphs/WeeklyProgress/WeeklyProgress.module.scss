@@ -1,0 +1,106 @@
+.container {
+  width: 100%;
+  height: 175px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 21px;
+
+  .title {
+    margin-top: 20px;
+    font-family: --var(--font-dm-sans);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 22px;
+    color: #a3aed0;
+  }
+
+  .streakContainer {
+    width: 98%;
+    height: 16px;
+    margin: 22px 5px 0px;
+    position: relative;
+
+    .line {
+      width: 100%;
+      height: 16px;
+      align-items: flex-start;
+      background-color: #f3f3f3;
+      position: absolute;
+      margin-top: 12.5px;
+    }
+
+    .days {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: center;
+      position: absolute;
+
+      .day {
+        display: flex;
+        width: 41px;
+        flex-direction: column;
+        text-align: center;
+
+        .circle {
+          height: 41px;
+          width: 41px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .greyCircle {
+            position: absolute;
+            width: 41px;
+            height: 41px;
+          }
+
+          .blueCircle {
+            position: relative;
+            border-radius: 50%;
+            width: 27px;
+            height: 27px;
+            background-color: #008afc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+          }
+        }
+
+        .dayTextContainer {
+          display: flex;
+          flex-direction: column;
+          margin-top: 7px;
+          justify-content: center;
+          align-items: center;
+          row-gap: 7px;
+
+          .text {
+            font-family: --var(--font-dm-sans);
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 18px;
+            letter-spacing: -0.02em;
+            text-align: center;
+          }
+        }
+
+        .blueLine {
+          width: 16.5%;
+          margin-left: 1.5%;
+          height: 9px;
+          margin-top: 16px;
+          background-color: #008afc;
+          position: absolute;
+          z-index: 2;
+        }
+      }
+    }
+  }
+}

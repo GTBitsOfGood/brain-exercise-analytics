@@ -6,8 +6,8 @@ import {
   StackedBarChart,
   SmallDataBox,
 } from "@src/components/Graphs";
-import OverviewReport from "@src/components/Dashboard/OverviewReport";
-import OverallDashboard from "@src/components/Dashboard/OverallDashboard";
+import OverviewReport from "@src/components/Dashboard/OverviewReport/OverviewReport";
+import OverallDashboard from "@src/components/Dashboard/OverallDashboard/OverallDashboard";
 import { Divider } from "@mui/material";
 import { Days } from "@/common_utils/types";
 import { personIcon } from "./icons";

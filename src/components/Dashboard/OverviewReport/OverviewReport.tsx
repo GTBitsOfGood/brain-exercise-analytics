@@ -1,6 +1,6 @@
 import { personIcon, peopleIcon } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
-import { LineChart, SmallDataBox } from "../Graphs";
+import { LineChart, SmallDataBox } from "../../Graphs";
 import styles from "./OverviewReport.module.css";
 
 interface Params {

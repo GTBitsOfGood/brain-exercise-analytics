@@ -1,13 +1,8 @@
-import { Box, Stack, Grid } from "@mui/material";
-import { Select } from "@mui/base/Select";
-import { Option } from "@mui/base/Option";
-import { SelectOption } from "@mui/base/useOption";
+import { Stack, Grid } from "@mui/material";
 import {
   dashboardIcon as DB,
   importantGrayIcon as IGI,
   checkCircle as CC,
-  calendarIcon as CI,
-  arrowDown as AD,
   timeForward as TF,
   lastPage as PF,
   completedIcon as COI,
@@ -16,12 +11,11 @@ import {
   docIcon as DI,
   questionIcon as QI,
 } from "@src/app/icons";
-import { CSSProperties, ReactNode, useState } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { Days } from "@/common_utils/types";
-import WeeklyProgress from "../Graphs/WeeklyProgress";
-import { BarChart, SmallDataBox } from "../Graphs";
-import { D3Data } from "../Graphs/types";
-import styles from "./OverallDashboard.module.css";
+import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
+import { D3Data } from "../../Graphs/types";
+import styles from "./OverallDashboard.module.scss";
 
 interface Params {
   streak: Days[];
@@ -64,68 +58,7 @@ function ActiveIndicator({
     </div>
   );
 }
-function Dropdown({ style = {} }: { active?: boolean; style?: CSSProperties }) {
-  const [age, setAge] = useState<number | null>(null);
-  const [hover, setHover] = useState<number | null>(null);
-  const handleChange = (_: unknown, newValue: number | null) =>
-    setAge(newValue);
-  return (
-    <div
-      style={{
-        ...style,
-      }}
-    >
-      <Select
-        value={age}
-        className={styles.Select}
-        onChange={handleChange}
-        renderValue={(option: SelectOption<number> | null) => {
-          return (
-            <div className={styles.SelectBox}>
-              <CI />
-              <p className={styles.SelectTypography}>
-                {option ? option.label : "Select"}
-              </p>
-              <AD />
-            </div>
-          );
-        }}
-      >
-        <Box
-          style={{
-            height: "2px",
-          }}
-        />
-        {["Most Recent", "3 Months", "6 Months", "12 Months", "Max"].map(
-          (label, i) => (
-            <Option
-              key={i}
-              value={i}
-              className={styles.SelectOptionTypography}
-              style={{
-                borderRadius: (() => {
-                  if (i === 0) return "3px 3px 0px 0px";
-                  if (i === 4) return "0px 0px 3px 3px";
-                  return "0px 0px 0px 0px";
-                })(),
-                backgroundColor: hover === i ? "#DDEBFF" : "white",
-              }}
-              onMouseEnter={() => setHover(i)}
-              onMouseLeave={() => setHover(null)}
-            >
-              {label}
-            </Option>
-          ),
-        )}
-        <div
-          style={{
-            height: "2px",
-          }}
-        />
-      </Select>
-    </div>
-  );
-}
+
 function formatDate(date: Date) {
   const str = date.toLocaleDateString("en-us", options);
   const arr = str.split(" ");
@@ -152,29 +85,17 @@ function Chip(props: {
 
 export default function OverallDashboard(params: Params) {
   return (
-    <Box
-      sx={{
-        height: 564,
-        width: "100%",
-        ...params.style,
-      }}
-    >
-      <Stack
-        className="titleRow"
-        direction="row"
-        alignItems="center"
-        justifyContent="flex-start"
-        marginBottom="51px"
-      >
+    <div className={styles.OverallDashboardContainer} style={params.style}>
+      <div className={styles.titleRow}>
         <DB />
         <p
-          className={styles.DashboardTitleTypography}
+          className={styles.title}
           style={{ marginLeft: "20px", color: "#2b3674" }}
         >
           Overall Dashboard
         </p>
         <p
-          className={styles.DashboardTitleTypography}
+          className={styles.title}
           style={{ color: "#a3aed0", marginLeft: "62px" }}
         >
           {currentUser}
@@ -184,8 +105,8 @@ export default function OverallDashboard(params: Params) {
           style={{ marginLeft: "17px", marginRight: "10px" }}
         />
         <IGI />
-        <Dropdown style={{ marginLeft: "auto" }} />
-      </Stack>
+        {/* <Dropdown style={{ marginLeft: "auto" }} /> */}
+      </div>
       <WeeklyProgress days={params.streak} />
       <Grid
         className="mainGraphs"
@@ -292,6 +213,6 @@ export default function OverallDashboard(params: Params) {
           </Grid>
         </Grid>
       </Grid>
-    </Box>
+    </div>
   );
 }
