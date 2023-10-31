@@ -1,0 +1,73 @@
+doctype html
+head
+  style.
+    body {
+      font-family: Poppins, sans-serif;
+      background: #F4F7FE;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #FFFFFF;
+      padding: 40px 60px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .img-box {
+      margin-bottom: 20px;
+    }
+    .img-box img {
+      width: 15%;
+    }
+    .title {
+      font-size: 64px;
+      font-weight: 600;
+      margin-bottom: 40px;
+    }
+    .verification-text {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+    .verification-button {
+      background: #005AA3;
+      border-radius: 16px;
+      color: #ffffff;
+      padding: 10px 25px;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-align: center; 
+    }
+    .email-text {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .user-email {
+      color: #005AA3;
+    }
+    .disclaimer {
+      font-size: 14px;
+      font-weight: 400;
+      color: #333;
+    }
+
+body
+  .container
+    .img-box
+      img(src='https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png')
+    .title Email Verification
+    .verification-text Please verify your email address by clicking the button below.
+    a.verification-button(href=backlinkUrl) Click here to continue sign up
+    .email-text
+      | Your email address: 
+      span.user-email #{userEmail}
+    .email-text
+       If this was a mistake, please ignore this email and nothing will happen.

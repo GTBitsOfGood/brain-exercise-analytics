@@ -2,6 +2,7 @@ import { createVerificationLog } from "@server/mongodb/actions/VerificationLog";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 import { VerificationLogType } from "@/common_utils/types";
+import { sendEmail } from "@server/utils/Authentication";
 
 type RequestData = {
   email: string;
@@ -35,6 +36,15 @@ export const POST = APIWrapper({
       requestData.email,
       VerificationLogType.PASSWORD_RESET,
     );
+
+    const backlinkUrl = `${process.env.BASE_URL}/auth/password-reset/${verificationLog.token}`;
+
+    const emailSubject = "Password Reset";
+    const emailTemplate = "reset";
+    await sendEmail(requestData.email, emailSubject, emailTemplate, {
+      backlinkUrl,
+    });
+
     return { token: verificationLog.token };
   },
 });
