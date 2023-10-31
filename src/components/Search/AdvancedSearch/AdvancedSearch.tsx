@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, RefObject, createRef } from "react";
 import Switch from "react-switch";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
@@ -76,8 +76,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [dobCalendarY, setDOBCalendarY] = useState<number>(0);
   const [joinDateCalendarX, setJoinDateCalendarX] = useState<number>(0);
   const [joinDateCalendarY, setJoinDateCalendarY] = useState<number>(0);
-  const dobIconRef = useRef<Element>();
-  const joinIconRef = useRef<Element>();
+  const dobIconRef: RefObject<HTMLDivElement> = createRef();
+  const joinIconRef: RefObject<HTMLDivElement> = createRef();
 
   useEffect(() => {
     const onScroll = () => {
@@ -97,9 +97,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     }
 
     if (joinIconRef.current) {
-      const joinIconRect: Element = joinIconRef.current;
-      const joinIconTop = joinIconRect.getBoundingClientRect().y + 30;
-      setJoinDateCalendarY(joinIconTop);
+      const joinIconRect: Element | undefined = joinIconRef.current;
+      let joinIconY = 0;
+      if (joinIconRect) {
+        joinIconY = joinIconRect.getBoundingClientRect().y;
+      }
+      setJoinDateCalendarY(joinIconY);
       const joinIconLeft = joinIconRect.getBoundingClientRect().x;
       setJoinDateCalendarX(joinIconLeft);
     }

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { RefObject } from "react";
 import Calendar from "react-calendar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import styles from "./AdvancedSearch.module.css";
 
 interface CalendarInputProp {
-  iconRef: Element;
+  iconRef: RefObject<HTMLDivElement>;
   showCalendar: boolean;
   calendarValue: string;
   setShowCalendar: (showCalendar: boolean) => void;
