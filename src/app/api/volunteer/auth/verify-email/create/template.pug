@@ -1,0 +1,107 @@
+doctype html
+head
+  style.
+    .container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #F4F7FE;
+    }
+    .inner-container {
+    width: 1387px;
+    height: 832px;
+    left: 266px;
+    top: 231px;
+    position: absolute;
+    background: white;
+    }
+    .content-box {
+    width: 974px;
+    left: 473px;
+    top: 347px;
+    position: absolute;
+    }
+    .title {
+    left: 201px;
+    top: 0px;
+    position: absolute;
+    color: black;
+    font-size: 64px;
+    font-family: Poppins;
+    font-weight: 600;
+    word-wrap: break-word;
+    }
+    .verification-text {
+    width: 974px;
+    height: 95px;
+    left: 0px;
+    top: 156px;
+    position: absolute;
+    text-align: center;
+    color: black;
+    font-size: 36px;
+    font-family: Poppins;
+    font-weight: 700;
+    }
+    .verification-button {
+    width: 410px;
+    height: 54px;
+    padding: 10px 8px;
+    left: 282px;
+    top: 311px;
+    position: absolute;
+    background: #005AA3;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+    .email-text {
+    left: 48px;
+    top: 78px;
+    position: absolute;
+    color: #333333;
+    font-size: 16px;
+    font-family: Poppins;
+    font-weight: 400;
+    }
+    .user-email {
+    color: #005AA3;
+    }
+    .disclaimer {
+    left: 241px;
+    top: 473px;
+    position: absolute;
+    color: #333333;
+    font-size: 14px;
+    font-family: Poppins;
+    font-weight: 400;
+    }
+    a {
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    font-family: Poppins;
+    font-weight: 700;
+    line-height: 14px;
+    text-decoration: none;
+    }
+    img {
+    width: 180px;
+    height: 132.29px;
+    left: 870px;
+    top: 99px;
+    position: absolute;
+    }
+.container
+  .inner-container
+    .content-box
+      .title Email Verification
+      .verification-text Please verify your email address by clicking the button below.
+      .verification-button
+        a(href='backlinkUrl') Click here to continue verification
+      .email-text
+        | Your email address: 
+        span.user-email ( #{userEmail} )
+      .disclaimer If this was a mistake, please ignore this email and nothing will happen.
+      img(src='https://via.placeholder.com/180x132')

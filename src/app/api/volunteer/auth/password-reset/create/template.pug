@@ -1,0 +1,120 @@
+doctype html
+head
+  style.
+    .container {
+    width: 1920px;
+    height: 1152px;
+    position: relative;
+    background: #F4F7FE;
+    }
+    .inner-container {
+    width: 1387px;
+    height: 832px;
+    left: 266px;
+    top: 231px;
+    position: absolute;
+    background: white;
+    }
+    .content-box {
+    left: 473px;
+    top: 347px;
+    position: absolute;
+    }
+    .title {
+    left: 231px;
+    top: 0px;
+    position: absolute;
+    color: black;
+    font-size: 64px;
+    font-family: Poppins;
+    font-weight: 600;
+    }
+    .instructions {
+    width: 974px;
+    height: 156px;
+    left: 0px;
+    top: 156px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    }
+    .instructions-text {
+    text-align: center;
+    color: black;
+    font-size: 36px;
+    font-family: Poppins;
+    font-weight: 700;
+    }
+    .reset-link-text {
+    color: #333333;
+    font-size: 16px;
+    font-family: Poppins;
+    font-weight: 400;
+    }
+    .reset-button {
+    width: 410px;
+    height: 54px;
+    padding: 10px 8px;
+    left: 282px;
+    top: 372px;
+    position: absolute;
+    background: #005AA3;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+    .email-text {
+    left: 48px;
+    top: 78px;
+    position: absolute;
+    color: #333333;
+    font-size: 16px;
+    font-family: Poppins;
+    font-weight: 400;
+    }
+    .user-email {
+    color: #005AA3;
+    }
+    .disclaimer {
+    left: 241px;
+    top: 534px;
+    position: absolute;
+    color: #333333;
+    font-size: 14px;
+    font-family: Poppins;
+    font-weight: 400;
+    }
+    a {
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    font-family: Poppins;
+    font-weight: 700;
+    line-height: 14px;
+    text-decoration: none;
+    }
+    img {
+    width: 180px;
+    height: 132.29px;
+    left: 870px;
+    top: 99px;
+    position: absolute;
+    }
+.container
+  .inner-container
+    .content-box
+      .title Password Reset
+      .instructions
+        .instructions-text Someone requested that the password be reset for the following account:
+        .reset-link-text To reset your account, visit the following address:
+      .reset-button
+        a(href='backlinkUrl') Click here to reset your password
+      .email-text
+        | Your email address: 
+        span.user-email #{userEmail}
+      .disclaimer If this was a mistake, please ignore this email and nothing will happen.
+      img(src='https://via.placeholder.com/180x132')
