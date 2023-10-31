@@ -15,23 +15,19 @@ const poppins = Poppins({
 
 export default function Page() {
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
-  const [country, setCountry] = useState<Set<string>>(new Set<string>());
-  const [state, setState] = useState<Set<string>>(new Set<string>());
-  const [city, setCity] = useState<Set<string>>(new Set<string>());
+  const [country, setCountry] = useState(new Set<string>()); // values chosen before the aply button
+  const [state, setState] = useState(new Set<string>());
+  const [city, setCity] = useState(new Set<string>());
   const [active, setActive] = useState(true);
-  const [dateOfBirth, setDateOfBirth] = useState<Set<string>>(
+  const [dateOfBirth, setDateOfBirth] = useState(new Set<string>());
+  const [email, setEmail] = useState(new Set<string>());
+  const [additionalAffliction, setAdditionalAffliction] = useState(
     new Set<string>(),
   );
-  const [email, setEmail] = useState<Set<string>>(new Set<string>());
-  const [additionalAffliction, setAdditionalAffliction] = useState<Set<string>>(
-    new Set<string>(),
-  );
-  const [joinDate, setJoinDate] = useState<Set<string>>(new Set<string>());
-  const [beiChapter, setBeiChapter] = useState<Set<string>>(new Set<string>());
-  const [secondPhoneNumber, setSecondPhoneNumber] = useState<Set<string>>(
-    new Set<string>(),
-  );
-  const [secondName, setSecondName] = useState<Set<string>>(new Set<string>());
+  const [joinDate, setJoinDate] = useState(new Set<string>());
+  const [beiChapter, setBeiChapter] = useState(new Set<string>());
+  const [secondPhoneNumber, setSecondPhoneNumber] = useState(new Set<string>());
+  const [secondName, setSecondName] = useState(new Set<string>());
 
   return (
     <div className={styles.wrapper}>
@@ -47,6 +43,28 @@ export default function Page() {
             <Search
               showAdvancedSearch={showAdvancedSearch}
               setShowAdvancedSearch={setShowAdvancedSearch}
+              country={country}
+              setCountry={setCountry}
+              city={city}
+              setCity={setCity}
+              state={state}
+              setState={setState}
+              active={active}
+              setActive={setActive}
+              dateOfBirth={dateOfBirth}
+              setDateOfBirth={setDateOfBirth}
+              email={email}
+              setEmail={setEmail}
+              additionalAffiliation={additionalAffliction}
+              setAdditionalAffiliation={setAdditionalAffliction}
+              joinDate={joinDate}
+              setJoinDate={setJoinDate}
+              beiChapter={beiChapter}
+              setBEIChapter={setBeiChapter}
+              secondPhoneNumber={secondPhoneNumber}
+              secondName={secondName}
+              setSecondName={setSecondName}
+              setSecondPhoneNumber={setSecondPhoneNumber}
             />
             {showAdvancedSearch && (
               <AdvancedSearch

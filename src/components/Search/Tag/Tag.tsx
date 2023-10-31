@@ -13,12 +13,23 @@ const poppins = Poppins({
 type TagProps = {
   title: string;
   value: string | boolean;
+  list?: Set<string>;
+  setList?: (list: Set<string>) => void;
 };
 
 const Tag = (TagProps: TagProps) => {
   const [closeTag, setCloseTag] = useState(false);
   const { title } = TagProps;
   const { value } = TagProps;
+
+  const handleCloseTag = () => {
+    setCloseTag(true);
+    if (TagProps.list instanceof Set && TagProps.setList) {
+      const newList = TagProps.list;
+      newList.delete(value as string);
+      TagProps.setList(newList);
+    }
+  };
 
   let tagText = `${title}: `;
 
@@ -39,7 +50,7 @@ const Tag = (TagProps: TagProps) => {
                 className={styles["x-icon"]}
                 icon={faX}
                 size="2xs"
-                onClick={() => setCloseTag(true)}
+                onClick={() => handleCloseTag()}
               />
             </div>
           </div>

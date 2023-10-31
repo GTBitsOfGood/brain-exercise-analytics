@@ -38,7 +38,7 @@ export const CalendarInput = ({
         paddingBottom: 0,
       }}
       onClick={() => setShowCalendar(!showCalendar)}
-      ref={iconRef}
+      ref={iconRef} //eslint-disable-line
     >
       {calendarValue === "" && "MM/DD/YYYY"}
       {calendarValue !== "" && calendarValue}

@@ -21,10 +21,10 @@ const Metric = (MetricProps: MetricProps) => {
   const pathname = usePathname();
 
   const handleButtonClick = () => {
-    if (pathname.startsWith("/api/patient/dashboard/")) {
+    if (pathname.startsWith("/patient/dashboard/")) {
       router.push(`${pathname}#${MetricProps.title}`);
     } else {
-      router.push(`/api/patient/dashboard#${MetricProps.title}`);
+      router.push(`/patient/dashboard#${MetricProps.title}`);
     }
   };
 

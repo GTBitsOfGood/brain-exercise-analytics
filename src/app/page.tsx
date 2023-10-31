@@ -6,7 +6,6 @@ import StackedBarChart from "@src/components/StackedBarChart";
 import SmallDataBox from "@src/components/SmallDataBox";
 import { Icon } from "./icons/barChartIcon";
 import styles from "./page.module.css";
-import { AdvancedSearch } from "@src/components/Search/AdvancedSearch/AdvancedSearch";
 
 const dataLine = [
   {
@@ -96,7 +95,6 @@ const dataStacked = [
 export default function Home() {
   return (
     <main className={styles.main}>
-      <AdvancedSearch />
       <LineChart
         title="Accuracy"
         data={dataLine}

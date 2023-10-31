@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject, createRef } from "react";
+import React, { useState, useEffect, createRef, RefObject } from "react";
 import Switch from "react-switch";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";

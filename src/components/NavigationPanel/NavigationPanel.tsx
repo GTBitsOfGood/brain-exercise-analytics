@@ -1,6 +1,6 @@
 import React from "react";
 import { Poppins } from "next/font/google";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { faChartSimple } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Metric from "./Metric/Metric";
@@ -14,6 +14,8 @@ const poppins = Poppins({
 
 const NavigationPanel = () => {
   const router = useRouter();
+  const currentPath = usePathname();
+
   return (
     <div className={styles.wrapper}>
       <img
@@ -28,10 +30,18 @@ const NavigationPanel = () => {
           <div className={styles.divider}>
             <hr />
           </div>
-          <div className={styles["search-patient-container"]}>
+          <div className={styles[`search-patient-container`]}>
             <div
-              className={styles["search-patient"]}
-              onClick={() => router.push("/api/patient/search")}
+              className={
+                styles[
+                  `search-patient-${
+                    currentPath.startsWith("/patient/search")
+                      ? "active"
+                      : "inactive"
+                  }`
+                ]
+              }
+              onClick={() => router.push("/patient/search")}
             >
               <div className={styles["icon-shadow"]}>
                 <FontAwesomeIcon
@@ -46,7 +56,18 @@ const NavigationPanel = () => {
             </div>
           </div>
           <div className={styles["metrics-container"]}>
-            <div className={styles["overall-metrics-container"]}>
+            <div
+              className={
+                styles[
+                  `overall-metrics-container-${
+                    currentPath.startsWith("/patient/dashboard")
+                      ? "active"
+                      : "inactive"
+                  }`
+                ]
+              }
+              onClick={() => router.push("/patient/dashboard")}
+            >
               <div className={styles["icon-shadow"]}>
                 <FontAwesomeIcon
                   className={styles["statistics-icon"]}
@@ -55,9 +76,7 @@ const NavigationPanel = () => {
                 />
               </div>
               <div className={styles["overall-metrics"]}>
-                <span onClick={() => router.push("/api/patient/dashboard")}>
-                  PATIENT OVERALL METRICS
-                </span>
+                <span>PATIENT OVERALL METRICS</span>
               </div>
             </div>
             <Metric title="math" />
