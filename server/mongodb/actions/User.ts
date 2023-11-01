@@ -1,6 +1,7 @@
 import { IAnalytics, IUser } from "@/common_utils/types";
 import User from "@server/mongodb/models/User";
 import Analytics from "../models/Analytics";
+import { PipelineStage } from "mongoose";
 
 export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ email });
@@ -84,98 +85,153 @@ export const volunteerSignUp = async (
   return result;
 };
 
+
+
+
+type UParam = {
+  name?: string;
+  email?: object;
+  "patientDetails.birthDate"?: object;
+  "patientDetails.secondaryContactName"?: object;
+  "patientDetails.secondaryContactPhone"?: object;
+  "location.country"?: object;
+  "location.state"?: object;
+  "location.city"?: object;
+  additionalAffiliation?: object;
+  beiChapter?: object;
+  'analyticsRecords.active'?: boolean;
+};
+
 export const getUsersFiltered = async (
   paramsObject: {
     name?: string;
-    dateOfBirth?: string;
-    email?: string;
-    additionalAffiliation?: string;
-    secondName?: string;
-    secondaryPhone?: string;
-    BEIChapter?: string;
+    dateOfBirth?: string[];
+    email?: string[];
+    additionalAffiliation?: string[];
+    secondName?: string[];
+    secondaryPhone?: string[];
+    beiChapter?: string[];
     active?: boolean;
-    country?: string;
-    state?: string;
-    city?: string;
-    dateOfJoin?: string;
+    country?: string[];
+    state?: string[];
+    city?: string[];
+    dateOfJoin?: string[];
   },
   page: number,
 ): Promise<IUser[] | null> => {
-  type AParam = {
-    startDate?: Date;
-    active?: boolean;
-  };
-  type UParam = {
-    name?: string;
-    email?: string;
-    "patient.birthDate"?: string;
-    "patient.secondContactName"?: string;
-    "patient.secondaryContactPhone"?: string;
-    "location.country"?: string;
-    "location.state"?: string;
-    "location.city?": string;
-    additionalAffiliation?: string;
-    BEIChapter?: string;
-  };
+
 
   const numOfItems = 8;
 
-  const analyticsParamsObject = {} as AParam;
 
   if (paramsObject.dateOfJoin !== undefined) {
-    const dateObject = new Date(paramsObject.dateOfJoin);
-    analyticsParamsObject.startDate = dateObject;
-  }
-  if (paramsObject.active !== undefined) {
-    analyticsParamsObject.active = paramsObject.active;
-  }
+  //   const patientDate = new Date(paramsObject.dateOfJoin);
+  //   const patientDate2 = new Date(patientDate);
+  //   patientDate2.setDate(patientDate.getDate() + 1);
+  //   const startDateParam = { $gte: patientDate, $lt: patientDate };
 
-  let patientDOB;
-
-  if (paramsObject.dateOfBirth !== undefined) {
-    patientDOB = new Date(paramsObject.dateOfBirth);
+  //   analyticsParamsObject.startDate = startDateParam;
   }
 
-  const userParamsObject = JSON.parse(
-    JSON.stringify({
-      name: paramsObject.name,
-      email: paramsObject.email,
-      "patient.birthDate": patientDOB,
-      "patient.secondaryContactName": paramsObject.secondName,
-      "patient.secondaryContactPhone": paramsObject.secondaryPhone,
-      "location.country": paramsObject.country,
-      "location.state": paramsObject.state,
-      "location.city": paramsObject.city,
-      additionalAffiliation: paramsObject.additionalAffiliation,
-      BEIChapter: paramsObject.BEIChapter,
-    }),
-  ) as UParam;
+  
 
-  const userFiltering = (await User.find(userParamsObject)
-    .skip(numOfItems * page)
+  const userParamsObject = {} as UParam
+  if (paramsObject.name) {
+    userParamsObject.name = paramsObject.name
+  }
+  if (paramsObject.email) {
+    userParamsObject.email = {"$in": paramsObject.email}
+  }
+  if (paramsObject.secondName) {
+    userParamsObject["patientDetails.secondaryContactName"] = {"$in": paramsObject.secondName}
+  }
+  if (paramsObject.secondaryPhone) {
+    userParamsObject["patientDetails.secondaryContactPhone"] = {"$in": paramsObject.secondaryPhone}
+  }
+  if (paramsObject.country) {
+    userParamsObject["location.country"] = {"$in": paramsObject.country}
+  }
+  if (paramsObject.state) {
+    userParamsObject["location.state"] = {"$in": paramsObject.state}
+  }
+  if (paramsObject.city) {
+    userParamsObject["location.city"] = {"$in": paramsObject.city}
+  }
+  if (paramsObject.additionalAffiliation) {
+    userParamsObject.additionalAffiliation = {"$in": paramsObject.additionalAffiliation}
+  }
+  if (paramsObject.beiChapter) {
+    userParamsObject.beiChapter = {"$in": paramsObject.beiChapter}
+  }
+  if (paramsObject.active) {
+    userParamsObject['analyticsRecords.active'] = paramsObject.active
+  }
+
+
+
+  let matchPipeline = 
+    { $match: {$and: 
+      [userParamsObject]} } as PipelineStage.Match;
+  
+  if (paramsObject.dateOfBirth) {
+    matchPipeline['$match']['$and']!.push({$expr: {
+                $in: [
+                  {
+                    $dateToString: {
+                      date: "$patientDetails.birthDate",
+                      format: "%m-%d-%Y"
+                    }
+                  },
+                  paramsObject.dateOfBirth
+                ]
+              }})
+  }
+
+  if (paramsObject.dateOfJoin) {
+    matchPipeline['$match']['$and']!.push({$expr: {
+                $in: [
+                  {
+                    $dateToString: {
+                      date: "$analyticsRecords.startDate", 
+                      format: "%m-%d-%Y"
+                    }
+                  },
+                  paramsObject.dateOfJoin
+                ]
+              }})
+  }
+
+
+  console.log(matchPipeline)
+
+  const userFiltering = (await User.aggregate([
+    {$lookup: {
+      from: "analytics",
+      localField: "_id",
+      foreignField: "userID",
+      as: "analyticsRecords"
+    }},
+    {
+      $unwind: "$analyticsRecords"
+    },
+    matchPipeline,
+    {$project: {
+      'analyticsRecords._id': 0,
+      'analyticsRecords.userID': 0,
+      'analyticsRecords.totalSessionsCompleted': 0,
+      'analyticsRecords.streak': 0,
+      'analyticsRecords.lastSessionMetrics': 0,
+      'analyticsRecords.weeklyMetrics': 0,
+      'analyticsRecords.__v': 0,
+      '__v': 0
+      }
+    }
+    ]
+    ).skip(numOfItems * page)
     .limit(numOfItems)) as IUser[];
 
-  const userIDs = userFiltering.map((user) => user._id);
+  console.log(userFiltering)
 
-  const analyticsFiltering: IAnalytics[] = await Analytics.find({
-    ...analyticsParamsObject,
-    userID: { $in: userIDs },
-  });
-
-  function findOverlappingObjects(
-    array1: IUser[],
-    array2: IAnalytics[],
-  ): IUser[] {
-    return array1.filter((obj1) => {
-      return array2.some((obj2) => {
-        return (
-          obj2.userID.toString() === obj1._id?.toString() ||
-          !userIDs.includes(obj2.userID)
-        );
-      });
-    });
-  }
-
-  const out = findOverlappingObjects(userFiltering, analyticsFiltering);
+  const out = userFiltering;
   return out;
 };
