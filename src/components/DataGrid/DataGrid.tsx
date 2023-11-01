@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { GridColDef, GridRowDef } from "../types";
 import {
   faCircleCheck,
   faCircleXmark,
@@ -7,7 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Typography } from "@mui/material";
+import { GridColDef, GridRowDef } from "../types";
 import styles from "./DataGrid.module.css";
+import { style } from "d3";
 
 interface DataParams {
   columns: GridColDef[];
@@ -34,25 +35,43 @@ function Row({ row }: { row: GridRowDef }) {
   return (
     <>
       <tr>
-        <td className={styles.Row}>
+        <td className={styles.RowCell}>
           <button
-            style={{ backgroundColor: "white", border: 0 }}
+            style={{
+              backgroundColor: "white",
+              border: 0,
+              rotate: view ? "90deg" : "0deg",
+            }}
             onClick={handleClick}
           >
             <FontAwesomeIcon icon={faCaretRight} />
           </button>
         </td>
-        <td className={styles.Row}>{row.firstName}</td>
-        <td className={styles.Row}>{row.lastName}</td>
-        <td className={styles.Row}>{row.dateOfBirth}</td>
-        <td className={styles.Row}>
-          {!row.status && <FontAwesomeIcon icon={faCircleXmark} />}
-          {row.status && <FontAwesomeIcon icon={faCircleCheck} />}
+        <td className={styles.RowCell}>
+          <div className={styles.RowCellContainer}>{row.firstName}</div>
         </td>
-        <td className={styles.Row}>{row.email}</td>
-        <td className={styles.Row}>{row.chapter}</td>
+        <td className={styles.RowCell}>
+          <div className={styles.RowCellContainer}>{row.lastName}</div>
+        </td>
+        <td className={styles.RowCell}>
+          <div className={styles.RowCellContainer}>{row.dateOfBirth}</div>
+        </td>
+        <td className={styles.RowCell}>
+          <div className={styles.RowCellContainer}>
+            {!row.status && <FontAwesomeIcon icon={faCircleXmark} />}
+            {row.status && <FontAwesomeIcon icon={faCircleCheck} />}
+          </div>
+        </td>
+        <td className={styles.RowCell} style={{ scrollbarWidth: "none" }}>
+          <div className={styles.RowCellContainer}>{row.email}</div>
+        </td>
+        <td className={styles.RowCell}>
+          <div className={styles.RowCellContainer}>{row.chapter}</div>
+        </td>
 
-        <td className={styles.Row}>{row.location.country}</td>
+        <td className={styles.RowCell}>
+          <div className={styles.RowCellContainer}>{row.location.country}</div>
+        </td>
       </tr>
       {view && <ExpandedRow row={row} />}
     </>
@@ -61,27 +80,15 @@ function Row({ row }: { row: GridRowDef }) {
 
 export default function DataGrid({ columns, rows }: DataParams) {
   return (
-    <div
-      style={{
-        width: "1353px",
-        height: "638.37px",
-        paddingTop: "90px",
-        paddingLeft: "49px",
-        paddingRight: "76px",
-        paddingBottom: "35px",
-        backgroundColor: "white",
-        overflow: "hidden",
-        borderRadius: "15px",
-      }}
-    >
+    <div className={styles.DataGrid}>
       <table className={styles.Table} style={{ width: "calc(100% - 15px)" }}>
         <colgroup>
           <col style={{ width: "2%" }} />
           <col style={{ width: "12%" }} />
           <col style={{ width: "12%" }} />
           <col style={{ width: "12%" }} />
-          <col style={{ width: "10%" }} />
-          <col style={{ width: "12%" }} />
+          <col style={{ width: "5%" }} />
+          <col style={{ width: "15%" }} />
           <col style={{ width: "12%" }} />
           <col style={{ width: "12%" }} />
         </colgroup>
@@ -111,8 +118,8 @@ export default function DataGrid({ columns, rows }: DataParams) {
             <col style={{ width: "12%" }} />
             <col style={{ width: "12%" }} />
             <col style={{ width: "12%" }} />
-            <col style={{ width: "10%" }} />
-            <col style={{ width: "12%" }} />
+            <col style={{ width: "5%" }} />
+            <col style={{ width: "15%" }} />
             <col style={{ width: "12%" }} />
             <col style={{ width: "12%" }} />
           </colgroup>

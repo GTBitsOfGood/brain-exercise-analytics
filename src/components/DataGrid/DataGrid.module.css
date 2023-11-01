@@ -1,6 +1,28 @@
-.Row {
+.RowCell {
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.RowCellContainer {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  scrollbar-width: none;
+}
+.RowCellContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.DataGrid {
+  width: 1353px;
+  height: 638.37px;
+  padding-top: 90px;
+  padding-left: 49px;
+  padding-right: 76px;
+  padding-bottom: 35px;
+  background-color: white;
+  overflow: hidden;
+  border-radius: 15px;
 }
 
 .TopRow {
@@ -27,8 +49,8 @@
 }
 
 .ExpandedRow > div {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .Table {
