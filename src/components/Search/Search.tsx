@@ -63,7 +63,11 @@ const Search = (InputParamsProps: InputParamsProps) => {
             />
             <span
               className={styles["advanced-filter"]}
-              onClick={() => InputParamsProps.setShowAdvancedSearch(!InputParamsProps.showAdvancedSearch)} //eslint-disable-line
+              onClick={() =>
+                InputParamsProps.setShowAdvancedSearch(
+                  !InputParamsProps.showAdvancedSearch,
+                )
+              }
             >
               Advanced Filter
             </span>
