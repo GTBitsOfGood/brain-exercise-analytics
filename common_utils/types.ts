@@ -55,12 +55,13 @@ export enum AdminApprovalStatus {
   REJECTED = "Rejected",
 }
 
-export enum DateRangeEnum {}
-// recent = <any>"recent",
-// quarter = <any>"3 months",
-// half = <any>"6 months",
-// year = <any>"1 year",
-// max = <any>"max",
+export enum DateRangeEnum {
+  recent = "most recent",
+  quarter = "3 months",
+  half = "6 months",
+  year = "12 months",
+  max = "max",
+}
 
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
