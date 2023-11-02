@@ -10,9 +10,53 @@ import {
 } from "@/common_utils/types";
 import Analytics from "../models/Analytics";
 
+type WeeklyMetrics = {
+  math: {
+    sessionsCompleted: number;
+    questionsAttempted: number;
+    questionsCorrect: number;
+    finalDifficultyScore: number;
+    timePerQuestion: number;
+  };
+  trivia: {
+    sessionsCompleted: number;
+    questionsAttempted: number;
+    questionsCorrect: number;
+    timePerQuestion: number;
+  };
+  reading: {
+    sessionsAttempted: number;
+    sessionsCompleted: number;
+    passagesRead: number;
+    timePerPassage: number;
+    wordsPerMinute: number;
+  };
+  writing: {
+    sessionsAttempted: number;
+    sessionsCompleted: number;
+    questionsAnswered: number;
+    timePerQuestion: number;
+  };
+  date: Date;
+  sessionsCompleted: number;
+  streakLength: number;
+  active: boolean;
+};
+
+type TempAggData = {
+  [type: string]: {
+    [property: string]: number;
+  };
+};
+type Result = {
+  [type: string]: {
+    [property: string]: DataRecord[];
+  };
+};
+
 export const getAggregatedAnalytics = async (
   userID: string,
-  // rangeEnum: string
+  rangeEnum: string,
   sectionType: keyof IAggregatedAnalyticsAll,
 ): Promise<
   | IAggregatedAnalyticsAll
@@ -22,210 +66,235 @@ export const getAggregatedAnalytics = async (
   | IAggregatedAnalyticsTrivia
   | null
 > => {
-  type WeeklyMetrics = {
-    math: {
-      sessionsCompleted: number;
-      questionsAttempted: number;
-      questionsCorrect: number;
-      finalDifficultyScore: number;
-      timePerQuestion: number;
-    };
-    trivia: {
-      sessionsCompleted: number;
-      questionsAttempted: number;
-      questionsCorrect: number;
-      timePerQuestion: number;
-    };
-    reading: {
-      sessionsAttempted: number;
-      sessionsCompleted: number;
-      passagesRead: number;
-      timePerPassage: number;
-      wordsPerMinute: number;
-    };
-    writing: {
-      sessionsAttempted: number;
-      sessionsCompleted: number;
-      questionsAnswered: number;
-      timePerQuestion: number;
-    };
-    date: Date;
-    sessionsCompleted: number;
-    streakLength: number;
-    active: boolean;
-  };
+  let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
-  type TempAggData = {
-    [type: string]: {
-      [property: string]: number;
-    };
-    // overall: {
-    //   streakLength: number;
-    // };
-    // math: {
-    //   // totalNum: item.math.questionsAttempted === 0 ? 0 : 1,
-    //   avgAccuracy: number;
-    //   avgDifficultyScore: number;
-    //   avgQuestionsCompleted: number;
-    //   avgTimePerQuestion: number;
-    // };
-    // reading: {
-    //   // totalNum: item.reading.sessionsAttempted === 0 ? 0 : 1,
-    //   sessionCompletion: number;
-    //   stackedValue: number;
-    //   avgWordsPerMin: number;
-    //   avgPassagesRead: number;
-    //   avgTimePerPassage: number;
-    // };
-    // writing: {
-    //   // totalNum: item.writing.sessionsAttempted === 0 ? 0 : 1,
-    //   sessionCompletion: number;
-    //   stackedValue: number;
-    //   avgPromptsAnswered: number;
-    //   avgTimePerQuestion: number;
-    // };
-    // trivia: {
-    //   // totalNum: item.trivia.questionsAttempted === 0 ? 0 : 1,
-    //   avgAccuracy: number;
-    //   avgQuestionsCompleted: number;
-    //   avgTimePerQuestion: number;
-    // };
-  };
-  type Result = {
-    [type: string]: {
-      [property: string]: DataRecord[];
-    };
-
-    // overall: {
-    //   streakHistory: DataRecord[];
-    // };
-    // math: {
-    //   avgAccuracy: DataRecord[];
-    //   avgDifficultyScore: DataRecord[];
-    //   avgQuestionsCompleted: DataRecord[];
-    //   avgTimePerQuestion: DataRecord[];
-    // };
-    // reading: {
-    //   sessionCompletion: StackedDataRecord[];
-    //   avgWordsPerMin: DataRecord[];
-    //   avgPassagesRead: DataRecord[];
-    //   avgTimePerPassage: DataRecord[];
-    // };
-    // writing: {
-    //   sessionCompletion: StackedDataRecord[];
-    //   avgPromptsAnswered: DataRecord[];
-    //   avgTimePerQuestion: DataRecord[];
-    // };
-    // trivia: {
-    //   avgAccuracy: DataRecord[];
-    //   avgQuestionsCompleted: DataRecord[];
-    //   avgTimePerQuestion: DataRecord[];
-    // };
-  };
-
-  const numOfWeeks = 7;
+  if (rangeEnum === "recent") {
+    numOfWeeks = 7;
+  } else if (rangeEnum === "quarter") {
+    numOfWeeks = 13;
+  } else if (rangeEnum === "half") {
+    numOfWeeks = 7; // 26
+  } else if (rangeEnum === "year") {
+    numOfWeeks = 15; // 52
+  }
 
   const res = await Analytics.findOne<IAnalytics>(
     { userID },
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
 
-  const groupSumDict: Record<string, TempAggData> = {};
+  let groupSumDict: Record<string, TempAggData> = {};
+
   let lastDate = new Date();
+  let counter = 0;
+  const lenOfMetrics = res!.weeklyMetrics.length;
+  const groupSize = Math.floor(lenOfMetrics / 12);
+  let lastDateMax = new Date();
 
-  res!.weeklyMetrics.forEach((item: WeeklyMetrics) => {
-    // let dateVar = item.date.getMonth() + "/" + item.date.getFullYear() as string;
-    // if (rangeEnum === "recent") {
-    // set as mm/dd, not mm/yyyy
-    const dateVar = `${item.date.getMonth() + 1}/${item.date.getUTCDate()}`;
+  // reversing the list
+  const reversedWeeklyMetrics = res?.weeklyMetrics.reverse();
+  const paddingDate = res!.weeklyMetrics[0].date;
+
+  reversedWeeklyMetrics!.forEach((item: WeeklyMetrics) => {
+    let dateVar = `${item.date.getMonth() + 1}/${item.date.getUTCDate()}`;
+
+    // adds to previous date in groups of 2
+    if (rangeEnum === "half" && counter % 2 === 1) {
+      dateVar = `${lastDate.getMonth() + 1}/${lastDate.getUTCDate()}`;
+    }
+    // set as mm/yyyy, not mm/dd
+    if (rangeEnum === "year") {
+      dateVar = `${item.date.getMonth() + 1}/${item.date.getFullYear()}`;
+    }
+    // group into groups of 12 and put everything into the last object once it goes over
+    if (rangeEnum === "max") {
+      if (counter % groupSize === 0 && counter < groupSize * 12) {
+        lastDateMax = item.date;
+        // dateVar = (item.date.getMonth() + 1) + "/" + item.date.getFullYear() as string;
+        dateVar = `${
+          item.date.getMonth() + 1
+        }/${item.date.getUTCDate()}/${item.date.getFullYear()}`;
+      } else {
+        dateVar = `${
+          lastDateMax.getMonth() + 1
+        }/${lastDateMax.getUTCDate()}/${lastDateMax.getFullYear()}`;
+      }
+    }
+    counter += 1;
     lastDate = item.date;
-    //    }
 
-    // if(groupSumDict[dateVar]) {
-    // groupSumDict[dateVar].math.avgAccuracy += item.math.questionsCorrect
-    // } else {
-    groupSumDict[dateVar] = {
-      overall: {
-        streakLength: item.streakLength,
-      },
-      math: {
-        // totalNum: item.math.questionsAttempted === 0 ? 0 : 1,
-        avgAccuracy:
-          item.math.questionsAttempted === 0
-            ? 0
-            : item.math.questionsCorrect / item.math.questionsAttempted,
-        avgDifficultyScore: item.math.finalDifficultyScore,
-        avgQuestionsCompleted: item.math.questionsAttempted,
-        avgTimePerQuestion: item.math.timePerQuestion,
-      },
-      reading: {
-        // totalNum: item.reading.sessionsAttempted === 0 ? 0 : 1,
-        sessionCompletion: item.reading.sessionsCompleted,
-        stackedValue: item.reading.sessionsAttempted,
-        avgWordsPerMin: item.reading.wordsPerMinute,
-        avgPassagesRead: item.reading.passagesRead,
-        avgTimePerPassage: item.reading.timePerPassage,
-      },
-      writing: {
-        // totalNum: item.writing.sessionsAttempted === 0 ? 0 : 1,
-        sessionCompletion: item.writing.sessionsCompleted,
-        stackedValue: item.writing.sessionsAttempted,
-        avgPromptsAnswered: item.writing.questionsAnswered,
-        avgTimePerQuestion: item.writing.timePerQuestion,
-      },
-      trivia: {
-        // totalNum: item.trivia.questionsAttempted === 0 ? 0 : 1,
-        avgAccuracy:
-          item.trivia.questionsAttempted === 0
-            ? 0
-            : item.trivia.questionsCorrect / item.trivia.questionsAttempted,
-        avgQuestionsCompleted: item.trivia.questionsAttempted,
-        avgTimePerQuestion: item.trivia.timePerQuestion,
-      },
-      // }
-    };
+    if (groupSumDict[dateVar]) {
+      // overall
+      groupSumDict[dateVar].overall.totalNum += 1;
+      groupSumDict[dateVar].overall.streakLength += item.streakLength;
+      // math
+      groupSumDict[dateVar].math.totalNum += 1;
+      groupSumDict[dateVar].math.questionsCorrect += item.math.questionsCorrect;
+      groupSumDict[dateVar].math.avgDifficultyScore +=
+        item.math.finalDifficultyScore;
+      groupSumDict[dateVar].math.avgQuestionsCompleted +=
+        item.math.questionsAttempted;
+      groupSumDict[dateVar].math.avgTimePerQuestion +=
+        item.math.timePerQuestion;
+      // reading
+      groupSumDict[dateVar].reading.totalNum += 1;
+      groupSumDict[dateVar].reading.sessionCompletion +=
+        item.reading.sessionsCompleted;
+      groupSumDict[dateVar].reading.stackedValue +=
+        item.reading.sessionsAttempted;
+      groupSumDict[dateVar].reading.avgWordsPerMin +=
+        item.reading.wordsPerMinute;
+      groupSumDict[dateVar].reading.avgPassagesRead +=
+        item.reading.passagesRead;
+      groupSumDict[dateVar].reading.avgTimePerPassage +=
+        item.reading.timePerPassage;
+      // writing
+      groupSumDict[dateVar].writing.totalNum += 1;
+      groupSumDict[dateVar].writing.sessionCompletion +=
+        item.writing.sessionsCompleted;
+      groupSumDict[dateVar].writing.stackedValue +=
+        item.writing.sessionsAttempted;
+      groupSumDict[dateVar].writing.avgPromptsAnswered +=
+        item.writing.questionsAnswered;
+      groupSumDict[dateVar].writing.avgTimePerQuestion +=
+        item.writing.timePerQuestion;
+      // trivia
+      groupSumDict[dateVar].trivia.totalNum += 1;
+      groupSumDict[dateVar].trivia.questionsCorrect +=
+        item.trivia.questionsCorrect;
+      groupSumDict[dateVar].trivia.avgQuestionsCompleted +=
+        item.trivia.questionsAttempted;
+      groupSumDict[dateVar].trivia.avgTimePerQuestion +=
+        item.trivia.timePerQuestion;
+    } else {
+      groupSumDict[dateVar] = {
+        overall: {
+          totalNum: 1,
+          streakLength: item.streakLength,
+        },
+        math: {
+          totalNum: 1,
+          avgAccuracy:
+            item.math.questionsAttempted === 0
+              ? 0
+              : item.math.questionsCorrect / item.math.questionsAttempted,
+          questionsCorrect: item.math.questionsCorrect,
+          avgDifficultyScore: item.math.finalDifficultyScore,
+          avgQuestionsCompleted: item.math.questionsAttempted,
+          avgTimePerQuestion: item.math.timePerQuestion,
+        },
+        reading: {
+          totalNum: 1,
+          sessionCompletion: item.reading.sessionsCompleted,
+          stackedValue: item.reading.sessionsAttempted,
+          avgWordsPerMin: item.reading.wordsPerMinute,
+          avgPassagesRead: item.reading.passagesRead,
+          avgTimePerPassage: item.reading.timePerPassage,
+        },
+        writing: {
+          totalNum: 1,
+          sessionCompletion: item.writing.sessionsCompleted,
+          stackedValue: item.writing.sessionsAttempted,
+          avgPromptsAnswered: item.writing.questionsAnswered,
+          avgTimePerQuestion: item.writing.timePerQuestion,
+        },
+        trivia: {
+          totalNum: 1,
+          avgAccuracy:
+            item.trivia.questionsAttempted === 0
+              ? 0
+              : item.trivia.questionsCorrect / item.trivia.questionsAttempted,
+          questionsCorrect: item.trivia.questionsCorrect,
+          avgQuestionsCompleted: item.trivia.questionsAttempted,
+          avgTimePerQuestion: item.trivia.timePerQuestion,
+        },
+      };
+    }
   });
 
-  let len = Object.keys(groupSumDict).length;
-  while (len < numOfWeeks) {
-    lastDate.setDate(lastDate.getDate() - 7);
-    const tempDateString = `${
-      lastDate.getMonth() + 1
-    }/${lastDate.getUTCDate()}`;
-    groupSumDict[tempDateString] = {
-      overall: {
-        streakLength: 0,
-      },
-      math: {
-        // totalNum: 0,
-        avgAccuracy: 0,
-        avgDifficultyScore: 0,
-        avgQuestionsCompleted: 0,
-        avgTimePerQuestion: 0,
-      },
-      reading: {
-        // totalNum: 0,
-        sessionCompletion: 0,
-        stackedValue: 0,
-        avgWordsPerMin: 0,
-        avgPassagesRead: 0,
-        avgTimePerPassage: 0,
-      },
-      writing: {
-        // totalNum: 0,
-        sessionCompletion: 0,
-        stackedValue: 0,
-        avgPromptsAnswered: 0,
-        avgTimePerQuestion: 0,
-      },
-      trivia: {
-        // totalNum: 0,
-        avgAccuracy: 0,
-        avgQuestionsCompleted: 0,
-        avgTimePerQuestion: 0,
-      },
-    };
-    len += 1;
+  Object.keys(groupSumDict).forEach((month) => {
+    Object.keys(groupSumDict[month]).forEach((type) => {
+      Object.keys(groupSumDict[month][type]).forEach((property) => {
+        if (property !== "totalNum" && property !== "avgAccuracy") {
+          groupSumDict[month][type][property] /=
+            groupSumDict[month][type].totalNum;
+        } else if (property === "avgAccuracy") {
+          groupSumDict[month][type].avgAccuracy =
+            groupSumDict[month][type].avgQuestionsCompleted === 0
+              ? 0
+              : Math.round(
+                  (100 * groupSumDict[month][type].questionsCorrect) /
+                    groupSumDict[month][type].avgQuestionsCompleted,
+                ) / 100;
+        }
+      });
+    });
+  });
+
+  // PADDING
+  if (rangeEnum !== "max") {
+    let len = Object.keys(groupSumDict).length;
+
+    let totalWeeks = numOfWeeks;
+    if (rangeEnum === "half") {
+      totalWeeks = 13;
+    } else if (rangeEnum === "year") {
+      totalWeeks = 12;
+    }
+
+    while (len < totalWeeks) {
+      if (rangeEnum === "recent" || rangeEnum === "quarter") {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      } else if (rangeEnum === "half") {
+        paddingDate.setDate(paddingDate.getDate() - 14);
+      } else if (rangeEnum === "year") {
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
+      }
+
+      let tempDateString = `${
+        paddingDate.getMonth() + 1
+      }/${paddingDate.getUTCDate()}`;
+      if (rangeEnum === "year") {
+        tempDateString = `${
+          paddingDate.getMonth() + 1
+        }/${paddingDate.getFullYear()}`;
+      }
+
+      groupSumDict = {
+        [tempDateString]: {
+          overall: {
+            streakLength: 0,
+          },
+          math: {
+            avgAccuracy: 0,
+            avgDifficultyScore: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+          reading: {
+            sessionCompletion: 0,
+            stackedValue: 0,
+            avgWordsPerMin: 0,
+            avgPassagesRead: 0,
+            avgTimePerPassage: 0,
+          },
+          writing: {
+            sessionCompletion: 0,
+            stackedValue: 0,
+            avgPromptsAnswered: 0,
+            avgTimePerQuestion: 0,
+          },
+          trivia: {
+            avgAccuracy: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+        },
+        ...groupSumDict,
+      };
+
+      len += 1;
+    }
   }
 
   const result: Result = {
@@ -256,31 +325,6 @@ export const getAggregatedAnalytics = async (
     },
   };
 
-  // for (const month in groupSumDict) {
-  //   for (const type in groupSumDict[month]) {
-  //     for (const property in groupSumDict[month][type]) {
-  //       if (property === "totalNum" || property === "stackedValue") {
-  //         continue;
-  //       }
-  //       let dr = [
-  //         {
-  //           interval: month,
-  //           value: groupSumDict[month][type][property],
-  //         } as DataRecord,
-  //       ];
-  //       if (property === "sessionCompletion") {
-  //         dr = [
-  //           {
-  //             interval: month,
-  //             value: groupSumDict[month][type][property],
-  //             stackedValue: groupSumDict[month][type].sessionCompletion,
-  //           } as StackedDataRecord,
-  //         ];
-  //       }
-  //       result[type][property] = dr.concat(result[type][property]);
-  //     }
-  //   }
-  // }
   Object.keys(groupSumDict).forEach((month) => {
     Object.keys(groupSumDict[month]).forEach((type) => {
       Object.keys(groupSumDict[month][type]).forEach((property) => {
@@ -304,8 +348,11 @@ export const getAggregatedAnalytics = async (
             } as StackedDataRecord,
           ];
         }
-
-        result[type][property] = dr.concat(result[type][property]);
+        if (!result[type][property]) {
+          result[type][property] = dr;
+        } else {
+          result[type][property] = result[type][property].concat(dr);
+        }
       });
     });
   });
