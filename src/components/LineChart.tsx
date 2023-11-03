@@ -2,7 +2,7 @@ import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
 import { InfoIcon } from "@src/app/icons/InfoIcon";
-import PopupModal from "./PopulModal/PopupModal";
+import PopupModal from "./PopupModal/PopupModal";
 import { D3Data } from "./types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
