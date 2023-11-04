@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { persistStore } from "redux-persist";
 import {
   FLUSH,
   PAUSE,
@@ -19,3 +20,5 @@ export const store = configureStore({
       },
     }),
 });
+
+export const persistor = persistStore(store);

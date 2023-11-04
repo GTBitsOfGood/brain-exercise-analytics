@@ -1,14 +1,9 @@
-"use client";
-
 import "./globals.css";
 import type { Metadata } from "next";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import { Poppins } from "next/font/google";
 
-import { store } from "@src/redux/store";
-import { persistStore } from "redux-persist";
 import firebaseInit from "@src/firebase/config";
+import StoreProvider from "@src/redux/StoreProvider";
 
 const poppins = Poppins({
   subsets: ["latin-ext"],
@@ -22,7 +17,6 @@ export const metadata: Metadata = {
 };
 
 firebaseInit();
-const persistor = persistStore(store);
 
 export default function RootLayout({
   children,
@@ -32,11 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Provider store={store}>
-          <PersistGate persistor={persistor} loading={null}>
-            {children}
-          </PersistGate>
-        </Provider>
+        <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
   );
