@@ -13,10 +13,9 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
-
+import { Dropdown } from "@src/components/Dropdown/Dropdown";
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
-import { Dropdown } from "@src/components/Dropdown/Dropdown";
 
 export default function Page() {
   const [firstName, setFirstName] = useState("");
