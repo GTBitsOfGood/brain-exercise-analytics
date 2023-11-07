@@ -9,6 +9,7 @@ const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
 interface DataParams extends D3Data {
+  className?: string;
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
@@ -16,6 +17,7 @@ interface DataParams extends D3Data {
 }
 
 export default function LineChart({
+  className,
   data,
   width = 410,
   height = 174,
@@ -133,6 +135,7 @@ export default function LineChart({
 
   return (
     <div
+      className={className}
       style={{
         backgroundColor: "white",
         borderRadius: "15px",

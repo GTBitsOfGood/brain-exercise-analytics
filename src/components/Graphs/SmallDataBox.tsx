@@ -6,23 +6,25 @@ const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 
 interface DataParams {
+  className?: string;
   title: string;
   Icon: () => JSX.Element;
   text: string;
   titleAboveText?: boolean;
   Chip?: () => ReactNode;
-  className?: string;
   style?: CSSProperties;
+  [prop: string]: unknown;
 }
 
 export default function SmallDataBox({
+  className,
   title,
   Icon,
   text,
   titleAboveText = false,
   style = {},
   Chip = () => <></>,
-  className,
+  ...props
 }: DataParams) {
   return (
     <div
@@ -35,6 +37,7 @@ export default function SmallDataBox({
         position: "relative",
         ...style,
       }}
+      {...props}
     >
       <div
         style={{
