@@ -1,10 +1,12 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import MathScreen from "@src/components/MathScreen/MathScreen";
 import { ReadingScreen } from "@src/components/ReadingScreen/ReadingScreen";
 import { WritingScreen } from "@src/components/WritingScreen/WritingScreen";
 import { TriviaScreen } from "@src/components/TriviaScreen/TriviaScreen";
-import { Dropdown2 } from "@src/components/Dropdown/Dropdown";
+import { Dropdown } from "@src/components/Dropdown/Dropdown";
 
 const numberOfQuestionData = [
   {
@@ -160,7 +162,6 @@ export default function Home() {
         totalQuestions="10"
         totalTime="3 min 15 sec"
       /> */}
-      <Dropdown2 />
     </div>
     // <main className={styles.main}>
     //   <LineChart
