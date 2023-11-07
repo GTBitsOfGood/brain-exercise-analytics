@@ -1,9 +1,11 @@
 import { useState } from "react";
-import Dropdown, { DropdownOption } from "../Dropdown/Dropdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { Dropdown, IDropdownOption } from "../Dropdown/Dropdown";
 
 function DateSelector() {
   const [selectedValue, setSelectedValue] = useState("Most Recent");
-  const options: DropdownOption<string>[] = [];
+  const options: IDropdownOption[] = [];
   options.push({ value: "Most Recent", displayValue: "Most Recent" });
   options.push({ value: "3 Months", displayValue: "3 Months" });
   options.push({ value: "6 Months", displayValue: "6 Months" });
@@ -13,13 +15,14 @@ function DateSelector() {
   return (
     <Dropdown
       options={options}
-      value={selectedValue}
       required={false}
       placeholder={"Most Recent"}
       showError={false}
-      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedValue(e.target.value);
+      onChange={(e) => {
+        setSelectedValue(e.currentTarget.innerText);
+        console.log(selectedValue);
       }}
+      icon={<FontAwesomeIcon icon={faCalendarAlt} />}
     />
   );
 }

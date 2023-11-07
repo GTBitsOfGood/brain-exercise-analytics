@@ -7,6 +7,7 @@ import { ReadingScreen } from "@src/components/ReadingScreen/ReadingScreen";
 import { WritingScreen } from "@src/components/WritingScreen/WritingScreen";
 import { TriviaScreen } from "@src/components/TriviaScreen/TriviaScreen";
 import { Dropdown } from "@src/components/Dropdown/Dropdown";
+import DateSelector from "@src/components/DateSelector/DateSelector";
 
 const numberOfQuestionData = [
   {
@@ -127,6 +128,7 @@ const dataStacked = [
 export default function Home() {
   return (
     <div>
+      <DateSelector />
       {/* <MathScreen
         accuracyData={dataLine}
         difficultyData={dataLine}

@@ -25,6 +25,7 @@ interface IDropdownProps {
   height?: string;
   error?: string;
   showError?: boolean;
+  icon?: React.ReactElement;
   onChange: (e: React.MouseEvent<HTMLLIElement>) => void;
 }
 
@@ -37,6 +38,7 @@ export const Dropdown = ({
   error,
   showError,
   onChange,
+  icon,
 }: IDropdownProps) => {
   const [showList, setShowList] = useState(false);
   const [selectedValue, setSelectedValue] = useState("");
@@ -66,7 +68,7 @@ export const Dropdown = ({
     if (!isValuePresent) {
       setSelectedValue("");
     }
-  }, [options]);
+  }, [options, selectedValue]);
 
   return (
     <div className={styles.container} ref={wrapperRef}>
@@ -89,6 +91,7 @@ export const Dropdown = ({
             className={styles.value}
             style={{ color: selectedValue === "" ? "gray" : "black" }}
           >
+            {icon && <>{icon}</>}&nbsp;
             {selectedValue === "" ? placeholder : selectedValue}
           </div>
           <FontAwesomeIcon icon={showList ? faCaretUp : faCaretDown} />
