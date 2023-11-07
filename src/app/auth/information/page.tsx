@@ -48,7 +48,7 @@ export default function Page() {
     displayValue: `${country.name}`,
   }));
   const countryCode = Country.getAllCountries().filter(
-    (country) => country.name === locCountry
+    (country) => country.name === locCountry,
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((state) => ({
@@ -56,7 +56,7 @@ export default function Page() {
     displayValue: `${state.name}`,
   }));
   const stateCode = State.getStatesOfCountry(countryCode).filter(
-    (state) => state.name === locState
+    (state) => state.name === locState,
   )[0]?.isoCode;
 
   const CITIES = City.getCitiesOfState(countryCode, stateCode).map((city) => ({
