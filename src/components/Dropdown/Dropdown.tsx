@@ -1,82 +1,128 @@
-import React from "react";
-
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import React, { createRef, useEffect, useState } from "react";
+import {
+  faCaretDown,
+  faCaretUp,
+  faExclamationCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Poppins } from "next/font/google";
 import styles from "./Dropdown.module.css";
 
-const poppins = Poppins({
-  subsets: ["latin-ext"],
-  variable: "--font-poppins",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
-
-export interface DropdownOption<T> {
-  value: T;
-  displayValue: string;
+export interface IDropdownOption {
+  value: string | number;
+  displayValue: string | number;
 }
 
-export interface DropdownProps<T> {
-  options: DropdownOption<T>[];
-  value?: T;
-  title?: string;
-  required: boolean;
-  showError: boolean;
-  error?: string;
+const defaultOption = [{ value: "", displayValue: "No option available" }];
+
+interface IDropdownProps {
+  name?: string;
+  options: IDropdownOption[];
+  required?: boolean;
+  tabIndex?: number;
+  type?: string;
   placeholder?: string;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  style?: object;
+  labelName?: string;
+  height?: string;
+  error?: string;
+  showError?: boolean;
+  onChange: (e: React.MouseEvent<HTMLLIElement>) => void;
 }
 
-function Dropdown<T>(props: DropdownProps<T>) {
-  const { options, title, required, placeholder, showError, error } = props;
-  let { style } = props;
-  if (!style) {
-    style = {};
-  }
-  return (
-    <div className={styles.container} style={style}>
-      <main className={poppins.variable}>
-        {title !== undefined ? (
-          <div className={styles["label-container"]}>
-            <label className={styles["input-label"]}>{title}</label>
-            {required && <label className={styles.asterisk}>*</label>}
-          </div>
-        ) : null}
-        <div className={styles["input-container"]}>
-          <select
-            className={
-              showError ? styles["input-field-error"] : styles["input-field"]
-            }
-            value={props.value as unknown as string}
-            onChange={props.onChange}
-          >
-            {placeholder && (
-              <option value="" disabled selected>
-                {placeholder}
-              </option>
-            )}
+export const Dropdown = ({
+  labelName,
+  options = defaultOption,
+  placeholder,
+  required,
+  height = "300px",
+  error,
+  showError,
+  onChange,
+}: IDropdownProps) => {
+  const [showList, setShowList] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("");
+  const wrapperRef = createRef<HTMLDivElement>();
 
-            {options.map((option, index) => (
-              <option key={index} value={option.value as unknown as string}>
-                {option.displayValue}
-              </option>
-            ))}
-          </select>
-        </div>
-        {showError && error !== undefined && (
-          <div className={styles["error-container"]}>
-            <FontAwesomeIcon
-              className={styles["error-icon"]}
-              icon={faExclamationCircle}
-              size="sm"
-            />
-            <p className={styles["error-message"]}>{error}</p>
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent | Event) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setShowList(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
+  useEffect(() => {
+    const isValuePresent = options.some(
+      (o) => o.displayValue === selectedValue,
+    );
+    if (!isValuePresent) {
+      setSelectedValue("");
+    }
+  }, [options]);
+
+  return (
+    <div className={styles.container} ref={wrapperRef}>
+      <div
+        className={styles.question}
+        style={{ display: labelName ? "block" : "none" }}
+      >
+        {labelName} {required ? <span>*</span> : <></>}
+      </div>
+      <div className={styles.input_container}>
+        <div
+          className={[
+            styles.shownInput,
+            showList ? styles.show_drop_down : null,
+            showError ? styles.error_input_box : null,
+          ].join(" ")}
+          onClick={() => setShowList(!showList)}
+        >
+          <div
+            className={styles.value}
+            style={{ color: selectedValue === "" ? "gray" : "black" }}
+          >
+            {selectedValue === "" ? placeholder : selectedValue}
           </div>
-        )}
-      </main>
+          <FontAwesomeIcon icon={showList ? faCaretUp : faCaretDown} />
+        </div>
+        <div
+          className={styles.option_list_div}
+          style={{ display: showList ? "block" : "none", maxHeight: height }}
+        >
+          <ul>
+            <li className={styles.non_select_option}>{placeholder}</li>
+            {options.map((value, index) => {
+              return (
+                <li
+                  key={index}
+                  onClick={(e: React.MouseEvent<HTMLLIElement>) => {
+                    setSelectedValue(e.currentTarget.innerText);
+                    onChange(e);
+                    setShowList(false);
+                  }}
+                  className={styles.option_item}
+                >
+                  {value.displayValue}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+      {showError && (
+        <span className={styles.errorBlock}>
+          {" "}
+          <FontAwesomeIcon icon={faExclamationCircle} /> {error}{" "}
+        </span>
+      )}
     </div>
   );
-}
-
-export default Dropdown;
+};

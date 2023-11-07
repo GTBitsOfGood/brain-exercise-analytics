@@ -4,6 +4,7 @@ import MathScreen from "@src/components/MathScreen/MathScreen";
 import { ReadingScreen } from "@src/components/ReadingScreen/ReadingScreen";
 import { WritingScreen } from "@src/components/WritingScreen/WritingScreen";
 import { TriviaScreen } from "@src/components/TriviaScreen/TriviaScreen";
+import { Dropdown2 } from "@src/components/Dropdown/Dropdown";
 
 const numberOfQuestionData = [
   {
@@ -124,7 +125,7 @@ const dataStacked = [
 export default function Home() {
   return (
     <div>
-      <MathScreen
+      {/* <MathScreen
         accuracyData={dataLine}
         difficultyData={dataLine}
         numQuestionData={numberOfQuestionData}
@@ -158,7 +159,8 @@ export default function Home() {
         currentAccuracy="65%"
         totalQuestions="10"
         totalTime="3 min 15 sec"
-      />
+      /> */}
+      <Dropdown2 />
     </div>
     // <main className={styles.main}>
     //   <LineChart

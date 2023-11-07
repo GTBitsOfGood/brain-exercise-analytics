@@ -13,10 +13,10 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
-import Dropdown from "@src/components/Dropdown/Dropdown";
 
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
+import { Dropdown } from "@src/components/Dropdown/Dropdown";
 
 export default function Page() {
   const [firstName, setFirstName] = useState("");
@@ -196,13 +196,12 @@ export default function Page() {
               </div>
               <div className={styles.locationField}>
                 <Dropdown
-                  title="Location"
-                  required={true}
+                  labelName="Location"
                   placeholder="Select Your Country"
+                  required={true}
                   options={COUNTRIES}
-                  value={locCountry}
                   onChange={(e) => {
-                    setLocCountry(e.target.value);
+                    setLocCountry(e.currentTarget.innerText);
                     setCountryError("");
                     setStateError("");
                     setCityError("");
@@ -217,9 +216,8 @@ export default function Page() {
                     required={true}
                     placeholder="Select Your State"
                     options={STATES}
-                    value={locState}
                     onChange={(e) => {
-                      setLocState(e.target.value);
+                      setLocState(e.currentTarget.innerText);
                       setStateError("");
                       setCityError("");
                     }}
@@ -230,9 +228,8 @@ export default function Page() {
                     required={true}
                     placeholder="Select Your City"
                     options={CITIES}
-                    value={locCity}
                     onChange={(e) => {
-                      setLocCity(e.target.value);
+                      setLocCity(e.currentTarget.innerText);
                       setCityError("");
                     }}
                     showError={cityError !== ""}
@@ -242,13 +239,12 @@ export default function Page() {
               )}
               <div className={styles.locationField}>
                 <Dropdown
-                  title="Chapter"
+                  labelName="Chapter"
                   required={true}
                   placeholder="Select Your Chaper"
                   options={CHAPTERS}
-                  value={chapter}
                   onChange={(e) => {
-                    setChapter(e.target.value);
+                    setChapter(e.currentTarget.innerText);
                     setChapterError("");
                   }}
                   showError={chapterError !== ""}

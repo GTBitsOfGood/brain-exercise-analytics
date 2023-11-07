@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import { D3Data } from "./types";
-import PopupModal from "./PopulModal/PopupModal";
+import PopupModal from "./PopupModal/PopupModal";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
