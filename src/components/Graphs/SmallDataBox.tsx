@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import { Poppins, Inter } from "next/font/google";
 import { CSSProperties, ReactNode } from "react";
 
@@ -62,10 +61,13 @@ export default function SmallDataBox({
               }}
             >
               <Icon />
-              <Stack
-                direction="column"
-                textAlign={"left"}
-                sx={{ marginLeft: "10px" }}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "left",
+                  marginLeft: "10px",
+                }}
               >
                 <div className="titleBox">
                   <p
@@ -96,7 +98,7 @@ export default function SmallDataBox({
                 >
                   {text}
                 </p>
-              </Stack>
+              </div>
             </div>
           </>
         ) : (

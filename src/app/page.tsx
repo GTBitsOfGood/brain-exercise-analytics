@@ -8,7 +8,6 @@ import {
 } from "@src/components/Graphs";
 import OverviewReport from "@src/components/Dashboard/OverviewReport/OverviewReport";
 import OverallDashboard from "@src/components/Dashboard/OverallDashboard/OverallDashboard";
-import { Divider } from "@mui/material";
 import { Days } from "@/common_utils/types";
 import { personIcon } from "./icons";
 import styles from "./page.module.css";
@@ -102,10 +101,13 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <OverviewReport activeUsers={10} totalUsers={200} />
-      <Divider
-        orientation="horizontal"
-        flexItem
-        sx={{ marginTop: "50px", marginBottom: "50px" }}
+      <div
+        style={{
+          marginTop: "50px",
+          marginBottom: "50px",
+          width: "100%",
+          borderTop: "1px solid #C8C8C8",
+        }}
       />
       <OverallDashboard
         streak={[Days.Monday, Days.Tuesday, Days.Friday]}
