@@ -94,3 +94,12 @@ export interface IAnalytics {
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
+export interface IFilteredUser {
+  metadata: {
+    totalDocuments: number;
+    page: number;
+    totalPages: number;
+  };
+  data: [IUser];
+}
