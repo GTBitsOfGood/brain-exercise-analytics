@@ -164,3 +164,12 @@ export interface DataRecord {
 export interface StackedDataRecord extends DataRecord {
   stackedValue: number;
 }
+
+export interface IFilteredUser {
+  metadata: {
+    totalDocuments: number;
+    page: number;
+    totalPages: number;
+  };
+  data: [IUser];
+}
