@@ -45,7 +45,7 @@
   border-radius: 16px;
   border: 1px #e0e5f2 solid;
   padding-left: 17px;
-  padding-right: 17px;
+  padding-right: 43px;
 }
 
 .input-field::placeholder {
@@ -65,7 +65,7 @@
 
 .eye-icon {
   position: absolute;
-  top: 33%;
+  top: 36%;
   right: 17px;
   cursor: pointer;
   color: #a3aed0;
@@ -74,6 +74,7 @@
 .error-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding-top: 10px;
 }
 
@@ -86,5 +87,5 @@
   font-weight: 500;
   color: #ff0000;
   padding-left: 5px;
-  font-size: 10px;
+  font-size: 12px;
 }
