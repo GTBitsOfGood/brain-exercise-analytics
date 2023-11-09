@@ -32,10 +32,11 @@ export interface IUser {
     city: string;
   };
   signedUp: boolean;
+  verified: boolean;
   role: Role;
 }
 
-export interface IPasswordReset {
+export interface IVerificationLog {
   email: string;
   token: string;
   expiryDate: Date;
@@ -47,8 +48,11 @@ export interface IAnalytics {
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
+  startDate: Date;
+  active: boolean;
   streak: [string];
   lastSessionMetrics: {
+    date: Date;
     math: {
       questionsAttempted: number;
       questionsCorrect: number;
@@ -62,6 +66,12 @@ export interface IAnalytics {
     };
     reading: {
       passagesRead: number;
+      timePerPassage: number;
+      wordsPerMinute: number;
+    };
+    writing: {
+      questionsAnswered: number;
+      timePerQuestion: number;
     };
   };
   weeklyMetrics: [
@@ -69,6 +79,7 @@ export interface IAnalytics {
       date: Date;
       sessionsCompleted: number;
       streakLength: number;
+      active: boolean;
       math: {
         sessionsCompleted: number;
         questionsAttempted: number;
@@ -86,6 +97,14 @@ export interface IAnalytics {
         sessionsAttempted: number;
         sessionsCompleted: number;
         passagesRead: number;
+        timePerPassage: number;
+        wordsPerMinute: number;
+      };
+      writing: {
+        sessionsAttempted: number;
+        sessionsCompleted: number;
+        questionsAnswered: number;
+        timePerQuestion: number;
       };
     },
   ];
@@ -94,3 +113,21 @@ export interface IAnalytics {
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
+/* VerificationLog MongoDB Schema Types */
+
+export enum VerificationLogType {
+  PASSWORD_RESET = "PASSWORD_RESET",
+  EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
+}
+
+/* Analytics Data */
+
+export interface DataRecord {
+  interval: string;
+  value: number;
+}
+
+export interface StackedDataRecord extends DataRecord {
+  stackedValue: number;
+}

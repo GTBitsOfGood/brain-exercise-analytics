@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSquareCheck,
@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
+import { useDispatch } from "react-redux";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -16,8 +17,10 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
-import { setCookie, getCookie, getCookies } from "cookies-next";
+import { setCookie, getCookie } from "cookies-next";
 import { IUser } from "@/common_utils/types";
+import { login } from "@src/redux/reducers/authReducer";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -30,13 +33,7 @@ export default function Page() {
 
   const router = useRouter();
 
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-    if (getCookie("authToken") !== undefined) {
-      console.log("Found token");
-    }
-  }, []);
+  const dispatch = useDispatch();
 
   const resetErrors = () => {
     setEmailError("");
@@ -62,17 +59,19 @@ export default function Page() {
     try {
       await emailSignIn(email, password);
       try {
-        const userMongo: IUser | undefined = await internalRequest({
+        const user = await internalRequest<IUser>({
           url: "/api/volunteer/auth/login",
           method: HttpMethod.GET,
           body: {
             email,
           },
         });
-        if (keepLogged && userMongo) {
-          setCookie("authUser", userMongo, { maxAge: 7 * 24 * 60 * 60 });
+        if (keepLogged && user) {
+          setCookie("authUser", user, { maxAge: 7 * 24 * 60 * 60 });
         }
-        router.push("/auth/redirect");
+
+        dispatch(login(user));
+        router.push("/auth/information");
       } catch (error) {
         setShowGeneralError(true);
       }
@@ -104,17 +103,19 @@ export default function Page() {
         throw new Error("Error signing in");
       }
 
-      const userMongo: IUser | undefined = await internalRequest({
+      const fetchedUser = await internalRequest<IUser>({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
         body: {
           email: user.email,
         },
       });
-      if (keepLogged && userMongo) {
-        setCookie("authUser", userMongo, { maxAge: 7 * 24 * 60 * 60 });
+      if (keepLogged && fetchedUser) {
+        setCookie("authUser", fetchedUser, { maxAge: 7 * 24 * 60 * 60 });
       }
-      router.push("/auth/redirect");
+
+      dispatch(login(fetchedUser));
+      router.push("/auth/information");
     } catch (error) {
       setShowGeneralError(true);
     }
@@ -123,10 +124,6 @@ export default function Page() {
   const toggleKeepMeLoggedIn = () => {
     setKeepLogged((prevState) => !prevState);
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>

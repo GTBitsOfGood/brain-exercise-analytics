@@ -17,7 +17,7 @@ export interface InternalRequestData {
 export interface InternalResponseData<T> {
   success: boolean;
   message?: string;
-  payload?: T;
+  payload: T;
 }
 
 export class InternalResponseError extends Error {}
