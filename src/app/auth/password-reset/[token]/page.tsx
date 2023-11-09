@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CheckCircleOutline, Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
@@ -155,10 +153,9 @@ export default function Page({ params }: PageProps) {
               </div>
               {showGeneralError && (
                 <div className={styles["general-error"]}>
-                  <FontAwesomeIcon
+                  <ErrorIcon
                     className={styles["error-icon"]}
-                    icon={faExclamationCircle}
-                    size="sm"
+                    sx={{ width: "18px" }}
                   />
                   <p className={styles["error-message"]}>
                     Error: An internal server error has occurred. Please try
@@ -168,7 +165,7 @@ export default function Page({ params }: PageProps) {
               )}
               {passwordSuccess && (
                 <div className={styles["success-container"]}>
-                  <CheckCircleOutlineIcon className={styles["check-icon"]} />
+                  <CheckCircleOutline className={styles["check-icon"]} />
                   <p className={styles["success-text"]}>
                     Password has been reset successfully.
                   </p>
