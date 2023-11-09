@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 
@@ -207,10 +206,9 @@ export default function Page() {
 
             {showGeneralError && (
               <div className={styles.generalError}>
-                <FontAwesomeIcon
+                <ErrorIcon
                   className={styles.errorIcon}
-                  icon={faExclamationCircle}
-                  size="sm"
+                  sx={{ width: "18px" }}
                 />
                 <p className={styles.errorMessage}>
                   Error: An internal server error has occurred. Please try again

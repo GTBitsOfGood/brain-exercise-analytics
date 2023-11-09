@@ -100,8 +100,10 @@
 .chapterNotFound {
   flex-direction: column;
   display: flex;
+  align-items: center;
   flex-direction: row;
   padding-top: 10px;
+  padding-bottom: 6%;
 }
 
 .notFoundMessage {
@@ -119,8 +121,9 @@
 .generalError {
   flex-direction: column;
   display: flex;
+  align-items: center;
   flex-direction: row;
-  padding-top: 10px;
+  padding-bottom: 15px;
 }
 
 .googleGLogo {
@@ -141,7 +144,6 @@
 
 .continueButtonContainer {
   display: flex;
-  padding-top: 10%;
   flex-direction: column;
   width: 100%;
 }
@@ -152,16 +154,10 @@
   font-size: 14px;
   font-family: var(--font-poppins);
   font-weight: 700;
-  line-height: 14px;
   word-wrap: break-word;
-  text-align: center;
   width: 100%;
-  height: 43px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background: #005aa3;
+  height: 45px;
+  padding: 10px 8px;
   border-radius: 16px;
   border: none;
   justify-content: center;

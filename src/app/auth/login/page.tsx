@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSquareCheck,
-  faSquare,
-  faExclamationCircle,
-} from "@fortawesome/free-solid-svg-icons";
+  CheckBox,
+  CheckBoxOutlineBlank,
+  Error as ErrorIcon,
+} from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 
@@ -118,6 +117,8 @@ export default function Page() {
     return null;
   }
 
+  const CheckIcon = keepLogged ? CheckBox : CheckBoxOutlineBlank;
+
   return (
     <div className={styles.screen}>
       <div className={styles.splitScreen}>
@@ -191,31 +192,27 @@ export default function Page() {
               </div>
             </div>
             <div className={styles.checkboxContainer}>
-              <div
-                className={styles.checkboxLabel}
-                onClick={toggleKeepMeLoggedIn}
-              >
-                <FontAwesomeIcon
+              <div className={styles.checkboxLabel}>
+                <CheckIcon
                   className={styles.checkboxIcon}
-                  icon={keepLogged ? faSquareCheck : faSquare}
-                  size="lg"
+                  sx={{ width: "18px" }}
+                  onClick={toggleKeepMeLoggedIn}
                 />
-                Keep me logged in
+                <p>Keep me logged in</p>
               </div>
               <a
                 className={styles.forgotPassword}
                 href="/auth/account-recovery"
               >
-                Forget password?
+                Forgot password?
               </a>
             </div>
 
             {showGeneralError && (
               <div className={styles.generalError}>
-                <FontAwesomeIcon
+                <ErrorIcon
                   className={styles.errorIcon}
-                  icon={faExclamationCircle}
-                  size="sm"
+                  sx={{ width: "18px" }}
                 />
                 <p className={styles.errorMessage}>
                   Error: An internal server error has occurred. Please try again
