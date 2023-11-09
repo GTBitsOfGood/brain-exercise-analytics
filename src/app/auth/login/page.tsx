@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CheckBox,
   CheckBoxOutlineBlank,
@@ -17,6 +17,7 @@ import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
 import { HttpMethod, IUser } from "@/common_utils/types";
 
+import { setCookie, getCookie } from "cookies-next";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -28,6 +29,12 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (getCookie("authToken") !== undefined) {
+      console.log("Found token");
+    }
+  }, []);
 
   const resetErrors = () => {
     setEmailError("");
@@ -42,13 +49,16 @@ export default function Page() {
         throw new Error("Error signing in");
       }
 
-      await internalRequest<IUser>({
+      const userMongo = await internalRequest<IUser>({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
         body: {
           email: user.email,
         },
       });
+      if (keepLogged && userMongo) {
+        setCookie("authUser", userMongo, { maxAge: 7 * 24 * 60 * 60 });
+      }
 
       router.push("/auth/email-verification");
     } catch (error) {
