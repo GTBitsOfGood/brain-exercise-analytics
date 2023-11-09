@@ -103,7 +103,17 @@ export default function Page() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await googleSignIn();
+      const user = await googleSignIn();
+      if (!user) {
+        throw new Error("Error signing in");
+      }
+      await internalRequest({
+        url: "/api/volunteer/auth/login",
+        method: HttpMethod.GET,
+        body: {
+          email: user.email,
+        },
+      });
       router.push("/auth/redirect");
     } catch (error) {
       setShowGeneralError(true);

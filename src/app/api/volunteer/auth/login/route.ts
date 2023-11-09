@@ -16,7 +16,6 @@ export const GET = APIWrapper({
     if (!email) {
       throw new Error("Email parameter is missing in the request.");
     }
-
     let newUser = await getUserByEmail(email);
     if (newUser === null) {
       newUser = (await User.create({

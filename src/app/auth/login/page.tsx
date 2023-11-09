@@ -16,6 +16,8 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
+import { setCookie, getCookie, getCookies } from "cookies-next";
+import { IUser } from "@/common_utils/types";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -31,6 +33,9 @@ export default function Page() {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
+    if (getCookie("authToken") !== undefined) {
+      console.log("Found token");
+    }
   }, []);
 
   const resetErrors = () => {
@@ -57,14 +62,16 @@ export default function Page() {
     try {
       await emailSignIn(email, password);
       try {
-        await internalRequest({
+        const userMongo: IUser | undefined = await internalRequest({
           url: "/api/volunteer/auth/login",
           method: HttpMethod.GET,
           body: {
             email,
           },
         });
-
+        if (keepLogged && userMongo) {
+          setCookie("authUser", userMongo, { maxAge: 7 * 24 * 60 * 60 });
+        }
         router.push("/auth/redirect");
       } catch (error) {
         setShowGeneralError(true);
@@ -75,12 +82,12 @@ export default function Page() {
           case "auth/invalid-email":
           case "auth/user-not-found":
             setEmailError(
-              "Email address not found. Please try again or contact bei2023@gmail.com to retrieve it.",
+              "Email address not found. Please try again or contact bei2023@gmail.com to retrieve it."
             );
             break;
           case "auth/wrong-password":
             setPasswordError(
-              "Wrong password. Please try again or click Forgot Password to reset it.",
+              "Wrong password. Please try again or click Forgot Password to reset it."
             );
             break;
           default:
@@ -97,13 +104,16 @@ export default function Page() {
         throw new Error("Error signing in");
       }
 
-      await internalRequest({
+      const userMongo: IUser | undefined = await internalRequest({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
         body: {
           email: user.email,
         },
       });
+      if (keepLogged && userMongo) {
+        setCookie("authUser", userMongo, { maxAge: 7 * 24 * 60 * 60 });
+      }
       router.push("/auth/redirect");
     } catch (error) {
       setShowGeneralError(true);
@@ -138,8 +148,8 @@ export default function Page() {
               >
                 <img
                   className={styles.googleGLogo}
-                  alt="Google g logo"
-                  src="https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg"
+                  alt='Google g logo'
+                  src='https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg'
                 />
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>Sign in with Google
               </button>
@@ -147,21 +157,21 @@ export default function Page() {
             <div className={styles.separator}>
               <img
                 className={styles.line}
-                alt="Line"
-                src="https://c.animaapp.com/2gdwBOyI/img/line-17.svg"
+                alt='Line'
+                src='https://c.animaapp.com/2gdwBOyI/img/line-17.svg'
               />
               <div className={styles.textWrapper4}>or</div>
               <img
                 className={styles.line}
-                alt="Line"
-                src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
+                alt='Line'
+                src='https://c.animaapp.com/2gdwBOyI/img/line-18.svg'
               />
             </div>
             <div className={styles.inputFields}>
               <div className={styles.emailField}>
                 <InputField
-                  title="Email"
-                  placeholder="mail@simple.com"
+                  title='Email'
+                  placeholder='mail@simple.com'
                   required={true}
                   value={email}
                   onChange={(e) => {
@@ -175,10 +185,10 @@ export default function Page() {
               </div>
               <div className={styles.passwords}>
                 <InputField
-                  title="Password"
-                  type="password"
+                  title='Password'
+                  type='password'
                   required={true}
-                  placeholder="Min. 8 characters"
+                  placeholder='Min. 8 characters'
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -198,13 +208,13 @@ export default function Page() {
                 <FontAwesomeIcon
                   className={styles.checkboxIcon}
                   icon={keepLogged ? faSquareCheck : faSquare}
-                  size="lg"
+                  size='lg'
                 />
                 Keep me logged in
               </div>
               <a
                 className={styles.forgotPassword}
-                href="/auth/account-recovery"
+                href='/auth/account-recovery'
               >
                 Forget password?
               </a>
@@ -215,7 +225,7 @@ export default function Page() {
                 <FontAwesomeIcon
                   className={styles.errorIcon}
                   icon={faExclamationCircle}
-                  size="sm"
+                  size='sm'
                 />
                 <p className={styles.errorMessage}>
                   Error: An internal server error has occurred. Please try again
@@ -234,7 +244,7 @@ export default function Page() {
                 Don&apos;t have an Account?{" "}
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </div>
-              <a className={styles.signUpButton} href="/auth/signup">
+              <a className={styles.signUpButton} href='/auth/signup'>
                 Sign up now
               </a>
             </div>
