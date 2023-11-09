@@ -3,7 +3,7 @@ import {
   faCircleCheck,
   faCircleXmark,
   faCaretRight,
-  faPaperPlane
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GridColDef, GridRowDef } from "../types";
@@ -14,23 +14,46 @@ interface DataParams {
   rows: GridRowDef[];
 }
 
-function ExpandedRow({ row }: GridRowDef) {
+interface ExtendedDataParams extends DataParams {
+  initialState?: {
+    pagination: {
+      paginationModel: {
+        pageSize: number;
+      };
+    };
+  };
+  pageSizeOptions?: number[];
+}
+
+function ExpandedRow({ row }: { row: GridRowDef }) {
   return (
     <tr>
       <td colSpan={8} className={styles.ExpandedRow}>
         <div className={styles.ExpandedRowContainer}>
-            <div className={styles.ExpandedRowColumn}>
-                <div>Patient Additional Information</div>
-                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Date of Joined&nbsp;  {row.dateStart}</div>
-
-                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Additional Affiliation&nbsp;  </div>
+          <div className={styles.ExpandedRowColumn}>
+            <div>Patient Additional Information</div>
+            <div>
+              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Date of
+              Joined</strong>&nbsp; {row.dateStart}
             </div>
 
-            <div className={styles.ExpandedRowColumn}>
-                <div>Secondary Contact Person</div>
-                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Name&nbsp;  {row.secondContactName}</div>
-                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Contact&nbsp;  {row.secondContactPhone}</div>
+            <div>
+              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Additional
+              Affiliation</strong>&nbsp;{" "}
             </div>
+          </div>
+
+          <div className={styles.ExpandedRowColumn}>
+            <div>Secondary Contact Person</div>
+            <div>
+              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Name</strong>&nbsp;{" "}
+              {row.secondContactName}
+            </div>
+            <div>
+              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Contact</strong>&nbsp;{" "}
+              {row.secondContactPhone}
+            </div>
+          </div>
         </div>
       </td>
     </tr>
@@ -86,7 +109,7 @@ function Row({ row }: { row: GridRowDef }) {
   );
 }
 
-export default function DataGrid({ columns, rows }: DataParams) {
+export default function DataGrid({ columns, rows }: ExtendedDataParams) {
   return (
     <div className={styles.DataGrid}>
       <table className={styles.Table} style={{ width: "calc(100% - 15px)" }}>

@@ -8,7 +8,7 @@
   height: 100%;
   overflow: scroll;
   scrollbar-width: none;
-  color: #2B3674;
+  color: #2b3674;
 }
 .RowCellContainer::-webkit-scrollbar {
   display: none;
@@ -52,25 +52,25 @@
 .ExpandedRow {
   width: 100%;
   border-radius: 5px;
-  background-color: var(--Selected-Blue,  #e7eeff);
+  background-color: var(--Selected-Blue, #e7eeff);
   padding: 9px 27px;
   box-sizing: border-box;
-  position: relative; 
-  overflow: hidden; 
+  position: relative;
+  overflow: hidden;
 }
 
 .ExpandedRowContainer {
   display: flex;
-  justify-content: space-between; 
-  width: 100%; 
+  justify-content: space-between;
+  width: 100%;
 }
 
 .ExpandedRowColumn {
   display: flex;
-  color: #2B3674;
+  color: #2b3674;
   font-size: 14px;
   flex-direction: column;
-  width: calc(50% - 10px); 
+  margin-right: 20%;
 }
 
 .ExpandedRowColumn > div:first-child {
@@ -79,13 +79,8 @@
 }
 
 .ExpandedRowColumn > div {
-  margin-bottom: 4px; 
+  margin-bottom: 4px;
 }
-
-
-
-
-
 
 .Table {
   table-layout: fixed;

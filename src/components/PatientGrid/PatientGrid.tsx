@@ -68,11 +68,11 @@ export default function PatientGrid(params: DataParams) {
             dateOfBirth: v.patientDetails.birthdate,
             status: v.status,
             email: v.email,
-            chapter: v.ch,
+            chapter: v.chapter,
             location: v.location,
             dateStart: v.startDate,
             secondContactName: v.patientDetails.secondaryContactName,
-            secondContactPhone: v.patientDetails.secondaryContactPhone
+            secondContactPhone: v.patientDetails.secondaryContactPhone,
           }) as GridRowDef,
       ),
     );
@@ -89,8 +89,6 @@ export default function PatientGrid(params: DataParams) {
         },
       }}
       pageSizeOptions={[5]}
-      checkboxSelection
-      disableRowSelectionOnClick
     />
   );
 }
