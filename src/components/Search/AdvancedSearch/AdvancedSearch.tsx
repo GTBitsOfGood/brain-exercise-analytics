@@ -1,22 +1,26 @@
 import React, { useState, useEffect, createRef, RefObject } from "react";
-import Switch from "react-switch";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
-import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
+import { Dropdown, IDropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
-import { CalendarInput } from "./CalendarInput";
 import "react-calendar/dist/Calendar.css";
+import { CalendarInput } from "./CalendarInput";
+import Switch from "react-switch";
 
 interface SelectDropdownProps {
   title: string;
-  dropdownprops: DropdownProps<string>;
+  dropdownprops: IDropdownProps;
   style?: object;
+  labelMinWidth: string;
+  answerMinWidth: string;
 }
 
 const SelectDropdown = ({
   title,
   dropdownprops,
   style = {},
+  labelMinWidth,
+  answerMinWidth,
 }: SelectDropdownProps) => {
   return (
     <div
@@ -25,9 +29,18 @@ const SelectDropdown = ({
         ...style,
       }}
     >
-      <div className={styles.label}>{title}</div>
-      <div className={styles.answer}>
-        <Dropdown {...dropdownprops} />
+      <div className={styles.label} style={{ minWidth: labelMinWidth }}>
+        {title}
+      </div>
+      <div
+        className={styles.select_dropdown_answer}
+        style={{ minWidth: answerMinWidth }}
+      >
+        <Dropdown
+          {...dropdownprops}
+          inputBoxHeight={"28px"}
+          style={{ borderRadius: 0, borderWidth: 0 }}
+        />
       </div>
     </div>
   );
@@ -72,41 +85,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [showJoinDateCalendar, setShowJoinDateCalendar] = useState(false);
   const [secondPhoneNumber, setSecondPhoneNumber] = useState("");
   const [secondName, setSecondName] = useState("");
-  const [dobCalendarX, setDOBCalendarX] = useState<number>(0);
-  const [dobCalendarY, setDOBCalendarY] = useState<number>(0);
-  const [joinDateCalendarX, setJoinDateCalendarX] = useState<number>(0);
-  const [joinDateCalendarY, setJoinDateCalendarY] = useState<number>(0);
-  const dobIconRef: RefObject<HTMLDivElement> = createRef();
-  const joinIconRef: RefObject<HTMLDivElement> = createRef();
-
-  useEffect(() => {
-    const onScroll = () => {
-      setShowDOBCalendar(false);
-      setShowJoinDateCalendar(false);
-    };
-
-    window.removeEventListener("scroll", onScroll);
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    if (dobIconRef.current) {
-      const dobIconRect: Element = dobIconRef.current;
-      const newTop = dobIconRect.getBoundingClientRect().y + 30;
-      setDOBCalendarY(newTop);
-      const left = dobIconRect.getBoundingClientRect().x;
-      setDOBCalendarX(left);
-    }
-
-    if (joinIconRef.current) {
-      const joinIconRect: Element | undefined = joinIconRef.current;
-      let joinIconY = 0;
-      if (joinIconRect) {
-        joinIconY = joinIconRect.getBoundingClientRect().y;
-      }
-      setJoinDateCalendarY(joinIconY);
-      const joinIconLeft = joinIconRect.getBoundingClientRect().x;
-      setJoinDateCalendarX(joinIconLeft);
-    }
-  }, []);
 
   const reset = () => {
     setCountry("");
@@ -190,7 +168,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       className={styles.body}
       style={{
         backgroundColor: "#E7EEFF",
-        padding: 40,
+        paddingTop: "22px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        paddingBottom: "22px",
         borderRadius: 20,
       }}
     >
@@ -244,22 +225,23 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           Apply
         </div>
       </div>
-      <div className={styles.cities_row}>
+      {/* entire flexbox */}
+      <div className={styles.all_questions}>
         <SelectDropdown
           title="Country"
           dropdownprops={{
             required: false,
             placeholder: "input",
             options: COUNTRIES,
-            value: country,
-            onChange: (e) => {
-              setCountry(e.target.value);
+            onChange: (e: React.MouseEvent<HTMLLIElement>) => {
+              setCountry(e.currentTarget.innerText);
               setState("");
               setCity("");
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="183px"
         />
         <SelectDropdown
           title="State"
@@ -268,13 +250,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: STATES,
             value: state,
-            onChange: (e) => {
-              setState(e.target.value);
+            onChange: (e: React.MouseEvent<HTMLLIElement>) => {
+              setState(e.currentTarget.innerText);
               setCity("");
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="183px"
         />
         <SelectDropdown
           title="City"
@@ -283,12 +266,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: CITIES,
             value: city,
-            onChange: (e) => {
-              setCity(e.target.value);
+            onChange: (e: React.MouseEvent<HTMLLIElement>) => {
+              setCity(e.currentTarget.innerText);
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="183px"
         />
         <SelectDropdown
           title="BEI Chapter"
@@ -297,59 +281,56 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: CHAPTERS,
             value: beiChapter,
-            onChange: (e) => {
-              setBeiChapter(e.target.value);
+            onChange: (e: React.MouseEvent<HTMLLIElement>) => {
+              setBeiChapter(e.currentTarget.innerText);
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="258px"
         />
-      </div>
-      <div className={styles.row_two}>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
           <CalendarInput
-            iconRef={dobIconRef}
             showCalendar={showDOBCalendar}
             calendarValue={dateOfBirth}
             setShowCalendar={setShowDOBCalendar}
             setCalendarValue={setDateOfBirth}
-            calendarX={dobCalendarX}
-            calendarY={dobCalendarY}
           />
         </div>
         <div className={styles.question_box}>
-          <div className={styles.label}>Email Address</div>
+          <div className={styles.label} style={{ minWidth: "134px" }}>
+            Email Address
+          </div>
           <input
             type="email"
             className={styles.answer}
             value={email}
             placeholder="***@****.***"
             onChange={(e) => setEmail(e.target.value)}
+            style={{ minWidth: "192px" }}
           />
         </div>
         <div className={styles.question_box}>
-          <div className={styles.label}>Additional Affiliation</div>
+          <div className={styles.label} style={{ minWidth: "192px" }}>
+            Additional Affiliation
+          </div>
           <input
             className={styles.answer}
             placeholder="input"
             maxLength={140}
             onChange={(e) => setAdditionalAffliction(e.target.value)}
             value={additionalAffliction}
+            style={{ minWidth: "346px" }}
           />
         </div>
-      </div>
-      <div className={styles.row_three}>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
           <CalendarInput
-            iconRef={joinIconRef}
             showCalendar={showJoinDateCalendar}
             calendarValue={joinDate}
             setShowCalendar={setShowJoinDateCalendar}
             setCalendarValue={setJoinDate}
-            calendarX={joinDateCalendarX}
-            calendarY={joinDateCalendarY}
           />
         </div>
 
@@ -359,7 +340,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               Secondary Contact Person Information
             </div>
             <div className={styles.question_box}>
-              <div className={styles.label} style={{ whiteSpace: "nowrap" }}>
+              <div
+                className={styles.label}
+                style={{ whiteSpace: "nowrap", minWidth: "154px" }}
+              >
                 First and Last Name
               </div>
               <input
@@ -368,6 +352,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 placeholder="Anna White"
                 value={secondName}
                 onChange={(e) => setSecondName(e.target.value)}
+                style={{ minWidth: "305px" }}
               />
             </div>
           </div>
@@ -379,13 +364,17 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               Secondary Contact Person Information
             </div>
             <div className={styles.question_box}>
-              <div className={styles.label}>Phone Number</div>
+              <div className={styles.label} style={{ minWidth: "305px" }}>
+                Phone Number
+              </div>
               <input
                 className={styles.answer}
                 required={false}
+                type="number"
                 placeholder="***-***-****"
                 value={secondPhoneNumber}
                 onChange={(e) => setSecondPhoneNumber(e.target.value)}
+                style={{ minWidth: "359px" }}
               />
             </div>
           </div>

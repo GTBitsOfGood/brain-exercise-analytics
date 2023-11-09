@@ -1,75 +1,99 @@
-import React, { RefObject } from "react";
+import React, { RefObject, createRef, useEffect, Ref } from "react";
 import Calendar from "react-calendar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import styles from "./AdvancedSearch.module.css";
 
 interface CalendarInputProp {
-  iconRef: RefObject<HTMLDivElement>;
   showCalendar: boolean;
   calendarValue: string;
   setShowCalendar: (showCalendar: boolean) => void;
   setCalendarValue: (value: string) => void;
-  calendarX: number;
-  calendarY: number;
 }
 
 export const CalendarInput = ({
-  iconRef,
   showCalendar,
   calendarValue = "",
   setShowCalendar,
   setCalendarValue,
-  calendarX,
-  calendarY,
 }: CalendarInputProp) => {
+  const calendarPopupRef: RefObject<HTMLDivElement> = createRef();
+  const iconRef: Ref<SVGSVGElement> = createRef();
+
+  useEffect(() => {
+    const onClickOutside = (event: MouseEvent) => {
+      if (showCalendar && !iconRef.current?.contains(event.target as Node)) {
+        if (
+          calendarPopupRef.current &&
+          event.target instanceof Node &&
+          calendarPopupRef.current.contains(event.target)
+        ) {
+          event.stopPropagation();
+          return;
+        }
+
+        setShowCalendar(false);
+      }
+    };
+
+    const toggleCalendar = (event: MouseEvent) => {
+      setShowCalendar(!showCalendar);
+      event.stopPropagation();
+    };
+
+    const iconRefCopy = iconRef.current;
+    iconRef.current?.addEventListener("click", toggleCalendar);
+    document.addEventListener("click", onClickOutside);
+
+    return () => {
+      iconRefCopy?.removeEventListener("click", toggleCalendar);
+      document.removeEventListener("click", onClickOutside);
+    };
+  }, [showCalendar]);
+
   return (
     <div
-      className={styles.answer}
-      style={{
-        display: "flex",
-        backgroundColor: "white",
-        verticalAlign: "middle",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 0,
-        paddingBottom: 0,
+      className={[styles.answer, styles.calendarContainer].join(" ")}
+      onClick={() => {
+        setShowCalendar(!showCalendar);
       }}
-      onClick={() => setShowCalendar(!showCalendar)}
-      ref={iconRef} //eslint-disable-line
     >
       {calendarValue === "" && "MM/DD/YYYY"}
       {calendarValue !== "" && calendarValue}
-      <FontAwesomeIcon
-        icon={faCalendarAlt}
-        style={{ cursor: "pointer", float: "right" }}
-      />
-      {showCalendar && (
+      <div>
+        <FontAwesomeIcon
+          ref={iconRef}
+          icon={faCalendarAlt}
+          style={{ cursor: "pointer", float: "right" }}
+        />
         <div
+          className={styles.calendar}
           style={{
-            position: "fixed",
-            top: `${calendarY}px`,
-            left: `${calendarX}px`,
+            position: "absolute",
             zIndex: 50,
+            display: showCalendar ? "block" : "none",
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
-          <Calendar
-            onChange={(value) => {
-              if (!value) {
-                return;
-              }
-              const date = new Date(value.toString());
-              setCalendarValue(
-                `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
-              );
-              setShowCalendar(false);
-            }}
-          />
+          <div ref={calendarPopupRef}>
+            <Calendar
+              onChange={(value, event) => {
+                event.stopPropagation();
+                if (!value) {
+                  return;
+                }
+                const date = new Date(value.toString());
+                setCalendarValue(
+                  `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
+                );
+                setShowCalendar(false);
+              }}
+            />
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

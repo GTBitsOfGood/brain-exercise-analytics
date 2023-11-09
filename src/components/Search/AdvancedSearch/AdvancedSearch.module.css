@@ -10,17 +10,16 @@
   color: #888888;
 }
 
-.button_row,
-.cities_row,
-.row_two,
-.row_three {
+.button_row {
   margin-bottom: 20px;
   display: flex;
   gap: 40px;
 }
 
-.row_three {
-  margin-top: 40px;
+.all_questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 38px;
 }
 
 .question_box {
@@ -29,12 +28,21 @@
 }
 
 .label {
-  vertical-align: "middle";
-  margin: auto;
   display: inline-block;
+  text-align: left;
+  margin-top: auto;
+  vertical-align: middle;
   background-color: #fafafa;
   padding: 5px;
+  padding-left: 17px;
+  padding-right: 12px;
   flex: 1;
+  border: 1px solid #d9d9d9;
+}
+
+.select_dropdown_answer {
+  flex: 1;
+  display: inline-block;
   border: 1px solid #d9d9d9;
 }
 
@@ -46,5 +54,18 @@
 
 .secondInfoTitle {
   font-size: 12px;
+  text-align: left;
   margin-top: -20px;
+}
+
+.calendarContainer {
+  display: flex;
+  background-color: white;
+  vertical-align: middle;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }

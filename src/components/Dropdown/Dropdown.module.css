@@ -1,14 +1,9 @@
 .container {
-  display: flex;
-  flex-direction: column;
+  background-color: white;
+  border-radius: 16px;
 }
 
-.label-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.input-label {
+.question {
   color: #2b3674;
   font-size: 13px;
   font-family: var(--font-poppins);
@@ -17,88 +12,76 @@
   word-wrap: break-word;
 }
 
-.asterisk {
-  color: #005aa3;
-  font-size: 13px;
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  line-height: 14px;
-  word-wrap: break-word;
-}
-
-.input-container {
-  padding-top: 8px;
-  position: relative;
-}
-
-.input-field {
+.shownInput {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 10px;
   color: #000000;
-  width: 100%;
   background-color: transparent;
   font-size: 12px;
   font-family: var(--font-poppins);
   font-weight: 500;
-  line-height: 35px;
   word-wrap: break-word;
   resize: none;
-  height: 40px;
-  border-radius: 16px;
+  /* height: 40px; */
   border: 1px #e0e5f2 solid;
   padding-left: 17px;
   padding-right: 17px;
 }
 
-.input-field::placeholder {
-  color: #a3aed0;
-}
-.input-field option:disabled {
-  color: #a3aed0;
+.show_drop_down {
+  border: 2px #005aa3 solid;
+  /* border-radius: 20px; */
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
-.input-field-error {
-  color: #000000;
+.input_container {
+  position: relative;
   width: 100%;
-  background-color: #f300001a;
-  font-size: 12px;
-  font-family: var(--font-poppins);
-  font-weight: 400;
-  line-height: 35px;
-  word-wrap: break-word;
-  resize: none;
-  height: 40px;
-  border-radius: 16px;
-  border: 1.5px #f30000 solid;
-  padding-left: 17px;
-  padding-right: 17px;
-  outline: none;
 }
 
-.input-field-error::placeholder {
-  color: #a3aed0;
-}
-
-.eye-icon {
+.option_list_div {
+  background-color: white;
   position: absolute;
-  top: 33%;
-  right: 17px;
+  width: 100%;
+  z-index: 99;
+  max-height: 300px;
+  overflow-y: scroll;
   cursor: pointer;
-  color: #a3aed0;
+  /* border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.error-container {
-  display: flex;
-  flex-direction: row;
-  padding-top: 10px;
+.option_item {
+  padding: 10px;
 }
 
-.error-icon {
+.option_item:hover {
+  color: white;
+  background-color: blue;
+}
+
+.errorBlock {
+  width: 100%;
   color: #ff0000;
+  font-size: 14px;
 }
 
-.error-message {
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  color: #ff0000;
-  padding-left: 5px;
-  font-size: 10px;
+.error_input_box {
+  border-color: #ff0000;
+  border-width: 2px;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.non_select_option {
+  padding: 10px;
+  background-color: gray;
+  cursor: default;
+}
+
+.non_select_option:hover {
+  background-color: gray;
 }
