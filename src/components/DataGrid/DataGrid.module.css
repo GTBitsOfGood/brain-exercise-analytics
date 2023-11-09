@@ -14,6 +14,13 @@
   display: none;
 }
 
+.ChapterCellContainer {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
 .DataGrid {
   width: 1353px;
   height: 638.37px;
@@ -63,6 +70,13 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--Selected-Blue, #e7eeff);
+
+  padding: 9px 27px;
 }
 
 .ExpandedRowColumn {
@@ -82,6 +96,26 @@
   margin-bottom: 4px;
 }
 
+.Header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.Detail {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.Label {
+  font-weight: bold;
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.Content {
+  flex-grow: 1;
+  text-align: left;
+}
 .Table {
   table-layout: fixed;
   width: "100%";

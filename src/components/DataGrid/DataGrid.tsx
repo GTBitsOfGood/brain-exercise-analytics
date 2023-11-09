@@ -28,30 +28,40 @@ interface ExtendedDataParams extends DataParams {
 function ExpandedRow({ row }: { row: GridRowDef }) {
   return (
     <tr>
-      <td colSpan={8} className={styles.ExpandedRow}>
+      <td colSpan={8}>
         <div className={styles.ExpandedRowContainer}>
           <div className={styles.ExpandedRowColumn}>
-            <div>Patient Additional Information</div>
-            <div>
-              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Date of
-              Joined</strong>&nbsp; {row.dateStart}
+            <div className={styles.Header}>
+              Patient&apos;s Additional Information
             </div>
-
-            <div>
-              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Additional
-              Affiliation</strong>&nbsp;{" "}
+            <div className={styles.Detail}>
+              <span className={styles.Label}>
+                <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Date of Joined
+              </span>
+              <span className={styles.Content}>{row.dateStart}</span>
+            </div>
+            <div className={styles.Detail}>
+              <span className={styles.Label}>
+                <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Additional
+                Affiliation
+              </span>
+              <span className={styles.Content}>{row.chapter}</span>
             </div>
           </div>
 
           <div className={styles.ExpandedRowColumn}>
-            <div>Secondary Contact Person</div>
-            <div>
-              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Name</strong>&nbsp;{" "}
-              {row.secondContactName}
+            <div className={styles.Header}>Secondary Contact Person</div>
+            <div className={styles.Detail}>
+              <span className={styles.Label}>
+                <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Name
+              </span>
+              <span className={styles.Content}>{row.secondContactName}</span>
             </div>
-            <div>
-              <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; <strong>Contact</strong>&nbsp;{" "}
-              {row.secondContactPhone}
+            <div className={styles.Detail}>
+              <span className={styles.Label}>
+                <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Contact
+              </span>
+              <span className={styles.Content}>{row.secondContactPhone}</span>
             </div>
           </div>
         </div>
@@ -97,9 +107,12 @@ function Row({ row }: { row: GridRowDef }) {
           <div className={styles.RowCellContainer}>{row.email}</div>
         </td>
         <td className={styles.RowCell}>
-          <div className={styles.RowCellContainer}>{row.chapter}</div>
+          <div
+            className={`${styles.RowCellContainer} ${styles.ChapterCellContainer}`}
+          >
+            {row.chapter}
+          </div>
         </td>
-
         <td className={styles.RowCell}>
           <div className={styles.RowCellContainer}>{row.location.country}</div>
         </td>
