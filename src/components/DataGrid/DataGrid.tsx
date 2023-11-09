@@ -3,12 +3,11 @@ import {
   faCircleCheck,
   faCircleXmark,
   faCaretRight,
+  faPaperPlane
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Typography } from "@mui/material";
 import { GridColDef, GridRowDef } from "../types";
 import styles from "./DataGrid.module.css";
-import { style } from "d3";
 
 interface DataParams {
   columns: GridColDef[];
@@ -19,10 +18,19 @@ function ExpandedRow({ row }: GridRowDef) {
   return (
     <tr>
       <td colSpan={8} className={styles.ExpandedRow}>
-        <div>
-          <Typography>Patient&apos;s Additional Information</Typography>
-          <Typography>Date of Joined</Typography>
-          <Typography>Additional Affiliation</Typography>
+        <div className={styles.ExpandedRowContainer}>
+            <div className={styles.ExpandedRowColumn}>
+                <div>Patient Additional Information</div>
+                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Date of Joined&nbsp;  {row.dateStart}</div>
+
+                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Additional Affiliation&nbsp;  </div>
+            </div>
+
+            <div className={styles.ExpandedRowColumn}>
+                <div>Secondary Contact Person</div>
+                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Name&nbsp;  {row.secondContactName}</div>
+                <div><FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Contact&nbsp;  {row.secondContactPhone}</div>
+            </div>
         </div>
       </td>
     </tr>

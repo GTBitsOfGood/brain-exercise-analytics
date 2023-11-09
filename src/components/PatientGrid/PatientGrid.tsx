@@ -70,6 +70,9 @@ export default function PatientGrid(params: DataParams) {
             email: v.email,
             chapter: v.ch,
             location: v.location,
+            dateStart: v.startDate,
+            secondContactName: v.patientDetails.secondaryContactName,
+            secondContactPhone: v.patientDetails.secondaryContactPhone
           }) as GridRowDef,
       ),
     );
