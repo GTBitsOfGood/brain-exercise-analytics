@@ -3,50 +3,36 @@
 import React, { useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Poppins } from "next/font/google";
 import styles from "./Search.module.css";
 import Tag from "./Tag/Tag";
+import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
 
-const poppins = Poppins({
-  subsets: ["latin-ext"],
-  variable: "--font-poppins",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
+// interface InputParamsProps {}
 
-interface InputParamsProps {
-  setShowAdvancedSearch: (showAdvancedSearch: boolean) => void;
-  showAdvancedSearch: boolean;
-  country: Set<string>;
-  setCountry: (country: Set<string>) => void;
-  state: Set<string>;
-  setState: (state: Set<string>) => void;
-  city: Set<string>;
-  setCity: (city: Set<string>) => void;
-  active: boolean;
-  setActive: (active: boolean) => void;
-  dateOfBirth: Set<string>;
-  setDateOfBirth: (dob: Set<string>) => void;
-  email: Set<string>;
-  setEmail: (email: Set<string>) => void;
-  joinDate: Set<string>;
-  setJoinDate: (joinDate: Set<string>) => void;
-  beiChapter: Set<string>;
-  setBEIChapter: (chapter: Set<string>) => void;
-  secondPhoneNumber: Set<string>;
-  setSecondPhoneNumber: (phoneNumber: Set<string>) => void;
-  additionalAffiliation: Set<string>;
-  setAdditionalAffiliation: (words: Set<string>) => void;
-  secondName: Set<string>;
-  setSecondName: (name: Set<string>) => void;
-}
-
-const Search = (InputParamsProps: InputParamsProps) => {
+export default function Search() {
   const [searchInput, setSearchInput] = useState("");
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
+
+  const [actives, setActives] = useState(new Set<boolean>());
+  const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
+  const [states, setStates] = useState(new Set<string>());
+  const [cities, setCities] = useState(new Set<string>());
+  const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
+  const [emails, setEmails] = useState(new Set<string>());
+  const [additionalAffiliations, setAdditionalAffiliations] = useState(
+    new Set<string>(),
+  );
+  const [joinDates, setJoinDates] = useState(new Set<string>());
+  const [beiChapters, setBeiChapters] = useState(new Set<string>());
+  const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
+    new Set<string>(),
+  );
+  const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
   return (
-    <div className={styles.container}>
-      <div className={styles.border}>
-        <main className={poppins.variable}>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <div className={styles.border}>
           <div className={styles["search-no-tags"]}>
             <div className={styles["search-container"]}>
               <input
@@ -63,128 +49,142 @@ const Search = (InputParamsProps: InputParamsProps) => {
             />
             <span
               className={styles["advanced-filter"]}
-              onClick={() =>
-                InputParamsProps.setShowAdvancedSearch(
-                  !InputParamsProps.showAdvancedSearch,
-                )
-              }
+              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
             >
               Advanced Filter
             </span>
           </div>
           <div className={styles.tags}>
-            {InputParamsProps.country.size > 0 &&
-              Array.from(InputParamsProps.country).map((country, index) => (
+            {countries.size > 0 &&
+              Array.from(countries).map((country) => (
                 <Tag
-                  key={index}
+                  key={`country-${country}`}
                   title="Country"
                   value={country}
-                  list={InputParamsProps.country}
-                  setList={InputParamsProps.setCountry}
+                  list={countries}
+                  setList={setCountries}
                 />
               ))}
-            {InputParamsProps.state.size > 0 &&
-              Array.from(InputParamsProps.state).map((state, index) => (
+            {states.size > 0 &&
+              Array.from(states).map((state) => (
                 <Tag
-                  key={index}
+                  key={`state-${state}`}
                   title="State"
                   value={state}
-                  list={InputParamsProps.state}
-                  setList={InputParamsProps.setState}
+                  list={states}
+                  setList={setStates}
                 />
               ))}
-            {InputParamsProps.city.size > 0 &&
-              Array.from(InputParamsProps.city).map((city, index) => (
+            {cities.size > 0 &&
+              Array.from(cities).map((city) => (
                 <Tag
-                  key={index}
+                  key={`city-${city}`}
                   title="City"
                   value={city}
-                  list={InputParamsProps.city}
-                  setList={InputParamsProps.setCity}
+                  list={cities}
+                  setList={setCities}
                 />
               ))}
-            {InputParamsProps.active && (
-              <Tag title="Status" value={InputParamsProps.active} />
-            )}
-            {InputParamsProps.dateOfBirth.size > 0 &&
-              Array.from(InputParamsProps.dateOfBirth).map((dob, index) => (
+            {actives.size > 0 &&
+              Array.from(actives).map((active) => (
                 <Tag
-                  key={index}
+                  key={`active-${active}`}
+                  title="Status"
+                  value={active}
+                  list={actives}
+                  setList={setActives}
+                />
+              ))}
+            {dateOfBirths.size > 0 &&
+              Array.from(dateOfBirths).map((dob) => (
+                <Tag
+                  key={`dob-${dob}`}
                   title="Date of Birth"
                   value={dob}
-                  list={InputParamsProps.dateOfBirth}
-                  setList={InputParamsProps.setDateOfBirth}
+                  list={dateOfBirths}
+                  setList={setDateOfBirths}
                 />
               ))}
-            {InputParamsProps.email.size > 0 &&
-              Array.from(InputParamsProps.email).map((email, index) => (
+            {emails.size > 0 &&
+              Array.from(emails).map((email) => (
                 <Tag
-                  key={index}
+                  key={`email-${email}`}
                   title="Email"
                   value={email}
-                  list={InputParamsProps.email}
-                  setList={InputParamsProps.setEmail}
+                  list={emails}
+                  setList={setEmails}
                 />
               ))}
-            {InputParamsProps.joinDate.size > 0 &&
-              Array.from(InputParamsProps.joinDate).map((joinDate, index) => (
+            {joinDates.size > 0 &&
+              Array.from(joinDates).map((joinDate) => (
                 <Tag
-                  key={index}
+                  key={`join-date-${joinDate}`}
                   title="Join Date"
                   value={joinDate}
-                  list={InputParamsProps.joinDate}
-                  setList={InputParamsProps.setJoinDate}
+                  list={joinDates}
+                  setList={setJoinDates}
                 />
               ))}
-            {InputParamsProps.beiChapter.size > 0 &&
-              Array.from(InputParamsProps.beiChapter).map((chapter, index) => (
+            {beiChapters.size > 0 &&
+              Array.from(beiChapters).map((chapter) => (
                 <Tag
-                  key={index}
+                  key={`bei-chapter-${chapter}`}
                   title="BEI Chapter"
                   value={chapter}
-                  list={InputParamsProps.beiChapter}
-                  setList={InputParamsProps.setBEIChapter}
+                  list={beiChapters}
+                  setList={setBeiChapters}
                 />
               ))}
-            {InputParamsProps.secondPhoneNumber.size > 0 &&
-              Array.from(InputParamsProps.secondPhoneNumber).map(
-                (phoneNumber, index) => (
-                  <Tag
-                    key={index}
-                    title="Second Phone Number"
-                    value={phoneNumber}
-                    list={InputParamsProps.secondPhoneNumber}
-                    setList={InputParamsProps.setSecondPhoneNumber}
-                  />
-                ),
-              )}
-            {InputParamsProps.additionalAffiliation.size > 0 &&
-              Array.from(InputParamsProps.additionalAffiliation).map(
-                (words, index) => (
-                  <Tag
-                    key={index}
-                    title="Additional Affiliation"
-                    value={words}
-                    list={InputParamsProps.additionalAffiliation}
-                    setList={InputParamsProps.setAdditionalAffiliation}
-                  />
-                ),
-              )}
-            {InputParamsProps.secondName.size > 0 &&
-              Array.from(InputParamsProps.secondName).map((name, index) => (
+            {secondaryPhoneNumbers.size > 0 &&
+              Array.from(secondaryPhoneNumbers).map((secondaryPhoneNumber) => (
                 <Tag
-                  key={index}
-                  title="Second Name"
-                  value={name}
-                  list={InputParamsProps.secondName}
-                  setList={InputParamsProps.setSecondName}
+                  key={`phone-number-${secondaryPhoneNumber}`}
+                  title="Secondary Phone Number"
+                  value={secondaryPhoneNumber}
+                  list={secondaryPhoneNumbers}
+                  setList={setSecondaryPhoneNumbers}
+                />
+              ))}
+            {additionalAffiliations.size > 0 &&
+              Array.from(additionalAffiliations).map(
+                (additionalAffiliation) => (
+                  <Tag
+                    key={`additional-affiliation-${additionalAffiliation}`}
+                    title="Additional Affiliation"
+                    value={additionalAffiliation}
+                    list={additionalAffiliations}
+                    setList={setAdditionalAffiliations}
+                  />
+                ),
+              )}
+            {secondaryNames.size > 0 &&
+              Array.from(secondaryNames).map((secondaryName) => (
+                <Tag
+                  key={`secondary-name-${secondaryName}`}
+                  title="Secondary Name"
+                  value={secondaryName}
+                  list={secondaryNames}
+                  setList={setSecondaryNames}
                 />
               ))}
           </div>
-        </main>
+        </div>
       </div>
+      {showAdvancedSearch && (
+        <AdvancedSearch
+          setActives={setActives}
+          setCountries={setCountries}
+          setStates={setStates}
+          setCities={setCities}
+          setDateOfBirths={setDateOfBirths}
+          setEmails={setEmails}
+          setAdditionalAffiliations={setAdditionalAffiliations}
+          setJoinDates={setJoinDates}
+          setBeiChapters={setBeiChapters}
+          setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
+          setSecondaryNames={setSecondaryNames}
+        />
+      )}
     </div>
   );
-};
-
-export default Search;
+}

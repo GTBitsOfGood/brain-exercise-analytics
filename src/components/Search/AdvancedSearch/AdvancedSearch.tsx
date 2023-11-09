@@ -1,4 +1,12 @@
-import React, { useState, useEffect, createRef, RefObject } from "react";
+import React, {
+  useState,
+  useEffect,
+  createRef,
+  RefObject,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from "react";
 import Switch from "react-switch";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
@@ -34,28 +42,17 @@ const SelectDropdown = ({
 };
 
 interface UpdateParamProp {
-  country: Set<string>;
-  setCountry: (country: Set<string>) => void;
-  state: Set<string>;
-  setState: (state: Set<string>) => void;
-  city: Set<string>;
-  setCity: (city: Set<string>) => void;
-  active: boolean;
-  setActive: (active: boolean) => void;
-  dateOfBirth: Set<string>;
-  setDateOfBirth: (dob: Set<string>) => void;
-  email: Set<string>;
-  setEmail: (email: Set<string>) => void;
-  joinDate: Set<string>;
-  setJoinDate: (joinDate: Set<string>) => void;
-  beiChapter: Set<string>;
-  setBEIChapter: (chapter: Set<string>) => void;
-  secondPhoneNumber: Set<string>;
-  setSecondPhoneNumber: (phoneNumber: Set<string>) => void;
-  additionalAffiliation: Set<string>;
-  setAdditionalAffiliation: (words: Set<string>) => void;
-  secondName: Set<string>;
-  setSecondName: (name: Set<string>) => void;
+  setCountries: Dispatch<SetStateAction<Set<string>>>;
+  setStates: Dispatch<SetStateAction<Set<string>>>;
+  setCities: Dispatch<SetStateAction<Set<string>>>;
+  setActives: Dispatch<SetStateAction<Set<boolean>>>;
+  setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
+  setEmails: Dispatch<SetStateAction<Set<string>>>;
+  setJoinDates: Dispatch<SetStateAction<Set<string>>>;
+  setBeiChapters: Dispatch<SetStateAction<Set<string>>>;
+  setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
+  setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
+  setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
@@ -65,13 +62,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [active, setActive] = useState(true);
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [email, setEmail] = useState("");
-  const [additionalAffliction, setAdditionalAffliction] = useState("");
+  const [additionalAffiliation, setAdditionalAffiliation] = useState("");
   const [joinDate, setJoinDate] = useState("");
   const [beiChapter, setBeiChapter] = useState("");
   const [showDOBCalendar, setShowDOBCalendar] = useState(false);
   const [showJoinDateCalendar, setShowJoinDateCalendar] = useState(false);
-  const [secondPhoneNumber, setSecondPhoneNumber] = useState("");
-  const [secondName, setSecondName] = useState("");
+  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
+  const [secondaryName, setSecondaryName] = useState("");
   const [dobCalendarX, setDOBCalendarX] = useState<number>(0);
   const [dobCalendarY, setDOBCalendarY] = useState<number>(0);
   const [joinDateCalendarX, setJoinDateCalendarX] = useState<number>(0);
@@ -106,60 +103,46 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       const joinIconLeft = joinIconRect.getBoundingClientRect().x;
       setJoinDateCalendarX(joinIconLeft);
     }
-  }, []);
+  }, [dobIconRef, joinIconRef]);
+
+  const checkAndUpdateList = useCallback(
+    <T,>(element: T, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
+      setUpdater((set) => {
+        if (element !== "" && !set.has(element)) {
+          const newSet = new Set<T>(set);
+          return newSet.add(element);
+        }
+        return set;
+      });
+    },
+    [],
+  );
 
   const reset = () => {
     setCountry("");
     setState("");
     setCity("");
-    setActive(true);
+    setActive(false);
     setDateOfBirth("");
     setEmail("");
-    setAdditionalAffliction("");
+    setAdditionalAffiliation("");
     setJoinDate("");
-    setSecondName("");
-    setSecondPhoneNumber("");
+    setSecondaryName("");
+    setSecondaryPhoneNumber("");
   };
 
   const setFinal = () => {
-    props.setActive(active);
-    if (country !== "" && !props.country.has(country)) {
-      props.setCountry(props.country.add(country));
-    }
-    if (city !== "" && !props.city.has(city)) {
-      props.setCity(props.city.add(city));
-    }
-    if (state !== "" && !props.state.has(state)) {
-      props.setState(props.state.add(state));
-    }
-    if (dateOfBirth !== "" && !props.dateOfBirth.has(dateOfBirth)) {
-      props.setDateOfBirth(props.dateOfBirth.add(dateOfBirth));
-    }
-    if (email !== "" && !props.email.has(email)) {
-      props.setEmail(props.email.add(email));
-    }
-    if (
-      additionalAffliction !== "" &&
-      !props.additionalAffiliation.has(additionalAffliction)
-    ) {
-      props.setAdditionalAffiliation(
-        props.additionalAffiliation.add(additionalAffliction),
-      );
-    }
-    if (joinDate !== "" && !props.joinDate.has(joinDate)) {
-      props.setJoinDate(props.joinDate.add(joinDate));
-    }
-    if (
-      secondPhoneNumber !== "" &&
-      !props.secondPhoneNumber.has(secondPhoneNumber)
-    ) {
-      props.setSecondPhoneNumber(
-        props.secondPhoneNumber.add(secondPhoneNumber),
-      );
-    }
-    if (secondName !== "" && !props.secondName.has(secondName)) {
-      props.setSecondName(props.secondName.add(secondName));
-    }
+    checkAndUpdateList(active, props.setActives);
+    checkAndUpdateList(country, props.setCountries);
+    checkAndUpdateList(state, props.setStates);
+    checkAndUpdateList(city, props.setCities);
+    checkAndUpdateList(dateOfBirth, props.setDateOfBirths);
+    checkAndUpdateList(email, props.setEmails);
+    checkAndUpdateList(additionalAffiliation, props.setAdditionalAffiliations);
+    checkAndUpdateList(joinDate, props.setJoinDates);
+    checkAndUpdateList(beiChapter, props.setBeiChapters);
+    checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
+    checkAndUpdateList(secondaryName, props.setSecondaryNames);
   };
 
   const COUNTRIES = Country.getAllCountries().map((locCountry) => ({
@@ -334,8 +317,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             className={styles.answer}
             placeholder="input"
             maxLength={140}
-            onChange={(e) => setAdditionalAffliction(e.target.value)}
-            value={additionalAffliction}
+            onChange={(e) => setAdditionalAffiliation(e.target.value)}
+            value={additionalAffiliation}
           />
         </div>
       </div>
@@ -366,8 +349,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 className={styles.answer}
                 required={false}
                 placeholder="Anna White"
-                value={secondName}
-                onChange={(e) => setSecondName(e.target.value)}
+                value={secondaryName}
+                onChange={(e) => setSecondaryName(e.target.value)}
               />
             </div>
           </div>
@@ -384,8 +367,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 className={styles.answer}
                 required={false}
                 placeholder="***-***-****"
-                value={secondPhoneNumber}
-                onChange={(e) => setSecondPhoneNumber(e.target.value)}
+                value={secondaryPhoneNumber}
+                onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
               />
             </div>
           </div>

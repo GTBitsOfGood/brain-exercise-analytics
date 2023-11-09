@@ -1,3 +1,8 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -6,7 +11,7 @@
 
 .border {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: white;
   width: 70vw;
   border-radius: 10px;
