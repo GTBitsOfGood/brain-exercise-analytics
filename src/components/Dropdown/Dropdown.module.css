@@ -2,9 +2,6 @@
   background-color: white;
   border-radius: 16px;
   font-family: var(--font-poppins);
-  border: 1px #e0e5f2 solid;
-  height: 600px;
-  width: 200px;
 }
 
 .question {
@@ -39,6 +36,7 @@
 }
 
 .shown_drop_down_round {
+  border: 1px #e0e5f2 solid;
   border-radius: 20px;
 }
 
