@@ -14,11 +14,12 @@ export interface IDropdownOption {
 
 const defaultOption = [{ value: "", displayValue: "No option available" }];
 
-interface IDropdownProps {
+export interface IDropdownProps {
   name?: string;
+  selectedValue: string;
+  setSelectedValue: (finalValue: string) => void;
   options: IDropdownOption[];
   required?: boolean;
-  tabIndex?: number;
   type?: string;
   placeholder?: string;
   labelName?: string;
@@ -26,10 +27,16 @@ interface IDropdownProps {
   error?: string;
   showError?: boolean;
   icon?: React.ReactElement;
+  style?: object;
+  roundBorder?: boolean;
+  hoverBackgroundColor?: string;
+  hoverFontColor?: string;
+  inputBoxHeight?: string;
+  nonSelectDefaultOption?: boolean;
   onChange: (e: React.MouseEvent<HTMLLIElement>) => void;
 }
 
-export const Dropdown = ({
+function Dropdown({
   labelName,
   options = defaultOption,
   placeholder,
@@ -39,10 +46,26 @@ export const Dropdown = ({
   showError,
   onChange,
   icon,
-}: IDropdownProps) => {
+  style,
+  selectedValue,
+  roundBorder,
+  hoverBackgroundColor = "#DADADA",
+  hoverFontColor = "black",
+  setSelectedValue,
+  inputBoxHeight,
+  nonSelectDefaultOption,
+}: IDropdownProps) {
   const [showList, setShowList] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
   const wrapperRef = createRef<HTMLDivElement>();
+
+  document.documentElement.style.setProperty(
+    "--hover-bg-color",
+    hoverBackgroundColor,
+  );
+  document.documentElement.style.setProperty(
+    "--hover-font-color",
+    hoverFontColor,
+  );
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | Event) {
@@ -68,10 +91,10 @@ export const Dropdown = ({
     if (!isValuePresent) {
       setSelectedValue("");
     }
-  }, [options, selectedValue]);
+  }, [options, selectedValue, setSelectedValue]);
 
   return (
-    <div className={styles.container} ref={wrapperRef}>
+    <div className={styles.container} ref={wrapperRef} style={{ ...style }}>
       <div
         className={styles.question}
         style={{ display: labelName ? "block" : "none" }}
@@ -83,8 +106,10 @@ export const Dropdown = ({
           className={[
             styles.shownInput,
             showList ? styles.show_drop_down : null,
+            roundBorder ? styles.shown_drop_down_round : null,
             showError ? styles.error_input_box : null,
           ].join(" ")}
+          style={{ height: inputBoxHeight }}
           onClick={() => setShowList(!showList)}
         >
           <div
@@ -97,11 +122,16 @@ export const Dropdown = ({
           <FontAwesomeIcon icon={showList ? faCaretUp : faCaretDown} />
         </div>
         <div
-          className={styles.option_list_div}
+          className={[
+            styles.option_list_div,
+            roundBorder ? styles.option_list_div_round : null,
+          ].join(" ")}
           style={{ display: showList ? "block" : "none", maxHeight: height }}
         >
           <ul>
-            <li className={styles.non_select_option}>{placeholder}</li>
+            {nonSelectDefaultOption && (
+              <li className={styles.non_select_option}>{placeholder}</li>
+            )}
             {options.map((value, index) => {
               return (
                 <li
@@ -128,4 +158,6 @@ export const Dropdown = ({
       )}
     </div>
   );
-};
+}
+
+export default Dropdown;

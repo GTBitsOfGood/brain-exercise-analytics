@@ -1,14 +1,25 @@
 .container {
   background-color: white;
+  border-radius: 16px;
+  font-family: var(--font-poppins);
+  border: 1px #e0e5f2 solid;
+  height: 600px;
+  width: 200px;
 }
 
 .question {
   color: #2b3674;
   font-size: 13px;
-  font-family: var(--font-poppins);
   font-weight: 600;
   line-height: 14px;
   word-wrap: break-word;
+}
+
+.value {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-content: center;
 }
 
 .shownInput {
@@ -23,16 +34,16 @@
   font-weight: 500;
   word-wrap: break-word;
   resize: none;
-  height: 40px;
-  border-radius: 16px;
-  border: 1px #e0e5f2 solid;
   padding-left: 17px;
   padding-right: 17px;
 }
 
+.shown_drop_down_round {
+  border-radius: 20px;
+}
+
 .show_drop_down {
   border: 2px #005aa3 solid;
-  border-radius: 20px;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
 }
@@ -50,9 +61,12 @@
   max-height: 300px;
   overflow-y: scroll;
   cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.option_list_div_round {
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .option_item {
@@ -60,8 +74,8 @@
 }
 
 .option_item:hover {
-  color: white;
-  background-color: blue;
+  color: var(--hover-font-color);
+  background-color: var(--hover-bg-color);
 }
 
 .errorBlock {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
-import { Dropdown, IDropdownOption } from "../Dropdown/Dropdown";
+import Dropdown, { IDropdownOption } from "../Dropdown/Dropdown";
 
 function DateSelector() {
   const [selectedValue, setSelectedValue] = useState("Most Recent");
@@ -18,11 +18,15 @@ function DateSelector() {
       required={false}
       placeholder={"Most Recent"}
       showError={false}
-      onChange={(e) => {
+      onChange={(e: React.MouseEvent<HTMLLIElement>) => {
         setSelectedValue(e.currentTarget.innerText);
-        console.log(selectedValue);
       }}
+      roundBorder={true}
+      selectedValue={selectedValue}
+      setSelectedValue={setSelectedValue}
+      hoverBackgroundColor={"#DDEBFF"}
       icon={<FontAwesomeIcon icon={faCalendarAlt} />}
+      nonSelectDefaultOption={false}
     />
   );
 }
