@@ -253,6 +253,18 @@ export const getUsersFiltered = async (
     {
       $unwind: "$metadata",
     },
+    {
+      $addFields: {
+        numRecords: "$metadata.totalDocuments",
+        page: "$metadata.page",
+        numPage: "$metadata.totalPages",
+      },
+    },
+    {
+      $project: {
+        metadata: 0,
+      },
+    },
   ]);
 
   return userFiltering[0] as IFilteredUser;
