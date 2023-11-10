@@ -1,7 +1,6 @@
 import { IUser } from "@/common_utils/types";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { internalRequest } from "./utils/requests";
 import { HttpMethod } from "./utils/types";
 
 export async function middleware(request: NextRequest) {
@@ -9,7 +8,7 @@ export async function middleware(request: NextRequest) {
   // Getting cookies from the request using the `RequestCookies` API
   const path = request.nextUrl.pathname;
   const user = JSON.parse(
-    request.cookies.get("authUser")?.value ?? "{}"
+    request.cookies.get("authUser")?.value ?? "{}",
   ) as IUser;
 
   /*
@@ -27,10 +26,10 @@ export async function middleware(request: NextRequest) {
     if (request.cookies.has("authUser")) {
       if (user.signedUp && user.verified) {
         return NextResponse.redirect(
-          new URL("/search/patient", request.nextUrl.origin)
+          new URL("/search/patient", request.nextUrl.origin),
         );
       }
-      const response = await(
+      const response = (await (
         await fetch(`${process.env.URL}/api/volunteer/internal/get-volunteer`, {
           method: HttpMethod.POST,
           body: JSON.stringify({
@@ -38,10 +37,10 @@ export async function middleware(request: NextRequest) {
             secret: process.env.INTERNAL_SECRET,
           }),
         })
-      ).json() as { success: boolean; message: string; payload: object };
+      ).json()) as { success: boolean; message: string; payload: object };
       if (!response || response.success === false) {
         return NextResponse.redirect(
-          new URL("/auth/login", request.nextUrl.origin)
+          new URL("/auth/login", request.nextUrl.origin),
         );
       }
       const fetchedUser = response.payload as IUser;
@@ -50,16 +49,16 @@ export async function middleware(request: NextRequest) {
       }
       if (fetchedUser.signedUp && fetchedUser.verified) {
         return NextResponse.redirect(
-          new URL("/search/patient", request.nextUrl.origin)
+          new URL("/search/patient", request.nextUrl.origin),
         );
       }
       if (fetchedUser.signedUp && !fetchedUser.verified) {
         return NextResponse.redirect(
-          new URL("/auth/email-verification", request.nextUrl.origin)
+          new URL("/auth/email-verification", request.nextUrl.origin),
         );
       }
       return NextResponse.redirect(
-        new URL("/auth/information", request.nextUrl.origin)
+        new URL("/auth/information", request.nextUrl.origin),
       );
     }
     return NextResponse.next();
@@ -77,7 +76,7 @@ export async function middleware(request: NextRequest) {
   */
   if (!request.cookies.has("authUser")) {
     return NextResponse.redirect(
-      new URL("/auth/login", request.nextUrl.origin)
+      new URL("/auth/login", request.nextUrl.origin),
     );
   }
 
@@ -95,7 +94,7 @@ export async function middleware(request: NextRequest) {
   ).json()) as { success: boolean; message: string; payload: object };
   if (!response || response.success === false) {
     return NextResponse.redirect(
-      new URL("/auth/login", request.nextUrl.origin)
+      new URL("/auth/login", request.nextUrl.origin),
     );
   }
   const fetchedUser = response.payload as IUser;
@@ -107,14 +106,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
     return NextResponse.redirect(
-      new URL("/auth/email-verification", request.nextUrl.origin)
+      new URL("/auth/email-verification", request.nextUrl.origin),
     );
   }
   if (path.match(/auth\/information.*/g)) {
     return NextResponse.next();
   }
   return NextResponse.redirect(
-    new URL("/auth/information", request.nextUrl.origin)
+    new URL("/auth/information", request.nextUrl.origin),
   );
 }
 

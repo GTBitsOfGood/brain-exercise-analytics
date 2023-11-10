@@ -32,7 +32,7 @@ export const patientSignUp = async (data: IUser): Promise<IUser | null> => {
       },
     },
 
-    { new: true }
+    { new: true },
   );
   return result;
 };
@@ -44,7 +44,7 @@ export const volunteerSignUp = async (
   country: string,
   state: string,
   city: string,
-  chapter: string
+  chapter: string,
 ): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email },
@@ -62,7 +62,7 @@ export const volunteerSignUp = async (
       },
     },
 
-    { new: true }
+    { new: true },
   );
   return result;
 };
