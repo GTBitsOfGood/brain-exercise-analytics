@@ -14,18 +14,18 @@ export async function middleware(request: NextRequest) {
   Login and Signup
   1. User does not have a cookie: simply continue
   2. Cookie Exists:
-    a. SignUp and Verify both true: redirect to /search/patients
+    a. SignUp and Verify both true: redirect to /patients/search
     b. Refresh data from mongo
       i. No response / Error: simply continue
-      ii. SignUp and Verify both true: redirect to /search/patients
+      ii. SignUp and Verify both true: redirect to /patients/search
       iii. SignUp is true: redirect to /auth/email-verification
       iv. Verify is true: redirect to /auth/information
   */
-  if (path.match(/\/auth\/[login|signup].*/g)) {
+  if (path.match(/\/auth\/[login|signup]/g)) {
     if (request.cookies.has("authUser")) {
       if (user.signedUp && user.verified) {
         return NextResponse.redirect(
-          new URL("/search/patient", request.nextUrl.origin),
+          new URL("/patient/search", request.nextUrl.origin),
         );
       }
       const response = (await (
@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
       }
       if (fetchedUser.signedUp && fetchedUser.verified) {
         return NextResponse.redirect(
-          new URL("/search/patient", request.nextUrl.origin),
+          new URL("/patient/search", request.nextUrl.origin),
         );
       }
       if (fetchedUser.signedUp && !fetchedUser.verified) {
@@ -66,10 +66,10 @@ export async function middleware(request: NextRequest) {
   All other routes
   1. User does not have a cookie: redirect to /auth/login
   2. Cookie Exists:
-  a. SignUp and Verify both true: simply continue
+  a. SignUp and Verify both true: simply continue (if not going to email-verification or information pages)
   b. Refresh data from mongo
       i. No response / Error: redirect to /auth/login
-      ii. SignUp and Verify both true: simply continue
+      ii. SignUp and Verify both true: simply continue (if not going to email-verification or information pages)
       iii. SignUp is true: redirect to /auth/email-verification if not already there
       iv. Verify is true: redirect to /auth/information if not already there
   */
@@ -80,6 +80,14 @@ export async function middleware(request: NextRequest) {
   }
 
   if (user.signedUp && user.verified) {
+    if (
+      path.match(/auth\/email-verification/g) ||
+      path.match(/auth\/information/g)
+    ) {
+      return NextResponse.redirect(
+        new URL("/patient/search", request.nextUrl.origin),
+      );
+    }
     return NextResponse.next();
   }
   const response = (await (
@@ -98,17 +106,25 @@ export async function middleware(request: NextRequest) {
   }
   const fetchedUser = response.payload as IUser;
   if (fetchedUser.signedUp && fetchedUser.verified) {
+    if (
+      path.match(/auth\/email-verification/g) ||
+      path.match(/auth\/information/g)
+    ) {
+      return NextResponse.redirect(
+        new URL("/patient/search", request.nextUrl.origin),
+      );
+    }
     return NextResponse.next();
   }
   if (fetchedUser.signedUp && !fetchedUser.verified) {
-    if (path.match(/auth\/email-verification.*/g)) {
+    if (path.match(/auth\/email-verification/g)) {
       return NextResponse.next();
     }
     return NextResponse.redirect(
       new URL("/auth/email-verification", request.nextUrl.origin),
     );
   }
-  if (path.match(/auth\/information.*/g)) {
+  if (path.match(/auth\/information/g)) {
     return NextResponse.next();
   }
   return NextResponse.redirect(
