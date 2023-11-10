@@ -1,11 +1,11 @@
-import React, { useState, useEffect, createRef, RefObject } from "react";
+import React, { useState } from "react";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
-import { Dropdown, IDropdownProps } from "../../Dropdown/Dropdown";
+import Switch from "react-switch";
+import Dropdown, { IDropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
 import { CalendarInput } from "./CalendarInput";
-import Switch from "react-switch";
 
 interface SelectDropdownProps {
   title: string;
@@ -15,13 +15,13 @@ interface SelectDropdownProps {
   answerMinWidth: string;
 }
 
-const SelectDropdown = ({
+function SelectDropdown({
   title,
   dropdownprops,
   style = {},
   labelMinWidth,
   answerMinWidth,
-}: SelectDropdownProps) => {
+}: SelectDropdownProps) {
   return (
     <div
       className={styles.question_box}
@@ -44,7 +44,7 @@ const SelectDropdown = ({
       </div>
     </div>
   );
-};
+}
 
 interface UpdateParamProp {
   country: Set<string>;
@@ -233,6 +233,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             required: false,
             placeholder: "input",
             options: COUNTRIES,
+            selectedValue: country,
+            setSelectedValue: setCountry,
             onChange: (e: React.MouseEvent<HTMLLIElement>) => {
               setCountry(e.currentTarget.innerText);
               setState("");
@@ -249,7 +251,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             required: false,
             placeholder: "input",
             options: STATES,
-            value: state,
+            selectedValue: state,
+            setSelectedValue: setState,
             onChange: (e: React.MouseEvent<HTMLLIElement>) => {
               setState(e.currentTarget.innerText);
               setCity("");
@@ -265,7 +268,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             required: false,
             placeholder: "input",
             options: CITIES,
-            value: city,
+            selectedValue: city,
+            setSelectedValue: setCity,
             onChange: (e: React.MouseEvent<HTMLLIElement>) => {
               setCity(e.currentTarget.innerText);
             },
@@ -280,7 +284,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             required: false,
             placeholder: "input",
             options: CHAPTERS,
-            value: beiChapter,
+            selectedValue: beiChapter,
+            setSelectedValue: setBeiChapter,
             onChange: (e: React.MouseEvent<HTMLLIElement>) => {
               setBeiChapter(e.currentTarget.innerText);
             },

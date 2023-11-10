@@ -1,15 +1,23 @@
 .container {
   background-color: white;
   border-radius: 16px;
+  font-family: var(--font-poppins);
+  border: 1px #e0e5f2 solid;
 }
 
 .question {
   color: #2b3674;
   font-size: 13px;
-  font-family: var(--font-poppins);
   font-weight: 600;
   line-height: 14px;
   word-wrap: break-word;
+}
+
+.value {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-content: center;
 }
 
 .shownInput {
@@ -25,7 +33,7 @@
   word-wrap: break-word;
   resize: none;
   /* height: 40px; */
-  border: 1px #e0e5f2 solid;
+  /* border: 1px #e0e5f2 solid; */
   padding-left: 17px;
   padding-right: 17px;
 }

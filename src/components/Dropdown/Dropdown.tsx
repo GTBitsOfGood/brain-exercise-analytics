@@ -14,11 +14,12 @@ export interface IDropdownOption {
 
 const defaultOption = [{ value: "", displayValue: "No option available" }];
 
-interface IDropdownProps {
+export interface IDropdownProps {
   name?: string;
+  selectedValue: string;
+  setSelectedValue: (finalValue: string) => void;
   options: IDropdownOption[];
   required?: boolean;
-  tabIndex?: number;
   type?: string;
   placeholder?: string;
   labelName?: string;
@@ -27,11 +28,11 @@ interface IDropdownProps {
   showError?: boolean;
   icon?: React.ReactElement;
   style?: object;
-  inputBoxHeight?: number;
+  inputBoxHeight?: string;
   onChange: (e: React.MouseEvent<HTMLLIElement>) => void;
 }
 
-export const Dropdown = ({
+function Dropdown({
   labelName,
   options = defaultOption,
   placeholder,
@@ -42,10 +43,11 @@ export const Dropdown = ({
   onChange,
   icon,
   style,
+  selectedValue,
+  setSelectedValue,
   inputBoxHeight,
-}: IDropdownProps) => {
+}: IDropdownProps) {
   const [showList, setShowList] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
   const wrapperRef = createRef<HTMLDivElement>();
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export const Dropdown = ({
     if (!isValuePresent) {
       setSelectedValue("");
     }
-  }, [options, selectedValue]);
+  }, [options, selectedValue, setSelectedValue]);
 
   return (
     <div className={styles.container} ref={wrapperRef} style={{ ...style }}>
@@ -133,4 +135,6 @@ export const Dropdown = ({
       )}
     </div>
   );
-};
+}
+
+export default Dropdown;
