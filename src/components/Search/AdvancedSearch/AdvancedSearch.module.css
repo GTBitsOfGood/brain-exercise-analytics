@@ -4,6 +4,12 @@
   width: 70vw;
   font-size: 12px;
   box-shadow: 0px 0px 4px 4px #e5e8ee;
+  background-color: #e7eeff;
+  padding-top: 22px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 22px;
+  border-radius: 20px;
 }
 
 .answer::placeholder {
@@ -14,6 +20,8 @@
   margin-bottom: 20px;
   display: flex;
   gap: 40px;
+  justify-content: flex-end;
+  gap: 20px;
 }
 
 .all_questions {
@@ -22,13 +30,46 @@
   gap: 38px;
 }
 
+.email_label {
+  min-width: 134px;
+}
+
+.additional_affil_label {
+  min-width: 192px;
+}
+
+.affiliation_answer {
+  min-width: 346px;
+}
+
+.sec_person_name_label {
+  min-width: 154px;
+  white-space: nowrap;
+}
+
+.sec_person_phone_answer {
+  min-width: 359px;
+}
+
+.sec_person_name_answer {
+  min-width: 305px;
+}
+
+.sec_person_phone_label {
+  min-width: 305px;
+}
+
+.email_box {
+  min-width: 192px;
+}
+
 .question_box {
   display: flex;
-  flex: 1;
+  flex: 1 0 auto;
+  height: 30px;
 }
 
 .label {
-  display: inline-block;
   text-align: left;
   margin-top: auto;
   vertical-align: middle;
@@ -37,6 +78,7 @@
   padding-left: 17px;
   padding-right: 12px;
   flex: 1;
+  height: 100%;
   border: 1px solid #d9d9d9;
 }
 
@@ -68,4 +110,27 @@
   padding-right: 10px;
   padding-top: 0px;
   padding-bottom: 0px;
+}
+
+.active_patient_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active_patient_box_label {
+  padding-right: 5px;
+}
+
+.button_row_button {
+  background-color: white;
+  padding: 7px;
+  padding-left: 17px;
+  padding-right: 17px;
+  cursor: pointer;
+}
+
+.button_blue {
+  background-color: #008afc;
+  color: white;
 }

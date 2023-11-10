@@ -38,8 +38,8 @@ function SelectDropdown({
       >
         <Dropdown
           {...dropdownprops}
-          inputBoxHeight={"28px"}
-          style={{ borderRadius: 0, borderWidth: 0 }}
+          inputBoxHeight={"30px"}
+          style={{ borderRadius: 0, borderWidth: 0, height: "28px" }}
         />
       </div>
     </div>
@@ -164,33 +164,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   );
 
   return (
-    <div
-      className={styles.body}
-      style={{
-        backgroundColor: "#E7EEFF",
-        paddingTop: "22px",
-        paddingLeft: "12px",
-        paddingRight: "12px",
-        paddingBottom: "22px",
-        borderRadius: 20,
-      }}
-    >
-      <div
-        className={styles.button_row}
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 20,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span style={{ paddingRight: 5 }}>Active Patient</span>
+    <div className={styles.body}>
+      <div className={styles.button_row}>
+        <div className={styles.active_patient_box}>
+          <span className={styles.active_patient_box_label}>
+            Active Patient
+          </span>
           <Switch
             onChange={() => setActive(!active)}
             checked={active}
@@ -199,27 +178,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             checkedIcon={false}
           />
         </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            padding: 7,
-            paddingLeft: 17,
-            paddingRight: 17,
-            cursor: "pointer",
-          }}
-          onClick={reset}
-        >
+        <div className={styles.button_row_button} onClick={reset}>
           Clear
         </div>
         <div
-          style={{
-            backgroundColor: "#008AFC",
-            padding: 7,
-            paddingLeft: 17,
-            paddingRight: 17,
-            color: "white",
-            cursor: "pointer",
-          }}
+          className={[styles.button_row_button, styles.button_blue].join(" ")}
           onClick={setFinal}
         >
           Apply
@@ -304,29 +267,29 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           />
         </div>
         <div className={styles.question_box}>
-          <div className={styles.label} style={{ minWidth: "134px" }}>
+          <div className={[styles.label, styles.email_label].join(" ")}>
             Email Address
           </div>
           <input
             type="email"
-            className={styles.answer}
+            className={[styles.answer, styles.email_box].join(" ")}
             value={email}
             placeholder="***@****.***"
             onChange={(e) => setEmail(e.target.value)}
-            style={{ minWidth: "192px" }}
           />
         </div>
         <div className={styles.question_box}>
-          <div className={styles.label} style={{ minWidth: "192px" }}>
+          <div
+            className={[styles.label, styles.additional_affil_label].join(" ")}
+          >
             Additional Affiliation
           </div>
           <input
-            className={styles.answer}
+            className={[styles.answer, styles.affiliation_answer].join(" ")}
             placeholder="input"
             maxLength={140}
             onChange={(e) => setAdditionalAffliction(e.target.value)}
             value={additionalAffliction}
-            style={{ minWidth: "346px" }}
           />
         </div>
         <div className={styles.question_box}>
@@ -346,18 +309,20 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             </div>
             <div className={styles.question_box}>
               <div
-                className={styles.label}
-                style={{ whiteSpace: "nowrap", minWidth: "154px" }}
+                className={[styles.label, styles.sec_person_name_label].join(
+                  " ",
+                )}
               >
                 First and Last Name
               </div>
               <input
-                className={styles.answer}
+                className={[styles.answer, styles.sec_person_name_answer].join(
+                  " ",
+                )}
                 required={false}
                 placeholder="Anna White"
                 value={secondName}
                 onChange={(e) => setSecondName(e.target.value)}
-                style={{ minWidth: "305px" }}
               />
             </div>
           </div>
@@ -369,17 +334,22 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               Secondary Contact Person Information
             </div>
             <div className={styles.question_box}>
-              <div className={styles.label} style={{ minWidth: "305px" }}>
+              <div
+                className={[styles.label, styles.sec_person_phone_label].join(
+                  " ",
+                )}
+              >
                 Phone Number
               </div>
               <input
-                className={styles.answer}
+                className={[styles.answer, styles.sec_person_phone_answer].join(
+                  " ",
+                )}
                 required={false}
-                type="number"
+                type="tel"
                 placeholder="***-***-****"
                 value={secondPhoneNumber}
                 onChange={(e) => setSecondPhoneNumber(e.target.value)}
-                style={{ minWidth: "359px" }}
               />
             </div>
           </div>
