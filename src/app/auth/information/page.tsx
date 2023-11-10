@@ -13,7 +13,7 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
-import { Dropdown } from "@src/components/Dropdown/Dropdown";
+import Dropdown from "@src/components/Dropdown/Dropdown";
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
 
@@ -199,12 +199,15 @@ export default function Page() {
                   placeholder="Select Your Country"
                   required={true}
                   options={COUNTRIES}
-                  onChange={(e) => {
+                  selectedValue={locCountry}
+                  setSelectedValue={setLocCountry}
+                  onChange={(e: React.MouseEvent<HTMLLIElement>) => {
                     setLocCountry(e.currentTarget.innerText);
                     setCountryError("");
                     setStateError("");
                     setCityError("");
                   }}
+                  nonSelectDefaultOption={false}
                   showError={countryError !== ""}
                   error={countryError}
                 />
@@ -213,9 +216,11 @@ export default function Page() {
                 <div className={styles.cityStateFields}>
                   <Dropdown
                     required={true}
+                    selectedValue={locState}
+                    setSelectedValue={setLocState}
                     placeholder="Select Your State"
                     options={STATES}
-                    onChange={(e) => {
+                    onChange={(e: React.MouseEvent<HTMLLIElement>) => {
                       setLocState(e.currentTarget.innerText);
                       setStateError("");
                       setCityError("");
@@ -225,9 +230,11 @@ export default function Page() {
                   />
                   <Dropdown
                     required={true}
+                    selectedValue={locCity}
+                    setSelectedValue={setLocCity}
                     placeholder="Select Your City"
                     options={CITIES}
-                    onChange={(e) => {
+                    onChange={(e: React.MouseEvent<HTMLLIElement>) => {
                       setLocCity(e.currentTarget.innerText);
                       setCityError("");
                     }}
@@ -238,14 +245,16 @@ export default function Page() {
               )}
               <div className={styles.locationField}>
                 <Dropdown
-                  labelName="Chapter"
+                  name="Chapter"
                   required={true}
                   placeholder="Select Your Chapter"
                   options={CHAPTERS}
-                  onChange={(e) => {
+                  onChange={(e: React.MouseEvent<HTMLLIElement>) => {
                     setChapter(e.currentTarget.innerText);
                     setChapterError("");
                   }}
+                  selectedValue={chapter}
+                  setSelectedValue={setChapter}
                   showError={chapterError !== ""}
                   error={chapterError}
                 />
