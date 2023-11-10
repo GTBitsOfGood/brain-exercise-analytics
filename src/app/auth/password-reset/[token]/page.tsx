@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,31 +25,7 @@ export default function Page({ params }: PageProps) {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [showGeneralError, setShowGeneralError] = useState(false);
 
-  const [validatingToken, setValidatingToken] = useState(true);
-
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const validateToken = async () => {
-      try {
-        await internalRequest({
-          url: "/api/volunteer/auth/password-reset/validate",
-          queryParams: { token: params.token },
-          method: HttpMethod.GET,
-          authRequired: false,
-        });
-        setValidatingToken(false);
-      } catch (error) {
-        router.push("/auth/password-reset/error");
-      }
-    };
-    validateToken();
-  }, [router, params.token]);
 
   const resetErrors = () => {
     setPasswordError("");
@@ -99,10 +75,6 @@ export default function Page({ params }: PageProps) {
       }
     }
   };
-
-  if (!isClient || validatingToken) {
-    return null;
-  }
 
   return (
     <div>

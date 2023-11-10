@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faExclamationCircle,
@@ -8,6 +8,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
+
+import { login } from "@src/redux/reducers/authReducer";
+import { IUser } from "@/common_utils/types";
+import { useDispatch } from "react-redux";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -38,11 +42,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const dispatch = useDispatch();
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -116,7 +116,7 @@ export default function Page() {
       return;
     try {
       const name = `${firstName} ${lastName}`;
-      await internalRequest({
+      const user = await internalRequest<IUser>({
         url: "/api/volunteer/auth/signup",
         method: HttpMethod.POST,
         body: {
@@ -128,15 +128,13 @@ export default function Page() {
           chapter,
         },
       });
-      router.push("/auth/dashboard");
+
+      dispatch(login(user));
+      router.push("/patient/dashboard");
     } catch (error) {
       setShowGeneralError(true);
     }
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>

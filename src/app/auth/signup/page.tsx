@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignUp } from "@src/firebase/email_signin";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -24,11 +25,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const resetErrors = () => {
     setEmailError("");
@@ -103,16 +99,22 @@ export default function Page() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await googleSignIn();
+      const user = await googleSignIn();
+      if (!user) {
+        throw new Error("Error signing in");
+      }
+      await internalRequest({
+        url: "/api/volunteer/auth/login",
+        method: HttpMethod.GET,
+        body: {
+          email: user.email,
+        },
+      });
       router.push("/auth/redirect");
     } catch (error) {
       setShowGeneralError(true);
     }
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>

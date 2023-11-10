@@ -13,7 +13,7 @@ export async function internalRequest<T>({
   method,
   body,
   authRequired = true,
-}: InternalRequestData): Promise<T | undefined> {
+}: InternalRequestData): Promise<T> {
   let idToken: string | undefined;
   let newParams = queryParams;
   let newBody = body;

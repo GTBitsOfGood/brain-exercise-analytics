@@ -1,6 +1,7 @@
-import { createPasswordReset } from "@server/mongodb/actions/PasswordReset";
+import { createVerificationLog } from "@server/mongodb/actions/VerificationLog";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
+import { VerificationLogType } from "@/common_utils/types";
 
 type RequestData = {
   email: string;
@@ -30,7 +31,10 @@ export const POST = APIWrapper({
       throw new Error("Name doesn't match to existing value");
     }
 
-    const passwordReset = await createPasswordReset(requestData.email);
-    return { token: passwordReset.token };
+    const verificationLog = await createVerificationLog(
+      requestData.email,
+      VerificationLogType.PASSWORD_RESET,
+    );
+    return { token: verificationLog.token };
   },
 });

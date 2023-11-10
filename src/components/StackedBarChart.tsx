@@ -1,14 +1,11 @@
 import * as d3 from "d3";
 import { Fragment } from "react";
+import { StackedDataRecord } from "@/common_utils/types";
 import { D3Data } from "./types";
 import BarChart from "./BarChart";
 
 interface DataParams extends D3Data {
-  data: {
-    interval: string;
-    value: number;
-    stackedValue: number;
-  }[];
+  data: StackedDataRecord[];
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
