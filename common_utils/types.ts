@@ -96,10 +96,8 @@ export type RecursivePartial<T> = {
 };
 
 export interface IFilteredUser {
-  metadata: {
-    totalDocuments: number;
-    page: number;
-    totalPages: number;
-  };
+  totalDocuments: number;
+  page: number;
+  totalPages: number;
   data: [IUser];
 }
