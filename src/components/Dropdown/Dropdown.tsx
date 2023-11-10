@@ -28,6 +28,7 @@ export interface IDropdownProps {
   showError?: boolean;
   icon?: React.ReactElement;
   style?: object;
+  roundBorder?: boolean;
   inputBoxHeight?: string;
   onChange: (e: React.MouseEvent<HTMLLIElement>) => void;
 }
@@ -44,6 +45,7 @@ function Dropdown({
   icon,
   style,
   selectedValue,
+  roundBorder,
   setSelectedValue,
   inputBoxHeight,
 }: IDropdownProps) {
@@ -89,6 +91,7 @@ function Dropdown({
           className={[
             styles.shownInput,
             showList ? styles.show_drop_down : null,
+            roundBorder ? styles.shown_drop_down_round : null,
             showError ? styles.error_input_box : null,
           ].join(" ")}
           style={{ height: inputBoxHeight }}
@@ -104,7 +107,10 @@ function Dropdown({
           <FontAwesomeIcon icon={showList ? faCaretUp : faCaretDown} />
         </div>
         <div
-          className={styles.option_list_div}
+          className={[
+            styles.option_list_div,
+            roundBorder ? styles.option_list_div_round : null,
+          ].join(" ")}
           style={{ display: showList ? "block" : "none", maxHeight: height }}
         >
           <ul>
