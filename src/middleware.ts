@@ -1,7 +1,8 @@
 import { IUser } from "@/common_utils/types";
-import { getUserByEmail } from "@server/mongodb/actions/User";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { internalRequest } from "./utils/requests";
+import { HttpMethod } from "./utils/types";
 
 export async function middleware(request: NextRequest) {
   // Assume a "Cookie:nextjs=fast" header to be present on the incoming request
@@ -11,19 +12,39 @@ export async function middleware(request: NextRequest) {
     request.cookies.get("authUser")?.value ?? "{}"
   ) as IUser;
 
-  if (path.match(/\/auth\/[login|signup]*/g)) {
-    console.log("Auth");
+  /*
+  Login and Signup
+  1. User does not have a cookie: simply continue
+  2. Cookie Exists:
+    a. SignUp and Verify both true: redirect to /search/patients
+    b. Refresh data from mongo
+      i. No response / Error: simply continue
+      ii. SignUp and Verify both true: redirect to /search/patients
+      iii. SignUp is true: redirect to /auth/email-verification
+      iv. Verify is true: redirect to /auth/information
+  */
+  if (path.match(/\/auth\/[login|signup].*/g)) {
     if (request.cookies.has("authUser")) {
-      console.log("Has Auth");
       if (user.signedUp && user.verified) {
-        console.log("signed and verfified")
         return NextResponse.redirect(
           new URL("/search/patient", request.nextUrl.origin)
         );
       }
-      console.log("fetching");
-      const fetchedUser = await getUserByEmail(user.email);
-      console.log("fetched");
+      const response = await(
+        await fetch(`${process.env.URL}/api/volunteer/internal/get-volunteer`, {
+          method: HttpMethod.POST,
+          body: JSON.stringify({
+            id: user._id,
+            secret: process.env.INTERNAL_SECRET,
+          }),
+        })
+      ).json() as { success: boolean; message: string; payload: object };
+      if (!response || response.success === false) {
+        return NextResponse.redirect(
+          new URL("/auth/login", request.nextUrl.origin)
+        );
+      }
+      const fetchedUser = response.payload as IUser;
       if (fetchedUser === null) {
         return NextResponse.next();
       }
@@ -43,6 +64,17 @@ export async function middleware(request: NextRequest) {
     }
     return NextResponse.next();
   }
+  /*
+  All other routes
+  1. User does not have a cookie: redirect to /auth/login
+  2. Cookie Exists:
+  a. SignUp and Verify both true: simply continue
+  b. Refresh data from mongo
+      i. No response / Error: redirect to /auth/login
+      ii. SignUp and Verify both true: simply continue
+      iii. SignUp is true: redirect to /auth/email-verification if not already there
+      iv. Verify is true: redirect to /auth/information if not already there
+  */
   if (!request.cookies.has("authUser")) {
     return NextResponse.redirect(
       new URL("/auth/login", request.nextUrl.origin)
@@ -52,19 +84,34 @@ export async function middleware(request: NextRequest) {
   if (user.signedUp && user.verified) {
     return NextResponse.next();
   }
-  const fetchedUser = await getUserByEmail(user.email);
-  if (fetchedUser === null) {
+  const response = (await (
+    await fetch(`${process.env.URL}/api/volunteer/internal/get-volunteer`, {
+      method: HttpMethod.POST,
+      body: JSON.stringify({
+        id: user._id,
+        secret: process.env.INTERNAL_SECRET,
+      }),
+    })
+  ).json()) as { success: boolean; message: string; payload: object };
+  if (!response || response.success === false) {
     return NextResponse.redirect(
       new URL("/auth/login", request.nextUrl.origin)
     );
   }
+  const fetchedUser = response.payload as IUser;
   if (fetchedUser.signedUp && fetchedUser.verified) {
     return NextResponse.next();
   }
   if (fetchedUser.signedUp && !fetchedUser.verified) {
+    if (path.match(/auth\/email-verification.*/g)) {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(
       new URL("/auth/email-verification", request.nextUrl.origin)
     );
+  }
+  if (path.match(/auth\/information.*/g)) {
+    return NextResponse.next();
   }
   return NextResponse.redirect(
     new URL("/auth/information", request.nextUrl.origin)

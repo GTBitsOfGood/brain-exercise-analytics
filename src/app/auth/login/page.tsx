@@ -17,7 +17,7 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
-import { setCookie, getCookie } from "cookies-next";
+import { setCookie } from "cookies-next";
 import { IUser } from "@/common_utils/types";
 import { login } from "@src/redux/reducers/authReducer";
 
@@ -62,9 +62,6 @@ export default function Page() {
         const user = await internalRequest<IUser>({
           url: "/api/volunteer/auth/login",
           method: HttpMethod.GET,
-          body: {
-            email,
-          },
         });
         if (keepLogged && user) {
           setCookie("authUser", user, { maxAge: 7 * 24 * 60 * 60 });
