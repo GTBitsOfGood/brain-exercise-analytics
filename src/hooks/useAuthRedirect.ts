@@ -7,7 +7,6 @@ import { HttpMethod } from "@server/utils/types";
 import { login, logout } from "@src/redux/reducers/authReducer";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
-import { deleteCookie } from "cookies-next";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -42,7 +41,6 @@ export default function useAuthRedirect() {
     async function checkAndRedirect(currentUser: User | null): Promise<void> {
       if (!currentUser) {
         if (pathName !== "/auth/login" && pathName !== "/auth/signup") {
-          deleteCookie("authUser", { path: "/" });
           dispatch(logout());
           return navigation.push("/auth/login");
         }
