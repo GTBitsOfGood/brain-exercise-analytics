@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser, Role } from "@/common_utils/types";
+import { deleteCookie } from "cookies-next";
 
 const initialState: IUser = {
   _id: "",
@@ -59,6 +60,7 @@ const authReducer = createSlice({
     },
     // Clear the authState
     logout(state) {
+      deleteCookie("authUser", { path: "/" });
       setState(state, initialState);
     },
     setFirstTimeLogin(state, action: PayloadAction<boolean>) {
