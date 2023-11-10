@@ -29,6 +29,8 @@ export interface IDropdownProps {
   icon?: React.ReactElement;
   style?: object;
   roundBorder?: boolean;
+  hoverBackgroundColor?: string;
+  hoverFontColor?: string;
   inputBoxHeight?: string;
   onChange: (e: React.MouseEvent<HTMLLIElement>) => void;
 }
@@ -46,11 +48,22 @@ function Dropdown({
   style,
   selectedValue,
   roundBorder,
+  hoverBackgroundColor = "#DADADA",
+  hoverFontColor = "black",
   setSelectedValue,
   inputBoxHeight,
 }: IDropdownProps) {
   const [showList, setShowList] = useState(false);
   const wrapperRef = createRef<HTMLDivElement>();
+
+  document.documentElement.style.setProperty(
+    "--hover-bg-color",
+    hoverBackgroundColor,
+  );
+  document.documentElement.style.setProperty(
+    "--hover-font-color",
+    hoverFontColor,
+  );
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | Event) {

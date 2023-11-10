@@ -72,8 +72,8 @@
 }
 
 .option_item:hover {
-  color: white;
-  background-color: blue;
+  color: var(--hover-font-color);
+  background-color: var(--hover-bg-color);
 }
 
 .errorBlock {

@@ -39,6 +39,7 @@ function SelectDropdown({
         <Dropdown
           {...dropdownprops}
           inputBoxHeight={"30px"}
+          hoverColor="transparent"
           style={{ borderRadius: 0, borderWidth: 0, height: "28px" }}
         />
       </div>
