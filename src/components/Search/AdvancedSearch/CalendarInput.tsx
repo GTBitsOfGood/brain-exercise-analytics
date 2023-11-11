@@ -1,99 +1,53 @@
-import React, { RefObject, createRef, useEffect, Ref } from "react";
-import Calendar from "react-calendar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { styled } from "@mui/material";
+import { Poppins } from "next/font/google";
 import styles from "./AdvancedSearch.module.css";
 
 interface CalendarInputProp {
-  showCalendar: boolean;
-  calendarValue: string;
-  setShowCalendar: (showCalendar: boolean) => void;
-  setCalendarValue: (value: string) => void;
+  value: string;
+  onChange: (value: string) => void;
 }
 
-export const CalendarInput = ({
-  showCalendar,
-  calendarValue = "",
-  setShowCalendar,
-  setCalendarValue,
-}: CalendarInputProp) => {
-  const calendarPopupRef: RefObject<HTMLDivElement> = createRef();
-  const iconRef: Ref<SVGSVGElement> = createRef();
+const poppins500 = Poppins({
+  subsets: ["latin-ext"],
+  weight: "500",
+});
 
-  useEffect(() => {
-    const onClickOutside = (event: MouseEvent) => {
-      if (showCalendar && !iconRef.current?.contains(event.target as Node)) {
-        if (
-          calendarPopupRef.current &&
-          event.target instanceof Node &&
-          calendarPopupRef.current.contains(event.target)
-        ) {
-          event.stopPropagation();
-          return;
-        }
+const StyledDatePicker = styled(DatePicker)(() => ({
+  "& .MuiInputBase-root": {
+    fontSize: 12,
+    fontFamily: poppins500.style.fontFamily,
+  },
+  "& .MuiOutlinedInput-root": {
+    height: "30px",
+    "& fieldset": {
+      border: "0px solid black",
+      outline: "none",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#3b82f6",
+    },
+  },
+})) as typeof DatePicker;
 
-        setShowCalendar(false);
-      }
-    };
-
-    const toggleCalendar = (event: MouseEvent) => {
-      setShowCalendar(!showCalendar);
-      event.stopPropagation();
-    };
-
-    const iconRefCopy = iconRef.current;
-    iconRef.current?.addEventListener("click", toggleCalendar);
-    document.addEventListener("click", onClickOutside);
-
-    return () => {
-      iconRefCopy?.removeEventListener("click", toggleCalendar);
-      document.removeEventListener("click", onClickOutside);
-    };
-  }, [showCalendar]);
-
+export default function Calendar({ value = "", onChange }: CalendarInputProp) {
   return (
-    <div
-      className={[styles.answer, styles.calendarContainer].join(" ")}
-      onClick={() => {
-        setShowCalendar(!showCalendar);
-      }}
-    >
-      {calendarValue === "" && "MM/DD/YYYY"}
-      {calendarValue !== "" && calendarValue}
-      <div>
-        <FontAwesomeIcon
-          ref={iconRef}
-          icon={faCalendarAlt}
-          style={{ cursor: "pointer", float: "right" }}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <div className={[styles.answer, styles.calendarContainer].join(" ")}>
+        <StyledDatePicker
+          value={value}
+          sx={{
+            "& .MuiInputBase-root": {
+              color: value === "" ? "#a3aed0" : "#313144",
+            },
+          }}
+          onChange={(val) => {
+            if (val === null) return;
+            onChange(val.toString());
+          }}
         />
-        <div
-          className={styles.calendar}
-          style={{
-            position: "absolute",
-            zIndex: 50,
-            display: showCalendar ? "block" : "none",
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <div ref={calendarPopupRef}>
-            <Calendar
-              onChange={(value, event) => {
-                event.stopPropagation();
-                if (!value) {
-                  return;
-                }
-                const date = new Date(value.toString());
-                setCalendarValue(
-                  `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
-                );
-                setShowCalendar(false);
-              }}
-            />
-          </div>
-        </div>
       </div>
-    </div>
+    </LocalizationProvider>
   );
-};
+}

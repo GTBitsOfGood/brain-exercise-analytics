@@ -13,7 +13,7 @@ import CHAPTERS from "@src/utils/chapters";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
-import { CalendarInput } from "./CalendarInput";
+import CalendarInput from "./CalendarInput";
 
 interface SelectDropdownProps<T> {
   title: string;
@@ -86,8 +86,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
   const [joinDate, setJoinDate] = useState("");
   const [beiChapter, setBeiChapter] = useState("");
-  const [showDOBCalendar, setShowDOBCalendar] = useState(false);
-  const [showJoinDateCalendar, setShowJoinDateCalendar] = useState(false);
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
 
@@ -184,7 +182,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <SelectDropdown
           title="Country"
           dropdownProps={{
-            placeholder: "input",
+            placeholder: "Select Country",
             options: COUNTRIES,
             value: country,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -200,7 +198,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <SelectDropdown
           title="State"
           dropdownProps={{
-            placeholder: "input",
+            placeholder: "Select State",
             options: STATES,
             value: state,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -215,7 +213,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <SelectDropdown
           title="City"
           dropdownProps={{
-            placeholder: "input",
+            placeholder: "Select City",
             options: CITIES,
             value: city,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -229,7 +227,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <SelectDropdown
           title="BEI Chapter"
           dropdownProps={{
-            placeholder: "input",
+            placeholder: "Select BEI Chapter",
             options: CHAPTERS,
             value: beiChapter,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -242,12 +240,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         />
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
-          <CalendarInput
-            showCalendar={showDOBCalendar}
-            calendarValue={dateOfBirth}
-            setShowCalendar={setShowDOBCalendar}
-            setCalendarValue={setDateOfBirth}
-          />
+          <CalendarInput value={dateOfBirth} onChange={setDateOfBirth} />
         </div>
         <div className={styles.question_box}>
           <div className={[styles.label, styles.email_label].join(" ")}>
@@ -258,7 +251,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             className={[styles.answer, styles.email_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
             value={email}
-            placeholder="***@****.***"
+            placeholder="example@domain.com"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -271,19 +264,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <InputField
             className={[styles.answer, styles.affiliation_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
-            placeholder="input"
+            placeholder="Enter Additional Affiliation"
             onChange={(e) => setAdditionalAffiliation(e.target.value)}
             value={additionalAffiliation}
           />
         </div>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
-          <CalendarInput
-            showCalendar={showJoinDateCalendar}
-            calendarValue={joinDate}
-            setShowCalendar={setShowJoinDateCalendar}
-            setCalendarValue={setJoinDate}
-          />
+          <CalendarInput value={joinDate} onChange={setJoinDate} />
         </div>
 
         <div className={styles.secondaryInfo}>
@@ -302,7 +290,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               )}
               inputFieldClassName={styles.answerInput}
               required={false}
-              placeholder="Anna White"
+              placeholder="Enter Name"
               value={secondaryName}
               onChange={(e) => setSecondaryName(e.target.value)}
             />
@@ -328,7 +316,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               inputFieldClassName={styles.answerInput}
               required={false}
               type="tel"
-              placeholder="***-***-****"
+              placeholder="Enter Phone Number"
               value={secondaryPhoneNumber}
               onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
             />
