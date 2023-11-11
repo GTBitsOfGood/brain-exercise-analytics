@@ -170,21 +170,27 @@ export default function Search() {
           </div>
         </div>
       </div>
-      {showAdvancedSearch && (
-        <AdvancedSearch
-          setActives={setActives}
-          setCountries={setCountries}
-          setStates={setStates}
-          setCities={setCities}
-          setDateOfBirths={setDateOfBirths}
-          setEmails={setEmails}
-          setAdditionalAffiliations={setAdditionalAffiliations}
-          setJoinDates={setJoinDates}
-          setBeiChapters={setBeiChapters}
-          setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-          setSecondaryNames={setSecondaryNames}
-        />
-      )}
+      {/* {showAdvancedSearch && ( */}
+      <AdvancedSearch
+        setActives={setActives}
+        setCountries={setCountries}
+        setStates={setStates}
+        setCities={setCities}
+        setDateOfBirths={setDateOfBirths}
+        setEmails={setEmails}
+        setAdditionalAffiliations={setAdditionalAffiliations}
+        setJoinDates={setJoinDates}
+        setBeiChapters={setBeiChapters}
+        setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
+        setSecondaryNames={setSecondaryNames}
+        style={{
+          // display: showAdvancedSearch ? "flex" : "none",
+          maxHeight: showAdvancedSearch ? "10000px" : "0px",
+          zIndex: showAdvancedSearch ? 3 : -1,
+          opacity: showAdvancedSearch ? 1 : 0,
+        }}
+      />
+      {/* )} */}
     </div>
   );
 }

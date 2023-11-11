@@ -8,6 +8,7 @@ import React, {
 import Switch from "react-switch";
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
+import InputField from "@src/components/InputField/InputField";
 import CHAPTERS from "@src/utils/chapters";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
@@ -17,26 +18,26 @@ import { CalendarInput } from "./CalendarInput";
 interface SelectDropdownProps<T> {
   title: string;
   style?: CSSProperties;
-  labelMinWidth: string;
-  answerMinWidth: string;
+  labelWidth: number;
+  answerWidth: number;
   dropdownProps: DropdownProps<T>;
 }
 
 function SelectDropdown<T>({
   title,
   style = {},
-  labelMinWidth,
-  answerMinWidth,
+  labelWidth,
+  answerWidth,
   dropdownProps,
 }: SelectDropdownProps<T>) {
   return (
     <div className={styles.question_box} style={style}>
-      <div className={styles.label} style={{ minWidth: labelMinWidth }}>
+      <div className={styles.label} style={{ width: labelWidth }}>
         {title}
       </div>
       <div
         className={styles.select_dropdown_answer}
-        style={{ minWidth: answerMinWidth }}
+        style={{ width: answerWidth }}
       >
         <Dropdown
           {...dropdownProps}
@@ -61,6 +62,7 @@ function SelectDropdown<T>({
 }
 
 interface UpdateParamProp {
+  style: CSSProperties;
   setCountries: Dispatch<SetStateAction<Set<string>>>;
   setStates: Dispatch<SetStateAction<Set<string>>>;
   setCities: Dispatch<SetStateAction<Set<string>>>;
@@ -153,7 +155,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   );
 
   return (
-    <div className={styles.body}>
+    <div className={styles.body} style={props.style}>
       <div className={styles.button_row}>
         <div className={styles.active_patient_box}>
           <span className={styles.active_patient_box_label}>
@@ -185,15 +187,15 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: COUNTRIES,
             value: country,
-            onChange: (e: SelectChangeEvent) => {
-              setCountry(e.target.value);
+            onChange: (e: SelectChangeEvent<unknown>) => {
+              setCountry(e.target.value as string);
               setState("");
               setCity("");
             },
             showError: false,
           }}
-          labelMinWidth="99px"
-          answerMinWidth="183px"
+          labelWidth={99}
+          answerWidth={183}
         />
         <SelectDropdown
           title="State"
@@ -201,14 +203,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: STATES,
             value: state,
-            onChange: (e: SelectChangeEvent) => {
-              setState(e.target.value);
+            onChange: (e: SelectChangeEvent<unknown>) => {
+              setState(e.target.value as string);
               setCity("");
             },
             showError: false,
           }}
-          labelMinWidth="99px"
-          answerMinWidth="183px"
+          labelWidth={99}
+          answerWidth={183}
         />
         <SelectDropdown
           title="City"
@@ -216,13 +218,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: CITIES,
             value: city,
-            onChange: (e: SelectChangeEvent) => {
-              setCity(e.target.value);
+            onChange: (e: SelectChangeEvent<unknown>) => {
+              setCity(e.target.value as string);
             },
             showError: false,
           }}
-          labelMinWidth="99px"
-          answerMinWidth="183px"
+          labelWidth={99}
+          answerWidth={183}
         />
         <SelectDropdown
           title="BEI Chapter"
@@ -230,13 +232,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             placeholder: "input",
             options: CHAPTERS,
             value: beiChapter,
-            onChange: (e: SelectChangeEvent) => {
-              setBeiChapter(e.target.value);
+            onChange: (e: SelectChangeEvent<unknown>) => {
+              setBeiChapter(e.target.value as string);
             },
             showError: false,
           }}
-          labelMinWidth="99px"
-          answerMinWidth="258px"
+          labelWidth={120}
+          answerWidth={258}
         />
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
@@ -251,9 +253,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={[styles.label, styles.email_label].join(" ")}>
             Email Address
           </div>
-          <input
+          <InputField
             type="email"
-            className={[styles.answer, styles.email_box].join(" ")}
+            className={[styles.answer, styles.email_answer].join(" ")}
+            inputFieldClassName={styles.answerInput}
             value={email}
             placeholder="***@****.***"
             onChange={(e) => setEmail(e.target.value)}
@@ -265,10 +268,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           >
             Additional Affiliation
           </div>
-          <input
+          <InputField
             className={[styles.answer, styles.affiliation_answer].join(" ")}
+            inputFieldClassName={styles.answerInput}
             placeholder="input"
-            maxLength={140}
             onChange={(e) => setAdditionalAffiliation(e.target.value)}
             value={additionalAffiliation}
           />
@@ -293,10 +296,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             >
               First and Last Name
             </div>
-            <input
+            <InputField
               className={[styles.answer, styles.sec_person_name_answer].join(
                 " ",
               )}
+              inputFieldClassName={styles.answerInput}
               required={false}
               placeholder="Anna White"
               value={secondaryName}
@@ -317,10 +321,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             >
               Phone Number
             </div>
-            <input
+            <InputField
               className={[styles.answer, styles.sec_person_phone_answer].join(
                 " ",
               )}
+              inputFieldClassName={styles.answerInput}
               required={false}
               type="tel"
               placeholder="***-***-****"

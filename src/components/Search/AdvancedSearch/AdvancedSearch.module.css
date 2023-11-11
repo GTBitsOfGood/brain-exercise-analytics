@@ -1,12 +1,16 @@
 .body {
+  display: flex;
+  flex-direction: column;
   align-self: center;
   justify-content: center;
   width: 70vw;
   font-size: 12px;
   box-shadow: 0px 0px 4px 4px #e5e8ee;
   background-color: #e7eeff;
+  margin-top: 5px;
   padding: 22px 12px;
   border-radius: 20px;
+  transition: all 1s ease-in-out;
 }
 
 .answer::placeholder {
@@ -28,41 +32,9 @@
   column-gap: 20px;
 }
 
-.email_label {
-  min-width: 134px;
-}
-
-.additional_affil_label {
-  min-width: 10px;
-}
-
-.affiliation_answer {
-  min-width: 240px;
-}
-
-.sec_person_name_label {
-  min-width: 154px;
-  white-space: nowrap;
-}
-
-.sec_person_phone_answer {
-  min-width: 260px;
-}
-
-.sec_person_name_answer {
-  min-width: 305px;
-}
-
-.sec_person_phone_label {
-  min-width: 305px;
-}
-
-.email_box {
-  min-width: 192px;
-}
-
 .question_box {
   display: flex;
+  flex-direction: row;
   height: 30px;
 }
 
@@ -71,24 +43,57 @@
   margin-top: auto;
   vertical-align: middle;
   background-color: #fafafa;
-  padding: 5px;
-  padding-left: 17px;
-  padding-right: 12px;
-  flex: 1;
+  padding: 5px 12px;
   height: 100%;
   border: 1px solid #d9d9d9;
 }
 
+.email_label {
+  width: 134px;
+}
+
+.email_answer {
+  width: 263px;
+}
+
+.additional_affil_label {
+  width: 192px;
+}
+
+.affiliation_answer {
+  width: 346px;
+}
+
+.sec_person_name_label {
+  width: 154px;
+  white-space: nowrap;
+}
+
+.sec_person_name_answer {
+  width: 305px;
+}
+
+.sec_person_phone_label {
+  width: 134px;
+}
+
+.sec_person_phone_answer {
+  width: 359px;
+}
+
 .select_dropdown_answer {
-  flex: 1;
   display: inline-block;
   border: 1px solid #d9d9d9;
 }
 
 .answer {
-  flex: 1;
-  padding-left: 10px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #d9d9d9 !important;
+}
+
+.answerInput {
+  height: 28.5px !important;
+  border-radius: 0px !important;
+  border: 0px solid;
 }
 
 .secondaryInfo {
