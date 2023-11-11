@@ -1,45 +1,64 @@
 import React, {
   useState,
-  useEffect,
-  createRef,
-  RefObject,
   Dispatch,
   SetStateAction,
   useCallback,
+  CSSProperties,
 } from "react";
 import Switch from "react-switch";
+import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import CHAPTERS from "@src/utils/chapters";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
-import { CalendarInput } from "./CalendarInput";
 import "react-calendar/dist/Calendar.css";
+import { CalendarInput } from "./CalendarInput";
 
-interface SelectDropdownProps {
+interface SelectDropdownProps<T> {
   title: string;
-  dropdownprops: DropdownProps<string>;
-  style?: object;
+  style?: CSSProperties;
+  labelMinWidth: string;
+  answerMinWidth: string;
+  dropdownProps: DropdownProps<T>;
 }
 
-const SelectDropdown = ({
+function SelectDropdown<T>({
   title,
-  dropdownprops,
   style = {},
-}: SelectDropdownProps) => {
+  labelMinWidth,
+  answerMinWidth,
+  dropdownProps,
+}: SelectDropdownProps<T>) {
   return (
-    <div
-      className={styles.question_box}
-      style={{
-        ...style,
-      }}
-    >
-      <div className={styles.label}>{title}</div>
-      <div className={styles.answer}>
-        <Dropdown {...dropdownprops} />
+    <div className={styles.question_box} style={style}>
+      <div className={styles.label} style={{ minWidth: labelMinWidth }}>
+        {title}
+      </div>
+      <div
+        className={styles.select_dropdown_answer}
+        style={{ minWidth: answerMinWidth }}
+      >
+        <Dropdown
+          {...dropdownProps}
+          style={{
+            height: "28px",
+            width: "100%",
+            border: "none",
+            borderRadius: 0,
+          }}
+          sx={{
+            "&.MuiOutlinedInput-root": {
+              height: "30px",
+              "& fieldset": {
+                borderRadius: "0px",
+              },
+            },
+          }}
+        />
       </div>
     </div>
   );
-};
+}
 
 interface UpdateParamProp {
   setCountries: Dispatch<SetStateAction<Set<string>>>;
@@ -69,41 +88,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [showJoinDateCalendar, setShowJoinDateCalendar] = useState(false);
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
-  const [dobCalendarX, setDOBCalendarX] = useState<number>(0);
-  const [dobCalendarY, setDOBCalendarY] = useState<number>(0);
-  const [joinDateCalendarX, setJoinDateCalendarX] = useState<number>(0);
-  const [joinDateCalendarY, setJoinDateCalendarY] = useState<number>(0);
-  const dobIconRef: RefObject<HTMLDivElement> = createRef();
-  const joinIconRef: RefObject<HTMLDivElement> = createRef();
-
-  useEffect(() => {
-    const onScroll = () => {
-      setShowDOBCalendar(false);
-      setShowJoinDateCalendar(false);
-    };
-
-    window.removeEventListener("scroll", onScroll);
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    if (dobIconRef.current) {
-      const dobIconRect: Element = dobIconRef.current;
-      const newTop = dobIconRect.getBoundingClientRect().y + 30;
-      setDOBCalendarY(newTop);
-      const left = dobIconRect.getBoundingClientRect().x;
-      setDOBCalendarX(left);
-    }
-
-    if (joinIconRef.current) {
-      const joinIconRect: Element | undefined = joinIconRef.current;
-      let joinIconY = 0;
-      if (joinIconRect) {
-        joinIconY = joinIconRect.getBoundingClientRect().y;
-      }
-      setJoinDateCalendarY(joinIconY);
-      const joinIconLeft = joinIconRect.getBoundingClientRect().x;
-      setJoinDateCalendarX(joinIconLeft);
-    }
-  }, [dobIconRef, joinIconRef]);
 
   const checkAndUpdateList = useCallback(
     <T,>(element: T, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
@@ -169,30 +153,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   );
 
   return (
-    <div
-      className={styles.body}
-      style={{
-        backgroundColor: "#E7EEFF",
-        padding: 40,
-        borderRadius: 20,
-      }}
-    >
-      <div
-        className={styles.button_row}
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 20,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span style={{ paddingRight: 5 }}>Active Patient</span>
+    <div className={styles.body}>
+      <div className={styles.button_row}>
+        <div className={styles.active_patient_box}>
+          <span className={styles.active_patient_box_label}>
+            Active Patient
+          </span>
           <Switch
             onChange={() => setActive(!active)}
             checked={active}
@@ -201,176 +167,166 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             checkedIcon={false}
           />
         </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            padding: 7,
-            paddingLeft: 17,
-            paddingRight: 17,
-            cursor: "pointer",
-          }}
-          onClick={reset}
-        >
+        <div className={styles.button_row_button} onClick={reset}>
           Clear
         </div>
         <div
-          style={{
-            backgroundColor: "#008AFC",
-            padding: 7,
-            paddingLeft: 17,
-            paddingRight: 17,
-            color: "white",
-            cursor: "pointer",
-          }}
+          className={[styles.button_row_button, styles.button_blue].join(" ")}
           onClick={setFinal}
         >
           Apply
         </div>
       </div>
-      <div className={styles.cities_row}>
+      {/* entire flexbox */}
+      <div className={styles.all_questions}>
         <SelectDropdown
           title="Country"
-          dropdownprops={{
-            required: false,
+          dropdownProps={{
             placeholder: "input",
             options: COUNTRIES,
             value: country,
-            onChange: (e) => {
+            onChange: (e: SelectChangeEvent) => {
               setCountry(e.target.value);
               setState("");
               setCity("");
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="183px"
         />
         <SelectDropdown
           title="State"
-          dropdownprops={{
-            required: false,
+          dropdownProps={{
             placeholder: "input",
             options: STATES,
             value: state,
-            onChange: (e) => {
+            onChange: (e: SelectChangeEvent) => {
               setState(e.target.value);
               setCity("");
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="183px"
         />
         <SelectDropdown
           title="City"
-          dropdownprops={{
-            required: false,
+          dropdownProps={{
             placeholder: "input",
             options: CITIES,
             value: city,
-            onChange: (e) => {
+            onChange: (e: SelectChangeEvent) => {
               setCity(e.target.value);
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="183px"
         />
         <SelectDropdown
           title="BEI Chapter"
-          dropdownprops={{
-            required: false,
+          dropdownProps={{
             placeholder: "input",
             options: CHAPTERS,
             value: beiChapter,
-            onChange: (e) => {
+            onChange: (e: SelectChangeEvent) => {
               setBeiChapter(e.target.value);
             },
             showError: false,
           }}
-          style={{ flex: 1 }}
+          labelMinWidth="99px"
+          answerMinWidth="258px"
         />
-      </div>
-      <div className={styles.row_two}>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
           <CalendarInput
-            iconRef={dobIconRef}
             showCalendar={showDOBCalendar}
             calendarValue={dateOfBirth}
             setShowCalendar={setShowDOBCalendar}
             setCalendarValue={setDateOfBirth}
-            calendarX={dobCalendarX}
-            calendarY={dobCalendarY}
           />
         </div>
         <div className={styles.question_box}>
-          <div className={styles.label}>Email Address</div>
+          <div className={[styles.label, styles.email_label].join(" ")}>
+            Email Address
+          </div>
           <input
             type="email"
-            className={styles.answer}
+            className={[styles.answer, styles.email_box].join(" ")}
             value={email}
             placeholder="***@****.***"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className={styles.question_box}>
-          <div className={styles.label}>Additional Affiliation</div>
+          <div
+            className={[styles.label, styles.additional_affil_label].join(" ")}
+          >
+            Additional Affiliation
+          </div>
           <input
-            className={styles.answer}
+            className={[styles.answer, styles.affiliation_answer].join(" ")}
             placeholder="input"
             maxLength={140}
             onChange={(e) => setAdditionalAffiliation(e.target.value)}
             value={additionalAffiliation}
           />
         </div>
-      </div>
-      <div className={styles.row_three}>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
           <CalendarInput
-            iconRef={joinIconRef}
             showCalendar={showJoinDateCalendar}
             calendarValue={joinDate}
             setShowCalendar={setShowJoinDateCalendar}
             setCalendarValue={setJoinDate}
-            calendarX={joinDateCalendarX}
-            calendarY={joinDateCalendarY}
           />
         </div>
 
-        <div className={styles.question_box}>
-          <div className={styles.secondaryInfo}>
-            <div className={styles.secondInfoTitle}>
-              Secondary Contact Person Information
+        <div className={styles.secondaryInfo}>
+          <div className={styles.secondaryInfoTitle}>
+            Secondary Contact Person Information
+          </div>
+          <div className={styles.question_box}>
+            <div
+              className={[styles.label, styles.sec_person_name_label].join(" ")}
+            >
+              First and Last Name
             </div>
-            <div className={styles.question_box}>
-              <div className={styles.label} style={{ whiteSpace: "nowrap" }}>
-                First and Last Name
-              </div>
-              <input
-                className={styles.answer}
-                required={false}
-                placeholder="Anna White"
-                value={secondaryName}
-                onChange={(e) => setSecondaryName(e.target.value)}
-              />
-            </div>
+            <input
+              className={[styles.answer, styles.sec_person_name_answer].join(
+                " ",
+              )}
+              required={false}
+              placeholder="Anna White"
+              value={secondaryName}
+              onChange={(e) => setSecondaryName(e.target.value)}
+            />
           </div>
         </div>
 
-        <div className={styles.question_box}>
-          <div className={styles.secondaryInfo}>
-            <div className={styles.secondInfoTitle}>
-              Secondary Contact Person Information
+        <div className={styles.secondaryInfo}>
+          <div className={styles.secondaryInfoTitle}>
+            Secondary Contact Person Information
+          </div>
+          <div className={styles.question_box}>
+            <div
+              className={[styles.label, styles.sec_person_phone_label].join(
+                " ",
+              )}
+            >
+              Phone Number
             </div>
-            <div className={styles.question_box}>
-              <div className={styles.label}>Phone Number</div>
-              <input
-                className={styles.answer}
-                required={false}
-                placeholder="***-***-****"
-                value={secondaryPhoneNumber}
-                onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
-              />
-            </div>
+            <input
+              className={[styles.answer, styles.sec_person_phone_answer].join(
+                " ",
+              )}
+              required={false}
+              type="tel"
+              placeholder="***-***-****"
+              value={secondaryPhoneNumber}
+              onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faExclamationCircle,
@@ -13,7 +13,7 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
-import Dropdown from "@src/components/Dropdown/Dropdown";
+import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
@@ -39,11 +39,6 @@ export default function Page() {
 
   const router = useRouter();
 
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
     displayValue: `${country.name}`,
@@ -56,6 +51,7 @@ export default function Page() {
     value: state.name,
     displayValue: `${state.name}`,
   }));
+
   const stateCode = State.getStatesOfCountry(countryCode).filter(
     (state) => state.name === locState,
   )[0]?.isoCode;
@@ -134,10 +130,6 @@ export default function Page() {
     }
   };
 
-  if (!isClient) {
-    return null;
-  }
-
   return (
     <div className={styles.screen}>
       <div className={styles.splitScreen}>
@@ -195,7 +187,7 @@ export default function Page() {
                 />
               </div>
               <div className={styles.locationField}>
-                <Dropdown
+                <AuthDropdown
                   title="Location"
                   required={true}
                   placeholder="Select Your Country"
@@ -203,6 +195,8 @@ export default function Page() {
                   value={locCountry}
                   onChange={(e) => {
                     setLocCountry(e.target.value);
+                    setLocState("");
+                    setLocCity("");
                     setCountryError("");
                     setStateError("");
                     setCityError("");
@@ -213,20 +207,21 @@ export default function Page() {
               </div>
               {locCountry === "" ? null : (
                 <div className={styles.cityStateFields}>
-                  <Dropdown
+                  <AuthDropdown
                     required={true}
                     placeholder="Select Your State"
                     options={STATES}
                     value={locState}
                     onChange={(e) => {
                       setLocState(e.target.value);
+                      setLocCity("");
                       setStateError("");
                       setCityError("");
                     }}
                     showError={stateError !== ""}
                     error={stateError}
                   />
-                  <Dropdown
+                  <AuthDropdown
                     required={true}
                     placeholder="Select Your City"
                     options={CITIES}
@@ -241,7 +236,7 @@ export default function Page() {
                 </div>
               )}
               <div className={styles.locationField}>
-                <Dropdown
+                <AuthDropdown
                   title="Chapter"
                   required={true}
                   placeholder="Select Your Chaper"

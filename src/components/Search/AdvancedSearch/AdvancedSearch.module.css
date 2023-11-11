@@ -4,37 +4,84 @@
   width: 70vw;
   font-size: 12px;
   box-shadow: 0px 0px 4px 4px #e5e8ee;
+  background-color: #e7eeff;
+  padding: 22px 12px;
+  border-radius: 20px;
 }
 
 .answer::placeholder {
   color: #888888;
 }
 
-.button_row,
-.cities_row,
-.row_two,
-.row_three {
+.button_row {
   margin-bottom: 20px;
   display: flex;
-  gap: 40px;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.row_three {
-  margin-top: 40px;
+.all_questions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: last baseline;
+  row-gap: 20px;
+  column-gap: 20px;
+}
+
+.email_label {
+  min-width: 134px;
+}
+
+.additional_affil_label {
+  min-width: 10px;
+}
+
+.affiliation_answer {
+  min-width: 240px;
+}
+
+.sec_person_name_label {
+  min-width: 154px;
+  white-space: nowrap;
+}
+
+.sec_person_phone_answer {
+  min-width: 260px;
+}
+
+.sec_person_name_answer {
+  min-width: 305px;
+}
+
+.sec_person_phone_label {
+  min-width: 305px;
+}
+
+.email_box {
+  min-width: 192px;
 }
 
 .question_box {
   display: flex;
-  flex: 1;
+  height: 30px;
 }
 
 .label {
-  vertical-align: "middle";
-  margin: auto;
-  display: inline-block;
+  text-align: left;
+  margin-top: auto;
+  vertical-align: middle;
   background-color: #fafafa;
   padding: 5px;
+  padding-left: 17px;
+  padding-right: 12px;
   flex: 1;
+  height: 100%;
+  border: 1px solid #d9d9d9;
+}
+
+.select_dropdown_answer {
+  flex: 1;
+  display: inline-block;
   border: 1px solid #d9d9d9;
 }
 
@@ -44,7 +91,57 @@
   border: 1px solid #d9d9d9;
 }
 
-.secondInfoTitle {
+.secondaryInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.secondaryInfo > .question_box {
+  margin-top: 6px;
+}
+
+.secondaryInfoTitle {
   font-size: 12px;
-  margin-top: -20px;
+  text-align: left;
+  margin-top: -10px;
+  color: #828282;
+}
+
+.calendarContainer {
+  display: flex;
+  background-color: white;
+  vertical-align: middle;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.active_patient_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 17px;
+}
+
+.active_patient_box_label {
+  padding-right: 12px;
+}
+
+.button_row_button {
+  background-color: white;
+  width: 95px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button_blue {
+  background-color: #008afc;
+  color: white;
 }

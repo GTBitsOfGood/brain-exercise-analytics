@@ -48,6 +48,11 @@
   padding-right: 17px;
 }
 
+.input-field:focus {
+  outline: 1px solid #0a6ebd;
+  border: 1px solid #0a6ebd;
+}
+
 .input-field::placeholder {
   color: #a3aed0;
 }
