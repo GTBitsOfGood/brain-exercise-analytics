@@ -1,0 +1,20 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  color: #8f9bba;
+}
+
+.navigation-panel {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  width: 20%;
+}
+
+.rest-of-page {
+  display: flex;
+  flex-direction: column;
+  color: #8f9bba;
+  background-color: #f4f7fe;
+  width: 80%;
+}

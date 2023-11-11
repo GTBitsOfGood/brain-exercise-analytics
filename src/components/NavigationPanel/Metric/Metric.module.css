@@ -1,8 +1,8 @@
 .wrapper {
   display: flex;
   flex-direction: row;
-  padding-top: 13%;
-  padding-bottom: 3%;
+  padding-top: 3vh;
+  padding-bottom: 1vh;
   padding-left: 17%;
 }
 

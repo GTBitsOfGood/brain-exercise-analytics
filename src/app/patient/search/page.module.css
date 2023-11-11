@@ -1,20 +1,9 @@
-.wrapper {
+.search-container {
   display: flex;
-  width: 100vw;
-  font-family: var(--font-poppins);
-}
-
-.navigation-panel {
-}
-
-.rest-of-page {
-  display: flex;
+  height: 100%;
   flex-direction: column;
   justify-content: center;
-  text-align: center;
-  width: 80%;
-  min-height: 100vh;
-  padding: 0 2%;
+  align-items: center;
 }
 
 .intro-text {
@@ -27,7 +16,6 @@
 }
 
 .search-wrapper {
-  margin: auto;
   justify-self: center;
   width: 90%;
 }
