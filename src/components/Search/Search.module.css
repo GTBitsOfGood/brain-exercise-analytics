@@ -1,51 +1,39 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  width: 80vw;
+  width: 100%;
 }
 
 .border {
   display: flex;
   flex-direction: column;
   background-color: white;
-  width: 70vw;
   border-radius: 10px;
   text-align: left;
-  padding-left: 0.7vw;
-  padding-top: 0.7vw;
-  padding-bottom: 0.7vw;
-  padding-right: 0.7vw;
+  padding: 14px;
+  row-gap: 14px;
 }
 
 .search-no-tags {
-  width: 67vw;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  column-gap: 16px;
 }
 
 .search-container {
   display: flex;
   flex-direction: column;
   display: flex;
+  flex: 18;
 }
 
 .search-bar {
-  width: 55vw;
   background: #e7eeff;
   border-radius: 8px;
   border: none;
   color: #808080;
   font-size: 20px;
   font-weight: 400;
-  line-height: 24.34px;
-  padding-left: 1vw;
-  padding-right: 1vw;
-  height: 5vh;
 }
 
 .search-bar::placeholder {
@@ -56,25 +44,34 @@
   word-wrap: break-word;
 }
 
+.search-bar-input {
+  height: 51px;
+  border: none;
+  background-color: transparent;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 400;
+}
+
 .search-icon {
   color: #2b3674;
   cursor: pointer;
-  padding-top: 1vh;
+  flex: 1;
 }
 
 .advanced-filter {
   color: black;
   font-size: 14px;
   font-weight: 500;
-  line-height: 36.69px;
   word-wrap: break-word;
   cursor: pointer;
+  flex: 2;
+  min-width: max-content;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  row-gap: 1.1vh;
-  column-gap: 0.7vw;
-  padding-top: 1vh;
+  row-gap: 15px;
+  column-gap: 14px;
 }

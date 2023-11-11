@@ -1,15 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { classes } from "@src/utils/utils";
 import styles from "./Search.module.css";
 import Tag from "./Tag/Tag";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
+import InputField from "../InputField/InputField";
 
-// interface InputParamsProps {}
+interface SearchProps {
+  className?: string;
+}
 
-export default function Search() {
+export default function Search({ className }: SearchProps) {
   const [searchInput, setSearchInput] = useState("");
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
@@ -29,31 +34,62 @@ export default function Search() {
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
+  const tagsPresent = useMemo(
+    () =>
+      actives.size > 0 ||
+      countries.size > 0 ||
+      states.size > 0 ||
+      cities.size > 0 ||
+      dateOfBirths.size > 0 ||
+      emails.size > 0 ||
+      additionalAffiliations.size > 0 ||
+      joinDates.size > 0 ||
+      beiChapters.size > 0 ||
+      secondaryPhoneNumbers.size > 0 ||
+      secondaryNames.size > 0,
+    [
+      actives,
+      countries,
+      states,
+      cities,
+      dateOfBirths,
+      emails,
+      additionalAffiliations,
+      joinDates,
+      beiChapters,
+      secondaryPhoneNumbers,
+      secondaryNames,
+    ],
+  );
+
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <div className={styles.border}>
-          <div className={styles["search-no-tags"]}>
-            <div className={styles["search-container"]}>
-              <input
-                className={styles["search-bar"]}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Name"
-              />
-            </div>
-            <FontAwesomeIcon
-              className={styles["search-icon"]}
-              icon={faSearch}
-              size="lg"
-              onClick={() => console.log(searchInput)} //eslint-disable-line
+    <div className={classes(styles.wrapper, className)}>
+      <div className={styles.border}>
+        <div className={styles["search-no-tags"]}>
+          <div className={styles["search-container"]}>
+            <InputField
+              className={styles["search-bar"]}
+              inputFieldClassName={styles["search-bar-input"]}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Name"
             />
-            <span
-              className={styles["advanced-filter"]}
-              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-            >
-              Advanced Filter
-            </span>
           </div>
+          <FontAwesomeIcon
+            className={styles["search-icon"]}
+            icon={faSearch}
+            size="lg"
+            onClick={() => console.log(searchInput)} //eslint-disable-line
+            style={{ height: 28 }}
+          />
+          <p
+            className={styles["advanced-filter"]}
+            onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+          >
+            Advanced Filter
+          </p>
+        </div>
+        {tagsPresent ? (
           <div className={styles.tags}>
             {countries.size > 0 &&
               Array.from(countries).map((country) => (
@@ -168,9 +204,8 @@ export default function Search() {
                 />
               ))}
           </div>
-        </div>
+        ) : null}
       </div>
-      {/* {showAdvancedSearch && ( */}
       <AdvancedSearch
         setActives={setActives}
         setCountries={setCountries}
@@ -184,13 +219,11 @@ export default function Search() {
         setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
         setSecondaryNames={setSecondaryNames}
         style={{
-          // display: showAdvancedSearch ? "flex" : "none",
           maxHeight: showAdvancedSearch ? "10000px" : "0px",
           zIndex: showAdvancedSearch ? 3 : -1,
           opacity: showAdvancedSearch ? 1 : 0,
         }}
       />
-      {/* )} */}
     </div>
   );
 }

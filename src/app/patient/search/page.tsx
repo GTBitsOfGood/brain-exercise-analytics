@@ -1,15 +1,8 @@
 "use client";
 
 import NavigationPanel from "@src/components/NavigationPanel/NavigationPanel";
-import { Poppins } from "next/font/google";
 import Search from "@src/components/Search/Search";
 import styles from "./page.module.css";
-
-const poppins = Poppins({
-  subsets: ["latin-ext"],
-  variable: "--font-poppins",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
 
 export default function Page() {
   return (
@@ -17,16 +10,16 @@ export default function Page() {
       <div className={styles["navigation-panel"]}>
         <NavigationPanel />
       </div>
-      <main className={poppins.variable}>
-        <div className={styles["text-wrapper"]}>
-          <div className={styles["rest-of-page"]}>
-            <span className={styles["intro-text"]}>
-              To begin viewing analytics, search for a patient here!
-            </span>
+      <div className={styles["rest-of-page"]}>
+        <div className={styles["search-container"]}>
+          <p className={styles["intro-text"]}>
+            To begin viewing analytics, search for a patient here!
+          </p>
+          <div className={styles["search-wrapper"]}>
             <Search />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
