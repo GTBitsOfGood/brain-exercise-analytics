@@ -13,4 +13,25 @@ interface D3Data {
   style?: object;
 }
 
-export type { D3Data };
+interface GridRowDef {
+  id: number;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  dateStart: string;
+  secondContactName: string;
+  secondContactPhone: string;
+  status: boolean;
+  email: string;
+  chapter: string;
+  location: { country: string; state: string; city: string };
+}
+interface GridColDef {
+  field: string;
+  headerName: string;
+  width?: number | string;
+  type?: "string";
+  sortable?: boolean;
+}
+
+export type { D3Data, GridRowDef, GridColDef };

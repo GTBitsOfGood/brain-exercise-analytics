@@ -1,6 +1,7 @@
 .search-container {
   display: flex;
   height: 100%;
+  padding: 2%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -18,4 +19,8 @@
 .search-wrapper {
   justify-self: center;
   width: 90%;
+}
+
+.table-wrapper {
+  width: 96%;
 }

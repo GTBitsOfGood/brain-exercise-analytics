@@ -30,6 +30,10 @@ const UserSchema = new Schema({
       secondaryContactPhone: "",
     },
   },
+  chapter: {
+    type: String,
+    default: "",
+  },
   location: {
     type: {
       country: String,

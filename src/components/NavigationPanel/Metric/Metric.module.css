@@ -1,8 +1,7 @@
 .wrapper {
   display: flex;
   flex-direction: row;
-  padding-top: 3vh;
-  padding-bottom: 1vh;
+  padding-top: 2vh;
   padding-left: 17%;
 }
 
@@ -18,7 +17,7 @@
 
 .metric {
   color: #2078c1;
-  font-size: 15px;
+  font-size: 13px;
   font-family: var(--font-poppins);
   font-weight: 500;
   word-wrap: break-word;

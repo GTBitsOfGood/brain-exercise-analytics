@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  height: 100vh;
+  min-height: 100vh;
   align-items: center;
-  padding: 12% 10% 8%;
+  padding: 10%;
 }
 
 .BEI-image {
@@ -22,7 +22,7 @@
 
 .bei {
   color: #474747;
-  font-size: 18px;
+  font-size: 17px;
   font-family: var(--font-poppins);
   font-weight: 600;
   line-height: 21.04px;
@@ -71,7 +71,7 @@
   border-radius: 10px;
   border: none;
   color: #2078c1;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   font-family: var(--font-poppins);
   cursor: pointer;
@@ -88,7 +88,7 @@
   border-radius: 10px;
   border: none;
   color: #2078c1;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   font-family: var(--font-poppins);
   cursor: pointer;
@@ -131,10 +131,9 @@
 
 .overall-metrics {
   color: #2078c1;
-  font-size: 14px;
+  font-size: 13px;
   font-family: var(--font-poppins);
   font-weight: 600;
-  line-height: 30.54px;
   word-wrap: break-word;
   padding-left: 5%;
 }
