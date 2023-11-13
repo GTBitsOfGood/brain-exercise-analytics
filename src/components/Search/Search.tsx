@@ -35,6 +35,7 @@ interface SearchProps {
   setSecondaryPhoneNumbers: React.Dispatch<React.SetStateAction<Set<string>>>;
   secondaryNames: Set<string>;
   setSecondaryNames: React.Dispatch<React.SetStateAction<Set<string>>>;
+  onSubmit?: () => void;
 }
 
 export default function Search({
@@ -62,6 +63,7 @@ export default function Search({
   setSecondaryPhoneNumbers,
   secondaryNames,
   setSecondaryNames,
+  onSubmit,
 }: SearchProps) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
@@ -94,9 +96,10 @@ export default function Search({
     ],
   );
 
-  const updateFullName = useCallback(() => {
+  const onSubmitSearch = useCallback(() => {
     setFullName(searchInput);
-  }, [searchInput, setFullName]);
+    onSubmit?.();
+  }, [searchInput, setFullName, onSubmit]);
 
   return (
     <div className={classes(styles.wrapper, className)}>
@@ -115,7 +118,7 @@ export default function Search({
             className={styles["search-icon"]}
             icon={faSearch}
             size="lg"
-            onClick={updateFullName}
+            onClick={onSubmitSearch}
             style={{ height: 28 }}
           />
           <p
@@ -245,26 +248,28 @@ export default function Search({
               ))}
           </div>
         ) : null}
+        <div
+          className={classes(
+            styles["advanced-search-container"],
+            showAdvancedSearch && styles["advanced-search-container-show"],
+          )}
+        >
+          <AdvancedSearch
+            setActives={setActives}
+            setCountries={setCountries}
+            setStates={setStates}
+            setCities={setCities}
+            setDateOfBirths={setDateOfBirths}
+            setEmails={setEmails}
+            setAdditionalAffiliations={setAdditionalAffiliations}
+            setJoinDates={setJoinDates}
+            setBeiChapters={setBeiChapters}
+            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
+            setSecondaryNames={setSecondaryNames}
+            onSubmit={onSubmitSearch}
+          />
+        </div>
       </div>
-      <AdvancedSearch
-        setActives={setActives}
-        setCountries={setCountries}
-        setStates={setStates}
-        setCities={setCities}
-        setDateOfBirths={setDateOfBirths}
-        setEmails={setEmails}
-        setAdditionalAffiliations={setAdditionalAffiliations}
-        setJoinDates={setJoinDates}
-        setBeiChapters={setBeiChapters}
-        setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-        setSecondaryNames={setSecondaryNames}
-        style={{
-          maxHeight: showAdvancedSearch ? "10000px" : "0px",
-          zIndex: showAdvancedSearch ? 3 : -1,
-          opacity: showAdvancedSearch ? 1 : 0,
-        }}
-        onClick={updateFullName}
-      />
     </div>
   );
 }

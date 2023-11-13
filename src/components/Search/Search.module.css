@@ -12,6 +12,7 @@
   text-align: left;
   padding: 14px;
   row-gap: 14px;
+  position: relative;
 }
 
 .search-no-tags {
@@ -74,4 +75,25 @@
   flex-wrap: wrap;
   row-gap: 15px;
   column-gap: 14px;
+}
+
+.advanced-search-container {
+  position: absolute;
+  top: 96%;
+  left: 0;
+  transition:
+    all 0.75s ease-in-out,
+    z-index 0s ease-out 0.75s;
+  max-height: 0px;
+  z-index: -1;
+  opacity: 0;
+}
+
+.advanced-search-container-show {
+  max-height: 10000px;
+  z-index: 3;
+  opacity: 1;
+  transition:
+    all 0.75s ease-in-out,
+    z-index 0s !important;
 }

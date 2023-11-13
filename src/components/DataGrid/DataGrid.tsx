@@ -26,6 +26,7 @@ interface ExtendedDataParams extends DataParams {
     };
   };
   pageSizeOptions?: number[];
+  onClick?: () => void;
 }
 
 function ExpandedRow({ row }: { row: GridRowDef }) {

@@ -62,7 +62,7 @@ function SelectDropdown<T>({
 }
 
 interface UpdateParamProp {
-  style: CSSProperties;
+  style?: CSSProperties;
   setCountries: Dispatch<SetStateAction<Set<string>>>;
   setStates: Dispatch<SetStateAction<Set<string>>>;
   setCities: Dispatch<SetStateAction<Set<string>>>;
@@ -74,7 +74,7 @@ interface UpdateParamProp {
   setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
   setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
   setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
-  onClick?: () => void;
+  onSubmit?: () => void;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
@@ -133,8 +133,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     checkAndUpdateList(beiChapter, props.setBeiChapters);
     checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
     checkAndUpdateList(secondaryName, props.setSecondaryNames);
-    if (props.onClick) {
-      props.onClick();
+    if (props.onSubmit) {
+      props.onSubmit();
     }
   };
 

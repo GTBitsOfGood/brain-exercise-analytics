@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
 import { sampleUsers } from "@src/utils/patients";
-import { transformDate } from "@src/utils/utils";
+import { classes, transformDate } from "@src/utils/utils";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -68,39 +69,59 @@ export default function Page() {
     secondaryNames,
   ]);
 
+  const [viewTable, setViewTable] = useState<boolean>(false);
+  const viewTablePermanent = useCallback(() => setViewTable(true), []);
+
   return (
-    <div className={styles["search-container"]}>
-      <p className={styles["intro-text"]}>
-        To begin viewing analytics, search for a patient here!
-      </p>
-      <div className={styles["search-wrapper"]}>
-        <Search
-          setFullName={setFullName}
-          actives={actives}
-          setActives={setActives}
-          countries={countries}
-          setCountries={setCountries}
-          states={states}
-          setStates={setStates}
-          cities={cities}
-          setCities={setCities}
-          dateOfBirths={dateOfBirths}
-          setDateOfBirths={setDateOfBirths}
-          emails={emails}
-          setEmails={setEmails}
-          additionalAffiliations={additionalAffiliations}
-          setAdditionalAffiliations={setAdditionalAffiliations}
-          joinDates={joinDates}
-          setJoinDates={setJoinDates}
-          beiChapters={beiChapters}
-          setBeiChapters={setBeiChapters}
-          secondaryPhoneNumbers={secondaryPhoneNumbers}
-          setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-          secondaryNames={secondaryNames}
-          setSecondaryNames={setSecondaryNames}
-        />
+    <div className={styles.container}>
+      <div
+        className={classes(
+          styles["search-container"],
+          !viewTable && styles["search-container-alone"],
+        )}
+      >
+        <p className={styles["intro-text"]}>
+          To begin viewing analytics, search for a patient here!
+        </p>
+        <div className={styles["search-wrapper"]}>
+          <Search
+            setFullName={setFullName}
+            actives={actives}
+            setActives={setActives}
+            countries={countries}
+            setCountries={setCountries}
+            states={states}
+            setStates={setStates}
+            cities={cities}
+            setCities={setCities}
+            dateOfBirths={dateOfBirths}
+            setDateOfBirths={setDateOfBirths}
+            emails={emails}
+            setEmails={setEmails}
+            additionalAffiliations={additionalAffiliations}
+            setAdditionalAffiliations={setAdditionalAffiliations}
+            joinDates={joinDates}
+            setJoinDates={setJoinDates}
+            beiChapters={beiChapters}
+            setBeiChapters={setBeiChapters}
+            secondaryPhoneNumbers={secondaryPhoneNumbers}
+            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
+            secondaryNames={secondaryNames}
+            setSecondaryNames={setSecondaryNames}
+            onSubmit={viewTablePermanent}
+          />
+        </div>
       </div>
-      <div className={styles["table-wrapper"]}>
+      <div
+        className={classes(
+          styles["table-container"],
+          viewTable && styles["table-container-show"],
+        )}
+      >
+        <div className={styles["table-header"]}>
+          <Dashboard />
+          <p className={styles["table-header-text"]}>Patient Table</p>
+        </div>
         <PatientGrid data={filteredUsers} />
       </div>
     </div>
