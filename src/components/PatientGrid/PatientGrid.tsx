@@ -3,12 +3,14 @@
 import { ITableEntry } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
-import { GridColDef, GridRowDef } from "../types";
+import { GridColDef, GridRowDef, SortField } from "../types";
 import DataGrid from "../DataGrid/DataGrid";
 
 interface DataParams {
   data: ITableEntry[];
   children?: ReactNode;
+  sortField: SortField;
+  setSortField: React.Dispatch<React.SetStateAction<SortField>>;
 }
 
 const columns: GridColDef[] = [
@@ -80,9 +82,44 @@ export default function PatientGrid(params: DataParams) {
     [params.data],
   );
 
+  const sortedRows = useMemo<GridRowDef[]>(() => {
+    if (!params.sortField) {
+      return rows;
+    }
+    return [...rows].sort((a, b) => {
+      const { ascending, field } = params.sortField as NonNullable<SortField>;
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const aVal = a[field] as string | boolean;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const bVal = b[field] as string | boolean;
+
+      if (typeof aVal === "boolean" || typeof bVal === "boolean") {
+        return ascending ? +aVal - +bVal : +bVal - +aVal;
+      }
+
+      if (field === "dateOfBirth" || field === "dateStart") {
+        const aDate = new Date(aVal);
+        const bDate = new Date(bVal);
+
+        if (ascending) {
+          return aDate.getTime() - bDate.getTime();
+        }
+        return bDate.getTime() - aDate.getTime();
+      }
+
+      if (ascending) {
+        return aVal.localeCompare(bVal);
+      }
+      return bVal.localeCompare(aVal);
+    });
+  }, [params.sortField, rows]);
+
   return (
     <DataGrid
-      rows={rows}
+      rows={sortedRows}
       columns={columns}
       initialState={{
         pagination: {
@@ -92,6 +129,8 @@ export default function PatientGrid(params: DataParams) {
         },
       }}
       pageSizeOptions={[5]}
+      sortField={params.sortField}
+      setSortField={params.setSortField}
     />
   );
 }

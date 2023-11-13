@@ -1,6 +1,6 @@
 import { NumberValue } from "d3";
 
-interface D3Data {
+export interface D3Data {
   data: { interval: string; value: number }[];
   yAxis?: {
     min: number;
@@ -13,7 +13,7 @@ interface D3Data {
   style?: object;
 }
 
-interface GridRowDef {
+export interface GridRowDef {
   id: number;
   firstName: string;
   lastName: string;
@@ -27,7 +27,7 @@ interface GridRowDef {
   chapter: string;
   location: { country: string; state: string; city: string };
 }
-interface GridColDef {
+export interface GridColDef {
   field: string;
   headerName: string;
   width?: number | string;
@@ -35,4 +35,9 @@ interface GridColDef {
   sortable?: boolean;
 }
 
-export type { D3Data, GridRowDef, GridColDef };
+export type SortField =
+  | {
+      field: string;
+      ascending: boolean;
+    }
+  | undefined;

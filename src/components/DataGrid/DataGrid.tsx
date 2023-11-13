@@ -9,12 +9,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classes, transformPhoneNumber } from "@src/utils/utils";
-import { GridColDef, GridRowDef } from "../types";
+import { GridColDef, GridRowDef, SortField } from "../types";
 import styles from "./DataGrid.module.css";
 
 interface DataParams {
   columns: GridColDef[];
   rows: GridRowDef[];
+  sortField: SortField;
+  setSortField: React.Dispatch<React.SetStateAction<SortField>>;
 }
 
 interface ExtendedDataParams extends DataParams {
@@ -149,13 +151,6 @@ function ColumnSizes() {
   );
 }
 
-type SortField =
-  | {
-      field: string;
-      ascending: boolean;
-    }
-  | undefined;
-
 function SortButton({
   field,
   sortField,
@@ -192,15 +187,12 @@ function SortButton({
   );
 }
 
-export default function DataGrid({ columns, rows }: ExtendedDataParams) {
-  const [sortField, setSortField] = useState<
-    | {
-        field: string;
-        ascending: boolean;
-      }
-    | undefined
-  >(undefined);
-
+export default function DataGrid({
+  columns,
+  rows,
+  sortField,
+  setSortField,
+}: ExtendedDataParams) {
   return (
     <div className={styles.DataGrid}>
       <div className={styles.Container}>

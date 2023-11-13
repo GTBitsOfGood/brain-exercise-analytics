@@ -7,11 +7,13 @@ import Search from "@src/components/Search/Search";
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
 import { sampleUsers } from "@src/utils/patients";
 import { classes, transformDate } from "@src/utils/utils";
+import { SortField } from "@src/components/types";
 import styles from "./page.module.css";
 
 export default function Page() {
-  const [fullName, setFullName] = useState("");
+  const [viewTable, setViewTable] = useState<boolean>(false);
 
+  const [fullName, setFullName] = useState("");
   const [actives, setActives] = useState(new Set<boolean>());
   const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
   const [states, setStates] = useState(new Set<string>());
@@ -27,6 +29,8 @@ export default function Page() {
     new Set<string>(),
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
+
+  const [sortField, setSortField] = useState<SortField>(undefined);
 
   const filteredUsers = useMemo(() => {
     return sampleUsers.filter((user) => {
@@ -69,7 +73,6 @@ export default function Page() {
     secondaryNames,
   ]);
 
-  const [viewTable, setViewTable] = useState<boolean>(false);
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
 
   return (
@@ -122,7 +125,11 @@ export default function Page() {
           <Dashboard />
           <p className={styles["table-header-text"]}>Patient Table</p>
         </div>
-        <PatientGrid data={filteredUsers} />
+        <PatientGrid
+          data={filteredUsers}
+          sortField={sortField}
+          setSortField={setSortField}
+        />
       </div>
     </div>
   );
