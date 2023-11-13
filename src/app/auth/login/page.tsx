@@ -64,7 +64,7 @@ export default function Page() {
           },
         });
 
-        router.push("/auth/redirect");
+        router.push("/auth/information");
       } catch (error) {
         setShowGeneralError(true);
       }
@@ -103,7 +103,7 @@ export default function Page() {
           email: user.email,
         },
       });
-      router.push("/auth/redirect");
+      router.push("/auth/information");
     } catch (error) {
       setShowGeneralError(true);
     }

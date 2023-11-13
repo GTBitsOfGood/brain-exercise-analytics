@@ -83,7 +83,7 @@ export default function Page() {
             email,
           },
         });
-        router.push("/auth/redirect");
+        router.push("/auth/information");
       } catch (error) {
         setShowGeneralError(true);
       }
@@ -103,7 +103,7 @@ export default function Page() {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      router.push("/auth/redirect");
+      router.push("/auth/information");
     } catch (error) {
       setShowGeneralError(true);
     }

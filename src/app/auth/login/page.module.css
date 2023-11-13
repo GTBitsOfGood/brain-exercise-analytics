@@ -43,7 +43,7 @@
 
 .descriptionText {
   color: #a3aed0;
-  font-size: 12px;
+  font-size: 14px;
   font-family: var(--font-poppins);
   font-weight: 400;
   word-wrap: break-word;
@@ -83,7 +83,7 @@
   font-weight: 500;
   color: #ff0000;
   padding-left: 5px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .signInButtonContainer {
@@ -161,7 +161,7 @@
 
 .checkboxLabel {
   color: #005aa3;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -177,7 +177,7 @@
 
 .forgotPassword {
   color: #005aa3;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   display: flex;
   cursor: pointer;
@@ -189,7 +189,7 @@
 
 .dontHaveAccountLabel {
   color: #1a1a1a;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -197,7 +197,7 @@
 
 .signUpButton {
   color: #007aff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   display: flex;
   cursor: pointer;

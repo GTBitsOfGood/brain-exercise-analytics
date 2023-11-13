@@ -50,6 +50,7 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
         placeholder={placeholder}
         onChange={onChange}
         showError={showError}
+        sx={{ fontSize: "11px" }}
       />
       {showError && error !== undefined && (
         <div className={styles["error-container"]}>
