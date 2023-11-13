@@ -34,5 +34,5 @@
     "next.config.js",
     "src/components/InputField/InputField.tsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next"]
 }
