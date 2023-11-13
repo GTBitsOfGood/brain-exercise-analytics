@@ -23,11 +23,13 @@ const UserSchema = new Schema({
       birthDate: Date,
       secondaryContactName: String,
       secondaryContactPhone: String,
+      additionalAffiliation: String,
     },
     default: {
       birthDate: new Date(),
       secondaryContactName: "",
       secondaryContactPhone: "",
+      additionalAffiliation: "",
     },
   },
   chapter: {

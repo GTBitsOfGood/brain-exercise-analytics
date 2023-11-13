@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -12,27 +12,59 @@ import InputField from "../InputField/InputField";
 
 interface SearchProps {
   className?: string;
+  setFullName: React.Dispatch<React.SetStateAction<string>>;
+  actives: Set<boolean>;
+  setActives: React.Dispatch<React.SetStateAction<Set<boolean>>>;
+  countries: Set<string>;
+  setCountries: React.Dispatch<React.SetStateAction<Set<string>>>;
+  states: Set<string>;
+  setStates: React.Dispatch<React.SetStateAction<Set<string>>>;
+  cities: Set<string>;
+  setCities: React.Dispatch<React.SetStateAction<Set<string>>>;
+  dateOfBirths: Set<string>;
+  setDateOfBirths: React.Dispatch<React.SetStateAction<Set<string>>>;
+  emails: Set<string>;
+  setEmails: React.Dispatch<React.SetStateAction<Set<string>>>;
+  additionalAffiliations: Set<string>;
+  setAdditionalAffiliations: React.Dispatch<React.SetStateAction<Set<string>>>;
+  joinDates: Set<string>;
+  setJoinDates: React.Dispatch<React.SetStateAction<Set<string>>>;
+  beiChapters: Set<string>;
+  setBeiChapters: React.Dispatch<React.SetStateAction<Set<string>>>;
+  secondaryPhoneNumbers: Set<string>;
+  setSecondaryPhoneNumbers: React.Dispatch<React.SetStateAction<Set<string>>>;
+  secondaryNames: Set<string>;
+  setSecondaryNames: React.Dispatch<React.SetStateAction<Set<string>>>;
 }
 
-export default function Search({ className }: SearchProps) {
-  const [searchInput, setSearchInput] = useState("");
+export default function Search({
+  className,
+  setFullName,
+  actives,
+  setActives,
+  countries,
+  setCountries,
+  states,
+  setStates,
+  cities,
+  setCities,
+  dateOfBirths,
+  setDateOfBirths,
+  emails,
+  setEmails,
+  additionalAffiliations,
+  setAdditionalAffiliations,
+  joinDates,
+  setJoinDates,
+  beiChapters,
+  setBeiChapters,
+  secondaryPhoneNumbers,
+  setSecondaryPhoneNumbers,
+  secondaryNames,
+  setSecondaryNames,
+}: SearchProps) {
+  const [searchInput, setSearchInput] = useState<string>("");
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
-
-  const [actives, setActives] = useState(new Set<boolean>());
-  const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
-  const [states, setStates] = useState(new Set<string>());
-  const [cities, setCities] = useState(new Set<string>());
-  const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
-  const [emails, setEmails] = useState(new Set<string>());
-  const [additionalAffiliations, setAdditionalAffiliations] = useState(
-    new Set<string>(),
-  );
-  const [joinDates, setJoinDates] = useState(new Set<string>());
-  const [beiChapters, setBeiChapters] = useState(new Set<string>());
-  const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
-    new Set<string>(),
-  );
-  const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
   const tagsPresent = useMemo(
     () =>
@@ -62,6 +94,10 @@ export default function Search({ className }: SearchProps) {
     ],
   );
 
+  const updateFullName = useCallback(() => {
+    setFullName(searchInput);
+  }, [searchInput, setFullName]);
+
   return (
     <div className={classes(styles.wrapper, className)}>
       <div className={styles.border}>
@@ -79,7 +115,7 @@ export default function Search({ className }: SearchProps) {
             className={styles["search-icon"]}
             icon={faSearch}
             size="lg"
-            onClick={() => console.log(searchInput)} //eslint-disable-line
+            onClick={updateFullName}
             style={{ height: 28 }}
           />
           <p
@@ -223,6 +259,7 @@ export default function Search({ className }: SearchProps) {
           zIndex: showAdvancedSearch ? 3 : -1,
           opacity: showAdvancedSearch ? 1 : 0,
         }}
+        onClick={updateFullName}
       />
     </div>
   );

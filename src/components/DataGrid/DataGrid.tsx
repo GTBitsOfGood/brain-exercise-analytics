@@ -48,7 +48,9 @@ function ExpandedRow({ row }: { row: GridRowDef }) {
                 <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Additional
                 Affiliation
               </span>
-              <span className={styles.Content}>{row.chapter}</span>
+              <span className={styles.Content}>
+                {row.additionalAffiliation}
+              </span>
             </div>
           </div>
 
@@ -82,8 +84,6 @@ function Row({ row }: { row: GridRowDef }) {
         <td className={styles.RowCell}>
           <button
             style={{
-              backgroundColor: "white",
-              border: 0,
               rotate: view ? "90deg" : "0deg",
             }}
             onClick={handleClick}

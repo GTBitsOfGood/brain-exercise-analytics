@@ -73,6 +73,7 @@ export default function PatientGrid(params: DataParams) {
             dateStart: v.startDate,
             secondContactName: v.patientDetails.secondaryContactName,
             secondContactPhone: v.patientDetails.secondaryContactPhone,
+            additionalAffiliation: v.patientDetails.additionalAffiliation,
           }) as GridRowDef,
       ),
     [params.data],

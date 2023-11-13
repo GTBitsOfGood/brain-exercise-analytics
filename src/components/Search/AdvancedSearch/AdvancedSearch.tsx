@@ -74,6 +74,7 @@ interface UpdateParamProp {
   setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
   setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
   setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
+  onClick?: () => void;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
@@ -113,6 +114,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setJoinDate("");
     setSecondaryName("");
     setSecondaryPhoneNumber("");
+    if (props.onClick) {
+      props.onClick();
+    }
   };
 
   const setFinal = () => {

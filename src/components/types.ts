@@ -21,6 +21,7 @@ interface GridRowDef {
   dateStart: string;
   secondContactName: string;
   secondContactPhone: string;
+  additionalAffiliation: string;
   status: boolean;
   email: string;
   chapter: string;

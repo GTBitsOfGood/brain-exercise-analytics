@@ -71,7 +71,7 @@
   border-radius: 10px;
   border: none;
   color: #2078c1;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   font-family: var(--font-poppins);
   cursor: pointer;
@@ -88,7 +88,7 @@
   border-radius: 10px;
   border: none;
   color: #2078c1;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   font-family: var(--font-poppins);
   cursor: pointer;
@@ -103,11 +103,11 @@
 }
 
 .metrics-container {
-  padding-top: 8%;
+  padding-top: 10%;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding-bottom: 5%;
+  padding-bottom: 7%;
 }
 
 .overall-metrics-container-active {
@@ -131,7 +131,7 @@
 
 .overall-metrics {
   color: #2078c1;
-  font-size: 13px;
+  font-size: 14px;
   font-family: var(--font-poppins);
   font-weight: 600;
   word-wrap: break-word;

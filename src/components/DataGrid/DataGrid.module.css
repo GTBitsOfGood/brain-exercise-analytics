@@ -4,6 +4,14 @@
   border-right: 10px solid transparent;
 }
 
+.RowCell > button {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  border: 0;
+  cursor: pointer;
+}
+
 .RowCell:last-child {
   border-right: none;
 }
@@ -28,6 +36,7 @@
   justify-content: center;
   align-items: center;
   padding-bottom: 4px;
+  padding-right: 15%;
 }
 
 .DatabaseButton {
@@ -67,8 +76,7 @@
   top: 0;
   z-index: 2;
   background-color: white;
-  padding-top: 45px;
-  padding-bottom: 10px;
+  padding: 45px 0px 10px 7px;
   border-right: 3px solid transparent;
 
   -webkit-user-select: none; /* Safari */
@@ -113,14 +121,14 @@
   box-sizing: border-box;
   background-color: var(--Selected-Blue, #e7eeff);
   padding: 9px 27px;
-  column-gap: 10px;
+  column-gap: 13px;
 }
 
 .ExpandedRowColumn {
   flex: 1;
   display: flex;
   color: #2b3674;
-  font-size: 14px;
+  font-size: 13px;
   flex-direction: column;
 }
 

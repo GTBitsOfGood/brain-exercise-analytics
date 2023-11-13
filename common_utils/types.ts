@@ -24,6 +24,7 @@ export interface IUser {
     birthdate: string;
     secondaryContactName: string;
     secondaryContactPhone: string;
+    additionalAffiliation: string;
   };
   chapter: string;
   location: {
