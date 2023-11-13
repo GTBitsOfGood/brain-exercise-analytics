@@ -8,9 +8,16 @@ type TagProps<T> = {
   value: T;
   list?: Set<T>;
   setList?: Dispatch<SetStateAction<Set<T>>>;
+  transformData?: (value: T) => string;
 };
 
-export default function Tag<T>({ title, value, list, setList }: TagProps<T>) {
+export default function Tag<T>({
+  title,
+  value,
+  list,
+  setList,
+  transformData,
+}: TagProps<T>) {
   const [closeTag, setCloseTag] = useState(false);
 
   const handleCloseTag = () => {
@@ -24,8 +31,8 @@ export default function Tag<T>({ title, value, list, setList }: TagProps<T>) {
 
   let tagText = `${title}: `;
 
-  if (typeof value === "boolean") {
-    tagText += value ? "Active" : "Inactive";
+  if (transformData) {
+    tagText += transformData(value);
   } else {
     tagText += value;
   }

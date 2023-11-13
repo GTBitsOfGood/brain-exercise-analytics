@@ -1,6 +1,7 @@
 "use client";
 
 import { ITableEntry } from "@/common_utils/types";
+import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
 import { GridColDef, GridRowDef } from "../types";
 import DataGrid from "../DataGrid/DataGrid";
@@ -65,12 +66,12 @@ export default function PatientGrid(params: DataParams) {
             id: i,
             firstName: v.name.split(" ")[0],
             lastName: v.name.split(" ")[1],
-            dateOfBirth: v.patientDetails.birthdate,
+            dateOfBirth: transformDate(v.patientDetails.birthDate),
             status: v.status,
             email: v.email,
             chapter: v.chapter,
             location: v.location,
-            dateStart: v.startDate,
+            dateStart: transformDate(v.startDate),
             secondContactName: v.patientDetails.secondaryContactName,
             secondContactPhone: v.patientDetails.secondaryContactPhone,
             additionalAffiliation: v.patientDetails.additionalAffiliation,

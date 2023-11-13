@@ -8,7 +8,7 @@ import {
   faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { classes } from "@src/utils/utils";
+import { classes, transformPhoneNumber } from "@src/utils/utils";
 import { GridColDef, GridRowDef } from "../types";
 import styles from "./DataGrid.module.css";
 
@@ -66,7 +66,9 @@ function ExpandedRow({ row }: { row: GridRowDef }) {
               <span className={styles.Label}>
                 <FontAwesomeIcon icon={faPaperPlane} /> &nbsp; Contact
               </span>
-              <span className={styles.Content}>{row.secondContactPhone}</span>
+              <span className={styles.Content}>
+                {transformPhoneNumber(row.secondContactPhone)}
+              </span>
             </div>
           </div>
         </div>

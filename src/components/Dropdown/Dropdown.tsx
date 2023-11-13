@@ -100,11 +100,13 @@ function Dropdown<T>(props: DropdownProps<T>) {
           borderRadius: "16px",
           borderWidth: "1px",
           borderStyle: "solid",
+          paddingRight: "0px",
           color: displayValue === " " ? "#a3aed0" : "#313144",
           ...extraStyle,
           ...style,
         }}
         MenuProps={{
+          disableScrollLock: true,
           PaperProps: {
             sx: {
               maxHeight: 200,

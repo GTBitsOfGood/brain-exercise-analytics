@@ -82,18 +82,23 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [active, setActive] = useState(true);
-  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [email, setEmail] = useState("");
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
-  const [joinDate, setJoinDate] = useState("");
+  const [joinDate, setJoinDate] = useState<string>("");
   const [beiChapter, setBeiChapter] = useState("");
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
 
   const checkAndUpdateList = useCallback(
-    <T,>(element: T, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
+    <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
       setUpdater((set) => {
-        if (element !== "" && !set.has(element)) {
+        if (
+          element !== "" &&
+          element !== null &&
+          element !== undefined &&
+          !set.has(element)
+        ) {
           const newSet = new Set<T>(set);
           return newSet.add(element);
         }
@@ -114,9 +119,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setJoinDate("");
     setSecondaryName("");
     setSecondaryPhoneNumber("");
-    if (props.onClick) {
-      props.onClick();
-    }
   };
 
   const setFinal = () => {
@@ -131,6 +133,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     checkAndUpdateList(beiChapter, props.setBeiChapters);
     checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
     checkAndUpdateList(secondaryName, props.setSecondaryNames);
+    if (props.onClick) {
+      props.onClick();
+    }
   };
 
   const COUNTRIES = Country.getAllCountries().map((locCountry) => ({
@@ -176,7 +181,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         </div>
         <div
           className={[styles.button_row_button, styles.button_blue].join(" ")}
-          onClick={setFinal}
+          onClick={() => {
+            setFinal();
+            reset();
+          }}
         >
           Apply
         </div>

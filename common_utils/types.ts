@@ -21,7 +21,7 @@ export interface IUser {
   email: string;
   phoneNumber: string;
   patientDetails: {
-    birthdate: string;
+    birthDate: Date;
     secondaryContactName: string;
     secondaryContactPhone: string;
     additionalAffiliation: string;
@@ -39,7 +39,7 @@ export interface IUser {
 export interface ITableEntry
   extends Omit<IUser, "phoneNumber" | "role" | "signedUp"> {
   status: boolean;
-  startDate: string;
+  startDate: Date;
 }
 
 export interface IPasswordReset {

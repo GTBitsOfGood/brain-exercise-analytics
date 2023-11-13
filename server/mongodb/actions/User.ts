@@ -16,7 +16,9 @@ export const createUserEmail = async (email: string): Promise<IUser> => {
   return user;
 };
 
-export const patientSignUp = async (data: IUser): Promise<IUser | null> => {
+export const patientSignUp = async (
+  data: Omit<IUser, "chapter" | "location">,
+): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email: data.email },
     {
@@ -24,7 +26,7 @@ export const patientSignUp = async (data: IUser): Promise<IUser | null> => {
         name: data.name,
         phoneNumber: data.phoneNumber,
         patientDetails: {
-          birthDate: data.patientDetails.birthdate,
+          birthDate: data.patientDetails.birthDate,
           secondaryContactName: data.patientDetails.secondaryContactName,
           secondaryContactPhone: data.patientDetails.secondaryContactPhone,
         },

@@ -2,6 +2,8 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { styled } from "@mui/material";
 import { Poppins } from "next/font/google";
+import { useMemo } from "react";
+import { transformDate } from "@src/utils/utils";
 import styles from "./AdvancedSearch.module.css";
 
 interface CalendarInputProp {
@@ -31,20 +33,21 @@ const StyledDatePicker = styled(DatePicker)(() => ({
   },
 })) as typeof DatePicker;
 
-export default function Calendar({ value = "", onChange }: CalendarInputProp) {
+export default function Calendar({ value, onChange }: CalendarInputProp) {
+  const date = useMemo(() => new Date(value), [value]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={[styles.answer, styles.calendarContainer].join(" ")}>
         <StyledDatePicker
-          value={value}
+          value={date}
           sx={{
             "& .MuiInputBase-root": {
-              color: value === "" ? "#a3aed0" : "#313144",
+              color: value === null ? "#a3aed0" : "#313144",
             },
           }}
           onChange={(val) => {
             if (val === null) return;
-            onChange(val.toString());
+            onChange(transformDate(val));
           }}
         />
       </div>

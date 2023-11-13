@@ -5,6 +5,7 @@ import Search from "@src/components/Search/Search";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
 import { sampleUsers } from "@src/utils/patients";
+import { transformDate } from "@src/utils/utils";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -35,13 +36,14 @@ export default function Page() {
         (states.size === 0 || states.has(user.location.state)) &&
         (cities.size === 0 || cities.has(user.location.city)) &&
         (dateOfBirths.size === 0 ||
-          dateOfBirths.has(user.patientDetails.birthdate)) &&
+          dateOfBirths.has(transformDate(user.patientDetails.birthDate))) &&
         (emails.size === 0 || emails.has(user.email)) &&
         (additionalAffiliations.size === 0 ||
           additionalAffiliations.has(
             user.patientDetails.additionalAffiliation,
           )) &&
-        (joinDates.size === 0 || joinDates.has(user.startDate)) &&
+        (joinDates.size === 0 ||
+          joinDates.has(transformDate(user.startDate))) &&
         (beiChapters.size === 0 || beiChapters.has(user.chapter)) &&
         (secondaryPhoneNumbers.size === 0 ||
           secondaryPhoneNumbers.has(

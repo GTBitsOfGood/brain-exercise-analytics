@@ -4,7 +4,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { classes } from "@src/utils/utils";
+import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import styles from "./Search.module.css";
 import Tag from "./Tag/Tag";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
@@ -165,6 +165,7 @@ export default function Search({
                   value={active}
                   list={actives}
                   setList={setActives}
+                  transformData={(val) => (val ? "Active" : "Inactive")}
                 />
               ))}
             {dateOfBirths.size > 0 &&
@@ -175,6 +176,7 @@ export default function Search({
                   value={dob}
                   list={dateOfBirths}
                   setList={setDateOfBirths}
+                  transformData={transformDate}
                 />
               ))}
             {emails.size > 0 &&
@@ -195,6 +197,7 @@ export default function Search({
                   value={joinDate}
                   list={joinDates}
                   setList={setJoinDates}
+                  transformData={transformDate}
                 />
               ))}
             {beiChapters.size > 0 &&
@@ -215,6 +218,7 @@ export default function Search({
                   value={secondaryPhoneNumber}
                   list={secondaryPhoneNumbers}
                   setList={setSecondaryPhoneNumbers}
+                  transformData={transformPhoneNumber}
                 />
               ))}
             {additionalAffiliations.size > 0 &&
