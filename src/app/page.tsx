@@ -1,10 +1,15 @@
 "use client";
 
-import LineChart from "@src/components/LineChart";
-import BarChart from "@src/components/BarChart";
-import StackedBarChart from "@src/components/StackedBarChart";
-import SmallDataBox from "@src/components/SmallDataBox";
-import { Icon } from "./icons/barChartIcon";
+import {
+  BarChart,
+  LineChart,
+  StackedBarChart,
+  SmallDataBox,
+} from "@src/components/Graphs";
+import OverviewReport from "@src/components/Dashboard/OverviewReport/OverviewReport";
+import OverallDashboard from "@src/components/Dashboard/OverallDashboard/OverallDashboard";
+import { Days } from "@/common_utils/types";
+import { personIcon } from "./icons";
 import styles from "./page.module.css";
 
 const dataLine = [
@@ -95,7 +100,23 @@ const dataStacked = [
 export default function Home() {
   return (
     <main className={styles.main}>
+      <OverviewReport activeUsers={10} totalUsers={200} />
+      <div
+        style={{
+          marginTop: "50px",
+          marginBottom: "50px",
+          width: "100%",
+          borderTop: "1px solid #C8C8C8",
+        }}
+      />
+      <OverallDashboard
+        streak={[Days.Monday, Days.Tuesday, Days.Friday]}
+        startDate={new Date("2020-12-10")}
+        endDate={new Date("2023-07-23")}
+        sessionCompletionHistory={dataBar}
+      />
       <LineChart
+        style={{ marginTop: "100px" }}
         title="Accuracy"
         data={dataLine}
         yAxis={{
@@ -142,7 +163,7 @@ export default function Home() {
       />
       <SmallDataBox
         title={"Number of questions completed"}
-        Icon={Icon}
+        Icon={personIcon}
         text={"20 / 1 hr 50 min"}
       />
       {/* <BarChart data={data} /> */}

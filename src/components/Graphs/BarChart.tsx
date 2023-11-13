@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { D3Data } from "./types";
+import { D3Data } from "@src/utils/types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });

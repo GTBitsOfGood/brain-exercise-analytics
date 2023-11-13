@@ -1,0 +1,40 @@
+.OverviewReport {
+  height: 164px;
+  width: 100%;
+
+  .title {
+    color: #2b3674;
+    font-family: var(--font-dm-sans);
+    font-weight: 700;
+    font-size: 29.705px;
+    font-style: normal;
+    line-height: 36.695px;
+    letter-spacing: -0.594px;
+  }
+
+  .dataGrid {
+    display: flex;
+    flex-direction: row;
+    margin-top: 51px;
+    gap: 15px;
+
+    .box {
+      box-shadow: 12.02189px 14.59801px 34.34826px 3.43483px
+        rgba(112, 144, 176, 0.08);
+    }
+
+    .graph {
+      position: absolute;
+      margin-top: -17%;
+      margin-left: 45%;
+      width: 305px;
+      height: 254px;
+      box-shadow: 3px 8px 36px -4px rgba(0, 0, 0, 0.1);
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    .popupGraphContainer {
+      position: relative;
+    }
+  }
+}

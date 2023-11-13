@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationCircle,
-  faCircleInfo,
-} from "@fortawesome/free-solid-svg-icons";
+import { Error as ErrorIcon, Info as InfoIcon } from "@mui/icons-material";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
@@ -251,10 +247,9 @@ export default function Page() {
                 />
               </div>
               <div className={styles.chapterNotFound}>
-                <FontAwesomeIcon
-                  icon={faCircleInfo}
+                <InfoIcon
                   className={styles.notFoundIcon}
-                  size="sm"
+                  sx={{ width: "18px" }}
                 />
                 <p className={styles.notFoundMessage}>
                   Don&apos;t see your Chapter? Contact{" "}
@@ -263,10 +258,9 @@ export default function Page() {
               </div>
               {showGeneralError && (
                 <div className={styles.generalError}>
-                  <FontAwesomeIcon
+                  <ErrorIcon
                     className={styles.errorIcon}
-                    icon={faExclamationCircle}
-                    size="sm"
+                    sx={{ width: "18px" }}
                   />
                   <p className={styles.errorMessage}>
                     Error: An internal server error has occurred. Please try

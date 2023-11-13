@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classes, transformPhoneNumber } from "@src/utils/utils";
-import { GridColDef, GridRowDef, SortField } from "../types";
+import { GridColDef, GridRowDef, SortField } from "@src/utils/types";
 import styles from "./DataGrid.module.css";
 
 interface DataParams {

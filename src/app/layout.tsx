@@ -1,11 +1,17 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
-import { Poppins, DM_Sans } from "next/font/google";
+import { DM_Sans, Inter, Poppins } from "next/font/google";
 
 const poppins = Poppins({
   subsets: ["latin-ext"],
   variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
+const inter = Inter({
+  subsets: ["latin-ext"],
+  variable: "--font-inter",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
@@ -27,7 +33,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} ${dmSans.className}`}>
+      <body
+        className={`${poppins.className} ${inter.className} ${dmSans.className}`}
+      >
         {children}
       </body>
     </html>

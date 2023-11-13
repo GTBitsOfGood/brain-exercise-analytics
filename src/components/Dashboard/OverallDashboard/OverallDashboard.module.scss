@@ -1,0 +1,106 @@
+.Chip {
+  width: fit-content;
+  padding: 0px 5px 0px 5px;
+  border-radius: 10px;
+  text-align: center;
+
+  .text {
+    color: #2b3674;
+    font-family: var(--font-dm-sans);
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 20.968px;
+    letter-spacing: -0.2px;
+  }
+}
+
+.ChipTypography {
+  color: #2b3674;
+  font-family: var(--font-dm-sans);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 20.968px;
+  letter-spacing: -0.2px;
+}
+
+.ActiveIndicatorBox {
+  width: 95.232px;
+  height: 41.937px;
+  border-radius: 13.105px;
+  background-color: rgba(5, 205, 153, 0.1);
+  padding-top: 10.48px;
+  padding-bottom: 10.48px;
+  padding-left: 12px;
+
+  .container {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+
+    .text {
+      color: #2b3674;
+      font-family: var(--font-dm-sans);
+      font-weight: 700;
+      font-size: 12px;
+      font-style: normal;
+    }
+  }
+}
+
+.OverallDashboard {
+  height: 564px;
+  width: 100%;
+
+  .titleRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 51px;
+
+    .title {
+      font-family: var(--font-dm-sans);
+      font-weight: 700;
+      font-size: 29.705px;
+      font-style: normal;
+    }
+  }
+
+  .bottomContainer {
+    display: flex;
+    column-gap: 10px;
+    margin-top: 26px;
+
+    .dateBoxes {
+      display: flex;
+      flex-direction: column;
+      row-gap: 17px;
+
+      .box {
+        width: 282px;
+        height: 98px;
+      }
+    }
+
+    .lastSession {
+      display: flex;
+      flex-direction: column;
+      row-gap: 15px;
+
+      .title {
+        font-family: var(--font-dm-sans);
+        font-weight: 700;
+        font-size: 24px;
+        color: #2b3674;
+      }
+
+      .boxes {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 10px;
+        row-gap: 10px;
+      }
+    }
+  }
+}

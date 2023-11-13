@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "ngrok": "ngrok http 3030",
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
@@ -40,6 +41,7 @@
     "react-calendar": "^4.6.1",
     "react-dom": "18.2.0",
     "react-switch": "^7.0.0",
+    "sass": "^1.69.5",
     "solid-icons": "^1.0.12",
     "solid-js": "^1.8.1",
     "typescript": "5.2.2",

@@ -3,7 +3,7 @@
 import { ITableEntry } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
-import { GridColDef, GridRowDef, SortField } from "../types";
+import { GridColDef, GridRowDef, SortField } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
 
 interface DataParams {

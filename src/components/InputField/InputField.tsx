@@ -34,7 +34,7 @@ const InputField = (InputFieldProps: InputFieldProps) => {
   );
 
   return (
-    <div className={`${styles.container} ${InputFieldProps.className}`}>
+    <div className={classes(styles.container, InputFieldProps.className)}>
       {InputFieldProps.title !== undefined ? (
         <div className={styles["label-container"]}>
           <label className={styles["input-label"]}>

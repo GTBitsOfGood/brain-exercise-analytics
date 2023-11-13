@@ -1,7 +1,7 @@
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
-import { D3Data } from "./types";
+import { D3Data } from "@src/utils/types";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -9,6 +9,7 @@ const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
 interface DataParams extends D3Data {
+  className?: string;
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
@@ -16,6 +17,7 @@ interface DataParams extends D3Data {
 }
 
 export default function LineChart({
+  className,
   data,
   width = 410,
   height = 174,
@@ -85,11 +87,11 @@ export default function LineChart({
     svg.select(".y-axis").remove();
     const xAxisLabel = d3
       .axisBottom(x)
-      .ticks(data.length)
+      .ticks(data.length - 1)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval);
+      .tickFormat((d, i) => data[i].interval);
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(
@@ -133,6 +135,7 @@ export default function LineChart({
 
   return (
     <div
+      className={className}
       style={{
         backgroundColor: "white",
         borderRadius: "15px",

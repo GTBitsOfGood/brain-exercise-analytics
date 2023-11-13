@@ -7,7 +7,7 @@ import Search from "@src/components/Search/Search";
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
 import { sampleUsers } from "@src/utils/patients";
 import { classes, transformDate } from "@src/utils/utils";
-import { SortField } from "@src/components/types";
+import { SortField } from "@src/utils/types";
 import styles from "./page.module.css";
 
 export default function Page() {
