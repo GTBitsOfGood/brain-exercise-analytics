@@ -21,9 +21,7 @@ const NavigationPanel = () => {
       <div className={styles["text-wrapper"]}>
         <span className={styles.bei}>Brain Exercise Initiative</span>
         <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
-        <div className={styles.divider}>
-          <hr />
-        </div>
+        <div className={styles.divider} />
         <div className={styles[`search-patient-container`]}>
           <div
             className={
@@ -78,9 +76,7 @@ const NavigationPanel = () => {
           <Metric title="writing" />
           <Metric title="trivia" />
         </div>
-        <div className={styles.divider}>
-          <hr />
-        </div>
+        <div className={styles.divider} />
         <div className={styles["patient-container"]}>
           <img
             className={styles["patient-pfp"]}

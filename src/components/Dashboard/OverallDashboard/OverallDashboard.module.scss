@@ -50,6 +50,7 @@
 .OverallDashboard {
   height: 564px;
   width: 100%;
+  height: max-content;
 
   .titleRow {
     display: flex;

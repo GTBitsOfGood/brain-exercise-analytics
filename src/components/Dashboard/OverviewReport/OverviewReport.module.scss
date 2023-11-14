@@ -1,21 +1,18 @@
 .OverviewReport {
-  height: 164px;
   width: 100%;
 
   .title {
     color: #2b3674;
     font-family: var(--font-dm-sans);
     font-weight: 700;
-    font-size: 29.705px;
+    font-size: 28px;
     font-style: normal;
-    line-height: 36.695px;
-    letter-spacing: -0.594px;
   }
 
   .dataGrid {
     display: flex;
     flex-direction: row;
-    margin-top: 51px;
+    margin-top: 40px;
     gap: 15px;
 
     .box {

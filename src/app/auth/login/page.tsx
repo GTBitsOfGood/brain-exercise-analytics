@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CheckBox,
   CheckBoxOutlineBlank,
@@ -26,11 +26,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const resetErrors = () => {
     setEmailError("");
@@ -112,10 +107,6 @@ export default function Page() {
   const toggleKeepMeLoggedIn = () => {
     setKeepLogged((prevState) => !prevState);
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   const CheckIcon = keepLogged ? CheckBox : CheckBoxOutlineBlank;
 

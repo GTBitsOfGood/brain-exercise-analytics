@@ -1,3 +1,5 @@
+"use client";
+
 import { personIcon, peopleIcon } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
 import { LineChart, SmallDataBox } from "../../Graphs";

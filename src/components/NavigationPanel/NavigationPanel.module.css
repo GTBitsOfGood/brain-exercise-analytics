@@ -3,8 +3,9 @@
   flex-direction: column;
   background-color: white;
   min-height: 100vh;
+  justify-content: center;
   align-items: center;
-  padding: 10%;
+  padding: 10% 8%;
 }
 
 .BEI-image {
@@ -42,8 +43,10 @@
 }
 
 .divider {
-  padding-top: 15%;
-  padding-bottom: 16%;
+  width: 100%;
+  margin: 17% 0;
+  height: 1.5px;
+  background-color: #c8c8c8;
 }
 
 .icon-shadow {
@@ -71,7 +74,7 @@
   border-radius: 10px;
   border: none;
   color: #2078c1;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
   cursor: pointer;
@@ -88,7 +91,7 @@
   border-radius: 10px;
   border: none;
   color: #2078c1;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
   cursor: pointer;
@@ -131,7 +134,7 @@
 
 .overall-metrics {
   color: #2078c1;
-  font-size: 14px;
+  font-size: 15px;
   font-family: var(--font-poppins);
   font-weight: 600;
   word-wrap: break-word;

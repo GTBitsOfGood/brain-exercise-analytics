@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
@@ -22,11 +22,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const resetErrors = () => {
     setFirstNameError("");
@@ -81,10 +76,6 @@ export default function Page() {
       }
     }
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>

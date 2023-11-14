@@ -182,3 +182,89 @@ export const sampleUsers: ITableEntry[] = [
     startDate: new Date("2021-10-05"),
   },
 ];
+
+export const dataLine = [
+  {
+    interval: "9/17",
+    value: 0.4,
+  },
+  {
+    interval: "9/24",
+    value: 0.23,
+  },
+  {
+    interval: "10/4",
+    value: 0.01,
+  },
+  {
+    interval: "10/12",
+    value: 0.25,
+  },
+  {
+    interval: "10/19",
+    value: 0.7,
+  },
+  {
+    interval: "10/25",
+    value: 0.55,
+  },
+];
+
+export const dataBar = [
+  {
+    interval: "9/17",
+    value: 0,
+  },
+  {
+    interval: "9/24",
+    value: 2,
+  },
+  {
+    interval: "10/4",
+    value: 1,
+  },
+  {
+    interval: "10/12",
+    value: 6,
+  },
+  {
+    interval: "10/19",
+    value: 5,
+  },
+  {
+    interval: "10/25",
+    value: 7,
+  },
+];
+export const dataStacked = [
+  {
+    interval: "9/17",
+    stackedValue: 0.3,
+    value: 0.5,
+  },
+  {
+    interval: "9/24",
+    stackedValue: 0.1,
+    value: 0.2,
+  },
+  {
+    interval: "10/4",
+    stackedValue: 0.1,
+    value: 0.7,
+  },
+  {
+    interval: "10/12",
+    stackedValue: 0.55,
+    value: 0.6,
+  },
+  {
+    interval: "10/19",
+    stackedValue: 0.2,
+    value: 0.5,
+  },
+  {
+    interval: "10/25",
+    stackedValue: 0.0,
+    value: 0.8,
+  },
+];
