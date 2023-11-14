@@ -223,13 +223,19 @@ export default function BarChart({
     >
       <div
         className="titleBox"
-        style={{ display: "flex", flexDirection: "row", margin: "auto" }}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          margin: "auto",
+          alignItems: "first baseline",
+        }}
       >
         <p
           style={{
             fontFamily: poppins500.style.fontFamily,
             color: "#A3AED0",
             fontSize: 12,
+            width: "80%",
           }}
         >
           {title}
@@ -268,9 +274,6 @@ export default function BarChart({
             color:
               actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
-            marginTop: "auto",
-            marginBottom: "auto",
-            marginLeft: 12,
           }}
         >
           {actualChange !== null &&

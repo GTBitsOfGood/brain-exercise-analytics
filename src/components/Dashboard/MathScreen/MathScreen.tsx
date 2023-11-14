@@ -11,6 +11,7 @@ import styles from "./MathScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
 
 interface InputProp {
+  id?: string;
   accuracyData: { interval: string; value: number }[];
   difficultyData: { interval: string; value: number }[];
   numQuestionData: { interval: string; value: number }[];
@@ -37,7 +38,7 @@ const MathScreen = ({
     <div className={styles.container} style={style}>
       <div className={styles.header}>
         <RootXIcon />
-        <p>MATH</p>
+        <p>Math</p>
         <div className={styles.dateSelector}>
           <DateSelector />
         </div>
@@ -45,63 +46,75 @@ const MathScreen = ({
       <div className={styles.body}>
         <div className={styles.graphs}>
           <LineChart
+            width={325}
+            height={175}
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
             gradient={true}
             info="Vidushi"
             data={accuracyData}
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
           />
           <LineChart
+            width={325}
+            height={175}
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
             gradient={true}
             info="Vidushi"
             data={difficultyData}
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
-            title="Average Number of Questions Answered per Session"
+            width={325}
+            height={175}
+            title="Average Questions Answered per Session"
             data={numQuestionData}
             hoverable
             percentageChange
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
+            width={325}
+            height={175}
             title="Average Time Spent per Question"
             data={timeData}
             hoverable
             percentageChange
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
           />
         </div>
         <div className={styles.textStats}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
+            className={styles.box}
             title="Current Accuracy"
             text={currentAccuracy}
             Icon={AccuracyIcon}
-            style={{ width: "80%", margin: "auto" }}
+            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
+            className={styles.box}
             title="Current Difficulty"
             text={currentDifficulty}
             Icon={BarChartIcon}
-            style={{ width: "80%", margin: "auto" }}
+            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
+            className={styles.box}
             title="Number of Question Completed"
             text={totalQuestions}
             Icon={QuestionIcon}
-            style={{ width: "80%", margin: "auto" }}
+            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
+            className={styles.box}
             title="Current Time per Question"
             text={totalTime}
             Icon={TimeIcon}
-            style={{ width: "80%", margin: "auto" }}
+            // style={{ width: "80%", margin: "auto" }}
           />
         </div>
       </div>

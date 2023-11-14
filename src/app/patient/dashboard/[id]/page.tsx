@@ -17,9 +17,10 @@ import {
 
 import styles from "./page.module.scss";
 
-export function Divider() {
+export function Divider({ id }: { id?: string }) {
   return (
     <div
+      id={id}
       style={{
         width: "100%",
         height: "2px",
@@ -42,7 +43,7 @@ export default function Page() {
           sessionCompletionHistory={dataBar}
         />
       </div>
-      <Divider />
+      <Divider id="math" />
       <div className={styles.overallPatientContainer}>
         <MathScreen
           accuracyData={dataLine}

@@ -296,6 +296,6 @@ export const numberOfQuestionData = [
   },
   {
     interval: "11/01",
-    value: 4,
+    value: 8,
   },
 ];
