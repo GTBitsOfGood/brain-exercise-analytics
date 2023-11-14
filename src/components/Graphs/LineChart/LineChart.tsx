@@ -161,8 +161,8 @@ export default function LineChart({
       style={{
         backgroundColor: "white",
         borderRadius: "15px",
-        width: 465,
-        height: 280,
+        width: width + 45,
+        height: height + 60,
         paddingTop: 18.6,
         paddingLeft: 18,
         paddingRight: 36,

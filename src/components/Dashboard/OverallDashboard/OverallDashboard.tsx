@@ -4,11 +4,12 @@ import {
   CheckCircle as CC,
   TimeForward as TF,
   LastPage as PF,
-  CompletedIcon as COI,
+  // CalendarIcon as COI,
   SqrtIcon as SQ,
   BookIcon as BI,
   DocIcon as DI,
   QuestionIcon as QI,
+  BarChartIcon,
 } from "@src/app/icons";
 import { CSSProperties, ReactNode } from "react";
 import { Days } from "@/common_utils/types";
@@ -118,15 +119,14 @@ export default function OverallDashboard(params: Params) {
           <SmallDataBox
             className={styles.box}
             title="Total Completed Sessions"
-            text={formatDate(params.startDate)}
-            Icon={COI}
+            text={"5"}
+            Icon={BarChartIcon}
           />
         </div>
 
         <BarChart
-          width={370}
-          height={250}
-          style={{ width: "447px", paddingLeft: "30px", height: "324px" }}
+          width={300}
+          height={200}
           title="Session Completion History"
           data={params.sessionCompletionHistory}
           highlightLargest
@@ -138,33 +138,29 @@ export default function OverallDashboard(params: Params) {
             <SmallDataBox
               className={styles.box}
               title="Questions Completed"
-              text={"Need data"}
+              text={"10"}
               Icon={SQ}
-              style={{ width: "282px", height: "98px" }}
               Chip={() => <Chip color="#FF9FB34D">Math</Chip>}
             />
             <SmallDataBox
               className={styles.box}
               title="Prompts Completed"
-              text={"Need data"}
+              text={"20"}
               Icon={DI}
               Chip={() => <Chip color="#32D29633">Writing</Chip>}
-              style={{ width: "282px", height: "98px" }}
             />
             <SmallDataBox
               className={styles.box}
               title="Words Read Per Min"
-              text={"Need data"}
+              text={"24.8"}
               Icon={BI}
-              style={{ width: "282px", height: "98px" }}
               Chip={() => <Chip color="#008AFC1A">Reading</Chip>}
             />
             <SmallDataBox
               className={styles.box}
               title="Questions Completed"
-              text={"Need data"}
+              text={"13"}
               Icon={QI}
-              style={{ width: "282px", height: "98px" }}
               Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
             />
           </div>

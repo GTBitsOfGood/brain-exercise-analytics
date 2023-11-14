@@ -19,7 +19,6 @@ const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
@@ -208,12 +207,12 @@ export default function BarChart({
       style={{
         backgroundColor: "white",
         borderRadius: "15px",
-        width: 430,
-        height: 254,
-        paddingTop: 18.6,
-        paddingLeft: 16,
-        paddingRight: 36,
-        paddingBottom: 30,
+        width: width + 44,
+        height: height + 70,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
         ...style,
       }}
       onClick={() => {

@@ -4,7 +4,7 @@ import { CSSProperties, ReactNode } from "react";
 import styles from "./SmallDataBox.module.scss";
 
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
-const inter700 = Inter({ subsets: ["latin"], weight: "700" });
+const inter600 = Inter({ subsets: ["latin"], weight: "600" });
 
 interface DataParams {
   className?: string;
@@ -51,7 +51,19 @@ export default function SmallDataBox({
             alignItems: "center",
           }}
         >
-          <Icon />
+          <div
+            style={{
+              width: "51px",
+              height: "51px",
+              backgroundColor: "#F4F7FE",
+              borderRadius: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Icon />
+          </div>
           <div
             style={{
               display: "flex",
@@ -76,9 +88,9 @@ export default function SmallDataBox({
             </div>
             <p
               style={{
-                font: inter700.style.fontFamily,
-                fontWeight: 700,
-                fontSize: "18px",
+                font: inter600.style.fontFamily,
+                fontWeight: 600,
+                fontSize: "16px",
                 lineHeight: "27px",
                 letterSpacing: "-0.02em",
                 textAlign: "left",
@@ -95,7 +107,7 @@ export default function SmallDataBox({
       <div
         style={{
           position: "absolute",
-          bottom: "5px",
+          bottom: "12px",
           right: "20px",
         }}
       >

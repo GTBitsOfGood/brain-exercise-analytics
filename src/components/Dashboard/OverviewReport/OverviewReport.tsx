@@ -38,8 +38,8 @@ export default function OverviewReport(params: Params) {
 
           <LineChart
             className={styles.graph}
-            width={400}
-            height={250}
+            width={250}
+            height={150}
             title="New Users Over Time"
             data={[
               {
