@@ -56,7 +56,7 @@ export default function Page() {
           totalTime="1min 30sec"
         />
       </div>
-      <Divider />
+      <Divider id="reading" />
       <div className={styles.overallPatientContainer}>
         <ReadingScreen
           sessionHistory={dataStacked}
@@ -68,7 +68,7 @@ export default function Page() {
           completionStatus={true}
         />
       </div>
-      <Divider />
+      <Divider id="writing" />
       <div className={styles.overallPatientContainer}>
         <WritingScreen
           sessionHistory={dataStacked}
@@ -79,7 +79,7 @@ export default function Page() {
           attemptStatus={false}
         />
       </div>
-      <Divider />
+      <Divider id="trivia" />
       <div className={styles.overallPatientContainer}>
         <TriviaScreen
           accuracyData={dataLine}

@@ -3,6 +3,7 @@
   flex-direction: row;
   padding-top: 3vh;
   padding-left: 17%;
+  cursor: pointer;
 }
 
 .metrics-container {
@@ -21,5 +22,4 @@
   font-family: var(--font-poppins);
   font-weight: 500;
   word-wrap: break-word;
-  cursor: pointer;
 }

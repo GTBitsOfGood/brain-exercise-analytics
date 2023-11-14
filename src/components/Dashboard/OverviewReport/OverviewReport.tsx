@@ -41,14 +41,23 @@ export default function OverviewReport(params: Params) {
             width={250}
             height={150}
             title="New Users Over Time"
+            hoverable
             data={[
               {
                 interval: "9/17",
-                value: 0.4,
+                value: 1,
               },
               {
                 interval: "10/17",
-                value: 0.6,
+                value: 5,
+              },
+              {
+                interval: "10/24",
+                value: 15,
+              },
+              {
+                interval: "10/31",
+                value: 40,
               },
             ]}
             style={{

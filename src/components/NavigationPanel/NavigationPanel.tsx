@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { faChartSimple } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,16 @@ import styles from "./NavigationPanel.module.css";
 const NavigationPanel = () => {
   const router = useRouter();
   const currentPath = usePathname();
+
+  const isSearch = useMemo(
+    () => currentPath.startsWith("/patient/search"),
+    [currentPath],
+  );
+
+  const isDashboard = useMemo(
+    () => currentPath.startsWith("/patient/dashboard"),
+    [currentPath],
+  );
 
   return (
     <div className={styles.wrapper}>
@@ -25,13 +35,7 @@ const NavigationPanel = () => {
         <div className={styles[`search-patient-container`]}>
           <div
             className={
-              styles[
-                `search-patient-${
-                  currentPath.startsWith("/patient/search")
-                    ? "active"
-                    : "inactive"
-                }`
-              ]
+              styles[`search-patient-${isSearch ? "active" : "inactive"}`]
             }
             onClick={() => router.push("/patient/search")}
           >
@@ -52,13 +56,17 @@ const NavigationPanel = () => {
             className={
               styles[
                 `overall-metrics-container-${
-                  currentPath.startsWith("/patient/dashboard")
-                    ? "active"
-                    : "inactive"
+                  isDashboard ? "active" : "inactive"
                 }`
               ]
             }
-            onClick={() => router.push("/patient/dashboard")}
+            onClick={() => {
+              if (!isDashboard) {
+                router.push("/patient/dashboard");
+              } else {
+                router.push("#");
+              }
+            }}
           >
             <div className={styles["icon-shadow"]}>
               <FontAwesomeIcon

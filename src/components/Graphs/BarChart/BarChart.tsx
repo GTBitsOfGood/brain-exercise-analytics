@@ -235,7 +235,6 @@ export default function BarChart({
             fontFamily: poppins500.style.fontFamily,
             color: "#A3AED0",
             fontSize: 12,
-            width: "70%",
           }}
         >
           {title}
@@ -248,7 +247,6 @@ export default function BarChart({
               marginBottom: "auto",
               marginLeft: 12,
               cursor: "pointer",
-              left: 500,
             }}
             onClick={() => {
               setInfoPopup(true);

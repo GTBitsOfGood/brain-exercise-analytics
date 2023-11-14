@@ -29,7 +29,7 @@ const Metric = (MetricProps: MetricProps) => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={handleButtonClick}>
       <main className={poppins.variable}>
         <div className={styles["text-wrapper"]}></div>
         <div className={styles["metrics-container"]}>
@@ -37,9 +37,7 @@ const Metric = (MetricProps: MetricProps) => {
             <DashboardIcon />
           </div>
           <div className={styles.metric}>
-            <span onClick={handleButtonClick}>
-              {MetricProps.title.toUpperCase()}
-            </span>
+            <span>{MetricProps.title.toUpperCase()}</span>
           </div>
         </div>
       </main>

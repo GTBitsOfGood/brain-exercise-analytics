@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   faCircleCheck,
   faCircleXmark,
@@ -7,6 +7,7 @@ import {
   faAngleUp,
   faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classes, transformPhoneNumber } from "@src/utils/utils";
 import { GridColDef, GridRowDef, SortField } from "@src/utils/types";
@@ -82,7 +83,14 @@ function ExpandedRow({ row }: { row: GridRowDef }) {
 
 function Row({ row }: { row: GridRowDef }) {
   const [view, setView] = useState<boolean>(false);
-  const handleClick = () => setView(!view);
+  const handleClick = useCallback(() => setView((v) => !v), []);
+  const router = useRouter();
+
+  const handleDashboardClick = useCallback(() => {
+    // router.push(`/patient/dashboard/${row.id}`);
+    router.push(`/patient/dashboard/650a7e3a301ab8b382b7034a`);
+  }, [router]);
+
   return (
     <>
       <tr className={styles.Row}>
@@ -128,7 +136,9 @@ function Row({ row }: { row: GridRowDef }) {
           </div>
         </td>
         <td className={styles.RowCell}>
-          <div className={styles.DatabaseButton}>View</div>
+          <div className={styles.DatabaseButton} onClick={handleDashboardClick}>
+            View
+          </div>
         </td>
       </tr>
       {view && <ExpandedRow row={row} />}
