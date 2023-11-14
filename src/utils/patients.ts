@@ -268,3 +268,34 @@ export const dataStacked = [
     value: 0.8,
   },
 ];
+
+export const numberOfQuestionData = [
+  {
+    interval: "9/17",
+    value: 25,
+  },
+  {
+    interval: "9/24",
+    value: 30,
+  },
+  {
+    interval: "10/4",
+    value: 15,
+  },
+  {
+    interval: "10/11",
+    value: 10,
+  },
+  {
+    interval: "10/18",
+    value: 10,
+  },
+  {
+    interval: "10/25",
+    value: 8,
+  },
+  {
+    interval: "11/01",
+    value: 4,
+  },
+];

@@ -108,24 +108,18 @@ export default function OverallDashboard(params: Params) {
             title="Start Date"
             text={formatDate(params.startDate)}
             Icon={TF}
-            titleAboveText
-            style={{ width: "282px", height: "98px" }}
           />
           <SmallDataBox
             className={styles.box}
             title="End Date"
             text={formatDate(params.endDate)}
             Icon={PF}
-            titleAboveText
-            style={{ width: "282px", height: "98px" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Total Completed Sessions"
             text={formatDate(params.startDate)}
             Icon={COI}
-            titleAboveText
-            style={{ width: "282px", height: "98px" }}
           />
         </div>
 
@@ -146,7 +140,6 @@ export default function OverallDashboard(params: Params) {
               title="Questions Completed"
               text={"Need data"}
               Icon={SQ}
-              titleAboveText
               style={{ width: "282px", height: "98px" }}
               Chip={() => <Chip color="#FF9FB34D">Math</Chip>}
             />
@@ -155,7 +148,6 @@ export default function OverallDashboard(params: Params) {
               title="Prompts Completed"
               text={"Need data"}
               Icon={DI}
-              titleAboveText
               Chip={() => <Chip color="#32D29633">Writing</Chip>}
               style={{ width: "282px", height: "98px" }}
             />
@@ -164,7 +156,6 @@ export default function OverallDashboard(params: Params) {
               title="Words Read Per Min"
               text={"Need data"}
               Icon={BI}
-              titleAboveText
               style={{ width: "282px", height: "98px" }}
               Chip={() => <Chip color="#008AFC1A">Reading</Chip>}
             />
@@ -173,7 +164,6 @@ export default function OverallDashboard(params: Params) {
               title="Questions Completed"
               text={"Need data"}
               Icon={QI}
-              titleAboveText
               style={{ width: "282px", height: "98px" }}
               Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
             />

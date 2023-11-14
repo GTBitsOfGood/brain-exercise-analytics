@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { Fragment } from "react";
 import { D3Data } from "@src/utils/types";
-import BarChart from "./BarChart";
+import BarChart from "./BarChart/BarChart";
 
 interface DataParams extends D3Data {
   data: {

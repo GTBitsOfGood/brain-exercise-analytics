@@ -1,31 +1,39 @@
 "use client";
 
 import { Poppins, Inter } from "next/font/google";
-import * as d3 from "d3";
-import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
-import { D3Data } from "@src/utils/types";
 import { InfoIcon } from "@src/app/icons";
-import PopupModal from "./PopupModal/PopupModal";
+import * as d3 from "d3";
+import {
+  Fragment,
+  MouseEvent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { D3Data } from "@src/utils/types";
+import PopupModal from "../PopupModal/PopupModal";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 interface DataParams extends D3Data {
-  className?: string;
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
-  gradient?: boolean;
+  highlightLargest?: boolean;
+  children?: ReactNode;
   info?: string;
 }
 
-export default function LineChart({
-  className,
+export default function BarChart({
+  title,
   data,
-  width = 410,
-  height = 174,
+  width = 375,
+  height = 180,
   style = {},
   yAxis = {
     min: d3.min(data.map((v) => v.value)) ?? 0,
@@ -33,28 +41,32 @@ export default function LineChart({
     numDivisions: 5,
     format: (d: d3.NumberValue) => JSON.stringify(d),
   },
-  title,
   hoverable = false,
   percentageChange = false,
-  gradient = false,
+  highlightLargest = true,
+  children,
   info = "",
 }: DataParams) {
   const infoButtonRef = useRef(null);
   const marginTop = 20;
-  const marginRight = 20;
-  const marginBottom = 40;
-  const marginLeft = 40;
+  const marginRight = 25;
+  const marginBottom = 25;
+  const marginLeft = 35;
+  const [largest, setLargest] = useState(-1);
+  const barWidth = 20;
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
-  const [popupX, setPopupX] = useState(0);
-  const [popupY, setPopupY] = useState(0);
+  const [popupX, setPopupX] = useState<number | null>(null);
+  const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
     data.length < 2
       ? null
       : data[data.length - 1].value / data[data.length - 2].value - 1;
 
-  function handleMouseMove(e: MouseEvent) {
+  const windowRef = useRef(null);
+
+  function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
     const x = e.pageX;
     const svg: Element = e.currentTarget as SVGElement;
     const svgRect = svg.getBoundingClientRect();
@@ -71,31 +83,21 @@ export default function LineChart({
     setActiveIndex(-1);
   };
 
-  const windowRef = useRef(null);
-
-  const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
-    [height - marginBottom, marginTop],
-  );
-
   const x = d3.scaleLinear(
     [0, data.length - 1],
     [marginLeft, width - marginRight],
   );
-  const line = d3
-    .line()
-    .x((d, i) => x(i))
-    .y((d) => y(d[1]))
-    .curve(d3.curveCatmullRom);
+  const y = d3.scaleLinear(
+    [yAxis.min, yAxis.max],
+    [height - marginBottom, marginTop],
+  );
 
   useEffect(() => {
     const onScroll = () => setInfoPopup(false);
     // clean up code
     window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
-    const yAxisFormat = yAxis?.format
-      ? yAxis.format
-      : (d: d3.NumberValue) => JSON.stringify(d);
+
     if (infoButtonRef.current) {
       const rect: Element = infoButtonRef.current;
       const newTop = rect.getBoundingClientRect().y - 50;
@@ -103,16 +105,40 @@ export default function LineChart({
       const left = rect.getBoundingClientRect().x;
       setPopupX(left);
     }
+
+    const yAxisFormat = yAxis?.format
+      ? yAxis.format
+      : (d: d3.NumberValue) => JSON.stringify(d);
+    function indexOfMax() {
+      if (data.length === 0) {
+        return -1;
+      }
+
+      let max = data[0].value;
+      let maxIndex = 0;
+
+      for (let i = 1; i < data.length; i += 1) {
+        if (data[i].value > max) {
+          maxIndex = i;
+          max = data[i].value;
+        }
+      }
+
+      return maxIndex;
+    }
+    setLargest(indexOfMax());
+
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis").remove();
     svg.select(".y-axis").remove();
     const xAxisLabel = d3
       .axisBottom(x)
-      .ticks(data.length - 1)
+      .ticks(data.length)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d, i) => data[i].interval);
+      .tickFormat((d) => data[d.valueOf()].interval);
+
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(
@@ -129,7 +155,7 @@ export default function LineChart({
 
     svg
       .append("g")
-      .attr("transform", `translate(0, ${height - marginBottom})`)
+      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
       .attr("class", "x-axis")
       .style("font", `9px ${poppins600.style.fontFamily}`)
       .style("color", "#B0BBD5")
@@ -147,6 +173,7 @@ export default function LineChart({
   }, [
     data,
     height,
+    windowRef,
     x,
     y,
     yAxis.format,
@@ -155,18 +182,38 @@ export default function LineChart({
     yAxis.numDivisions,
   ]);
 
+  const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
+    activeIndex === i && (
+      <foreignObject
+        x={x(i)}
+        y={y(d.value) - 11 - barWidth / 2}
+        width={barWidth}
+        height="10"
+        fontSize={8}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            color: "#A5A5A5",
+            fontSize: 9,
+          }}
+        >
+          {d.value}
+        </div>
+      </foreignObject>
+    );
+
   return (
     <div
-      className={className}
       style={{
         backgroundColor: "white",
         borderRadius: "15px",
-        width: 465,
-        height: 280,
+        width: 430,
+        height: 254,
         paddingTop: 18.6,
-        paddingLeft: 18,
+        paddingLeft: 16,
         paddingRight: 36,
-        paddingBottom: 38,
+        paddingBottom: 30,
         ...style,
       }}
       onClick={() => {
@@ -175,7 +222,10 @@ export default function LineChart({
         }
       }}
     >
-      <div className="titleBox" style={{ display: "inline-flex" }}>
+      <div
+        className="titleBox"
+        style={{ display: "flex", flexDirection: "row", margin: "auto" }}
+      >
         <p
           style={{
             fontFamily: poppins500.style.fontFamily,
@@ -193,6 +243,7 @@ export default function LineChart({
               marginBottom: "auto",
               marginLeft: 12,
               cursor: "pointer",
+              left: 500,
             }}
             onClick={() => {
               setInfoPopup(true);
@@ -202,7 +253,7 @@ export default function LineChart({
             <InfoIcon />
             <PopupModal
               show={infoPopup}
-              info="Some information about line chart should come here."
+              info={info}
               style={{
                 position: "fixed",
                 top: `${popupY}px`,
@@ -229,89 +280,64 @@ export default function LineChart({
               ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
               : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
         </p>
-        <p
-          style={{
-            fontFamily: poppins500.style.fontFamily,
-            color: "#BDCDFF",
-            fontSize: 10.2,
-          }}
-        >
-          {actualChange !== null && percentageChange}
-        </p>
       </div>
       <svg
         ref={windowRef}
         width={width}
         height={height}
+        style={{ marginTop: 10 }}
         onMouseMove={hoverable ? handleMouseMove : undefined}
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
-        style={{ marginTop: 10 }}
       >
-        {gradient && (
-          <filter id="drop-shadow" height={"180%"}>
-            <feDropShadow
-              dx="0"
-              dy="13"
-              stdDeviation="6"
-              floodColor="rgb(216 211 232)"
-            />
-          </filter>
-        )}
-        <path
-          fill="none"
-          stroke="#008AFC"
-          strokeWidth="6"
-          d={line(data.map((d, i) => [i, d.value])) as string | undefined}
-          radius={"10px"}
-          height={"100%"}
-          filter="url(#drop-shadow)"
-        />
-        <g fill="white" stroke="currentColor" strokeWidth="1.5">
-          <circle
-            key={-1}
-            cx={x(0)}
-            cy={y(data[0].value)}
-            r="2.5"
-            strokeWidth={1}
-            color="#008AFC"
-            fill="#008AFC"
-          />
-          <circle
-            key={-2}
-            cx={x(data.length - 1)}
-            cy={y(data[data.length - 1].value)}
-            r="2.5"
-            strokeWidth={1}
-            color="#008AFC"
-            fill="#008AFC"
-          />
-          {data.map(
-            (d, i) =>
-              activeIndex === i && (
+        <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
+          {children ||
+            data.map((d, i) => {
+              const color =
+                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
+              return (
                 <Fragment key={i}>
-                  <circle
-                    cx={x(i)}
-                    cy={y(d.value)}
-                    r="7.5"
-                    strokeWidth={5}
-                    color="#008AFC"
+                  <rect
+                    x={x(i)}
+                    y={y(d.value)}
+                    width={barWidth}
+                    height={height - y(d.value) - marginBottom}
+                    color={color}
+                    style={{ borderRadius: 10 }}
                   />
-                  <foreignObject
-                    x={x(i) - 7.5}
-                    y={y(d.value) - 20}
-                    width="20"
-                    height="10"
-                    fontSize={8}
-                  >
-                    <div style={{ textAlign: "center", color: "#A5A5A5" }}>
-                      {d.value}
-                    </div>
-                  </foreignObject>
+                  <circle
+                    cx={x(i) + barWidth / 2}
+                    cy={y(d.value)}
+                    r={barWidth / 2}
+                    color={color}
+                  />
+                  <rect
+                    x={x(i)}
+                    y={y(0)}
+                    width={barWidth}
+                    height={barWidth / 2}
+                    color="white"
+                    style={{ borderRadius: 10 }}
+                  />
                 </Fragment>
-              ),
-          )}
+              );
+            })}
+          {data.map((d, i) => (
+            <HoverableNode key={i} i={i} d={d} />
+          ))}
         </g>
       </svg>
+      <div style={{ justifyContent: "center" }}>
+        <div>
+          {/* <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 50,
+              backgroundColor: "#008AFC",
+            }}
+          /> */}
+        </div>
+      </div>
     </div>
   );
 }

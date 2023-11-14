@@ -22,7 +22,6 @@ export default function OverviewReport(params: Params) {
           className={styles.box}
           title="Active Users"
           Icon={PersonIcon}
-          titleAboveText
           text={`${params.activeUsers} / ${params.totalUsers}`}
         />
         <div
@@ -34,14 +33,13 @@ export default function OverviewReport(params: Params) {
             className={styles.box}
             title="Total Users"
             Icon={PeopleIcon}
-            titleAboveText
             text={`${params.totalUsers}`}
           />
 
           <LineChart
             className={styles.graph}
-            width={250}
-            height={150}
+            width={400}
+            height={250}
             title="New Users Over Time"
             data={[
               {
