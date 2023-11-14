@@ -35,16 +35,22 @@ export default function Page() {
   return (
     <div className={styles.container}>
       <Divider />
-      <div className={styles.overallPatientContainer}>
+      <div className={styles.sectionContainer}>
         <OverallDashboard
-          streak={[Days.Monday, Days.Tuesday, Days.Friday]}
+          streak={[
+            Days.Sunday,
+            Days.Monday,
+            Days.Tuesday,
+            Days.Thursday,
+            Days.Saturday,
+          ]}
           startDate={new Date("2020-12-10")}
           endDate={new Date("2023-07-23")}
           sessionCompletionHistory={dataBar}
         />
       </div>
       <Divider id="math" />
-      <div className={styles.overallPatientContainer}>
+      <div className={styles.sectionContainer}>
         <MathScreen
           accuracyData={dataLine}
           difficultyData={dataLine}
@@ -57,7 +63,7 @@ export default function Page() {
         />
       </div>
       <Divider id="reading" />
-      <div className={styles.overallPatientContainer}>
+      <div className={styles.sectionContainer}>
         <ReadingScreen
           sessionHistory={dataStacked}
           readingRate={dataLine}
@@ -69,7 +75,7 @@ export default function Page() {
         />
       </div>
       <Divider id="writing" />
-      <div className={styles.overallPatientContainer}>
+      <div className={styles.sectionContainer}>
         <WritingScreen
           sessionHistory={dataStacked}
           numCompleted={dataBar}
@@ -80,7 +86,7 @@ export default function Page() {
         />
       </div>
       <Divider id="trivia" />
-      <div className={styles.overallPatientContainer}>
+      <div className={styles.sectionContainer}>
         <TriviaScreen
           accuracyData={dataLine}
           numQuestionData={numberOfQuestionData}

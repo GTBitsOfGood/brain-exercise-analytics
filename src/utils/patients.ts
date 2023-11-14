@@ -190,11 +190,11 @@ export const dataLine = [
   },
   {
     interval: "9/24",
-    value: 0.23,
+    value: 0.2,
   },
   {
     interval: "10/4",
-    value: 0.01,
+    value: 0.65,
   },
   {
     interval: "10/12",

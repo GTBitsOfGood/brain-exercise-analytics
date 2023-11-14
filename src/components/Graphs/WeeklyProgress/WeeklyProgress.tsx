@@ -1,16 +1,27 @@
 import { CSSProperties } from "react";
 import { Days } from "@/common_utils/types";
 import { GrayCircle as GC, CheckMark as CM } from "@src/app/icons";
+import { getCurrentSunday } from "@server/utils/utils";
+
 import styles from "./WeeklyProgress.module.scss";
 
 interface DataParams {
   days: Days[];
   style?: CSSProperties;
 }
-const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+// const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-// Current paramters do not provide this. We need to change the parameter signature
-const week = ["17/9", "18/9", "19/9", "20/9", "21/9", "22/9", "23/9"];
+const currentSunday = getCurrentSunday();
+const week = [...Array<string>(7)].map((_, i) => {
+  const date = new Date(currentSunday);
+  date.setDate(date.getDate() + i);
+  return {
+    day: date
+      .toLocaleDateString("en-us", { weekday: "short" })
+      .toLocaleUpperCase(),
+    date: `${date.getMonth() + 1}/${date.getDate()}`,
+  };
+});
 
 export default function WeeklyProgress({ days, style = {} }: DataParams) {
   return (
@@ -38,15 +49,15 @@ export default function WeeklyProgress({ days, style = {} }: DataParams) {
                 )}
               </div>
               <div className={styles.dayTextContainer}>
+                <p className={styles.text}>{week[i].day}</p>
                 <p
                   className={styles.text}
                   style={{
-                    color: "#A3AED0",
+                    color: "#000",
                   }}
                 >
-                  {weekDays[i]}
+                  {week[i].date}
                 </p>
-                <p className={styles.text}>{week[i]}</p>
               </div>
               {((i === 0 &&
                 days.includes(Days.Sunday) &&

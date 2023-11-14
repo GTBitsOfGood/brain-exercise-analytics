@@ -5,3 +5,11 @@ export function getCurrentMonday() {
   date.setDate(diff);
   return new Date(date.toDateString());
 }
+
+export function getCurrentSunday() {
+  const date = new Date();
+  const day = date.getDay();
+  const diff = date.getDate() - day;
+  date.setDate(diff);
+  return new Date(date.toDateString());
+}
