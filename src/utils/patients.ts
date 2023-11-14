@@ -244,17 +244,17 @@ export const dataStacked = [
   },
   {
     interval: "9/24",
-    stackedValue: 0.1,
-    value: 0.2,
+    stackedValue: 0.2,
+    value: 0.6,
   },
   {
     interval: "10/4",
-    stackedValue: 0.1,
+    stackedValue: 0.2,
     value: 0.7,
   },
   {
     interval: "10/12",
-    stackedValue: 0.55,
+    stackedValue: 0.5,
     value: 0.6,
   },
   {

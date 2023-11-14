@@ -235,7 +235,7 @@ export default function BarChart({
             fontFamily: poppins500.style.fontFamily,
             color: "#A3AED0",
             fontSize: 12,
-            width: "80%",
+            width: "70%",
           }}
         >
           {title}
@@ -271,6 +271,7 @@ export default function BarChart({
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
+            marginLeft: "12px",
             color:
               actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,

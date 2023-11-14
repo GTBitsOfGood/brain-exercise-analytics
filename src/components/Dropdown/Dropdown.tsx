@@ -5,6 +5,7 @@ import React, { useCallback, useMemo } from "react";
 import { classes } from "@src/utils/utils";
 import {
   MenuItem,
+  MenuProps,
   Select,
   SelectChangeEvent,
   SxProps,
@@ -27,6 +28,8 @@ export interface DropdownProps<T> {
   placeholder?: string;
   onChange: (e: SelectChangeEvent<T>) => void;
   sx?: SxProps<Theme>;
+  menuProps?: Partial<MenuProps>;
+  menuItemStyle?: React.CSSProperties;
   style?: React.CSSProperties;
 }
 
@@ -62,6 +65,8 @@ function Dropdown<T>(props: DropdownProps<T>) {
     showError,
     onChange,
     sx,
+    menuProps,
+    menuItemStyle,
     style,
   } = props;
 
@@ -112,16 +117,9 @@ function Dropdown<T>(props: DropdownProps<T>) {
           PaperProps: {
             sx: {
               maxHeight: 200,
-
-              // "& .MuiMenuItem-root.Mui-selected": {
-              // backgroundColor: "#0069ca1a",
-              // color: "#78adff",
-              // },
-              // "& .MuiMenuItem-root.Mui-selected:hover": {
-              // backgroundColor: "#0069ca23",
-              // },
             },
           },
+          ...menuProps,
         }}
         sx={sx}
       >
@@ -129,7 +127,11 @@ function Dropdown<T>(props: DropdownProps<T>) {
           {placeholder}
         </StyledMenuItem>
         {options.map((option, index) => (
-          <StyledMenuItem key={index} value={option.value as string}>
+          <StyledMenuItem
+            key={index}
+            value={option.value as string}
+            style={menuItemStyle}
+          >
             {option.displayValue}
           </StyledMenuItem>
         ))}

@@ -51,10 +51,10 @@ export default function WritingScreen({
           <StackedBarChart
             title="Writing Session Completion History"
             data={sessionHistory}
-            legend={{
-              valueText: "sessions completed without writing",
-              stackedValueText: "sessions completed with writing",
-            }}
+            legend={[
+              { text: "sessions completed without reading", color: "#FF9FB3" },
+              { text: "sessions completed with reading", color: "#008AFC" },
+            ]}
             info="Some really extremely interesting information about stacked bar chart."
             hoverable
             percentageChange

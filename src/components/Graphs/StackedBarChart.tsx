@@ -13,7 +13,7 @@ interface DataParams extends D3Data {
   hoverable?: boolean;
   percentageChange?: boolean;
   info?: string;
-  legend: { valueText: string; stackedValueText: string };
+  legend: { text: string; color: string }[];
 }
 
 export default function StackedBarChart({
@@ -95,26 +95,38 @@ export default function StackedBarChart({
           </Fragment>
         ))}
       </BarChart>
-      <div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
+            flexDirection: "column",
             color: "#A5A5A5",
+            fontSize: "10px",
+            rowGap: "3px",
+            paddingBottom: "12px",
           }}
         >
-          <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 50,
-              backgroundColor: "#008AFC",
-            }}
-          />
-          <div style={{ marginTop: "auto", marginBottom: "auto" }}>
-            {legend.valueText}
-          </div>
+          {legend.map((l) => (
+            <div
+              key={l.text}
+              style={{
+                display: "flex",
+                columnGap: "12px",
+              }}
+            >
+              <div
+                style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: 50,
+                  backgroundColor: l.color,
+                }}
+              />
+              <div style={{ marginTop: "auto", marginBottom: "auto" }}>
+                {l.text}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -66,64 +66,71 @@ export default function ReadingScreen({
       <div className={styles.body}>
         <div className={styles.graphs}>
           <StackedBarChart
+            width={325}
+            height={165}
             title="Writing Session Completion History"
             data={sessionHistory}
-            legend={{
-              valueText: "sessions completed without reading",
-              stackedValueText: "sessions completed with reading",
-            }}
+            legend={[
+              { text: "sessions completed without reading", color: "#FF9FB3" },
+              { text: "sessions completed with reading", color: "#008AFC" },
+            ]}
             hoverable
             percentageChange
           />
           <BarChart
-            title="Average Number of Passages Read Per Session"
+            width={325}
+            height={210}
+            title="Average Passages Read Per Session"
             data={avgPassage}
             hoverable
             percentageChange
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
           />
           <LineChart
+            width={325}
+            height={185}
             title="Average Reading Rate (Words/Min)"
             hoverable={true}
             percentageChange={true}
             gradient={true}
             info="Vidushi"
             data={readingRate}
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
+            width={325}
+            height={175}
             title="Average Time Spent Per Passage"
             data={timeData}
             hoverable
             percentageChange
-            style={{ width: "100%", height: "100%" }}
+            // style={{ width: "100%", height: "100%" }}
             info="Hey this is just some info I thought you will find interesting."
           />
         </div>
         <div className={styles.textStats}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
+            className={styles.box}
             title="Number of Passages Completed"
             text={totalPassage}
             Icon={PromptsIcon}
-            style={{ width: "80%", margin: "auto" }}
+            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
+            className={styles.box}
             title="Current Time per Passage"
             text={currentTime}
             Icon={TimeIcon}
-            style={{ width: "80%", margin: "auto" }}
+            // style={{ width: "80%", margin: "auto" }}
           />
           <BooleanBox
+            className={styles.box}
             title="Completion Status"
             greenText="ATTEMPTED"
             redText="NOT ATTEMPTED"
             Icon={AttemptIcon}
             showGreen={completionStatus}
-            style={{
-              width: "80%",
-              margin: "auto",
-            }}
           />
         </div>
       </div>

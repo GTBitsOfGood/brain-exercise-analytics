@@ -1,5 +1,6 @@
 import React from "react";
 import { Poppins } from "next/font/google";
+import { classes } from "@src/utils/utils";
 import styles from "./BooleanBox.module.css";
 
 const poppins = Poppins({
@@ -9,6 +10,7 @@ const poppins = Poppins({
 });
 
 interface InputPropType {
+  className?: string;
   title: string;
   greenText: string;
   redText: string;
@@ -20,27 +22,29 @@ interface InputPropType {
 }
 
 const BooleanBox = ({
+  className,
   title,
   greenText,
   redText,
   Icon,
   showGreen,
-  height = 101,
-  width = 421,
+  height,
+  width,
   style = {},
 }: InputPropType) => {
   return (
     <div
-      className={[styles.body, poppins.variable].join(" ")}
+      className={classes(styles.body, poppins.variable, className)}
       style={{
         height,
         width,
-        marginTop: "16px",
         ...style,
       }}
     >
-      <Icon />
-      {title}
+      <div className={styles.iconHeader}>
+        <Icon />
+        {title}
+      </div>
       {showGreen && (
         <div className={styles.infoBox} style={{ backgroundColor: "#70E975" }}>
           {greenText}
