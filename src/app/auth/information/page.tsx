@@ -15,18 +15,18 @@ import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
 
 export default function Page() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [number, setNumber] = useState("");
+  const [firstName, setFirstName] = useState("Samarth");
+  const [lastName, setLastName] = useState("Chandna");
+  const [number, setNumber] = useState("1234567890");
 
-  const [locCountry, setLocCountry] = useState("");
-  const [locState, setLocState] = useState("");
-  const [locCity, setLocCity] = useState("");
+  const [locCountry, setLocCountry] = useState("United States");
+  const [locState, setLocState] = useState("Georgia");
+  const [locCity, setLocCity] = useState("Atlanta");
   const [countryError, setCountryError] = useState("");
   const [stateError, setStateError] = useState("");
   const [cityError, setCityError] = useState("");
 
-  const [chapter, setChapter] = useState("");
+  const [chapter, setChapter] = useState("Georgia Tech");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [numberError, setNumberError] = useState("");
@@ -120,7 +120,7 @@ export default function Page() {
           chapter,
         },
       });
-      router.push("/auth/dashboard");
+      router.push("/patient/search");
     } catch (error) {
       setShowGeneralError(true);
     }
