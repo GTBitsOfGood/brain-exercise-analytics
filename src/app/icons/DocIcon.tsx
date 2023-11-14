@@ -1,4 +1,4 @@
-const docIcon = () => (
+const DocIcon = () => (
   <>
     <svg
       width="26"
@@ -30,4 +30,4 @@ const docIcon = () => (
     </svg>
   </>
 );
-export default docIcon;
+export default DocIcon;

@@ -1,7 +1,11 @@
+"use client";
+
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
+import { InfoIcon } from "@src/app/icons";
+import PopupModal from "./PopupModal/PopupModal";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -14,6 +18,7 @@ interface DataParams extends D3Data {
   hoverable?: boolean;
   percentageChange?: boolean;
   gradient?: boolean;
+  info?: string;
 }
 
 export default function LineChart({
@@ -32,12 +37,17 @@ export default function LineChart({
   hoverable = false,
   percentageChange = false,
   gradient = false,
+  info = "",
 }: DataParams) {
+  const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 20;
   const marginBottom = 40;
   const marginLeft = 40;
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [infoPopup, setInfoPopup] = useState(false);
+  const [popupX, setPopupX] = useState(0);
+  const [popupY, setPopupY] = useState(0);
 
   const actualChange =
     data.length < 2
@@ -79,9 +89,20 @@ export default function LineChart({
     .curve(d3.curveCatmullRom);
 
   useEffect(() => {
+    const onScroll = () => setInfoPopup(false);
+    // clean up code
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
+    if (infoButtonRef.current) {
+      const rect: Element = infoButtonRef.current;
+      const newTop = rect.getBoundingClientRect().y - 50;
+      setPopupY(newTop);
+      const left = rect.getBoundingClientRect().x;
+      setPopupX(left);
+    }
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis").remove();
     svg.select(".y-axis").remove();
@@ -122,6 +143,7 @@ export default function LineChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+    return () => window.removeEventListener("scroll", onScroll);
   }, [
     data,
     height,
@@ -147,8 +169,13 @@ export default function LineChart({
         paddingBottom: 38,
         ...style,
       }}
+      onClick={() => {
+        if (infoPopup) {
+          setInfoPopup(false);
+        }
+      }}
     >
-      <div className="titleBox">
+      <div className="titleBox" style={{ display: "inline-flex" }}>
         <p
           style={{
             fontFamily: poppins500.style.fontFamily,
@@ -158,13 +185,42 @@ export default function LineChart({
         >
           {title}
         </p>
+        {info !== "" && (
+          <div
+            style={{
+              fontSize: 12,
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginLeft: 12,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setInfoPopup(true);
+            }}
+            ref={infoButtonRef}
+          >
+            <InfoIcon />
+            <PopupModal
+              show={infoPopup}
+              info="Some information about line chart should come here."
+              style={{
+                position: "fixed",
+                top: `${popupY}px`,
+                zIndex: 500,
+                left: `${popupX}px`,
+              }}
+            />
+          </div>
+        )}
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
             color:
               actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
-            marginTop: 11,
+            marginTop: "auto",
+            marginBottom: "auto",
+            marginLeft: 12,
           }}
         >
           {actualChange !== null &&
@@ -180,7 +236,7 @@ export default function LineChart({
             fontSize: 10.2,
           }}
         >
-          {actualChange !== null && percentageChange && "Improved..."}
+          {actualChange !== null && percentageChange}
         </p>
       </div>
       <svg

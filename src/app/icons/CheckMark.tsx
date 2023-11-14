@@ -1,4 +1,4 @@
-const checkMark = () => (
+const CheckMark = () => (
   <>
     <svg
       width="15"
@@ -25,4 +25,4 @@ const checkMark = () => (
   </>
 );
 
-export default checkMark;
+export default CheckMark;

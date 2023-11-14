@@ -1,4 +1,4 @@
-const grayCircle = () => (
+const GrayCircle = () => (
   <>
     <svg
       width="41"
@@ -89,4 +89,4 @@ const grayCircle = () => (
   </>
 );
 
-export default grayCircle;
+export default GrayCircle;

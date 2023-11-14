@@ -1,0 +1,8 @@
+.modal {
+  z-index: 50;
+  background-color: #cdcdcd;
+  width: 300px;
+  border-radius: 10px;
+  padding: 10px;
+  border: "0.8px solid black";
+}

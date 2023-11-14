@@ -1,4 +1,4 @@
-const importantGrayIcon = () => (
+const ImportantGrayIcon = () => (
   <>
     <svg
       width="20"
@@ -19,4 +19,4 @@ const importantGrayIcon = () => (
   </>
 );
 
-export default importantGrayIcon;
+export default ImportantGrayIcon;

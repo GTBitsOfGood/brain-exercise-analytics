@@ -1,4 +1,4 @@
-const bookIcon = () => (
+const BookIcon = () => (
   <>
     <svg
       width="28"
@@ -18,4 +18,4 @@ const bookIcon = () => (
   </>
 );
 
-export default bookIcon;
+export default BookIcon;

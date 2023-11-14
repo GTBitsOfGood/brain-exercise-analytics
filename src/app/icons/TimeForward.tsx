@@ -1,4 +1,4 @@
-const timeForward = () => (
+const TimeForward = () => (
   <>
     <svg
       width="51"
@@ -17,4 +17,4 @@ const timeForward = () => (
   </>
 );
 
-export default timeForward;
+export default TimeForward;

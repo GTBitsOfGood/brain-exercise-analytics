@@ -1,6 +1,6 @@
 "use client";
 
-import OverallDashboard from "@src/components/Dashboard/OverallDashboard/OverallDashboard";
+import { OverallDashboard } from "@src/components/Dashboard";
 import { Days } from "@/common_utils/types";
 import { dataBar } from "@src/utils/patients";
 

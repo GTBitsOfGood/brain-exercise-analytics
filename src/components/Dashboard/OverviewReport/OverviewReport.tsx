@@ -1,6 +1,6 @@
 "use client";
 
-import { personIcon, peopleIcon } from "@src/app/icons";
+import { PersonIcon, PeopleIcon } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
 import { LineChart, SmallDataBox } from "../../Graphs";
 import styles from "./OverviewReport.module.scss";
@@ -21,7 +21,7 @@ export default function OverviewReport(params: Params) {
         <SmallDataBox
           className={styles.box}
           title="Active Users"
-          Icon={personIcon}
+          Icon={PersonIcon}
           titleAboveText
           text={`${params.activeUsers} / ${params.totalUsers}`}
         />
@@ -33,7 +33,7 @@ export default function OverviewReport(params: Params) {
           <SmallDataBox
             className={styles.box}
             title="Total Users"
-            Icon={peopleIcon}
+            Icon={PeopleIcon}
             titleAboveText
             text={`${params.totalUsers}`}
           />

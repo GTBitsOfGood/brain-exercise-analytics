@@ -1,4 +1,4 @@
-const questionIcon = () => (
+const QuestionIcon = () => (
   <>
     <svg
       width="29"
@@ -18,4 +18,4 @@ const questionIcon = () => (
   </>
 );
 
-export default questionIcon;
+export default QuestionIcon;

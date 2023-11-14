@@ -12,6 +12,8 @@ interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
+  info?: string;
+  legend: { valueText: string; stackedValueText: string };
 }
 
 export default function StackedBarChart({
@@ -28,6 +30,8 @@ export default function StackedBarChart({
   },
   hoverable = false,
   percentageChange = false,
+  legend,
+  info = "",
 }: DataParams) {
   const marginTop = 20;
   const marginRight = 25;
@@ -43,51 +47,76 @@ export default function StackedBarChart({
     [height - marginBottom, marginTop],
   );
   return (
-    <BarChart
-      title={title}
-      data={data}
-      width={width}
-      height={height}
-      style={style}
-      yAxis={yAxis}
-      hoverable={hoverable}
-      percentageChange={percentageChange}
-    >
-      {data.map((d, i) => (
-        <Fragment key={i}>
-          <rect
-            x={x(i)}
-            y={y(d.value)}
-            width={barWidth}
-            height={height - y(d.value - d.stackedValue) - marginBottom}
-            color={"#FF9FB3"}
-            style={{ borderRadius: 10 }}
+    <div style={{ backgroundColor: "white", borderRadius: 10 }}>
+      <BarChart
+        title={title}
+        data={data}
+        width={width}
+        height={height}
+        style={style}
+        yAxis={yAxis}
+        hoverable={hoverable}
+        percentageChange={percentageChange}
+        info={info}
+      >
+        {data.map((d, i) => (
+          <Fragment key={i}>
+            <rect
+              x={x(i)}
+              y={y(d.value)}
+              width={barWidth}
+              height={height - y(d.value - d.stackedValue) - marginBottom}
+              color={"#FF9FB3"}
+              style={{ borderRadius: 10 }}
+            />
+            <circle
+              cx={x(i) + barWidth / 2}
+              cy={y(d.value)}
+              width={barWidth}
+              r={barWidth / 2}
+              color={d.value === d.stackedValue ? "#008AFC" : "#FF9FB3"}
+            />
+            <rect
+              x={x(i)}
+              y={y(d.stackedValue)}
+              width={barWidth}
+              height={height - y(d.stackedValue) - marginBottom}
+              color={"#008AFC"}
+              style={{ borderRadius: 10 }}
+            />
+            <rect
+              x={x(i)}
+              y={y(0)}
+              width={barWidth}
+              height={barWidth / 2}
+              color="white"
+              style={{ borderRadius: 10 }}
+            />
+          </Fragment>
+        ))}
+      </BarChart>
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            color: "#A5A5A5",
+          }}
+        >
+          <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 50,
+              backgroundColor: "#008AFC",
+            }}
           />
-          <circle
-            cx={x(i) + barWidth / 2}
-            cy={y(d.value)}
-            width={barWidth}
-            r={barWidth / 2}
-            color={d.value === d.stackedValue ? "#008AFC" : "#FF9FB3"}
-          />
-          <rect
-            x={x(i)}
-            y={y(d.stackedValue)}
-            width={barWidth}
-            height={height - y(d.stackedValue) - marginBottom}
-            color={"#008AFC"}
-            style={{ borderRadius: 10 }}
-          />
-          <rect
-            x={x(i)}
-            y={y(0)}
-            width={barWidth}
-            height={barWidth / 2}
-            color="white"
-            style={{ borderRadius: 10 }}
-          />
-        </Fragment>
-      ))}
-    </BarChart>
+          <div style={{ marginTop: "auto", marginBottom: "auto" }}>
+            {legend.valueText}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

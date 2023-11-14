@@ -1,14 +1,14 @@
 import {
-  dashboardIcon as DB,
-  importantGrayIcon as IGI,
-  checkCircle as CC,
-  timeForward as TF,
-  lastPage as PF,
-  completedIcon as COI,
-  sqrtIcon as SQ,
-  bookIcon as BI,
-  docIcon as DI,
-  questionIcon as QI,
+  DashboardIcon as DB,
+  ImportantGrayIcon as IGI,
+  CheckCircle as CC,
+  TimeForward as TF,
+  LastPage as PF,
+  CompletedIcon as COI,
+  SqrtIcon as SQ,
+  BookIcon as BI,
+  DocIcon as DI,
+  QuestionIcon as QI,
 } from "@src/app/icons";
 import { CSSProperties, ReactNode } from "react";
 import { Days } from "@/common_utils/types";

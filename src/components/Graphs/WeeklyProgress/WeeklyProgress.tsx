@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { Days } from "@/common_utils/types";
-import { grayCircle as GC, checkMark as CM } from "@src/app/icons";
+import { GrayCircle as GC, CheckMark as CM } from "@src/app/icons";
 import styles from "./WeeklyProgress.module.scss";
 
 interface DataParams {

@@ -1,37 +1,52 @@
-import barChartIcon from "./barChartIcon";
-import personIcon from "./personIcon";
-import dashboardIcon from "./dashboardIcon";
-import peopleIcon from "./peopleIcon";
-import checkCircle from "./checkCircle";
-import importantGrayIcon from "./importantGrayIcon";
-import calendarIcon from "./calendarIcon";
-import arrowDown from "./arrowDown";
-import grayCircle from "./grayCircle";
-import checkMark from "./checkMark";
-import completedIcon from "./completedIcon";
-import lastPage from "./lastPage";
-import timeForward from "./timeForward";
-import sqrtIcon from "./sqrtIcon";
-import bookIcon from "./bookIcon";
-import docIcon from "./docIcon";
-import questionIcon from "./questionIcon";
+import BarChartIcon from "./BarChartIcon";
+import PersonIcon from "./PersonIcon";
+import DashboardIcon from "./DashboardIcon";
+import PeopleIcon from "./PeopleIcon";
+import CheckCircle from "./CheckCircle";
+import ImportantGrayIcon from "./ImportantGrayIcon";
+import CalendarIcon from "./CalendarIcon";
+import ArrowDown from "./ArrowDown";
+import GrayCircle from "./GrayCircle";
+import CheckMark from "./CheckMark";
+import CompletedIcon from "./CompletedIcon";
+import LastPage from "./LastPage";
+import TimeForward from "./TimeForward";
+import SqrtIcon from "./SqrtIcon";
+import BookIcon from "./BookIcon";
+import DocIcon from "./DocIcon";
+import QuestionIcon from "./QuestionIcon";
+
+import AccuracyIcon from "./AccuracyIcon";
+import AttemptIcon from "./AttemptIcon";
+import InfoIcon from "./InfoIcon";
+import PromptsIcon from "./PromptsIcon";
+import RootXIcon from "./RootXIcon";
+import TimeIcon from "./TimeIcon";
+import WritingIcon from "./WritingIcon";
 
 export {
-  barChartIcon,
-  personIcon,
-  dashboardIcon,
-  peopleIcon,
-  checkCircle,
-  importantGrayIcon,
-  calendarIcon,
-  arrowDown,
-  grayCircle,
-  checkMark,
-  completedIcon,
-  lastPage,
-  timeForward,
-  sqrtIcon,
-  bookIcon,
-  docIcon,
-  questionIcon,
+  BarChartIcon,
+  PersonIcon,
+  DashboardIcon,
+  PeopleIcon,
+  CheckCircle,
+  ImportantGrayIcon,
+  CalendarIcon,
+  ArrowDown,
+  GrayCircle,
+  CheckMark,
+  CompletedIcon,
+  LastPage,
+  TimeForward,
+  SqrtIcon,
+  BookIcon,
+  DocIcon,
+  QuestionIcon,
+  AccuracyIcon,
+  AttemptIcon,
+  InfoIcon,
+  PromptsIcon,
+  RootXIcon,
+  TimeIcon,
+  WritingIcon,
 };

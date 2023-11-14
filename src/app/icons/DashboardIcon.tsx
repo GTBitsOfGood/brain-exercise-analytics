@@ -1,4 +1,4 @@
-const dashboardIcon = () => (
+const DashboardIcon = () => (
   <>
     <svg
       width="28"
@@ -27,4 +27,4 @@ const dashboardIcon = () => (
   </>
 );
 
-export default dashboardIcon;
+export default DashboardIcon;

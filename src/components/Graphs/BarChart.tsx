@@ -1,4 +1,7 @@
+"use client";
+
 import { Poppins, Inter } from "next/font/google";
+import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import {
   Fragment,
@@ -9,6 +12,7 @@ import {
   useState,
 } from "react";
 import { D3Data } from "@src/utils/types";
+import PopupModal from "./PopupModal/PopupModal";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
@@ -22,6 +26,7 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   highlightLargest?: boolean;
   children?: ReactNode;
+  info?: string;
 }
 
 export default function BarChart({
@@ -40,7 +45,9 @@ export default function BarChart({
   percentageChange = false,
   highlightLargest = true,
   children,
+  info = "",
 }: DataParams) {
+  const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 25;
   const marginBottom = 25;
@@ -48,6 +55,9 @@ export default function BarChart({
   const [largest, setLargest] = useState(-1);
   const barWidth = 20;
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [infoPopup, setInfoPopup] = useState(false);
+  const [popupX, setPopupX] = useState<number | null>(null);
+  const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
     data.length < 2
@@ -83,6 +93,19 @@ export default function BarChart({
   );
 
   useEffect(() => {
+    const onScroll = () => setInfoPopup(false);
+    // clean up code
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    if (infoButtonRef.current) {
+      const rect: Element = infoButtonRef.current;
+      const newTop = rect.getBoundingClientRect().y - 50;
+      setPopupY(newTop);
+      const left = rect.getBoundingClientRect().x;
+      setPopupX(left);
+    }
+
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
@@ -146,6 +169,7 @@ export default function BarChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+    return () => window.removeEventListener("scroll", onScroll);
   }, [
     data,
     height,
@@ -192,6 +216,11 @@ export default function BarChart({
         paddingBottom: 30,
         ...style,
       }}
+      onClick={() => {
+        if (infoPopup) {
+          setInfoPopup(false);
+        }
+      }}
     >
       <div
         className="titleBox"
@@ -206,6 +235,34 @@ export default function BarChart({
         >
           {title}
         </p>
+        {info !== "" && (
+          <div
+            style={{
+              fontSize: 12,
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginLeft: 12,
+              cursor: "pointer",
+              left: 500,
+            }}
+            onClick={() => {
+              setInfoPopup(true);
+            }}
+            ref={infoButtonRef}
+          >
+            <InfoIcon />
+            <PopupModal
+              show={infoPopup}
+              info={info}
+              style={{
+                position: "fixed",
+                top: `${popupY}px`,
+                zIndex: 500,
+                left: `${popupX}px`,
+              }}
+            />
+          </div>
+        )}
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
@@ -269,6 +326,18 @@ export default function BarChart({
           ))}
         </g>
       </svg>
+      <div style={{ justifyContent: "center" }}>
+        <div>
+          {/* <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 50,
+              backgroundColor: "#008AFC",
+            }}
+          /> */}
+        </div>
+      </div>
     </div>
   );
 }

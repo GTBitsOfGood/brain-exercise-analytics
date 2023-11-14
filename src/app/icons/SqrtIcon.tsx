@@ -1,4 +1,4 @@
-const sqrtIcon = () => (
+const SqrtIcon = () => (
   <>
     <svg
       width="29"
@@ -21,4 +21,4 @@ const sqrtIcon = () => (
   </>
 );
 
-export default sqrtIcon;
+export default SqrtIcon;

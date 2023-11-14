@@ -1,4 +1,4 @@
-const lastPage = () => (
+const LastPage = () => (
   <>
     <svg
       width="48"
@@ -15,4 +15,4 @@ const lastPage = () => (
   </>
 );
 
-export default lastPage;
+export default LastPage;

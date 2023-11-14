@@ -1,4 +1,4 @@
-const checkCircle = () => (
+const CheckCircle = () => (
   <>
     <svg
       width="22"
@@ -28,4 +28,4 @@ const checkCircle = () => (
   </>
 );
 
-export default checkCircle;
+export default CheckCircle;

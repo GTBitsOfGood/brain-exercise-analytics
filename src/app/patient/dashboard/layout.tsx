@@ -1,5 +1,5 @@
 import React from "react";
-import OverviewReport from "@src/components/Dashboard/OverviewReport/OverviewReport";
+import { OverviewReport } from "@src/components/Dashboard";
 import styles from "./layout.module.scss";
 
 export default function DashboardLayout({
