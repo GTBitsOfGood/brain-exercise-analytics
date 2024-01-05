@@ -47,13 +47,14 @@ export const POST = APIWrapper({
       name: signupData.name,
       phoneNumber: signupData.phoneNumber,
       patientDetails: {
-        birthdate: signupData.birthDate.toString(),
+        birthDate: signupData.birthDate,
         secondaryContactName: signupData.secondaryContactName,
         secondaryContactPhone: signupData.secondaryContactPhone,
+        additionalAffiliation: "",
       },
       signedUp: true,
       role: Role.NONPROFIT_USER,
-    } as IUser);
+    } as Omit<IUser, "chapter" | "location">);
     return newSignUp;
   },
 });

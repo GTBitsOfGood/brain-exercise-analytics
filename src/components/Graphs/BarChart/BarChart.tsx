@@ -1,4 +1,7 @@
+"use client";
+
 import { Poppins, Inter } from "next/font/google";
+import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import {
   Fragment,
@@ -8,20 +11,21 @@ import {
   useRef,
   useState,
 } from "react";
-import { D3Data } from "./types";
+import { D3Data } from "@src/utils/types";
+import PopupModal from "../PopupModal/PopupModal";
 
 const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
   highlightLargest?: boolean;
   children?: ReactNode;
+  info?: string;
 }
 
 export default function BarChart({
@@ -40,7 +44,9 @@ export default function BarChart({
   percentageChange = false,
   highlightLargest = true,
   children,
+  info = "",
 }: DataParams) {
+  const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 25;
   const marginBottom = 25;
@@ -48,6 +54,9 @@ export default function BarChart({
   const [largest, setLargest] = useState(-1);
   const barWidth = 20;
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [infoPopup, setInfoPopup] = useState(false);
+  const [popupX, setPopupX] = useState<number | null>(null);
+  const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
     data.length < 2
@@ -83,6 +92,19 @@ export default function BarChart({
   );
 
   useEffect(() => {
+    const onScroll = () => setInfoPopup(false);
+    // clean up code
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    if (infoButtonRef.current) {
+      const rect: Element = infoButtonRef.current;
+      const newTop = rect.getBoundingClientRect().y - 50;
+      setPopupY(newTop);
+      const left = rect.getBoundingClientRect().x;
+      setPopupX(left);
+    }
+
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
@@ -146,6 +168,7 @@ export default function BarChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+    return () => window.removeEventListener("scroll", onScroll);
   }, [
     data,
     height,
@@ -184,18 +207,28 @@ export default function BarChart({
       style={{
         backgroundColor: "white",
         borderRadius: "15px",
-        width: 430,
-        height: 254,
-        paddingTop: 18.6,
-        paddingLeft: 16,
-        paddingRight: 36,
-        paddingBottom: 30,
+        width: width + 44,
+        height: height + 70,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
         ...style,
+      }}
+      onClick={() => {
+        if (infoPopup) {
+          setInfoPopup(false);
+        }
       }}
     >
       <div
         className="titleBox"
-        style={{ display: "flex", flexDirection: "row", margin: "auto" }}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          margin: "auto",
+          alignItems: "first baseline",
+        }}
       >
         <p
           style={{
@@ -206,15 +239,40 @@ export default function BarChart({
         >
           {title}
         </p>
+        {info !== "" && (
+          <div
+            style={{
+              fontSize: 12,
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginLeft: 12,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setInfoPopup(true);
+            }}
+            ref={infoButtonRef}
+          >
+            <InfoIcon />
+            <PopupModal
+              show={infoPopup}
+              info={info}
+              style={{
+                position: "fixed",
+                top: `${popupY}px`,
+                zIndex: 500,
+                left: `${popupX}px`,
+              }}
+            />
+          </div>
+        )}
         <p
           style={{
             fontFamily: inter700.style.fontFamily,
+            marginLeft: "12px",
             color:
               actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
             fontSize: 8.73,
-            marginTop: "auto",
-            marginBottom: "auto",
-            marginLeft: 12,
           }}
         >
           {actualChange !== null &&
@@ -269,6 +327,18 @@ export default function BarChart({
           ))}
         </g>
       </svg>
+      <div style={{ justifyContent: "center" }}>
+        <div>
+          {/* <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 50,
+              backgroundColor: "#008AFC",
+            }}
+          /> */}
+        </div>
+      </div>
     </div>
   );
 }

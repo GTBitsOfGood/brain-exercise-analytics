@@ -1,0 +1,23 @@
+.wrapper {
+  flex-direction: row;
+  color: #8f9bba;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.navigation-panel {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  width: 304px;
+  position: fixed;
+}
+
+.rest-of-page {
+  display: flex;
+  color: #8f9bba;
+  background-color: #f4f7fe;
+  padding-left: 304px;
+  width: 100%;
+  min-height: 100vh;
+}

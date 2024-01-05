@@ -6,12 +6,19 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   return user;
 };
 
+export const getUserById = async (id: string): Promise<IUser | null> => {
+  const user = await User.findOne<IUser>({ id });
+  return user;
+};
+
 export const createUserEmail = async (email: string): Promise<IUser> => {
   const user = (await User.create({ email })) as IUser;
   return user;
 };
 
-export const patientSignUp = async (data: IUser): Promise<IUser | null> => {
+export const patientSignUp = async (
+  data: Omit<IUser, "chapter" | "location">,
+): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email: data.email },
     {
@@ -19,7 +26,7 @@ export const patientSignUp = async (data: IUser): Promise<IUser | null> => {
         name: data.name,
         phoneNumber: data.phoneNumber,
         patientDetails: {
-          birthDate: data.patientDetails.birthdate,
+          birthDate: data.patientDetails.birthDate,
           secondaryContactName: data.patientDetails.secondaryContactName,
           secondaryContactPhone: data.patientDetails.secondaryContactPhone,
         },

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
+import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 
@@ -24,11 +23,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const resetErrors = () => {
     setEmailError("");
@@ -84,7 +78,7 @@ export default function Page() {
             email,
           },
         });
-        router.push("/auth/redirect");
+        router.push("/auth/information");
       } catch (error) {
         setShowGeneralError(true);
       }
@@ -104,15 +98,11 @@ export default function Page() {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      router.push("/auth/redirect");
+      router.push("/auth/information");
     } catch (error) {
       setShowGeneralError(true);
     }
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>
@@ -207,10 +197,9 @@ export default function Page() {
 
             {showGeneralError && (
               <div className={styles.generalError}>
-                <FontAwesomeIcon
+                <ErrorIcon
                   className={styles.errorIcon}
-                  icon={faExclamationCircle}
-                  size="sm"
+                  sx={{ width: "18px" }}
                 />
                 <p className={styles.errorMessage}>
                   Error: An internal server error has occurred. Please try again

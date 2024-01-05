@@ -1,11 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationCircle,
-  faCircleInfo,
-} from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
+import { Error as ErrorIcon, Info as InfoIcon } from "@mui/icons-material";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
@@ -13,24 +9,24 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@src/utils/types";
-import Dropdown from "@src/components/Dropdown/Dropdown";
+import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
 
 export default function Page() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [number, setNumber] = useState("");
+  const [firstName, setFirstName] = useState("Samarth");
+  const [lastName, setLastName] = useState("Chandna");
+  const [number, setNumber] = useState("1234567890");
 
-  const [locCountry, setLocCountry] = useState("");
-  const [locState, setLocState] = useState("");
-  const [locCity, setLocCity] = useState("");
+  const [locCountry, setLocCountry] = useState("United States");
+  const [locState, setLocState] = useState("Georgia");
+  const [locCity, setLocCity] = useState("Atlanta");
   const [countryError, setCountryError] = useState("");
   const [stateError, setStateError] = useState("");
   const [cityError, setCityError] = useState("");
 
-  const [chapter, setChapter] = useState("");
+  const [chapter, setChapter] = useState("Georgia Tech");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [numberError, setNumberError] = useState("");
@@ -38,11 +34,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -56,6 +47,7 @@ export default function Page() {
     value: state.name,
     displayValue: `${state.name}`,
   }));
+
   const stateCode = State.getStatesOfCountry(countryCode).filter(
     (state) => state.name === locState,
   )[0]?.isoCode;
@@ -128,15 +120,11 @@ export default function Page() {
           chapter,
         },
       });
-      router.push("/auth/dashboard");
+      router.push("/patient/search");
     } catch (error) {
       setShowGeneralError(true);
     }
   };
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className={styles.screen}>
@@ -195,7 +183,7 @@ export default function Page() {
                 />
               </div>
               <div className={styles.locationField}>
-                <Dropdown
+                <AuthDropdown
                   title="Location"
                   required={true}
                   placeholder="Select Your Country"
@@ -203,6 +191,8 @@ export default function Page() {
                   value={locCountry}
                   onChange={(e) => {
                     setLocCountry(e.target.value);
+                    setLocState("");
+                    setLocCity("");
                     setCountryError("");
                     setStateError("");
                     setCityError("");
@@ -213,20 +203,21 @@ export default function Page() {
               </div>
               {locCountry === "" ? null : (
                 <div className={styles.cityStateFields}>
-                  <Dropdown
+                  <AuthDropdown
                     required={true}
                     placeholder="Select Your State"
                     options={STATES}
                     value={locState}
                     onChange={(e) => {
                       setLocState(e.target.value);
+                      setLocCity("");
                       setStateError("");
                       setCityError("");
                     }}
                     showError={stateError !== ""}
                     error={stateError}
                   />
-                  <Dropdown
+                  <AuthDropdown
                     required={true}
                     placeholder="Select Your City"
                     options={CITIES}
@@ -241,7 +232,7 @@ export default function Page() {
                 </div>
               )}
               <div className={styles.locationField}>
-                <Dropdown
+                <AuthDropdown
                   title="Chapter"
                   required={true}
                   placeholder="Select Your Chaper"
@@ -256,10 +247,9 @@ export default function Page() {
                 />
               </div>
               <div className={styles.chapterNotFound}>
-                <FontAwesomeIcon
-                  icon={faCircleInfo}
+                <InfoIcon
                   className={styles.notFoundIcon}
-                  size="sm"
+                  sx={{ width: "18px" }}
                 />
                 <p className={styles.notFoundMessage}>
                   Don&apos;t see your Chapter? Contact{" "}
@@ -268,10 +258,9 @@ export default function Page() {
               </div>
               {showGeneralError && (
                 <div className={styles.generalError}>
-                  <FontAwesomeIcon
+                  <ErrorIcon
                     className={styles.errorIcon}
-                    icon={faExclamationCircle}
-                    size="sm"
+                    sx={{ width: "18px" }}
                   />
                   <p className={styles.errorMessage}>
                     Error: An internal server error has occurred. Please try
