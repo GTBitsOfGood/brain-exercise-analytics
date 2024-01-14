@@ -15,9 +15,7 @@ import { D3Data } from "@src/utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./BarChart.module.scss";
 
-const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
-const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
 interface DataParams extends D3Data {
@@ -32,14 +30,14 @@ interface DataParams extends D3Data {
 export default function BarChart({
   title,
   data,
-  width = 375,
-  height = 180,
+  width: providedWidth = 375,
+  height: providedHeight = 180,
   style = {},
   yAxis = {
     min: d3.min(data.map((v) => v.value)) ?? 0,
     max: d3.max(data.map((v) => v.value)) ?? 1,
-    numDivisions: 5,
-    format: (d: d3.NumberValue) => JSON.stringify(d),
+    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
+    format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
   hoverable = false,
   percentageChange = false,
@@ -47,13 +45,15 @@ export default function BarChart({
   children,
   info = "",
 }: DataParams) {
+  const barWidth = 20;
+  const width = Math.max(providedWidth, (barWidth + 5) * data.length + 60);
+  const height = Math.max(providedHeight, 80);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 25;
   const marginBottom = 25;
   const marginLeft = 35;
   const [largest, setLargest] = useState(-1);
-  const barWidth = 20;
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
