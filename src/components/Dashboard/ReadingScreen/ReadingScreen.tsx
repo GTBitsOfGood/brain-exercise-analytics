@@ -66,7 +66,7 @@ export default function ReadingScreen({
       <div className={styles.body}>
         <div className={styles.graphs}>
           <StackedBarChart
-            width={325}
+            width={105}
             height={165}
             title="Writing Session Completion History"
             data={sessionHistory}

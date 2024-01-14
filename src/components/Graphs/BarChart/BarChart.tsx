@@ -1,6 +1,6 @@
 "use client";
 
-import { Poppins, Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import {
@@ -74,7 +74,7 @@ export default function BarChart({
     const range = width - marginRight - marginLeft;
     const itemWidth = range / (data.length - 1);
     const index = Math.floor(
-      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth
+      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
     );
     setActiveIndex(index);
   }
@@ -85,11 +85,11 @@ export default function BarChart({
 
   const x = d3.scaleLinear(
     [0, data.length - 1],
-    [marginLeft, width - marginRight]
+    [marginLeft, width - marginRight],
   );
   const y = d3.scaleLinear(
     [yAxis.min, yAxis.max],
-    [height - marginBottom, marginTop]
+    [height - marginBottom, marginTop],
   );
 
   useEffect(() => {
@@ -145,8 +145,8 @@ export default function BarChart({
         d3.range(
           yAxis.min,
           yAxis.max + 0.0001,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1)
-        )
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+        ),
       )
       .tickSizeOuter(0)
       .tickSizeInner(0)
@@ -188,7 +188,7 @@ export default function BarChart({
         x={x(i)}
         y={y(d.value) - 11 - barWidth / 2}
         width={barWidth}
-        height='10'
+        height="10"
         fontSize={8}
       >
         <div
@@ -262,7 +262,7 @@ export default function BarChart({
         onMouseMove={hoverable ? handleMouseMove : undefined}
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
       >
-        <g fill='currentColor' stroke='currentColor' strokeWidth='1.5'>
+        <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
           {children ||
             data.map((d, i) => {
               const color =
@@ -288,7 +288,7 @@ export default function BarChart({
                     y={y(yAxis.min)}
                     width={barWidth}
                     height={barWidth / 2}
-                    color='white'
+                    color="white"
                     style={{ borderRadius: 10 }}
                   />
                 </Fragment>
