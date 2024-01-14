@@ -1,0 +1,29 @@
+.StackedBarChart {
+  background-color: white;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.legendBox {
+  display: flex;
+  justify-content: center;
+}
+
+.legendBox > div {
+  display: flex;
+  flex-direction: column;
+  color: #a5a5a5;
+  font-size: 10px;
+  row-gap: 3px;
+  padding-bottom: 12px;
+}
+
+.legendItem {
+  display: flex;
+  column-gap: 12px;
+}
+
+.legendText {
+  margin-top: auto;
+  margin-bottom: auto;
+}
