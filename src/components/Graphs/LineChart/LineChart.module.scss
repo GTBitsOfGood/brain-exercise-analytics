@@ -1,0 +1,64 @@
+.LineChart {
+  min-width: 245px;
+  background-color: white;
+  border-radius: 15px;
+  padding-top: 18.6px;
+  padding-left: 18px;
+  padding-right: 36px;
+  padding-bottom: 38px;
+}
+
+.titleBox {
+  display: inline-flex;
+  p {
+    font-family: var(--font-poppins);
+    font-weight: 500;
+    color: #a3aed0;
+    font-size: 12;
+  }
+  .percentageChangeIcon {
+    font-family: var(--font-inter);
+    font-weight: 700;
+    font-size: 8.73px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 12px;
+  }
+  .percentageChange {
+    font-family: var(--font-poppins);
+    font-weight: 500;
+    color: #bdcdff;
+    font-size: 10.2;
+  }
+}
+.info {
+  font-size: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+.linePath {
+  fill: none;
+  stroke: #008afc;
+  stroke-width: 6;
+  border-radius: 10px;
+  height: 100%;
+  filter: url(#drop-shadow);
+}
+.svgComp {
+  stroke-width: 1.5;
+  stroke: currentColor;
+  fill: white;
+  circle {
+    stroke-width: 1;
+    color: #008afc;
+    fill: #008afc;
+  }
+  .hoverCircle {
+    stroke-width: 5;
+    color: #008afc;
+    fill: white;
+  }
+}
