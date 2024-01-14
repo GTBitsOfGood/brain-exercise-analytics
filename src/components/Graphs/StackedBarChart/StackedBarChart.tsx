@@ -64,7 +64,7 @@ export default function StackedBarChart({
         info={info}
       >
         {data.map((d, i) => (
-          <Fragment key={i} props>
+          <Fragment key={i}>
             <rect
               x={x(i)}
               y={y(d.value)}
