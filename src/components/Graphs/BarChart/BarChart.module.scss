@@ -17,6 +17,13 @@
     font-weight: 500;
     color: #a3aed0;
     font-size: 12px;
+    white-space: nowrap;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .title::-webkit-scrollbar {
+    display: none;
   }
   .infoBox {
     font-size: 12px;
@@ -29,6 +36,7 @@
     font-family: var(--font-inter);
     font-weight: 700;
     margin-left: 12px;
-    font-size: 8.73px,
+    font-size: 8.73px;
+    white-space: nowrap;
   }
 }
