@@ -53,13 +53,16 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = (await (
-    await fetch(`${process.env.URL}/api/volunteer/internal/get-volunteer`, {
-      method: HttpMethod.POST,
-      body: JSON.stringify({
-        id: user._id,
-        secret: process.env.INTERNAL_SECRET,
-      }),
-    })
+    await fetch(
+      `${request.nextUrl.origin}/api/volunteer/internal/get-volunteer`,
+      {
+        method: HttpMethod.POST,
+        body: JSON.stringify({
+          id: user._id,
+          secret: process.env.INTERNAL_SECRET,
+        }),
+      },
+    )
   ).json()) as { success: boolean; message: string; payload: object };
   if (!response || response.success === false || !response.payload) {
     request.cookies.delete("authUser");
