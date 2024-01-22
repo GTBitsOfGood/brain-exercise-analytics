@@ -1,15 +1,14 @@
 "use client";
 
-import { Poppins, Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import * as d3 from "d3";
 import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { InfoIcon } from "@src/app/icons";
 import PopupModal from "../PopupModal/PopupModal";
+import styles from "./LineChart.module.scss";
 
-const inter700 = Inter({ subsets: ["latin"], weight: "700" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
-const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
 
 interface DataParams extends D3Data {
@@ -24,14 +23,14 @@ interface DataParams extends D3Data {
 export default function LineChart({
   className,
   data,
-  width = 410,
-  height = 174,
+  width: providedWidth = 410,
+  height: providedHeight = 150,
   style = {},
   yAxis = {
     min: d3.min(data.map((v) => v.value)) ?? 0,
     max: d3.max(data.map((v) => v.value)) ?? 1,
-    numDivisions: 5,
-    format: (d: d3.NumberValue) => JSON.stringify(d),
+    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
+    format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
   title,
   hoverable = false,
@@ -39,6 +38,8 @@ export default function LineChart({
   gradient = false,
   info = "",
 }: DataParams) {
+  const width = Math.max(providedWidth, 210);
+  const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 20;
@@ -157,16 +158,10 @@ export default function LineChart({
 
   return (
     <div
-      className={className}
+      className={`${className} ${styles.LineChart}`}
       style={{
-        backgroundColor: "white",
-        borderRadius: "15px",
         width: width + 45,
         height: height + 60,
-        paddingTop: 18.6,
-        paddingLeft: 18,
-        paddingRight: 36,
-        paddingBottom: 38,
         ...style,
       }}
       onClick={() => {
@@ -175,25 +170,11 @@ export default function LineChart({
         }
       }}
     >
-      <div className="titleBox" style={{ display: "inline-flex" }}>
-        <p
-          style={{
-            fontFamily: poppins500.style.fontFamily,
-            color: "#A3AED0",
-            fontSize: 12,
-          }}
-        >
-          {title}
-        </p>
+      <div className={styles.titleBox}>
+        <p>{title}</p>
         {info !== "" && (
           <div
-            style={{
-              fontSize: 12,
-              marginTop: "auto",
-              marginBottom: "auto",
-              marginLeft: 12,
-              cursor: "pointer",
-            }}
+            className={styles.info}
             onClick={() => {
               setInfoPopup(true);
             }}
@@ -213,14 +194,10 @@ export default function LineChart({
           </div>
         )}
         <p
+          className={styles.percentageChangeIcon}
           style={{
-            fontFamily: inter700.style.fontFamily,
             color:
               actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
-            fontSize: 8.73,
-            marginTop: "auto",
-            marginBottom: "auto",
-            marginLeft: 12,
           }}
         >
           {actualChange !== null &&
@@ -229,13 +206,7 @@ export default function LineChart({
               ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
               : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
         </p>
-        <p
-          style={{
-            fontFamily: poppins500.style.fontFamily,
-            color: "#BDCDFF",
-            fontSize: 10.2,
-          }}
-        >
+        <p className={styles.percentageChange}>
           {actualChange !== null && percentageChange}
         </p>
       </div>
@@ -258,43 +229,26 @@ export default function LineChart({
           </filter>
         )}
         <path
-          fill="none"
-          stroke="#008AFC"
-          strokeWidth="6"
+          className={styles.linePath}
           d={line(data.map((d, i) => [i, d.value])) as string | undefined}
-          radius={"10px"}
-          height={"100%"}
-          filter="url(#drop-shadow)"
         />
-        <g fill="white" stroke="currentColor" strokeWidth="1.5">
-          <circle
-            key={-1}
-            cx={x(0)}
-            cy={y(data[0].value)}
-            r="2.5"
-            strokeWidth={1}
-            color="#008AFC"
-            fill="#008AFC"
-          />
+        <g className={styles.svgComp}>
+          <circle key={-1} cx={x(0)} cy={y(data[0].value)} r="2.5" />
           <circle
             key={-2}
             cx={x(data.length - 1)}
             cy={y(data[data.length - 1].value)}
             r="2.5"
-            strokeWidth={1}
-            color="#008AFC"
-            fill="#008AFC"
           />
           {data.map(
             (d, i) =>
               activeIndex === i && (
                 <Fragment key={i}>
                   <circle
+                    className={styles.hoverCircle}
                     cx={x(i)}
                     cy={y(d.value)}
                     r="7.5"
-                    strokeWidth={5}
-                    color="#008AFC"
                   />
                   <foreignObject
                     x={x(i) - 7.5}

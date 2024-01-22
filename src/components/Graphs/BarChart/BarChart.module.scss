@@ -1,0 +1,42 @@
+.BarChart {
+  background-color: white;
+  border-radius: 15px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.titleBox {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  align-items: first baseline;
+  .title {
+    font-family: var(--font-poppins);
+    font-weight: 500;
+    color: #a3aed0;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .title::-webkit-scrollbar {
+    display: none;
+  }
+  .infoBox {
+    font-size: 12px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 12px;
+    cursor: pointer;
+  }
+  .percentageChange {
+    font-family: var(--font-inter);
+    font-weight: 700;
+    margin-left: 12px;
+    font-size: 8.73px;
+    white-space: nowrap;
+  }
+}
