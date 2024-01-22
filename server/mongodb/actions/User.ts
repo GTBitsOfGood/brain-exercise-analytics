@@ -11,6 +11,20 @@ export const getUserById = async (id: string): Promise<IUser | null> => {
   return user;
 };
 
+export const verifyUserByEmail = async (
+  email: string,
+): Promise<IUser | null> => {
+  const res = await User.findOneAndUpdate<IUser>(
+    { email },
+    {
+      $set: {
+        verified: true,
+      },
+    },
+  );
+  return res;
+};
+
 export const createUserEmail = async (email: string): Promise<IUser> => {
   const user = (await User.create({ email })) as IUser;
   return user;

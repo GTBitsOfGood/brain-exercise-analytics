@@ -48,7 +48,7 @@ export default function Page() {
         },
       });
 
-      router.push("/auth/information");
+      router.push("/auth/email-verification");
     } catch (error) {
       if (error instanceof FirebaseError) {
         switch (error.code) {

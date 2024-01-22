@@ -50,7 +50,7 @@ export default function Page() {
         },
       });
 
-      router.push("/auth/information");
+      router.push("/auth/email-verification");
     } catch (error) {
       if (error instanceof FirebaseError) {
         switch (error.code) {
@@ -181,10 +181,7 @@ export default function Page() {
                 />
                 <p>Keep me logged in</p>
               </div>
-              <a
-                className={styles.forgotPassword}
-                href="/auth/account-recovery"
-              >
+              <a className={styles.forgotPassword} href="/auth/password-reset">
                 Forgot password?
               </a>
             </div>

@@ -145,7 +145,11 @@ export default function Page({ params }: PageProps) {
               <div className={styles["button-container"]}>
                 <button
                   className={styles["confirm-button"]}
-                  onClick={() => confirmButtonFunction()}
+                  onClick={() =>
+                    passwordSuccess
+                      ? router.push("/auth/login")
+                      : confirmButtonFunction()
+                  }
                 >
                   {passwordSuccess ? "Go to Sign in" : "Confirm"}
                 </button>

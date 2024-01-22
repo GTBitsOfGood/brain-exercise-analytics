@@ -5,9 +5,7 @@ import { Error as ErrorIcon, Info as InfoIcon } from "@mui/icons-material";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
-import { login } from "@src/redux/reducers/authReducer";
 import { IUser, HttpMethod } from "@/common_utils/types";
-import { useDispatch } from "react-redux";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -37,7 +35,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -112,7 +109,7 @@ export default function Page() {
       return;
     try {
       const name = `${firstName} ${lastName}`;
-      const user = await internalRequest<IUser>({
+      await internalRequest<IUser>({
         url: "/api/volunteer/auth/signup",
         method: HttpMethod.POST,
         body: {
@@ -125,8 +122,6 @@ export default function Page() {
         },
       });
       router.push("/patient/search");
-
-      dispatch(login(user));
     } catch (error) {
       setShowGeneralError(true);
     }

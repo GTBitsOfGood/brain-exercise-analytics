@@ -43,7 +43,7 @@ export default function Page() {
       firstName.length === 0 || lastName.length === 0 || email.length === 0;
     if (!anyInputEmpty) {
       try {
-        const res = await internalRequest({
+        await internalRequest({
           url: "/api/volunteer/auth/password-reset/create",
           method: HttpMethod.POST,
           body: {
@@ -52,9 +52,6 @@ export default function Page() {
           },
           authRequired: false,
         });
-
-        const { token } = res as { token: string };
-        console.log(token);
 
         setValidateInputs(true);
         setTimeout(() => {
@@ -87,9 +84,7 @@ export default function Page() {
         <div className={styles.right}>
           {!validateInputs && (
             <div className={styles["right-container"]}>
-              <span className={styles["account-recovery"]}>
-                Account Recovery
-              </span>
+              <span className={styles["password-reset"]}>Account Recovery</span>
               <p className={styles.description}>
                 If you&apos;ve forgotten your password, you&apos;ll need to
                 reset your password to proceed.
