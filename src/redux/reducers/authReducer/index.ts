@@ -8,10 +8,12 @@ const initialState: IUser = {
   email: "",
   phoneNumber: "",
   patientDetails: {
-    birthdate: Date(),
+    birthDate: new Date(),
     secondaryContactName: "",
     secondaryContactPhone: "",
+    additionalAffiliation: "",
   },
+  chapter: "",
   location: {
     country: "",
     state: "",
@@ -29,15 +31,19 @@ const setState = (state: IUser, newState: Partial<IUser>): IUser => {
   state.email = newState.email ?? state.email;
   state.phoneNumber = newState.phoneNumber ?? state.phoneNumber;
   state.patientDetails = {
-    birthdate:
-      newState.patientDetails?.birthdate ?? state.patientDetails.birthdate,
+    birthDate:
+      newState.patientDetails?.birthDate ?? state.patientDetails.birthDate,
     secondaryContactName:
       newState.patientDetails?.secondaryContactName ??
       state.patientDetails.secondaryContactName,
     secondaryContactPhone:
       newState.patientDetails?.secondaryContactPhone ??
       state.patientDetails.secondaryContactPhone,
+    additionalAffiliation:
+      newState.patientDetails?.additionalAffiliation ??
+      state.patientDetails.additionalAffiliation,
   };
+  state.chapter = newState.chapter ?? state.chapter;
   state.location = {
     country: newState.location?.country ?? state.location.country,
     state: newState.location?.state ?? state.location.state,

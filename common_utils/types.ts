@@ -64,7 +64,7 @@ export interface IUser {
 }
 
 export interface ITableEntry
-  extends Omit<IUser, "phoneNumber" | "role" | "signedUp"> {
+  extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
   status: boolean;
   startDate: Date;
 }

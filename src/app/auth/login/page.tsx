@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
-import { useDispatch } from "react-redux";
+import { User } from "firebase/auth";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -16,7 +16,6 @@ import { internalRequest } from "@src/utils/requests";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
 import { HttpMethod, IUser } from "@/common_utils/types";
-import { login } from "@src/redux/reducers/authReducer";
 
 import styles from "./page.module.css";
 
@@ -29,7 +28,6 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const resetErrors = () => {
     setEmailError("");
@@ -37,38 +35,22 @@ export default function Page() {
     setShowGeneralError(false);
   };
 
-  const signIn = async () => {
-    resetErrors();
-    let hasError = false;
-
-    if (email.trim() === "") {
-      setEmailError("Email can't be blank.");
-      hasError = true;
-    }
-    if (password.trim() === "") {
-      setPasswordError("Password can't be blank.");
-      hasError = true;
-    }
-
-    if (hasError) return;
-
+  const handleSignIn = async (signIn: () => Promise<User | null>) => {
     try {
-      await emailSignIn(email, password);
-      try {
-        const user = await internalRequest<IUser>({
-          url: "/api/volunteer/auth/login",
-          method: HttpMethod.GET,
-          body: {
-            email,
-          },
-        });
-
-        router.push("/auth/information");
-        dispatch(login(user));
-        router.push("/auth/information");
-      } catch (error) {
-        setShowGeneralError(true);
+      const user = await signIn();
+      if (!user) {
+        throw new Error("Error signing in");
       }
+
+      await internalRequest<IUser>({
+        url: "/api/volunteer/auth/login",
+        method: HttpMethod.GET,
+        body: {
+          email: user.email,
+        },
+      });
+
+      router.push("/auth/information");
     } catch (error) {
       if (error instanceof FirebaseError) {
         switch (error.code) {
@@ -86,31 +68,31 @@ export default function Page() {
           default:
             setShowGeneralError(true);
         }
+      } else {
+        setShowGeneralError(true);
       }
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const user = await googleSignIn();
-      if (!user) {
-        throw new Error("Error signing in");
-      }
+  const handleEmailSignIn = async () => {
+    resetErrors();
+    let hasError = false;
 
-      const fetchedUser = await internalRequest<IUser>({
-        url: "/api/volunteer/auth/login",
-        method: HttpMethod.GET,
-        body: {
-          email: user.email,
-        },
-      });
-
-      dispatch(login(fetchedUser));
-      router.push("/auth/information");
-    } catch (error) {
-      setShowGeneralError(true);
+    if (email.trim() === "") {
+      setEmailError("Email can't be blank.");
+      hasError = true;
     }
+    if (password.trim() === "") {
+      setPasswordError("Password can't be blank.");
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    handleSignIn(() => emailSignIn(email, password));
   };
+
+  const handleGoogleSignIn = async () => handleSignIn(googleSignIn);
 
   const toggleKeepMeLoggedIn = () => {
     setKeepLogged((prevState) => !prevState);
@@ -220,7 +202,10 @@ export default function Page() {
               </div>
             )}
             <div className={styles.signInButtonContainer}>
-              <button className={styles.signInButton} onClick={signIn}>
+              <button
+                className={styles.signInButton}
+                onClick={handleEmailSignIn}
+              >
                 Sign In
               </button>
             </div>

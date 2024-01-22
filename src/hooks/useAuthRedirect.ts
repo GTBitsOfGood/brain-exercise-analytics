@@ -2,8 +2,7 @@
 
 /* eslint-disable consistent-return */
 
-import { IUser } from "@/common_utils/types";
-import { HttpMethod } from "@server/utils/types";
+import { HttpMethod, IUser } from "@/common_utils/types";
 import { login, logout } from "@src/redux/reducers/authReducer";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
