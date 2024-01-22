@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { deleteCookie } from "cookies-next";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import { internalRequest } from "@src/utils/requests";
@@ -27,34 +28,38 @@ export default function Page() {
   const router = useRouter();
   const [loadingState, setLoadingState] = useState(State.LOADING);
 
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  const verifyEmail = useCallback(async () => {
-    try {
-      const res: Response = await internalRequest({
-        url: "/api/volunteer/auth/email-verification/create",
-        method: HttpMethod.POST,
-        body: {
-          email: user?.email,
-        },
-      });
-      if (res.verified === true) {
-        router.push("/auth/information");
-      } else {
-        setLoadingState(State.SUCCESS);
+  const verifyEmail = useCallback(
+    async (email: string | null) => {
+      try {
+        const res: Response = await internalRequest({
+          url: "/api/volunteer/auth/email-verification/create",
+          method: HttpMethod.POST,
+          body: {
+            email,
+          },
+        });
+        if (res.verified === true) {
+          router.push("/auth/information");
+        } else {
+          setLoadingState(State.SUCCESS);
+        }
+      } catch (err) {
+        setLoadingState(State.ERROR);
       }
-    } catch (err) {
-      setLoadingState(State.ERROR);
-    }
-  }, [router, user]);
+    },
+    [router],
+  );
 
   useEffect(() => {
-    if (!router || !user) {
-      return;
-    }
-    verifyEmail();
-  }, [router, user, verifyEmail]);
+    getAuth().onAuthStateChanged((user) => {
+      if (user) {
+        verifyEmail(user.email);
+      } else {
+        deleteCookie("authUser");
+        router.push("/auth/login");
+      }
+    });
+  }, [verifyEmail, router]);
 
   if (loadingState === State.LOADING) {
     return <div></div>;

@@ -13,7 +13,7 @@ export const POST = APIWrapper({
     const reqdata: RequestData = (await req.json()) as RequestData;
     const { secret } = reqdata;
 
-    if (secret !== process.env.INTERNAL_AVERAGE_SECRET) {
+    if (secret !== process.env.INTERNAL_SECRET) {
       throw new Error("User is not authorized");
     }
 

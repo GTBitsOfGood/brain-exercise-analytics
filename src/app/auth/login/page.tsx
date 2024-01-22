@@ -17,6 +17,7 @@ import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
 import { HttpMethod, IUser } from "@/common_utils/types";
 
+import { setCookie } from "cookies-next";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -24,7 +25,7 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [keepLogged, setKeepLogged] = useState(true);
+  const [keepLogged, setKeepLogged] = useState(false);
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
@@ -42,13 +43,18 @@ export default function Page() {
         throw new Error("Error signing in");
       }
 
-      await internalRequest<IUser>({
+      const userMongo = await internalRequest<IUser>({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
         body: {
           email: user.email,
         },
       });
+      setCookie(
+        "authUser",
+        userMongo,
+        keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
+      );
 
       router.push("/auth/email-verification");
     } catch (error) {
