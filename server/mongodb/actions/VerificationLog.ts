@@ -7,8 +7,6 @@ export const createVerificationLog = async (
   type: VerificationLogType,
 ): Promise<IVerificationLog> => {
   const token: string = uuidv4();
-  const expiryDate = new Date();
-  expiryDate.setDate(expiryDate.getDate() + 7);
 
   const verificationLog =
     await VerificationLog.findOneAndUpdate<IVerificationLog>(
@@ -19,7 +17,7 @@ export const createVerificationLog = async (
       {
         $set: {
           token,
-          expiryDate,
+          createdAt: new Date(),
         },
       },
       { upsert: true, new: true },
