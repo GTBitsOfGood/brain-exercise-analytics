@@ -72,7 +72,7 @@ export interface ITableEntry
 export interface IVerificationLog {
   email: string;
   token: string;
-  expiryDate: Date;
+  createdAt: Date;
 }
 
 export interface IAnalytics {

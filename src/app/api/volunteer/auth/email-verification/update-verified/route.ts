@@ -3,7 +3,6 @@ import { verifyUserByEmail } from "@server/mongodb/actions/User";
 import {
   deleteVerificationLogByEmail,
   getVerificationLogByToken,
-  deleteVerificationLog,
 } from "@server/mongodb/actions/VerificationLog";
 import APIWrapper from "@server/utils/APIWrapper";
 
@@ -28,14 +27,9 @@ export const POST = APIWrapper({
       await getVerificationLogByToken(requestData.token);
 
     if (!verificationLog) {
-      throw new Error("Verification log was not found");
+      throw new Error("Verification log was not found or has expired.");
     }
 
-    const currDate = new Date();
-    if (verificationLog.expiryDate <= currDate) {
-      await deleteVerificationLog(verificationLog);
-      throw new Error("Verification log token has expired.");
-    }
     await verifyUserByEmail(verificationLog.email);
     await deleteVerificationLogByEmail(verificationLog.email);
 

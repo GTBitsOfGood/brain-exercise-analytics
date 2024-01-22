@@ -3,7 +3,6 @@ import { updateUserPassword } from "@server/firebase/passwordReset";
 import {
   deleteVerificationLogByEmail,
   getVerificationLogByToken,
-  deleteVerificationLog,
 } from "@server/mongodb/actions/VerificationLog";
 import APIWrapper from "@server/utils/APIWrapper";
 
@@ -29,13 +28,7 @@ export const POST = APIWrapper({
       await getVerificationLogByToken(requestData.token);
 
     if (!verificationLog) {
-      throw new Error("Verification log was not found");
-    }
-
-    const currDate = new Date();
-    if (verificationLog.expiryDate <= currDate) {
-      await deleteVerificationLog(verificationLog);
-      throw new Error("Verification log token has expired.");
+      throw new Error("Verification log was not found or has expired.");
     }
 
     const value = await updateUserPassword(

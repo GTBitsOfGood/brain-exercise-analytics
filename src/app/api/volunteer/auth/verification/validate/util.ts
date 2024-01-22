@@ -1,8 +1,5 @@
 import { IVerificationLog } from "@/common_utils/types";
-import {
-  deleteVerificationLog,
-  getVerificationLogByToken,
-} from "@server/mongodb/actions/VerificationLog";
+import { getVerificationLogByToken } from "@server/mongodb/actions/VerificationLog";
 
 export async function processRequest({ token }: { token: string | null }) {
   if (!token) {
@@ -10,13 +7,8 @@ export async function processRequest({ token }: { token: string | null }) {
   }
   const verificationLog: IVerificationLog | null =
     await getVerificationLogByToken(token);
-  const currDate = new Date();
   if (verificationLog === null) {
-    throw new Error("Verification log was not found");
-  }
-  if (verificationLog.expiryDate <= currDate) {
-    await deleteVerificationLog(verificationLog);
-    throw new Error("Password reset token has expired.");
+    throw new Error("Verification log was not found or has expired.");
   }
   return true;
 }

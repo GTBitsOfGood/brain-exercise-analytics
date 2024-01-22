@@ -18,9 +18,10 @@ const VerificationLogSchema = new Schema({
     type: mongoose.Schema.Types.String,
     default: "",
   },
-  expiryDate: {
+  createdAt: {
     type: mongoose.Schema.Types.Date,
     default: new Date(),
+    expires: 60 * 60 * 24 * 7, // 7 days
   },
 });
 
