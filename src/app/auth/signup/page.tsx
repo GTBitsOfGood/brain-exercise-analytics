@@ -5,6 +5,7 @@ import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
+import { setCookie } from "cookies-next";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -40,13 +41,15 @@ export default function Page() {
         throw new Error("Error signing up");
       }
 
-      await internalRequest<IUser>({
+      const userMongo = await internalRequest<IUser>({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
         body: {
           email: user.email,
         },
       });
+
+      setCookie("authUser", userMongo);
 
       router.push("/auth/email-verification");
     } catch (error) {
