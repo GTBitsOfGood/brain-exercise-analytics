@@ -162,7 +162,7 @@ export interface StackedDataRecord extends DataRecord {
 export interface FilteredUsersResponse {
   data: [ITableEntry];
   numRecords: number;
-  numPage: number;
+  numPages: number;
   page: number;
 }
 

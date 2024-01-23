@@ -254,7 +254,7 @@ export const getUsersFiltered = async ({
       $addFields: {
         numRecords: "$metadata.totalDocuments",
         page: "$metadata.page",
-        numPage: "$metadata.totalPages",
+        numPages: "$metadata.totalPages",
       },
     },
     {

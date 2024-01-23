@@ -69,7 +69,7 @@ export default function Page() {
             sortParams: sortField,
           },
         }).then((res) => {
-          setFilteredUsers(res.data);
+          setFilteredUsers(res?.data ?? []);
         });
       }
     });
