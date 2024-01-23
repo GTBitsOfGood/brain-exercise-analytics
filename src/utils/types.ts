@@ -24,7 +24,7 @@ export interface GridRowDef {
   secondContactName: string;
   secondContactPhone: string;
   additionalAffiliation: string;
-  status: boolean;
+  active: boolean;
   email: string;
   chapter: string;
   location: { country: string; state: string; city: string };
@@ -36,10 +36,3 @@ export interface GridColDef {
   type?: "string";
   sortable?: boolean;
 }
-
-export type SortField =
-  | {
-      field: string;
-      ascending: boolean;
-    }
-  | undefined;

@@ -69,7 +69,7 @@ interface UpdateParamProp {
   setActives: Dispatch<SetStateAction<Set<boolean>>>;
   setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
   setEmails: Dispatch<SetStateAction<Set<string>>>;
-  setJoinDates: Dispatch<SetStateAction<Set<string>>>;
+  setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
   setBeiChapters: Dispatch<SetStateAction<Set<string>>>;
   setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
   setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
@@ -85,7 +85,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [email, setEmail] = useState("");
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
-  const [joinDate, setJoinDate] = useState<string>("");
+  const [dateOfJoin, setDateOfJoin] = useState<string>("");
   const [beiChapter, setBeiChapter] = useState("");
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
@@ -116,7 +116,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setDateOfBirth("");
     setEmail("");
     setAdditionalAffiliation("");
-    setJoinDate("");
+    setDateOfJoin("");
     setSecondaryName("");
     setSecondaryPhoneNumber("");
   };
@@ -129,7 +129,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     checkAndUpdateList(dateOfBirth, props.setDateOfBirths);
     checkAndUpdateList(email, props.setEmails);
     checkAndUpdateList(additionalAffiliation, props.setAdditionalAffiliations);
-    checkAndUpdateList(joinDate, props.setJoinDates);
+    checkAndUpdateList(dateOfJoin, props.setDateOfJoins);
     checkAndUpdateList(beiChapter, props.setBeiChapters);
     checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
     checkAndUpdateList(secondaryName, props.setSecondaryNames);
@@ -283,7 +283,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         </div>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
-          <CalendarInput value={joinDate} onChange={setJoinDate} />
+          <CalendarInput value={dateOfJoin} onChange={setDateOfJoin} />
         </div>
 
         <div className={styles.secondaryInfo}>

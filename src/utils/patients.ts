@@ -1,6 +1,6 @@
-import { ITableEntry } from "@/common_utils/types";
+import { ITableEntry, IUser, Role } from "@/common_utils/types";
 
-export const sampleUsers: ITableEntry[] = [
+export const sampleTableEntries: ITableEntry[] = [
   {
     name: "John Doe",
     patientDetails: {
@@ -9,7 +9,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5552221515",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: true,
+    active: true,
     email: "john.doe@example.com",
     chapter: "Georgia Institute of Technology",
     location: {
@@ -27,7 +27,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5553347890",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: true,
+    active: true,
     email: "jane.smith@example.com",
     chapter: "Toronto Central",
     location: {
@@ -45,7 +45,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5554567890",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: false,
+    active: false,
     email: "alice.johnson@example.com",
     chapter: "London Health Sciences Center",
     location: {
@@ -63,7 +63,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5555678901",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: true,
+    active: true,
     email: "bob.brown@example.com",
     chapter: "Sydney Medical Center",
     location: {
@@ -81,7 +81,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5556789012",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: false,
+    active: false,
     email: "charlie.davis@example.com",
     chapter: "Mumbai Health Forum",
     location: {
@@ -99,7 +99,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5557890123",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: true,
+    active: true,
     email: "diana.evans@example.com",
     chapter: "Rio de Janeiro Health Institute",
     location: {
@@ -117,7 +117,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5558901234",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: false,
+    active: false,
     email: "evan.foster@example.com",
     chapter: "Bavarian Medical Society",
     location: {
@@ -135,7 +135,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5559012345",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: true,
+    active: true,
     email: "fiona.green@example.com",
     chapter: "Johannesburg Health Chapter",
     location: {
@@ -153,7 +153,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5550123456",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: true,
+    active: true,
     email: "george.harris@example.com",
     chapter: "Tokyo Medical Association",
     location: {
@@ -171,7 +171,7 @@ export const sampleUsers: ITableEntry[] = [
       secondaryContactPhone: "5551234567",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
     },
-    status: false,
+    active: false,
     email: "hannah.adams@example.com",
     chapter: "Wellington Health Services",
     location: {
@@ -299,3 +299,17 @@ export const numberOfQuestionData = [
     value: 8,
   },
 ];
+
+export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
+  return {
+    name: entry.name,
+    email: entry.email,
+    phoneNumber: "1234567890",
+    patientDetails: entry.patientDetails,
+    chapter: entry.chapter,
+    location: entry.location,
+    signedUp: true,
+    verified: true,
+    role: Role.NONPROFIT_USER,
+  };
+});

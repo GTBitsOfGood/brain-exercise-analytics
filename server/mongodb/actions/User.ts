@@ -1,4 +1,9 @@
-import { IFilteredUser, IUser } from "@/common_utils/types";
+import {
+  FilteredUsersResponse,
+  IUser,
+  Role,
+  SearchParams,
+} from "@/common_utils/types";
 import User from "@server/mongodb/models/User";
 import { PipelineStage } from "mongoose";
 
@@ -87,6 +92,7 @@ export const volunteerSignUp = async (
 type UParam = {
   name?: RegExp;
   email?: object;
+  role: Role;
   "patientDetails.birthDate"?: object;
   "patientDetails.secondaryContactName"?: object;
   "patientDetails.secondaryContactPhone"?: object;
@@ -95,76 +101,64 @@ type UParam = {
   "location.city"?: object;
   additionalAffiliation?: object;
   beiChapter?: object;
-  "analyticsRecords.active"?: boolean;
+  "analyticsRecords.active"?: object;
 };
 
-export const getUsersFiltered = async (
-  paramsObject: {
-    name?: string;
-    dateOfBirth?: string[];
-    email?: string[];
-    additionalAffiliation?: string[];
-    secondName?: string;
-    secondaryPhone?: string[];
-    beiChapter?: string[];
-    active?: boolean;
-    country?: string[];
-    state?: string[];
-    city?: string[];
-    dateOfJoin?: string[];
-  },
-  page: number,
-  sortParams?: {
-    value?: string;
-    ascending?: boolean;
-  },
-): Promise<IFilteredUser | null> => {
+export const getUsersFiltered = async ({
+  params: paramsObject,
+  page,
+  sortParams,
+}: SearchParams): Promise<FilteredUsersResponse | undefined> => {
   const numOfItems = 8;
 
-  const userParamsObject = {} as UParam;
+  const userParamsObject = {
+    role: Role.NONPROFIT_USER,
+  } as UParam;
+
   if (paramsObject.name) {
-    userParamsObject.name = new RegExp(`^${paramsObject.name}`, `i`);
+    userParamsObject.name = new RegExp(paramsObject.name, `i`);
   }
-  if (paramsObject.email) {
-    userParamsObject.email = { $in: paramsObject.email };
+  if (paramsObject.emails) {
+    userParamsObject.email = { $in: paramsObject.emails };
   }
-  if (paramsObject.secondName) {
-    userParamsObject["patientDetails.secondaryContactName"] = new RegExp(
-      `^${paramsObject.secondName}`,
-      `i`,
-    );
+  if (paramsObject.secondaryNames) {
+    userParamsObject["patientDetails.secondaryContactName"] = {
+      $in: paramsObject.secondaryNames.map(
+        (secondaryName) => new RegExp(secondaryName, `i`),
+      ),
+    };
   }
-  if (paramsObject.secondaryPhone) {
+  if (paramsObject.secondaryPhones) {
     userParamsObject["patientDetails.secondaryContactPhone"] = {
-      $in: paramsObject.secondaryPhone,
+      $in: paramsObject.secondaryPhones,
     };
   }
-  if (paramsObject.country) {
-    userParamsObject["location.country"] = { $in: paramsObject.country };
+  if (paramsObject.countries) {
+    userParamsObject["location.country"] = { $in: paramsObject.countries };
   }
-  if (paramsObject.state) {
-    userParamsObject["location.state"] = { $in: paramsObject.state };
+  if (paramsObject.states) {
+    userParamsObject["location.state"] = { $in: paramsObject.states };
   }
-  if (paramsObject.city) {
-    userParamsObject["location.city"] = { $in: paramsObject.city };
+  if (paramsObject.cities) {
+    userParamsObject["location.city"] = { $in: paramsObject.cities };
   }
-  if (paramsObject.additionalAffiliation) {
+  if (paramsObject.additionalAffiliations) {
     userParamsObject.additionalAffiliation = {
-      $in: paramsObject.additionalAffiliation,
+      $in: paramsObject.additionalAffiliations,
     };
   }
-  if (paramsObject.beiChapter) {
-    userParamsObject.beiChapter = { $in: paramsObject.beiChapter };
+  if (paramsObject.beiChapters) {
+    userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
   }
-  if (paramsObject.active) {
-    userParamsObject["analyticsRecords.active"] = paramsObject.active;
+  if (paramsObject.actives) {
+    userParamsObject["analyticsRecords.active"] = { $in: paramsObject.actives };
   }
 
   const matchPipeline = {
     $match: { $and: [userParamsObject] },
   } as PipelineStage.Match;
 
-  if (paramsObject.dateOfBirth) {
+  if (paramsObject.dateOfBirths) {
     matchPipeline.$match.$and!.push({
       $expr: {
         $in: [
@@ -174,13 +168,13 @@ export const getUsersFiltered = async (
               format: "%m-%d-%Y",
             },
           },
-          paramsObject.dateOfBirth,
+          paramsObject.dateOfBirths,
         ],
       },
     });
   }
 
-  if (paramsObject.dateOfJoin) {
+  if (paramsObject.dateOfJoins) {
     matchPipeline.$match.$and!.push({
       $expr: {
         $in: [
@@ -190,18 +184,21 @@ export const getUsersFiltered = async (
               format: "%m-%d-%Y",
             },
           },
-          paramsObject.dateOfJoin,
+          paramsObject.dateOfJoins,
         ],
       },
     });
   }
 
-  let sortPipeline = {} as PipelineStage.Sort;
-  if (sortParams) {
-    sortPipeline = {
-      $sort: { [sortParams.value!]: sortParams.ascending! ? -1 : 1, _id: 1 },
-    } as PipelineStage.Sort;
-  }
+  const sortPipeline = (
+    sortParams
+      ? {
+          $sort: { [sortParams.field]: sortParams.ascending ? 1 : -1, _id: 1 },
+        }
+      : {
+          $sort: { _id: 1 },
+        }
+  ) as PipelineStage.Sort;
 
   const userFiltering = await User.aggregate([
     {
@@ -266,6 +263,6 @@ export const getUsersFiltered = async (
       },
     },
   ]);
-
-  return userFiltering[0] as IFilteredUser;
+  // console.log(userFiltering[0].data[0]);
+  return userFiltering[0] as FilteredUsersResponse | undefined;
 };

@@ -27,8 +27,8 @@ interface SearchProps {
   setEmails: React.Dispatch<React.SetStateAction<Set<string>>>;
   additionalAffiliations: Set<string>;
   setAdditionalAffiliations: React.Dispatch<React.SetStateAction<Set<string>>>;
-  joinDates: Set<string>;
-  setJoinDates: React.Dispatch<React.SetStateAction<Set<string>>>;
+  dateOfJoins: Set<string>;
+  setDateOfJoins: React.Dispatch<React.SetStateAction<Set<string>>>;
   beiChapters: Set<string>;
   setBeiChapters: React.Dispatch<React.SetStateAction<Set<string>>>;
   secondaryPhoneNumbers: Set<string>;
@@ -55,8 +55,8 @@ export default function Search({
   setEmails,
   additionalAffiliations,
   setAdditionalAffiliations,
-  joinDates,
-  setJoinDates,
+  dateOfJoins,
+  setDateOfJoins,
   beiChapters,
   setBeiChapters,
   secondaryPhoneNumbers,
@@ -77,7 +77,7 @@ export default function Search({
       dateOfBirths.size > 0 ||
       emails.size > 0 ||
       additionalAffiliations.size > 0 ||
-      joinDates.size > 0 ||
+      dateOfJoins.size > 0 ||
       beiChapters.size > 0 ||
       secondaryPhoneNumbers.size > 0 ||
       secondaryNames.size > 0,
@@ -89,7 +89,7 @@ export default function Search({
       dateOfBirths,
       emails,
       additionalAffiliations,
-      joinDates,
+      dateOfJoins,
       beiChapters,
       secondaryPhoneNumbers,
       secondaryNames,
@@ -192,14 +192,14 @@ export default function Search({
                   setList={setEmails}
                 />
               ))}
-            {joinDates.size > 0 &&
-              Array.from(joinDates).map((joinDate) => (
+            {dateOfJoins.size > 0 &&
+              Array.from(dateOfJoins).map((dateOfJoin) => (
                 <Tag
-                  key={`join-date-${joinDate}`}
+                  key={`join-date-${dateOfJoin}`}
                   title="Join Date"
-                  value={joinDate}
-                  list={joinDates}
-                  setList={setJoinDates}
+                  value={dateOfJoin}
+                  list={dateOfJoins}
+                  setList={setDateOfJoins}
                   transformData={transformDate}
                 />
               ))}
@@ -262,7 +262,7 @@ export default function Search({
             setDateOfBirths={setDateOfBirths}
             setEmails={setEmails}
             setAdditionalAffiliations={setAdditionalAffiliations}
-            setJoinDates={setJoinDates}
+            setDateOfJoins={setDateOfJoins}
             setBeiChapters={setBeiChapters}
             setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
             setSecondaryNames={setSecondaryNames}
