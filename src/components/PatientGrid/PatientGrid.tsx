@@ -1,38 +1,38 @@
 "use client";
 
-import { ITableEntry } from "@/common_utils/types";
+import { ITableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
-import { GridColDef, GridRowDef, SortField } from "@src/utils/types";
+import { GridColDef, GridRowDef } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
 
 interface DataParams {
   data: ITableEntry[];
   children?: ReactNode;
-  sortField: SortField;
-  setSortField: React.Dispatch<React.SetStateAction<SortField>>;
+  sortField: SortField | undefined;
+  setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
 }
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "", width: 90 },
   {
-    field: "firstName",
+    field: "name",
     headerName: "First Name",
     sortable: true,
   },
   {
-    field: "lastName",
+    field: "name",
     headerName: "Last Name",
     sortable: true,
   },
   {
-    field: "dateOfBirth",
+    field: "patientDetails.birthDate",
     headerName: "Date of Birth",
     type: "string",
     sortable: true,
   },
   {
-    field: "status",
+    field: "active",
     headerName: "Active",
     type: "string",
     sortable: true,
@@ -69,7 +69,7 @@ export default function PatientGrid(params: DataParams) {
             firstName: v.name.split(" ")[0],
             lastName: v.name.split(" ")[1],
             dateOfBirth: transformDate(v.patientDetails.birthDate),
-            status: v.status,
+            active: v.active,
             email: v.email,
             chapter: v.chapter,
             location: v.location,
@@ -82,44 +82,9 @@ export default function PatientGrid(params: DataParams) {
     [params.data],
   );
 
-  const sortedRows = useMemo<GridRowDef[]>(() => {
-    if (!params.sortField) {
-      return rows;
-    }
-    return [...rows].sort((a, b) => {
-      const { ascending, field } = params.sortField as NonNullable<SortField>;
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const aVal = a[field] as string | boolean;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const bVal = b[field] as string | boolean;
-
-      if (typeof aVal === "boolean" || typeof bVal === "boolean") {
-        return ascending ? +aVal - +bVal : +bVal - +aVal;
-      }
-
-      if (field === "dateOfBirth" || field === "dateStart") {
-        const aDate = new Date(aVal);
-        const bDate = new Date(bVal);
-
-        if (ascending) {
-          return aDate.getTime() - bDate.getTime();
-        }
-        return bDate.getTime() - aDate.getTime();
-      }
-
-      if (ascending) {
-        return aVal.localeCompare(bVal);
-      }
-      return bVal.localeCompare(aVal);
-    });
-  }, [params.sortField, rows]);
-
   return (
     <DataGrid
-      rows={sortedRows}
+      rows={rows}
       columns={columns}
       initialState={{
         pagination: {

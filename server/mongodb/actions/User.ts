@@ -1,5 +1,11 @@
-import { IUser } from "@/common_utils/types";
+import {
+  FilteredUsersResponse,
+  IUser,
+  Role,
+  SearchParams,
+} from "@/common_utils/types";
 import User from "@server/mongodb/models/User";
+import { PipelineStage } from "mongoose";
 
 export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ email });
@@ -7,8 +13,22 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
 };
 
 export const getUserById = async (id: string): Promise<IUser | null> => {
-  const user = await User.findOne<IUser>({ id });
+  const user = await User.findOne<IUser>({ _id: id });
   return user;
+};
+
+export const verifyUserByEmail = async (
+  email: string,
+): Promise<IUser | null> => {
+  const res = await User.findOneAndUpdate<IUser>(
+    { email },
+    {
+      $set: {
+        verified: true,
+      },
+    },
+  );
+  return res;
 };
 
 export const createUserEmail = async (email: string): Promise<IUser> => {
@@ -67,4 +87,182 @@ export const volunteerSignUp = async (
     { new: true },
   );
   return result;
+};
+
+type UParam = {
+  name?: RegExp;
+  email?: object;
+  role: Role;
+  "patientDetails.birthDate"?: object;
+  "patientDetails.secondaryContactName"?: object;
+  "patientDetails.secondaryContactPhone"?: object;
+  "location.country"?: object;
+  "location.state"?: object;
+  "location.city"?: object;
+  additionalAffiliation?: object;
+  beiChapter?: object;
+  "analyticsRecords.active"?: object;
+};
+
+export const getUsersFiltered = async ({
+  params: paramsObject,
+  page,
+  sortParams,
+}: SearchParams): Promise<FilteredUsersResponse | undefined> => {
+  const numOfItems = 8;
+
+  const userParamsObject = {
+    role: Role.NONPROFIT_USER,
+  } as UParam;
+
+  if (paramsObject.name) {
+    userParamsObject.name = new RegExp(paramsObject.name, `i`);
+  }
+  if (paramsObject.emails) {
+    userParamsObject.email = { $in: paramsObject.emails };
+  }
+  if (paramsObject.secondaryNames) {
+    userParamsObject["patientDetails.secondaryContactName"] = {
+      $in: paramsObject.secondaryNames.map(
+        (secondaryName) => new RegExp(secondaryName, `i`),
+      ),
+    };
+  }
+  if (paramsObject.secondaryPhones) {
+    userParamsObject["patientDetails.secondaryContactPhone"] = {
+      $in: paramsObject.secondaryPhones,
+    };
+  }
+  if (paramsObject.countries) {
+    userParamsObject["location.country"] = { $in: paramsObject.countries };
+  }
+  if (paramsObject.states) {
+    userParamsObject["location.state"] = { $in: paramsObject.states };
+  }
+  if (paramsObject.cities) {
+    userParamsObject["location.city"] = { $in: paramsObject.cities };
+  }
+  if (paramsObject.additionalAffiliations) {
+    userParamsObject.additionalAffiliation = {
+      $in: paramsObject.additionalAffiliations,
+    };
+  }
+  if (paramsObject.beiChapters) {
+    userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
+  }
+  if (paramsObject.actives) {
+    userParamsObject["analyticsRecords.active"] = { $in: paramsObject.actives };
+  }
+
+  const matchPipeline = {
+    $match: { $and: [userParamsObject] },
+  } as PipelineStage.Match;
+
+  if (paramsObject.dateOfBirths) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $in: [
+          {
+            $dateToString: {
+              date: "$patientDetails.birthDate",
+              format: "%m-%d-%Y",
+            },
+          },
+          paramsObject.dateOfBirths,
+        ],
+      },
+    });
+  }
+
+  if (paramsObject.dateOfJoins) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $in: [
+          {
+            $dateToString: {
+              date: "$analyticsRecords.startDate",
+              format: "%m-%d-%Y",
+            },
+          },
+          paramsObject.dateOfJoins,
+        ],
+      },
+    });
+  }
+
+  const sortPipeline = (
+    sortParams
+      ? {
+          $sort: { [sortParams.field]: sortParams.ascending ? 1 : -1, _id: 1 },
+        }
+      : {
+          $sort: { _id: 1 },
+        }
+  ) as PipelineStage.Sort;
+
+  const userFiltering = await User.aggregate([
+    {
+      $lookup: {
+        from: "analytics",
+        localField: "_id",
+        foreignField: "userID",
+        as: "analyticsRecords",
+      },
+    },
+    {
+      $unwind: {
+        path: "$analyticsRecords",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        startDate: "$analyticsRecords.startDate",
+        active: "$analyticsRecords.active",
+      },
+    },
+    matchPipeline,
+    {
+      $project: {
+        analyticsRecords: 0,
+        __v: 0,
+      },
+    },
+    sortPipeline,
+    {
+      $facet: {
+        metadata: [
+          { $count: "totalDocuments" },
+          {
+            $addFields: {
+              page,
+              totalPages: {
+                $ceil: {
+                  $divide: ["$totalDocuments", numOfItems],
+                },
+              },
+            },
+          },
+        ],
+        data: [{ $skip: numOfItems * page }, { $limit: numOfItems }],
+      },
+    },
+    {
+      $unwind: "$metadata",
+    },
+    {
+      $addFields: {
+        numRecords: "$metadata.totalDocuments",
+        page: "$metadata.page",
+        numPage: "$metadata.totalPages",
+      },
+    },
+    {
+      $project: {
+        metadata: 0,
+      },
+    },
+  ]);
+  // console.log(userFiltering[0].data[0]);
+  return userFiltering[0] as FilteredUsersResponse | undefined;
 };

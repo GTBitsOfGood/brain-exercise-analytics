@@ -5,10 +5,11 @@ import { Error as ErrorIcon, Info as InfoIcon } from "@mui/icons-material";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
 
+import { IUser, HttpMethod } from "@/common_utils/types";
+
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 
 import CHAPTERS from "@src/utils/chapters";
@@ -108,7 +109,7 @@ export default function Page() {
       return;
     try {
       const name = `${firstName} ${lastName}`;
-      await internalRequest({
+      await internalRequest<IUser>({
         url: "/api/volunteer/auth/signup",
         method: HttpMethod.POST,
         body: {

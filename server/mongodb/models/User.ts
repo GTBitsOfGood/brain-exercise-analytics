@@ -52,6 +52,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   role: {
     type: String,
     enum: {

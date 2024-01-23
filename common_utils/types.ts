@@ -1,3 +1,29 @@
+/* Internal Request & API Wrapper Types */
+
+export enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PATCH = "PATCH",
+  PUT = "PUT",
+  DELETE = "DELETE",
+}
+
+export interface InternalRequestData {
+  url: string;
+  method: HttpMethod;
+  body?: { [key: string]: unknown };
+  queryParams?: { [key: string]: string | number | boolean | undefined };
+  authRequired?: boolean;
+}
+
+export interface InternalResponseData<T> {
+  success: boolean;
+  message?: string;
+  payload?: T;
+}
+
+export class InternalResponseError extends Error {}
+
 export enum Role {
   NONPROFIT_ADMIN = "Nonprofit Admin",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
@@ -33,19 +59,14 @@ export interface IUser {
     city: string;
   };
   signedUp: boolean;
+  verified: boolean;
   role: Role;
 }
 
-export interface ITableEntry
-  extends Omit<IUser, "phoneNumber" | "role" | "signedUp"> {
-  status: boolean;
-  startDate: Date;
-}
-
-export interface IPasswordReset {
+export interface IVerificationLog {
   email: string;
   token: string;
-  expiryDate: Date;
+  createdAt: Date;
 }
 
 export interface IAnalytics {
@@ -54,8 +75,11 @@ export interface IAnalytics {
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
+  startDate: Date;
+  active: boolean;
   streak: [string];
   lastSessionMetrics: {
+    date: Date;
     math: {
       questionsAttempted: number;
       questionsCorrect: number;
@@ -69,6 +93,12 @@ export interface IAnalytics {
     };
     reading: {
       passagesRead: number;
+      timePerPassage: number;
+      wordsPerMinute: number;
+    };
+    writing: {
+      questionsAnswered: number;
+      timePerQuestion: number;
     };
   };
   weeklyMetrics: [
@@ -76,6 +106,7 @@ export interface IAnalytics {
       date: Date;
       sessionsCompleted: number;
       streakLength: number;
+      active: boolean;
       math: {
         sessionsCompleted: number;
         questionsAttempted: number;
@@ -93,6 +124,14 @@ export interface IAnalytics {
         sessionsAttempted: number;
         sessionsCompleted: number;
         passagesRead: number;
+        timePerPassage: number;
+        wordsPerMinute: number;
+      };
+      writing: {
+        sessionsAttempted: number;
+        sessionsCompleted: number;
+        questionsAnswered: number;
+        timePerQuestion: number;
       };
     },
   ];
@@ -101,3 +140,58 @@ export interface IAnalytics {
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
+/* VerificationLog MongoDB Schema Types */
+
+export enum VerificationLogType {
+  PASSWORD_RESET = "PASSWORD_RESET",
+  EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
+}
+
+/* Analytics Data */
+
+export interface DataRecord {
+  interval: string;
+  value: number;
+}
+
+export interface StackedDataRecord extends DataRecord {
+  stackedValue: number;
+}
+
+export interface FilteredUsersResponse {
+  data: [ITableEntry];
+  numRecords: number;
+  numPage: number;
+  page: number;
+}
+
+export type SortField = {
+  field: string;
+  ascending: boolean;
+};
+
+export interface SearchParams {
+  params: {
+    name?: string;
+    dateOfBirths?: string[];
+    emails?: string[];
+    additionalAffiliations?: string[];
+    secondaryNames?: string[];
+    secondaryPhones?: string[];
+    beiChapters?: string[];
+    actives?: boolean[];
+    countries?: string[];
+    states?: string[];
+    cities?: string[];
+    dateOfJoins?: string[];
+  };
+  page: number;
+  sortParams?: SortField;
+}
+
+export interface ITableEntry
+  extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
+  active: boolean;
+  startDate: Date;
+}

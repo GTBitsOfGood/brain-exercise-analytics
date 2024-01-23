@@ -5,7 +5,7 @@ import {
   InternalRequestData,
   InternalResponseData,
   InternalResponseError,
-} from "./types";
+} from "@/common_utils/types";
 
 export async function internalRequest<T>({
   url,
@@ -13,7 +13,7 @@ export async function internalRequest<T>({
   method,
   body,
   authRequired = true,
-}: InternalRequestData): Promise<T | undefined> {
+}: InternalRequestData): Promise<T> {
   let idToken: string | undefined;
   let newParams = queryParams;
   let newBody = body;
@@ -52,5 +52,5 @@ export async function internalRequest<T>({
   if (response.data.success === false) {
     throw new InternalResponseError(response.data.message);
   }
-  return response.data.payload;
+  return response.data.payload as T;
 }

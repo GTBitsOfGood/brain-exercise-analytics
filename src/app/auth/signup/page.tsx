@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
+import { User } from "firebase/auth";
+import { setCookie } from "cookies-next";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignUp } from "@src/firebase/email_signin";
+import { IUser, HttpMethod } from "@/common_utils/types";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -31,7 +34,38 @@ export default function Page() {
     setShowGeneralError(false);
   };
 
-  const signUp = async () => {
+  const handleSignUp = async (signUp: () => Promise<User | null>) => {
+    try {
+      const user = await signUp();
+      if (!user) {
+        throw new Error("Error signing up");
+      }
+
+      const userMongo = await internalRequest<IUser>({
+        url: "/api/volunteer/auth/login",
+        method: HttpMethod.GET,
+        body: {
+          email: user.email,
+        },
+      });
+
+      setCookie("authUser", userMongo);
+
+      router.push("/auth/email-verification");
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            setEmailError("Email already exists.");
+            break;
+          default:
+            setShowGeneralError(true);
+        }
+      }
+    }
+  };
+
+  const handleEmailSignUp = async () => {
     resetErrors();
 
     let hasError = false;
@@ -68,41 +102,10 @@ export default function Page() {
       return;
     }
 
-    try {
-      await emailSignUp(email, password);
-      try {
-        await internalRequest({
-          url: "/api/volunteer/auth/login",
-          method: HttpMethod.GET,
-          body: {
-            email,
-          },
-        });
-        router.push("/auth/information");
-      } catch (error) {
-        setShowGeneralError(true);
-      }
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/email-already-in-use":
-            setEmailError("Email already exists.");
-            break;
-          default:
-            setShowGeneralError(true);
-        }
-      }
-    }
+    handleSignUp(() => emailSignUp(email, password));
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await googleSignIn();
-      router.push("/auth/information");
-    } catch (error) {
-      setShowGeneralError(true);
-    }
-  };
+  const handleGoogleSignIn = async () => handleSignUp(googleSignIn);
 
   return (
     <div className={styles.screen}>
@@ -208,7 +211,10 @@ export default function Page() {
               </div>
             )}
             <div className={styles.continueButtonContainer}>
-              <button className={styles.continueButton} onClick={signUp}>
+              <button
+                className={styles.continueButton}
+                onClick={handleEmailSignUp}
+              >
                 Continue
               </button>
             </div>

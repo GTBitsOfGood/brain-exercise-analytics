@@ -1,14 +1,12 @@
 import * as d3 from "d3";
 import { Fragment } from "react";
 import { D3Data } from "@src/utils/types";
-import BarChart from "./BarChart/BarChart";
+import { StackedDataRecord } from "@/common_utils/types";
+import BarChart from "../BarChart/BarChart";
+import styles from "./StackedBarChart.module.scss";
 
 interface DataParams extends D3Data {
-  data: {
-    interval: string;
-    value: number;
-    stackedValue: number;
-  }[];
+  data: StackedDataRecord[];
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
@@ -19,25 +17,28 @@ interface DataParams extends D3Data {
 export default function StackedBarChart({
   title,
   data,
-  width = 375,
-  height = 180,
+  width: providedWidth = 375,
+  height: providedHeight = 180,
   style = {},
   yAxis = {
     min: 0,
     max: 1,
-    numDivisions: 5,
-    format: (d: d3.NumberValue) => JSON.stringify(d),
+    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
+    format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
   hoverable = false,
   percentageChange = false,
   legend,
   info = "",
 }: DataParams) {
+  const barWidth = 20;
+  // Same rules as BarChart
+  const width = Math.max(providedWidth, (barWidth + 5) * data.length + 60);
+  const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;
   const marginBottom = 25;
   const marginLeft = 35;
-  const barWidth = 20;
   const x = d3.scaleLinear(
     [0, data.length - 1],
     [marginLeft, width - marginRight],
@@ -47,7 +48,7 @@ export default function StackedBarChart({
     [height - marginBottom, marginTop],
   );
   return (
-    <div style={{ backgroundColor: "white", borderRadius: 10 }}>
+    <div className={styles.StackedBarChart}>
       <BarChart
         title={title}
         data={data}
@@ -86,7 +87,7 @@ export default function StackedBarChart({
             />
             <rect
               x={x(i)}
-              y={y(0)}
+              y={y(yAxis.min)}
               width={barWidth}
               height={barWidth / 2}
               color="white"
@@ -95,26 +96,12 @@ export default function StackedBarChart({
           </Fragment>
         ))}
       </BarChart>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            color: "#A5A5A5",
-            fontSize: "10px",
-            rowGap: "3px",
-            paddingBottom: "12px",
-          }}
-        >
+      <div className={styles.legendBox}>
+        <div>
           {legend.map((l) => (
-            <div
-              key={l.text}
-              style={{
-                display: "flex",
-                columnGap: "12px",
-              }}
-            >
+            <div className={styles.legendItem} key={l.text}>
               <div
+                className={styles.emptyDiv}
                 style={{
                   width: 14,
                   height: 14,
@@ -122,9 +109,7 @@ export default function StackedBarChart({
                   backgroundColor: l.color,
                 }}
               />
-              <div style={{ marginTop: "auto", marginBottom: "auto" }}>
-                {l.text}
-              </div>
+              <div className={styles.legendText}>{l.text}</div>
             </div>
           ))}
         </div>

@@ -10,14 +10,15 @@ import {
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classes, transformPhoneNumber } from "@src/utils/utils";
-import { GridColDef, GridRowDef, SortField } from "@src/utils/types";
+import { SortField } from "@/common_utils/types";
+import { GridColDef, GridRowDef } from "@src/utils/types";
 import styles from "./DataGrid.module.css";
 
 interface DataParams {
   columns: GridColDef[];
   rows: GridRowDef[];
-  sortField: SortField;
-  setSortField: React.Dispatch<React.SetStateAction<SortField>>;
+  sortField: SortField | undefined;
+  setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
 }
 
 interface ExtendedDataParams extends DataParams {
@@ -117,10 +118,10 @@ function Row({ row }: { row: GridRowDef }) {
           <div
             className={classes(styles.RowCellContainer, styles.StatusContainer)}
           >
-            {!row.status && (
+            {!row.active && (
               <FontAwesomeIcon icon={faCircleXmark} color="#ff004c" />
             )}
-            {row.status && (
+            {row.active && (
               <FontAwesomeIcon icon={faCircleCheck} color="#05cd99" />
             )}
           </div>
@@ -167,7 +168,7 @@ function SortButton({
   onClick,
 }: {
   field: string;
-  sortField: SortField;
+  sortField: SortField | undefined;
   onClick: (newSortField: SortField) => void;
 }) {
   const active = sortField?.field === field;

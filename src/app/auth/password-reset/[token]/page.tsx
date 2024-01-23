@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { CheckCircleOutline, Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
+import { HttpMethod } from "@/common_utils/types";
 import styles from "./page.module.css";
 
 interface PageProps {
@@ -15,7 +15,6 @@ interface PageProps {
 }
 
 export default function Page({ params }: PageProps) {
-  // eslint-disable-line
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -23,31 +22,7 @@ export default function Page({ params }: PageProps) {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [showGeneralError, setShowGeneralError] = useState(false);
 
-  const [validatingToken, setValidatingToken] = useState(true);
-
   const router = useRouter();
-
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const validateToken = async () => {
-      try {
-        await internalRequest({
-          url: "/api/volunteer/auth/password-reset/validate",
-          queryParams: { token: params.token },
-          method: HttpMethod.GET,
-          authRequired: false,
-        });
-        setValidatingToken(false);
-      } catch (error) {
-        router.push("/auth/password-reset/error");
-      }
-    };
-    validateToken();
-  }, [router, params.token]);
 
   const resetErrors = () => {
     setPasswordError("");
@@ -97,10 +72,6 @@ export default function Page({ params }: PageProps) {
       }
     }
   };
-
-  if (!isClient || validatingToken) {
-    return null;
-  }
 
   return (
     <div>
@@ -174,7 +145,11 @@ export default function Page({ params }: PageProps) {
               <div className={styles["button-container"]}>
                 <button
                   className={styles["confirm-button"]}
-                  onClick={() => confirmButtonFunction()}
+                  onClick={() =>
+                    passwordSuccess
+                      ? router.push("/auth/login")
+                      : confirmButtonFunction()
+                  }
                 >
                   {passwordSuccess ? "Go to Sign in" : "Confirm"}
                 </button>

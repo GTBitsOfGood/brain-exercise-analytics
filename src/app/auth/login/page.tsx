@@ -8,13 +8,16 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
+import { User } from "firebase/auth";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@src/utils/types";
 import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
+import { HttpMethod, IUser } from "@/common_utils/types";
+
+import { setCookie } from "cookies-next";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -22,7 +25,7 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [keepLogged, setKeepLogged] = useState(true);
+  const [keepLogged, setKeepLogged] = useState(false);
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
@@ -33,36 +36,27 @@ export default function Page() {
     setShowGeneralError(false);
   };
 
-  const signIn = async () => {
-    resetErrors();
-    let hasError = false;
-
-    if (email.trim() === "") {
-      setEmailError("Email can't be blank.");
-      hasError = true;
-    }
-    if (password.trim() === "") {
-      setPasswordError("Password can't be blank.");
-      hasError = true;
-    }
-
-    if (hasError) return;
-
+  const handleSignIn = async (signIn: () => Promise<User | null>) => {
     try {
-      await emailSignIn(email, password);
-      try {
-        await internalRequest({
-          url: "/api/volunteer/auth/login",
-          method: HttpMethod.GET,
-          body: {
-            email,
-          },
-        });
-
-        router.push("/auth/information");
-      } catch (error) {
-        setShowGeneralError(true);
+      const user = await signIn();
+      if (!user) {
+        throw new Error("Error signing in");
       }
+
+      const userMongo = await internalRequest<IUser>({
+        url: "/api/volunteer/auth/login",
+        method: HttpMethod.GET,
+        body: {
+          email: user.email,
+        },
+      });
+      setCookie(
+        "authUser",
+        userMongo,
+        keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
+      );
+
+      router.push("/auth/email-verification");
     } catch (error) {
       if (error instanceof FirebaseError) {
         switch (error.code) {
@@ -80,29 +74,31 @@ export default function Page() {
           default:
             setShowGeneralError(true);
         }
+      } else {
+        setShowGeneralError(true);
       }
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const user = await googleSignIn();
-      if (!user) {
-        throw new Error("Error signing in");
-      }
+  const handleEmailSignIn = async () => {
+    resetErrors();
+    let hasError = false;
 
-      await internalRequest({
-        url: "/api/volunteer/auth/login",
-        method: HttpMethod.GET,
-        body: {
-          email: user.email,
-        },
-      });
-      router.push("/auth/information");
-    } catch (error) {
-      setShowGeneralError(true);
+    if (email.trim() === "") {
+      setEmailError("Email can't be blank.");
+      hasError = true;
     }
+    if (password.trim() === "") {
+      setPasswordError("Password can't be blank.");
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    handleSignIn(() => emailSignIn(email, password));
   };
+
+  const handleGoogleSignIn = async () => handleSignIn(googleSignIn);
 
   const toggleKeepMeLoggedIn = () => {
     setKeepLogged((prevState) => !prevState);
@@ -191,10 +187,7 @@ export default function Page() {
                 />
                 <p>Keep me logged in</p>
               </div>
-              <a
-                className={styles.forgotPassword}
-                href="/auth/account-recovery"
-              >
+              <a className={styles.forgotPassword} href="/auth/password-reset">
                 Forgot password?
               </a>
             </div>
@@ -212,7 +205,10 @@ export default function Page() {
               </div>
             )}
             <div className={styles.signInButtonContainer}>
-              <button className={styles.signInButton} onClick={signIn}>
+              <button
+                className={styles.signInButton}
+                onClick={handleEmailSignIn}
+              >
                 Sign In
               </button>
             </div>
