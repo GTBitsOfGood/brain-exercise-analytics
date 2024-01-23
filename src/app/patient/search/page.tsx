@@ -1,14 +1,25 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
-import { sampleUsers } from "@src/utils/patients";
-import { classes, transformDate } from "@src/utils/utils";
-import { SortField } from "@src/utils/types";
+import { classes } from "@src/utils/utils";
+import { internalRequest } from "@src/utils/requests";
+import {
+  SortField,
+  HttpMethod,
+  ITableEntry,
+  FilteredUsersResponse,
+} from "@/common_utils/types";
+
+import { getAuth } from "firebase/auth";
+import firebaseInit from "@src/firebase/config";
+
 import styles from "./page.module.css";
+
+firebaseInit();
 
 export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
@@ -23,40 +34,44 @@ export default function Page() {
   const [additionalAffiliations, setAdditionalAffiliations] = useState(
     new Set<string>(),
   );
-  const [joinDates, setJoinDates] = useState(new Set<string>());
+  const [dateOfJoins, setDateOfJoins] = useState(new Set<string>());
   const [beiChapters, setBeiChapters] = useState(new Set<string>());
   const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
     new Set<string>(),
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
-  const [sortField, setSortField] = useState<SortField>(undefined);
+  const [sortField, setSortField] = useState<SortField | undefined>(undefined);
+  const [filteredUsers, setFilteredUsers] = useState<ITableEntry[]>([]);
 
-  const filteredUsers = useMemo(() => {
-    return sampleUsers.filter((user) => {
-      return (
-        user.name.toLowerCase().includes(fullName.toLowerCase()) &&
-        (actives.size === 0 || actives.has(user.status)) &&
-        (countries.size === 0 || countries.has(user.location.country)) &&
-        (states.size === 0 || states.has(user.location.state)) &&
-        (cities.size === 0 || cities.has(user.location.city)) &&
-        (dateOfBirths.size === 0 ||
-          dateOfBirths.has(transformDate(user.patientDetails.birthDate))) &&
-        (emails.size === 0 || emails.has(user.email)) &&
-        (additionalAffiliations.size === 0 ||
-          additionalAffiliations.has(
-            user.patientDetails.additionalAffiliation,
-          )) &&
-        (joinDates.size === 0 ||
-          joinDates.has(transformDate(user.startDate))) &&
-        (beiChapters.size === 0 || beiChapters.has(user.chapter)) &&
-        (secondaryPhoneNumbers.size === 0 ||
-          secondaryPhoneNumbers.has(
-            user.patientDetails.secondaryContactPhone,
-          )) &&
-        (secondaryNames.size === 0 ||
-          secondaryNames.has(user.patientDetails.secondaryContactName))
-      );
+  useEffect(() => {
+    getAuth().onAuthStateChanged((user) => {
+      if (user) {
+        internalRequest<FilteredUsersResponse>({
+          url: "/api/patient/filter-patient",
+          method: HttpMethod.POST,
+          body: {
+            params: {
+              name: fullName,
+              dateOfBirths: Array.from(dateOfBirths),
+              emails: Array.from(emails),
+              additionalAffiliations: Array.from(additionalAffiliations),
+              secondaryNames: Array.from(secondaryNames),
+              secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
+              beiChapters: Array.from(beiChapters),
+              actives: Array.from(actives),
+              countries: Array.from(countries),
+              states: Array.from(states),
+              cities: Array.from(cities),
+              dateOfJoins: Array.from(dateOfJoins),
+            },
+            page: 0,
+            sortParams: sortField,
+          },
+        }).then((res) => {
+          setFilteredUsers(res.data);
+        });
+      }
     });
   }, [
     fullName,
@@ -67,10 +82,11 @@ export default function Page() {
     dateOfBirths,
     emails,
     additionalAffiliations,
-    joinDates,
+    dateOfJoins,
     beiChapters,
     secondaryPhoneNumbers,
     secondaryNames,
+    sortField,
   ]);
 
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
@@ -103,8 +119,8 @@ export default function Page() {
             setEmails={setEmails}
             additionalAffiliations={additionalAffiliations}
             setAdditionalAffiliations={setAdditionalAffiliations}
-            joinDates={joinDates}
-            setJoinDates={setJoinDates}
+            dateOfJoins={dateOfJoins}
+            setDateOfJoins={setDateOfJoins}
             beiChapters={beiChapters}
             setBeiChapters={setBeiChapters}
             secondaryPhoneNumbers={secondaryPhoneNumbers}

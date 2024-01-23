@@ -63,12 +63,6 @@ export interface IUser {
   role: Role;
 }
 
-export interface ITableEntry
-  extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
-  status: boolean;
-  startDate: Date;
-}
-
 export interface IVerificationLog {
   email: string;
   token: string;
@@ -163,4 +157,41 @@ export interface DataRecord {
 
 export interface StackedDataRecord extends DataRecord {
   stackedValue: number;
+}
+
+export interface FilteredUsersResponse {
+  data: [ITableEntry];
+  numRecords: number;
+  numPage: number;
+  page: number;
+}
+
+export type SortField = {
+  field: string;
+  ascending: boolean;
+};
+
+export interface SearchParams {
+  params: {
+    name?: string;
+    dateOfBirths?: string[];
+    emails?: string[];
+    additionalAffiliations?: string[];
+    secondaryNames?: string[];
+    secondaryPhones?: string[];
+    beiChapters?: string[];
+    actives?: boolean[];
+    countries?: string[];
+    states?: string[];
+    cities?: string[];
+    dateOfJoins?: string[];
+  };
+  page: number;
+  sortParams?: SortField;
+}
+
+export interface ITableEntry
+  extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
+  active: boolean;
+  startDate: Date;
 }
