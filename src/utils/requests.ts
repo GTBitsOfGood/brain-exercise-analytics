@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 import firebaseInit from "@src/firebase/config";
 import {
   InternalRequestData,
@@ -21,7 +21,7 @@ export async function internalRequest<T>({
     firebaseInit();
     const auth = getAuth();
 
-    const currentUser = await new Promise((resolve, reject) => {
+    const currentUser: User = await new Promise((resolve, reject) => {
       const unsubscribe = auth.onAuthStateChanged((user) => {
         unsubscribe();
         if (user) {
