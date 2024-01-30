@@ -5,11 +5,12 @@ import React, {
   useCallback,
   CSSProperties,
 } from "react";
-import Switch from "react-switch";
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 import CHAPTERS from "@src/utils/chapters";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -90,6 +91,15 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
 
+  const [alignment, setAlignment] = React.useState<string | null>("left");
+
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string | null,
+  ) => {
+    setAlignment(newAlignment);
+  };
+
   const checkAndUpdateList = useCallback(
     <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
       setUpdater((set) => {
@@ -166,15 +176,22 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       <div className={styles.button_row}>
         <div className={styles.active_patient_box}>
           <span className={styles.active_patient_box_label}>
-            Active Patient
+            <ToggleButtonGroup
+              color="primary"
+              value={alignment}
+              exclusive
+              onChange={handleAlignment}
+              aria-label="Platform"
+            >
+              <ToggleButton value="allPatients">All Patients</ToggleButton>
+              <ToggleButton value="activePatients">
+                Active Patients
+              </ToggleButton>
+              <ToggleButton value="inactivePatients">
+                Inactive Patients
+              </ToggleButton>
+            </ToggleButtonGroup>
           </span>
-          <Switch
-            onChange={() => setActive(!active)}
-            checked={active}
-            onColor="#008AFC"
-            uncheckedIcon={false}
-            checkedIcon={false}
-          />
         </div>
         <div className={styles.button_row_button} onClick={reset}>
           Clear
