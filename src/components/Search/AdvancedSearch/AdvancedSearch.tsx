@@ -67,7 +67,7 @@ interface UpdateParamProp {
   setCountries: Dispatch<SetStateAction<Set<string>>>;
   setStates: Dispatch<SetStateAction<Set<string>>>;
   setCities: Dispatch<SetStateAction<Set<string>>>;
-  setActives: Dispatch<SetStateAction<Set<boolean>>>;
+  setActives: Dispatch<SetStateAction<boolean | undefined>>;
   setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
   setEmails: Dispatch<SetStateAction<Set<string>>>;
   setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
@@ -82,7 +82,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [country, setCountry] = useState(""); // values chosen before the aply button
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState<boolean | undefined>(undefined);
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [email, setEmail] = useState("");
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
@@ -118,11 +118,21 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     [],
   );
 
+  const updateBooleanState = useCallback(
+    (
+      value: boolean | undefined,
+      setBoolean: Dispatch<SetStateAction<boolean | undefined>>,
+    ) => {
+      setBoolean(value);
+    },
+    [],
+  );
+
   const reset = () => {
     setCountry("");
     setState("");
     setCity("");
-    setActive(false);
+    setActive(undefined);
     setDateOfBirth("");
     setEmail("");
     setAdditionalAffiliation("");
@@ -132,7 +142,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   };
 
   const setFinal = () => {
-    checkAndUpdateList(active, props.setActives);
+    updateBooleanState(active, props.setActives);
     checkAndUpdateList(country, props.setCountries);
     checkAndUpdateList(state, props.setStates);
     checkAndUpdateList(city, props.setCities);
@@ -183,11 +193,22 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               onChange={handleAlignment}
               aria-label="Platform"
             >
-              <ToggleButton value="allPatients">All Patients</ToggleButton>
-              <ToggleButton value="activePatients">
+              <ToggleButton
+                value="allPatients"
+                onClick={() => setActive(undefined)}
+              >
+                All Patients
+              </ToggleButton>
+              <ToggleButton
+                value="activePatients"
+                onClick={() => setActive(true)}
+              >
                 Active Patients
               </ToggleButton>
-              <ToggleButton value="inactivePatients">
+              <ToggleButton
+                value="inactivePatients"
+                onClick={() => setActive(false)}
+              >
                 Inactive Patients
               </ToggleButton>
             </ToggleButtonGroup>

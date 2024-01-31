@@ -13,8 +13,8 @@ import InputField from "../InputField/InputField";
 interface SearchProps {
   className?: string;
   setFullName: React.Dispatch<React.SetStateAction<string>>;
-  actives: Set<boolean>;
-  setActives: React.Dispatch<React.SetStateAction<Set<boolean>>>;
+  actives: boolean | undefined;
+  setActives: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   countries: Set<string>;
   setCountries: React.Dispatch<React.SetStateAction<Set<string>>>;
   states: Set<string>;
@@ -70,7 +70,7 @@ export default function Search({
 
   const tagsPresent = useMemo(
     () =>
-      actives.size > 0 ||
+      actives !== undefined ||
       countries.size > 0 ||
       states.size > 0 ||
       cities.size > 0 ||
@@ -160,17 +160,14 @@ export default function Search({
                   setList={setCities}
                 />
               ))}
-            {actives.size > 0 &&
-              Array.from(actives).map((active) => (
-                <Tag
-                  key={`active-${active}`}
-                  title="Status"
-                  value={active}
-                  list={actives}
-                  setList={setActives}
-                  transformData={(val) => (val ? "Active" : "Inactive")}
-                />
-              ))}
+            {actives !== undefined && (
+              <Tag
+                key={`active-${actives}`}
+                title="Status"
+                value={actives}
+                transformData={(val) => (val ? "Active" : "Inactive")}
+              />
+            )}
             {dateOfBirths.size > 0 &&
               Array.from(dateOfBirths).map((dob) => (
                 <Tag

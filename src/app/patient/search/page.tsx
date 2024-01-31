@@ -25,7 +25,7 @@ export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
 
   const [fullName, setFullName] = useState("");
-  const [actives, setActives] = useState(new Set<boolean>());
+  const [actives, setActives] = useState<boolean | undefined>(true);
   const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
   const [states, setStates] = useState(new Set<string>());
   const [cities, setCities] = useState(new Set<string>());
@@ -59,7 +59,7 @@ export default function Page() {
               secondaryNames: Array.from(secondaryNames),
               secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
               beiChapters: Array.from(beiChapters),
-              actives: Array.from(actives),
+              actives: actives !== undefined ? [actives] : [],
               countries: Array.from(countries),
               states: Array.from(states),
               cities: Array.from(cities),
