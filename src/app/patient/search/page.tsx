@@ -25,7 +25,7 @@ export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
 
   const [fullName, setFullName] = useState("");
-  const [actives, setActives] = useState<boolean | undefined>(true);
+  const [actives, setActives] = useState<boolean | undefined>(undefined);
   const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
   const [states, setStates] = useState(new Set<string>());
   const [cities, setCities] = useState(new Set<string>());
