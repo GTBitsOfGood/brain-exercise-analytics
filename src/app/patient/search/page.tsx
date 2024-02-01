@@ -44,6 +44,12 @@ export default function Page() {
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<ITableEntry[]>([]);
 
+
+  // FOR PAGINATION
+  const [currentPage, setCurrentPage] = useState(0)
+  const [pageCount, setPageCount] = useState(0)
+  const [numRecords, setNumRecords] =  useState(0)
+
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (user) {
@@ -65,10 +71,13 @@ export default function Page() {
               cities: Array.from(cities),
               dateOfJoins: Array.from(dateOfJoins),
             },
-            page: 0,
+            page: currentPage,
             sortParams: sortField,
           },
         }).then((res) => {
+          // FOR PAGINATION 
+          setPageCount(res?.numPages)
+          setNumRecords(res?.numRecords)
           setFilteredUsers(res?.data ?? []);
         });
       }
@@ -87,6 +96,7 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
     sortField,
+    currentPage
   ]);
 
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
@@ -140,11 +150,19 @@ export default function Page() {
         <div className={styles["table-header"]}>
           <Dashboard />
           <p className={styles["table-header-text"]}>Patient Table</p>
+          
         </div>
         <PatientGrid
           data={filteredUsers}
           sortField={sortField}
           setSortField={setSortField}
+          
+          // FOR PAGINATION
+          setCurrentPage = {setCurrentPage}
+          pageCount = {pageCount}
+          numRecords = {numRecords}
+          currentPage = {currentPage}
+          
         />
       </div>
     </div>

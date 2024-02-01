@@ -5,12 +5,18 @@ import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
 import { GridColDef, GridRowDef } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
+import Pagination from "../Pagination/Pagination"
 
 interface DataParams {
   data: ITableEntry[];
   children?: ReactNode;
   sortField: SortField | undefined;
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
+  // FOR PAGINATION
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  pageCount: number;
+  numRecords:number;
+  currentPage:number;
 }
 
 const columns: GridColDef[] = [
@@ -83,19 +89,27 @@ export default function PatientGrid(params: DataParams) {
   );
 
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      initialState={{
-        pagination: {
-          paginationModel: {
-            pageSize: 8,
+    <div style = {{display: 'flex',justifyContent: 'center', flexDirection: 'column',alignItems: 'center', }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 8,
+            },
           },
-        },
-      }}
-      pageSizeOptions={[5]}
-      sortField={params.sortField}
-      setSortField={params.setSortField}
-    />
+        }}
+        pageSizeOptions={[5]}
+        sortField={params.sortField}
+        setSortField={params.setSortField}
+      />
+        <Pagination 
+          setCurrentPage = {params.setCurrentPage}
+          pageCount = {params.pageCount}
+          totalUsers = {params.numRecords}
+          currentPage = {params.currentPage}
+        />
+    </div>
   );
 }

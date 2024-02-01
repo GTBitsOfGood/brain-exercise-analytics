@@ -1,0 +1,27 @@
+.Container {
+  display: flex;
+}
+
+.pageButton {
+  padding: 8px 12px;
+  margin: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #000000;
+  border: 1.2px solid #cbd1d6;
+  transition: background-color 0.3s;
+  font-weight: 700;
+  word-wrap: break-word;
+  background-color: white;
+}
+
+.pageButton:hover {
+  background-color: #038aff;
+  color: #fff;
+}
+
+.currentPage {
+  /* background-color: #91cafb; */
+  color: #038aff;
+  border-color: #038aff;
+}
