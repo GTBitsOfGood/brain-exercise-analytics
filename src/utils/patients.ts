@@ -181,6 +181,7 @@ export const sampleTableEntries: ITableEntry[] = [
     },
     startDate: new Date("2021-10-05"),
   },
+  
 ];
 
 export const dataLine = [

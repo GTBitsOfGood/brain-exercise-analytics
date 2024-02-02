@@ -10,7 +10,12 @@ const Pagination = ({
   let pages = [];
   const usersPerPage = 8;
   for (let i = 1; i <= Math.ceil(totalUsers / usersPerPage); i++) {
-    pages.push(i);
+    if (i === 4 && pageCount > 7) {
+      pages.push("...");
+      i = pageCount - 2;
+    } else {
+      pages.push(i);
+    }
   }
 
   const goToPreviousPage = () => {

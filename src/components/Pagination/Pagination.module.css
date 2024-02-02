@@ -16,8 +16,9 @@
 }
 
 .pageButton:hover {
-  background-color: #038aff;
   color: #fff;
+  background-color: #038aff;
+  border-color: #038aff;
 }
 
 .currentPage {
@@ -36,6 +37,3 @@
   color: #C4CDD5; 
 }
 
-.arrowSymbol {
-  color: purple;
-}
