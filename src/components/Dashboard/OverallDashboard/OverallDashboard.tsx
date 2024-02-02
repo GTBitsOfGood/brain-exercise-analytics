@@ -134,35 +134,39 @@ export default function OverallDashboard(params: Params) {
 
         <div className={styles.lastSession}>
           <p className={styles.title}>Last Session</p>
-          <div className={styles.boxes}>
-            <SmallDataBox
-              className={styles.box}
-              title="Questions Completed"
-              text={"10"}
-              Icon={SQ}
-              Chip={() => <Chip color="#FF9FB34D">Math</Chip>}
-            />
-            <SmallDataBox
-              className={styles.box}
-              title="Prompts Completed"
-              text={"20"}
-              Icon={DI}
-              Chip={() => <Chip color="#32D29633">Writing</Chip>}
-            />
-            <SmallDataBox
-              className={styles.box}
-              title="Words Read Per Min"
-              text={"24.8"}
-              Icon={BI}
-              Chip={() => <Chip color="#008AFC1A">Reading</Chip>}
-            />
-            <SmallDataBox
-              className={styles.box}
-              title="Questions Completed"
-              text={"13"}
-              Icon={QI}
-              Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
-            />
+          <div className={styles.verBoxes}>
+            <div className={styles.horBoxes}>
+              <SmallDataBox
+                className={styles.box}
+                title="Questions Completed"
+                text={"10"}
+                Icon={SQ}
+                Chip={() => <Chip color="#FF9FB34D">Math</Chip>}
+              />
+              <SmallDataBox
+                className={styles.box}
+                title="Prompts Completed"
+                text={"20"}
+                Icon={DI}
+                Chip={() => <Chip color="#32D29633">Writing</Chip>}
+              />
+            </div>
+            <div className={styles.horBoxes}>
+              <SmallDataBox
+                className={styles.box}
+                title="Words Read Per Min"
+                text={"24.8"}
+                Icon={BI}
+                Chip={() => <Chip color="#008AFC1A">Reading</Chip>}
+              />
+              <SmallDataBox
+                className={styles.box}
+                title="Questions Completed"
+                text={"13"}
+                Icon={QI}
+                Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
+              />  
+            </div>
           </div>
         </div>
       </div>
