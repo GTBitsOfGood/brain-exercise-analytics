@@ -24,10 +24,12 @@ const Pagination = ({
       setCurrentPage(currentPage + 1);
     }
   };
-
+  if (pages.length === 0) {
+    return null
+  }
   return (
-    <div className={styles.Container}>
-      <button className={styles.pageButton} onClick={goToPreviousPage}>
+    <div className={`${styles.Container} ${(currentPage === 0 || currentPage === pages.length - 1)  ? styles.boundary : ""}`}>
+      <button className={`${styles.pageButton} ${currentPage + 1 === 1 ? styles.atLimit : ""}`} onClick={goToPreviousPage}>
         &lt;
       </button>
       <div className={styles.Container}>
@@ -44,7 +46,7 @@ const Pagination = ({
           );
         })}
       </div>
-      <button className={styles.pageButton} onClick={goToNextPage}>
+      <button className={`${styles.pageButton} ${currentPage + 1 === pages[pages.length - 1] ? styles.atLimit : ""}`} onClick={goToNextPage}>
         &gt;
       </button>
     </div>
