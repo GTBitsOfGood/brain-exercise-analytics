@@ -181,7 +181,60 @@ export const sampleTableEntries: ITableEntry[] = [
     },
     startDate: new Date("2021-10-05"),
   },
-  
+  {
+    name: "David Johnson",
+    patientDetails: {
+      birthDate: new Date("1993-08-12"),
+      secondaryContactName: "Emma Johnson",
+      secondaryContactPhone: "5558901234",
+      additionalAffiliation: "Patient attends health workshops regularly",
+    },
+    active: true,
+    email: "david.johnson@example.com",
+    chapter: "New York Medical Society",
+    location: {
+      country: "USA",
+      state: "New York",
+      city: "New York City",
+    },
+    startDate: new Date("2021-05-20"),
+  },
+  {
+    name: "Sophie Brown",
+    patientDetails: {
+      birthDate: new Date("1986-11-15"),
+      secondaryContactName: "Ryan Brown",
+      secondaryContactPhone: "5552345678",
+      additionalAffiliation: "Patient advocates for mental health awareness",
+    },
+    active: false,
+    email: "sophie.brown@example.com",
+    chapter: "Paris Health Institute",
+    location: {
+      country: "France",
+      state: "Île-de-France",
+      city: "Paris",
+    },
+    startDate: new Date("2021-06-10"),
+  },
+  {
+    name: "Oliver White",
+    patientDetails: {
+      birthDate: new Date("1990-03-25"),
+      secondaryContactName: "Ava White",
+      secondaryContactPhone: "5553456789",
+      additionalAffiliation: "Patient volunteers at local health clinics",
+    },
+    active: true,
+    email: "oliver.white@example.com",
+    chapter: "Berlin Medical Association",
+    location: {
+      country: "Germany",
+      state: "Berlin",
+      city: "Berlin",
+    },
+    startDate: new Date("2021-07-15"),
+  },
 ];
 
 export const dataLine = [

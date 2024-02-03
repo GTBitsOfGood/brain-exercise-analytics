@@ -18,7 +18,7 @@
 .pageButton:hover {
   color: #fff;
   background-color: #038aff;
-  border-color: #038aff;
+  /* border-color: #038aff; */
 }
 
 .currentPage {
@@ -35,5 +35,6 @@
 .boundary .atLimit:hover {
   background-color: #919EAB; 
   color: #C4CDD5; 
+  border-color: #919EAB;
 }
 
