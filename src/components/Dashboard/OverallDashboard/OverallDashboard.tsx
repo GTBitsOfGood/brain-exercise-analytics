@@ -165,7 +165,7 @@ export default function OverallDashboard(params: Params) {
                 text={"13"}
                 Icon={QI}
                 Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
-              />  
+              />
             </div>
           </div>
         </div>
