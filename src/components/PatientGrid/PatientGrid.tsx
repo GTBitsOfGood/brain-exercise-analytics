@@ -7,6 +7,7 @@ import { GridColDef, GridRowDef } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
 import Pagination from "../Pagination/Pagination";
 import styles from "./PatientGrid.module.css";
+
 interface DataParams {
   data: ITableEntry[];
   children?: ReactNode;

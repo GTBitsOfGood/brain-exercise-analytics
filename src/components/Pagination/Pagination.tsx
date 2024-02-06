@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Pagination.module.css";
+
 interface DataParams {
   totalUsers: number;
   currentPage: number;
@@ -7,9 +8,9 @@ interface DataParams {
   pageCount: number;
 }
 const Pagination = (params: DataParams) => {
-  let pages = [];
+  const pages = [];
   const usersPerPage = 8;
-  for (let i = 1; i <= Math.ceil(params.totalUsers / usersPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(params.totalUsers / usersPerPage); i += 1) {
     if (i === 4 && params.pageCount > 7) {
       pages.push("...");
       i = params.pageCount - 2;
