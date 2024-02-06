@@ -1,11 +1,11 @@
 import {
   AdminApprovalStatus,
-  ITableEntry,
+  IPatientTableEntry,
   IUser,
   Role,
 } from "@/common_utils/types";
 
-export const sampleTableEntries: ITableEntry[] = [
+export const sampleTableEntries: IPatientTableEntry[] = [
   {
     name: "John Doe",
     patientDetails: {

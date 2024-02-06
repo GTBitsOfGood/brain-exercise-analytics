@@ -167,38 +167,44 @@ export interface StackedDataRecord extends DataRecord {
   stackedValue: number;
 }
 
-export interface FilteredUsersResponse {
-  data: [ITableEntry];
-  numRecords: number;
-  numPages: number;
-  page: number;
-}
+/* Search Types */
 
 export type SortField = {
   field: string;
   ascending: boolean;
 };
 
-export interface SearchParams {
-  params: {
-    name?: string;
-    dateOfBirths?: string[];
-    emails?: string[];
-    additionalAffiliations?: string[];
-    secondaryNames?: string[];
-    secondaryPhones?: string[];
-    beiChapters?: string[];
-    active?: boolean;
-    countries?: string[];
-    states?: string[];
-    cities?: string[];
-    dateOfJoins?: string[];
-  };
+export interface SearchRequestBody<T extends object> {
+  params: T;
   page: number;
   sortParams?: SortField;
 }
 
-export interface ITableEntry
+export interface SearchResponseBody<T> {
+  data: T[];
+  numRecords: number;
+  numPages: number;
+  page: number;
+}
+
+/* Patient Search Specific Types */
+
+export type PatientSearchParams = {
+  name?: string;
+  dateOfBirths?: string[];
+  emails?: string[];
+  additionalAffiliations?: string[];
+  secondaryNames?: string[];
+  secondaryPhones?: string[];
+  beiChapters?: string[];
+  active?: boolean;
+  countries?: string[];
+  states?: string[];
+  cities?: string[];
+  dateOfJoins?: string[];
+};
+
+export interface IPatientTableEntry
   extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
   active: boolean;
   startDate: Date;

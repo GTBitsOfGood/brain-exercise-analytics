@@ -1,6 +1,6 @@
 "use client";
 
-import { ITableEntry, SortField } from "@/common_utils/types";
+import { IPatientTableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
 import { GridColDef } from "@src/utils/types";
@@ -11,7 +11,7 @@ import { GridRowDef } from "./types";
 import { Row } from "./Row/Row";
 
 interface PatientGridProps {
-  data: ITableEntry[];
+  data: IPatientTableEntry[];
   children?: ReactNode;
   sortField: SortField | undefined;
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;

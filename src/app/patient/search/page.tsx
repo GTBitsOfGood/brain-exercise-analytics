@@ -10,8 +10,8 @@ import { internalRequest } from "@src/utils/requests";
 import {
   SortField,
   HttpMethod,
-  ITableEntry,
-  FilteredUsersResponse,
+  IPatientTableEntry,
+  SearchResponseBody,
 } from "@/common_utils/types";
 
 import { getAuth } from "firebase/auth";
@@ -42,7 +42,7 @@ export default function Page() {
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
-  const [filteredUsers, setFilteredUsers] = useState<ITableEntry[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -50,7 +50,7 @@ export default function Page() {
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (user) {
-        internalRequest<FilteredUsersResponse>({
+        internalRequest<SearchResponseBody<IPatientTableEntry>>({
           url: "/api/patient/filter-patient",
           method: HttpMethod.POST,
           body: {

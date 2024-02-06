@@ -1,8 +1,10 @@
 import {
-  FilteredUsersResponse,
+  IPatientTableEntry,
   IUser,
+  PatientSearchParams,
   Role,
-  SearchParams,
+  SearchRequestBody,
+  SearchResponseBody,
 } from "@/common_utils/types";
 import User from "@server/mongodb/models/User";
 import { PipelineStage } from "mongoose";
@@ -108,7 +110,9 @@ export const getUsersFiltered = async ({
   params: paramsObject,
   page,
   sortParams,
-}: SearchParams): Promise<FilteredUsersResponse | undefined> => {
+}: SearchRequestBody<PatientSearchParams>): Promise<
+  SearchResponseBody<IPatientTableEntry[]> | undefined
+> => {
   const numOfItems = 8;
 
   const userParamsObject = {
@@ -264,5 +268,7 @@ export const getUsersFiltered = async ({
     },
   ]);
   // console.log(userFiltering[0].data[0]);
-  return userFiltering[0] as FilteredUsersResponse | undefined;
+  return userFiltering[0] as
+    | SearchResponseBody<IPatientTableEntry[]>
+    | undefined;
 };
