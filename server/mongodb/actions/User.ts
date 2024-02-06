@@ -101,7 +101,7 @@ type UParam = {
   "location.city"?: object;
   additionalAffiliation?: object;
   beiChapter?: object;
-  "analyticsRecords.active"?: object;
+  "analyticsRecords.active"?: boolean;
 };
 
 export const getUsersFiltered = async ({
@@ -150,8 +150,8 @@ export const getUsersFiltered = async ({
   if (paramsObject.beiChapters) {
     userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
   }
-  if (paramsObject.actives) {
-    userParamsObject["analyticsRecords.active"] = { $in: paramsObject.actives };
+  if (paramsObject.active !== undefined) {
+    userParamsObject["analyticsRecords.active"] = paramsObject.active;
   }
 
   const matchPipeline = {

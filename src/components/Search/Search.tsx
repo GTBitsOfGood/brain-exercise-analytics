@@ -13,8 +13,8 @@ import InputField from "../InputField/InputField";
 interface SearchProps {
   className?: string;
   setFullName: React.Dispatch<React.SetStateAction<string>>;
-  actives: Set<boolean>;
-  setActives: React.Dispatch<React.SetStateAction<Set<boolean>>>;
+  active: boolean | undefined;
+  setActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   countries: Set<string>;
   setCountries: React.Dispatch<React.SetStateAction<Set<string>>>;
   states: Set<string>;
@@ -41,8 +41,8 @@ interface SearchProps {
 export default function Search({
   className,
   setFullName,
-  actives,
-  setActives,
+  active,
+  setActive,
   countries,
   setCountries,
   states,
@@ -70,7 +70,7 @@ export default function Search({
 
   const tagsPresent = useMemo(
     () =>
-      actives.size > 0 ||
+      active !== undefined ||
       countries.size > 0 ||
       states.size > 0 ||
       cities.size > 0 ||
@@ -82,7 +82,7 @@ export default function Search({
       secondaryPhoneNumbers.size > 0 ||
       secondaryNames.size > 0,
     [
-      actives,
+      active,
       countries,
       states,
       cities,
@@ -160,17 +160,15 @@ export default function Search({
                   setList={setCities}
                 />
               ))}
-            {actives.size > 0 &&
-              Array.from(actives).map((active) => (
-                <Tag
-                  key={`active-${active}`}
-                  title="Status"
-                  value={active}
-                  list={actives}
-                  setList={setActives}
-                  transformData={(val) => (val ? "Active" : "Inactive")}
-                />
-              ))}
+            {active !== undefined && (
+              <Tag
+                key={`active-${active}`}
+                title="Status"
+                value={active}
+                transformData={(val) => (val ? "Active" : "Inactive")}
+                onClick={() => setActive(undefined)}
+              />
+            )}
             {dateOfBirths.size > 0 &&
               Array.from(dateOfBirths).map((dob) => (
                 <Tag
@@ -255,7 +253,8 @@ export default function Search({
           )}
         >
           <AdvancedSearch
-            setActives={setActives}
+            active={active}
+            setActive={setActive}
             setCountries={setCountries}
             setStates={setStates}
             setCities={setCities}
