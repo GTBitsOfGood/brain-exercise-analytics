@@ -1,27 +1,32 @@
 import React from "react";
 import styles from "./Pagination.module.css";
-
-const Pagination = ({ totalUsers, currentPage, setCurrentPage, pageCount }) => {
+interface DataParams {
+  totalUsers: number;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  pageCount: number;
+}
+const Pagination = (params: DataParams) => {
   let pages = [];
   const usersPerPage = 8;
-  for (let i = 1; i <= Math.ceil(totalUsers / usersPerPage); i++) {
-    if (i === 4 && pageCount > 7) {
+  for (let i = 1; i <= Math.ceil(params.totalUsers / usersPerPage); i++) {
+    if (i === 4 && params.pageCount > 7) {
       pages.push("...");
-      i = pageCount - 2;
+      i = params.pageCount - 2;
     } else {
       pages.push(i);
     }
   }
 
   const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
+    if (params.currentPage > 0) {
+      params.setCurrentPage(params.currentPage - 1);
     }
   };
 
   const goToNextPage = () => {
-    if (currentPage < pageCount - 1) {
-      setCurrentPage(currentPage + 1);
+    if (params.currentPage < params.pageCount - 1) {
+      params.setCurrentPage(params.currentPage + 1);
     }
   };
   if (pages.length === 0) {
@@ -29,21 +34,21 @@ const Pagination = ({ totalUsers, currentPage, setCurrentPage, pageCount }) => {
   }
   return (
     <div
-      className={`${styles.Container} ${currentPage === 0 || currentPage === pages.length - 1 ? styles.boundary : ""}`}
+      className={`${styles.Container} ${params.currentPage === 0 || params.currentPage === pages.length - 1 ? styles.boundary : ""}`}
     >
       <button
-        className={`${styles.pageButton} ${currentPage + 1 === 1 ? styles.atLimit : ""}`}
+        className={`${styles.pageButton} ${params.currentPage + 1 === 1 ? styles.atLimit : ""}`}
         onClick={goToPreviousPage}
       >
         &lt;
       </button>
       <div className={styles.Container}>
         {pages.map((page, index) => {
-          const isCurrentPage = page === currentPage + 1;
+          const isCurrentPage = page === params.currentPage + 1;
           return (
             <button
               key={index}
-              onClick={() => setCurrentPage(page - 1)}
+              onClick={() => params.setCurrentPage(page - 1)}
               className={`${styles.pageButton} ${isCurrentPage ? styles.currentPage : ""}`}
             >
               {page}
@@ -52,7 +57,7 @@ const Pagination = ({ totalUsers, currentPage, setCurrentPage, pageCount }) => {
         })}
       </div>
       <button
-        className={`${styles.pageButton} ${currentPage + 1 === pages[pages.length - 1] ? styles.atLimit : ""}`}
+        className={`${styles.pageButton} ${params.currentPage + 1 === pages[pages.length - 1] ? styles.atLimit : ""}`}
         onClick={goToNextPage}
       >
         &gt;
