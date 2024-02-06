@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 import firebaseInit from "@src/firebase/config";
 import {
   InternalRequestData,
@@ -19,10 +19,19 @@ export async function internalRequest<T>({
   let newBody = body;
   if (authRequired) {
     firebaseInit();
-    const { currentUser } = getAuth();
-    if (!currentUser) {
-      throw new Error("Unable to get user");
-    }
+    const auth = getAuth();
+
+    const currentUser: User = await new Promise((resolve, reject) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        unsubscribe();
+        if (user) {
+          resolve(user);
+        } else {
+          reject(new Error("Unable to get user"));
+        }
+      }, reject);
+    });
+
     idToken = await currentUser.getIdToken();
     const { email } = currentUser;
     if (email === null) {
