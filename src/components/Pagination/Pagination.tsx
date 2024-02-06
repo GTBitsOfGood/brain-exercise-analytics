@@ -48,7 +48,7 @@ const Pagination = (params: DataParams) => {
           return (
             <button
               key={index}
-              onClick={() => params.setCurrentPage(page - 1)}
+              onClick={() => params.setCurrentPage(Number(page) - 1)}
               className={`${styles.pageButton} ${isCurrentPage ? styles.currentPage : ""}`}
             >
               {page}
