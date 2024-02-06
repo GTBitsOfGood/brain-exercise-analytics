@@ -34,19 +34,20 @@ export default function StackedBarChart({
 }: DataParams) {
   const barWidth = 20;
   // Same rules as BarChart
-  const [width, setWidth] = useState(Math.max(providedWidth, (barWidth + 5) * data.length + 60));
-  const windowSizeRef = useRef(null);
+  const [width, setWidth] = useState(
+    Math.max(providedWidth, (barWidth + 5) * data.length + 60),
+  );
+  const windowSizeRef = useRef<null | HTMLDivElement>(null);
   const updateSize = () => {
-    if(!fullWidth) return;
+    if (!fullWidth || !windowSizeRef.current) return;
     setWidth(windowSizeRef.current.offsetWidth - 44);
-    console.log("Barchart ", width);
-  }
-  const resizeRef = useRef<any>(undefined);
+  };
+  const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
   const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
     resizeRef.current = setTimeout(updateSize, 500);
   };
-  window.addEventListener('resize', resizeOptimised);
+  window.addEventListener("resize", resizeOptimised);
   const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;
@@ -62,9 +63,13 @@ export default function StackedBarChart({
   );
   useEffect(() => {
     resizeOptimised();
-  }, [])
+  }, []);
   return (
-    <div className={styles.StackedBarChart} style={{width: fullWidth ? '100%' : 'fit-content'}} ref={windowSizeRef}>
+    <div
+      className={styles.StackedBarChart}
+      style={{ width: fullWidth ? "100%" : "fit-content" }}
+      ref={windowSizeRef}
+    >
       <BarChart
         title={title}
         data={data}

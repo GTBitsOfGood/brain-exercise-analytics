@@ -41,17 +41,17 @@ export default function LineChart({
 }: DataParams) {
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
-  const windowSizeRef = useRef(null);
-  const updateSize = ()=>{
-    if(!fullWidth) return;
+  const windowSizeRef = useRef<null | HTMLDivElement>(null);
+  const updateSize = () => {
+    if (!fullWidth || !windowSizeRef.current) return;
     setWidth(Math.max(windowSizeRef.current.offsetWidth - 45, minWidth));
-  }
-  const resizeRef = useRef<any>(undefined);
-  const resizeOptimised =  () => {
+  };
+  const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
+  const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
     resizeRef.current = setTimeout(updateSize, 500);
   };
-  window.addEventListener('resize', resizeOptimised);
+  window.addEventListener("resize", resizeOptimised);
   const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -168,16 +168,16 @@ export default function LineChart({
     yAxis.min,
     yAxis.numDivisions,
   ]);
-  
+
   useEffect(() => {
     resizeOptimised();
-  }, [])
+  }, []);
 
   return (
     <div
       className={`${className} ${styles.LineChart}`}
       style={{
-        width: fullWidth? '100%': width + 45,
+        width: fullWidth ? "100%" : width + 45,
         minWidth: fullWidth ? minWidth + 45 : undefined,
         height: height + 60,
         ...style,

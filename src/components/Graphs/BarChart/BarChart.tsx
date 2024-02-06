@@ -49,17 +49,17 @@ export default function BarChart({
   const barWidth = 20;
   const minWidth = (barWidth + 5) * data.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
-  const windowSizeRef = useRef(null);
+  const windowSizeRef = useRef<null | HTMLDivElement>(null);
   const updateSize = () => {
-    if (!fullWidth) return;
+    if (!fullWidth || !windowSizeRef.current) return;
     setWidth(Math.max(windowSizeRef.current.offsetWidth - 44, minWidth));
-  }
-  const resizeRef = useRef<any>(undefined);
+  };
+  const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
   const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
     resizeRef.current = setTimeout(updateSize, 500);
   };
-  window.addEventListener('resize', resizeOptimised);
+  window.addEventListener("resize", resizeOptimised);
   const height = Math.max(providedHeight, 80);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -182,7 +182,7 @@ export default function BarChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
-    
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     data,
@@ -195,10 +195,10 @@ export default function BarChart({
     yAxis.min,
     yAxis.numDivisions,
   ]);
-  
+
   useEffect(() => {
     resizeOptimised();
-  }, [])
+  }, []);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
     activeIndex === i && (
@@ -225,12 +225,12 @@ export default function BarChart({
     <div
       className={styles.BarChart}
       style={{
-        width: fullWidth ? '100%' : width + 44,
+        width: fullWidth ? "100%" : width + 44,
         minWidth: fullWidth ? minWidth + 44 : undefined,
         height: height + 70,
         ...style,
       }}
-      ref = {windowSizeRef}
+      ref={windowSizeRef}
       onClick={() => {
         if (infoPopup) {
           setInfoPopup(false);
