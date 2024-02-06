@@ -1,0 +1,38 @@
+.Container {
+  display: flex;
+}
+
+.pageButton {
+  padding: 8px 12px;
+  margin: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #000000;
+  border: 1px solid #dfe3e8;
+  transition: background-color 0.3s;
+  font-weight: 700;
+  word-wrap: break-word;
+  background: #fff;
+}
+
+.pageButton:hover {
+  color: #fff;
+  background-color: #038aff;
+}
+
+.currentPage {
+  color: #038aff;
+  border-color: #038aff;
+}
+
+.atLimit {
+  color: #c4cdd5;
+  background-color: #919eab;
+  border-color: #919eab;
+}
+
+.boundary .atLimit:hover {
+  background-color: #919eab;
+  color: #c4cdd5;
+  border-color: #919eab;
+}

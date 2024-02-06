@@ -44,6 +44,10 @@ export default function Page() {
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<ITableEntry[]>([]);
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+  const [numRecords, setNumRecords] = useState(0);
+
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (user) {
@@ -65,10 +69,12 @@ export default function Page() {
               cities: Array.from(cities),
               dateOfJoins: Array.from(dateOfJoins),
             },
-            page: 0,
+            page: currentPage,
             sortParams: sortField,
           },
         }).then((res) => {
+          setPageCount(res?.numPages);
+          setNumRecords(res?.numRecords);
           setFilteredUsers(res?.data ?? []);
         });
       }
@@ -87,6 +93,7 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
     sortField,
+    currentPage,
   ]);
 
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
@@ -145,6 +152,10 @@ export default function Page() {
           data={filteredUsers}
           sortField={sortField}
           setSortField={setSortField}
+          setCurrentPage={setCurrentPage}
+          pageCount={pageCount}
+          numRecords={numRecords}
+          currentPage={currentPage}
         />
       </div>
     </div>

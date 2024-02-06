@@ -65,3 +65,11 @@
   font-size: 26px;
   font-weight: 700;
 }
+
+.arrowButton {
+  background-color: #ffffff;
+  border: 1px solid #c4cdd5;
+  padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
