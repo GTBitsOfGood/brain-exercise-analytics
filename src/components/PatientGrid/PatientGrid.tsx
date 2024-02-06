@@ -3,12 +3,14 @@
 import { ITableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { ReactNode, useMemo } from "react";
-import { GridColDef, GridRowDef } from "@src/utils/types";
+import { GridColDef } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
 import Pagination from "../Pagination/Pagination";
 import styles from "./PatientGrid.module.css";
+import { GridRowDef } from "./types";
+import { Row } from "./Row/Row";
 
-interface DataParams {
+interface PatientGridProps {
   data: ITableEntry[];
   children?: ReactNode;
   sortField: SortField | undefined;
@@ -65,7 +67,22 @@ const columns: GridColDef[] = [
   },
 ];
 
-export default function PatientGrid(params: DataParams) {
+function ColumnSizes() {
+  return (
+    <colgroup>
+      <col style={{ width: "2%" }} />
+      <col style={{ width: "10%" }} />
+      <col style={{ width: "10%" }} />
+      <col style={{ width: "11%" }} />
+      <col style={{ width: "7%" }} />
+      <col style={{ width: "18%" }} />
+      <col style={{ width: "18%" }} />
+      <col style={{ width: "8%" }} />
+    </colgroup>
+  );
+}
+
+export default function PatientGrid(params: PatientGridProps) {
   const rows = useMemo<GridRowDef[]>(
     () =>
       params.data.map(
@@ -88,21 +105,20 @@ export default function PatientGrid(params: DataParams) {
     [params.data],
   );
 
+  const Rows = useMemo(
+    () => rows.map((row, rowIndex) => <Row key={rowIndex} row={row} />),
+    [rows],
+  );
+
   return (
     <div className={styles.Container}>
       <DataGrid
         rows={rows}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 8,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
         sortField={params.sortField}
         setSortField={params.setSortField}
+        ColumnSizes={ColumnSizes}
+        Rows={Rows}
       />
 
       <Pagination

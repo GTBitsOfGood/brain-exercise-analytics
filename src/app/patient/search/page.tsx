@@ -96,6 +96,24 @@ export default function Page() {
     currentPage,
   ]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [
+    fullName,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+    sortField,
+  ]);
+
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
 
   return (

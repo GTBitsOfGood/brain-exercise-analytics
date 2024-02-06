@@ -7,6 +7,7 @@ interface DataParams {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
 }
+
 const Pagination = (params: DataParams) => {
   const pages = [];
   const usersPerPage = 8;
