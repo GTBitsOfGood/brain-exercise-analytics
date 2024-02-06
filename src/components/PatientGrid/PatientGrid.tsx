@@ -2,7 +2,7 @@
 
 import { IPatientTableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
-import { ReactNode, useMemo } from "react";
+import { useMemo } from "react";
 import { GridColDef } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
 import Pagination from "../Pagination/Pagination";
@@ -12,7 +12,6 @@ import { Row } from "./Row/Row";
 
 interface PatientGridProps {
   data: IPatientTableEntry[];
-  children?: ReactNode;
   sortField: SortField | undefined;
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
