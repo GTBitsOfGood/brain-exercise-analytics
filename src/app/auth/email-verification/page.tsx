@@ -92,7 +92,8 @@ export default function Page() {
               </span>
               <p className={styles.description}>
                 We&apos;ve sent an email verification link to your inbox. Please
-                use the provided link to proceed.
+                use the link provided in the email to verify your email and
+                proceed.
               </p>
             </div>
           )}
