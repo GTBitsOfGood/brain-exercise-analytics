@@ -13,8 +13,8 @@ import InputField from "../InputField/InputField";
 interface SearchProps {
   className?: string;
   setFullName: React.Dispatch<React.SetStateAction<string>>;
-  actives: boolean | undefined;
-  setActives: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  active: boolean | undefined;
+  setActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   countries: Set<string>;
   setCountries: React.Dispatch<React.SetStateAction<Set<string>>>;
   states: Set<string>;
@@ -41,8 +41,8 @@ interface SearchProps {
 export default function Search({
   className,
   setFullName,
-  actives,
-  setActives,
+  active,
+  setActive,
   countries,
   setCountries,
   states,
@@ -70,7 +70,7 @@ export default function Search({
 
   const tagsPresent = useMemo(
     () =>
-      actives !== undefined ||
+      active !== undefined ||
       countries.size > 0 ||
       states.size > 0 ||
       cities.size > 0 ||
@@ -82,7 +82,7 @@ export default function Search({
       secondaryPhoneNumbers.size > 0 ||
       secondaryNames.size > 0,
     [
-      actives,
+      active,
       countries,
       states,
       cities,
@@ -160,12 +160,13 @@ export default function Search({
                   setList={setCities}
                 />
               ))}
-            {actives !== undefined && (
+            {active !== undefined && (
               <Tag
-                key={`active-${actives}`}
+                key={`active-${active}`}
                 title="Status"
-                value={actives}
+                value={active}
                 transformData={(val) => (val ? "Active" : "Inactive")}
+                onClick={() => setActive(undefined)}
               />
             )}
             {dateOfBirths.size > 0 &&
@@ -252,7 +253,8 @@ export default function Search({
           )}
         >
           <AdvancedSearch
-            setActives={setActives}
+            active={active}
+            setActive={setActive}
             setCountries={setCountries}
             setStates={setStates}
             setCities={setCities}

@@ -64,10 +64,11 @@ function SelectDropdown<T>({
 
 interface UpdateParamProp {
   style?: CSSProperties;
+  active: boolean | undefined;
   setCountries: Dispatch<SetStateAction<Set<string>>>;
   setStates: Dispatch<SetStateAction<Set<string>>>;
   setCities: Dispatch<SetStateAction<Set<string>>>;
-  setActives: Dispatch<SetStateAction<boolean | undefined>>;
+  setActive: Dispatch<SetStateAction<boolean | undefined>>;
   setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
   setEmails: Dispatch<SetStateAction<Set<string>>>;
   setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
@@ -82,7 +83,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [country, setCountry] = useState(""); // values chosen before the aply button
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [active, setActive] = useState<boolean | undefined>(undefined);
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [email, setEmail] = useState("");
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
@@ -90,15 +90,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [beiChapter, setBeiChapter] = useState("");
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
-
-  const [alignment, setAlignment] = React.useState<string | null>("left");
-
-  const handleAlignment = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | null,
-  ) => {
-    setAlignment(newAlignment);
-  };
 
   const checkAndUpdateList = useCallback(
     <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
@@ -118,21 +109,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     [],
   );
 
-  const updateBooleanState = useCallback(
-    (
-      value: boolean | undefined,
-      setBoolean: Dispatch<SetStateAction<boolean | undefined>>,
-    ) => {
-      setBoolean(value);
-    },
-    [],
-  );
-
   const reset = () => {
     setCountry("");
     setState("");
     setCity("");
-    setActive(undefined);
     setDateOfBirth("");
     setEmail("");
     setAdditionalAffiliation("");
@@ -142,7 +122,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   };
 
   const setFinal = () => {
-    updateBooleanState(active, props.setActives);
     checkAndUpdateList(country, props.setCountries);
     checkAndUpdateList(state, props.setStates);
     checkAndUpdateList(city, props.setCities);
@@ -188,26 +167,22 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <span className={styles.active_patient_box_label}>
             <ToggleButtonGroup
               color="primary"
-              value={alignment}
+              value={String(props.active)}
               exclusive
-              onChange={handleAlignment}
               aria-label="Platform"
             >
               <ToggleButton
-                value="allPatients"
-                onClick={() => setActive(undefined)}
+                value="undefined"
+                onClick={() => props.setActive(undefined)}
               >
                 All Patients
               </ToggleButton>
-              <ToggleButton
-                value="activePatients"
-                onClick={() => setActive(true)}
-              >
+              <ToggleButton value="true" onClick={() => props.setActive(true)}>
                 Active Patients
               </ToggleButton>
               <ToggleButton
-                value="inactivePatients"
-                onClick={() => setActive(false)}
+                value="false"
+                onClick={() => props.setActive(false)}
               >
                 Inactive Patients
               </ToggleButton>

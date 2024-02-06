@@ -25,7 +25,7 @@ export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
 
   const [fullName, setFullName] = useState("");
-  const [actives, setActives] = useState<boolean | undefined>(undefined);
+  const [active, setActive] = useState<boolean | undefined>(undefined);
   const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
   const [states, setStates] = useState(new Set<string>());
   const [cities, setCities] = useState(new Set<string>());
@@ -59,7 +59,7 @@ export default function Page() {
               secondaryNames: Array.from(secondaryNames),
               secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
               beiChapters: Array.from(beiChapters),
-              actives: actives !== undefined ? [actives] : [],
+              active,
               countries: Array.from(countries),
               states: Array.from(states),
               cities: Array.from(cities),
@@ -75,7 +75,7 @@ export default function Page() {
     });
   }, [
     fullName,
-    actives,
+    active,
     countries,
     states,
     cities,
@@ -105,8 +105,8 @@ export default function Page() {
         <div className={styles["search-wrapper"]}>
           <Search
             setFullName={setFullName}
-            actives={actives}
-            setActives={setActives}
+            active={active}
+            setActive={setActive}
             countries={countries}
             setCountries={setCountries}
             states={states}
