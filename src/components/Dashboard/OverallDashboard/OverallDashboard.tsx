@@ -130,6 +130,8 @@ export default function OverallDashboard(params: Params) {
           title="Session Completion History"
           data={params.sessionCompletionHistory}
           highlightLargest
+          fullWidth
+          style={{width: '30%'}}
         />
 
         <div className={styles.lastSession}>

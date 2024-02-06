@@ -12,6 +12,7 @@ export interface D3Data {
   };
   width?: number;
   height?: number;
+  fullWidth?: boolean;
   style?: CSSProperties;
 }
 

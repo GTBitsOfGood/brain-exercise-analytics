@@ -60,6 +60,7 @@ export default function WritingScreen({
             info="Some really extremely interesting information about stacked bar chart."
             hoverable
             percentageChange
+            fullWidth
           />
           <BarChart
             width={325}
@@ -68,6 +69,7 @@ export default function WritingScreen({
             data={numCompleted}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
             info="Some info for testing purposes in bar chart"
           />
@@ -79,6 +81,7 @@ export default function WritingScreen({
             info="Some info for testing purposes in bar chart"
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
         </div>

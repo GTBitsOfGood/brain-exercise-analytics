@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { StackedDataRecord } from "@/common_utils/types";
 import BarChart from "../BarChart/BarChart";
@@ -29,11 +29,24 @@ export default function StackedBarChart({
   hoverable = false,
   percentageChange = false,
   legend,
+  fullWidth = false,
   info = "",
 }: DataParams) {
   const barWidth = 20;
   // Same rules as BarChart
-  const width = Math.max(providedWidth, (barWidth + 5) * data.length + 60);
+  const [width, setWidth] = useState(Math.max(providedWidth, (barWidth + 5) * data.length + 60));
+  const windowSizeRef = useRef(null);
+  const updateSize = () => {
+    if(!fullWidth) return;
+    setWidth(windowSizeRef.current.offsetWidth - 44);
+    console.log("Barchart ", width);
+  }
+  const resizeRef = useRef<any>(undefined);
+  const resizeOptimised = () => {
+    clearTimeout(resizeRef.current);
+    resizeRef.current = setTimeout(updateSize, 500);
+  };
+  window.addEventListener('resize', resizeOptimised);
   const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;
@@ -47,8 +60,11 @@ export default function StackedBarChart({
     [yAxis.min, yAxis.max],
     [height - marginBottom, marginTop],
   );
+  useEffect(() => {
+    resizeOptimised();
+  }, [])
   return (
-    <div className={styles.StackedBarChart}>
+    <div className={styles.StackedBarChart} style={{width: fullWidth ? '100%' : 'fit-content'}} ref={windowSizeRef}>
       <BarChart
         title={title}
         data={data}
@@ -59,6 +75,7 @@ export default function StackedBarChart({
         hoverable={hoverable}
         percentageChange={percentageChange}
         info={info}
+        fullWidth
       >
         {data.map((d, i) => (
           <Fragment key={i}>
