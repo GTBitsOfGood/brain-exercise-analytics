@@ -8,17 +8,16 @@
   border-radius: 4px;
   cursor: pointer;
   color: #000000;
-  border: 1px solid #DFE3E8;
+  border: 1px solid #dfe3e8;
   transition: background-color 0.3s;
   font-weight: 700;
   word-wrap: break-word;
-  background: #FFF;
+  background: #fff;
 }
 
 .pageButton:hover {
   color: #fff;
   background-color: #038aff;
-  /* border-color: #038aff; */
 }
 
 .currentPage {
@@ -27,14 +26,13 @@
 }
 
 .atLimit {
-  color: #C4CDD5;
-  background-color: #919EAB;
-  border-color: #919EAB;
+  color: #c4cdd5;
+  background-color: #919eab;
+  border-color: #919eab;
 }
 
 .boundary .atLimit:hover {
-  background-color: #919EAB; 
-  color: #C4CDD5; 
-  border-color: #919EAB;
+  background-color: #919eab;
+  color: #c4cdd5;
+  border-color: #919eab;
 }
-

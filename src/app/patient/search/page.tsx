@@ -26,7 +26,7 @@ export default function Page() {
 
   const [fullName, setFullName] = useState("");
   const [actives, setActives] = useState(new Set<boolean>());
-  const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
+  const [countries, setCountries] = useState(new Set<string>());
   const [states, setStates] = useState(new Set<string>());
   const [cities, setCities] = useState(new Set<string>());
   const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
