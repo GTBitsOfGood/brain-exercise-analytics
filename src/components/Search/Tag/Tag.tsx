@@ -9,6 +9,7 @@ type TagProps<T> = {
   list?: Set<T>;
   setList?: Dispatch<SetStateAction<Set<T>>>;
   transformData?: (value: T) => string;
+  onClick?: () => void;
 };
 
 export default function Tag<T>({
@@ -17,6 +18,7 @@ export default function Tag<T>({
   list,
   setList,
   transformData,
+  onClick,
 }: TagProps<T>) {
   const [closeTag, setCloseTag] = useState(false);
 
@@ -26,6 +28,9 @@ export default function Tag<T>({
       const newList = new Set<T>(list);
       newList.delete(value);
       setList(newList);
+    }
+    if (onClick) {
+      onClick();
     }
   };
 

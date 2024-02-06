@@ -5,11 +5,12 @@ import React, {
   useCallback,
   CSSProperties,
 } from "react";
-import Switch from "react-switch";
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 import CHAPTERS from "@src/utils/chapters";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -63,10 +64,11 @@ function SelectDropdown<T>({
 
 interface UpdateParamProp {
   style?: CSSProperties;
+  active: boolean | undefined;
   setCountries: Dispatch<SetStateAction<Set<string>>>;
   setStates: Dispatch<SetStateAction<Set<string>>>;
   setCities: Dispatch<SetStateAction<Set<string>>>;
-  setActives: Dispatch<SetStateAction<Set<boolean>>>;
+  setActive: Dispatch<SetStateAction<boolean | undefined>>;
   setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
   setEmails: Dispatch<SetStateAction<Set<string>>>;
   setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
@@ -81,7 +83,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [country, setCountry] = useState(""); // values chosen before the aply button
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [active, setActive] = useState(true);
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [email, setEmail] = useState("");
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
@@ -112,7 +113,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setCountry("");
     setState("");
     setCity("");
-    setActive(false);
     setDateOfBirth("");
     setEmail("");
     setAdditionalAffiliation("");
@@ -122,7 +122,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   };
 
   const setFinal = () => {
-    checkAndUpdateList(active, props.setActives);
     checkAndUpdateList(country, props.setCountries);
     checkAndUpdateList(state, props.setStates);
     checkAndUpdateList(city, props.setCities);
@@ -166,15 +165,29 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       <div className={styles.button_row}>
         <div className={styles.active_patient_box}>
           <span className={styles.active_patient_box_label}>
-            Active Patient
+            <ToggleButtonGroup
+              color="primary"
+              value={String(props.active)}
+              exclusive
+              aria-label="Platform"
+            >
+              <ToggleButton
+                value="undefined"
+                onClick={() => props.setActive(undefined)}
+              >
+                All Patients
+              </ToggleButton>
+              <ToggleButton value="true" onClick={() => props.setActive(true)}>
+                Active Patients
+              </ToggleButton>
+              <ToggleButton
+                value="false"
+                onClick={() => props.setActive(false)}
+              >
+                Inactive Patients
+              </ToggleButton>
+            </ToggleButtonGroup>
           </span>
-          <Switch
-            onChange={() => setActive(!active)}
-            checked={active}
-            onColor="#008AFC"
-            uncheckedIcon={false}
-            checkedIcon={false}
-          />
         </div>
         <div className={styles.button_row_button} onClick={reset}>
           Clear

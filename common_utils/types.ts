@@ -180,7 +180,7 @@ export interface SearchParams {
     secondaryNames?: string[];
     secondaryPhones?: string[];
     beiChapters?: string[];
-    actives?: boolean[];
+    active?: boolean;
     countries?: string[];
     states?: string[];
     cities?: string[];
