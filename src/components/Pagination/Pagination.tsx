@@ -1,24 +1,36 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./Pagination.module.css";
 
 interface DataParams {
-  totalUsers: number;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
 }
 
 const Pagination = (params: DataParams) => {
-  const pages = [];
-  const usersPerPage = 8;
-  for (let i = 1; i <= Math.ceil(params.totalUsers / usersPerPage); i += 1) {
-    if (i === 4 && params.pageCount > 7) {
-      pages.push("...");
-      i = params.pageCount - 2;
-    } else {
-      pages.push(i);
+  const pages = useMemo(() => {
+    const forwardPages: number[] = [];
+    for (
+      let i = params.currentPage + 1;
+      i <= params.pageCount && forwardPages.length !== 4;
+      i += 1
+    ) {
+      forwardPages.push(i);
     }
-  }
+
+    const backwardPages = [];
+    if (forwardPages.length !== 4) {
+      for (
+        let i = params.currentPage;
+        i > 0 && backwardPages.length !== 4 - forwardPages.length;
+        i -= 1
+      ) {
+        backwardPages.push(i);
+      }
+      backwardPages.reverse();
+    }
+    return [...backwardPages, ...forwardPages];
+  }, [params.currentPage, params.pageCount]);
 
   const goToPreviousPage = () => {
     if (params.currentPage > 0) {

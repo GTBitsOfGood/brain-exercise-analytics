@@ -46,7 +46,6 @@ export default function Page() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [numRecords, setNumRecords] = useState(0);
 
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
@@ -73,8 +72,7 @@ export default function Page() {
             sortParams: sortField,
           },
         }).then((res) => {
-          setPageCount(res?.numPages);
-          setNumRecords(res?.numRecords);
+          setPageCount(res?.numPages ?? 0);
           setFilteredUsers(res?.data ?? []);
         });
       }
@@ -172,7 +170,6 @@ export default function Page() {
           setSortField={setSortField}
           setCurrentPage={setCurrentPage}
           pageCount={pageCount}
-          numRecords={numRecords}
           currentPage={currentPage}
         />
       </div>

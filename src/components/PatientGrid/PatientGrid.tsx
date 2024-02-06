@@ -17,7 +17,6 @@ interface PatientGridProps {
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
-  numRecords: number;
   currentPage: number;
 }
 
@@ -124,7 +123,6 @@ export default function PatientGrid(params: PatientGridProps) {
       <Pagination
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
-        totalUsers={params.numRecords}
         currentPage={params.currentPage}
       />
     </div>
