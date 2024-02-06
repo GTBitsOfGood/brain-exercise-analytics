@@ -82,9 +82,9 @@ export default function PatientGrid(params: DataParams) {
             secondContactName: v.patientDetails.secondaryContactName,
             secondContactPhone: v.patientDetails.secondaryContactPhone,
             additionalAffiliation: v.patientDetails.additionalAffiliation,
-          }) as GridRowDef
+          }) as GridRowDef,
       ),
-    [params.data]
+    [params.data],
   );
 
   return (

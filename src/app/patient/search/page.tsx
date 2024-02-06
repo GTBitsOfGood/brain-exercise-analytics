@@ -32,12 +32,12 @@ export default function Page() {
   const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
   const [emails, setEmails] = useState(new Set<string>());
   const [additionalAffiliations, setAdditionalAffiliations] = useState(
-    new Set<string>()
+    new Set<string>(),
   );
   const [dateOfJoins, setDateOfJoins] = useState(new Set<string>());
   const [beiChapters, setBeiChapters] = useState(new Set<string>());
   const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
-    new Set<string>()
+    new Set<string>(),
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
@@ -103,7 +103,7 @@ export default function Page() {
       <div
         className={classes(
           styles["search-container"],
-          !viewTable && styles["search-container-alone"]
+          !viewTable && styles["search-container-alone"],
         )}
       >
         <p className={styles["intro-text"]}>
@@ -141,7 +141,7 @@ export default function Page() {
       <div
         className={classes(
           styles["table-container"],
-          viewTable && styles["table-container-show"]
+          viewTable && styles["table-container-show"],
         )}
       >
         <div className={styles["table-header"]}>
