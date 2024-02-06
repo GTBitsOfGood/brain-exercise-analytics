@@ -39,6 +39,13 @@ export enum Days {
   Friday,
   Saturday,
 }
+
+export enum AdminApprovalStatus {
+  PENDING = "Pending",
+  APPROVED = "Approved",
+  REJECTED = "Rejected",
+}
+
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
@@ -60,6 +67,7 @@ export interface IUser {
   };
   signedUp: boolean;
   verified: boolean;
+  approved: AdminApprovalStatus;
   role: Role;
 }
 

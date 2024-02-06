@@ -1,4 +1,9 @@
-import { ITableEntry, IUser, Role } from "@/common_utils/types";
+import {
+  AdminApprovalStatus,
+  ITableEntry,
+  IUser,
+  Role,
+} from "@/common_utils/types";
 
 export const sampleTableEntries: ITableEntry[] = [
   {
@@ -17,6 +22,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "California",
       city: "Los Angeles",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2020-05-05"),
   },
   {
@@ -35,6 +41,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Ontario",
       city: "Toronto",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-01-10"),
   },
   {
@@ -53,6 +60,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "England",
       city: "London",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-02-20"),
   },
   {
@@ -71,6 +79,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "New South Wales",
       city: "Sydney",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-03-15"),
   },
   {
@@ -89,6 +98,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Maharashtra",
       city: "Mumbai",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-04-22"),
   },
   {
@@ -107,6 +117,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Rio de Janeiro",
       city: "Rio de Janeiro",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-05-30"),
   },
   {
@@ -125,6 +136,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Bavaria",
       city: "Munich",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-07-14"),
   },
   {
@@ -143,6 +155,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Gauteng",
       city: "Johannesburg",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-08-28"),
   },
   {
@@ -161,6 +174,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Tokyo",
       city: "Tokyo",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-09-12"),
   },
   {
@@ -179,6 +193,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Wellington",
       city: "Wellington",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-10-05"),
   },
   {
@@ -197,6 +212,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "New York",
       city: "New York City",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-05-20"),
   },
   {
@@ -215,6 +231,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Île-de-France",
       city: "Paris",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-06-10"),
   },
   {
@@ -233,6 +250,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "Berlin",
       city: "Berlin",
     },
+    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-07-15"),
   },
 ];
@@ -364,6 +382,7 @@ export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
     location: entry.location,
     signedUp: true,
     verified: true,
+    approved: AdminApprovalStatus.APPROVED,
     role: Role.NONPROFIT_USER,
   };
 });

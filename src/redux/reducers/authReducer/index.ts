@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUser, Role } from "@/common_utils/types";
+import { AdminApprovalStatus, IUser, Role } from "@/common_utils/types";
 import { deleteCookie } from "cookies-next";
 
 const initialState: IUser = {
@@ -22,6 +22,7 @@ const initialState: IUser = {
   },
   signedUp: false,
   verified: false,
+  approved: AdminApprovalStatus.PENDING,
   role: Role.NONPROFIT_USER,
 };
 
