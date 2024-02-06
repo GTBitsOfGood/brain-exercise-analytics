@@ -59,6 +59,9 @@ export interface IUser {
     secondaryContactPhone: string;
     additionalAffiliation: string;
   };
+  adminDetails: {
+    active: boolean;
+  };
   chapter: string;
   location: {
     country: string;
@@ -205,7 +208,15 @@ export type PatientSearchParams = {
 };
 
 export interface IPatientTableEntry
-  extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
+  extends Omit<
+    IUser,
+    | "phoneNumber"
+    | "role"
+    | "signedUp"
+    | "verified"
+    | "approved"
+    | "adminDetails"
+  > {
   active: boolean;
   startDate: Date;
 }

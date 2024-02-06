@@ -14,6 +14,9 @@ const initialState: IUser = {
     secondaryContactPhone: "",
     additionalAffiliation: "",
   },
+  adminDetails: {
+    active: true,
+  },
   chapter: "",
   location: {
     country: "",

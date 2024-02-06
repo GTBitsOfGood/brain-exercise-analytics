@@ -22,7 +22,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "California",
       city: "Los Angeles",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2020-05-05"),
   },
   {
@@ -41,7 +40,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Ontario",
       city: "Toronto",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-01-10"),
   },
   {
@@ -60,7 +58,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "England",
       city: "London",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-02-20"),
   },
   {
@@ -79,7 +76,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "New South Wales",
       city: "Sydney",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-03-15"),
   },
   {
@@ -98,7 +94,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Maharashtra",
       city: "Mumbai",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-04-22"),
   },
   {
@@ -117,7 +112,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Rio de Janeiro",
       city: "Rio de Janeiro",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-05-30"),
   },
   {
@@ -136,7 +130,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Bavaria",
       city: "Munich",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-07-14"),
   },
   {
@@ -155,7 +148,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Gauteng",
       city: "Johannesburg",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-08-28"),
   },
   {
@@ -174,7 +166,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Tokyo",
       city: "Tokyo",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-09-12"),
   },
   {
@@ -193,7 +184,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Wellington",
       city: "Wellington",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-10-05"),
   },
   {
@@ -212,7 +202,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "New York",
       city: "New York City",
     },
-    approved: AdminApprovalStatus.PENDING,
+
     startDate: new Date("2021-05-20"),
   },
   {
@@ -231,7 +221,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Île-de-France",
       city: "Paris",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-06-10"),
   },
   {
@@ -250,7 +239,6 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Berlin",
       city: "Berlin",
     },
-    approved: AdminApprovalStatus.PENDING,
     startDate: new Date("2021-07-15"),
   },
 ];
@@ -378,6 +366,7 @@ export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
     email: entry.email,
     phoneNumber: "1234567890",
     patientDetails: entry.patientDetails,
+    adminDetails: { active: entry.active },
     chapter: entry.chapter,
     location: entry.location,
     signedUp: true,

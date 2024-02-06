@@ -32,6 +32,14 @@ const UserSchema = new Schema({
       additionalAffiliation: "",
     },
   },
+  adminDetails: {
+    type: {
+      active: Boolean,
+    },
+    default: {
+      active: true,
+    },
+  },
   chapter: {
     type: String,
     default: "",
