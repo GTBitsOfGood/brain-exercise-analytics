@@ -1,3 +1,5 @@
+"use client";
+
 import * as d3 from "d3";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
