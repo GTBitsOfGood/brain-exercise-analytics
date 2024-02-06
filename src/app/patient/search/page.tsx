@@ -32,23 +32,21 @@ export default function Page() {
   const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
   const [emails, setEmails] = useState(new Set<string>());
   const [additionalAffiliations, setAdditionalAffiliations] = useState(
-    new Set<string>(),
+    new Set<string>()
   );
   const [dateOfJoins, setDateOfJoins] = useState(new Set<string>());
   const [beiChapters, setBeiChapters] = useState(new Set<string>());
   const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
-    new Set<string>(),
+    new Set<string>()
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<ITableEntry[]>([]);
 
-
-  // FOR PAGINATION
-  const [currentPage, setCurrentPage] = useState(0)
-  const [pageCount, setPageCount] = useState(0)
-  const [numRecords, setNumRecords] =  useState(0)
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+  const [numRecords, setNumRecords] = useState(0);
 
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
@@ -75,9 +73,8 @@ export default function Page() {
             sortParams: sortField,
           },
         }).then((res) => {
-          // FOR PAGINATION 
-          setPageCount(res?.numPages)
-          setNumRecords(res?.numRecords)
+          setPageCount(res?.numPages);
+          setNumRecords(res?.numRecords);
           setFilteredUsers(res?.data ?? []);
         });
       }
@@ -96,7 +93,7 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
     sortField,
-    currentPage
+    currentPage,
   ]);
 
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
@@ -106,7 +103,7 @@ export default function Page() {
       <div
         className={classes(
           styles["search-container"],
-          !viewTable && styles["search-container-alone"],
+          !viewTable && styles["search-container-alone"]
         )}
       >
         <p className={styles["intro-text"]}>
@@ -144,25 +141,21 @@ export default function Page() {
       <div
         className={classes(
           styles["table-container"],
-          viewTable && styles["table-container-show"],
+          viewTable && styles["table-container-show"]
         )}
       >
         <div className={styles["table-header"]}>
           <Dashboard />
           <p className={styles["table-header-text"]}>Patient Table</p>
-          
         </div>
         <PatientGrid
           data={filteredUsers}
           sortField={sortField}
           setSortField={setSortField}
-          
-          // FOR PAGINATION
-          setCurrentPage = {setCurrentPage}
-          pageCount = {pageCount}
-          numRecords = {numRecords}
-          currentPage = {currentPage}
-          
+          setCurrentPage={setCurrentPage}
+          pageCount={pageCount}
+          numRecords={numRecords}
+          currentPage={currentPage}
         />
       </div>
     </div>
