@@ -39,11 +39,11 @@ export async function internalRequest<T>({
     }
     newParams = {
       ...queryParams,
-      email,
+      signedInEmail: email,
     };
     newBody = {
       ...body,
-      email,
+      signedInEmail: email,
     };
   }
 

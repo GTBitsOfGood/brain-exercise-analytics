@@ -3,7 +3,7 @@ import { volunteerSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 
 type SignupData = {
-  email: string;
+  signedInEmail: string;
   name: string;
   phoneNumber: string;
   country: string;
@@ -28,7 +28,7 @@ export const POST = APIWrapper({
       signupData.chapter === undefined ||
       signupData.city === undefined ||
       signupData.country === undefined ||
-      signupData.email === undefined ||
+      signupData.signedInEmail === undefined ||
       signupData.name === undefined ||
       signupData.phoneNumber === undefined ||
       signupData.state === undefined
@@ -45,7 +45,7 @@ export const POST = APIWrapper({
     }
 
     const newSignUp = await volunteerSignUp(
-      signupData.email,
+      signupData.signedInEmail,
       signupData.name,
       signupData.phoneNumber,
       signupData.country,

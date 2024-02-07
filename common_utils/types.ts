@@ -1,3 +1,12 @@
+/* eslint-disable prettier/prettier */
+export type RecursivePartial<T> =
+  T extends Date ? T :                                       // Leave Date objects alone
+  // Also of note: possibly add cases for Set, Map, other JS builtins...
+  T extends (infer U)[] ? RecursivePartial<U>[] :            // Recurse into array types!
+  T extends object ? {[P in keyof T]?: RecursivePartial<T[P]>} : // Recurse into object types!
+  T;                                                         // Leave other types as-is.
+/* eslint-enable prettier/prettier */
+
 /* Internal Request & API Wrapper Types */
 
 export enum HttpMethod {
@@ -147,10 +156,6 @@ export interface IAnalytics {
     },
   ];
 }
-
-export type RecursivePartial<T> = {
-  [P in keyof T]?: RecursivePartial<T[P]>;
-};
 
 /* VerificationLog MongoDB Schema Types */
 

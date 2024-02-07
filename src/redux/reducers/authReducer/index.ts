@@ -1,6 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminApprovalStatus, IUser, Role } from "@/common_utils/types";
+import {
+  AdminApprovalStatus,
+  IUser,
+  RecursivePartial,
+  Role,
+} from "@/common_utils/types";
 import { deleteCookie } from "cookies-next";
 
 const initialState: IUser = {
@@ -30,7 +35,7 @@ const initialState: IUser = {
 };
 
 // Helper function to copy all properties from newState over to the existing state
-const setState = (state: IUser, newState: Partial<IUser>): IUser => {
+const setState = (state: IUser, newState: RecursivePartial<IUser>): IUser => {
   state._id = newState._id ?? state._id;
   state.name = newState.name ?? state.name;
   state.email = newState.email ?? state.email;
@@ -48,6 +53,9 @@ const setState = (state: IUser, newState: Partial<IUser>): IUser => {
       newState.patientDetails?.additionalAffiliation ??
       state.patientDetails.additionalAffiliation,
   };
+  state.adminDetails = {
+    active: newState.adminDetails?.active ?? state.adminDetails.active,
+  };
   state.chapter = newState.chapter ?? state.chapter;
   state.location = {
     country: newState.location?.country ?? state.location.country,
@@ -56,6 +64,9 @@ const setState = (state: IUser, newState: Partial<IUser>): IUser => {
   };
   state.signedUp =
     newState.signedUp === undefined ? state.signedUp : newState.signedUp;
+  state.verified =
+    newState.verified === undefined ? state.verified : newState.verified;
+  state.approved = newState.approved ?? state.approved;
   state.role = newState.role ?? state.role;
   return state;
 };
