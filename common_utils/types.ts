@@ -164,6 +164,18 @@ export interface IAnalytics {
   ];
 }
 
+export interface IOverallAnalytics {
+  activeUsers: number;
+  totalUsers: number;
+  weeklyMetrics: [
+    {
+      date: Date;
+      totalUsers: number;
+      activeUsers: number;
+    },
+  ];
+}
+
 /* VerificationLog MongoDB Schema Types */
 
 export enum VerificationLogType {
@@ -240,7 +252,11 @@ export interface IPatientTableEntry
   startDate: Date;
 }
 
-export interface IAggregatedAnalyticsAll {
+export interface IAggregatedAnalyticsAll
+  extends IAggregatedAnalyticsMath,
+    IAggregatedAnalyticsTrivia,
+    IAggregatedAnalyticsReading,
+    IAggregatedAnalyticsWriting {
   overall: {
     streak: [string];
     startDate: Date;
@@ -252,49 +268,6 @@ export interface IAggregatedAnalyticsAll {
       wordsRead: number;
       promptsCompleted: number;
       triviaQuestionsCompleted: number;
-    };
-  };
-  math: {
-    avgAccuracy: DataRecord[];
-    avgDifficultyScore: DataRecord[];
-    avgQuestionsCompleted: DataRecord[];
-    avgTimePerQuestion: DataRecord[];
-    lastSession: {
-      accuracy: number;
-      difficultyScore: number;
-      questionsCompleted: number;
-      timePerQuestion: number;
-    };
-  };
-  trivia: {
-    avgAccuracy: DataRecord[];
-    avgQuestionsCompleted: DataRecord[];
-    avgTimePerQuestion: DataRecord[];
-    lastSession: {
-      accuracy: number;
-      questionsCompleted: number;
-      timePerQuestion: number;
-    };
-  };
-  reading: {
-    sessionCompletion: StackedDataRecord[];
-    avgWordsPerMin: DataRecord[];
-    avgPassagesRead: DataRecord[];
-    avgTimePerPassage: DataRecord[];
-    lastSession: {
-      passagesRead: number;
-      timePerPassage: number;
-      completed: boolean;
-    };
-  };
-  writing: {
-    sessionCompletion: StackedDataRecord[];
-    avgPromptsAnswered: DataRecord[];
-    avgTimePerQuestion: DataRecord[];
-    lastSession: {
-      promptsAnswered: number;
-      timePerPrompt: number;
-      completed: boolean;
     };
   };
 }
@@ -355,16 +328,4 @@ export interface IAggregatedOverallAnalytics {
   activeUsers: number;
   totalUsers: number;
   activeHistory: [DataRecord];
-}
-
-export interface IOverallAnalytics {
-  activeUsers: number;
-  totalUsers: number;
-  weeklyMetrics: [
-    {
-      date: Date;
-      totalUsers: number;
-      activeUsers: number;
-    },
-  ];
 }
