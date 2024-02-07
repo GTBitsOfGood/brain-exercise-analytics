@@ -1,11 +1,11 @@
-/* eslint-disable prettier/prettier */
-export type RecursivePartial<T> =
-  T extends Date ? T :                                       // Leave Date objects alone
-  // Also of note: possibly add cases for Set, Map, other JS builtins...
-  T extends (infer U)[] ? RecursivePartial<U>[] :            // Recurse into array types!
-  T extends object ? {[P in keyof T]?: RecursivePartial<T[P]>} : // Recurse into object types!
-  T;                                                         // Leave other types as-is.
-/* eslint-enable prettier/prettier */
+/* This may not handle edge cases like Set, ArrayList, etc. */
+export type RecursivePartial<T> = T extends Date
+  ? T
+  : T extends (infer U)[]
+    ? RecursivePartial<U>[]
+    : T extends object
+      ? { [P in keyof T]?: RecursivePartial<T[P]> }
+      : T;
 
 /* Internal Request & API Wrapper Types */
 
