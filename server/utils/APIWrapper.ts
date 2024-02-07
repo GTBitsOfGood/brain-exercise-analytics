@@ -1,5 +1,4 @@
 // Modified API Wrapper Inspired By Nationals NPP Portal: https://github.com/GTBitsOfGood/national-npp/blob/main/server/utils/APIWrapper.ts
-// import Cors, { CorsRequest } from "cors";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { Role } from "@/common_utils/types";
@@ -7,7 +6,6 @@ import { getEmailFromIdToken } from "@server/firebase/auth";
 import dbConnect from "@server/mongodb/config";
 import firebaseConfig from "@server/firebase/config";
 import { getUserByEmail } from "@server/mongodb/actions/User";
-// import * as admin from "firebase-admin";
 import { getAuth } from "firebase-admin/auth";
 
 interface RouteConfig {
@@ -55,7 +53,10 @@ function APIWrapper(route: Route<unknown>) {
         // Retrieve idToken from HEADERS
         const idToken: string | null = req.headers.get("accesstoken");
         try {
-          if (idToken === null) throw Error();
+          if (idToken === null) {
+            req.cookies.delete("authUser");
+            throw Error("No id token was provided");
+          }
           await getAuth().verifyIdToken(idToken);
         } catch (e) {
           return NextResponse.json(
@@ -68,8 +69,9 @@ function APIWrapper(route: Route<unknown>) {
         }
 
         const email: string = await getEmailFromIdToken(idToken);
-        // req.nextUrl.searchParams.set("email", email);
         const user = await getUserByEmail(email);
+        req.cookies.set("authUser", JSON.stringify(user));
+
         if (config.roles) {
           if (
             config.roles.length !== 0 &&
