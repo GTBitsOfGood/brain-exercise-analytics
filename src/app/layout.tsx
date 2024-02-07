@@ -6,6 +6,7 @@ import { DM_Sans, Inter, Poppins } from "next/font/google";
 import firebaseInit from "@src/firebase/config";
 import { classes } from "@src/utils/utils";
 import StoreProvider from "@src/redux/StoreProvider";
+import FirebaseAuthGuard from "@src/components/FirebaseAuthGuard/FirebaseAuthGuard";
 
 const poppins = Poppins({
   subsets: ["latin-ext"],
@@ -46,7 +47,9 @@ export default function RootLayout({
           dmSans.className,
         )}
       >
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider>
+          <FirebaseAuthGuard>{children}</FirebaseAuthGuard>
+        </StoreProvider>
       </body>
     </html>
   );

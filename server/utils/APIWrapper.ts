@@ -1,7 +1,7 @@
 // Modified API Wrapper Inspired By Nationals NPP Portal: https://github.com/GTBitsOfGood/national-npp/blob/main/server/utils/APIWrapper.ts
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import { Role } from "@/common_utils/types";
+import { IUser, Role } from "@/common_utils/types";
 import { getEmailFromIdToken } from "@server/firebase/auth";
 import dbConnect from "@server/mongodb/config";
 import firebaseConfig from "@server/firebase/config";
@@ -18,7 +18,7 @@ interface RouteConfig {
 
 interface Route<T> {
   config?: RouteConfig;
-  handler: (req: NextRequest) => Promise<T>;
+  handler: (req: NextRequest, currentUser?: IUser | undefined) => Promise<T>;
 }
 
 function APIWrapper(route: Route<unknown>) {
@@ -65,6 +65,8 @@ function APIWrapper(route: Route<unknown>) {
       // Connect to Firebase
       await firebaseConfig();
 
+      let currentUser: IUser | undefined;
+
       // Handle unauthorised or invalid idTokens + user access token + roles restrictions
       if (config?.requireToken) {
         // Retrieve idToken from HEADERS
@@ -87,20 +89,12 @@ function APIWrapper(route: Route<unknown>) {
 
         const email: string = await getEmailFromIdToken(idToken);
         const user = await getUserByEmail(email);
+        currentUser = user === null ? undefined : user;
 
-        if (!user) {
-          return NextResponse.json(
-            {
-              success: false,
-              message: "User does not exist in the database.",
-            },
-            { status: 200 },
-          );
-        }
-
-        req.cookies.set("authUser", JSON.stringify(user));
-
-        if (!allowedRoles.has(user.role)) {
+        if (
+          (config.roles || config.requireVolunteer || config.requireAdmin) &&
+          (!currentUser || !allowedRoles.has(currentUser.role))
+        ) {
           return NextResponse.json(
             {
               success: false,
@@ -111,7 +105,7 @@ function APIWrapper(route: Route<unknown>) {
         }
       }
 
-      const data = await handler(req);
+      const data = await handler(req, currentUser);
       if (config?.handleResponse) {
         return NextResponse.json(
           { success: true, payload: null },

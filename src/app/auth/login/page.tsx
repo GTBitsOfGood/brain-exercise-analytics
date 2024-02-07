@@ -52,7 +52,7 @@ export default function Page() {
       });
       setCookie(
         "authUser",
-        userMongo,
+        { user: userMongo, keepLogged },
         keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
       );
 

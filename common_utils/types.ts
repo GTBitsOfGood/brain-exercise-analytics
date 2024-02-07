@@ -159,6 +159,13 @@ export enum VerificationLogType {
   EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
 }
 
+/* authUser Cookie Type */
+
+export interface IAuthUserCookie {
+  user: IUser;
+  keepLogged: boolean;
+}
+
 /* Analytics Data */
 
 export interface DataRecord {

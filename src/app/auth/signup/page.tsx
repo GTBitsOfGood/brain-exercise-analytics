@@ -49,7 +49,7 @@ export default function Page() {
         },
       });
 
-      setCookie("authUser", userMongo);
+      setCookie("authUser", { user: userMongo, keepLogged: false });
 
       router.push("/auth/email-verification");
     } catch (error) {

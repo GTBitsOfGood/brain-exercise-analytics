@@ -1,4 +1,5 @@
-import { getUserByEmail, volunteerSignUp } from "@server/mongodb/actions/User";
+import { IUser } from "@/common_utils/types";
+import { volunteerSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 
 type SignupData = {
@@ -16,7 +17,7 @@ export const POST = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async (req: Request) => {
+  handler: async (req: Request, currentUser: IUser | undefined) => {
     const signupData = (await req.json()) as SignupData;
 
     if (!signupData) {
@@ -35,13 +36,12 @@ export const POST = APIWrapper({
       throw new Error("Missing parameter(s)");
     }
 
-    const user = await getUserByEmail(signupData.email);
-    if (!user) {
+    if (!currentUser) {
       throw new Error("User not found.");
     }
 
-    if (user.signedUp === true) {
-      return user;
+    if (currentUser.signedUp === true) {
+      return currentUser;
     }
 
     const newSignUp = await volunteerSignUp(

@@ -1,4 +1,4 @@
-import { HttpMethod, IUser } from "@/common_utils/types";
+import { IAuthUserCookie, HttpMethod, IUser } from "@/common_utils/types";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -12,11 +12,11 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  const user = JSON.parse(
+  const { user = {} as IUser, keepLogged = false } = JSON.parse(
     request.cookies.get("authUser")?.value ?? "{}",
-  ) as IUser;
+  ) as IAuthUserCookie;
 
-  // Unprotected routes
+  /* Unprotected routes; no need to check for user data */
   if (
     path.match(/\/auth\/password-reset/g) ||
     path.match(/\/auth\/email-verification\/[a-z0-9-]{36}/g)
@@ -85,7 +85,8 @@ export async function middleware(request: NextRequest) {
 
   /* Update the cookie with the new user data */
   const fetchedUser = response.payload as IUser;
-  request.cookies.set("authUser", JSON.stringify(fetchedUser));
+
+  let Response: NextResponse;
 
   /*
     Now, with the refreshed user data, if the user is already verified and signed up:
@@ -95,39 +96,48 @@ export async function middleware(request: NextRequest) {
   */
   if (fetchedUser.verified && fetchedUser.signedUp) {
     if (path.match(/\/auth\/(login|signup|email-verification|information)/g)) {
-      return NextResponse.redirect(
+      Response = NextResponse.redirect(
         new URL("/patient/search", request.nextUrl.origin),
       );
+    } else {
+      Response = NextResponse.next();
     }
-    return NextResponse.next();
-  }
-
-  /* 
+  } else if (!fetchedUser.verified) {
+    /* 
     If the user has not verified their email:
       a. redirect to /auth/email-verification if not already on it
       b. if already on /auth/email-verification, continue to the page
   */
-  if (!fetchedUser.verified) {
     if (path.match(/auth\/email-verification/g)) {
-      return NextResponse.next();
+      Response = NextResponse.next();
+    } else {
+      Response = NextResponse.redirect(
+        new URL("/auth/email-verification", request.nextUrl.origin),
+      );
     }
-    return NextResponse.redirect(
-      new URL("/auth/email-verification", request.nextUrl.origin),
-    );
-  }
-
-  /* 
+  } else {
+    /* 
     The user will only reach here if their email is verified but they have not filled
     out their signup information yet:
       a. redirect to /auth/information if not already on it
       b. if already on /auth/information, continue to the page
   */
-  if (path.match(/auth\/information/g)) {
-    return NextResponse.next();
+    // eslint-disable-next-line no-lonely-if
+    if (path.match(/auth\/information/g)) {
+      Response = NextResponse.next();
+    } else {
+      Response = NextResponse.redirect(
+        new URL("/auth/information", request.nextUrl.origin),
+      );
+    }
   }
-  return NextResponse.redirect(
-    new URL("/auth/information", request.nextUrl.origin),
+
+  Response.cookies.set(
+    "authUser",
+    JSON.stringify({ user: fetchedUser, keepLogged }),
+    keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
   );
+  return Response;
 }
 
 export const config = {
