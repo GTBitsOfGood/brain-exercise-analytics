@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 export const POST = APIWrapper({
   config: {
     requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const reqdata =

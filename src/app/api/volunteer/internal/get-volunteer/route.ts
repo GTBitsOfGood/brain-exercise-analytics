@@ -4,9 +4,6 @@ import { getUserById } from "@server/mongodb/actions/User";
 export const dynamic = "force-dynamic";
 
 export const POST = APIWrapper({
-  config: {
-    requireToken: false,
-  },
   handler: async (req) => {
     const data = (await req.json()) as { secret: string; id: string };
     const { secret, id } = data;

@@ -11,6 +11,7 @@ type RequestData = {
 export const POST = APIWrapper({
   config: {
     requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const requestData = (await req.json()) as RequestData;

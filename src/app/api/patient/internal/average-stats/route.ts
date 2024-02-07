@@ -8,7 +8,6 @@ type RequestData = {
 };
 
 export const POST = APIWrapper({
-  config: {},
   handler: async (req) => {
     const reqdata: RequestData = (await req.json()) as RequestData;
     const { secret } = reqdata;

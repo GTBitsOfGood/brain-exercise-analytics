@@ -12,8 +12,8 @@ interface RouteConfig {
   requireToken?: boolean;
   roles?: Array<Role>;
   handleResponse?: boolean; // handleResponse if the route handles setting status code and body
-  requireAdminVerification?: boolean;
-  requireEmailVerified?: boolean;
+  requireVolunteer?: boolean;
+  requireAdmin?: boolean;
 }
 
 interface Route<T> {
@@ -22,6 +22,25 @@ interface Route<T> {
 }
 
 function APIWrapper(route: Route<unknown>) {
+  const { config, handler } = route;
+
+  let allowedRoles: Set<Role>;
+
+  if (config?.requireAdmin) {
+    allowedRoles = new Set<Role>(
+      Object.values(Role).filter(
+        (role) =>
+          role !== Role.NONPROFIT_VOLUNTEER && role !== Role.NONPROFIT_ADMIN,
+      ),
+    );
+  } else if (config?.requireVolunteer) {
+    allowedRoles = new Set<Role>(
+      Object.values(Role).filter((role) => role !== Role.NONPROFIT_VOLUNTEER),
+    );
+  } else {
+    allowedRoles = new Set<Role>(config?.roles ?? Object.values(Role));
+  }
+
   return async (req: NextRequest) => {
     // await runMiddleware(req, res, cors);
     const { method } = req;
@@ -39,8 +58,6 @@ function APIWrapper(route: Route<unknown>) {
         { status: 200 },
       );
     }
-
-    const { config, handler } = route;
 
     try {
       // Connect to MongoDB Database
@@ -70,23 +87,30 @@ function APIWrapper(route: Route<unknown>) {
 
         const email: string = await getEmailFromIdToken(idToken);
         const user = await getUserByEmail(email);
+
+        if (!user) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "User does not exist in the database.",
+            },
+            { status: 200 },
+          );
+        }
+
         req.cookies.set("authUser", JSON.stringify(user));
 
-        if (config.roles) {
-          if (
-            config.roles.length !== 0 &&
-            !config.roles.some((role) => user?.role?.includes(role))
-          ) {
-            return NextResponse.json(
-              {
-                success: false,
-                message: "You do not have permissions to access this API route",
-              },
-              { status: 200 },
-            );
-          }
+        if (!allowedRoles.has(user.role)) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "You do not have permissions to access this API route",
+            },
+            { status: 200 },
+          );
         }
       }
+
       const data = await handler(req);
       if (config?.handleResponse) {
         return NextResponse.json(
