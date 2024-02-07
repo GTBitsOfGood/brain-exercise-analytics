@@ -1,11 +1,11 @@
-/* eslint-disable prettier/prettier */
-export type RecursivePartial<T> =
-  T extends Date ? T :                                       // Leave Date objects alone
-  // Also of note: possibly add cases for Set, Map, other JS builtins...
-  T extends (infer U)[] ? RecursivePartial<U>[] :            // Recurse into array types!
-  T extends object ? {[P in keyof T]?: RecursivePartial<T[P]>} : // Recurse into object types!
-  T;                                                         // Leave other types as-is.
-/* eslint-enable prettier/prettier */
+/* This may not handle edge cases like Set, ArrayList, etc. */
+export type RecursivePartial<T> = T extends Date
+  ? T
+  : T extends (infer U)[]
+    ? RecursivePartial<U>[]
+    : T extends object
+      ? { [P in keyof T]?: RecursivePartial<T[P]> }
+      : T;
 
 /* Internal Request & API Wrapper Types */
 
@@ -55,6 +55,14 @@ export enum AdminApprovalStatus {
   REJECTED = "Rejected",
 }
 
+export enum DateRangeEnum {
+  recent = "most recent",
+  quarter = "3 months",
+  half = "6 months",
+  year = "12 months",
+  max = "max",
+}
+
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
@@ -90,8 +98,6 @@ export interface IVerificationLog {
 }
 
 export interface IAnalytics {
-  // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
-  // without any_id attribute
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
@@ -115,6 +121,7 @@ export interface IAnalytics {
       passagesRead: number;
       timePerPassage: number;
       wordsPerMinute: number;
+      questionsAnswered: number;
     };
     writing: {
       questionsAnswered: number;
@@ -153,6 +160,18 @@ export interface IAnalytics {
         questionsAnswered: number;
         timePerQuestion: number;
       };
+    },
+  ];
+}
+
+export interface IOverallAnalytics {
+  activeUsers: number;
+  totalUsers: number;
+  weeklyMetrics: [
+    {
+      date: Date;
+      totalUsers: number;
+      activeUsers: number;
     },
   ];
 }
@@ -231,4 +250,82 @@ export interface IPatientTableEntry
   > {
   active: boolean;
   startDate: Date;
+}
+
+export interface IAggregatedAnalyticsAll
+  extends IAggregatedAnalyticsMath,
+    IAggregatedAnalyticsTrivia,
+    IAggregatedAnalyticsReading,
+    IAggregatedAnalyticsWriting {
+  overall: {
+    streak: [string];
+    startDate: Date;
+    lastSessionDate: Date;
+    totalSessionsCompleted: number;
+    streakHistory: DataRecord[];
+    lastSession: {
+      mathQuestionsCompleted: number;
+      wordsRead: number;
+      promptsCompleted: number;
+      triviaQuestionsCompleted: number;
+    };
+  };
+}
+
+export interface IAggregatedAnalyticsMath {
+  math: {
+    avgAccuracy: [DataRecord];
+    avgDifficultyScore: [DataRecord];
+    avgQuestionsCompleted: [DataRecord];
+    avgTimePerQuestion: [DataRecord];
+    lastSession: {
+      accuracy: number;
+      difficultyScore: number;
+      questionsCompleted: number;
+      timePerQuestion: number;
+    };
+  };
+}
+export interface IAggregatedAnalyticsTrivia {
+  trivia: {
+    avgAccuracy: [DataRecord];
+    avgQuestionsCompleted: [DataRecord];
+    avgTimePerQuestion: [DataRecord];
+    lastSession: {
+      accuracy: number;
+      questionsCompleted: number;
+      timePerQuestion: number;
+    };
+  };
+}
+export interface IAggregatedAnalyticsReading {
+  reading: {
+    sessionCompletion: [StackedDataRecord];
+    avgWordsPerMin: [DataRecord];
+    avgPassagesRead: [DataRecord];
+    avgTimePerPassage: [DataRecord];
+    lastSession: {
+      passagesRead: number;
+      timePerPassage: number;
+      completed: boolean;
+    };
+  };
+}
+export interface IAggregatedAnalyticsWriting {
+  writing: {
+    sessionCompletion: [StackedDataRecord];
+    avgPromptsAnswered: [DataRecord];
+    avgTimePerQuestion: [DataRecord];
+    lastSession: {
+      promptsAnswered: number;
+      timePerPrompt: number;
+      completed: boolean;
+    };
+  };
+}
+
+export interface IAggregatedOverallAnalytics {
+  activeUsers: number;
+  totalUsers: number;
+  activeHistory: [DataRecord];
 }
