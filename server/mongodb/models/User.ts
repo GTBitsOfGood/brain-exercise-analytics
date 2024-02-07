@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Role } from "@/common_utils/types";
+import { AdminApprovalStatus, Role } from "@/common_utils/types";
 
 const { Schema } = mongoose;
 
@@ -32,6 +32,14 @@ const UserSchema = new Schema({
       additionalAffiliation: "",
     },
   },
+  adminDetails: {
+    type: {
+      active: Boolean,
+    },
+    default: {
+      active: true,
+    },
+  },
   chapter: {
     type: String,
     default: "",
@@ -55,6 +63,13 @@ const UserSchema = new Schema({
   verified: {
     type: Boolean,
     default: false,
+  },
+  approved: {
+    type: String,
+    enum: {
+      values: Object.values(AdminApprovalStatus),
+    },
+    default: AdminApprovalStatus.PENDING,
   },
   role: {
     type: String,

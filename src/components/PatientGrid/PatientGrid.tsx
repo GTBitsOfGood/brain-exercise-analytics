@@ -1,8 +1,8 @@
 "use client";
 
-import { ITableEntry, SortField } from "@/common_utils/types";
+import { IPatientTableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
-import { ReactNode, useMemo } from "react";
+import { useMemo } from "react";
 import { GridColDef } from "@src/utils/types";
 import DataGrid from "../DataGrid/DataGrid";
 import Pagination from "../Pagination/Pagination";
@@ -11,8 +11,7 @@ import { GridRowDef } from "./types";
 import { Row } from "./Row/Row";
 
 interface PatientGridProps {
-  data: ITableEntry[];
-  children?: ReactNode;
+  data: IPatientTableEntry[];
   sortField: SortField | undefined;
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;

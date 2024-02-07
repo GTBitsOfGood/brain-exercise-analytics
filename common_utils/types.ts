@@ -39,6 +39,13 @@ export enum Days {
   Friday,
   Saturday,
 }
+
+export enum AdminApprovalStatus {
+  PENDING = "Pending",
+  APPROVED = "Approved",
+  REJECTED = "Rejected",
+}
+
 export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
@@ -52,6 +59,9 @@ export interface IUser {
     secondaryContactPhone: string;
     additionalAffiliation: string;
   };
+  adminDetails: {
+    active: boolean;
+  };
   chapter: string;
   location: {
     country: string;
@@ -60,6 +70,7 @@ export interface IUser {
   };
   signedUp: boolean;
   verified: boolean;
+  approved: AdminApprovalStatus;
   role: Role;
 }
 
@@ -159,39 +170,53 @@ export interface StackedDataRecord extends DataRecord {
   stackedValue: number;
 }
 
-export interface FilteredUsersResponse {
-  data: [ITableEntry];
-  numRecords: number;
-  numPages: number;
-  page: number;
-}
+/* Search Types */
 
 export type SortField = {
   field: string;
   ascending: boolean;
 };
 
-export interface SearchParams {
-  params: {
-    name?: string;
-    dateOfBirths?: string[];
-    emails?: string[];
-    additionalAffiliations?: string[];
-    secondaryNames?: string[];
-    secondaryPhones?: string[];
-    beiChapters?: string[];
-    active?: boolean;
-    countries?: string[];
-    states?: string[];
-    cities?: string[];
-    dateOfJoins?: string[];
-  };
+export interface SearchRequestBody<T extends object> {
+  params: T;
   page: number;
   sortParams?: SortField;
 }
 
-export interface ITableEntry
-  extends Omit<IUser, "phoneNumber" | "role" | "signedUp" | "verified"> {
+export interface SearchResponseBody<T> {
+  data: T[];
+  numRecords: number;
+  numPages: number;
+  page: number;
+}
+
+/* Patient Search Specific Types */
+
+export type PatientSearchParams = {
+  name?: string;
+  dateOfBirths?: string[];
+  emails?: string[];
+  additionalAffiliations?: string[];
+  secondaryNames?: string[];
+  secondaryPhones?: string[];
+  beiChapters?: string[];
+  active?: boolean;
+  countries?: string[];
+  states?: string[];
+  cities?: string[];
+  dateOfJoins?: string[];
+};
+
+export interface IPatientTableEntry
+  extends Omit<
+    IUser,
+    | "phoneNumber"
+    | "role"
+    | "signedUp"
+    | "verified"
+    | "approved"
+    | "adminDetails"
+  > {
   active: boolean;
   startDate: Date;
 }

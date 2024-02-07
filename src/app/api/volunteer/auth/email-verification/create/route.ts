@@ -2,7 +2,7 @@ import { createVerificationLog } from "@server/mongodb/actions/VerificationLog";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 import { VerificationLogType } from "@/common_utils/types";
-import { sendEmail } from "@server/utils/Authentication";
+import { sendEmail } from "@server/utils/email";
 
 type RequestData = {
   email: string;

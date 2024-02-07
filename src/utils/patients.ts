@@ -1,6 +1,11 @@
-import { ITableEntry, IUser, Role } from "@/common_utils/types";
+import {
+  AdminApprovalStatus,
+  IPatientTableEntry,
+  IUser,
+  Role,
+} from "@/common_utils/types";
 
-export const sampleTableEntries: ITableEntry[] = [
+export const sampleTableEntries: IPatientTableEntry[] = [
   {
     name: "John Doe",
     patientDetails: {
@@ -197,6 +202,7 @@ export const sampleTableEntries: ITableEntry[] = [
       state: "New York",
       city: "New York City",
     },
+
     startDate: new Date("2021-05-20"),
   },
   {
@@ -360,10 +366,12 @@ export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
     email: entry.email,
     phoneNumber: "1234567890",
     patientDetails: entry.patientDetails,
+    adminDetails: { active: entry.active },
     chapter: entry.chapter,
     location: entry.location,
     signedUp: true,
     verified: true,
+    approved: AdminApprovalStatus.APPROVED,
     role: Role.NONPROFIT_USER,
   };
 });

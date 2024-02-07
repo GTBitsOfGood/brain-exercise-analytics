@@ -1,6 +1,6 @@
 import APIWrapper from "@server/utils/APIWrapper";
 import { getUsersFiltered } from "@server/mongodb/actions/User";
-import { SearchParams } from "@/common_utils/types";
+import { PatientSearchParams, SearchRequestBody } from "@/common_utils/types";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +9,8 @@ export const POST = APIWrapper({
     requireToken: true,
   },
   handler: async (req) => {
-    const reqdata = (await req.json()) as SearchParams;
+    const reqdata =
+      (await req.json()) as SearchRequestBody<PatientSearchParams>;
 
     const params = Object.fromEntries(
       Object.entries(reqdata.params).filter(
