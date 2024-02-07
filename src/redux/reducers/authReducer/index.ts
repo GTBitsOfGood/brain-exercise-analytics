@@ -26,7 +26,7 @@ const initialState: IUser = {
   signedUp: false,
   verified: false,
   approved: AdminApprovalStatus.PENDING,
-  role: Role.NONPROFIT_USER,
+  role: Role.NONPROFIT_PATIENT,
 };
 
 // Helper function to copy all properties from newState over to the existing state

@@ -27,7 +27,7 @@ export class InternalResponseError extends Error {}
 export enum Role {
   NONPROFIT_ADMIN = "Nonprofit Admin",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
-  NONPROFIT_USER = "Nonprofit User",
+  NONPROFIT_PATIENT = "Nonprofit Patient",
 }
 
 export enum Days {

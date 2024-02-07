@@ -116,7 +116,7 @@ export const getUsersFiltered = async ({
   const numOfItems = 8;
 
   const userParamsObject = {
-    role: Role.NONPROFIT_USER,
+    role: Role.NONPROFIT_PATIENT,
   } as UParam;
 
   if (paramsObject.name) {

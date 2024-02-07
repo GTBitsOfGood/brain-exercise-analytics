@@ -22,7 +22,7 @@ export const GET = APIWrapper({
         email,
         role: Role.NONPROFIT_VOLUNTEER,
       })) as IUser;
-    } else if (newUser.role === Role.NONPROFIT_USER) {
+    } else if (newUser.role === Role.NONPROFIT_PATIENT) {
       throw new Error("App users cannot sign up on analytics dashboard");
     }
 

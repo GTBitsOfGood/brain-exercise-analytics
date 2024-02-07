@@ -53,7 +53,7 @@ export const POST = APIWrapper({
         additionalAffiliation: "",
       },
       signedUp: true,
-      role: Role.NONPROFIT_USER,
+      role: Role.NONPROFIT_PATIENT,
     } as Omit<IUser, "chapter" | "location">);
     return newSignUp;
   },

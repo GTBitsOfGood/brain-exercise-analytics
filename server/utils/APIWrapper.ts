@@ -30,12 +30,12 @@ function APIWrapper(route: Route<unknown>) {
     allowedRoles = new Set<Role>(
       Object.values(Role).filter(
         (role) =>
-          role !== Role.NONPROFIT_VOLUNTEER && role !== Role.NONPROFIT_ADMIN,
+          role !== Role.NONPROFIT_PATIENT && role !== Role.NONPROFIT_VOLUNTEER,
       ),
     );
   } else if (config?.requireVolunteer) {
     allowedRoles = new Set<Role>(
-      Object.values(Role).filter((role) => role !== Role.NONPROFIT_VOLUNTEER),
+      Object.values(Role).filter((role) => role !== Role.NONPROFIT_PATIENT),
     );
   } else {
     allowedRoles = new Set<Role>(config?.roles ?? Object.values(Role));

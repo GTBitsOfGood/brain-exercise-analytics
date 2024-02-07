@@ -76,7 +76,7 @@ const UserSchema = new Schema({
     enum: {
       values: Object.values(Role),
     },
-    default: Role.NONPROFIT_USER,
+    default: Role.NONPROFIT_PATIENT,
   },
 });
 
