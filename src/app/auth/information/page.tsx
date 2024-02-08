@@ -11,6 +11,7 @@ import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
+import { formatPhoneNumber } from "@src/utils/utils";
 
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
@@ -57,14 +58,6 @@ export default function Page() {
     value: city.name,
     displayValue: `${city.name}`,
   }));
-
-  const formatPhoneNumber = (num: string) => {
-    const len = num.length;
-    if (len === 0) return "";
-    if (len <= 3) return num;
-    if (len <= 6) return `(${num.slice(0, 3)}) ${num.slice(3)}`;
-    return `(${num.slice(0, 3)}) ${num.slice(3, 6)}-${num.slice(6)}`;
-  };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\D/g, "");

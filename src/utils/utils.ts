@@ -17,6 +17,14 @@ export function transformDate(date: Date | string) {
   return `${month}-${day}-${year}`;
 }
 
+export function formatPhoneNumber(num: string) {
+  const len = num.length;
+  if (len === 0) return "";
+  if (len <= 3) return num;
+  if (len <= 6) return `(${num.slice(0, 3)}) ${num.slice(3)}`;
+  return `(${num.slice(0, 3)}) ${num.slice(3, 6)}-${num.slice(6)}`;
+}
+
 export function transformPhoneNumber(phoneNumber: string) {
   const areaCode = phoneNumber.slice(0, 3);
   const firstThree = phoneNumber.slice(3, 6);
