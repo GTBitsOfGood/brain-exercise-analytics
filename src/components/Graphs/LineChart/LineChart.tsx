@@ -190,7 +190,7 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <p>{title}</p>
+        <p className={styles.titleText}>{title}</p>
         {info !== "" && (
           <div
             className={styles.info}
