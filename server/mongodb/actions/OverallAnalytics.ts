@@ -1,8 +1,10 @@
 import {
   DataRecord,
-  IAggregatedOverallAnalytics,
+  DateRangeEnum,
+  IAggregatedOverviewAnalytics,
   IOverallAnalytics,
 } from "@/common_utils/types";
+import { formatDateByRangeEnum } from "@server/utils/utils";
 import OverallAnalytics from "../models/OverallAnalytics";
 
 export const createOverallAnalytics = async (): Promise<null> => {
@@ -35,68 +37,144 @@ export const incrementTotalUsers = async (): Promise<null> => {
   return null;
 };
 
-export const getAggregatedOverallAnalytics =
-  async (): Promise<IAggregatedOverallAnalytics> => {
-    type TempAggData = {
-      activeHistory: number;
-    };
-    type WeeklyMetrics = {
-      date: Date;
-      activeUsers: number;
-      totalUsers: number;
-    };
-    type Result = {
-      activeHistory: DataRecord[];
-    };
+export const getAggregatedOverallAnalytics = async (
+  range: DateRangeEnum,
+): Promise<IAggregatedOverviewAnalytics> => {
+  interface TempAggData {
+    count: number;
+    activeHistory: number;
+  }
 
-    const numOfWeeks = 7;
+  type Result = {
+    activeHistory: DataRecord[];
+  };
 
-    const res = await OverallAnalytics.findOne<IOverallAnalytics>(
-      {},
-      { weeklyMetrics: { $slice: [1, numOfWeeks] } },
-    );
-    const groupSumDict: Record<string, TempAggData> = {};
+  let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
-    let lastDate = new Date();
-    res!.weeklyMetrics.forEach((item: WeeklyMetrics) => {
-      const dateVar = `${item.date.getMonth() + 1}/${item.date.getUTCDate()}`;
+  if (range === DateRangeEnum.RECENT) {
+    numOfWeeks = 7;
+  } else if (range === DateRangeEnum.QUARTER) {
+    numOfWeeks = 13;
+  } else if (range === DateRangeEnum.HALF) {
+    numOfWeeks = 26; // 26
+  } else if (range === DateRangeEnum.YEAR) {
+    numOfWeeks = 52; // 52
+  }
+
+  const res = await OverallAnalytics.findOne<IOverallAnalytics>(
+    {},
+    { weeklyMetrics: { $slice: [1, numOfWeeks] } },
+  );
+
+  if (!res) {
+    throw new Error("OverallAnalytics record not found");
+  }
+
+  const groupSumDict: Record<string, TempAggData> = {};
+
+  let counter = 0;
+  const lenOfMetrics = res.weeklyMetrics.length;
+  const groupSize = Math.floor(lenOfMetrics / 12);
+
+  // reversing the list
+  const reversedWeeklyMetrics = res.weeklyMetrics.reverse();
+  const paddingDate = new Date(res.weeklyMetrics[0].date);
+
+  let lastDate = new Date(res.weeklyMetrics[0].date);
+  let lastDateMax = new Date(res.weeklyMetrics[0].date);
+
+  const dbDateVars = new Set<string>();
+
+  reversedWeeklyMetrics.forEach(
+    (item: IOverallAnalytics["weeklyMetrics"][0]) => {
+      let dateVar = formatDateByRangeEnum(item.date, range);
+
+      // adds to previous date in groups of 2
+      if (range === DateRangeEnum.HALF && counter % 2 === 1) {
+        dateVar = formatDateByRangeEnum(lastDate, range);
+      }
+
+      // group into groups of 12 and put everything into the last object once it goes over
+      if (range === DateRangeEnum.MAX) {
+        if (counter % groupSize === 0 && counter < groupSize * 12) {
+          lastDateMax = item.date;
+        }
+        dateVar = formatDateByRangeEnum(lastDateMax, range);
+      }
+      counter += 1;
       lastDate = item.date;
 
-      groupSumDict[dateVar] = {
-        activeHistory: item.activeUsers,
-      };
-    });
+      if (!dbDateVars.has(dateVar)) {
+        dbDateVars.add(dateVar);
+      }
 
+      if (groupSumDict[dateVar]) {
+        groupSumDict[dateVar].count += 1;
+        groupSumDict[dateVar].activeHistory += item.activeUsers;
+      } else {
+        groupSumDict[dateVar] = {
+          count: 1,
+          activeHistory: item.activeUsers,
+        };
+      }
+    },
+  );
+
+  const result: Result = {
+    activeHistory: [],
+  };
+
+  Object.entries(groupSumDict).forEach(([month, monthDict]) => {
+    const dr: DataRecord = {
+      interval: month,
+      value:
+        monthDict.count === 0 ? 0 : monthDict.activeHistory / monthDict.count,
+    };
+    result.activeHistory.push(dr);
+  });
+
+  result.activeHistory.reverse();
+
+  // PADDING
+  if (range !== DateRangeEnum.MAX) {
     let len = Object.keys(groupSumDict).length;
-    while (len < numOfWeeks) {
-      lastDate.setDate(lastDate.getDate() - 7);
-      const tempDateString = `${
-        lastDate.getMonth() + 1
-      }/${lastDate.getUTCDate()}`;
-      groupSumDict[tempDateString] = {
-        activeHistory: 0,
-      };
-      len += 1;
+
+    let totalWeeks = numOfWeeks;
+    if (range === DateRangeEnum.HALF) {
+      totalWeeks = 13;
+    } else if (range === DateRangeEnum.YEAR) {
+      totalWeeks = 12;
     }
 
-    const singleAnalytics = {
-      totalUsers: res!.totalUsers,
-      activeUsers: res!.activeUsers,
-    };
+    while (len < totalWeeks) {
+      if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      } else if (range === DateRangeEnum.HALF) {
+        paddingDate.setDate(paddingDate.getDate() - 14);
+      } else if (range === DateRangeEnum.YEAR) {
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
+      }
 
-    const result: Result = {
-      activeHistory: [],
-    };
+      const tempDateString = formatDateByRangeEnum(paddingDate, range);
+      const dr: DataRecord = {
+        interval: tempDateString,
+        value: 0,
+      };
+      result.activeHistory.push(dr);
 
-    const record = Object.keys(groupSumDict).map((month) => ({
-      interval: month,
-      value: groupSumDict[month].activeHistory,
-    }));
-    result.activeHistory = record.reverse();
+      len += 1;
+    }
+  }
 
-    const aggOut = {
-      ...singleAnalytics,
-      ...result,
-    } as IAggregatedOverallAnalytics;
-    return aggOut;
+  const singleAnalytics = {
+    totalUsers: res.totalUsers,
+    activeUsers: res.activeUsers,
   };
+
+  const aggOut: IAggregatedOverviewAnalytics = {
+    ...singleAnalytics,
+    ...result,
+  };
+
+  return aggOut;
+};
