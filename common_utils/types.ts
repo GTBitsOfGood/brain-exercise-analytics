@@ -56,11 +56,19 @@ export enum AdminApprovalStatus {
 }
 
 export enum DateRangeEnum {
-  recent = "most recent",
-  quarter = "3 months",
-  half = "6 months",
-  year = "12 months",
-  max = "max",
+  RECENT = "Most Recent",
+  QUARTER = "3 Months",
+  HALF = "6 Months",
+  YEAR = "1 Year",
+  MAX = "Max",
+}
+
+export enum AnalyticsSectionEnum {
+  OVERALL = "overall",
+  MATH = "math",
+  TRIVIA = "trivia",
+  READING = "reading",
+  WRITING = "writing",
 }
 
 export interface IUser {
@@ -258,7 +266,7 @@ export interface IAggregatedAnalyticsAll
     IAggregatedAnalyticsReading,
     IAggregatedAnalyticsWriting {
   overall: {
-    streak: [string];
+    streak: string[];
     startDate: Date;
     lastSessionDate: Date;
     totalSessionsCompleted: number;
@@ -274,10 +282,10 @@ export interface IAggregatedAnalyticsAll
 
 export interface IAggregatedAnalyticsMath {
   math: {
-    avgAccuracy: [DataRecord];
-    avgDifficultyScore: [DataRecord];
-    avgQuestionsCompleted: [DataRecord];
-    avgTimePerQuestion: [DataRecord];
+    avgAccuracy: DataRecord[];
+    avgDifficultyScore: DataRecord[];
+    avgQuestionsCompleted: DataRecord[];
+    avgTimePerQuestion: DataRecord[];
     lastSession: {
       accuracy: number;
       difficultyScore: number;
@@ -288,9 +296,9 @@ export interface IAggregatedAnalyticsMath {
 }
 export interface IAggregatedAnalyticsTrivia {
   trivia: {
-    avgAccuracy: [DataRecord];
-    avgQuestionsCompleted: [DataRecord];
-    avgTimePerQuestion: [DataRecord];
+    avgAccuracy: DataRecord[];
+    avgQuestionsCompleted: DataRecord[];
+    avgTimePerQuestion: DataRecord[];
     lastSession: {
       accuracy: number;
       questionsCompleted: number;
@@ -300,10 +308,10 @@ export interface IAggregatedAnalyticsTrivia {
 }
 export interface IAggregatedAnalyticsReading {
   reading: {
-    sessionCompletion: [StackedDataRecord];
-    avgWordsPerMin: [DataRecord];
-    avgPassagesRead: [DataRecord];
-    avgTimePerPassage: [DataRecord];
+    sessionCompletion: StackedDataRecord[];
+    avgWordsPerMin: DataRecord[];
+    avgPassagesRead: DataRecord[];
+    avgTimePerPassage: DataRecord[];
     lastSession: {
       passagesRead: number;
       timePerPassage: number;
@@ -313,9 +321,9 @@ export interface IAggregatedAnalyticsReading {
 }
 export interface IAggregatedAnalyticsWriting {
   writing: {
-    sessionCompletion: [StackedDataRecord];
-    avgPromptsAnswered: [DataRecord];
-    avgTimePerQuestion: [DataRecord];
+    sessionCompletion: StackedDataRecord[];
+    avgPromptsAnswered: DataRecord[];
+    avgTimePerQuestion: DataRecord[];
     lastSession: {
       promptsAnswered: number;
       timePerPrompt: number;
@@ -327,5 +335,5 @@ export interface IAggregatedAnalyticsWriting {
 export interface IAggregatedOverallAnalytics {
   activeUsers: number;
   totalUsers: number;
-  activeHistory: [DataRecord];
+  activeHistory: DataRecord[];
 }
