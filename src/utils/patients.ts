@@ -7,6 +7,7 @@ import {
 
 export const sampleTableEntries: IPatientTableEntry[] = [
   {
+    _id: "1",
     name: "John Doe",
     patientDetails: {
       birthDate: new Date("1990-01-01"),
@@ -25,6 +26,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2020-05-05"),
   },
   {
+    _id: "1",
     name: "Jane Smith",
     patientDetails: {
       birthDate: new Date("1992-02-02"),
@@ -43,6 +45,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-01-10"),
   },
   {
+    _id: "1",
     name: "Alice Johnson",
     patientDetails: {
       birthDate: new Date("1985-03-03"),
@@ -61,6 +64,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-02-20"),
   },
   {
+    _id: "1",
     name: "Bob Brown",
     patientDetails: {
       birthDate: new Date("1987-04-04"),
@@ -79,6 +83,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-03-15"),
   },
   {
+    _id: "1",
     name: "Charlie Davis",
     patientDetails: {
       birthDate: new Date("1995-05-05"),
@@ -97,6 +102,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-04-22"),
   },
   {
+    _id: "1",
     name: "Diana Evans",
     patientDetails: {
       birthDate: new Date("1980-06-06"),
@@ -115,6 +121,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-05-30"),
   },
   {
+    _id: "1",
     name: "Evan Foster",
     patientDetails: {
       birthDate: new Date("1988-07-07"),
@@ -133,6 +140,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-07-14"),
   },
   {
+    _id: "1",
     name: "Fiona Green",
     patientDetails: {
       birthDate: new Date("1993-08-08"),
@@ -151,6 +159,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-08-28"),
   },
   {
+    _id: "1",
     name: "George Harris",
     patientDetails: {
       birthDate: new Date("1975-09-09"),
@@ -169,6 +178,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-09-12"),
   },
   {
+    _id: "1",
     name: "Hannah Adams",
     patientDetails: {
       birthDate: new Date("1997-10-10"),
@@ -187,6 +197,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-10-05"),
   },
   {
+    _id: "1",
     name: "David Johnson",
     patientDetails: {
       birthDate: new Date("1993-08-12"),
@@ -206,6 +217,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-05-20"),
   },
   {
+    _id: "1",
     name: "Sophie Brown",
     patientDetails: {
       birthDate: new Date("1986-11-15"),
@@ -224,6 +236,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-06-10"),
   },
   {
+    _id: "1",
     name: "Oliver White",
     patientDetails: {
       birthDate: new Date("1990-03-25"),
@@ -362,6 +375,7 @@ export const numberOfQuestionData = [
 
 export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
   return {
+    _id: "1",
     name: entry.name,
     email: entry.email,
     phoneNumber: "1234567890",

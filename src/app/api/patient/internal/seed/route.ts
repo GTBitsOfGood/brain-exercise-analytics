@@ -25,7 +25,7 @@ export const POST = APIWrapper({
     const users = await User.insertMany(sampleUsers);
     await Promise.all(
       users.map(async (user: IUser) => {
-        await createAnalyticsID(user._id as string);
+        await createAnalyticsID(user._id);
       }),
     );
 

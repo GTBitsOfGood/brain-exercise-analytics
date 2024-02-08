@@ -34,7 +34,7 @@ export const POST = APIWrapper({
     }
 
     await modifyWriting(
-      user._id!,
+      user._id,
       completed,
       questionsAnswered,
       timePerQuestion,

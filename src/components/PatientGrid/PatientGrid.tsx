@@ -84,9 +84,9 @@ export default function PatientGrid(params: PatientGridProps) {
   const rows = useMemo<GridRowDef[]>(
     () =>
       params.data.map(
-        (v, i) =>
+        (v) =>
           ({
-            id: i,
+            id: v._id,
             firstName: v.name.split(" ")[0],
             lastName: v.name.split(" ")[1],
             dateOfBirth: transformDate(v.patientDetails.birthDate),
@@ -104,7 +104,7 @@ export default function PatientGrid(params: PatientGridProps) {
   );
 
   const Rows = useMemo(
-    () => rows.map((row, rowIndex) => <Row key={rowIndex} row={row} />),
+    () => rows.map((row) => <Row key={row.id} row={row} />),
     [rows],
   );
 

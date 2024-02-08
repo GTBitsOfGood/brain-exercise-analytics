@@ -1,16 +1,26 @@
 import APIWrapper from "@server/utils/APIWrapper";
-// import { DateRangeEnum } from "@/common_utils/types";
 import { getAggregatedOverallAnalytics } from "@server/mongodb/actions/OverallAnalytics";
+import { DateRangeEnum } from "@/common_utils/types";
 
 export const GET = APIWrapper({
   config: {
-    requireToken: true,
+    // requireToken: true,
+    // requireVolunteer: true,
   },
-  handler: async () => {
-    // const rangeEnum =
-    //   Object.keys(DateRangeEnum)[Object.values(DateRangeEnum).indexOf(range)];
+  handler: async (req) => {
+    const { searchParams } = new URL(req.url);
+    const rangeString = searchParams.get("range");
 
-    const data = await getAggregatedOverallAnalytics();
+    if (!rangeString) {
+      throw new Error("Range missing in request");
+    }
+
+    const range = JSON.parse(rangeString) as DateRangeEnum;
+    if (!Object.values(DateRangeEnum).includes(range)) {
+      throw new Error("Invalid range in request");
+    }
+
+    const data = await getAggregatedOverallAnalytics(range);
 
     return data;
   },
