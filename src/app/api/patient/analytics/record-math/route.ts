@@ -48,7 +48,7 @@ export const POST = APIWrapper({
     }
 
     await modifyMath(
-      user._id!,
+      user._id,
       questionsAttempted,
       questionsCorrect,
       timePerQuestion,

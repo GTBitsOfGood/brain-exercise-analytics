@@ -38,7 +38,7 @@ export const POST = APIWrapper({
     }
 
     await modifyReading(
-      user._id!,
+      user._id,
       completed,
       passagesRead,
       timePerPassage,

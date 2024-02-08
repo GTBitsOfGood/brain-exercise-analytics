@@ -27,13 +27,13 @@ export const GET = APIWrapper({
       newUser = (await User.create({ email })) as IUser;
     }
     let analyticsRecord: IAnalytics = (await getAnalyticsByID(
-      newUser._id as string,
+      newUser._id,
     )) as IAnalytics;
     if (analyticsRecord === null) {
-      analyticsRecord = await createAnalyticsID(newUser._id as string);
+      analyticsRecord = await createAnalyticsID(newUser._id);
       await incrementTotalUsers();
     }
-    newUser._id = newUser._id as string;
+
     return {
       user: newUser,
       gameDetails: {

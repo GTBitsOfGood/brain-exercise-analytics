@@ -23,7 +23,7 @@ export const POST = APIWrapper({
       throw new Error("User not found in the database.");
     }
 
-    await updateSessionComplete(user._id!);
+    await updateSessionComplete(user._id);
 
     return null;
   },

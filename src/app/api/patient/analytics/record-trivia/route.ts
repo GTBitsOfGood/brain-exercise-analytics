@@ -40,7 +40,7 @@ export const POST = APIWrapper({
 
     // await createAnalyticsID(user._id!)
     await modifyTrivia(
-      user._id!,
+      user._id,
       questionsAttempted,
       questionsCorrect,
       timePerQuestion,
