@@ -62,6 +62,7 @@ export default function TriviaScreen({
             gradient={true}
             info="Vidushi"
             data={accuracyData}
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
@@ -71,6 +72,7 @@ export default function TriviaScreen({
             data={timeData}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
@@ -80,6 +82,7 @@ export default function TriviaScreen({
             data={numQuestionData}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
         </div>

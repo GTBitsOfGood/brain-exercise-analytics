@@ -54,6 +54,7 @@ const MathScreen = ({
             gradient={true}
             info="Vidushi"
             data={accuracyData}
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <LineChart
@@ -65,6 +66,7 @@ const MathScreen = ({
             gradient={true}
             info="Vidushi"
             data={difficultyData}
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
@@ -74,6 +76,7 @@ const MathScreen = ({
             data={numQuestionData}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
@@ -83,6 +86,7 @@ const MathScreen = ({
             data={timeData}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
         </div>

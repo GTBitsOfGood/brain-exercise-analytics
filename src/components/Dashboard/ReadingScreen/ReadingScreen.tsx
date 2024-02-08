@@ -76,6 +76,7 @@ export default function ReadingScreen({
             ]}
             hoverable
             percentageChange
+            fullWidth
           />
           <BarChart
             width={325}
@@ -84,6 +85,7 @@ export default function ReadingScreen({
             data={avgPassage}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <LineChart
@@ -95,6 +97,7 @@ export default function ReadingScreen({
             gradient={true}
             info="Vidushi"
             data={readingRate}
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
           />
           <BarChart
@@ -104,6 +107,7 @@ export default function ReadingScreen({
             data={timeData}
             hoverable
             percentageChange
+            fullWidth
             // style={{ width: "100%", height: "100%" }}
             info="Hey this is just some info I thought you will find interesting."
           />

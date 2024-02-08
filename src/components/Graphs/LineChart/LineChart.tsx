@@ -36,9 +36,22 @@ export default function LineChart({
   hoverable = false,
   percentageChange = false,
   gradient = false,
+  fullWidth,
   info = "",
 }: DataParams) {
-  const width = Math.max(providedWidth, 210);
+  const minWidth = 210;
+  const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
+  const windowSizeRef = useRef<null | HTMLDivElement>(null);
+  const updateSize = () => {
+    if (!fullWidth || !windowSizeRef.current) return;
+    setWidth(Math.max(windowSizeRef.current.offsetWidth - 45, minWidth));
+  };
+  const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
+  const resizeOptimised = () => {
+    clearTimeout(resizeRef.current);
+    resizeRef.current = setTimeout(updateSize, 500);
+  };
+  window.addEventListener("resize", resizeOptimised);
   const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -156,14 +169,20 @@ export default function LineChart({
     yAxis.numDivisions,
   ]);
 
+  useEffect(() => {
+    resizeOptimised();
+  }, []);
+
   return (
     <div
       className={`${className} ${styles.LineChart}`}
       style={{
-        width: width + 45,
+        width: fullWidth ? "100%" : width + 45,
+        minWidth: fullWidth ? minWidth + 45 : undefined,
         height: height + 60,
         ...style,
       }}
+      ref={windowSizeRef}
       onClick={() => {
         if (infoPopup) {
           setInfoPopup(false);
@@ -171,7 +190,7 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <p>{title}</p>
+        <p className={styles.titleText}>{title}</p>
         {info !== "" && (
           <div
             className={styles.info}
