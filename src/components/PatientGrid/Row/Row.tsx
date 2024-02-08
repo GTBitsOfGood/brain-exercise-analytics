@@ -69,9 +69,8 @@ export function Row({ row }: { row: GridRowDef }) {
   const router = useRouter();
 
   const handleDashboardClick = useCallback(() => {
-    // router.push(`/patient/dashboard/${row.id}`);
-    router.push(`/patient/dashboard/650a7e3a301ab8b382b7034a`);
-  }, [router]);
+    router.push(`/patient/dashboard/${row.id}`);
+  }, [router, row.id]);
 
   return (
     <>

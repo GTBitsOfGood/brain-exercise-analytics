@@ -277,8 +277,7 @@ export const getAggregatedAnalytics = async (
             avgQuestionsCompleted: 0,
             avgTimePerQuestion: 0,
           },
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }).filter(([k, _]) => sections.includes(k as AnalyticsSectionEnum)),
+        }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
       );
 
       len += 1;
