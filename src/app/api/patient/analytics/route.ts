@@ -29,7 +29,13 @@ export const GET = APIWrapper({
       throw new Error("Invalid section in request");
     }
 
-    const data = await getAggregatedAnalytics(id, range, sections);
+    const updatedSections = sections.includes(AnalyticsSectionEnum.OVERALL)
+      ? Object.values(AnalyticsSectionEnum).filter(
+          (section) => section !== AnalyticsSectionEnum.OVERALL,
+        )
+      : Array.from(new Set(sections));
+
+    const data = await getAggregatedAnalytics(id, range, updatedSections);
 
     return data;
   },
