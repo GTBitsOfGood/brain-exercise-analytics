@@ -1,6 +1,11 @@
 import APIWrapper from "@server/utils/APIWrapper";
-import { AnalyticsSectionEnum, DateRangeEnum } from "@/common_utils/types";
+import {
+  AnalyticsSectionEnum,
+  DateRangeEnum,
+  Role,
+} from "@/common_utils/types";
 import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
+import { getUserById } from "@server/mongodb/actions/User";
 
 export const GET = APIWrapper({
   config: {
@@ -34,6 +39,11 @@ export const GET = APIWrapper({
           (section) => section !== AnalyticsSectionEnum.OVERALL,
         )
       : Array.from(new Set(sections));
+
+    const user = await getUserById(id);
+    if (user?.role !== Role.NONPROFIT_PATIENT) {
+      throw new Error("User is not a patient");
+    }
 
     const data = await getAggregatedAnalytics(id, range, updatedSections);
 
