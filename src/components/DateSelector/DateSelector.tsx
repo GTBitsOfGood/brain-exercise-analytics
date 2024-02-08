@@ -3,27 +3,28 @@
 import { useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { Poppins } from "next/font/google";
+import { DateRangeEnum } from "@/common_utils/types";
 import Dropdown, { DropdownOption } from "../Dropdown/Dropdown";
 
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
+const options: DropdownOption<DateRangeEnum>[] = Object.values(
+  DateRangeEnum,
+).map((range) => ({
+  value: range,
+  displayValue: range.toString(),
+}));
 
 function DateSelector() {
-  const [selectedValue, setSelectedValue] = useState("Most Recent");
-  const options: DropdownOption<string>[] = [
-    { value: "Most Recent", displayValue: "Most Recent" },
-    { value: "3 Months", displayValue: "3 Months" },
-    { value: "6 Months", displayValue: "6 Months" },
-    { value: "1 Year", displayValue: "1 Year" },
-    { value: "Max", displayValue: "Max" },
-  ];
-
+  const [selectedValue, setSelectedValue] = useState<DateRangeEnum>(
+    DateRangeEnum.RECENT,
+  );
   return (
     <Dropdown
       options={options}
       value={selectedValue}
       showError={false}
-      onChange={(e: SelectChangeEvent) => {
-        setSelectedValue(e.target.value);
+      onChange={(e: SelectChangeEvent<DateRangeEnum>) => {
+        setSelectedValue(e.target.value as DateRangeEnum);
       }}
       style={{
         borderRadius: 0,
