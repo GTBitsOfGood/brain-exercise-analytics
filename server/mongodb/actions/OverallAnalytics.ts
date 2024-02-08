@@ -1,7 +1,7 @@
 import {
   DataRecord,
   DateRangeEnum,
-  IAggregatedOverviewAnalytics,
+  IAggregatedOverallAnalytics,
   IOverallAnalytics,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum } from "@server/utils/utils";
@@ -39,7 +39,7 @@ export const incrementTotalUsers = async (): Promise<null> => {
 
 export const getAggregatedOverallAnalytics = async (
   range: DateRangeEnum,
-): Promise<IAggregatedOverviewAnalytics> => {
+): Promise<IAggregatedOverallAnalytics> => {
   interface TempAggData {
     count: number;
     activeHistory: number;
@@ -171,7 +171,7 @@ export const getAggregatedOverallAnalytics = async (
     activeUsers: res.activeUsers,
   };
 
-  const aggOut: IAggregatedOverviewAnalytics = {
+  const aggOut: IAggregatedOverallAnalytics = {
     ...singleAnalytics,
     ...result,
   };

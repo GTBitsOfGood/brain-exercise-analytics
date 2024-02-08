@@ -332,7 +332,7 @@ export interface IAggregatedAnalyticsWriting {
   };
 }
 
-export interface IAggregatedOverviewAnalytics {
+export interface IAggregatedOverallAnalytics {
   activeUsers: number;
   totalUsers: number;
   activeHistory: DataRecord[];
