@@ -210,7 +210,7 @@ export type SortField = {
 
 export interface SearchRequestBody<T extends object> {
   params: T;
-  page: number;
+  page?: number;
   sortParams?: SortField;
 }
 
@@ -236,6 +236,10 @@ export type PatientSearchParams = {
   states?: string[];
   cities?: string[];
   dateOfJoins?: string[];
+};
+
+export type VolunteerSearchParams = {
+  role?: string;
 };
 
 export interface IPatientTableEntry
