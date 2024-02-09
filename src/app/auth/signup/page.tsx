@@ -37,14 +37,14 @@ export default function Page() {
   const handleSignUp = async (signUp: () => Promise<User | null>) => {
     try {
       const user = await signUp();
-      if (!user) {
+      if (!user || !user.email) {
         throw new Error("Error signing up");
       }
 
       const userMongo = await internalRequest<IUser>({
         url: "/api/volunteer/auth/login",
         method: HttpMethod.GET,
-        body: {
+        queryParams: {
           email: user.email,
         },
       });
