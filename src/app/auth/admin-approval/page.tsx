@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie"; // Used for client-side cookie handling
+// import Cookies from "js-cookie";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import styles from "./page.module.css";
 
@@ -10,34 +12,11 @@ enum AdminApprovalStatus {
   PENDING = "PENDING",
 }
 
-const Page = () => {
-  const [adminApprovalStatus, setAdminApprovalStatus] = useState(
+const page = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [adminApprovalStatus, setadminApprovalStatus] = useState(
     AdminApprovalStatus.PENDING,
   );
-  const router = useRouter();
-
-  useEffect(() => {
-    // Assuming this is client-side code; for server-side, use request.cookies.get("authUser") as shown
-    const authUserCookie = Cookies.get("authUser");
-    if (authUserCookie) {
-      const { user = {} as IUser, keepLogged = false } =
-        JSON.parse(authUserCookie);
-
-      // Update the adminApprovalStatus based on the user's approval status
-      if (user.approved) {
-        setAdminApprovalStatus(user.approved);
-      } else {
-        // Handle case where user is not found or approval status is not set
-        console.error("User not found or approval status is missing");
-        // Optionally redirect the user to a login or error page
-      }
-
-      // Redirect if approved
-      if (user.approved === AdminApprovalStatus.APPROVED) {
-        router.push("/patient/search");
-      }
-    }
-  }, [router]);
 
   return (
     <div className={styles.screen}>
@@ -75,4 +54,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;
