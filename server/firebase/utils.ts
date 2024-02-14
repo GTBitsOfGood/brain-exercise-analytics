@@ -1,9 +1,8 @@
 import { getAuth, UserRecord } from "firebase-admin/auth";
 
 const getUserByEmail = async (email: string): Promise<UserRecord | null> => {
-  
   const value = await getAuth().getUserByEmail(email);
-  
+
   return value;
 };
 
@@ -32,23 +31,18 @@ export const updateUserEmail = async (
     throw new Error("User not found");
   }
 
-  await getAuth().updateUser(userRecord.uid, 
-    {email: newemail}
-  );
+  await getAuth().updateUser(userRecord.uid, { email: newemail });
 
+  return true;
+};
 
-  return true
-}
-
-export const deleteFirebaseUser = async (
-  email:string,
-): Promise<boolean> => {
+export const deleteFirebaseUser = async (email: string): Promise<boolean> => {
   const userRecord = await getUserByEmail(email);
   if (!userRecord) {
     throw new Error("User not found");
   }
 
-  await getAuth().deleteUser(userRecord.uid)
+  await getAuth().deleteUser(userRecord.uid);
 
-  return true
-}
+  return true;
+};

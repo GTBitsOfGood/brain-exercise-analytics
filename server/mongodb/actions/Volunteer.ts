@@ -197,7 +197,6 @@ export const updateVolunteer = async (
   email: string,
   newData: RecursivePartial<IUser>,
 ): Promise<IUser | null> => {
-
   const flattened = flatten(newData);
 
   const user = await User.findOneAndUpdate<IUser>({ email }, flattened, {
@@ -209,8 +208,7 @@ export const updateVolunteer = async (
 
 export const deleteVolunteer = async (email: string): Promise<null> => {
   await User.findOneAndDelete({ email });
-  await deleteVerificationLogByEmail(email)
-
+  await deleteVerificationLogByEmail(email);
 
   return null;
 };

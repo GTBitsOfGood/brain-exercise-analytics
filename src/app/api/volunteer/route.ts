@@ -25,7 +25,7 @@ export const GET = APIWrapper({
 type PatchReq = {
   email: string;
   newData: {
-    email?: string
+    email?: string;
   };
 };
 
@@ -39,11 +39,10 @@ export const PATCH = APIWrapper({
     const { email }: { email: string } = reqdata;
     const { newData } = reqdata;
 
-
     if (email !== null) {
       if (newData.email !== null && email === newData.email) {
-        console.log("here")
-        await updateUserEmail(email, newData.email!)
+        console.log("here");
+        await updateUserEmail(email, newData.email);
       }
 
       const user = await updateVolunteer(email, newData);
@@ -54,10 +53,9 @@ export const PATCH = APIWrapper({
   },
 });
 
-
 type DeleteReq = {
   email: string;
-}
+};
 export const DELETE = APIWrapper({
   config: {
     requireToken: false,
@@ -67,9 +65,8 @@ export const DELETE = APIWrapper({
     const reqdata: DeleteReq = (await req.json()) as DeleteReq;
     const { email }: { email: string } = reqdata;
 
-    
     if (email !== null) {
-      await deleteFirebaseUser(email)
+      await deleteFirebaseUser(email);
       const user = await deleteVolunteer(email);
       return user;
     }
