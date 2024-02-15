@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-// import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import styles from "./page.module.css";
 
@@ -12,11 +12,24 @@ enum AdminApprovalStatus {
   PENDING = "PENDING",
 }
 
-const page = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [adminApprovalStatus, setadminApprovalStatus] = useState(
+const Page = () => {
+  const router = useRouter();
+  const [adminApprovalStatus, setAdminApprovalStatus] = useState(
     AdminApprovalStatus.PENDING,
   );
+
+  useEffect(() => {
+    const authUserCookie = getCookie("authUser");
+    if (authUserCookie) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const authUser = JSON.parse(authUserCookie);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (authUser && authUser.user && authUser.user.approved) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+        setAdminApprovalStatus(authUser.user.approved);
+      }
+    }
+  }, [router, adminApprovalStatus]);
 
   return (
     <div className={styles.screen}>
@@ -54,4 +67,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

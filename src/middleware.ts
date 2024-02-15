@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   // Assume a "Cookie:nextjs=fast" header to be present on the incoming request
   // Getting cookies from the request using the `RequestCookies` API
+  // return NextResponse.next();
   const path = request.nextUrl.pathname;
   if (path === "/") {
     return NextResponse.redirect(

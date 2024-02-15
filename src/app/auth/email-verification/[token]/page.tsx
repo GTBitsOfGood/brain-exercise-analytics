@@ -1,43 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie"; // Used for client-side cookie handling
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod } from "@/common_utils/types";
 import styles from "./page.module.css";
 
-enum AdminApprovalStatus {
-  APPROVED = "APPROVED",
-  REJECTED = "REJECTED",
-  PENDING = "PENDING",
+enum State {
+  LOADING,
+  ERROR,
+  SUCCESS,
 }
 
-const Page = () => {
-  const [adminApprovalStatus, setAdminApprovalStatus] = useState(
-    AdminApprovalStatus.PENDING,
-  );
+interface PageProps {
+  params: { token: string };
+}
+
+export default function Page({ params }: PageProps) {
   const router = useRouter();
+  const [loadingState, setLoadingState] = useState(State.LOADING);
+
+  const verifyEmail = useCallback(async () => {
+    try {
+      await internalRequest({
+        url: "/api/volunteer/auth/email-verification/update-verified",
+        method: HttpMethod.POST,
+        body: { token: params.token },
+        authRequired: false,
+      });
+      setLoadingState(State.SUCCESS);
+      setTimeout(() => {
+        router.push("/auth/information");
+      }, 1000);
+    } catch (err) {
+      setLoadingState(State.ERROR);
+    }
+  }, [params.token, router]);
 
   useEffect(() => {
-    // Assuming this is client-side code; for server-side, use request.cookies.get("authUser") as shown
-    const authUserCookie = Cookies.get("authUser");
-    if (authUserCookie) {
-      const { user = {} as IUser, keepLogged = false } =
-        JSON.parse(authUserCookie);
-
-      // Update the adminApprovalStatus based on the user's approval status
-      if (user.approved) {
-        setAdminApprovalStatus(user.approved);
-      } else {
-        // Handle case where user is not found or approval status is not set
-        console.error("User not found or approval status is missing");
-        // Optionally redirect the user to a login or error page
-      }
-
-      // Redirect if approved
-      if (user.approved === AdminApprovalStatus.APPROVED) {
-        router.push("/patient/search");
-      }
+    if (params.token) {
+      verifyEmail();
     }
-  }, [router]);
+  }, [params.token, verifyEmail]);
+
+  if (loadingState === State.LOADING) {
+    return <div></div>;
+  }
 
   return (
     <div className={styles.screen}>
@@ -47,25 +57,24 @@ const Page = () => {
         </div>
         <div className={styles["middle-space"]} />
         <div className={styles.right}>
-          {adminApprovalStatus === AdminApprovalStatus.PENDING && (
+          {loadingState === State.ERROR && (
             <div className={styles["right-container"]}>
               <span className={styles["password-reset"]}>
-                Waiting for Admin Approval!
+                Error verifying email
               </span>
               <p className={styles.description}>
-                Your account is being reviewed for approval. You’ll receive an
-                email pending your account approval.
+                Unfortunately, we ran into an error while verifying your email.
+                Please try again later or contact bei2023@gmail.com if this
+                error persists.
               </p>
             </div>
           )}
-          {adminApprovalStatus === AdminApprovalStatus.REJECTED && (
+          {loadingState === State.SUCCESS && (
             <div className={styles["right-container"]}>
-              <span className={styles["password-reset"]}>
-                Admin Approval Denied
-              </span>
+              <span className={styles["password-reset"]}>Email verified!</span>
               <p className={styles.description}>
-                An admin has denied your volunteer status. Contact your local
-                BEI chapter or bei2023@gmail.com for more information.
+                Your email has been successfully verified. Redirecting you
+                shortly...
               </p>
             </div>
           )}
@@ -73,6 +82,4 @@ const Page = () => {
       </div>
     </div>
   );
-};
-
-export default Page;
+}
