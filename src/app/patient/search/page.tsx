@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
+import AccountEditModal from "@src/components/AccountEditModal/AccountEditModal";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
 import { classes } from "@src/utils/utils";
@@ -23,6 +24,15 @@ firebaseInit();
 
 export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
+  // EDIT MODAL
+  const [showModal, setShowModal] = useState<boolean>(true);
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   const [fullName, setFullName] = useState("");
   const [active, setActive] = useState<boolean | undefined>(undefined);
@@ -32,12 +42,12 @@ export default function Page() {
   const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
   const [emails, setEmails] = useState(new Set<string>());
   const [additionalAffiliations, setAdditionalAffiliations] = useState(
-    new Set<string>(),
+    new Set<string>()
   );
   const [dateOfJoins, setDateOfJoins] = useState(new Set<string>());
   const [beiChapters, setBeiChapters] = useState(new Set<string>());
   const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
-    new Set<string>(),
+    new Set<string>()
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
@@ -119,9 +129,17 @@ export default function Page() {
       <div
         className={classes(
           styles["search-container"],
-          !viewTable && styles["search-container-alone"],
+          !viewTable && styles["search-container-alone"]
         )}
       >
+        {/* EDIT MODAL  */}
+        {showModal && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <AccountEditModal closeModal={closeModal} />
+            </div>
+          </div>
+        )}
         <p className={styles["intro-text"]}>
           To begin viewing analytics, search for a patient here!
         </p>
@@ -157,7 +175,7 @@ export default function Page() {
       <div
         className={classes(
           styles["table-container"],
-          viewTable && styles["table-container-show"],
+          viewTable && styles["table-container-show"]
         )}
       >
         <div className={styles["table-header"]}>
