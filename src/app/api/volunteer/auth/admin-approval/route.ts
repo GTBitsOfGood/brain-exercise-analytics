@@ -42,7 +42,7 @@ export const POST = APIWrapper({
     const emailSubject = requestData.approved
       ? "Volunteer Application Approved"
       : "Volunteer Application Rejected";
-    const backlinkUrl = requestData.approved ? "/patient/search" : "";
+    const backlinkUrl = requestData.approved ? "/patient/search" : "auth/login";
     const emailContent =
       updatedApprovalStatus === AdminApprovalStatus.APPROVED
         ? "approved"
