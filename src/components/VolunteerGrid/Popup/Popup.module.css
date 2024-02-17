@@ -1,0 +1,58 @@
+/* Popup.module.css */
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Dim background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.popup {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Adjust the width as needed */
+  z-index: 2;
+}
+
+.popupContent {
+  margin-bottom: 20px;
+}
+
+.popupActions {
+  text-align: right;
+}
+
+.confirmButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 15px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.cancelButton {
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.confirmButton:hover {
+  background-color: #ff7875;
+}
+
+.cancelButton:hover {
+  background-color: #e6e6e6;
+}
