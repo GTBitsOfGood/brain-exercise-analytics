@@ -19,6 +19,26 @@ export const getUserById = async (id: string): Promise<IUser | null> => {
   return user;
 };
 
+export const updateUserAdminApproval = async (
+  email: string,
+  approvalStatus: string
+): Promise<IUser | null> => {
+  try {
+    const updatedUser = await User.findOneAndUpdate<IUser>(
+      { email },
+      { 
+        $set: { 
+          approved: approvalStatus 
+        }
+      }
+    );
+
+    return updatedUser;
+  } catch (error) {
+    throw new Error("Failed to update admin approval status");
+  }
+};
+
 export const verifyUserByEmail = async (
   email: string,
 ): Promise<IUser | null> => {
