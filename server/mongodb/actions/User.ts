@@ -21,16 +21,16 @@ export const getUserById = async (id: string): Promise<IUser | null> => {
 
 export const updateUserAdminApproval = async (
   email: string,
-  approvalStatus: string
+  approvalStatus: string,
 ): Promise<IUser | null> => {
   try {
     const updatedUser = await User.findOneAndUpdate<IUser>(
       { email },
-      { 
-        $set: { 
-          approved: approvalStatus 
-        }
-      }
+      {
+        $set: {
+          approved: approvalStatus,
+        },
+      },
     );
 
     return updatedUser;

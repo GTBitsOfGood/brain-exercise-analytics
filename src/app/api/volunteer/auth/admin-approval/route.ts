@@ -1,5 +1,8 @@
-import { IUser, Role, AdminApprovalStatus } from "@/common_utils/types";
-import { getUserByEmail, updateUserAdminApproval } from "@server/mongodb/actions/User";
+import { Role, AdminApprovalStatus } from "@/common_utils/types";
+import {
+  getUserByEmail,
+  updateUserAdminApproval,
+} from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 import { sendEmail } from "@server/utils/email";
 
@@ -16,7 +19,11 @@ export const POST = APIWrapper({
   handler: async (req) => {
     const requestData = (await req.json()) as RequestData;
 
-    if (!requestData || !requestData.approvedEmail || requestData.approved === undefined) {
+    if (
+      !requestData ||
+      !requestData.approvedEmail ||
+      requestData.approved === undefined
+    ) {
       throw new Error("Invalid request body");
     }
 
@@ -35,19 +42,20 @@ export const POST = APIWrapper({
     const emailSubject = requestData.approved
       ? "Volunteer Application Approved"
       : "Volunteer Application Rejected";
-    const backlinkUrl = requestData.approved ? "/patient/search" : ""; 
-    const emailContent = updatedApprovalStatus === AdminApprovalStatus.APPROVED
-      ? "approved"
-      : "denied";
+    const backlinkUrl = requestData.approved ? "/patient/search" : "";
+    const emailContent =
+      updatedApprovalStatus === AdminApprovalStatus.APPROVED
+        ? "approved"
+        : "denied";
 
     await sendEmail(userEmail, emailSubject, emailContent, {
       backlinkUrl,
       userEmail,
     });
 
-    return { 
+    return {
       message: "Volunteer Approval Status Sent",
-      approved: true 
+      approved: true,
     };
   },
 });
