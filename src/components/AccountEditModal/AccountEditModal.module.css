@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  background-color: white;
+  height: 90vh;
+  width: 136vh;
+  padding: 6vh 5vh;
+  margin: 5vh;
+  border-radius: 10px;
+}
+.left {
+  flex-direction: column;
+  display: flex;
+  gap: 10px;
+  background-color: yellow;
+  padding-right: 5vh;
+}
