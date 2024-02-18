@@ -11,6 +11,69 @@
   flex-direction: column;
   display: flex;
   gap: 10px;
+  background-color: white;
+  padding-right: 7vh;
+}
+.profile {
+  color: #2078c1;
+}
+.password {
+  color: #979797;
+}
+.signout {
+  color: #ea4335;
+}
+.vl {
+  border-left: 1.5px solid #c8c8c8;
+  height: 100%;
+  border-radius: 5px;
+}
+.info {
+  background-color: white;
+  width: 100%;
+  padding-left: 5vh;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inputField {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #2b3674;
+}
+.inputField input {
+  height: 31px;
+  border-radius: 5px;
+  font-size: 12px;
+  border: 1px solid #979797;
+  background-color: white;
+}
+
+.inputField label {
+  font-size: 15px;
+  font-weight: 600;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  padding-bottom: 4vh;
+}
+
+.header img {
+  border-radius: 10px;
+}
+.myContainer {
   background-color: yellow;
-  padding-right: 5vh;
+  width: 100%;
+}
+.first {
+  display: flex;
+  flex-direction: row;
+  padding-left: 30px;
+  gap: 10px;
 }
