@@ -38,7 +38,7 @@ const Modal = (params: DataParams) => {
           ...patientDetails,
           birthDate: updatedBirthDate,
         },
-      })
+      }),
     );
 
     setEdit(false);
