@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RootState } from "@src/redux/rootReducer";
 import { update, logout } from "../../redux/reducers/authReducer/index";
 import StatusBadge from "../StatusBadge/StatusBadge";
@@ -9,7 +9,7 @@ interface DataParams {
   closeModal: () => void;
 }
 const Modal = (params: DataParams) => {
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
     name,
@@ -19,10 +19,42 @@ const Modal = (params: DataParams) => {
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
   const { birthDate } = patientDetails;
-  const [updatedName, setUpdatedName] = useState(name);
-  const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState(phoneNumber);
-  const [updatedEmail, setUpdatedEmail] = useState(email);
-  const [updatedBirthDate, setUpdatedBirthDate] = useState(birthDate);
+  const [updatedName, setUpdatedName] = useState<string>(name);
+  const [updatedPhoneNumber, setUpdatedPhoneNumber] =
+    useState<string>(phoneNumber);
+  const [updatedEmail, setUpdatedEmail] = useState<string>(email);
+
+  function formatDateToString(date: Date): string {
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${month}/${day}/${year}`;
+  }
+  const [unupdatedBirthDate, setUnupdatedBirthDate] = useState(
+    new Date(birthDate),
+  );
+  const [updatedBirthDate, setUpdatedBirthDate] = useState(new Date(birthDate));
+  const [updatedBirthDateInput, setUpdatedBirthDateInput] = useState(
+    formatDateToString(new Date(birthDate)),
+  );
+
+  useEffect(() => {
+    if (updatedBirthDateInput) {
+      const dateArray = updatedBirthDateInput.split("/");
+      if (dateArray.length === 3) {
+        const [month, day, year] = dateArray.map(Number);
+        const updatedDate = new Date(year, month - 1, day);
+        if (!Number.isNaN(updatedDate.getTime())) {
+          setUpdatedBirthDate(updatedDate);
+        }
+      }
+    }
+  }, [updatedBirthDateInput]);
+
+  const handleLogOut = () => {
+    dispatch(logout());
+  };
 
   const handleEdit = () => {
     setEdit(true);
@@ -40,19 +72,33 @@ const Modal = (params: DataParams) => {
         },
       }),
     );
-
+    setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
   };
-  const handleLogOut = () => {
-    dispatch(logout());
-  };
+
   const handleCancel = () => {
     setUpdatedName(name);
     setUpdatedPhoneNumber(phoneNumber);
     setUpdatedEmail(email);
-    setUpdatedBirthDate(birthDate);
+    setUpdatedBirthDate(unupdatedBirthDate);
+    setUpdatedBirthDateInput(unupdatedBirthDate.toLocaleDateString("en-US"));
     setEdit(false);
   };
+
+  const formatBirthDate = (input: string): string => {
+    const numericInput: string = input.replace(/\D/g, "");
+    const maxLength = 8;
+    const truncatedInput = numericInput.slice(0, maxLength);
+    let formattedInput = "";
+    for (let i = 0; i < truncatedInput.length; i += 1) {
+      if (i === 2 || i === 4) {
+        formattedInput += "/";
+      }
+      formattedInput += truncatedInput[i];
+    }
+    return formattedInput;
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -108,9 +154,12 @@ const Modal = (params: DataParams) => {
           <div className={styles.inputField}>
             <label>Date of Birth:</label>
             <input
-              placeholder="MM/DD/YY"
-              value={updatedBirthDate.toLocaleDateString()}
-              onChange={(e) => setUpdatedBirthDate(new Date(e.target.value))}
+              placeholder="MM/DD/YYYY"
+              value={updatedBirthDateInput}
+              onChange={(e) => {
+                const formattedDate = formatBirthDate(e.target.value);
+                setUpdatedBirthDateInput(formattedDate);
+              }}
               className={!edit ? styles.editable : styles.nonEditable}
               readOnly={!edit}
             />
