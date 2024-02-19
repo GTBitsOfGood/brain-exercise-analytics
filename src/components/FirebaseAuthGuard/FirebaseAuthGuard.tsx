@@ -20,11 +20,11 @@ export default function FirebaseAuthGuard({
   useEffect(() => {
     const unsubscribe = getAuth().onAuthStateChanged((user) => {
       if (!user) {
+        // Do not redirect after logging out. The middleware will handle that on page reload.
         dispatch(logout());
-        router.push("/auth/login");
       }
     });
-    return () => unsubscribe();
+    return unsubscribe;
   }, [dispatch, router]);
 
   return <>{children}</>;
