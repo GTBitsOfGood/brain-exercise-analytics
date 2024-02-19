@@ -1,10 +1,30 @@
-import React from "react";
 import styles from "./AccountEditModal.module.css";
+import StatusBadge from "../StatusBadge/StatusBadge";
+import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { RootState } from "@src/redux/rootReducer";
+import { update } from "../../redux/reducers/authReducer/index";
+import { useEffect } from "react";
+
 const Modal = ({ closeModal }) => {
+  const dispatch = useDispatch();
+
+  const [isOnline, setIsOnline] = useState(false);
+  const { name, phoneNumber, email } = useSelector(
+    (state: RootState) => state.auth
+  );
+  useEffect(() => {
+    dispatch(update({ email: "cc@example.com" }));
+  }, [dispatch]);
+  useEffect(() => {
+    // This will log the updated email value after the dispatch
+    console.log("after is " + email);
+  }, [email]); // Log the email whenever it changes
   return (
     <div className={styles.container}>
       <div className={styles.left}>
         <div className={styles.profile}>Profile</div>
+        <p>Name: {name}</p>
         <div className={styles.password}>Password</div>
         <div className={styles.signout}>Sign Out</div>
       </div>
@@ -18,8 +38,15 @@ const Modal = ({ closeModal }) => {
           />
           <div className={styles.myContainer}>
             <div className={styles.first}>
-              <div>userName</div>
-              <div>status</div>
+              <label>User Name</label>
+              <StatusBadge isOnline={isOnline} />
+            </div>
+            <div className={styles.second}>
+              <div>
+                <div>BEI Chapter Name</div>
+                <div>Position or Title</div>
+              </div>
+              <button className={styles.editButton}>Edit Profile</button>
             </div>
           </div>
         </div>

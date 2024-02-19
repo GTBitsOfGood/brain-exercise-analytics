@@ -68,12 +68,32 @@
   border-radius: 10px;
 }
 .myContainer {
-  background-color: yellow;
+  background-color: white;
   width: 100%;
+}
+.myContainer label {
+  font-size: 0.8cm;
+  color: #2b3674;
 }
 .first {
   display: flex;
   flex-direction: row;
   padding-left: 30px;
   gap: 10px;
+  background-color: white;
+}
+
+.second {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 30px;
+}
+.editButton {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px 30px;
+  border: 1px solid #979797;
+  font-weight: bold;
 }

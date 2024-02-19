@@ -25,7 +25,7 @@ firebaseInit();
 export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
   // EDIT MODAL
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(true);
   const openModal = () => {
     setShowModal(true);
   };

@@ -1,0 +1,13 @@
+.statusBadge {
+  padding: 10px;
+  border-radius: 5px;
+  color: #2b3674;
+}
+
+.online {
+  background-color: #e0f8ec;
+}
+
+.offline {
+  background-color: #f7dbd7;
+}
