@@ -15,9 +15,10 @@ const Modal = (params: DataParams) => {
     name,
     phoneNumber,
     email,
-    patientDetails: { birthDate },
+    patientDetails,
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
+  const { birthDate } = patientDetails;
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState(phoneNumber);
   const [updatedEmail, setUpdatedEmail] = useState(email);
@@ -34,9 +35,10 @@ const Modal = (params: DataParams) => {
         phoneNumber: updatedPhoneNumber,
         email: updatedEmail,
         patientDetails: {
+          ...patientDetails,
           birthDate: updatedBirthDate,
         },
-      }),
+      })
     );
 
     setEdit(false);
