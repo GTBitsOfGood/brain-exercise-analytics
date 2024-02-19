@@ -20,11 +20,12 @@ export default function FirebaseAuthGuard({
   useEffect(() => {
     const unsubscribe = getAuth().onAuthStateChanged((user) => {
       if (!user) {
+        console.log("FirebaseAuthGuard: User is not logged in");
         dispatch(logout());
         router.push("/auth/login");
       }
     });
-    return () => unsubscribe();
+    return unsubscribe;
   }, [dispatch, router]);
 
   return <>{children}</>;
