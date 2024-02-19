@@ -20,9 +20,8 @@ export default function FirebaseAuthGuard({
   useEffect(() => {
     const unsubscribe = getAuth().onAuthStateChanged((user) => {
       if (!user) {
-        console.log("FirebaseAuthGuard: User is not logged in");
+        // Do not redirect after logging out. The middleware will handle that on page reload.
         dispatch(logout());
-        // router.push("/auth/login");
       }
     });
     return unsubscribe;
