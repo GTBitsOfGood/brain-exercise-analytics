@@ -22,7 +22,7 @@ export default function FirebaseAuthGuard({
       if (!user) {
         console.log("FirebaseAuthGuard: User is not logged in");
         dispatch(logout());
-        router.push("/auth/login");
+        // router.push("/auth/login");
       }
     });
     return unsubscribe;
