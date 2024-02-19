@@ -109,8 +109,8 @@ const Modal = (params: DataParams) => {
             <label>Date of Birth:</label>
             <input
               placeholder="MM/DD/YY"
-              value={updatedBirthDate}
-              onChange={(e) => setUpdatedBirthDate(e.target.value)}
+              value={updatedBirthDate.toLocaleDateString()}
+              onChange={(e) => setUpdatedBirthDate(new Date(e.target.value))}
               className={!edit ? styles.editable : styles.nonEditable}
               readOnly={!edit}
             />
