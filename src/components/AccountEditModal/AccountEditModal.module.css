@@ -49,10 +49,18 @@
   height: 31px;
   border-radius: 5px;
   font-size: 12px;
-  border: 1px solid #979797;
-  background-color: white;
+}
+.editable {
+  background-color: #e7eeff;
+  padding-left: 15px;
+  border: 0cm;
 }
 
+.nonEditable {
+  background-color: white;
+  padding-left: 15px;
+  border: 1px solid #979797;
+}
 .inputField label {
   font-size: 15px;
   font-weight: 600;
@@ -91,9 +99,14 @@
   padding-left: 30px;
 }
 .editButton {
-  background-color: white;
   border-radius: 10px;
   padding: 15px 30px;
   border: 1px solid #979797;
   font-weight: bold;
+  background-color: #2078c1;
+  color: white;
+}
+.disabled {
+  color: #979797;
+  background-color: white;
 }

@@ -7,6 +7,7 @@ import { update } from "../../redux/reducers/authReducer/index";
 import { useEffect } from "react";
 
 const Modal = ({ closeModal }) => {
+  const [edit, setEdit] = useState(false);
   const dispatch = useDispatch();
   const {
     name,
@@ -23,8 +24,13 @@ const Modal = ({ closeModal }) => {
   useEffect(() => {
     console.log(name + phoneNumber + email + birthDate);
   }, [name, phoneNumber, email]);
-
-  const handleUpdateUserInfo = () => {
+  const handleEdit = () => {
+    setEdit(true);
+  };
+  useEffect(() => {
+    console.log(edit);
+  }, [edit]);
+  const handleSaveChanges = () => {
     dispatch(
       update({
         name: updatedName,
@@ -35,6 +41,11 @@ const Modal = ({ closeModal }) => {
         },
       })
     );
+    setEdit(false);
+  };
+  const handleCancel = () => {
+    console.log("fix me");
+    setEdit(false);
   };
   return (
     <div className={styles.container}>
@@ -61,7 +72,13 @@ const Modal = ({ closeModal }) => {
                 <div>BEI Chapter Name</div>
                 <div>Position or Title</div>
               </div>
-              <button className={styles.editButton}>Edit Profile</button>
+              <button
+                className={`${styles.editButton} ${edit ? styles.disabled : ""}`}
+                onClick={handleEdit}
+                disabled={edit}
+              >
+                Edit Profile
+              </button>
             </div>
           </div>
         </div>
@@ -72,6 +89,8 @@ const Modal = ({ closeModal }) => {
               placeholder="First Name Last Name"
               value={updatedName}
               onChange={(e) => setUpdatedName(e.target.value)}
+              className={!edit ? styles.editable : styles.nonEditable}
+              readOnly={!edit}
             />
           </div>
 
@@ -81,6 +100,8 @@ const Modal = ({ closeModal }) => {
               placeholder="MM/DD/YY"
               value={updatedBirthDate}
               onChange={(e) => setUpdatedBirthDate(e.target.value)}
+              className={!edit ? styles.editable : styles.nonEditable}
+              readOnly={!edit}
             />
           </div>
 
@@ -90,6 +111,8 @@ const Modal = ({ closeModal }) => {
               placeholder="(123) 456-7890"
               value={updatedPhoneNumber}
               onChange={(e) => setUpdatedPhoneNumber(e.target.value)}
+              className={!edit ? styles.editable : styles.nonEditable}
+              readOnly={!edit}
             />
           </div>
 
@@ -99,9 +122,17 @@ const Modal = ({ closeModal }) => {
               placeholder="blankemail@gmail"
               value={updatedEmail}
               onChange={(e) => setUpdatedEmail(e.target.value)}
+              className={!edit ? styles.editable : styles.nonEditable}
+              readOnly={!edit}
             />
           </div>
-          <button onClick={handleUpdateUserInfo}>Save Changes</button>
+          {edit && (
+            <div>
+              <button onClick={handleCancel}>Cancel</button>
+
+              <button onClick={handleSaveChanges}>Save Changes</button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ const NavigationPanel = () => {
     [currentPath]
   );
   function handleClick() {
-    console.log("open Edit Modal");
+    // console.log("open Edit Modal");
   }
 
   return (
