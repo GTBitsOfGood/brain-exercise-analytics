@@ -44,7 +44,10 @@ const Modal = ({ closeModal }) => {
     setEdit(false);
   };
   const handleCancel = () => {
-    console.log("fix me");
+    setUpdatedName(name);
+    setUpdatedPhoneNumber(phoneNumber);
+    setUpdatedEmail(email);
+    setUpdatedBirthDate(birthDate);
     setEdit(false);
   };
   return (
@@ -127,10 +130,16 @@ const Modal = ({ closeModal }) => {
             />
           </div>
           {edit && (
-            <div>
-              <button onClick={handleCancel}>Cancel</button>
-
-              <button onClick={handleSaveChanges}>Save Changes</button>
+            <div className={styles.buttons}>
+              <button
+                onClick={handleCancel}
+                className={`${styles.editButton} ${styles.disabled}`}
+              >
+                Cancel
+              </button>
+              <button className={styles.editButton} onClick={handleSaveChanges}>
+                Save Changes
+              </button>
             </div>
           )}
         </div>
