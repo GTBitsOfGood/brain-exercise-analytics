@@ -128,6 +128,7 @@ function APIWrapper(route: Route<unknown>) {
       }
 
       const error = e as Error;
+      console.log(error);
       return NextResponse.json(
         {
           success: false,

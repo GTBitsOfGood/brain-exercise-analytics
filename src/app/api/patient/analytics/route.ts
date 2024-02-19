@@ -22,7 +22,13 @@ export const GET = APIWrapper({
       throw new Error("ID or Range missing in request");
     }
 
-    const range = JSON.parse(rangeString) as DateRangeEnum;
+    let range: DateRangeEnum;
+    try {
+      // In case it was JSON stringified
+      range = JSON.parse(rangeString) as DateRangeEnum;
+    } catch (e) {
+      range = rangeString as DateRangeEnum;
+    }
     if (!Object.values(DateRangeEnum).includes(range)) {
       throw new Error("Invalid range in request");
     }

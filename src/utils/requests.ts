@@ -22,8 +22,7 @@ export async function internalRequest<T>({
     const auth = getAuth();
 
     const currentUser: User = await new Promise((resolve, reject) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe();
+      auth.onAuthStateChanged((user) => {
         if (user) {
           resolve(user);
         } else {
