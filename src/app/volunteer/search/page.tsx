@@ -17,7 +17,7 @@ const tableData = [
     name: "Name",
     title: "Volunteer",
     dateJoined: "MM/DD/YY",
-    status: false,
+    status: true,
   },
   {
     id: 3,
@@ -136,14 +136,7 @@ const tableData = [
 export default function Page() {
   return (
     <div className={styles.wrapper}>
-      <VolunteerGrid
-        data={tableData}
-        // sortField={sortField}
-        // setSortField={setSortField}
-        // setCurrentPage={setCurrentPage}
-        // pageCount={pageCount}
-        // currentPage={currentPage}
-      />
+      <VolunteerGrid data={tableData} />
     </div>
   );
 }

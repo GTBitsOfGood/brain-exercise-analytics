@@ -2,16 +2,12 @@ import React from "react";
 import styles from "./Popup.module.css"; // make sure to create this CSS module file
 
 const Popup = ({
-  isOpen,
   onClose,
   onConfirm,
 }: {
-  isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }) => {
-  if (!isOpen) return null;
-
   return (
     <div className={styles.popupOverlay}>
       <div className={styles.popup}>

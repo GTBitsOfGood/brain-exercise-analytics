@@ -1,11 +1,17 @@
 .volunteerGridWrapper {
-  font-family: "Arial", sans-serif;
   max-width: 1000px;
   margin: 20px auto;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background: #ffffff;
+  color: #2b3674;
+  font-size: 15.988px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 171.429% */
+  letter-spacing: -0.32px;
+  height: 57vh;
 }
 
 .table {
@@ -23,11 +29,11 @@
 }
 
 .statusToggle {
-  /* Styles for the status toggle if you are using a custom toggle switch */
   display: inline-block;
   position: relative;
   width: 60px; /* Width of the switch */
   height: 34px; /* Height of the switch */
+  margin-right: 1vw;
 }
 
 .statusToggle input {
@@ -89,5 +95,3 @@
 .atLimit {
   visibility: hidden;
 }
-
-/* You may need to add more specific styling based on the layout and design of your application. */

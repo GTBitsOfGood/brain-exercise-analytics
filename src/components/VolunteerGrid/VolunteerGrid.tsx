@@ -34,27 +34,50 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
   const itemsPerPage = 10;
   const pageCount = Math.ceil(data.length / itemsPerPage);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [deleteVolunteerId, setDeleteVolunteerId] = useState<number | null>(
+    null,
+  );
+  const [excludedIds, setExcludedIds] = useState<number[]>([]);
+
+  const handleConfirmDelete = () => {
+    if (deleteVolunteerId !== null) {
+      setExcludedIds((current) => [...current, deleteVolunteerId]);
+      // eslint-disable-next-line
+      data = data.filter(volunteer => !excludedIds.includes(volunteer.id) && volunteer.id !== deleteVolunteerId);
+      setDeleteVolunteerId(null);
+    }
+    setPopupOpen(false);
+  };
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+    setDeleteVolunteerId(null);
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setDeleteVolunteerId(id);
+    setPopupOpen(true);
+  };
 
   const currentItems = useMemo(() => {
     const start = currentPage * itemsPerPage;
     const end = start + itemsPerPage;
-    return data.slice(start, end);
-  }, [currentPage, itemsPerPage, data]);
+    return data
+      .filter((volunteer) => !excludedIds.includes(volunteer.id))
+      .slice(start, end);
+  }, [currentPage, itemsPerPage, data, excludedIds]);
 
-  const handleDelete = (id: number) => {
-    setPopupOpen(true);
-
-    const onConfirm = () => {
-      data.filter((volunteer) => volunteer.id !== id);
-      setPopupOpen(false);
-    };
-
-    const onClose = () => {
-      setPopupOpen(false);
-    };
-
-    return <Popup isOpen={popupOpen} onClose={onClose} onConfirm={onConfirm} />;
-  };
+  function ColumnSizes() {
+    return (
+      <colgroup>
+        <col style={{ width: "20%" }} />
+        <col style={{ width: "20%" }} />
+        <col style={{ width: "20%" }} />
+        <col style={{ width: "20%" }} />
+        <col style={{ width: "20%" }} />
+      </colgroup>
+    );
+  }
 
   // Construct Rows from the currentItems
   const Rows = currentItems.map((volunteer) => (
@@ -76,7 +99,7 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
       <td>
         <text
           className={styles.deleteButton}
-          onClick={() => handleDelete(volunteer.id)}
+          onClick={() => handleDeleteClick(volunteer.id)}
         >
           Delete Account
         </text>
@@ -84,25 +107,21 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
     </tr>
   ));
 
-  const onClose = () => {
-    setPopupOpen(false);
-  };
-
-  const onConfirm = () => {
-    // Implement the delete functionality here
-  };
-
   return (
     <div className={styles.volunteerGridWrapper}>
-      <DataGrid
-        columns={volunteersColumns}
-        sortField={sortField}
-        setSortField={setSortField}
-        rows={currentItems}
-        ColumnSizes={() => <></>}
-        Rows={Rows}
-      />
-      <Popup isOpen={popupOpen} onClose={onClose} onConfirm={onConfirm} />
+      <div className={styles.volunteerGridTable}>
+        <DataGrid
+          columns={volunteersColumns}
+          sortField={sortField}
+          setSortField={setSortField}
+          rows={currentItems}
+          ColumnSizes={ColumnSizes}
+          Rows={Rows}
+        />
+      </div>
+      {popupOpen && (
+        <Popup onClose={handleClosePopup} onConfirm={handleConfirmDelete} />
+      )}
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
