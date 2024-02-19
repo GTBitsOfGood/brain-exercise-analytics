@@ -26,9 +26,6 @@ export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
   // EDIT MODAL
   const [showModal, setShowModal] = useState<boolean>(true);
-  const openModal = () => {
-    setShowModal(true);
-  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -42,12 +39,12 @@ export default function Page() {
   const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
   const [emails, setEmails] = useState(new Set<string>());
   const [additionalAffiliations, setAdditionalAffiliations] = useState(
-    new Set<string>()
+    new Set<string>(),
   );
   const [dateOfJoins, setDateOfJoins] = useState(new Set<string>());
   const [beiChapters, setBeiChapters] = useState(new Set<string>());
   const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
-    new Set<string>()
+    new Set<string>(),
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
@@ -131,67 +128,66 @@ export default function Page() {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className={styles.container}>
-        <div
-          className={classes(
-            styles["search-container"],
-            !viewTable && styles["search-container-alone"]
-          )}
-        >
-          <p className={styles["intro-text"]}>
-            To begin viewing analytics, search for a patient here!
-          </p>
-          <div className={styles["search-wrapper"]}>
-            <Search
-              setFullName={setFullName}
-              active={active}
-              setActive={setActive}
-              countries={countries}
-              setCountries={setCountries}
-              states={states}
-              setStates={setStates}
-              cities={cities}
-              setCities={setCities}
-              dateOfBirths={dateOfBirths}
-              setDateOfBirths={setDateOfBirths}
-              emails={emails}
-              setEmails={setEmails}
-              additionalAffiliations={additionalAffiliations}
-              setAdditionalAffiliations={setAdditionalAffiliations}
-              dateOfJoins={dateOfJoins}
-              setDateOfJoins={setDateOfJoins}
-              beiChapters={beiChapters}
-              setBeiChapters={setBeiChapters}
-              secondaryPhoneNumbers={secondaryPhoneNumbers}
-              setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-              secondaryNames={secondaryNames}
-              setSecondaryNames={setSecondaryNames}
-              onSubmit={viewTablePermanent}
-            />
-          </div>
-        </div>
-        <div
-          className={classes(
-            styles["table-container"],
-            viewTable && styles["table-container-show"]
-          )}
-        >
-          <div className={styles["table-header"]}>
-            <Dashboard />
-            <p className={styles["table-header-text"]}>Patient Table</p>
-          </div>
-          <PatientGrid
-            data={filteredUsers}
-            sortField={sortField}
-            setSortField={setSortField}
-            setCurrentPage={setCurrentPage}
-            pageCount={pageCount}
-            currentPage={currentPage}
+  }
+  return (
+    <div className={styles.container}>
+      <div
+        className={classes(
+          styles["search-container"],
+          !viewTable && styles["search-container-alone"],
+        )}
+      >
+        <p className={styles["intro-text"]}>
+          To begin viewing analytics, search for a patient here!
+        </p>
+        <div className={styles["search-wrapper"]}>
+          <Search
+            setFullName={setFullName}
+            active={active}
+            setActive={setActive}
+            countries={countries}
+            setCountries={setCountries}
+            states={states}
+            setStates={setStates}
+            cities={cities}
+            setCities={setCities}
+            dateOfBirths={dateOfBirths}
+            setDateOfBirths={setDateOfBirths}
+            emails={emails}
+            setEmails={setEmails}
+            additionalAffiliations={additionalAffiliations}
+            setAdditionalAffiliations={setAdditionalAffiliations}
+            dateOfJoins={dateOfJoins}
+            setDateOfJoins={setDateOfJoins}
+            beiChapters={beiChapters}
+            setBeiChapters={setBeiChapters}
+            secondaryPhoneNumbers={secondaryPhoneNumbers}
+            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
+            secondaryNames={secondaryNames}
+            setSecondaryNames={setSecondaryNames}
+            onSubmit={viewTablePermanent}
           />
         </div>
       </div>
-    );
-  }
+      <div
+        className={classes(
+          styles["table-container"],
+          viewTable && styles["table-container-show"],
+        )}
+      >
+        <div className={styles["table-header"]}>
+          <Dashboard />
+          <p className={styles["table-header-text"]}>Patient Table</p>
+        </div>
+        <PatientGrid
+          data={filteredUsers}
+          sortField={sortField}
+          setSortField={setSortField}
+          setCurrentPage={setCurrentPage}
+          pageCount={pageCount}
+          currentPage={currentPage}
+        />
+      </div>
+    </div>
+  );
 }

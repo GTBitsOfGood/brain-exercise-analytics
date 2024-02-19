@@ -171,7 +171,7 @@ export default function LineChart({
 
   useEffect(() => {
     resizeOptimised();
-  }, []);
+  });
 
   return (
     <div

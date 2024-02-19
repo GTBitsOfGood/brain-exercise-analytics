@@ -13,12 +13,12 @@ const NavigationPanel = () => {
 
   const isSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
-    [currentPath]
+    [currentPath],
   );
 
   const isDashboard = useMemo(
     () => currentPath.startsWith("/patient/dashboard"),
-    [currentPath]
+    [currentPath],
   );
   function handleClick() {
     // console.log("open Edit Modal");

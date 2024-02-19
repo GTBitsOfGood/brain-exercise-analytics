@@ -78,13 +78,11 @@ const authReducer = createSlice({
     // Update the authState with the user information
     update(state, action: PayloadAction<Partial<IUser>>) {
       setState(state, action.payload);
-     
     },
     // Clear the authState
     logout(state) {
       deleteCookie("authUser", { path: "/" });
       setState(state, initialState);
-      
     },
     setFirstTimeLogin(state, action: PayloadAction<boolean>) {
       state.signedUp = action.payload;
@@ -95,4 +93,3 @@ const authReducer = createSlice({
 export const { update, logout, setFirstTimeLogin } = authReducer.actions;
 
 export default authReducer.reducer;
-

@@ -1,12 +1,14 @@
-import styles from "./AccountEditModal.module.css";
-import StatusBadge from "../StatusBadge/StatusBadge";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
 import { update, logout } from "../../redux/reducers/authReducer/index";
-import { useEffect } from "react";
+import StatusBadge from "../StatusBadge/StatusBadge";
+import styles from "./AccountEditModal.module.css";
 
-const Modal = ({ closeModal }) => {
+interface DataParams {
+  closeModal: () => void;
+}
+const Modal = (params: DataParams) => {
   const [edit, setEdit] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -21,9 +23,6 @@ const Modal = ({ closeModal }) => {
   const [updatedEmail, setUpdatedEmail] = useState(email);
   const [updatedBirthDate, setUpdatedBirthDate] = useState(birthDate);
 
-  useEffect(() => {
-    console.log(name + "  " + phoneNumber + "  " + email + "  " + birthDate);
-  }, [name, phoneNumber, email]);
   const handleEdit = () => {
     setEdit(true);
   };
@@ -37,9 +36,9 @@ const Modal = ({ closeModal }) => {
         patientDetails: {
           birthDate: updatedBirthDate,
         },
-      })
+      }),
     );
-    console.log("new name " + name);
+
     setEdit(false);
   };
   const handleLogOut = () => {
@@ -85,6 +84,9 @@ const Modal = ({ closeModal }) => {
                 disabled={edit}
               >
                 Edit Profile
+              </button>
+              <button className={styles.editButton} onClick={params.closeModal}>
+                Back
               </button>
             </div>
           </div>

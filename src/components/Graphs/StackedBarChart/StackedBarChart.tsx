@@ -65,7 +65,7 @@ export default function StackedBarChart({
   );
   useEffect(() => {
     resizeOptimised();
-  }, []);
+  });
   return (
     <div
       className={styles.StackedBarChart}

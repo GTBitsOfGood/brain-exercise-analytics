@@ -35,7 +35,7 @@ function SortButton({
     <div
       className={classes(
         styles.SortButton,
-        !active && styles.SortButtonInactive
+        !active && styles.SortButtonInactive,
       )}
       onClick={handleClick}
     >
