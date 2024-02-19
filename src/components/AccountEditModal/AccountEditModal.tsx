@@ -8,23 +8,38 @@ import { useEffect } from "react";
 
 const Modal = ({ closeModal }) => {
   const dispatch = useDispatch();
+  const {
+    name,
+    phoneNumber,
+    email,
+    patientDetails: { birthDate },
+    adminDetails: { active },
+  } = useSelector((state: RootState) => state.auth);
+  const [updatedName, setUpdatedName] = useState(name);
+  const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState(phoneNumber);
+  const [updatedEmail, setUpdatedEmail] = useState(email);
+  const [updatedBirthDate, setUpdatedBirthDate] = useState(birthDate);
 
-  const [isOnline, setIsOnline] = useState(false);
-  const { name, phoneNumber, email } = useSelector(
-    (state: RootState) => state.auth
-  );
   useEffect(() => {
-    dispatch(update({ email: "cc@example.com" }));
-  }, [dispatch]);
-  useEffect(() => {
-    // This will log the updated email value after the dispatch
-    console.log("after is " + email);
-  }, [email]); // Log the email whenever it changes
+    console.log(name + phoneNumber + email + birthDate);
+  }, [name, phoneNumber, email]);
+
+  const handleUpdateUserInfo = () => {
+    dispatch(
+      update({
+        name: updatedName,
+        phoneNumber: updatedPhoneNumber,
+        email: updatedEmail,
+        patientDetails: {
+          birthDate: updatedBirthDate,
+        },
+      })
+    );
+  };
   return (
     <div className={styles.container}>
       <div className={styles.left}>
         <div className={styles.profile}>Profile</div>
-        <p>Name: {name}</p>
         <div className={styles.password}>Password</div>
         <div className={styles.signout}>Sign Out</div>
       </div>
@@ -38,8 +53,8 @@ const Modal = ({ closeModal }) => {
           />
           <div className={styles.myContainer}>
             <div className={styles.first}>
-              <label>User Name</label>
-              <StatusBadge isOnline={isOnline} />
+              <label>{name}</label>
+              <StatusBadge isOnline={active} />
             </div>
             <div className={styles.second}>
               <div>
@@ -53,23 +68,40 @@ const Modal = ({ closeModal }) => {
         <div className={styles.inputs}>
           <div className={styles.inputField}>
             <label>Name:</label>
-            <input placeholder="      First Name Last Name" name="myInput" />
+            <input
+              placeholder="First Name Last Name"
+              value={updatedName}
+              onChange={(e) => setUpdatedName(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputField}>
             <label>Date of Birth:</label>
-            <input placeholder="      MM/DD/YY" name="myInput" />
+            <input
+              placeholder="MM/DD/YY"
+              value={updatedBirthDate}
+              onChange={(e) => setUpdatedBirthDate(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputField}>
             <label>Phone:</label>
-            <input placeholder="      (xxx) xxx-xxxx" name="myInput" />
+            <input
+              placeholder="(123) 456-7890"
+              value={updatedPhoneNumber}
+              onChange={(e) => setUpdatedPhoneNumber(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputField}>
             <label>Email:</label>
-            <input placeholder="      Email" name="myInput" />
+            <input
+              placeholder="blankemail@gmail"
+              value={updatedEmail}
+              onChange={(e) => setUpdatedEmail(e.target.value)}
+            />
           </div>
+          <button onClick={handleUpdateUserInfo}>Save Changes</button>
         </div>
       </div>
     </div>
