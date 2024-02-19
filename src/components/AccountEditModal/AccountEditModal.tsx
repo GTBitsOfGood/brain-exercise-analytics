@@ -3,7 +3,7 @@ import StatusBadge from "../StatusBadge/StatusBadge";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
-import { update } from "../../redux/reducers/authReducer/index";
+import { update, logout } from "../../redux/reducers/authReducer/index";
 import { useEffect } from "react";
 
 const Modal = ({ closeModal }) => {
@@ -22,14 +22,12 @@ const Modal = ({ closeModal }) => {
   const [updatedBirthDate, setUpdatedBirthDate] = useState(birthDate);
 
   useEffect(() => {
-    console.log(name + phoneNumber + email + birthDate);
+    console.log(name + "  " + phoneNumber + "  " + email + "  " + birthDate);
   }, [name, phoneNumber, email]);
   const handleEdit = () => {
     setEdit(true);
   };
-  useEffect(() => {
-    console.log(edit);
-  }, [edit]);
+
   const handleSaveChanges = () => {
     dispatch(
       update({
@@ -41,7 +39,11 @@ const Modal = ({ closeModal }) => {
         },
       })
     );
+    console.log("new name " + name);
     setEdit(false);
+  };
+  const handleLogOut = () => {
+    dispatch(logout());
   };
   const handleCancel = () => {
     setUpdatedName(name);
@@ -55,7 +57,9 @@ const Modal = ({ closeModal }) => {
       <div className={styles.left}>
         <div className={styles.profile}>Profile</div>
         <div className={styles.password}>Password</div>
-        <div className={styles.signout}>Sign Out</div>
+        <div className={styles.signout} onClick={handleLogOut}>
+          Sign Out
+        </div>
       </div>
       <div className={styles.vl}></div>
       <div className={styles.info}>

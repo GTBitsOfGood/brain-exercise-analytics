@@ -11,7 +11,7 @@ import { deleteCookie } from "cookies-next";
 const initialState: IUser = {
   _id: "",
   name: "",
-  email: "init",
+  email: "",
   phoneNumber: "",
   patientDetails: {
     birthDate: new Date(),
