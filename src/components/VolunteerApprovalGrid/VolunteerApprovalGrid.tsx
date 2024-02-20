@@ -40,7 +40,11 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
     if (deleteVolunteerId !== null) {
       setExcludedIds((current) => [...current, deleteVolunteerId]);
       // eslint-disable-next-line
-      data = data.filter(volunteer => !excludedIds.includes(volunteer.id) && volunteer.id !== deleteVolunteerId);
+      data = data.filter(
+        (volunteer) =>
+          !excludedIds.includes(volunteer.id) &&
+          volunteer.id !== deleteVolunteerId,
+      );
       setDeleteVolunteerId(null);
     }
   };
