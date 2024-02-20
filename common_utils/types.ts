@@ -247,7 +247,8 @@ export type PatientSearchParams = {
 };
 
 export type VolunteerSearchParams = {
-  role?: string;
+  name?: string;
+  approved?: AdminApprovalStatus;
 };
 
 export interface IPatientTableEntry

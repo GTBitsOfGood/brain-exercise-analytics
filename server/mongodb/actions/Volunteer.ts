@@ -1,4 +1,5 @@
 import {
+  AdminApprovalStatus,
   IUser,
   RecursivePartial,
   Role,
@@ -13,8 +14,8 @@ import { deleteVerificationLogByEmail } from "./VerificationLog";
 
 type VParam = {
   name?: RegExp;
-  email?: object;
-  role: Role;
+  role?: object;
+  approved?: AdminApprovalStatus;
 };
 
 export const getVolunteersFiltered = async ({
@@ -26,12 +27,16 @@ export const getVolunteersFiltered = async ({
 > => {
   const numOfItems = 8;
 
-  const userParamsObject = {
-    role:
-      paramsObject.role === "Admin"
-        ? Role.NONPROFIT_ADMIN
-        : Role.NONPROFIT_VOLUNTEER,
-  } as VParam;
+  const userParamsObject = {} as VParam;
+  if (paramsObject.name) {
+    userParamsObject.name = new RegExp(paramsObject.name, `i`);
+  }
+  if (paramsObject.approved !== undefined) {
+    userParamsObject.approved = paramsObject.approved;
+  }
+  userParamsObject.role = {
+    $ne: Role.NONPROFIT_PATIENT,
+  };
 
   // if (paramsObject.name) {
   //   userParamsObject.name = new RegExp(paramsObject.name, `i`);

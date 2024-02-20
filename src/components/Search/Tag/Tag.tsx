@@ -6,7 +6,6 @@ import styles from "./Tag.module.css";
 type TagProps<T> = {
   title: string;
   value: T;
-  list?: Set<T>;
   setList?: Dispatch<SetStateAction<Set<T>>>;
   transformData?: (value: T) => string;
   onClick?: () => void;
@@ -15,7 +14,6 @@ type TagProps<T> = {
 export default function Tag<T>({
   title,
   value,
-  list,
   setList,
   transformData,
   onClick,
@@ -24,10 +22,12 @@ export default function Tag<T>({
 
   const handleCloseTag = () => {
     setCloseTag(true);
-    if (list && setList) {
-      const newList = new Set<T>(list);
-      newList.delete(value);
-      setList(newList);
+    if (setList) {
+      setList((list) => {
+        const newList = new Set<T>(list);
+        newList.delete(value);
+        return newList;
+      });
     }
     if (onClick) {
       onClick();
