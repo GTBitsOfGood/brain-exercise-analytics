@@ -1,14 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
 import { RootState } from "@src/redux/rootReducer";
+import { formatPhoneNumber } from "@src/utils/utils";
 import { update, logout } from "../../redux/reducers/authReducer/index";
 import StatusBadge from "../StatusBadge/StatusBadge";
 import styles from "./AccountEditModal.module.css";
 
-interface DataParams {
-  closeModal: () => void;
-}
-const Modal = (params: DataParams) => {
+const Modal = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
@@ -98,6 +96,11 @@ const Modal = (params: DataParams) => {
     }
     return formattedInput;
   };
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\D/g, "");
+    if (rawValue.length > 10) return;
+    setUpdatedPhoneNumber(rawValue);
+  };
 
   return (
     <div className={styles.container}>
@@ -133,9 +136,6 @@ const Modal = (params: DataParams) => {
               >
                 Edit Profile
               </button>
-              <button className={styles.editButton} onClick={params.closeModal}>
-                Back
-              </button>
             </div>
           </div>
         </div>
@@ -169,8 +169,10 @@ const Modal = (params: DataParams) => {
             <label>Phone:</label>
             <input
               placeholder="(123) 456-7890"
-              value={updatedPhoneNumber}
-              onChange={(e) => setUpdatedPhoneNumber(e.target.value)}
+              value={formatPhoneNumber(updatedPhoneNumber) || ""}
+              onChange={(e) => {
+                handlePhoneChange(e);
+              }}
               className={!edit ? styles.editable : styles.nonEditable}
               readOnly={!edit}
             />
