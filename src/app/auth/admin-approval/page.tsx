@@ -3,33 +3,30 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
+import { AdminApprovalStatus, IAuthUserCookie } from "@/common_utils/types";
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import styles from "./page.module.css";
 
-enum AdminApprovalStatus {
-  APPROVED = "APPROVED",
-  REJECTED = "REJECTED",
-  PENDING = "PENDING",
-}
-
 const Page = () => {
   const router = useRouter();
-  const [adminApprovalStatus, setAdminApprovalStatus] = useState(
-    AdminApprovalStatus.PENDING,
-  );
+  const [adminApprovalStatus, setAdminApprovalStatus] = useState<
+    AdminApprovalStatus | undefined
+  >(undefined);
 
   useEffect(() => {
     const authUserCookie = getCookie("authUser");
     if (authUserCookie) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const authUser = JSON.parse(authUserCookie);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (authUser && authUser.user && authUser.user.approved) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-        setAdminApprovalStatus(authUser.user.approved);
+      const authUser = (JSON.parse(authUserCookie) as IAuthUserCookie).user;
+      setAdminApprovalStatus(authUser.approved);
+      if (authUser.approved === AdminApprovalStatus.APPROVED) {
+        router.push("/patient/search");
       }
     }
-  }, [router, adminApprovalStatus]);
+  }, [router]);
+
+  if (!adminApprovalStatus) {
+    return null;
+  }
 
   return (
     <div className={styles.screen}>
