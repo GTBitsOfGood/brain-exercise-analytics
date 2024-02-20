@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
 import { setCookie } from "cookies-next";
+import { update } from "@src/redux/reducers/authReducer";
+import { useDispatch } from "react-redux";
 
 import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
@@ -26,6 +28,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const resetErrors = () => {
     setEmailError("");
@@ -50,6 +53,7 @@ export default function Page() {
       });
 
       setCookie("authUser", { user: userMongo, keepLogged: false });
+      dispatch(update(userMongo));
 
       router.push("/auth/email-verification");
     } catch (error) {

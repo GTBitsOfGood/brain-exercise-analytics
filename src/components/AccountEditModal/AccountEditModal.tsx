@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { RootState } from "@src/redux/rootReducer";
 import { formatPhoneNumber } from "@src/utils/utils";
 import { update, logout } from "../../redux/reducers/authReducer/index";
-import StatusBadge from "../StatusBadge/StatusBadge";
 import styles from "./AccountEditModal.module.css";
+import ActiveIndicatorBox from "../ActiveIndicatorBox/ActiveIndicatorBox";
 
 const Modal = () => {
   const [edit, setEdit] = useState<boolean>(false);
@@ -21,6 +22,8 @@ const Modal = () => {
   const [updatedPhoneNumber, setUpdatedPhoneNumber] =
     useState<string>(phoneNumber);
   const [updatedEmail, setUpdatedEmail] = useState<string>(email);
+
+  const router = useRouter();
 
   function formatDateToString(date: Date): string {
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -52,6 +55,7 @@ const Modal = () => {
 
   const handleLogOut = () => {
     dispatch(logout());
+    router.push("/auth/login");
   };
 
   const handleEdit = () => {
@@ -122,7 +126,7 @@ const Modal = () => {
           <div className={styles.myContainer}>
             <div className={styles.first}>
               <label>{name}</label>
-              <StatusBadge isOnline={active} />
+              <ActiveIndicatorBox active={active} />
             </div>
             <div className={styles.second}>
               <div>
@@ -146,7 +150,7 @@ const Modal = () => {
               placeholder="First Name Last Name"
               value={updatedName}
               onChange={(e) => setUpdatedName(e.target.value)}
-              className={!edit ? styles.editable : styles.nonEditable}
+              className={!edit ? styles.nonEditable : styles.editable}
               readOnly={!edit}
             />
           </div>
@@ -160,7 +164,7 @@ const Modal = () => {
                 const formattedDate = formatBirthDate(e.target.value);
                 setUpdatedBirthDateInput(formattedDate);
               }}
-              className={!edit ? styles.editable : styles.nonEditable}
+              className={!edit ? styles.nonEditable : styles.editable}
               readOnly={!edit}
             />
           </div>
@@ -173,7 +177,7 @@ const Modal = () => {
               onChange={(e) => {
                 handlePhoneChange(e);
               }}
-              className={!edit ? styles.editable : styles.nonEditable}
+              className={!edit ? styles.nonEditable : styles.editable}
               readOnly={!edit}
             />
           </div>
@@ -184,7 +188,7 @@ const Modal = () => {
               placeholder="blankemail@gmail"
               value={updatedEmail}
               onChange={(e) => setUpdatedEmail(e.target.value)}
-              className={!edit ? styles.editable : styles.nonEditable}
+              className={!edit ? styles.nonEditable : styles.editable}
               readOnly={!edit}
             />
           </div>

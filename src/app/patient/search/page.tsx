@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
-import AccountEditModal from "@src/components/AccountEditModal/AccountEditModal";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
 import { classes } from "@src/utils/utils";
@@ -24,8 +23,6 @@ firebaseInit();
 
 export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
-  // EDIT MODAL
-  const [showModal] = useState<boolean>(true);
 
   const [fullName, setFullName] = useState("");
   const [active, setActive] = useState<boolean | undefined>(undefined);
@@ -116,15 +113,6 @@ export default function Page() {
   ]);
 
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
-  if (showModal) {
-    return (
-      <div className={styles.modal}>
-        <div className={styles.modalContent}>
-          <AccountEditModal />
-        </div>
-      </div>
-    );
-  }
   return (
     <div className={styles.container}>
       <div

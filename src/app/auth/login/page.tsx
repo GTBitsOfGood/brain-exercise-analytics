@@ -18,6 +18,8 @@ import { emailSignIn } from "@src/firebase/email_signin";
 import { HttpMethod, IUser } from "@/common_utils/types";
 
 import { setCookie } from "cookies-next";
+import { update } from "@src/redux/reducers/authReducer";
+import { useDispatch } from "react-redux";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -29,6 +31,7 @@ export default function Page() {
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const resetErrors = () => {
     setEmailError("");
@@ -55,6 +58,7 @@ export default function Page() {
         { user: userMongo, keepLogged },
         keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
       );
+      dispatch(update(userMongo));
 
       router.push("/auth/email-verification");
     } catch (error) {
