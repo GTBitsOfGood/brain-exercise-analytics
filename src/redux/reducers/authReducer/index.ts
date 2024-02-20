@@ -76,7 +76,7 @@ const authReducer = createSlice({
   initialState,
   reducers: {
     // Update the authState with the user information
-    login(state, action: PayloadAction<Partial<IUser>>) {
+    update(state, action: PayloadAction<Partial<IUser>>) {
       setState(state, action.payload);
     },
     // Clear the authState
@@ -90,6 +90,6 @@ const authReducer = createSlice({
   },
 });
 
-export const { login, logout, setFirstTimeLogin } = authReducer.actions;
+export const { update, logout, setFirstTimeLogin } = authReducer.actions;
 
 export default authReducer.reducer;

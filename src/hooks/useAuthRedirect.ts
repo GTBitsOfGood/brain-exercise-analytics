@@ -3,7 +3,7 @@
 /* eslint-disable consistent-return */
 
 import { HttpMethod, IUser } from "@/common_utils/types";
-import { login, logout } from "@src/redux/reducers/authReducer";
+import { update, logout } from "@src/redux/reducers/authReducer";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
@@ -30,7 +30,7 @@ export default function useAuthRedirect() {
           email,
         },
       });
-      dispatch(login(fetchedUser));
+      dispatch(update(fetchedUser));
       setFirstRetrieval(false);
     },
     [dispatch],
