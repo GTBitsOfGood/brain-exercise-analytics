@@ -1,5 +1,5 @@
 import { IVerificationLog } from "@/common_utils/types";
-import { updateUserPassword } from "@server/firebase/passwordReset";
+import { updateUserPassword } from "@server/firebase/utils";
 import {
   deleteVerificationLogByEmail,
   getVerificationLogByToken,

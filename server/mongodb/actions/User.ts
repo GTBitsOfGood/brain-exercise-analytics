@@ -269,7 +269,10 @@ export const getUsersFiltered = async ({
             },
           },
         ],
-        data: [{ $skip: numOfItems * page }, { $limit: numOfItems }],
+        data: [
+          { $skip: page === undefined ? 0 : numOfItems * page },
+          { $limit: numOfItems },
+        ],
       },
     },
     {
