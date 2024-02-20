@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
 import { SortField } from "@/common_utils/types";
+import { classes } from "@src/utils/utils";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
 
@@ -81,24 +82,28 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
 
   // Construct Rows from the currentItems
   const Rows = currentItems.map((volunteer) => (
-    <tr key={volunteer.id}>
-      <td>{volunteer.name}</td>
-      <td>{volunteer.title}</td>
-      <td>{volunteer.dateJoined}</td>
-      <td>
+    <tr className={styles.row} key={volunteer.id}>
+      <td className={styles.RowCell}>
+        <div className={styles.RowCellContainer}>{volunteer.name}</div>
+      </td>
+      <td className={styles.RowCell}>
+        <div className={styles.RowCellContainer}>{volunteer.title}</div>
+      </td>
+      <td className={styles.RowCell}>
+        <div className={styles.RowCellContainer}>{volunteer.dateJoined}</div>
+      </td>
+      <td className={classes(styles.RowCell, styles.statusContainer)}>
         <label className={styles.statusToggle}>
           <input type="checkbox" />
           <span />
         </label>
-        {volunteer.status ? (
-          <span className={styles.statusActive}>Active</span>
-        ) : (
-          <span className={styles.statusInactive}>Inactive</span>
-        )}
+        <span className={styles.RowCellContainer}>
+          {volunteer.status ? "Active" : "Inactive"}
+        </span>
       </td>
       <td>
         <text
-          className={styles.deleteButton}
+          className={classes(styles.RowCellContainer, styles.deleteButton)}
           onClick={() => handleDeleteClick(volunteer.id)}
         >
           Delete Account
