@@ -1,4 +1,4 @@
-import { Role, AdminApprovalStatus } from "@/common_utils/types";
+import { AdminApprovalStatus } from "@/common_utils/types";
 import {
   getUserByEmail,
   updateUserAdminApproval,
@@ -14,7 +14,7 @@ type RequestData = {
 export const POST = APIWrapper({
   config: {
     requireToken: true,
-    roles: [Role.NONPROFIT_ADMIN],
+    requireAdmin: true,
   },
   handler: async (req) => {
     const requestData = (await req.json()) as RequestData;
@@ -42,11 +42,14 @@ export const POST = APIWrapper({
     const emailSubject = requestData.approved
       ? "Volunteer Application Approved"
       : "Volunteer Application Rejected";
-    const backlinkUrl = requestData.approved ? "/patient/search" : "auth/login";
-    const emailContent =
+    const backlinkUrl =
+      process.env.URL +
+      (requestData.approved ? "/patient/search" : "/auth/login");
+    const emailContent = `admin-approval/${
       updatedApprovalStatus === AdminApprovalStatus.APPROVED
         ? "approved"
-        : "denied";
+        : "denied"
+    }`;
 
     await sendEmail(userEmail, emailSubject, emailContent, {
       backlinkUrl,
@@ -55,7 +58,7 @@ export const POST = APIWrapper({
 
     return {
       message: "Volunteer Approval Status Sent",
-      approved: true,
+      approved: requestData.approved,
     };
   },
 });

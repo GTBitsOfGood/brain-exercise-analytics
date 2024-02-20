@@ -1,4 +1,5 @@
 import {
+  AdminApprovalStatus,
   IPatientTableEntry,
   IUser,
   PatientSearchParams,
@@ -21,7 +22,7 @@ export const getUserById = async (id: string): Promise<IUser | null> => {
 
 export const updateUserAdminApproval = async (
   email: string,
-  approvalStatus: string,
+  approvalStatus: AdminApprovalStatus,
 ): Promise<IUser | null> => {
   try {
     const updatedUser = await User.findOneAndUpdate<IUser>(
