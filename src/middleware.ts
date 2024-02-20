@@ -1,4 +1,10 @@
-import { IAuthUserCookie, HttpMethod, IUser } from "@/common_utils/types";
+/* eslint-disable no-dupe-else-if */
+import {
+  IAuthUserCookie,
+  HttpMethod,
+  IUser,
+  AdminApprovalStatus,
+} from "@/common_utils/types";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -44,13 +50,21 @@ export async function middleware(request: NextRequest) {
   }
 
   /*
-    If the user is already verified and signed up:
+    If the user is already verified, signed up, and approved:
       a. redirect to /patient/search if they are on an auth page
       b. otherwise, continue to the intended page. This prevents pages like `/patient/dashboard` from
         redirecting to `/patient/search`.
   */
-  if (user.verified && user.signedUp) {
-    if (path.match(/\/auth\/(login|signup|email-verification|information)/g)) {
+  if (
+    user.verified &&
+    user.signedUp &&
+    user.approved === AdminApprovalStatus.APPROVED
+  ) {
+    if (
+      path.match(
+        /\/auth\/(login|signup|email-verification|information|admin-approval)/g,
+      )
+    ) {
       return NextResponse.redirect(
         new URL("/patient/search", request.nextUrl.origin),
       );
@@ -89,25 +103,45 @@ export async function middleware(request: NextRequest) {
   let Response: NextResponse;
 
   /*
-    Now, with the refreshed user data, if the user is already verified and signed up:
-      a. redirect to /patient/search if they are on an auth page
-      b. otherwise, continue to the intended page. This prevents pages like `/patient/dashboard` from
-        redirecting to `/patient/search`.
+  Now, with the refreshed user data, if the user is already verified, signed up, and approved:
+    a. redirect to /patient/search if they are on an auth page
+    b. otherwise, continue to the intended page. This prevents pages like `/patient/dashboard` fromredirecting to `/patient/search`.
   */
-  if (fetchedUser.verified && fetchedUser.signedUp) {
-    if (path.match(/\/auth\/(login|signup|email-verification|information)/g)) {
+  if (
+    fetchedUser.signedUp &&
+    fetchedUser.verified &&
+    fetchedUser.approved === AdminApprovalStatus.APPROVED
+  ) {
+    if (
+      path.match(
+        /\/auth\/(login|signup|email-verification|information|admin-approval)/g,
+      )
+    ) {
       Response = NextResponse.redirect(
         new URL("/patient/search", request.nextUrl.origin),
       );
     } else {
       Response = NextResponse.next();
     }
-  } else if (!fetchedUser.verified) {
+  } else if (fetchedUser.verified && fetchedUser.signedUp) {
+    /* 
+    If the user has not been approved:
+      a. redirect to /auth/admin-approval if not already on it
+      b. if already on /auth/admin-approval, continue to the page
+    */
+    if (path.match(/auth\/admin-approval/g)) {
+      Response = NextResponse.next();
+    } else {
+      Response = NextResponse.redirect(
+        new URL("/auth/admin-approval", request.nextUrl.origin),
+      );
+    }
+  } else if (fetchedUser.signedUp) {
     /* 
     If the user has not verified their email:
       a. redirect to /auth/email-verification if not already on it
       b. if already on /auth/email-verification, continue to the page
-  */
+    */
     if (path.match(/auth\/email-verification/g)) {
       Response = NextResponse.next();
     } else {
@@ -121,7 +155,7 @@ export async function middleware(request: NextRequest) {
     out their signup information yet:
       a. redirect to /auth/information if not already on it
       b. if already on /auth/information, continue to the page
-  */
+    */
     // eslint-disable-next-line no-lonely-if
     if (path.match(/auth\/information/g)) {
       Response = NextResponse.next();
