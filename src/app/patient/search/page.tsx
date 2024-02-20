@@ -25,11 +25,7 @@ firebaseInit();
 export default function Page() {
   const [viewTable, setViewTable] = useState<boolean>(false);
   // EDIT MODAL
-  const [showModal, setShowModal] = useState<boolean>(true);
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  const [showModal] = useState<boolean>(true);
 
   const [fullName, setFullName] = useState("");
   const [active, setActive] = useState<boolean | undefined>(undefined);
@@ -124,7 +120,7 @@ export default function Page() {
     return (
       <div className={styles.modal}>
         <div className={styles.modalContent}>
-          <AccountEditModal closeModal={closeModal} />
+          <AccountEditModal />
         </div>
       </div>
     );
