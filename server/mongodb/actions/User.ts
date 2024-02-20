@@ -1,4 +1,5 @@
 import {
+  AdminApprovalStatus,
   IPatientTableEntry,
   IUser,
   PatientSearchParams,
@@ -17,6 +18,26 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
 export const getUserById = async (id: string): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ _id: id });
   return user;
+};
+
+export const updateUserAdminApproval = async (
+  email: string,
+  approvalStatus: AdminApprovalStatus,
+): Promise<IUser | null> => {
+  try {
+    const updatedUser = await User.findOneAndUpdate<IUser>(
+      { email },
+      {
+        $set: {
+          approved: approvalStatus,
+        },
+      },
+    );
+
+    return updatedUser;
+  } catch (error) {
+    throw new Error("Failed to update admin approval status");
+  }
 };
 
 export const verifyUserByEmail = async (
