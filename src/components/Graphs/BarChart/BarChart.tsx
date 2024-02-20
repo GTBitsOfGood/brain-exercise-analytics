@@ -198,7 +198,7 @@ export default function BarChart({
 
   useEffect(() => {
     resizeOptimised();
-  });
+  }, []);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
     activeIndex === i && (

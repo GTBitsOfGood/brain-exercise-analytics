@@ -113,6 +113,7 @@ export default function Page() {
   ]);
 
   const viewTablePermanent = useCallback(() => setViewTable(true), []);
+
   return (
     <div className={styles.container}>
       <div
