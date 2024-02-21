@@ -47,7 +47,7 @@ const InputField = (InputFieldProps: InputFieldProps) => {
         </div>
       ) : null}
       <div className={styles["input-container"]}>
-        {InputFieldProps.icon !== null && (
+        {InputFieldProps.icon !== null ? (
           <div className={styles["icon-container"]}>
             <div className={styles.icon}>{InputFieldProps.icon}</div>
             <input
@@ -68,26 +68,27 @@ const InputField = (InputFieldProps: InputFieldProps) => {
               onChange={InputFieldProps.onChange}
             />
           </div>
+        ) : (
+          <div>
+            <input
+              className={classes(
+                styles["input-field"],
+                InputFieldProps.showError
+                  ? styles["input-field-error"]
+                  : undefined,
+                InputFieldProps.inputFieldClassName,
+                InputFieldProps.type === "password"
+                  ? styles["password-field"]
+                  : undefined
+              )}
+              type={passwordOrText}
+              required={InputFieldProps.required ?? false}
+              placeholder={InputFieldProps.placeholder}
+              value={InputFieldProps.value}
+              onChange={InputFieldProps.onChange}
+            />
+          </div>
         )}
-        {/* <div>
-          <input
-            className={classes(
-              styles["input-field"],
-              InputFieldProps.showError
-                ? styles["input-field-error"]
-                : undefined,
-              InputFieldProps.inputFieldClassName,
-              InputFieldProps.type === "password"
-                ? styles["password-field"]
-                : undefined
-            )}
-            type={passwordOrText}
-            required={InputFieldProps.required ?? false}
-            placeholder={InputFieldProps.placeholder}
-            value={InputFieldProps.value}
-            onChange={InputFieldProps.onChange}
-          />
-        </div> */}
 
         {InputFieldProps.type !== null &&
           InputFieldProps.type === "password" && (
