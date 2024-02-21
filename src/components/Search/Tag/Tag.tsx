@@ -50,14 +50,14 @@ export default function Tag<T>({
     <div className={styles.container}>
       <div className={styles.border}>
         <span className={styles.text}>{tagText}</span>
-        <div className={styles["icon-container"]}>
-          <FontAwesomeIcon
-            className={styles["x-icon"]}
-            icon={faX}
-            size="2xs"
-            onClick={handleCloseTag}
-          />
-        </div>
+        {/* <div className={styles["icon-container"]}> */}
+        <FontAwesomeIcon
+          className={styles["x-icon"]}
+          icon={faX}
+          size="2xs"
+          onClick={handleCloseTag}
+        />
+        {/* </div> */}
       </div>
     </div>
   );

@@ -106,7 +106,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         return set;
       });
     },
-    [],
+    []
   );
 
   const reset = () => {
@@ -142,7 +142,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     displayValue: `${locCountry.name}`,
   }));
   const countryCode = Country.getAllCountries().filter(
-    (locCountry) => country === locCountry.name,
+    (locCountry) => country === locCountry.name
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((locState) => ({
@@ -150,46 +150,47 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     displayValue: `${locState.name}`,
   }));
   const stateCode = State.getStatesOfCountry(countryCode).filter(
-    (locState) => locState.name === state,
+    (locState) => locState.name === state
   )[0]?.isoCode;
 
   const CITIES = City.getCitiesOfState(countryCode, stateCode).map(
     (locCity) => ({
       value: locCity.name,
       displayValue: `${locCity.name}`,
-    }),
+    })
   );
 
   return (
     <div className={styles.body} style={props.style}>
       <div className={styles.button_row}>
         <div className={styles.active_patient_box}>
-          <span className={styles.active_patient_box_label}>
-            <ToggleButtonGroup
-              color="primary"
-              value={String(props.active)}
-              exclusive
-              aria-label="Platform"
-            >
-              <ToggleButton
+          <span className={styles["active_patient_box_label"]}>
+            <div className={styles["toggle-button-group"]}>
+              <button
+                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]}`}
                 value="undefined"
                 onClick={() => props.setActive(undefined)}
               >
                 All Patients
-              </ToggleButton>
-              <ToggleButton value="true" onClick={() => props.setActive(true)}>
+              </button>
+              <button
+                className={styles["toggle-button"]}
+                value="true"
+                onClick={() => props.setActive(true)}
+              >
                 Active Patients
-              </ToggleButton>
-              <ToggleButton
+              </button>
+              <button
+                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]}`}
                 value="false"
                 onClick={() => props.setActive(false)}
               >
                 Inactive Patients
-              </ToggleButton>
-            </ToggleButtonGroup>
+              </button>
+            </div>
           </span>
         </div>
-        <div className={styles.button_row_button} onClick={reset}>
+        {/* <div className={styles.button_row_button} onClick={reset}>
           Clear
         </div>
         <div
@@ -200,7 +201,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           }}
         >
           Apply
-        </div>
+        </div> */}
       </div>
       {/* entire flexbox */}
       <div className={styles.all_questions}>
@@ -311,7 +312,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             </div>
             <InputField
               className={[styles.answer, styles.sec_person_name_answer].join(
-                " ",
+                " "
               )}
               inputFieldClassName={styles.answerInput}
               required={false}
@@ -329,14 +330,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={styles.question_box}>
             <div
               className={[styles.label, styles.sec_person_phone_label].join(
-                " ",
+                " "
               )}
             >
               Phone Number
             </div>
             <InputField
               className={[styles.answer, styles.sec_person_phone_answer].join(
-                " ",
+                " "
               )}
               inputFieldClassName={styles.answerInput}
               required={false}

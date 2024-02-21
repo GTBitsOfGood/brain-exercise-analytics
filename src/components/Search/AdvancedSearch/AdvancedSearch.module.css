@@ -20,8 +20,9 @@
 .button_row {
   margin-bottom: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: row;
   gap: 10px;
+  /* background-color: red; */
 }
 
 .all_questions {
@@ -123,15 +124,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 17px;
+  /* background-color: green; */
 }
 
 .active_patient_box_label {
-  padding-right: 12px;
+  border-radius: 50px;
 }
 
 .button_row_button {
-  background-color: white;
+  background-color: red;
   width: 95px;
   height: 38px;
   display: flex;
@@ -144,4 +145,25 @@
 .button_blue {
   background-color: #008afc;
   color: white;
+}
+.toggle-button-group {
+  /* background-color: purple; */
+}
+
+.toggle-button {
+  color: #2b3674;
+  padding: 8px 16px;
+  border: 1px solid #d9d9d9;
+}
+
+.toggle-button-left {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right: 0;
+}
+
+.toggle-button-right {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-left: 0;
 }
