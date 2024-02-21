@@ -54,10 +54,6 @@ export default function LineChart({
   };
   window.addEventListener("resize", resizeOptimised);
   
-  useEffect(() => {
-    updateSize();
-  }, [data]);
-  
   const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -176,8 +172,8 @@ export default function LineChart({
   ]);
 
   useEffect(() => {
-    resizeOptimised();
-  }, []);
+    updateSize();
+  }, [data]);
 
   return (
     <div

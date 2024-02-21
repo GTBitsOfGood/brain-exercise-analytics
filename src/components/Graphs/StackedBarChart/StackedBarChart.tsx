@@ -34,7 +34,7 @@ export default function StackedBarChart({
   fullWidth = false,
   info = "",
 }: DataParams) {
-  const barWidth = 20;
+  const barWidth = 12;
   // Same rules as BarChart
   const [width, setWidth] = useState(
     Math.max(providedWidth, (barWidth + 5) * data.length + 60),
@@ -51,14 +51,10 @@ export default function StackedBarChart({
   };
   window.addEventListener("resize", resizeOptimised);
   
-  useEffect(() => {
-    updateSize();
-  }, [data]);
-  
   const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;
-  const marginBottom = 25;
+  const marginBottom = 40;
   const marginLeft = 35;
   const x = d3.scaleLinear(
     [0, data.length - 1],
@@ -69,8 +65,8 @@ export default function StackedBarChart({
     [height - marginBottom, marginTop],
   );
   useEffect(() => {
-    resizeOptimised();
-  }, []);
+    updateSize();
+  }, [data]);
   return (
     <div
       className={styles.StackedBarChart}

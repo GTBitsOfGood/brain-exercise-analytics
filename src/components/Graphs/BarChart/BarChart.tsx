@@ -1,6 +1,6 @@
 "use client";
 
-import { Poppins } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import {
@@ -16,7 +16,8 @@ import PopupModal from "../PopupModal/PopupModal";
 import styles from "./BarChart.module.scss";
 
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
-const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
+const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
+const inter500 = Inter({ subsets: ["latin"], weight: "500" });
 
 interface DataParams extends D3Data {
   title: string;
@@ -46,7 +47,7 @@ export default function BarChart({
   children,
   info = "",
 }: DataParams) {
-  const barWidth = 20;
+  const barWidth = 12;
   const minWidth = (barWidth + 5) * data.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -61,15 +62,11 @@ export default function BarChart({
   };
   window.addEventListener("resize", resizeOptimised);
   
-  useEffect(() => {
-    updateSize();
-  }, [data]);
-  
   const height = Math.max(providedHeight, 80);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 25;
-  const marginBottom = 25;
+  const marginBottom = 40;
   const marginLeft = 35;
   const [largest, setLargest] = useState(-1);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -149,13 +146,21 @@ export default function BarChart({
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis").remove();
     svg.select(".y-axis").remove();
-    const xAxisLabel = d3
+    const xAxisLabelTop = d3
       .axisBottom(x)
       .ticks(data.length)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval);
+      .tickFormat((d) => data[d.valueOf()].interval.split(" ")[0]);
+    
+      const xAxisLabelBottom = d3
+      .axisBottom(x)
+      .ticks(data.length)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickPadding(15)
+      .tickFormat((d) => data[d.valueOf()].interval.split(" ")[1]);
 
     const yAxisLabel = d3
       .axisLeft(y)
@@ -175,11 +180,21 @@ export default function BarChart({
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
       .attr("class", "x-axis")
-      .style("font", `9px ${poppins600.style.fontFamily}`)
-      .style("color", "#B0BBD5")
-      .call(xAxisLabel)
+      .style("font", `8px ${poppins500.style.fontFamily}`)
+      .style("color", "#343539")
+      .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
+    
     svg
+      .append("g")
+      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom + 15})`)
+      .attr("class", "x-axis")
+      .style("font", `7px ${inter500.style.fontFamily}`)
+      .style("color", "#B0BBD5")
+      .call(xAxisLabelBottom)
+      .call((g) => g.select(".domain").remove());
+    
+      svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)
       .attr("class", "y-axis")
@@ -202,8 +217,8 @@ export default function BarChart({
   ]);
 
   useEffect(() => {
-    resizeOptimised();
-  }, []);
+    updateSize();
+  }, [data]);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
     activeIndex === i && (
