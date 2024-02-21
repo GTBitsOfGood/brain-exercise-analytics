@@ -277,6 +277,7 @@ export interface IAggregatedAnalyticsAll
       promptsCompleted: number;
       triviaQuestionsCompleted: number;
     };
+    userName: string;
   };
 }
 

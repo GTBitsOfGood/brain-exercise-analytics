@@ -50,6 +50,11 @@ export default function StackedBarChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
+  
+  useEffect(() => {
+    updateSize();
+  }, [data]);
+  
   const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;

@@ -46,6 +46,7 @@ type Result = Partial<{
 
 export const getAggregatedAnalytics = async (
   userID: string,
+  userName: string,
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
 ): Promise<Partial<IAggregatedAnalyticsAll>> => {
@@ -411,6 +412,7 @@ export const getAggregatedAnalytics = async (
             triviaQuestionsCompleted:
               res.lastSessionMetrics.trivia.questionsAttempted,
           },
+          userName: userName,
         };
         break;
       }

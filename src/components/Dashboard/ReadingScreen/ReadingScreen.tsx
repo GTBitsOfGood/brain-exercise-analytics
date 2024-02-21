@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AttemptIcon, PromptsIcon, TimeIcon } from "@src/app/icons";
 import styles from "./ReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
@@ -9,6 +9,7 @@ import {
   BooleanBox,
   LineChart,
 } from "../../Graphs";
+import { DateRangeEnum } from "@/common_utils/types";
 
 const ReadingIcon = () => {
   return (
@@ -42,6 +43,7 @@ interface InputProp {
   currentTime: string;
   completionStatus: boolean;
   style?: object;
+  menuState: [selectedValue: DateRangeEnum, setSelectedvalue: Function];
 }
 
 export default function ReadingScreen({
@@ -53,6 +55,7 @@ export default function ReadingScreen({
   currentTime,
   completionStatus,
   style,
+  menuState,
 }: InputProp) {
   return (
     <div className={styles.container} style={style}>
@@ -60,7 +63,7 @@ export default function ReadingScreen({
         <ReadingIcon />
         <p>READING</p>
         <div className={styles.dateSelector}>
-          <DateSelector />
+          <DateSelector selectedValue={menuState[0]} setSelectedValue={menuState[1]} />
         </div>
       </div>
       <div className={styles.body}>

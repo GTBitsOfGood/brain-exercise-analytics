@@ -35,7 +35,7 @@ export default function BarChart({
   style = {},
   yAxis = {
     min: d3.min(data.map((v) => v.value)) ?? 0,
-    max: d3.max(data.map((v) => v.value)) ?? 1,
+    max: d3.max(data.map((v) => v.value + 0.00001)) ?? 1,
     numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
     format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
@@ -60,6 +60,11 @@ export default function BarChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
+  
+  useEffect(() => {
+    updateSize();
+  }, [data]);
+  
   const height = Math.max(providedHeight, 80);
   const infoButtonRef = useRef(null);
   const marginTop = 20;

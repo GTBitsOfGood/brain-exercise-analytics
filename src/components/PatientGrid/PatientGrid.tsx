@@ -22,12 +22,12 @@ interface PatientGridProps {
 const columns: GridColDef[] = [
   { field: "id", headerName: "", width: 90 },
   {
-    field: "name",
+    field: "first name",
     headerName: "First Name",
     sortable: true,
   },
   {
-    field: "name",
+    field: "last name",
     headerName: "Last Name",
     sortable: true,
   },

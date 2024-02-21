@@ -12,10 +12,11 @@ import {
   BarChartIcon,
 } from "@src/app/icons";
 import { CSSProperties, ReactNode } from "react";
-import { Days } from "@/common_utils/types";
+import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
 import styles from "./OverallDashboard.module.scss";
+import DateSelector from "@src/components/DateSelector/DateSelector";
 
 interface Params {
   streak: Days[];
@@ -23,6 +24,7 @@ interface Params {
   endDate: Date;
   sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
+  menuState: [selectedValue: DateRangeEnum, setSelectedvalue: Function];
 
   // Need to update with the schema of the response we will get from the backend
 }
@@ -99,6 +101,9 @@ export default function OverallDashboard(params: Params) {
           style={{ marginLeft: "17px", marginRight: "10px" }}
         />
         <IGI />
+        <div className={styles.dateSelector}>
+          <DateSelector selectedValue={params.menuState[0]} setSelectedValue={params.menuState[1]} />
+        </div>
         {/* <Dropdown style={{ marginLeft: "auto" }} /> */}
       </div>
       <WeeklyProgress days={params.streak} />

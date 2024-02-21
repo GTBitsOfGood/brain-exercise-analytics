@@ -14,10 +14,7 @@ const options: DropdownOption<DateRangeEnum>[] = Object.values(
   displayValue: range.toString(),
 }));
 
-function DateSelector() {
-  const [selectedValue, setSelectedValue] = useState<DateRangeEnum>(
-    DateRangeEnum.RECENT,
-  );
+function DateSelector({ selectedValue, setSelectedValue }: { selectedValue: DateRangeEnum, setSelectedValue: any}) {
   return (
     <Dropdown
       options={options}

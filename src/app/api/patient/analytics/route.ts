@@ -50,8 +50,7 @@ export const GET = APIWrapper({
     if (user?.role !== Role.NONPROFIT_PATIENT) {
       throw new Error("User is not a patient");
     }
-
-    const data = await getAggregatedAnalytics(id, range, updatedSections);
+    const data = await getAggregatedAnalytics(id, user.name, range, updatedSections);
 
     return data;
   },

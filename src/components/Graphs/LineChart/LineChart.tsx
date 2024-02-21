@@ -39,6 +39,7 @@ export default function LineChart({
   fullWidth,
   info = "",
 }: DataParams) {
+  data = (data.length == 0 ? [{ interval: '1', value: 1 }] : data);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -52,6 +53,11 @@ export default function LineChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
+  
+  useEffect(() => {
+    updateSize();
+  }, [data]);
+  
   const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   PromptsIcon,
   TimeIcon,
@@ -13,6 +13,7 @@ import {
   BooleanBox,
 } from "../../Graphs";
 import styles from "./WritingScreen.module.css";
+import { DateRangeEnum } from "@/common_utils/types";
 
 interface InputProp {
   sessionHistory: {
@@ -26,6 +27,7 @@ interface InputProp {
   currentTime: string;
   attemptStatus: boolean;
   style?: object;
+  menuState: [selectedValue: DateRangeEnum, setSelectedvalue: Function];
 }
 
 export default function WritingScreen({
@@ -36,6 +38,7 @@ export default function WritingScreen({
   currentTime,
   attemptStatus,
   style,
+  menuState,
 }: InputProp) {
   return (
     <div className={styles.container} style={style}>
@@ -43,7 +46,7 @@ export default function WritingScreen({
         <WritingIcon />
         <p>WRITING</p>
         <div className={styles.dateSelector}>
-          <DateSelector />
+          <DateSelector selectedValue={menuState[0]} setSelectedValue={menuState[1]} />
         </div>
       </div>
       <div className={styles.body}>
