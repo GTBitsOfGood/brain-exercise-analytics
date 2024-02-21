@@ -61,12 +61,10 @@
 }
 
 .advanced-filter {
-  color: black;
-  font-size: 14px;
-  font-weight: 500;
+  color: #2b3674;
+  padding: 0px 32px 0px 32px;
   word-wrap: break-word;
   cursor: pointer;
-  flex: 2;
   min-width: max-content;
 }
 

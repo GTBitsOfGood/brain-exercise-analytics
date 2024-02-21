@@ -3,6 +3,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import styles from "./Search.module.css";
@@ -93,7 +94,7 @@ export default function Search({
       beiChapters,
       secondaryPhoneNumbers,
       secondaryNames,
-    ],
+    ]
   );
 
   const onSubmitSearch = useCallback(() => {
@@ -111,22 +112,29 @@ export default function Search({
               inputFieldClassName={styles["search-bar-input"]}
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Name"
+              placeholder="Search"
             />
           </div>
-          <FontAwesomeIcon
+          {/* <FontAwesomeIcon
             className={styles["search-icon"]}
             icon={faSearch}
             size="lg"
             onClick={onSubmitSearch}
             style={{ height: 28 }}
-          />
-          <p
+          /> */}
+          {/* <p
             className={styles["advanced-filter"]}
             onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
           >
             Advanced Filter
-          </p>
+          </p> */}
+
+          <div className={styles["advanced-filter"]}>
+            <FilterAltIcon
+              fontSize="large"
+              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+            />
+          </div>
         </div>
         {tagsPresent ? (
           <div className={styles.tags}>
@@ -223,7 +231,7 @@ export default function Search({
                     value={additionalAffiliation}
                     setList={setAdditionalAffiliations}
                   />
-                ),
+                )
               )}
             {secondaryNames.size > 0 &&
               Array.from(secondaryNames).map((secondaryName) => (
@@ -239,7 +247,7 @@ export default function Search({
         <div
           className={classes(
             styles["advanced-search-container"],
-            showAdvancedSearch && styles["advanced-search-container-show"],
+            showAdvancedSearch && styles["advanced-search-container-show"]
           )}
         >
           <AdvancedSearch
