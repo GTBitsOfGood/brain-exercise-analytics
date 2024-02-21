@@ -34,9 +34,9 @@ export interface InternalResponseData<T> {
 export class InternalResponseError extends Error {}
 
 export enum Role {
-  NONPROFIT_ADMIN = "Nonprofit Admin",
-  NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_PATIENT = "Nonprofit Patient",
+  NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
+  NONPROFIT_ADMIN = "Nonprofit Admin",
 }
 
 export enum Days {
