@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
@@ -22,8 +22,6 @@ import styles from "./page.module.css";
 firebaseInit();
 
 export default function Page() {
-  const [viewTable, setViewTable] = useState<boolean>(false);
-
   const [fullName, setFullName] = useState("");
   const [active, setActive] = useState<boolean | undefined>(undefined);
   const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
@@ -112,16 +110,9 @@ export default function Page() {
     sortField,
   ]);
 
-  const viewTablePermanent = useCallback(() => setViewTable(true), []);
-
   return (
     <div className={styles.container}>
-      <div
-        className={classes(
-          styles["search-container"],
-          !viewTable && styles["search-container-alone"],
-        )}
-      >
+      <div className={classes(styles["search-container"])}>
         <p className={styles["intro-text"]}>
           To begin viewing analytics, search for a patient here!
         </p>
@@ -150,14 +141,13 @@ export default function Page() {
             setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
             secondaryNames={secondaryNames}
             setSecondaryNames={setSecondaryNames}
-            onSubmit={viewTablePermanent}
           />
         </div>
       </div>
       <div
         className={classes(
           styles["table-container"],
-          viewTable && styles["table-container-show"],
+          styles["table-container-show"],
         )}
       >
         <div className={styles["table-header"]}>

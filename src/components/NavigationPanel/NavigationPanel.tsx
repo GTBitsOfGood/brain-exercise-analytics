@@ -20,6 +20,9 @@ const NavigationPanel = () => {
     () => currentPath.startsWith("/patient/dashboard"),
     [currentPath],
   );
+  function handleClick() {
+    // console.log("open Edit Modal");
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -86,10 +89,13 @@ const NavigationPanel = () => {
         </div>
         <div className={styles.divider} />
         <div className={styles["patient-container"]}>
-          <img
-            className={styles["patient-pfp"]}
-            src="https://via.placeholder.com/81x81"
-          />
+          <a href="#" onClick={handleClick}>
+            <img
+              className={styles["patient-pfp"]}
+              src="https://via.placeholder.com/81x81"
+              alt="Patient Profile Picture"
+            />
+          </a>
           <div className={styles["patient-info"]}>
             <span className={styles["user-name"]}>User Name</span>
             <span className={styles.position}>Position or title</span>

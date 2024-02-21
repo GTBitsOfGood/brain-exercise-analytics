@@ -73,7 +73,7 @@ function APIWrapper(route: Route<unknown>) {
         const idToken: string | null = req.headers.get("accesstoken");
         try {
           if (idToken === null) {
-            req.cookies.delete("authUser");
+            // req.cookies.delete("authUser");
             throw Error("No id token was provided");
           }
           await getAuth().verifyIdToken(idToken);

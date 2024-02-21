@@ -1,7 +1,6 @@
 import {
   DashboardIcon as DB,
   ImportantGrayIcon as IGI,
-  CheckCircle as CC,
   TimeForward as TF,
   LastPage as PF,
   // CalendarIcon as COI,
@@ -14,6 +13,7 @@ import {
 import { CSSProperties, ReactNode } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
+import ActiveIndicatorBox from "@src/components/ActiveIndicatorBox/ActiveIndicatorBox";
 import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
 import styles from "./OverallDashboard.module.scss";
 import DateSelector from "@src/components/DateSelector/DateSelector";
@@ -42,23 +42,6 @@ function formatDate(date: Date) {
   const str = date.toLocaleDateString("en-us", options);
   const arr = str.split(" ");
   return [arr[2], arr[0], arr[1]].join(" ");
-}
-
-function ActiveIndicatorBox({
-  active = true,
-  style = {},
-}: {
-  active?: boolean;
-  style?: CSSProperties;
-}) {
-  return (
-    <div className={styles.ActiveIndicatorBox} style={style}>
-      <div className={styles.container}>
-        <CC />
-        <p className={styles.text}>{active ? "Active" : "Inactive"}</p>
-      </div>
-    </div>
-  );
 }
 
 function Chip(props: {

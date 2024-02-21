@@ -34,9 +34,9 @@ export interface InternalResponseData<T> {
 export class InternalResponseError extends Error {}
 
 export enum Role {
-  NONPROFIT_ADMIN = "Nonprofit Admin",
-  NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_PATIENT = "Nonprofit Patient",
+  NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
+  NONPROFIT_ADMIN = "Nonprofit Admin",
 }
 
 export enum Days {
@@ -218,7 +218,7 @@ export type SortField = {
 
 export interface SearchRequestBody<T extends object> {
   params: T;
-  page: number;
+  page?: number;
   sortParams?: SortField;
 }
 
@@ -244,6 +244,11 @@ export type PatientSearchParams = {
   states?: string[];
   cities?: string[];
   dateOfJoins?: string[];
+};
+
+export type VolunteerSearchParams = {
+  name?: string;
+  approved?: AdminApprovalStatus;
 };
 
 export interface IPatientTableEntry

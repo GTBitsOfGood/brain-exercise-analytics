@@ -6011,6 +6011,11 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
+mongo-dot-notation@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/mongo-dot-notation/-/mongo-dot-notation-3.1.0.tgz#2911ca2770a5449c1457ec33ac1e03af85552866"
+  integrity sha512-wxbnPPpWL2cV0cZskYgLyxltOZTlQugGf06eHfTzPiGnVYyxNModbYOCCMquJqOz0T0XYvGnH3qw+XFznDXYgg==
+
 mongodb-connection-string-url@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/mongodb-connection-string-url/-/mongodb-connection-string-url-2.6.0.tgz#57901bf352372abdde812c81be47b75c6b2ec5cf"

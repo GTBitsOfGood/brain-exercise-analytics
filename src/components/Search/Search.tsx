@@ -136,7 +136,6 @@ export default function Search({
                   key={`country-${country}`}
                   title="Country"
                   value={country}
-                  list={countries}
                   setList={setCountries}
                 />
               ))}
@@ -146,7 +145,6 @@ export default function Search({
                   key={`state-${state}`}
                   title="State"
                   value={state}
-                  list={states}
                   setList={setStates}
                 />
               ))}
@@ -156,7 +154,6 @@ export default function Search({
                   key={`city-${city}`}
                   title="City"
                   value={city}
-                  list={cities}
                   setList={setCities}
                 />
               ))}
@@ -175,7 +172,6 @@ export default function Search({
                   key={`dob-${dob}`}
                   title="Date of Birth"
                   value={dob}
-                  list={dateOfBirths}
                   setList={setDateOfBirths}
                   transformData={transformDate}
                 />
@@ -186,7 +182,6 @@ export default function Search({
                   key={`email-${email}`}
                   title="Email"
                   value={email}
-                  list={emails}
                   setList={setEmails}
                 />
               ))}
@@ -196,7 +191,6 @@ export default function Search({
                   key={`join-date-${dateOfJoin}`}
                   title="Join Date"
                   value={dateOfJoin}
-                  list={dateOfJoins}
                   setList={setDateOfJoins}
                   transformData={transformDate}
                 />
@@ -207,7 +201,6 @@ export default function Search({
                   key={`bei-chapter-${chapter}`}
                   title="BEI Chapter"
                   value={chapter}
-                  list={beiChapters}
                   setList={setBeiChapters}
                 />
               ))}
@@ -217,7 +210,6 @@ export default function Search({
                   key={`phone-number-${secondaryPhoneNumber}`}
                   title="Secondary Phone Number"
                   value={secondaryPhoneNumber}
-                  list={secondaryPhoneNumbers}
                   setList={setSecondaryPhoneNumbers}
                   transformData={transformPhoneNumber}
                 />
@@ -229,7 +221,6 @@ export default function Search({
                     key={`additional-affiliation-${additionalAffiliation}`}
                     title="Additional Affiliation"
                     value={additionalAffiliation}
-                    list={additionalAffiliations}
                     setList={setAdditionalAffiliations}
                   />
                 ),
@@ -240,7 +231,6 @@ export default function Search({
                   key={`secondary-name-${secondaryName}`}
                   title="Secondary Name"
                   value={secondaryName}
-                  list={secondaryNames}
                   setList={setSecondaryNames}
                 />
               ))}
