@@ -125,7 +125,7 @@ export async function middleware(request: NextRequest) {
     }
   } else if (fetchedUser.verified && fetchedUser.signedUp) {
     /* 
-    If the user has not been approved:
+    If the user has been verified and has signed up, but not been approved:
       a. redirect to /auth/admin-approval if not already on it
       b. if already on /auth/admin-approval, continue to the page
     */
@@ -136,32 +136,31 @@ export async function middleware(request: NextRequest) {
         new URL("/auth/admin-approval", request.nextUrl.origin),
       );
     }
-  } else if (fetchedUser.signedUp) {
+  } else if (fetchedUser.verified) {
     /* 
-    If the user has not verified their email:
-      a. redirect to /auth/email-verification if not already on it
-      b. if already on /auth/email-verification, continue to the page
-    */
-    if (path.match(/auth\/email-verification/g)) {
-      Response = NextResponse.next();
-    } else {
-      Response = NextResponse.redirect(
-        new URL("/auth/email-verification", request.nextUrl.origin),
-      );
-    }
-  } else {
-    /* 
-    The user will only reach here if their email is verified but they have not filled
-    out their signup information yet:
+    If the user has been verified, but not has signed up:
       a. redirect to /auth/information if not already on it
       b. if already on /auth/information, continue to the page
     */
-    // eslint-disable-next-line no-lonely-if
     if (path.match(/auth\/information/g)) {
       Response = NextResponse.next();
     } else {
       Response = NextResponse.redirect(
         new URL("/auth/information", request.nextUrl.origin),
+      );
+    }
+  } else {
+    /* 
+    The user will only reach here if the user has not been verified, signed up, or approved:
+      a. redirect to /auth/email-verification if not already on it
+      b. if already on /auth/email-verification, continue to the page
+    */
+    // eslint-disable-next-line no-lonely-if
+    if (path.match(/auth\/email-verification/g)) {
+      Response = NextResponse.next();
+    } else {
+      Response = NextResponse.redirect(
+        new URL("/auth/email-verification", request.nextUrl.origin),
       );
     }
   }
