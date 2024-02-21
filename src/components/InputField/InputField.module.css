@@ -98,3 +98,12 @@
   padding-left: 5px;
   font-size: 11px;
 }
+.icon-container {
+  display: flex;
+  flex-direction: row;
+}
+.icon {
+  padding-left: 17px;
+  display: flex;
+  align-items: center;
+}

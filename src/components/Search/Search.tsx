@@ -4,6 +4,8 @@ import React, { useCallback, useMemo, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import styles from "./Search.module.css";
@@ -113,27 +115,29 @@ export default function Search({
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search"
+              icon={<SearchIcon fontSize="medium" />}
             />
           </div>
-          {/* <FontAwesomeIcon
+          <FontAwesomeIcon
             className={styles["search-icon"]}
             icon={faSearch}
             size="lg"
             onClick={onSubmitSearch}
             style={{ height: 28 }}
-          /> */}
-          {/* <p
-            className={styles["advanced-filter"]}
-            onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-          >
-            Advanced Filter
-          </p> */}
+          />
 
           <div className={styles["advanced-filter"]}>
-            <FilterAltIcon
-              fontSize="large"
-              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-            />
+            {!showAdvancedSearch ? (
+              <FilterAltIcon
+                fontSize="large"
+                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+              />
+            ) : (
+              <FilterAltOffIcon
+                fontSize="large"
+                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+              />
+            )}
           </div>
         </div>
         {tagsPresent ? (
