@@ -180,7 +180,7 @@ export default function BarChart({
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
       .attr("class", "x-axis")
-      .style("font", `8px ${poppins500.style.fontFamily}`)
+      .style("font", `10px ${poppins500.style.fontFamily}`)
       .style("color", "#343539")
       .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
@@ -189,7 +189,7 @@ export default function BarChart({
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom + 15})`)
       .attr("class", "x-axis")
-      .style("font", `7px ${inter500.style.fontFamily}`)
+      .style("font", `10px ${inter500.style.fontFamily}`)
       .style("color", "#B0BBD5")
       .call(xAxisLabelBottom)
       .call((g) => g.select(".domain").remove());
