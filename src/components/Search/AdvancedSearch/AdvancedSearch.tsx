@@ -4,6 +4,7 @@ import React, {
   SetStateAction,
   useCallback,
   CSSProperties,
+  useMemo,
 } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
@@ -12,9 +13,12 @@ import CHAPTERS from "@src/utils/chapters";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
+import { transformDate, transformPhoneNumber } from "@src/utils/utils";
+
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
 import CalendarInput from "./CalendarInput";
+import Tag from "../Tag/Tag";
 
 interface SelectDropdownProps<T> {
   title: string;
@@ -77,6 +81,18 @@ interface UpdateParamProp {
   setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
   setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
   onSubmit?: () => void;
+  // hihihihi
+  className?: string;
+  countries: Set<string>;
+  states: Set<string>;
+  cities: Set<string>;
+  dateOfBirths: Set<string>;
+  emails: Set<string>;
+  additionalAffiliations: Set<string>;
+  dateOfJoins: Set<string>;
+  beiChapters: Set<string>;
+  secondaryPhoneNumbers: Set<string>;
+  secondaryNames: Set<string>;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
@@ -90,7 +106,36 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [beiChapter, setBeiChapter] = useState("");
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
+  const [activeButton, setActiveButton] = useState(undefined);
 
+  // hihihih
+  const tagsPresent = useMemo(
+    () =>
+      props.active !== undefined ||
+      props.countries.size > 0 ||
+      props.states.size > 0 ||
+      props.cities.size > 0 ||
+      props.dateOfBirths.size > 0 ||
+      props.emails.size > 0 ||
+      props.additionalAffiliations.size > 0 ||
+      props.dateOfJoins.size > 0 ||
+      props.beiChapters.size > 0 ||
+      props.secondaryPhoneNumbers.size > 0 ||
+      props.secondaryNames.size > 0,
+    [
+      props.active,
+      props.countries,
+      props.states,
+      props.cities,
+      props.dateOfBirths,
+      props.emails,
+      props.additionalAffiliations,
+      props.dateOfJoins,
+      props.beiChapters,
+      props.secondaryPhoneNumbers,
+      props.secondaryNames,
+    ]
+  );
   const checkAndUpdateList = useCallback(
     <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
       setUpdater((set) => {
@@ -167,41 +212,181 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <span className={styles["active_patient_box_label"]}>
             <div className={styles["toggle-button-group"]}>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${activeButton === undefined ? styles["active-button"] : ""}`}
                 value="undefined"
-                onClick={() => props.setActive(undefined)}
+                onClick={() => {
+                  props.setActive(undefined);
+                  setActiveButton(undefined);
+                }}
               >
                 All Patients
               </button>
               <button
-                className={styles["toggle-button"]}
+                className={`${styles["toggle-button"]} ${activeButton === true ? styles["active-button"] : ""}`}
                 value="true"
-                onClick={() => props.setActive(true)}
+                onClick={() => {
+                  props.setActive(true);
+                  setActiveButton(true);
+                }}
               >
                 Active Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${activeButton === false ? styles["active-button"] : ""}`}
                 value="false"
-                onClick={() => props.setActive(false)}
+                onClick={() => {
+                  props.setActive(false);
+                  setActiveButton(false);
+                }}
               >
                 Inactive Patients
               </button>
             </div>
+            {tagsPresent
+              ? props.countries.size > 0 &&
+                Array.from(props.countries).map((country) => (
+                  <div key={`country-${country}`} className={styles.tags}>
+                    <Tag
+                      title="Country"
+                      value={country}
+                      setList={props.setCountries}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.states.size > 0 &&
+                Array.from(props.states).map((state) => (
+                  <div key={`state-${state}`} className={styles.tags}>
+                    <Tag
+                      title="State"
+                      value={state}
+                      setList={props.setStates}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.cities.size > 0 &&
+                Array.from(props.cities).map((city) => (
+                  <div key={`city-${city}`} className={styles.tags}>
+                    <Tag title="City" value={city} setList={props.setCities} />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.dateOfBirths.size > 0 &&
+                Array.from(props.dateOfBirths).map((dob) => (
+                  <div key={`dob-${dob}`} className={styles.tags}>
+                    <Tag
+                      title="Date of Birth"
+                      value={dob}
+                      setList={props.setDateOfBirths}
+                      transformData={transformDate}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.emails.size > 0 &&
+                Array.from(props.emails).map((email) => (
+                  <div key={`email-${email}`} className={styles.tags}>
+                    <Tag
+                      title="Email"
+                      value={email}
+                      setList={props.setEmails}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.dateOfJoins.size > 0 &&
+                Array.from(props.dateOfJoins).map((dateOfJoin) => (
+                  <div key={`join-date-${dateOfJoin}`} className={styles.tags}>
+                    <Tag
+                      title="Join Date"
+                      value={dateOfJoin}
+                      setList={props.setDateOfJoins}
+                      transformData={transformDate}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.beiChapters.size > 0 &&
+                Array.from(props.beiChapters).map((chapter) => (
+                  <div key={`bei-chapter-${chapter}`} className={styles.tags}>
+                    <Tag
+                      title="BEI Chapter"
+                      value={chapter}
+                      setList={props.setBeiChapters}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
+              ? props.secondaryPhoneNumbers.size > 0 &&
+                Array.from(props.secondaryPhoneNumbers).map(
+                  (secondaryPhoneNumber) => (
+                    <div
+                      key={`phone-number-${secondaryPhoneNumber}`}
+                      className={styles.tags}
+                    >
+                      <Tag
+                        title="Secondary Phone Number"
+                        value={secondaryPhoneNumber}
+                        setList={props.setSecondaryPhoneNumbers}
+                        transformData={transformPhoneNumber}
+                      />
+                    </div>
+                  )
+                )
+              : null}
+            {tagsPresent
+              ? props.additionalAffiliations.size > 0 &&
+                Array.from(props.additionalAffiliations).map(
+                  (additionalAffiliation) => (
+                    <div
+                      key={`additional-affiliation-${additionalAffiliation}`}
+                      className={styles.tags}
+                    >
+                      <Tag
+                        title="Additional Affiliation"
+                        value={additionalAffiliation}
+                        setList={props.setAdditionalAffiliations}
+                      />
+                    </div>
+                  )
+                )
+              : null}
+            {tagsPresent
+              ? props.secondaryNames.size > 0 &&
+                Array.from(props.secondaryNames).map((secondaryName) => (
+                  <div
+                    key={`secondary-name-${secondaryName}`}
+                    className={styles.tags}
+                  >
+                    <Tag
+                      title="Secondary Name"
+                      value={secondaryName}
+                      setList={props.setSecondaryNames}
+                    />
+                  </div>
+                ))
+              : null}
+            <div
+              className={[styles.button_row_button, styles.button_blue].join(
+                " "
+              )}
+              onClick={() => {
+                setFinal();
+                reset();
+              }}
+            >
+              Apply
+            </div>
           </span>
         </div>
-        {/* <div className={styles.button_row_button} onClick={reset}>
-          Clear
-        </div>
-        <div
-          className={[styles.button_row_button, styles.button_blue].join(" ")}
-          onClick={() => {
-            setFinal();
-            reset();
-          }}
-        >
-          Apply
-        </div> */}
       </div>
       {/* entire flexbox */}
       <div className={styles.all_questions}>

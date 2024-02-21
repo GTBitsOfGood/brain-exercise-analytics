@@ -5,11 +5,12 @@
   justify-content: center;
   width: 100%;
   font-size: 12px;
-  box-shadow: 0px 0px 4px 4px #e5e8ee;
-  background-color: #e7eeff;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  background-color: white;
   margin-top: 5px;
   padding: 22px 12px;
-  border-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   color: #444;
 }
 
@@ -20,9 +21,8 @@
 .button_row {
   margin-bottom: 20px;
   display: flex;
-  justify-content: row;
-  gap: 10px;
   /* background-color: red; */
+  flex-wrap: wrap;
 }
 
 .all_questions {
@@ -128,11 +128,15 @@
 }
 
 .active_patient_box_label {
-  border-radius: 50px;
+  /* border-radius: 50px; */
+  /* background-color: aqua; */
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 12px;
+  column-gap: 12px;
 }
 
 .button_row_button {
-  background-color: red;
   width: 95px;
   height: 38px;
   display: flex;
@@ -147,13 +151,21 @@
   color: white;
 }
 .toggle-button-group {
-  /* background-color: purple; */
+  display: flex;
+  flex-direction: row;
 }
 
 .toggle-button {
   color: #2b3674;
   padding: 8px 16px;
+  font-size: 16px;
   border: 1px solid #d9d9d9;
+  transition: background-color 0.3s;
+}
+
+.toggle-button:hover {
+  background-color: #008afc;
+  color: white;
 }
 
 .toggle-button-left {
@@ -166,4 +178,17 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   border-left: 0;
+}
+
+.active-button {
+  background-color: #e3eafc;
+  color: #2b3674;
+  font-weight: 600;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  row-gap: 12px;
 }
