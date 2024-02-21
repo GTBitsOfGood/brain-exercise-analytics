@@ -144,7 +144,8 @@ export default function BarChart({
     setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
-    svg.select(".x-axis").remove();
+    svg.select(".x-axis-top").remove();
+    svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
     const xAxisLabelTop = d3
       .axisBottom(x)
@@ -179,7 +180,7 @@ export default function BarChart({
     svg
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
-      .attr("class", "x-axis")
+      .attr("class", "x-axis-top")
       .style("font", `10px ${poppins500.style.fontFamily}`)
       .style("color", "#343539")
       .call(xAxisLabelTop)
@@ -188,7 +189,7 @@ export default function BarChart({
     svg
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom + 15})`)
-      .attr("class", "x-axis")
+      .attr("class", "x-axis-bottom")
       .style("font", `10px ${inter500.style.fontFamily}`)
       .style("color", "#B0BBD5")
       .call(xAxisLabelBottom)

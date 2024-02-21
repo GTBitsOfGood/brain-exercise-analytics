@@ -110,9 +110,11 @@ export default function LineChart({
     // clean up code
     window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
+    
+    
     const yAxisFormat = yAxis?.format
-      ? yAxis.format
-      : (d: d3.NumberValue) => JSON.stringify(d);
+    ? yAxis.format
+    : (d: d3.NumberValue) => JSON.stringify(d);
     if (infoButtonRef.current) {
       const rect: Element = infoButtonRef.current;
       const newTop = rect.getBoundingClientRect().y - 50;
@@ -121,7 +123,8 @@ export default function LineChart({
       setPopupX(left);
     }
     const svg = d3.select(windowRef.current);
-    svg.select(".x-axis").remove();
+    svg.select(".x-axis-top").remove();
+    svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
     const xAxisLabelTop = d3
       .axisBottom(x)
@@ -156,7 +159,7 @@ export default function LineChart({
     svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom})`)
-      .attr("class", "x-axis")
+      .attr("class", "x-axis-top")
       .style("font", `10px ${poppins500.style.fontFamily}`)
       .style("color", "#343539")
       .call(xAxisLabelTop)
@@ -165,7 +168,7 @@ export default function LineChart({
       svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom + 15})`)
-      .attr("class", "x-axis")
+      .attr("class", "x-axis-bottom")
       .style("font", `10px ${inter500.style.fontFamily}`)
       .style("color", "#B0BBD5")
       .call(xAxisLabelBottom)
@@ -181,6 +184,7 @@ export default function LineChart({
       .call((g) => g.select(".domain").remove());
     return () => window.removeEventListener("scroll", onScroll);
   }, [
+    width,
     data,
     height,
     x,
