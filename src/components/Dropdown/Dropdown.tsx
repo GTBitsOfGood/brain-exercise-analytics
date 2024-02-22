@@ -45,7 +45,7 @@ const StyledSelect = styled(Select)(() => ({
   "&.MuiOutlinedInput-root": {
     "& fieldset": {
       border: "0px solid",
-      borderRadius: "16px",
+      // borderRadius: "16px",
     },
   },
 }));
@@ -74,12 +74,12 @@ function Dropdown<T>(props: DropdownProps<T>) {
     (e: SelectChangeEvent<T>) => {
       onChange(e);
     },
-    [onChange],
+    [onChange]
   );
 
   const displayValue = useMemo(
     () => options.find((o) => o.value === value)?.displayValue ?? " ",
-    [options, value],
+    [options, value]
   );
 
   const extraStyle = useMemo(
@@ -93,7 +93,7 @@ function Dropdown<T>(props: DropdownProps<T>) {
             borderColor: "#e0e5f2",
             backgroundColor: "#ffffff",
           },
-    [showError],
+    [showError]
   );
 
   return (
@@ -104,7 +104,7 @@ function Dropdown<T>(props: DropdownProps<T>) {
         onChange={onSelectChange as (e: SelectChangeEvent<unknown>) => void}
         style={{
           textAlign: "left",
-          borderRadius: "16px",
+          // borderRadius: "16px",
           borderWidth: "1px",
           borderStyle: "solid",
           paddingRight: "0px",

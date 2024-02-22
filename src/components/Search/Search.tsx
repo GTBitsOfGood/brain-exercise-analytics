@@ -86,7 +86,6 @@ export default function Search({
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search"
-              icon={<SearchIcon fontSize="medium" />}
             />
           </div>
           {/* <FontAwesomeIcon

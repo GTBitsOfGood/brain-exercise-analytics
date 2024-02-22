@@ -29,24 +29,32 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  row-gap: 20px;
-  column-gap: 20px;
+  row-gap: 12px;
+  column-gap: 12px;
+  /* background-color: red; */
 }
 
 .question_box {
   display: flex;
   flex-direction: row;
   height: 30px;
+  /* border-radius: 10px; */
+  color: #2b3674;
+  /* color: red; */
+  font-weight: 600;
 }
 
 .label {
   text-align: left;
   margin-top: auto;
   vertical-align: middle;
-  background-color: #fafafa;
   padding: 5px 12px;
   height: 100%;
   border: 1px solid #d9d9d9;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right: 0;
+  background-color: #f4f7fe;
 }
 
 .email_label {
@@ -54,7 +62,7 @@
 }
 
 .email_answer {
-  width: 263px;
+  width: 200px;
 }
 
 .additional_affil_label {
@@ -62,7 +70,7 @@
 }
 
 .affiliation_answer {
-  width: 346px;
+  width: 220px;
 }
 
 .sec_person_name_label {
@@ -71,7 +79,7 @@
 }
 
 .sec_person_name_answer {
-  width: 305px;
+  width: 220px;
 }
 
 .sec_person_phone_label {
@@ -79,22 +87,33 @@
 }
 
 .sec_person_phone_answer {
-  width: 359px;
+  width: 220px;
 }
 
 .select_dropdown_answer {
   display: inline-block;
   border: 1px solid #d9d9d9;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .answer {
   border: 1px solid #d9d9d9 !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  /* background-color: purple; */
+  background-color: #f4f7fe;
 }
 
 .answerInput {
   height: 28px !important;
-  border-radius: 0px !important;
+  /* border-radius: 10px !important; */
   border: 0px solid;
+  /* background-color: red; */
+  /* fix me  */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #f4f7fe;
 }
 
 .secondaryInfo {
@@ -109,8 +128,9 @@
 .secondaryInfoTitle {
   font-size: 12px;
   text-align: left;
-  margin-top: -10px;
-  color: #828282;
+  margin-top: -8px;
+  color: #9ca5c2;
+  font-weight: 600;
 }
 
 .calendarContainer {
@@ -158,7 +178,7 @@
 .toggle-button {
   color: #2b3674;
   padding: 8px 16px;
-  font-size: 16px;
+  font-size: 14px;
   border: 1px solid #d9d9d9;
   transition: background-color 0.3s;
 }
@@ -191,4 +211,8 @@
   flex-wrap: wrap;
   column-gap: 12px;
   row-gap: 12px;
+}
+.calendarContainer {
+  width: 146px;
+  background-color: #f4f7fe;
 }

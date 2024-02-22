@@ -10,8 +10,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 import CHAPTERS from "@src/utils/chapters";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import ToggleButton from "@mui/material/ToggleButton";
+
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import { transformDate, transformPhoneNumber } from "@src/utils/utils";
 
@@ -37,12 +36,26 @@ function SelectDropdown<T>({
 }: SelectDropdownProps<T>) {
   return (
     <div className={styles.question_box} style={style}>
-      <div className={styles.label} style={{ width: labelWidth }}>
+      <div
+        className={styles.label}
+        style={{
+          width: labelWidth,
+          borderTopLeftRadius: "10px",
+          borderBottomLeftRadius: "10px",
+          borderRight: "0",
+          backgroundColor: "#F4F7FE",
+        }}
+      >
         {title}
       </div>
       <div
         className={styles.select_dropdown_answer}
-        style={{ width: answerWidth }}
+        style={{
+          width: answerWidth,
+          borderTopRightRadius: "10px",
+          borderBottomRightRadius: "10px",
+          backgroundColor: "#F4F7FE",
+        }}
       >
         <Dropdown
           {...dropdownProps}
@@ -50,7 +63,8 @@ function SelectDropdown<T>({
             height: "28px",
             width: "100%",
             border: "none",
-            borderRadius: 0,
+            borderRadius: 10,
+            backgroundColor: "#F4F7FE",
           }}
           sx={{
             "&.MuiOutlinedInput-root": {
@@ -393,7 +407,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <SelectDropdown
           title="Country"
           dropdownProps={{
-            placeholder: "Select Country",
+            placeholder: "Select country",
             options: COUNTRIES,
             value: country,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -403,13 +417,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             },
             showError: false,
           }}
-          labelWidth={99}
-          answerWidth={183}
+          labelWidth={75}
+          answerWidth={155}
         />
         <SelectDropdown
           title="State"
           dropdownProps={{
-            placeholder: "Select State",
+            placeholder: "Select state",
             options: STATES,
             value: state,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -418,13 +432,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             },
             showError: false,
           }}
-          labelWidth={99}
-          answerWidth={183}
+          labelWidth={58}
+          answerWidth={140}
         />
         <SelectDropdown
           title="City"
           dropdownProps={{
-            placeholder: "Select City",
+            placeholder: "Select city",
             options: CITIES,
             value: city,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -432,8 +446,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             },
             showError: false,
           }}
-          labelWidth={99}
-          answerWidth={183}
+          labelWidth={51}
+          answerWidth={130}
         />
         <SelectDropdown
           title="BEI Chapter"
@@ -447,11 +461,15 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             showError: false,
           }}
           labelWidth={120}
-          answerWidth={258}
+          answerWidth={180}
         />
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
-          <CalendarInput value={dateOfBirth} onChange={setDateOfBirth} />
+          <CalendarInput
+            className={styles.calendarContainer}
+            value={dateOfBirth}
+            onChange={setDateOfBirth}
+          />
         </div>
         <div className={styles.question_box}>
           <div className={[styles.label, styles.email_label].join(" ")}>
@@ -462,7 +480,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             className={[styles.answer, styles.email_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
             value={email}
-            placeholder="example@domain.com"
+            placeholder="bei@example.com"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
