@@ -264,6 +264,9 @@ export interface IPatientTableEntry
   active: boolean;
   startDate: Date;
 }
+
+/* Single Patient Analytics Types */
+
 export interface IAggregatedAnalyticsAll
   extends IAggregatedAnalyticsOverall,
     IAggregatedAnalyticsMath,
@@ -346,3 +349,41 @@ export interface IAggregatedOverallAnalytics {
   totalUsers: number;
   activeHistory: DataRecord[];
 }
+
+/* Group Patient Analytics Types */
+
+export interface IAggregatedGroupAnalyticsAll
+  extends IAggregatedGroupAnalyticsOverall,
+    IAggregateGroupAnalyticsMath,
+    IAggregateGroupAnalyticsReading,
+    IAggregateGroupAnalyticsWriting,
+    IAggregateGroupAnalyticsTrivia {}
+
+export type IAggregatedGroupAnalyticsOverall = {
+  overall: Omit<
+    IAggregatedAnalyticsOverall["overall"],
+    "name" | "streak" | "active" | "startDate" | "lastSessionDate"
+  >;
+};
+
+export type IAggregateGroupAnalyticsMath = IAggregatedAnalyticsMath;
+
+export type IAggregateGroupAnalyticsTrivia = IAggregatedAnalyticsTrivia;
+
+export type IAggregateGroupAnalyticsReading = {
+  reading: Omit<IAggregatedAnalyticsReading["reading"], "lastSession"> & {
+    lastSession: Omit<
+      IAggregatedAnalyticsReading["reading"]["lastSession"],
+      "completed"
+    >;
+  };
+};
+
+export type IAggregateGroupAnalyticsWriting = {
+  writing: Omit<IAggregatedAnalyticsWriting["writing"], "lastSession"> & {
+    lastSession: Omit<
+      IAggregatedAnalyticsWriting["writing"]["lastSession"],
+      "completed"
+    >;
+  };
+};
