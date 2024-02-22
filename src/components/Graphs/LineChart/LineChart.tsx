@@ -40,7 +40,8 @@ export default function LineChart({
   fullWidth,
   info = "",
 }: DataParams) {
-  data = (data.length == 0 ? [{ interval: '1', value: 1 }] : data);
+  // eslint-disable-next-line no-param-reassign
+  data = data.length === 0 ? [{ interval: "1", value: 1 }] : data;
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -54,7 +55,7 @@ export default function LineChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
-  
+
   const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -110,11 +111,10 @@ export default function LineChart({
     // clean up code
     window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
-    
-    
+
     const yAxisFormat = yAxis?.format
-    ? yAxis.format
-    : (d: d3.NumberValue) => JSON.stringify(d);
+      ? yAxis.format
+      : (d: d3.NumberValue) => JSON.stringify(d);
     if (infoButtonRef.current) {
       const rect: Element = infoButtonRef.current;
       const newTop = rect.getBoundingClientRect().y - 50;
@@ -133,7 +133,7 @@ export default function LineChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat((d) => data[d.valueOf()].interval.split(" ")[0]);
-      
+
     const xAxisLabelBottom = d3
       .axisBottom(x)
       .ticks(data.length - 1)
@@ -141,7 +141,7 @@ export default function LineChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat((d) => data[d.valueOf()].interval.split(" ")[1]);
-      
+
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(
@@ -164,8 +164,8 @@ export default function LineChart({
       .style("color", "#343539")
       .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
-    
-      svg
+
+    svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom + 15})`)
       .attr("class", "x-axis-bottom")
@@ -173,7 +173,7 @@ export default function LineChart({
       .style("color", "#B0BBD5")
       .call(xAxisLabelBottom)
       .call((g) => g.select(".domain").remove());
-      
+
     svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)

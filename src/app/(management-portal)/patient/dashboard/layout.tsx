@@ -1,9 +1,14 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { OverviewReport } from "@src/components/Dashboard";
-import styles from "./layout.module.scss";
 import { internalRequest } from "@src/utils/requests";
-import { DateRangeEnum, HttpMethod, IAggregatedOverallAnalytics } from "@/common_utils/types";
+import {
+  DateRangeEnum,
+  HttpMethod,
+  IAggregatedOverallAnalytics,
+} from "@/common_utils/types";
+import styles from "./layout.module.scss";
 
 export default function DashboardLayout({
   children,
@@ -13,7 +18,7 @@ export default function DashboardLayout({
   const [patientData, setPatientData] = useState<IAggregatedOverallAnalytics>({
     activeUsers: 0,
     totalUsers: 0,
-    activeHistory: []
+    activeHistory: [],
   });
   useEffect(() => {
     internalRequest({
@@ -23,13 +28,17 @@ export default function DashboardLayout({
         range: DateRangeEnum.RECENT,
       },
     }).then((data) => {
-      setPatientData(data as IAggregatedOverallAnalytics)
+      setPatientData(data as IAggregatedOverallAnalytics);
     });
   }, []);
   return (
     <div className={styles.container}>
       <div className={styles.overviewReportContainer}>
-        <OverviewReport activeUsers={patientData.activeUsers} totalUsers={patientData.totalUsers} activeHistory={patientData.activeHistory} />
+        <OverviewReport
+          activeUsers={patientData.activeUsers}
+          totalUsers={patientData.totalUsers}
+          activeHistory={patientData.activeHistory}
+        />
       </div>
       {children}
     </div>

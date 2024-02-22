@@ -2,11 +2,11 @@
 
 import { PersonIcon, PeopleIcon } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
+import { IAggregatedOverallAnalytics } from "@/common_utils/types";
 import { LineChart, SmallDataBox } from "../../Graphs";
 import styles from "./OverviewReport.module.scss";
-import { IAggregatedOverallAnalytics } from "@/common_utils/types";
 
-interface Params extends IAggregatedOverallAnalytics{
+interface Params extends IAggregatedOverallAnalytics {
   style?: CSSProperties;
 }
 // Need data to pass to Linechart

@@ -14,23 +14,25 @@ import { CSSProperties, ReactNode } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import ActiveIndicatorBox from "@src/components/ActiveIndicatorBox/ActiveIndicatorBox";
+import DateSelector from "@src/components/DateSelector/DateSelector";
 import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
 import styles from "./OverallDashboard.module.scss";
-import DateSelector from "@src/components/DateSelector/DateSelector";
 
 interface Params {
+  active: boolean;
+  name: string;
   streak: Days[];
   startDate: Date;
-  endDate: Date;
+  lastSessionDate: Date;
   sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
-  menuState: [selectedValue: DateRangeEnum, setSelectedvalue: Function];
+  menuState: [
+    selectedValue: DateRangeEnum,
+    setSelectedvalue: (value: DateRangeEnum) => void,
+  ];
 
   // Need to update with the schema of the response we will get from the backend
 }
-
-// For the name of the user it would be really useful to have a reducer store this information globally during authentication (like in the mobile app)
-const currentUser = "John Doe";
 
 const options: Intl.DateTimeFormatOptions = {
   weekday: "short",
@@ -77,15 +79,18 @@ export default function OverallDashboard(params: Params) {
           className={styles.title}
           style={{ color: "#a3aed0", marginLeft: "62px" }}
         >
-          {currentUser}
+          {params.name}
         </p>
         <ActiveIndicatorBox
-          active
+          active={params.active}
           style={{ marginLeft: "17px", marginRight: "10px" }}
         />
         <IGI />
         <div className={styles.dateSelector}>
-          <DateSelector selectedValue={params.menuState[0]} setSelectedValue={params.menuState[1]} />
+          <DateSelector
+            selectedValue={params.menuState[0]}
+            setSelectedValue={params.menuState[1]}
+          />
         </div>
         {/* <Dropdown style={{ marginLeft: "auto" }} /> */}
       </div>
@@ -100,8 +105,8 @@ export default function OverallDashboard(params: Params) {
           />
           <SmallDataBox
             className={styles.box}
-            title="End Date"
-            text={formatDate(params.endDate)}
+            title="Date of Last Session"
+            text={formatDate(params.lastSessionDate)}
             Icon={PF}
           />
           <SmallDataBox

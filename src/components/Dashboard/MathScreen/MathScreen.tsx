@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   RootXIcon,
   AccuracyIcon,
@@ -7,9 +7,9 @@ import {
   TimeIcon,
 } from "@src/app/icons";
 import { LineChart, BarChart, SmallDataBox } from "@src/components/Graphs";
+import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./MathScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
-import { DateRangeEnum } from "@/common_utils/types";
 
 interface InputProp {
   id?: string;
@@ -22,7 +22,10 @@ interface InputProp {
   totalQuestions: string;
   totalTime: string;
   style?: object;
-  menuState: [selectedValue: DateRangeEnum, setSelectedvalue: Function];
+  menuState: [
+    selectedValue: DateRangeEnum,
+    setSelectedvalue: (value: DateRangeEnum) => void,
+  ];
 }
 
 const MathScreen = ({
@@ -43,7 +46,10 @@ const MathScreen = ({
         <RootXIcon />
         <p>Math</p>
         <div className={styles.dateSelector}>
-          <DateSelector selectedValue={menuState[0]} setSelectedValue={menuState[1]} />
+          <DateSelector
+            selectedValue={menuState[0]}
+            setSelectedValue={menuState[1]}
+          />
         </div>
       </div>
       <div className={styles.body}>

@@ -111,7 +111,7 @@ export interface IAnalytics {
   totalSessionsCompleted: number;
   startDate: Date;
   active: boolean;
-  streak: [string];
+  streak: Days[];
   lastSessionMetrics: {
     date: Date;
     math: {
@@ -264,14 +264,17 @@ export interface IPatientTableEntry
   active: boolean;
   startDate: Date;
 }
-
 export interface IAggregatedAnalyticsAll
-  extends IAggregatedAnalyticsMath,
+  extends IAggregatedAnalyticsOverall,
+    IAggregatedAnalyticsMath,
     IAggregatedAnalyticsTrivia,
     IAggregatedAnalyticsReading,
-    IAggregatedAnalyticsWriting {
+    IAggregatedAnalyticsWriting {}
+
+export interface IAggregatedAnalyticsOverall {
   overall: {
-    streak: string[];
+    active: boolean;
+    streak: Days[];
     startDate: Date;
     lastSessionDate: Date;
     totalSessionsCompleted: number;
@@ -282,7 +285,7 @@ export interface IAggregatedAnalyticsAll
       promptsCompleted: number;
       triviaQuestionsCompleted: number;
     };
-    userName: string;
+    name: string;
   };
 }
 

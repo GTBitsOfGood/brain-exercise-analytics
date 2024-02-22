@@ -61,7 +61,7 @@ export default function BarChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
-  
+
   const height = Math.max(providedHeight, 80);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -154,8 +154,8 @@ export default function BarChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat((d) => data[d.valueOf()].interval.split(" ")[0]);
-    
-      const xAxisLabelBottom = d3
+
+    const xAxisLabelBottom = d3
       .axisBottom(x)
       .ticks(data.length)
       .tickSizeOuter(0)
@@ -185,17 +185,20 @@ export default function BarChart({
       .style("color", "#343539")
       .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
-    
+
     svg
       .append("g")
-      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom + 15})`)
+      .attr(
+        "transform",
+        `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
+      )
       .attr("class", "x-axis-bottom")
       .style("font", `10px ${inter500.style.fontFamily}`)
       .style("color", "#B0BBD5")
       .call(xAxisLabelBottom)
       .call((g) => g.select(".domain").remove());
-    
-      svg
+
+    svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)
       .attr("class", "y-axis")
