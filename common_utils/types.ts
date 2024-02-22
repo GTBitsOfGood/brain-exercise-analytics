@@ -354,23 +354,23 @@ export interface IAggregatedOverallAnalytics {
 
 export interface IAggregatedGroupAnalyticsAll
   extends IAggregatedGroupAnalyticsOverall,
-    IAggregateGroupAnalyticsMath,
-    IAggregateGroupAnalyticsReading,
-    IAggregateGroupAnalyticsWriting,
-    IAggregateGroupAnalyticsTrivia {}
+    IAggregatedGroupAnalyticsMath,
+    IAggregatedGroupAnalyticsReading,
+    IAggregatedGroupAnalyticsWriting,
+    IAggregatedGroupAnalyticsTrivia {}
 
 export type IAggregatedGroupAnalyticsOverall = {
   overall: Omit<
     IAggregatedAnalyticsOverall["overall"],
     "name" | "streak" | "active" | "startDate" | "lastSessionDate"
-  >;
+  > & {
+    totalUsers: number;
+    activeUsers: number;
+  };
 };
-
-export type IAggregateGroupAnalyticsMath = IAggregatedAnalyticsMath;
-
-export type IAggregateGroupAnalyticsTrivia = IAggregatedAnalyticsTrivia;
-
-export type IAggregateGroupAnalyticsReading = {
+export type IAggregatedGroupAnalyticsMath = IAggregatedAnalyticsMath;
+export type IAggregatedGroupAnalyticsTrivia = IAggregatedAnalyticsTrivia;
+export type IAggregatedGroupAnalyticsReading = {
   reading: Omit<IAggregatedAnalyticsReading["reading"], "lastSession"> & {
     lastSession: Omit<
       IAggregatedAnalyticsReading["reading"]["lastSession"],
@@ -378,8 +378,7 @@ export type IAggregateGroupAnalyticsReading = {
     >;
   };
 };
-
-export type IAggregateGroupAnalyticsWriting = {
+export type IAggregatedGroupAnalyticsWriting = {
   writing: Omit<IAggregatedAnalyticsWriting["writing"], "lastSession"> & {
     lastSession: Omit<
       IAggregatedAnalyticsWriting["writing"]["lastSession"],
