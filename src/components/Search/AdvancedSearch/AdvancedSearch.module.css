@@ -8,10 +8,11 @@
   box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
   background-color: white;
   margin-top: 5px;
-  padding: 22px 12px;
+  padding: 12px 12px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   color: #444;
+  /* background-color: red; */
 }
 
 .answer::placeholder {
@@ -31,13 +32,14 @@
   align-items: flex-end;
   row-gap: 12px;
   column-gap: 12px;
+
   /* background-color: red; */
 }
 
 .question_box {
   display: flex;
   flex-direction: row;
-  height: 30px;
+  /* height: 30px; */
   /* border-radius: 10px; */
   color: #2b3674;
   /* color: red; */
@@ -48,17 +50,18 @@
   text-align: left;
   margin-top: auto;
   vertical-align: middle;
-  padding: 5px 12px;
+  padding: 7px 15px;
   height: 100%;
   border: 1px solid #d9d9d9;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border-right: 0;
   background-color: #f4f7fe;
+  font-size: 12px;
 }
 
 .email_label {
-  width: 134px;
+  width: 150px;
 }
 
 .email_answer {
@@ -76,6 +79,7 @@
 .sec_person_name_label {
   width: 154px;
   white-space: nowrap;
+  padding: 7px 15px;
 }
 
 .sec_person_name_answer {
@@ -106,7 +110,7 @@
 }
 
 .answerInput {
-  height: 28px !important;
+  height: 31px !important;
   /* border-radius: 10px !important; */
   border: 0px solid;
   /* background-color: red; */
@@ -123,6 +127,7 @@
 
 .secondaryInfo > .question_box {
   margin-top: 6px;
+  /* background-color: red; */
 }
 
 .secondaryInfoTitle {
@@ -137,7 +142,6 @@
   display: flex;
   background-color: white;
   align-items: center;
-  height: 30px;
 }
 
 .active_patient_box {
@@ -148,21 +152,20 @@
 }
 
 .active_patient_box_label {
-  /* border-radius: 50px; */
-  /* background-color: aqua; */
   display: flex;
   flex-wrap: wrap;
   row-gap: 12px;
   column-gap: 12px;
+  height: 31 !important;
 }
 
 .button_row_button {
   width: 95px;
-  height: 38px;
+  height: 31px !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -170,22 +173,22 @@
   background-color: #008afc;
   color: white;
 }
+
 .toggle-button-group {
   display: flex;
   flex-direction: row;
+  /* height: 31px !important; */
 }
 
 .toggle-button {
   color: #2b3674;
-  padding: 8px 16px;
-  font-size: 14px;
+  height: 31 !important;
+  padding: 8px 15px;
+  font-size: 12px;
   border: 1px solid #d9d9d9;
   transition: background-color 0.3s;
-}
-
-.toggle-button:hover {
-  background-color: #008afc;
-  color: white;
+  background-color: #f4f7fe;
+  cursor: pointer;
 }
 
 .toggle-button-left {
@@ -205,7 +208,11 @@
   color: #2b3674;
   font-weight: 600;
 }
-
+.clear-button {
+  background-color: white;
+  color: #2b3674;
+  border: 1px solid #d9d9d9;
+}
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -215,4 +222,11 @@
 .calendarContainer {
   width: 146px;
   background-color: #f4f7fe;
+}
+
+.control_buttons {
+  display: flex;
+  justify-content: flex-end;
+  font-weight: 600;
+  gap: 12px;
 }

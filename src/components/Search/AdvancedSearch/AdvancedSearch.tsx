@@ -388,17 +388,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                   </div>
                 ))
               : null}
-            <div
-              className={[styles.button_row_button, styles.button_blue].join(
-                " "
-              )}
-              onClick={() => {
-                setFinal();
-                reset();
-              }}
-            >
-              Apply
-            </div>
           </span>
         </div>
       </div>
@@ -417,7 +406,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             },
             showError: false,
           }}
-          labelWidth={75}
+          labelWidth={95}
           answerWidth={155}
         />
         <SelectDropdown
@@ -432,7 +421,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             },
             showError: false,
           }}
-          labelWidth={58}
+          labelWidth={75}
           answerWidth={140}
         />
         <SelectDropdown
@@ -446,7 +435,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             },
             showError: false,
           }}
-          labelWidth={51}
+          labelWidth={63}
           answerWidth={130}
         />
         <SelectDropdown
@@ -457,10 +446,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             value: beiChapter,
             onChange: (e: SelectChangeEvent<unknown>) => {
               setBeiChapter(e.target.value as string);
+              setBeiChapter("");
             },
             showError: false,
           }}
-          labelWidth={120}
+          labelWidth={128}
           answerWidth={180}
         />
         <div className={styles.question_box}>
@@ -550,6 +540,28 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
             />
           </div>
+        </div>
+      </div>
+      <div className={styles.control_buttons}>
+        <div
+          className={[styles.button_row_button, styles["clear-button"]].join(
+            " "
+          )}
+          onClick={() => {
+            setFinal();
+            reset();
+          }}
+        >
+          Clear
+        </div>
+        <div
+          className={[styles.button_row_button, styles.button_blue].join(" ")}
+          onClick={() => {
+            setFinal();
+            reset();
+          }}
+        >
+          Add Tags
         </div>
       </div>
     </div>

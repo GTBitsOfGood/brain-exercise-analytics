@@ -130,7 +130,6 @@ export default function Search({
             setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
             setSecondaryNames={setSecondaryNames}
             onSubmit={onSubmitSearch}
-            // hihihihihi
             countries={countries}
             states={states}
             cities={cities}

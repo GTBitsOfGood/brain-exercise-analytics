@@ -45,7 +45,7 @@ const StyledSelect = styled(Select)(() => ({
   "&.MuiOutlinedInput-root": {
     "& fieldset": {
       border: "0px solid",
-      // borderRadius: "16px",
+      // borderRadius: "10px",
     },
   },
 }));

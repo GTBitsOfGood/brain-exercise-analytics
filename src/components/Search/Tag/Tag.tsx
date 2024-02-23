@@ -54,7 +54,7 @@ export default function Tag<T>({
         <FontAwesomeIcon
           className={styles["x-icon"]}
           icon={faX}
-          size="2xs"
+          size="fa-solid fa-x"
           onClick={handleCloseTag}
         />
         {/* </div> */}
