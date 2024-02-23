@@ -44,6 +44,9 @@ function SelectDropdown<T>({
           borderBottomLeftRadius: "10px",
           borderRight: "0",
           backgroundColor: "#F4F7FE",
+          height: "31px",
+          display: "flex",
+          alignItems: "center",
         }}
       >
         {title}
@@ -70,7 +73,7 @@ function SelectDropdown<T>({
             "&.MuiOutlinedInput-root": {
               height: "30px",
               "& fieldset": {
-                borderRadius: "0px",
+                borderRadius: "10px",
               },
             },
           }}
