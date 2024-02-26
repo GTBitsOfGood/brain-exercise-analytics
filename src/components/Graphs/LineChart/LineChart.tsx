@@ -19,6 +19,7 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   gradient?: boolean;
   info?: string;
+  yLabel?: string;
 }
 
 export default function LineChart({
@@ -39,6 +40,7 @@ export default function LineChart({
   gradient = false,
   fullWidth,
   info = "",
+  yLabel = "",
 }: DataParams) {
   // eslint-disable-next-line no-param-reassign
   data = data.length === 0 ? [{ interval: "1", value: 1 }] : data;
@@ -60,7 +62,7 @@ export default function LineChart({
   const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 20;
-  const marginBottom = 55;
+  const marginBottom = 65;
   const marginLeft = 40;
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
@@ -216,44 +218,49 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <p className={styles.titleText}>{title}</p>
-        {info !== "" && (
-          <div
-            className={styles.info}
-            onClick={() => {
-              setInfoPopup(true);
-            }}
-            ref={infoButtonRef}
-          >
-            <InfoIcon />
-            <PopupModal
-              show={infoPopup}
-              info="Some information about line chart should come here."
-              style={{
-                position: "fixed",
-                top: `${popupY}px`,
-                zIndex: 500,
-                left: `${popupX}px`,
+        <div style={{ display: "inline-flex" }}>
+          <p className={styles.titleText}>{title}</p>
+          {info !== "" && (
+            <div
+              className={styles.info}
+              onClick={() => {
+                setInfoPopup(true);
               }}
-            />
-          </div>
-        )}
-        <p
-          className={styles.percentageChangeIcon}
-          style={{
-            color:
-              actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
-          }}
-        >
-          {actualChange !== null &&
-            percentageChange &&
-            (actualChange < 0
-              ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-              : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-        </p>
-        <p className={styles.percentageChange}>
-          {actualChange !== null && percentageChange}
-        </p>
+              ref={infoButtonRef}
+            >
+              <InfoIcon />
+              <PopupModal
+                show={infoPopup}
+                info="Some information about line chart should come here."
+                style={{
+                  position: "fixed",
+                  top: `${popupY}px`,
+                  zIndex: 500,
+                  left: `${popupX}px`,
+                }}
+              />
+            </div>
+          )}
+          <p
+            className={styles.percentageChangeIcon}
+            style={{
+              color:
+                actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
+            }}
+          >
+            {actualChange !== null &&
+              percentageChange &&
+              (actualChange < 0
+                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+          </p>
+          <p className={styles.percentageChange}>
+            {actualChange !== null && percentageChange}
+          </p>
+        </div>
+        <div style={{ display: "inline-flex" }}>
+          <p className={styles.labelText}>{yLabel}</p>
+        </div>
       </div>
       <svg
         ref={windowRef}
@@ -261,7 +268,7 @@ export default function LineChart({
         height={height}
         onMouseMove={hoverable ? handleMouseMove : undefined}
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 20 }}
       >
         {gradient && (
           <filter id="drop-shadow" height={"180%"}>

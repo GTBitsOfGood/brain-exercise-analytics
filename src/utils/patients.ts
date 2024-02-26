@@ -258,85 +258,85 @@ export const sampleTableEntries: IPatientTableEntry[] = [
 
 export const dataLine = [
   {
-    interval: "9/17",
+    interval: "Aug 17",
     value: 0.4,
   },
   {
-    interval: "9/24",
+    interval: "Aug 17",
     value: 0.2,
   },
   {
-    interval: "10/4",
+    interval: "Aug 17",
     value: 0.65,
   },
   {
-    interval: "10/12",
+    interval: "Aug 17",
     value: 0.25,
   },
   {
-    interval: "10/19",
+    interval: "Aug 17",
     value: 0.7,
   },
   {
-    interval: "10/25",
+    interval: "Aug 17",
     value: 0.55,
   },
 ];
 
 export const dataBar = [
   {
-    interval: "9/17",
+    interval: "Aug 17",
     value: 0,
   },
   {
-    interval: "9/24",
+    interval: "Aug 17",
     value: 2,
   },
   {
-    interval: "10/4",
+    interval: "Aug 17",
     value: 1,
   },
   {
-    interval: "10/12",
+    interval: "Aug 17",
     value: 6,
   },
   {
-    interval: "10/19",
+    interval: "Aug 17",
     value: 5,
   },
   {
-    interval: "10/25",
+    interval: "Aug 17",
     value: 7,
   },
 ];
 export const dataStacked = [
   {
-    interval: "9/17",
+    interval: "Aug 17",
     stackedValue: 0.3,
     value: 0.5,
   },
   {
-    interval: "9/24",
+    interval: "Aug 17",
     stackedValue: 0.2,
     value: 0.6,
   },
   {
-    interval: "10/4",
+    interval: "Aug 17",
     stackedValue: 0.2,
     value: 0.7,
   },
   {
-    interval: "10/12",
+    interval: "Aug 17",
     stackedValue: 0.5,
     value: 0.6,
   },
   {
-    interval: "10/19",
+    interval: "Aug 17",
     stackedValue: 0.2,
     value: 0.5,
   },
   {
-    interval: "10/25",
+    interval: "Aug 17",
     stackedValue: 0.0,
     value: 0.8,
   },
@@ -344,23 +344,23 @@ export const dataStacked = [
 
 export const numberOfQuestionData = [
   {
-    interval: "9/17",
+    interval: "Aug 17",
     value: 25,
   },
   {
-    interval: "9/24",
+    interval: "Aug 17",
     value: 30,
   },
   {
-    interval: "10/4",
+    interval: "Aug 17",
     value: 15,
   },
   {
-    interval: "10/11",
+    interval: "Aug 17",
     value: 10,
   },
   {
-    interval: "10/18",
+    interval: "Aug 17",
     value: 10,
   },
   {
