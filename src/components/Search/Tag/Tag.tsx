@@ -1,12 +1,13 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { faX } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./Tag.module.css";
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { faX } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from './Tag.module.css';
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 type TagProps<T> = {
   title: string;
   value: T;
-  setList?: Dispatch<SetStateAction<Set<T>>>;
+  setList?: ActionCreatorWithPayload<Set<string>>;
   transformData?: (value: T) => string;
   onClick?: () => void;
 };
@@ -50,11 +51,11 @@ export default function Tag<T>({
     <div className={styles.container}>
       <div className={styles.border}>
         <span className={styles.text}>{tagText}</span>
-        <div className={styles["icon-container"]}>
+        <div className={styles['icon-container']}>
           <FontAwesomeIcon
-            className={styles["x-icon"]}
+            className={styles['x-icon']}
             icon={faX}
-            size="2xs"
+            size='2xs'
             onClick={handleCloseTag}
           />
         </div>

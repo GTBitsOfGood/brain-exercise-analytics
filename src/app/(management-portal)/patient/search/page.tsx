@@ -25,9 +25,8 @@ firebaseInit();
 
 export default function Page() {
   const dispatch = useDispatch();
-
   const {
-    name: fullName,
+    fullName,
     active,
     countries,
     states,
@@ -37,7 +36,7 @@ export default function Page() {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhones: secondaryPhoneNumbers,
+    secondaryPhoneNumbers,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
 
@@ -55,12 +54,12 @@ export default function Page() {
           method: HttpMethod.POST,
           body: {
             params: {
-              name: fullName,
+              fullName,
               dateOfBirths: dateOfBirths,
               emails: emails,
               additionalAffiliations: additionalAffiliations,
               secondaryNames: secondaryNames,
-              secondaryPhoneNumbers: secondaryPhoneNumbers,
+              secondaryPhoneNumbers,
               beiChapters: beiChapters,
               active,
               countries: countries,
@@ -92,6 +91,7 @@ export default function Page() {
     secondaryNames,
     sortField,
     currentPage,
+    dispatch,
   ]);
 
   useEffect(() => {
@@ -110,6 +110,7 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
     sortField,
+    dispatch,
   ]);
 
   return (
@@ -118,7 +119,9 @@ export default function Page() {
         <p className={styles['intro-text']}>
           To begin viewing analytics, search for a patient here!
         </p>
-        <div className={styles['search-wrapper']}>{/* <Search /> */}</div>
+        <div className={styles['search-wrapper']}>
+          <Search />
+        </div>
       </div>
       <div
         className={classes(

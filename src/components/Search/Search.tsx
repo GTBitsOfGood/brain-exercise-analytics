@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -10,6 +9,8 @@ import styles from './Search.module.css';
 import Tag from './Tag/Tag';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import InputField from '../InputField/InputField';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@src/redux/rootReducer';
 import {
   setFullName,
   setActive,
@@ -24,7 +25,6 @@ import {
   setSecondaryPhoneNumbers,
   setSecondaryNames,
 } from '@src/redux/reducers/patientSearchReducer';
-import { RootState } from '@src/redux/rootReducer';
 
 interface SearchProps {
   className?: string;
@@ -34,9 +34,10 @@ interface SearchProps {
 export default function Search({ className, onSubmit }: SearchProps) {
   const [searchInput, setSearchInput] = useState<string>('');
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
-
   const dispatch = useDispatch();
+
   const {
+    fullName,
     active,
     countries,
     states,
@@ -46,23 +47,23 @@ export default function Search({ className, onSubmit }: SearchProps) {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhones: secondaryPhoneNumbers,
+    secondaryPhoneNumbers,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
 
   const tagsPresent = useMemo(
     () =>
       active !== undefined ||
-      countries.length > 0 ||
-      states.length > 0 ||
-      cities.length > 0 ||
-      dateOfBirths.length > 0 ||
-      emails.length > 0 ||
-      additionalAffiliations.length > 0 ||
-      dateOfJoins.length > 0 ||
-      beiChapters.length > 0 ||
-      secondaryPhoneNumbers.length > 0 ||
-      secondaryNames.length > 0,
+      countries.size > 0 ||
+      states.size > 0 ||
+      cities.size > 0 ||
+      dateOfBirths.size > 0 ||
+      emails.size > 0 ||
+      additionalAffiliations.size > 0 ||
+      dateOfJoins.size > 0 ||
+      beiChapters.size > 0 ||
+      secondaryPhoneNumbers.size > 0 ||
+      secondaryNames.size > 0,
     [
       active,
       countries,
@@ -77,10 +78,11 @@ export default function Search({ className, onSubmit }: SearchProps) {
       secondaryNames,
     ]
   );
+
   const onSubmitSearch = useCallback(() => {
-    setFullName(searchInput);
+    dispatch(setFullName(searchInput));
     onSubmit?.();
-  }, [searchInput, setFullName, onSubmit]);
+  }, [searchInput, dispatch, setFullName, onSubmit]);
 
   return (
     <div className={classes(styles.wrapper, className)}>
@@ -223,20 +225,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
             showAdvancedSearch && styles['advanced-search-container-show']
           )}
         >
-          <AdvancedSearch
-            active={active}
-            setActive={setActive}
-            setCountries={setCountries}
-            setStates={setStates}
-            setCities={setCities}
-            setDateOfBirths={setDateOfBirths}
-            setEmails={setEmails}
-            setAdditionalAffiliations={setAdditionalAffiliations}
-            setDateOfJoins={setDateOfJoins}
-            setBeiChapters={setBeiChapters}
-            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-            setSecondaryNames={setSecondaryNames}
-            onSubmit={onSubmitSearch}
+          <AdvancedSearch onSubmit={onSubmitSearch}
           />
         </div>
       </div>
