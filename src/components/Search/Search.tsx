@@ -118,8 +118,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`country-${country}`}
                   title='Country'
-                  value={country}
-                  setList={setCountries}
+                  value={'country'}
+                  category='countries'
+                  setAction={setCountries}
                 />
               ))}
             {states.size > 0 &&
@@ -127,8 +128,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`state-${state}`}
                   title='State'
-                  value={state}
-                  setList={setStates}
+                  value={'state'}
+                  category='states'
+                  setAction={setStates}
                 />
               ))}
             {cities.size > 0 &&
@@ -136,26 +138,28 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`city-${city}`}
                   title='City'
-                  value={city}
-                  setList={setCities}
+                  value={'city'}
+                  category='cities'
+                  setAction={setCities}
                 />
               ))}
-            {active !== undefined && (
+            {/* {active !== undefined && (
               <Tag
                 key={`active-${active}`}
                 title='Status'
-                value={active}
+                value={'active'}
                 transformData={(val) => (val ? 'Active' : 'Inactive')}
-                onClick={() => setActive(undefined)}
+                onClick={() => dispatch(setActive(undefined))}
               />
-            )}
+            )} */}
             {dateOfBirths.size > 0 &&
               Array.from(dateOfBirths).map((dob) => (
                 <Tag
                   key={`dob-${dob}`}
                   title='Date of Birth'
-                  value={dob}
-                  setList={setDateOfBirths}
+                  value={'dob'}
+                  category='dateOfBirths'
+                  setAction={setDateOfBirths}
                   transformData={transformDate}
                 />
               ))}
@@ -164,8 +168,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`email-${email}`}
                   title='Email'
-                  value={email}
-                  setList={setEmails}
+                  value={'email'}
+                  category='emails'
+                  setAction={setEmails}
                 />
               ))}
             {dateOfJoins.size > 0 &&
@@ -173,8 +178,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`join-date-${dateOfJoin}`}
                   title='Join Date'
-                  value={dateOfJoin}
-                  setList={setDateOfJoins}
+                  value={'dateOfJoin'}
+                  category='dateOfJoins'
+                  setAction={setDateOfJoins}
                   transformData={transformDate}
                 />
               ))}
@@ -183,8 +189,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`bei-chapter-${chapter}`}
                   title='BEI Chapter'
-                  value={chapter}
-                  setList={setBeiChapters}
+                  value={'chapter'}
+                  category='beiChapters'
+                  setAction={setBeiChapters}
                 />
               ))}
             {secondaryPhoneNumbers.size > 0 &&
@@ -192,8 +199,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`phone-number-${secondaryPhoneNumber}`}
                   title='Secondary Phone Number'
-                  value={secondaryPhoneNumber}
-                  setList={setSecondaryPhoneNumbers}
+                  value={'secondaryPhoneNumber'}
+                  category='secondaryPhoneNumbers'
+                  setAction={setSecondaryPhoneNumbers}
                   transformData={transformPhoneNumber}
                 />
               ))}
@@ -203,8 +211,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   <Tag
                     key={`additional-affiliation-${additionalAffiliation}`}
                     title='Additional Affiliation'
-                    value={additionalAffiliation}
-                    setList={setAdditionalAffiliations}
+                    value={'additionalAffiliation'}
+                    category='additionalAffiliations'
+                    setAction={setAdditionalAffiliations}
                   />
                 )
               )}
@@ -214,7 +223,8 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`secondary-name-${secondaryName}`}
                   title='Secondary Name'
                   value={secondaryName}
-                  setList={setSecondaryNames}
+                  category='secondaryNames'
+                  setAction={setSecondaryNames}
                 />
               ))}
           </div>
@@ -225,8 +235,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
             showAdvancedSearch && styles['advanced-search-container-show']
           )}
         >
-          <AdvancedSearch onSubmit={onSubmitSearch}
-          />
+          {/* <AdvancedSearch onSubmit={onSubmitSearch} /> */}
         </div>
       </div>
     </div>

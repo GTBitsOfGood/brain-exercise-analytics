@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PatientSearchParams } from '@/common_utils/types';
+import { IPatientSearchReducer } from '@/common_utils/types';
 
-const initialState = {
+const initialState: IPatientSearchReducer = {
   fullName: '',
   active: undefined,
   countries: new Set<string>(),

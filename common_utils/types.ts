@@ -10,11 +10,11 @@ export type RecursivePartial<T> = T extends Date
 /* Internal Request & API Wrapper Types */
 
 export enum HttpMethod {
-  GET = "GET",
-  POST = "POST",
-  PATCH = "PATCH",
-  PUT = "PUT",
-  DELETE = "DELETE",
+  GET = 'GET',
+  POST = 'POST',
+  PATCH = 'PATCH',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
 }
 
 export interface InternalRequestData {
@@ -34,9 +34,9 @@ export interface InternalResponseData<T> {
 export class InternalResponseError extends Error {}
 
 export enum Role {
-  NONPROFIT_PATIENT = "Nonprofit Patient",
-  NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
-  NONPROFIT_ADMIN = "Nonprofit Admin",
+  NONPROFIT_PATIENT = 'Nonprofit Patient',
+  NONPROFIT_VOLUNTEER = 'Nonprofit Volunteer',
+  NONPROFIT_ADMIN = 'Nonprofit Admin',
 }
 
 export enum Days {
@@ -50,25 +50,25 @@ export enum Days {
 }
 
 export enum AdminApprovalStatus {
-  PENDING = "Pending",
-  APPROVED = "Approved",
-  REJECTED = "Rejected",
+  PENDING = 'Pending',
+  APPROVED = 'Approved',
+  REJECTED = 'Rejected',
 }
 
 export enum DateRangeEnum {
-  RECENT = "Most Recent",
-  QUARTER = "3 Months",
-  HALF = "6 Months",
-  YEAR = "1 Year",
-  MAX = "Max",
+  RECENT = 'Most Recent',
+  QUARTER = '3 Months',
+  HALF = '6 Months',
+  YEAR = '1 Year',
+  MAX = 'Max',
 }
 
 export enum AnalyticsSectionEnum {
-  OVERALL = "overall",
-  MATH = "math",
-  TRIVIA = "trivia",
-  READING = "reading",
-  WRITING = "writing",
+  OVERALL = 'overall',
+  MATH = 'math',
+  TRIVIA = 'trivia',
+  READING = 'reading',
+  WRITING = 'writing',
 }
 
 export interface IUser {
@@ -187,8 +187,8 @@ export interface IOverallAnalytics {
 /* VerificationLog MongoDB Schema Types */
 
 export enum VerificationLogType {
-  PASSWORD_RESET = "PASSWORD_RESET",
-  EMAIL_VERIFICATION = "EMAIL_VERIFICATION",
+  PASSWORD_RESET = 'PASSWORD_RESET',
+  EMAIL_VERIFICATION = 'EMAIL_VERIFICATION',
 }
 
 /* authUser Cookie Type */
@@ -246,6 +246,21 @@ export type PatientSearchParams = {
   dateOfJoins?: string[];
 };
 
+export type IPatientSearchReducer = {
+  fullName: string;
+  active: boolean | undefined;
+  countries: Set<string>;
+  states: Set<string>;
+  cities: Set<string>;
+  dateOfBirths: Set<string>;
+  emails: Set<string>;
+  additionalAffiliations: Set<string>;
+  dateOfJoins: Set<string>;
+  beiChapters: Set<string>;
+  secondaryPhoneNumbers: Set<string>;
+  secondaryNames: Set<string>;
+};
+
 export type VolunteerSearchParams = {
   name?: string;
   approved?: AdminApprovalStatus;
@@ -254,12 +269,12 @@ export type VolunteerSearchParams = {
 export interface IPatientTableEntry
   extends Omit<
     IUser,
-    | "phoneNumber"
-    | "role"
-    | "signedUp"
-    | "verified"
-    | "approved"
-    | "adminDetails"
+    | 'phoneNumber'
+    | 'role'
+    | 'signedUp'
+    | 'verified'
+    | 'approved'
+    | 'adminDetails'
   > {
   active: boolean;
   startDate: Date;
