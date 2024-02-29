@@ -5,14 +5,26 @@
   gap: 20px;
 }
 
+.row {
+  border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
+}
+
+.nameCellContainer {
+  padding-top: 5%;
+}
+
+.dateCellContainer {
+  padding-top: 5%;
+}
+
 .RowCell {
   padding-top: 20px;
   padding-bottom: 20px;
-  border-right: 10px solid transparent;
 }
 
 .RowCell:last-child {
   border-right: none;
+  border-bottom: none;
 }
 
 .RowCellContainer {

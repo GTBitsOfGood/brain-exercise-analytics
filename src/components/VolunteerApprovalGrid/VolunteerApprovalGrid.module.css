@@ -1,16 +1,32 @@
 .volunteerGridWrapper {
-  max-width: 1000px;
-  margin: 20px auto;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.row {
+  border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.RowCellContainer {
+  width: 100%;
   color: #2b3674;
-  font-size: 15.988px;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: -0.32px;
-  height: 57vh;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 97%;
+  font-family: var(--font-poppins);
+  font-size: 15px;
+  font-weight: 600;
+  padding-left: 7px;
+}
+.RowCellContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .table {

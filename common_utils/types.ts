@@ -63,6 +63,19 @@ export enum DateRangeEnum {
   MAX = "Max",
 }
 
+export enum VolunteerAccessLevel {
+  VOLUNTEER = "Volunteer",
+  CHAPTER_PRESIDENT = "Chapter President",
+  REGIONAL_COMMITTEE_MEMBER = "Regional Committee Member",
+  NATIONAL_COMMITTEE_MEMBER = "National Committee Member",
+  DIRECTOR = "Director",
+}
+
+export enum VolunteerStatus {
+  ACTIVE = "Active",
+  INACTIVE = "Inactive",
+}
+
 export enum AnalyticsSectionEnum {
   OVERALL = "overall",
   MATH = "math",

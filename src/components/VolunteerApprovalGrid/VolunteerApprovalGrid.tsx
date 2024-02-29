@@ -1,14 +1,18 @@
 import React, { useState, useMemo } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
-import { SortField } from "@/common_utils/types";
+import { SortField, VolunteerAccessLevel } from "@/common_utils/types";
+
+import Dropdown, { DropdownOption } from "@src/components/Dropdown/Dropdown";
+
+import { SelectChangeEvent } from "@mui/material";
 import styles from "./VolunteerApprovalGrid.module.css";
 
 interface IVolunteer {
   id: number;
   name: string;
-  title: string;
-  dateRequested: string;
+  accessLevel: string;
+  dateJoined: string;
 }
 
 interface GridColDef<T> {
@@ -20,8 +24,8 @@ interface GridColDef<T> {
 
 const volunteersColumns: GridColDef<IVolunteer>[] = [
   { field: "name", headerName: "Name", sortable: true },
-  { field: "title", headerName: "Title", sortable: true },
-  { field: "dateRequested", headerName: "Date Requested", sortable: true },
+  { field: "dateJoined", headerName: "Date Joined", sortable: true },
+  { field: "accessLevel", headerName: "Access Level", sortable: true },
   { field: "actions", headerName: "", sortable: false },
 ];
 
@@ -34,6 +38,18 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
     null,
   );
   const [excludedIds, setExcludedIds] = useState<number[]>([]);
+
+  const [dropdownValues, setDropdownValues] = useState<{
+    [volunteerId: number]: { accessLevel: VolunteerAccessLevel };
+  }>(
+    data.reduce(
+      (acc, cur) => ({
+        ...acc,
+        [cur.id]: { accessLevel: cur.accessLevel },
+      }),
+      {},
+    ),
+  );
 
   const handleConfirmDelete = (id: number) => {
     setDeleteVolunteerId(id);
@@ -60,21 +76,78 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
   function ColumnSizes() {
     return (
       <colgroup>
-        <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
+        <col style={{ width: "25%" }} />
+        <col style={{ width: "15%" }} />
         <col style={{ width: "30%" }} />
         <col style={{ width: "20%" }} />
       </colgroup>
     );
   }
 
+  const accessLevelOptions: DropdownOption<VolunteerAccessLevel>[] =
+    Object.values(VolunteerAccessLevel).map((range) => ({
+      value: range,
+      displayValue: range.toString(),
+    }));
+
   // Construct Rows from the currentItems
   const Rows = currentItems.map((volunteer) => (
-    <tr key={volunteer.id}>
-      <td>{volunteer.name}</td>
-      <td>{volunteer.title}</td>
-      <td>{volunteer.dateRequested}</td>
-      <td>
+    <tr className={styles.row} key={volunteer.id}>
+      <td className={styles.RowCell}>
+        <div className={styles.RowCellContainer}>{volunteer.name}</div>
+      </td>
+      <td className={styles.RowCell}>
+        <div className={styles.RowCellContainer}>{volunteer.dateJoined}</div>
+      </td>
+      <td className={styles.RowCell}>
+        <div className={styles.RowCellContainer}>
+          <Dropdown
+            className={styles.accessLevelContainer}
+            options={accessLevelOptions}
+            value={dropdownValues[volunteer.id].accessLevel}
+            showError={false}
+            onChange={(e: SelectChangeEvent<VolunteerAccessLevel>) => {
+              const newAccessLevel = e.target.value as VolunteerAccessLevel;
+              setDropdownValues((prev) => ({
+                ...prev,
+                [volunteer.id]: {
+                  ...prev[volunteer.id],
+                  accessLevel: newAccessLevel,
+                },
+              }));
+            }}
+            style={{
+              borderRadius: 41,
+              color: "#2B3674",
+              backgroundColor: "#E3EAFC",
+              border: "none",
+              width: "min-content",
+              maxWidth: "100%",
+              textAlign: "center",
+              fontSize: "14px",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "normal",
+            }}
+            sx={{
+              "&.MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderRadius: "41px",
+                },
+              },
+            }}
+            menuItemStyle={{
+              justifyContent: "left",
+              fontSize: "12px",
+              color: "#2B3674",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "normal",
+            }}
+          />
+        </div>
+      </td>
+      <td className={styles.RowCell}>
         <div className={styles.actionsContainer}>
           <button
             className={styles.approveButton}
