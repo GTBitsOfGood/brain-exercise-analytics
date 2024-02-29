@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { ReactNode, useCallback, useMemo } from "react";
 
 import { classes } from "@src/utils/utils";
 import {
@@ -15,6 +15,12 @@ import {
 import { Poppins } from "next/font/google";
 import styles from "./Dropdown.module.css";
 
+const poppins = Poppins({
+  subsets: ["latin-ext"],
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
 export interface DropdownOption<T> {
   value: T;
   displayValue: string;
@@ -22,7 +28,7 @@ export interface DropdownOption<T> {
 
 export interface DropdownProps<T> {
   className?: string;
-  options: DropdownOption<T>[];
+  options: (DropdownOption<T> | ReactNode)[];
   value: T;
   showError: boolean;
   placeholder?: string;
@@ -50,12 +56,6 @@ const StyledSelect = styled(Select)(() => ({
   },
 }));
 
-const StyledMenuItem = styled(MenuItem)(() => ({
-  fontSize: 12,
-  fontFamily: poppins400.style.fontFamily,
-  color: "#313144",
-}));
-
 function Dropdown<T>(props: DropdownProps<T>) {
   const {
     className,
@@ -77,10 +77,16 @@ function Dropdown<T>(props: DropdownProps<T>) {
     [onChange],
   );
 
-  const displayValue = useMemo(
-    () => options.find((o) => o.value === value)?.displayValue ?? " ",
-    [options, value],
-  );
+  const displayValue = useMemo(() => {
+    const option = options.find(
+      (o) =>
+        !React.isValidElement(o) && (o as DropdownOption<T>).value === value,
+    ) as DropdownOption<T> | undefined;
+    if (option) {
+      return option.displayValue;
+    }
+    return placeholder;
+  }, [options, value, placeholder]);
 
   const extraStyle = useMemo(
     () =>
@@ -108,7 +114,7 @@ function Dropdown<T>(props: DropdownProps<T>) {
           borderWidth: "1px",
           borderStyle: "solid",
           paddingRight: "0px",
-          color: displayValue === " " ? "#a3aed0" : "#313144",
+          color: displayValue === placeholder ? "#a3aed0" : "#313144",
           ...extraStyle,
           ...style,
         }}
@@ -122,19 +128,28 @@ function Dropdown<T>(props: DropdownProps<T>) {
           ...menuProps,
         }}
         sx={sx}
+        renderValue={() => displayValue}
       >
-        <StyledMenuItem value=" " disabled>
-          {placeholder}
-        </StyledMenuItem>
-        {options.map((option, index) => (
-          <StyledMenuItem
-            key={index}
-            value={option.value as string}
-            style={menuItemStyle}
-          >
-            {option.displayValue}
-          </StyledMenuItem>
-        ))}
+        <MenuItem value=" " disabled>
+          <div className={styles.defaultMenuItem}>{placeholder}</div>
+        </MenuItem>
+        {options.map((option, index) => {
+          if (React.isValidElement(option)) {
+            return option;
+          }
+
+          const dropdownOption = option as DropdownOption<T>;
+          return (
+            <MenuItem key={index} value={dropdownOption.value as string}>
+              <div
+                className={classes(styles.defaultMenuItem, poppins.className)}
+                style={menuItemStyle}
+              >
+                {dropdownOption.displayValue}
+              </div>
+            </MenuItem>
+          );
+        })}
       </StyledSelect>
     </div>
   );
