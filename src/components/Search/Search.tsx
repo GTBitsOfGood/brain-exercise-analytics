@@ -102,25 +102,6 @@ export default function Search({ className, onSubmit }: SearchProps) {
   const onSubmitSearch = useCallback(() => {
     dispatch(setFullName(searchInput));
 
-    dispatch(setFullName('John Doe'));
-    dispatch(setActive(false));
-    dispatch(setCountries(new Set(['Country1', 'Country2'])));
-    dispatch(setStates(new Set(['State1', 'State2'])));
-    dispatch(setCities(new Set(['City1', 'City2'])));
-    dispatch(setDateOfBirths(new Set(['1990-01-01', '1992-02-02'])));
-    dispatch(setEmails(new Set(['email1@example.com', 'email2@example.com'])));
-    dispatch(
-      setAdditionalAffiliations(new Set(['Affiliation1', 'Affiliation2']))
-    );
-    dispatch(setDateOfJoins(new Set(['2020-01-01', '2022-02-02'])));
-    dispatch(setBeiChapters(new Set(['Chapter1', 'Chapter2'])));
-    dispatch(setSecondaryPhoneNumbers(new Set(['1234567890', '0987654321'])));
-    dispatch(
-      setSecondaryNames(new Set(['Secondary Name1', 'Secondary Name2']))
-    );
-
-    // dispatch(resetFields());
-
     onSubmit?.();
   }, [searchInput, dispatch, setFullName, onSubmit]);
 
@@ -188,6 +169,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 key={`active-${active}`}
                 title='Status'
                 value={'active'}
+                category={'active'}
                 transformData={(val) => (val ? 'Active' : 'Inactive')}
                 onClick={() => dispatch(setActive(undefined))}
               />
@@ -275,7 +257,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
             showAdvancedSearch && styles['advanced-search-container-show']
           )}
         >
-          {/* <AdvancedSearch onSubmit={onSubmitSearch} /> */}
+          <AdvancedSearch onSubmit={onSubmitSearch} />
         </div>
       </div>
     </div>

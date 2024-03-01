@@ -13,6 +13,7 @@ type TagProps<T> = {
   category: keyof IPatientSearchReducer;
   setAction: ActionCreatorWithPayload<Set<string>, string>;
   transformData?: (value: string) => string;
+  onClick?: () => void;
 };
 
 export default function Tag<T>({
@@ -20,6 +21,7 @@ export default function Tag<T>({
   value,
   category,
   setAction,
+  onClick,
   transformData,
 }: TagProps<T>) {
   const dispatch = useDispatch();
@@ -34,6 +36,9 @@ export default function Tag<T>({
     const updatedSet = new Set(categorySet);
     updatedSet.delete(value);
     dispatch(setAction(updatedSet));
+    if (onClick) {
+      onClick();
+    }
   };
 
   const tagText = transformData

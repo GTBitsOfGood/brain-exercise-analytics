@@ -127,8 +127,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     value: locCountry.name,
     displayValue: `${locCountry.name}`,
   }));
-  const countryCode = Country.getAllCountries().filter((locCountry) =>
-    countries.has(locCountry.name)
+  const countryCode = Country.getAllCountries().filter(
+    (locCountry) => countries === locCountry.name,
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((locState) => ({
