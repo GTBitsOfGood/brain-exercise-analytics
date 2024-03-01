@@ -32,8 +32,6 @@ interface SearchProps {
 }
 
 export default function Search({ className, onSubmit }: SearchProps) {
-  const [searchInput, setSearchInput] = useState<string>('');
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const {
@@ -50,6 +48,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
     secondaryPhoneNumbers,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
+
+  const [searchInput, setSearchInput] = useState<string>(fullName);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
   const tagsPresent = useMemo(
     () =>
@@ -118,7 +119,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`country-${country}`}
                   title='Country'
-                  value={'country'}
+                  value={country}
                   category='countries'
                   setAction={setCountries}
                 />
@@ -128,7 +129,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`state-${state}`}
                   title='State'
-                  value={'state'}
+                  value={state}
                   category='states'
                   setAction={setStates}
                 />
@@ -138,7 +139,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`city-${city}`}
                   title='City'
-                  value={'city'}
+                  value={city}
                   category='cities'
                   setAction={setCities}
                 />
@@ -157,7 +158,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`dob-${dob}`}
                   title='Date of Birth'
-                  value={'dob'}
+                  value={dob}
                   category='dateOfBirths'
                   setAction={setDateOfBirths}
                   transformData={transformDate}
@@ -168,7 +169,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`email-${email}`}
                   title='Email'
-                  value={'email'}
+                  value={email}
                   category='emails'
                   setAction={setEmails}
                 />
@@ -178,7 +179,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`join-date-${dateOfJoin}`}
                   title='Join Date'
-                  value={'dateOfJoin'}
+                  value={dateOfJoin}
                   category='dateOfJoins'
                   setAction={setDateOfJoins}
                   transformData={transformDate}
@@ -189,7 +190,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`bei-chapter-${chapter}`}
                   title='BEI Chapter'
-                  value={'chapter'}
+                  value={chapter}
                   category='beiChapters'
                   setAction={setBeiChapters}
                 />
@@ -211,7 +212,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   <Tag
                     key={`additional-affiliation-${additionalAffiliation}`}
                     title='Additional Affiliation'
-                    value={'additionalAffiliation'}
+                    value={additionalAffiliation}
                     category='additionalAffiliations'
                     setAction={setAdditionalAffiliations}
                   />

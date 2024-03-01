@@ -28,7 +28,6 @@ export default function Tag<T>({
   );
 
   const handleCloseTag = () => {
-    // condition to check if categorySet is a set
     if (!(categorySet instanceof Set)) {
       return;
     }
