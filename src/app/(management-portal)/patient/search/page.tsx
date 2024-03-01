@@ -39,7 +39,6 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
-  console.log(fullName);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
@@ -72,7 +71,6 @@ export default function Page() {
             sortParams: sortField,
           },
         }).then((res) => {
-          console.log(res);
           setPageCount(res?.numPages ?? 0);
           setFilteredUsers(res?.data ?? []);
         });

@@ -9,7 +9,6 @@ import ToggleButton from '@mui/material/ToggleButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@src/redux/rootReducer';
 import {
-  setFullName,
   setActive,
   setCountries,
   setStates,
@@ -92,20 +91,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [secondaryName, setSecondaryName] = useState('');
 
   const dispatch = useDispatch();
-  const {
-    fullName,
-    active,
-    countries,
-    states,
-    cities,
-    dateOfBirths,
-    emails,
-    additionalAffiliations,
-    dateOfJoins,
-    beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
-  } = useSelector((state: RootState) => state.patientSearch);
+  const { active } = useSelector((state: RootState) => state.patientSearch);
 
   const resetForm = () => {
     setCountry('');
@@ -115,6 +101,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setEmail('');
     setAdditionalAffiliation('');
     setDateOfJoin('');
+    setBeiChapter('')
     setSecondaryName('');
     setSecondaryPhoneNumber('');
   };
@@ -178,14 +165,20 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             >
               <ToggleButton
                 value='undefined'
-                onClick={() => setActive(undefined)}
+                onClick={() => dispatch(setActive(undefined))}
               >
                 All Patients
               </ToggleButton>
-              <ToggleButton value='true' onClick={() => setActive(true)}>
+              <ToggleButton
+                value='true'
+                onClick={() => dispatch(setActive(true))}
+              >
                 Active Patients
               </ToggleButton>
-              <ToggleButton value='false' onClick={() => setActive(false)}>
+              <ToggleButton
+                value='false'
+                onClick={() => dispatch(setActive(false))}
+              >
                 Inactive Patients
               </ToggleButton>
             </ToggleButtonGroup>
