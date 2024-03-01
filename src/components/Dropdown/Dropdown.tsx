@@ -74,12 +74,12 @@ function Dropdown<T>(props: DropdownProps<T>) {
     (e: SelectChangeEvent<T>) => {
       onChange(e);
     },
-    [onChange]
+    [onChange],
   );
 
   const displayValue = useMemo(
     () => options.find((o) => o.value === value)?.displayValue ?? " ",
-    [options, value]
+    [options, value],
   );
 
   const extraStyle = useMemo(
@@ -93,7 +93,7 @@ function Dropdown<T>(props: DropdownProps<T>) {
             borderColor: "#e0e5f2",
             backgroundColor: "#ffffff",
           },
-    [showError]
+    [showError],
   );
 
   return (

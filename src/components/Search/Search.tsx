@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
-import SearchIcon from "@mui/icons-material/Search";
-import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
+import { classes } from "@src/utils/utils";
 import styles from "./Search.module.css";
-import Tag from "./Tag/Tag";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
 import InputField from "../InputField/InputField";
 
@@ -82,7 +80,7 @@ export default function Search({
     <div className={classes(styles.wrapper, className)}>
       <div
         className={[
-          styles["border"],
+          styles.border,
           showAdvancedSearch && styles["border-change"],
         ].join(" ")}
       >
@@ -124,7 +122,7 @@ export default function Search({
         <div
           className={classes(
             styles["advanced-search-container"],
-            showAdvancedSearch && styles["advanced-search-container-show"]
+            showAdvancedSearch && styles["advanced-search-container-show"],
           )}
         >
           <AdvancedSearch

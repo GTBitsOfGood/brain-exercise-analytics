@@ -33,11 +33,11 @@ const Modal = () => {
     return `${month}/${day}/${year}`;
   }
   const [unupdatedBirthDate, setUnupdatedBirthDate] = useState(
-    new Date(birthDate)
+    new Date(birthDate),
   );
   const [updatedBirthDate, setUpdatedBirthDate] = useState(new Date(birthDate));
   const [updatedBirthDateInput, setUpdatedBirthDateInput] = useState(
-    formatDateToString(new Date(birthDate))
+    formatDateToString(new Date(birthDate)),
   );
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const Modal = () => {
           ...patientDetails,
           birthDate: updatedBirthDate,
         },
-      })
+      }),
     );
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);

@@ -30,7 +30,7 @@ const InputField = (InputFieldProps: InputFieldProps) => {
   const EyeIcon = useMemo(
     () =>
       passwordOrText === "text" ? VisibilityOffOutlined : RemoveRedEyeOutlined,
-    [passwordOrText]
+    [passwordOrText],
   );
 
   return (
@@ -53,7 +53,7 @@ const InputField = (InputFieldProps: InputFieldProps) => {
             InputFieldProps.inputFieldClassName,
             InputFieldProps.type === "password"
               ? styles["password-field"]
-              : undefined
+              : undefined,
           )}
           type={passwordOrText}
           required={InputFieldProps.required ?? false}

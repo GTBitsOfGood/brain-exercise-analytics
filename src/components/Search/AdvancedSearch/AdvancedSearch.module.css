@@ -148,12 +148,6 @@
   font-weight: 600;
 }
 
-.calendarContainer {
-  display: flex;
-  background-color: white;
-  align-items: center;
-}
-
 .active_patient_box {
   display: flex;
   align-items: center;
