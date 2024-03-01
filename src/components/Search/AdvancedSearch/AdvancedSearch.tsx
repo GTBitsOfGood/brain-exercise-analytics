@@ -83,6 +83,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [country, setCountry] = useState(''); // values chosen before the aply button
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [additionalAffiliation, setAdditionalAffiliation] = useState('');
+  const [dateOfJoin, setDateOfJoin] = useState<string>('');
+  const [beiChapter, setBeiChapter] = useState('');
+  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
+  const [secondaryName, setSecondaryName] = useState('');
+
   const dispatch = useDispatch();
   const {
     fullName,
@@ -99,23 +107,36 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
 
+  const resetForm = () => {
+    setCountry('');
+    setState('');
+    setCity('');
+    setDateOfBirth('');
+    setEmail('');
+    setAdditionalAffiliation('');
+    setDateOfJoin('');
+    setSecondaryName('');
+    setSecondaryPhoneNumber('');
+  };
+
   const reset = () => {
+    resetForm();
     dispatch(resetFields());
   };
 
   const setFinal = () => {
-    if (countries) dispatch(setCountries(countries));
-    if (states) dispatch(setStates(states));
-    if (cities) dispatch(setCities(cities));
-    if (dateOfBirths) dispatch(setDateOfBirths(dateOfBirths));
-    if (emails) dispatch(setEmails(emails));
-    if (additionalAffiliations)
-      dispatch(setAdditionalAffiliations(additionalAffiliations));
-    if (dateOfJoins) dispatch(setDateOfJoins(dateOfJoins));
-    if (beiChapters) dispatch(setBeiChapters(beiChapters));
-    if (secondaryPhoneNumbers)
-      dispatch(setSecondaryPhoneNumbers(secondaryPhoneNumbers));
-    if (secondaryNames) dispatch(setSecondaryNames(secondaryNames));
+    if (country) dispatch(setCountries(new Set([country])));
+    if (state) dispatch(setStates(new Set([state])));
+    if (city) dispatch(setCities(new Set([city])));
+    if (dateOfBirth) dispatch(setDateOfBirths(new Set([dateOfBirth])));
+    if (email) dispatch(setEmails(new Set([email])));
+    if (additionalAffiliation)
+      dispatch(setAdditionalAffiliations(new Set([additionalAffiliation])));
+    if (dateOfJoin) dispatch(setDateOfJoins(new Set([dateOfJoin])));
+    if (beiChapter) dispatch(setBeiChapters(new Set([beiChapter])));
+    if (secondaryPhoneNumber)
+      dispatch(setSecondaryPhoneNumbers(new Set([secondaryPhoneNumber])));
+    if (secondaryName) dispatch(setSecondaryNames(new Set([secondaryName])));
     if (props.onSubmit) {
       props.onSubmit();
     }
@@ -177,7 +198,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           className={[styles.button_row_button, styles.button_blue].join(' ')}
           onClick={() => {
             setFinal();
-            // reset();
+            resetForm();
           }}
         >
           Apply
@@ -190,12 +211,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           dropdownProps={{
             placeholder: 'Select Country',
             options: COUNTRIES,
-            value: countries,
+            value: country,
             onChange: (e: SelectChangeEvent<unknown>) => {
               setCountry(e.target.value as string);
               setState('');
               setCity('');
-              dispatch(setCountries(new Set([e.target.value as string])));
             },
             showError: false,
           }}
@@ -207,11 +227,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           dropdownProps={{
             placeholder: 'Select State',
             options: STATES,
-            value: states,
+            value: state,
             onChange: (e: SelectChangeEvent<unknown>) => {
               setState(e.target.value as string);
               setCity('');
-              dispatch(setStates(new Set([e.target.value as string])));
             },
             showError: false,
           }}
@@ -223,10 +242,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           dropdownProps={{
             placeholder: 'Select City',
             options: CITIES,
-            value: cities,
+            value: city,
             onChange: (e: SelectChangeEvent<unknown>) => {
               setCity(e.target.value as string);
-              dispatch(setCities(new Set([e.target.value as string])));
             },
             showError: false,
           }}
@@ -238,9 +256,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           dropdownProps={{
             placeholder: 'Select BEI Chapter',
             options: CHAPTERS,
-            value: beiChapters,
+            value: beiChapter,
             onChange: (e: SelectChangeEvent<unknown>) => {
-              dispatch(setBeiChapters(new Set([e.target.value as string])));
+              setBeiChapter(e.target.value as string);
             },
             showError: false,
           }}
@@ -249,13 +267,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         />
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
-          <CalendarInput
-            value={Array.from(dateOfBirths)[0]}
-            onChange={(newDate) => {
-              const newDateOfBirths = new Set([newDate]);
-              dispatch(setDateOfBirths(newDateOfBirths));
-            }}
-          />
+          <CalendarInput value={dateOfBirth} onChange={setDateOfBirth} />
         </div>
         <div className={styles.question_box}>
           <div className={[styles.label, styles.email_label].join(' ')}>
@@ -265,9 +277,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             type='email'
             className={[styles.answer, styles.email_answer].join(' ')}
             inputFieldClassName={styles.answerInput}
-            value={Array.from(emails)[0]}
+            value={email}
             placeholder='example@domain.com'
-            onChange={(e) => dispatch(setEmails(new Set([e.target.value])))}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className={styles.question_box}>
@@ -280,21 +292,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             className={[styles.answer, styles.affiliation_answer].join(' ')}
             inputFieldClassName={styles.answerInput}
             placeholder='Enter Additional Affiliation'
-            value={Array.from(additionalAffiliations)[0]}
-            onChange={(e) =>
-              dispatch(setAdditionalAffiliations(new Set([e.target.value])))
-            }
+            onChange={(e) => setAdditionalAffiliation(e.target.value)}
+            value={additionalAffiliation}
           />
         </div>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
-          <CalendarInput
-            value={Array.from(dateOfJoins)[0]}
-            onChange={(newDate) => {
-              const newDateOfJoins = new Set([newDate]);
-              dispatch(setDateOfJoins(newDateOfJoins));
-            }}
-          />
+          <CalendarInput value={dateOfJoin} onChange={setDateOfJoin} />
         </div>
 
         <div className={styles.secondaryInfo}>
@@ -314,10 +318,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               inputFieldClassName={styles.answerInput}
               required={false}
               placeholder='Enter Name'
-              value={Array.from(secondaryNames)[0]}
-              onChange={(e) =>
-                dispatch(setSecondaryNames(new Set([e.target.value])))
-              }
+              value={secondaryName}
+              onChange={(e) => setSecondaryName(e.target.value)}
             />
           </div>
         </div>
@@ -342,10 +344,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               required={false}
               type='tel'
               placeholder='Enter Phone Number'
-              value={Array.from(secondaryPhoneNumbers)[0]}
-              onChange={(e) =>
-                dispatch(setSecondaryPhoneNumbers(new Set([e.target.value])))
-              }
+              value={secondaryPhoneNumber}
+              onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
             />
           </div>
         </div>
