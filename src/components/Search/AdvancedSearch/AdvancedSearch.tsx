@@ -177,6 +177,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           className={[styles.button_row_button, styles.button_blue].join(' ')}
           onClick={() => {
             setFinal();
+            // reset();
           }}
         >
           Apply
@@ -191,9 +192,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             options: COUNTRIES,
             value: countries,
             onChange: (e: SelectChangeEvent<unknown>) => {
+              setCountry(e.target.value as string);
+              setState('');
+              setCity('');
               dispatch(setCountries(new Set([e.target.value as string])));
-              dispatch(setStates(new Set()));
-              dispatch(setCities(new Set()));
             },
             showError: false,
           }}
@@ -207,8 +209,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             options: STATES,
             value: states,
             onChange: (e: SelectChangeEvent<unknown>) => {
+              setState(e.target.value as string);
+              setCity('');
               dispatch(setStates(new Set([e.target.value as string])));
-              dispatch(setCities(new Set()));
             },
             showError: false,
           }}
@@ -222,6 +225,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             options: CITIES,
             value: cities,
             onChange: (e: SelectChangeEvent<unknown>) => {
+              setCity(e.target.value as string);
               dispatch(setCities(new Set([e.target.value as string])));
             },
             showError: false,
