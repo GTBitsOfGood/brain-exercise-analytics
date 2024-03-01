@@ -40,10 +40,13 @@
   display: flex;
   flex-direction: row;
   /* height: 30px; */
-  /* border-radius: 10px; */
+  border-radius: 12px;
   color: #2b3674;
-  /* color: red; */
   font-weight: 600;
+}
+.hodingValue {
+  border: 2px solid #008afc;
+  border-radius: 12px;
 }
 
 .label {
@@ -60,8 +63,15 @@
   font-size: 12px;
 }
 
+.select-dropdown-label {
+  background-color: #f4f7fe;
+  height: 31px;
+  display: flex;
+  align-items: center;
+}
+
 .email_label {
-  width: 150px;
+  width: 120px;
 }
 
 .email_answer {
@@ -87,18 +97,19 @@
 }
 
 .sec_person_phone_label {
-  width: 134px;
+  width: 125px;
 }
 
 .sec_person_phone_answer {
   width: 220px;
 }
 
-.select_dropdown_answer {
+.select-dropdown-answer {
   display: inline-block;
   border: 1px solid #d9d9d9;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  background-color: #f4f7fe;
 }
 
 .answer {
@@ -159,25 +170,25 @@
   height: 31 !important;
 }
 
-.button_row_button {
-  width: 95px;
+.general-button {
   height: 31px !important;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
   cursor: pointer;
+  padding: 8px 12px;
 }
 
-.button_blue {
+.add-button {
   background-color: #008afc;
   color: white;
+  cursor: pointer;
 }
 
 .toggle-button-group {
   display: flex;
   flex-direction: row;
-  /* height: 31px !important; */
 }
 
 .toggle-button {
@@ -229,4 +240,20 @@
   justify-content: flex-end;
   font-weight: 600;
   gap: 12px;
+}
+.clear-tag {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+  background-color: #e3eafc;
+  color: #2b3674;
+  border: #e3eafc;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.disabled {
+  color: #e3eafc;
+  background-color: #f4f7fe;
+  pointer-events: none;
 }

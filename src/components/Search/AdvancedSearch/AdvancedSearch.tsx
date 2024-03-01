@@ -18,6 +18,7 @@ import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
 import CalendarInput from "./CalendarInput";
 import Tag from "../Tag/Tag";
+import { ClearTagIcon } from "@src/app/icons";
 
 interface SelectDropdownProps<T> {
   title: string;
@@ -37,27 +38,17 @@ function SelectDropdown<T>({
   return (
     <div className={styles.question_box} style={style}>
       <div
-        className={styles.label}
+        className={[styles["label"], styles["select-dropdown-label"]].join(" ")}
         style={{
           width: labelWidth,
-          borderTopLeftRadius: "10px",
-          borderBottomLeftRadius: "10px",
-          borderRight: "0",
-          backgroundColor: "#F4F7FE",
-          height: "31px",
-          display: "flex",
-          alignItems: "center",
         }}
       >
         {title}
       </div>
       <div
-        className={styles.select_dropdown_answer}
+        className={styles["select-dropdown-answer"]}
         style={{
           width: answerWidth,
-          borderTopRightRadius: "10px",
-          borderBottomRightRadius: "10px",
-          backgroundColor: "#F4F7FE",
         }}
       >
         <Dropdown
@@ -98,7 +89,6 @@ interface UpdateParamProp {
   setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
   setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
   onSubmit?: () => void;
-  // hihihihi
   className?: string;
   countries: Set<string>;
   states: Set<string>;
@@ -113,7 +103,7 @@ interface UpdateParamProp {
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
-  const [country, setCountry] = useState(""); // values chosen before the aply button
+  const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
@@ -125,7 +115,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [secondaryName, setSecondaryName] = useState("");
   const [activeButton, setActiveButton] = useState(undefined);
 
-  // hihihih
   const tagsPresent = useMemo(
     () =>
       props.active !== undefined ||
@@ -151,6 +140,31 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       props.beiChapters,
       props.secondaryPhoneNumbers,
       props.secondaryNames,
+    ]
+  );
+  const tagsChosen = useMemo(
+    () =>
+      country !== "" ||
+      state !== "" ||
+      city !== "" ||
+      dateOfBirth !== "" ||
+      email !== "" ||
+      additionalAffiliation !== "" ||
+      dateOfJoin !== "" ||
+      beiChapter !== "" ||
+      secondaryPhoneNumber !== "" ||
+      secondaryName !== "",
+    [
+      country,
+      state,
+      city,
+      dateOfBirth,
+      email,
+      additionalAffiliation,
+      dateOfJoin,
+      beiChapter,
+      secondaryPhoneNumber,
+      secondaryName,
     ]
   );
   const checkAndUpdateList = useCallback(
@@ -181,6 +195,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setDateOfJoin("");
     setSecondaryName("");
     setSecondaryPhoneNumber("");
+    setBeiChapter("");
   };
 
   const setFinal = () => {
@@ -196,6 +211,33 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     checkAndUpdateList(secondaryName, props.setSecondaryNames);
     if (props.onSubmit) {
       props.onSubmit();
+    }
+  };
+  const handleClearAppliedTags = () => {
+    if (tagsPresent) {
+      props.setActive(undefined);
+      setActiveButton(undefined);
+      props.setCountries(new Set());
+      props.setStates(new Set());
+      props.setCities(new Set());
+      props.setBeiChapters(new Set());
+      props.setDateOfBirths(new Set());
+      props.setEmails(new Set());
+      props.setAdditionalAffiliations(new Set());
+      props.setDateOfJoins(new Set());
+      props.setSecondaryNames(new Set());
+      props.setSecondaryPhoneNumbers(new Set());
+    }
+  };
+  const handleClearChosenTags = () => {
+    if (tagsChosen) {
+      reset();
+    }
+  };
+  const handleAddChosenTags = () => {
+    if (tagsChosen) {
+      setFinal();
+      reset();
     }
   };
 
@@ -292,6 +334,18 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
+              ? props.beiChapters.size > 0 &&
+                Array.from(props.beiChapters).map((chapter) => (
+                  <div key={`bei-chapter-${chapter}`} className={styles.tags}>
+                    <Tag
+                      title="BEI Chapter"
+                      value={chapter}
+                      setList={props.setBeiChapters}
+                    />
+                  </div>
+                ))
+              : null}
+            {tagsPresent
               ? props.dateOfBirths.size > 0 &&
                 Array.from(props.dateOfBirths).map((dob) => (
                   <div key={`dob-${dob}`} className={styles.tags}>
@@ -317,11 +371,28 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
+              ? props.additionalAffiliations.size > 0 &&
+                Array.from(props.additionalAffiliations).map(
+                  (additionalAffiliation) => (
+                    <div
+                      key={`additional-affiliation-${additionalAffiliation}`}
+                      className={styles.tags}
+                    >
+                      <Tag
+                        title="Additional Affiliation"
+                        value={additionalAffiliation}
+                        setList={props.setAdditionalAffiliations}
+                      />
+                    </div>
+                  )
+                )
+              : null}
+            {tagsPresent
               ? props.dateOfJoins.size > 0 &&
                 Array.from(props.dateOfJoins).map((dateOfJoin) => (
                   <div key={`join-date-${dateOfJoin}`} className={styles.tags}>
                     <Tag
-                      title="Join Date"
+                      title="Date of Join"
                       value={dateOfJoin}
                       setList={props.setDateOfJoins}
                       transformData={transformDate}
@@ -330,13 +401,16 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? props.beiChapters.size > 0 &&
-                Array.from(props.beiChapters).map((chapter) => (
-                  <div key={`bei-chapter-${chapter}`} className={styles.tags}>
+              ? props.secondaryNames.size > 0 &&
+                Array.from(props.secondaryNames).map((secondaryName) => (
+                  <div
+                    key={`secondary-name-${secondaryName}`}
+                    className={styles.tags}
+                  >
                     <Tag
-                      title="BEI Chapter"
-                      value={chapter}
-                      setList={props.setBeiChapters}
+                      title="Secondary Name"
+                      value={secondaryName}
+                      setList={props.setSecondaryNames}
                     />
                   </div>
                 ))
@@ -359,104 +433,118 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                   )
                 )
               : null}
-            {tagsPresent
-              ? props.additionalAffiliations.size > 0 &&
-                Array.from(props.additionalAffiliations).map(
-                  (additionalAffiliation) => (
-                    <div
-                      key={`additional-affiliation-${additionalAffiliation}`}
-                      className={styles.tags}
-                    >
-                      <Tag
-                        title="Additional Affiliation"
-                        value={additionalAffiliation}
-                        setList={props.setAdditionalAffiliations}
-                      />
-                    </div>
-                  )
-                )
-              : null}
-            {tagsPresent
-              ? props.secondaryNames.size > 0 &&
-                Array.from(props.secondaryNames).map((secondaryName) => (
-                  <div
-                    key={`secondary-name-${secondaryName}`}
-                    className={styles.tags}
-                  >
-                    <Tag
-                      title="Secondary Name"
-                      value={secondaryName}
-                      setList={props.setSecondaryNames}
-                    />
-                  </div>
-                ))
-              : null}
+
+            <div className={styles.control_buttons}>
+              <div
+                className={[
+                  styles["general-button"],
+                  styles["clear-tag"],
+                  !tagsPresent && styles["disabled"],
+                ].join(" ")}
+                onClick={handleClearAppliedTags}
+              >
+                {<ClearTagIcon />}
+                <div>Clear applied tags</div>
+              </div>
+            </div>
           </span>
         </div>
       </div>
       {/* entire flexbox */}
       <div className={styles.all_questions}>
-        <SelectDropdown
-          title="Country"
-          dropdownProps={{
-            placeholder: "Select country",
-            options: COUNTRIES,
-            value: country,
-            onChange: (e: SelectChangeEvent<unknown>) => {
-              setCountry(e.target.value as string);
-              setState("");
-              setCity("");
-            },
-            showError: false,
-          }}
-          labelWidth={95}
-          answerWidth={155}
-        />
-        <SelectDropdown
-          title="State"
-          dropdownProps={{
-            placeholder: "Select state",
-            options: STATES,
-            value: state,
-            onChange: (e: SelectChangeEvent<unknown>) => {
-              setState(e.target.value as string);
-              setCity("");
-            },
-            showError: false,
-          }}
-          labelWidth={75}
-          answerWidth={140}
-        />
-        <SelectDropdown
-          title="City"
-          dropdownProps={{
-            placeholder: "Select city",
-            options: CITIES,
-            value: city,
-            onChange: (e: SelectChangeEvent<unknown>) => {
-              setCity(e.target.value as string);
-            },
-            showError: false,
-          }}
-          labelWidth={63}
-          answerWidth={130}
-        />
-        <SelectDropdown
-          title="BEI Chapter"
-          dropdownProps={{
-            placeholder: "Select BEI Chapter",
-            options: CHAPTERS,
-            value: beiChapter,
-            onChange: (e: SelectChangeEvent<unknown>) => {
-              setBeiChapter(e.target.value as string);
-              setBeiChapter("");
-            },
-            showError: false,
-          }}
-          labelWidth={128}
-          answerWidth={180}
-        />
-        <div className={styles.question_box}>
+        <div
+          className={[styles.question_box, country && styles.hodingValue].join(
+            " "
+          )}
+        >
+          {" "}
+          <SelectDropdown
+            title="Country"
+            dropdownProps={{
+              placeholder: "Select country",
+              options: COUNTRIES,
+              value: country,
+              onChange: (e: SelectChangeEvent<unknown>) => {
+                setCountry(e.target.value as string);
+                setState("");
+                setCity("");
+              },
+              showError: false,
+            }}
+            labelWidth={80}
+            answerWidth={160}
+          />
+        </div>
+        <div
+          className={[styles.question_box, state && styles.hodingValue].join(
+            " "
+          )}
+        >
+          {" "}
+          <SelectDropdown
+            title="State"
+            dropdownProps={{
+              placeholder: "Select state",
+              options: STATES,
+              value: state,
+              onChange: (e: SelectChangeEvent<unknown>) => {
+                setState(e.target.value as string);
+                setCity("");
+              },
+              showError: false,
+            }}
+            labelWidth={65}
+            answerWidth={145}
+          />
+        </div>
+
+        <div
+          className={[styles.question_box, city && styles.hodingValue].join(
+            " "
+          )}
+        >
+          <SelectDropdown
+            title="City"
+            dropdownProps={{
+              placeholder: "Select city",
+              options: CITIES,
+              value: city,
+              onChange: (e: SelectChangeEvent<unknown>) => {
+                setCity(e.target.value as string);
+              },
+              showError: false,
+            }}
+            labelWidth={53}
+            answerWidth={135}
+          />
+        </div>
+        <div
+          className={[
+            styles.question_box,
+            beiChapter && styles.hodingValue,
+          ].join(" ")}
+        >
+          <SelectDropdown
+            title="BEI Chapter"
+            dropdownProps={{
+              placeholder: "Select BEI Chapter",
+              options: CHAPTERS,
+              value: beiChapter,
+              onChange: (e: SelectChangeEvent<unknown>) => {
+                setBeiChapter(e.target.value as string);
+              },
+              showError: false,
+            }}
+            labelWidth={105}
+            answerWidth={180}
+          />
+        </div>
+        <div
+          className={[
+            styles.question_box,
+            dateOfBirth && styles.hodingValue,
+          ].join(" ")}
+        >
           <div className={styles.label}>Date of Birth</div>
           <CalendarInput
             className={styles.calendarContainer}
@@ -464,7 +552,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             onChange={setDateOfBirth}
           />
         </div>
-        <div className={styles.question_box}>
+        <div
+          className={[styles.question_box, email && styles.hodingValue].join(
+            " "
+          )}
+        >
           <div className={[styles.label, styles.email_label].join(" ")}>
             Email Address
           </div>
@@ -477,7 +569,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className={styles.question_box}>
+        <div
+          className={[
+            styles.question_box,
+            additionalAffiliation && styles.hodingValue,
+          ].join(" ")}
+        >
           <div
             className={[styles.label, styles.additional_affil_label].join(" ")}
           >
@@ -491,7 +588,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             value={additionalAffiliation}
           />
         </div>
-        <div className={styles.question_box}>
+        <div
+          className={[
+            styles.question_box,
+            dateOfJoin && styles.hodingValue,
+          ].join(" ")}
+        >
           <div className={styles.label}>Date of Join</div>
           <CalendarInput value={dateOfJoin} onChange={setDateOfJoin} />
         </div>
@@ -500,7 +602,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={styles.secondaryInfoTitle}>
             Secondary Contact Person Information
           </div>
-          <div className={styles.question_box}>
+          <div
+            className={[
+              styles.question_box,
+              secondaryName && styles.hodingValue,
+            ].join(" ")}
+          >
             <div
               className={[styles.label, styles.sec_person_name_label].join(" ")}
             >
@@ -523,7 +630,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={styles.secondaryInfoTitle}>
             Secondary Contact Person Information
           </div>
-          <div className={styles.question_box}>
+          <div
+            className={[
+              styles.question_box,
+              secondaryPhoneNumber && styles.hodingValue,
+            ].join(" ")}
+          >
             <div
               className={[styles.label, styles.sec_person_phone_label].join(
                 " "
@@ -547,22 +659,22 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       </div>
       <div className={styles.control_buttons}>
         <div
-          className={[styles.button_row_button, styles["clear-button"]].join(
-            " "
-          )}
-          onClick={() => {
-            setFinal();
-            reset();
-          }}
+          className={[
+            styles["general-button"],
+            styles["clear-button"],
+            !tagsChosen && styles["disabled"],
+          ].join(" ")}
+          onClick={handleClearChosenTags}
         >
           Clear
         </div>
         <div
-          className={[styles.button_row_button, styles.button_blue].join(" ")}
-          onClick={() => {
-            setFinal();
-            reset();
-          }}
+          className={[
+            styles["general-button"],
+            styles["add-button"],
+            !tagsChosen && styles["disabled"],
+          ].join(" ")}
+          onClick={handleAddChosenTags}
         >
           Add Tags
         </div>
