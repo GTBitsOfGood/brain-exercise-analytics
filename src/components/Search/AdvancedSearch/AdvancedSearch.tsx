@@ -20,7 +20,6 @@ import {
   setBeiChapters,
   setSecondaryPhoneNumbers,
   setSecondaryNames,
-  resetFields,
 } from '@src/redux/reducers/patientSearchReducer';
 import Dropdown, { DropdownProps } from '../../Dropdown/Dropdown';
 import styles from './AdvancedSearch.module.css';
@@ -93,7 +92,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const dispatch = useDispatch();
   const { active } = useSelector((state: RootState) => state.patientSearch);
 
-  const resetForm = () => {
+  const reset = () => {
     setCountry('');
     setState('');
     setCity('');
@@ -101,14 +100,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setEmail('');
     setAdditionalAffiliation('');
     setDateOfJoin('');
-    setBeiChapter('')
+    setBeiChapter('');
     setSecondaryName('');
     setSecondaryPhoneNumber('');
-  };
-
-  const reset = () => {
-    resetForm();
-    dispatch(resetFields());
   };
 
   const setFinal = () => {
@@ -191,7 +185,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           className={[styles.button_row_button, styles.button_blue].join(' ')}
           onClick={() => {
             setFinal();
-            resetForm();
+            reset();
           }}
         >
           Apply

@@ -49,24 +49,6 @@ export default function Search({ className, onSubmit }: SearchProps) {
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
 
-  // Testing
-  console.log({
-    fullName,
-    active,
-    countries: Array.from(countries),
-    states: Array.from(states),
-    cities: Array.from(cities),
-    dateOfBirths: Array.from(dateOfBirths),
-    emails: Array.from(emails),
-    additionalAffiliations: Array.from(additionalAffiliations),
-    dateOfJoins: Array.from(dateOfJoins),
-    beiChapters: Array.from(beiChapters),
-    secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
-    secondaryNames: Array.from(secondaryNames),
-  });
-
-  console.log(Array.from(emails)[0]);
-
   const [searchInput, setSearchInput] = useState<string>(fullName);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
@@ -167,7 +149,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
               <Tag
                 key={`active-${active}`}
                 title='Status'
-                value={'active'}
+                value={active ? 'Active' : 'Inactive'}
                 category='active'
                 transformData={(val) => (val ? 'Active' : 'Inactive')}
                 onClick={() => dispatch(setActive(undefined))}
