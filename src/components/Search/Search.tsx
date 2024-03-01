@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useCallback, useMemo, useState } from 'react';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useCallback, useMemo, useState } from "react";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { classes, transformDate, transformPhoneNumber } from '@src/utils/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@src/redux/rootReducer';
+import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
 import {
   setFullName,
   setActive,
@@ -20,11 +20,11 @@ import {
   setBeiChapters,
   setSecondaryPhoneNumbers,
   setSecondaryNames,
-} from '@src/redux/reducers/patientSearchReducer';
-import styles from './Search.module.css';
-import Tag from './Tag/Tag';
-import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
-import InputField from '../InputField/InputField';
+} from "@src/redux/reducers/patientSearchReducer";
+import styles from "./Search.module.css";
+import Tag from "./Tag/Tag";
+import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
+import InputField from "../InputField/InputField";
 
 interface SearchProps {
   className?: string;
@@ -77,37 +77,37 @@ export default function Search({ className, onSubmit }: SearchProps) {
       beiChapters,
       secondaryPhoneNumbers,
       secondaryNames,
-    ]
+    ],
   );
 
   const onSubmitSearch = useCallback(() => {
     dispatch(setFullName(searchInput));
 
     onSubmit?.();
-  }, [searchInput, dispatch, setFullName, onSubmit]);
+  }, [searchInput, dispatch, onSubmit]);
 
   return (
     <div className={classes(styles.wrapper, className)}>
       <div className={styles.border}>
-        <div className={styles['search-no-tags']}>
-          <div className={styles['search-container']}>
+        <div className={styles["search-no-tags"]}>
+          <div className={styles["search-container"]}>
             <InputField
-              className={styles['search-bar']}
-              inputFieldClassName={styles['search-bar-input']}
+              className={styles["search-bar"]}
+              inputFieldClassName={styles["search-bar-input"]}
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder='Name'
+              placeholder="Name"
             />
           </div>
           <FontAwesomeIcon
-            className={styles['search-icon']}
+            className={styles["search-icon"]}
             icon={faSearch}
-            size='lg'
+            size="lg"
             onClick={onSubmitSearch}
             style={{ height: 28 }}
           />
           <p
-            className={styles['advanced-filter']}
+            className={styles["advanced-filter"]}
             onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
           >
             Advanced Filter
@@ -119,9 +119,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(countries).map((country) => (
                 <Tag
                   key={`country-${country}`}
-                  title='Country'
+                  title="Country"
                   value={country}
-                  category='countries'
+                  category="countries"
                   setAction={setCountries}
                 />
               ))}
@@ -129,9 +129,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(states).map((state) => (
                 <Tag
                   key={`state-${state}`}
-                  title='State'
+                  title="State"
                   value={state}
-                  category='states'
+                  category="states"
                   setAction={setStates}
                 />
               ))}
@@ -139,29 +139,31 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(cities).map((city) => (
                 <Tag
                   key={`city-${city}`}
-                  title='City'
+                  title="City"
                   value={city}
-                  category='cities'
+                  category="cities"
                   setAction={setCities}
                 />
               ))}
             {active !== undefined && (
               <Tag
                 key={`active-${active}`}
-                title='Status'
-                value={active ? 'Active' : 'Inactive'}
-                category='active'
-                transformData={(val) => (val ? 'Active' : 'Inactive')}
-                onClick={() => dispatch(setActive(undefined))}
+                title="Status"
+                value={String(active)}
+                transformData={() => (active ? "Active" : "Inactive")}
+                category="active"
+                onClick={() => {
+                  dispatch(setActive(undefined));
+                }}
               />
             )}
             {dateOfBirths.size > 0 &&
               Array.from(dateOfBirths).map((dob) => (
                 <Tag
                   key={`dob-${dob}`}
-                  title='Date of Birth'
+                  title="Date of Birth"
                   value={dob}
-                  category='dateOfBirths'
+                  category="dateOfBirths"
                   setAction={setDateOfBirths}
                   transformData={transformDate}
                 />
@@ -170,9 +172,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(emails).map((email) => (
                 <Tag
                   key={`email-${email}`}
-                  title='Email'
+                  title="Email"
                   value={email}
-                  category='emails'
+                  category="emails"
                   setAction={setEmails}
                 />
               ))}
@@ -180,9 +182,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(dateOfJoins).map((dateOfJoin) => (
                 <Tag
                   key={`join-date-${dateOfJoin}`}
-                  title='Join Date'
+                  title="Join Date"
                   value={dateOfJoin}
-                  category='dateOfJoins'
+                  category="dateOfJoins"
                   setAction={setDateOfJoins}
                   transformData={transformDate}
                 />
@@ -191,9 +193,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(beiChapters).map((chapter) => (
                 <Tag
                   key={`bei-chapter-${chapter}`}
-                  title='BEI Chapter'
+                  title="BEI Chapter"
                   value={chapter}
-                  category='beiChapters'
+                  category="beiChapters"
                   setAction={setBeiChapters}
                 />
               ))}
@@ -201,9 +203,9 @@ export default function Search({ className, onSubmit }: SearchProps) {
               Array.from(secondaryPhoneNumbers).map((secondaryPhoneNumber) => (
                 <Tag
                   key={`phone-number-${secondaryPhoneNumber}`}
-                  title='Secondary Phone Number'
+                  title="Secondary Phone Number"
                   value={secondaryPhoneNumber}
-                  category='secondaryPhoneNumbers'
+                  category="secondaryPhoneNumbers"
                   setAction={setSecondaryPhoneNumbers}
                   transformData={transformPhoneNumber}
                 />
@@ -213,20 +215,20 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 (additionalAffiliation) => (
                   <Tag
                     key={`additional-affiliation-${additionalAffiliation}`}
-                    title='Additional Affiliation'
+                    title="Additional Affiliation"
                     value={additionalAffiliation}
-                    category='additionalAffiliations'
+                    category="additionalAffiliations"
                     setAction={setAdditionalAffiliations}
                   />
-                )
+                ),
               )}
             {secondaryNames.size > 0 &&
               Array.from(secondaryNames).map((secondaryName) => (
                 <Tag
                   key={`secondary-name-${secondaryName}`}
-                  title='Secondary Name'
+                  title="Secondary Name"
                   value={secondaryName}
-                  category='secondaryNames'
+                  category="secondaryNames"
                   setAction={setSecondaryNames}
                 />
               ))}
@@ -234,8 +236,8 @@ export default function Search({ className, onSubmit }: SearchProps) {
         ) : null}
         <div
           className={classes(
-            styles['advanced-search-container'],
-            showAdvancedSearch && styles['advanced-search-container-show']
+            styles["advanced-search-container"],
+            showAdvancedSearch && styles["advanced-search-container-show"],
           )}
         >
           <AdvancedSearch onSubmit={onSubmitSearch} />

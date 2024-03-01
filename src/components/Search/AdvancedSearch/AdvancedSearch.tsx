@@ -1,13 +1,13 @@
-import React, { CSSProperties, useState } from 'react';
-import { SelectChangeEvent } from '@mui/material';
-import { Country, State, City } from 'country-state-city';
-import InputField from '@src/components/InputField/InputField';
+import React, { CSSProperties, useState } from "react";
+import { SelectChangeEvent } from "@mui/material";
+import { Country, State, City } from "country-state-city";
+import InputField from "@src/components/InputField/InputField";
 
-import CHAPTERS from '@src/utils/chapters';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import ToggleButton from '@mui/material/ToggleButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@src/redux/rootReducer';
+import CHAPTERS from "@src/utils/chapters";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
 import {
   setActive,
   setCountries,
@@ -20,11 +20,11 @@ import {
   setBeiChapters,
   setSecondaryPhoneNumbers,
   setSecondaryNames,
-} from '@src/redux/reducers/patientSearchReducer';
-import Dropdown, { DropdownProps } from '../../Dropdown/Dropdown';
-import styles from './AdvancedSearch.module.css';
-import 'react-calendar/dist/Calendar.css';
-import CalendarInput from './CalendarInput';
+} from "@src/redux/reducers/patientSearchReducer";
+import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
+import styles from "./AdvancedSearch.module.css";
+import "react-calendar/dist/Calendar.css";
+import CalendarInput from "./CalendarInput";
 
 interface SelectDropdownProps<T> {
   title: string;
@@ -53,16 +53,16 @@ function SelectDropdown<T>({
         <Dropdown
           {...dropdownProps}
           style={{
-            height: '28px',
-            width: '100%',
-            border: 'none',
+            height: "28px",
+            width: "100%",
+            border: "none",
             borderRadius: 0,
           }}
           sx={{
-            '&.MuiOutlinedInput-root': {
-              height: '30px',
-              '& fieldset': {
-                borderRadius: '0px',
+            "&.MuiOutlinedInput-root": {
+              height: "30px",
+              "& fieldset": {
+                borderRadius: "0px",
               },
             },
           }}
@@ -78,31 +78,33 @@ interface UpdateParamProp {
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
-  const [country, setCountry] = useState(''); // values chosen before the aply button
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState<string>('');
-  const [email, setEmail] = useState('');
-  const [additionalAffiliation, setAdditionalAffiliation] = useState('');
-  const [dateOfJoin, setDateOfJoin] = useState<string>('');
-  const [beiChapter, setBeiChapter] = useState('');
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
-  const [secondaryName, setSecondaryName] = useState('');
-
   const dispatch = useDispatch();
+
+  const [country, setCountry] = useState(""); // values chosen before the aply button
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [additionalAffiliation, setAdditionalAffiliation] = useState("");
+  const [dateOfJoin, setDateOfJoin] = useState<string>("");
+  const [beiChapter, setBeiChapter] = useState("");
+  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
+  const [secondaryName, setSecondaryName] = useState("");
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const { active } = useSelector((state: RootState) => state.patientSearch);
 
   const reset = () => {
-    setCountry('');
-    setState('');
-    setCity('');
-    setDateOfBirth('');
-    setEmail('');
-    setAdditionalAffiliation('');
-    setDateOfJoin('');
-    setBeiChapter('');
-    setSecondaryName('');
-    setSecondaryPhoneNumber('');
+    setCountry("");
+    setState("");
+    setCity("");
+    setDateOfBirth("");
+    setEmail("");
+    setAdditionalAffiliation("");
+    setDateOfJoin("");
+    setBeiChapter("");
+    setSecondaryName("");
+    setSecondaryPhoneNumber("");
   };
 
   const setFinal = () => {
@@ -128,7 +130,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     displayValue: `${locCountry.name}`,
   }));
   const countryCode = Country.getAllCountries().filter(
-    (locCountry) => country === locCountry.name
+    (locCountry) => country === locCountry.name,
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((locState) => ({
@@ -136,14 +138,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     displayValue: `${locState.name}`,
   }));
   const stateCode = State.getStatesOfCountry(countryCode).filter(
-    (locState) => locState.name === state
+    (locState) => locState.name === state,
   )[0]?.isoCode;
 
   const CITIES = City.getCitiesOfState(countryCode, stateCode).map(
     (locCity) => ({
       value: locCity.name,
       displayValue: `${locCity.name}`,
-    })
+    }),
   );
 
   return (
@@ -152,25 +154,25 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <div className={styles.active_patient_box}>
           <span className={styles.active_patient_box_label}>
             <ToggleButtonGroup
-              color='primary'
+              color="primary"
               value={String(active)}
               exclusive
-              aria-label='Platform'
+              aria-label="Platform"
             >
               <ToggleButton
-                value='undefined'
+                value="undefined"
                 onClick={() => dispatch(setActive(undefined))}
               >
                 All Patients
               </ToggleButton>
               <ToggleButton
-                value='true'
+                value="true"
                 onClick={() => dispatch(setActive(true))}
               >
                 Active Patients
               </ToggleButton>
               <ToggleButton
-                value='false'
+                value="false"
                 onClick={() => dispatch(setActive(false))}
               >
                 Inactive Patients
@@ -182,7 +184,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           Clear
         </div>
         <div
-          className={[styles.button_row_button, styles.button_blue].join(' ')}
+          className={[styles.button_row_button, styles.button_blue].join(" ")}
           onClick={() => {
             setFinal();
             reset();
@@ -194,15 +196,15 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       {/* entire flexbox */}
       <div className={styles.all_questions}>
         <SelectDropdown
-          title='Country'
+          title="Country"
           dropdownProps={{
-            placeholder: 'Select Country',
+            placeholder: "Select Country",
             options: COUNTRIES,
             value: country,
             onChange: (e: SelectChangeEvent<unknown>) => {
               setCountry(e.target.value as string);
-              setState('');
-              setCity('');
+              setState("");
+              setCity("");
             },
             showError: false,
           }}
@@ -210,14 +212,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           answerWidth={183}
         />
         <SelectDropdown
-          title='State'
+          title="State"
           dropdownProps={{
-            placeholder: 'Select State',
+            placeholder: "Select State",
             options: STATES,
             value: state,
             onChange: (e: SelectChangeEvent<unknown>) => {
               setState(e.target.value as string);
-              setCity('');
+              setCity("");
             },
             showError: false,
           }}
@@ -225,9 +227,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           answerWidth={183}
         />
         <SelectDropdown
-          title='City'
+          title="City"
           dropdownProps={{
-            placeholder: 'Select City',
+            placeholder: "Select City",
             options: CITIES,
             value: city,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -239,9 +241,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           answerWidth={183}
         />
         <SelectDropdown
-          title='BEI Chapter'
+          title="BEI Chapter"
           dropdownProps={{
-            placeholder: 'Select BEI Chapter',
+            placeholder: "Select BEI Chapter",
             options: CHAPTERS,
             value: beiChapter,
             onChange: (e: SelectChangeEvent<unknown>) => {
@@ -257,28 +259,28 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <CalendarInput value={dateOfBirth} onChange={setDateOfBirth} />
         </div>
         <div className={styles.question_box}>
-          <div className={[styles.label, styles.email_label].join(' ')}>
+          <div className={[styles.label, styles.email_label].join(" ")}>
             Email Address
           </div>
           <InputField
-            type='email'
-            className={[styles.answer, styles.email_answer].join(' ')}
+            type="email"
+            className={[styles.answer, styles.email_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
             value={email}
-            placeholder='example@domain.com'
+            placeholder="example@domain.com"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className={styles.question_box}>
           <div
-            className={[styles.label, styles.additional_affil_label].join(' ')}
+            className={[styles.label, styles.additional_affil_label].join(" ")}
           >
             Additional Affiliation
           </div>
           <InputField
-            className={[styles.answer, styles.affiliation_answer].join(' ')}
+            className={[styles.answer, styles.affiliation_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
-            placeholder='Enter Additional Affiliation'
+            placeholder="Enter Additional Affiliation"
             onChange={(e) => setAdditionalAffiliation(e.target.value)}
             value={additionalAffiliation}
           />
@@ -294,17 +296,17 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           </div>
           <div className={styles.question_box}>
             <div
-              className={[styles.label, styles.sec_person_name_label].join(' ')}
+              className={[styles.label, styles.sec_person_name_label].join(" ")}
             >
               First and Last Name
             </div>
             <InputField
               className={[styles.answer, styles.sec_person_name_answer].join(
-                ' '
+                " ",
               )}
               inputFieldClassName={styles.answerInput}
               required={false}
-              placeholder='Enter Name'
+              placeholder="Enter Name"
               value={secondaryName}
               onChange={(e) => setSecondaryName(e.target.value)}
             />
@@ -318,19 +320,19 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={styles.question_box}>
             <div
               className={[styles.label, styles.sec_person_phone_label].join(
-                ' '
+                " ",
               )}
             >
               Phone Number
             </div>
             <InputField
               className={[styles.answer, styles.sec_person_phone_answer].join(
-                ' '
+                " ",
               )}
               inputFieldClassName={styles.answerInput}
               required={false}
-              type='tel'
-              placeholder='Enter Phone Number'
+              type="tel"
+              placeholder="Enter Phone Number"
               value={secondaryPhoneNumber}
               onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
             />

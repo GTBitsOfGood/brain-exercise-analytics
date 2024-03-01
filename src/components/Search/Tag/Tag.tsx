@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { IPatientSearchReducer } from "@/common_utils/types";
+import { setActive } from "@src/redux/reducers/patientSearchReducer";
 import styles from "./Tag.module.css";
 
-type TagProps<T> = {
+type TagProps = {
   title: string;
   value: string;
   category: keyof IPatientSearchReducer;
@@ -16,20 +17,22 @@ type TagProps<T> = {
   onClick?: () => void;
 };
 
-export default function Tag<T>({
+export default function Tag({
   title,
   value,
   category,
   setAction,
   onClick,
   transformData,
-}: TagProps<T>) {
+}: TagProps) {
+  const [closeTag, setCloseTag] = useState(false);
   const dispatch = useDispatch();
   const categorySet = useSelector(
     (state: RootState) => state.patientSearch[category],
   );
 
   const handleCloseTag = () => {
+    setCloseTag(true);
     if (!(categorySet instanceof Set)) {
       return;
     }
@@ -44,6 +47,11 @@ export default function Tag<T>({
   const tagText = transformData
     ? `${title}: ${transformData(value)}`
     : `${title}: ${value}`;
+
+  if (closeTag) {
+    dispatch(setActive(undefined));
+    return null;
+  }
 
   return (
     <div className={styles.container}>
