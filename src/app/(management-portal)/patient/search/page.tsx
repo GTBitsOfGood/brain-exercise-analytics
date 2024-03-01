@@ -39,6 +39,7 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
+  console.log(fullName);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
@@ -54,23 +55,24 @@ export default function Page() {
           method: HttpMethod.POST,
           body: {
             params: {
-              fullName,
-              dateOfBirths: dateOfBirths,
-              emails: emails,
-              additionalAffiliations: additionalAffiliations,
-              secondaryNames: secondaryNames,
-              secondaryPhoneNumbers,
-              beiChapters: beiChapters,
+              name: fullName,
+              dateOfBirths: Array.from(dateOfBirths),
+              emails: Array.from(emails),
+              additionalAffiliations: Array.from(additionalAffiliations),
+              secondaryNames: Array.from(secondaryNames),
+              secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
+              beiChapters: Array.from(beiChapters),
               active,
-              countries: countries,
-              states: states,
-              cities: cities,
-              dateOfJoins: dateOfJoins,
+              countries: Array.from(countries),
+              states: Array.from(states),
+              cities: Array.from(cities),
+              dateOfJoins: Array.from(dateOfJoins),
             },
             page: currentPage,
             sortParams: sortField,
           },
         }).then((res) => {
+          console.log(res);
           setPageCount(res?.numPages ?? 0);
           setFilteredUsers(res?.data ?? []);
         });

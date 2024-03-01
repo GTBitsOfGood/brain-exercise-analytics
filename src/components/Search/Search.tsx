@@ -199,7 +199,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 <Tag
                   key={`phone-number-${secondaryPhoneNumber}`}
                   title='Secondary Phone Number'
-                  value={'secondaryPhoneNumber'}
+                  value={secondaryPhoneNumber}
                   category='secondaryPhoneNumbers'
                   setAction={setSecondaryPhoneNumbers}
                   transformData={transformPhoneNumber}

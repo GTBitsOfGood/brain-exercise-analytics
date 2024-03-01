@@ -7,37 +7,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@src/redux/rootReducer';
 import { IPatientSearchReducer } from '@/common_utils/types';
 
-type TagProps = {
+type TagProps<T> = {
   title: string;
   value: string;
-  category:
-    | 'countries'
-    | 'states'
-    | 'cities'
-    | 'emails'
-    | 'dateOfBirths'
-    | 'dateOfJoins'
-    | 'beiChapters'
-    | 'secondaryPhoneNumbers'
-    | 'secondaryNames'
-    | 'additionalAffiliations';
+  category: keyof IPatientSearchReducer;
   setAction: ActionCreatorWithPayload<Set<string>, string>;
   transformData?: (value: string) => string;
 };
 
-export default function Tag({
+export default function Tag<T>({
   title,
   value,
   category,
   setAction,
   transformData,
-}: TagProps) {
+}: TagProps<T>) {
   const dispatch = useDispatch();
   const categorySet = useSelector(
     (state: RootState) => state.patientSearch[category]
   );
 
   const handleCloseTag = () => {
+    // condition to check if categorySet is a set
+    if (!(categorySet instanceof Set)) {
+      return;
+    }
     const updatedSet = new Set(categorySet);
     updatedSet.delete(value);
     dispatch(setAction(updatedSet));
