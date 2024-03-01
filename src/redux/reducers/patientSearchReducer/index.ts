@@ -56,6 +56,20 @@ const patientSearchReducer = createSlice({
     setSecondaryNames(state, action: PayloadAction<Set<string>>) {
       state.secondaryNames = action.payload;
     },
+    resetFields(state) {
+      state.fullName = initialState.fullName;
+      state.active = initialState.active;
+      state.countries = initialState.countries;
+      state.states = initialState.states;
+      state.cities = initialState.cities;
+      state.dateOfBirths = initialState.dateOfBirths;
+      state.emails = initialState.emails;
+      state.additionalAffiliations = initialState.additionalAffiliations;
+      state.dateOfJoins = initialState.dateOfJoins;
+      state.beiChapters = initialState.beiChapters;
+      state.secondaryPhoneNumbers = initialState.secondaryPhoneNumbers;
+      state.secondaryNames = initialState.secondaryNames;
+    },
   },
 });
 
@@ -72,6 +86,7 @@ export const {
   setBeiChapters,
   setSecondaryPhoneNumbers,
   setSecondaryNames,
+  resetFields,
 } = patientSearchReducer.actions;
 
 export default patientSearchReducer.reducer;

@@ -4,18 +4,35 @@ import React, {
   SetStateAction,
   useCallback,
   CSSProperties,
-} from "react";
-import { SelectChangeEvent } from "@mui/material";
-import { Country, State, City } from "country-state-city";
-import InputField from "@src/components/InputField/InputField";
-import CHAPTERS from "@src/utils/chapters";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import ToggleButton from "@mui/material/ToggleButton";
-import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
-import styles from "./AdvancedSearch.module.css";
-import "react-calendar/dist/Calendar.css";
-import CalendarInput from "./CalendarInput";
+} from 'react';
+import { SelectChangeEvent } from '@mui/material';
+import { Country, State, City } from 'country-state-city';
+import InputField from '@src/components/InputField/InputField';
 
+import CHAPTERS from '@src/utils/chapters';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import Dropdown, { DropdownProps } from '../../Dropdown/Dropdown';
+import styles from './AdvancedSearch.module.css';
+import 'react-calendar/dist/Calendar.css';
+import CalendarInput from './CalendarInput';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@src/redux/rootReducer';
+import {
+  setFullName,
+  setActive,
+  setCountries,
+  setStates,
+  setCities,
+  setDateOfBirths,
+  setEmails,
+  setAdditionalAffiliations,
+  setDateOfJoins,
+  setBeiChapters,
+  setSecondaryPhoneNumbers,
+  setSecondaryNames,
+  resetFields,
+} from '@src/redux/reducers/patientSearchReducer';
 interface SelectDropdownProps<T> {
   title: string;
   style?: CSSProperties;
@@ -43,16 +60,16 @@ function SelectDropdown<T>({
         <Dropdown
           {...dropdownProps}
           style={{
-            height: "28px",
-            width: "100%",
-            border: "none",
+            height: '28px',
+            width: '100%',
+            border: 'none',
             borderRadius: 0,
           }}
           sx={{
-            "&.MuiOutlinedInput-root": {
-              height: "30px",
-              "& fieldset": {
-                borderRadius: "0px",
+            '&.MuiOutlinedInput-root': {
+              height: '30px',
+              '& fieldset': {
+                borderRadius: '0px',
               },
             },
           }}
@@ -64,74 +81,43 @@ function SelectDropdown<T>({
 
 interface UpdateParamProp {
   style?: CSSProperties;
-  active: boolean | undefined;
-  setCountries: Dispatch<SetStateAction<Set<string>>>;
-  setStates: Dispatch<SetStateAction<Set<string>>>;
-  setCities: Dispatch<SetStateAction<Set<string>>>;
-  setActive: Dispatch<SetStateAction<boolean | undefined>>;
-  setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
-  setEmails: Dispatch<SetStateAction<Set<string>>>;
-  setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
-  setBeiChapters: Dispatch<SetStateAction<Set<string>>>;
-  setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
-  setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
-  setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
   onSubmit?: () => void;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
-  const [country, setCountry] = useState(""); // values chosen before the aply button
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
-  const [email, setEmail] = useState("");
-  const [additionalAffiliation, setAdditionalAffiliation] = useState("");
-  const [dateOfJoin, setDateOfJoin] = useState<string>("");
-  const [beiChapter, setBeiChapter] = useState("");
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
-  const [secondaryName, setSecondaryName] = useState("");
-
-  const checkAndUpdateList = useCallback(
-    <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
-      setUpdater((set) => {
-        if (
-          element !== "" &&
-          element !== null &&
-          element !== undefined &&
-          !set.has(element)
-        ) {
-          const newSet = new Set<T>(set);
-          return newSet.add(element);
-        }
-        return set;
-      });
-    },
-    [],
-  );
+  const dispatch = useDispatch();
+  const {
+    fullName,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+  } = useSelector((state: RootState) => state.patientSearch);
 
   const reset = () => {
-    setCountry("");
-    setState("");
-    setCity("");
-    setDateOfBirth("");
-    setEmail("");
-    setAdditionalAffiliation("");
-    setDateOfJoin("");
-    setSecondaryName("");
-    setSecondaryPhoneNumber("");
+    dispatch(resetFields());
   };
 
   const setFinal = () => {
-    checkAndUpdateList(country, props.setCountries);
-    checkAndUpdateList(state, props.setStates);
-    checkAndUpdateList(city, props.setCities);
-    checkAndUpdateList(dateOfBirth, props.setDateOfBirths);
-    checkAndUpdateList(email, props.setEmails);
-    checkAndUpdateList(additionalAffiliation, props.setAdditionalAffiliations);
-    checkAndUpdateList(dateOfJoin, props.setDateOfJoins);
-    checkAndUpdateList(beiChapter, props.setBeiChapters);
-    checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
-    checkAndUpdateList(secondaryName, props.setSecondaryNames);
+    if (countries) dispatch(setCountries(countries));
+    if (states) dispatch(setStates(states));
+    if (cities) dispatch(setCities(cities));
+    if (dateOfBirths) dispatch(setDateOfBirths(dateOfBirths));
+    if (emails) dispatch(setEmails(emails));
+    if (additionalAffiliations)
+      dispatch(setAdditionalAffiliations(additionalAffiliations));
+    if (dateOfJoins) dispatch(setDateOfJoins(dateOfJoins));
+    if (beiChapters) dispatch(setBeiChapters(beiChapters));
+    if (secondaryPhoneNumbers)
+      dispatch(setSecondaryPhoneNumbers(secondaryPhoneNumbers));
+    if (secondaryNames) dispatch(setSecondaryNames(secondaryNames));
     if (props.onSubmit) {
       props.onSubmit();
     }
@@ -141,23 +127,23 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     value: locCountry.name,
     displayValue: `${locCountry.name}`,
   }));
-  const countryCode = Country.getAllCountries().filter(
-    (locCountry) => country === locCountry.name,
+  const countryCode = Country.getAllCountries().filter((locCountry) =>
+    countries.has(locCountry.name)
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((locState) => ({
     value: locState.name,
     displayValue: `${locState.name}`,
   }));
-  const stateCode = State.getStatesOfCountry(countryCode).filter(
-    (locState) => locState.name === state,
+  const stateCode = State.getStatesOfCountry(countryCode).filter((locState) =>
+    states.has(locState.name)
   )[0]?.isoCode;
 
   const CITIES = City.getCitiesOfState(countryCode, stateCode).map(
     (locCity) => ({
       value: locCity.name,
       displayValue: `${locCity.name}`,
-    }),
+    })
   );
 
   return (
@@ -166,24 +152,21 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         <div className={styles.active_patient_box}>
           <span className={styles.active_patient_box_label}>
             <ToggleButtonGroup
-              color="primary"
-              value={String(props.active)}
+              color='primary'
+              value={String(active)}
               exclusive
-              aria-label="Platform"
+              aria-label='Platform'
             >
               <ToggleButton
-                value="undefined"
-                onClick={() => props.setActive(undefined)}
+                value='undefined'
+                onClick={() => setActive(undefined)}
               >
                 All Patients
               </ToggleButton>
-              <ToggleButton value="true" onClick={() => props.setActive(true)}>
+              <ToggleButton value='true' onClick={() => setActive(true)}>
                 Active Patients
               </ToggleButton>
-              <ToggleButton
-                value="false"
-                onClick={() => props.setActive(false)}
-              >
+              <ToggleButton value='false' onClick={() => setActive(false)}>
                 Inactive Patients
               </ToggleButton>
             </ToggleButtonGroup>
@@ -193,7 +176,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           Clear
         </div>
         <div
-          className={[styles.button_row_button, styles.button_blue].join(" ")}
+          className={[styles.button_row_button, styles.button_blue].join(' ')}
           onClick={() => {
             setFinal();
             reset();
@@ -205,15 +188,15 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       {/* entire flexbox */}
       <div className={styles.all_questions}>
         <SelectDropdown
-          title="Country"
+          title='Country'
           dropdownProps={{
-            placeholder: "Select Country",
+            placeholder: 'Select Country',
             options: COUNTRIES,
-            value: country,
+            value: countries,
             onChange: (e: SelectChangeEvent<unknown>) => {
-              setCountry(e.target.value as string);
-              setState("");
-              setCity("");
+              dispatch(setCountries(new Set([e.target.value as string])));
+              dispatch(setStates(new Set()));
+              dispatch(setCities(new Set()));
             },
             showError: false,
           }}
@@ -221,14 +204,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           answerWidth={183}
         />
         <SelectDropdown
-          title="State"
+          title='State'
           dropdownProps={{
-            placeholder: "Select State",
+            placeholder: 'Select State',
             options: STATES,
-            value: state,
+            value: states,
             onChange: (e: SelectChangeEvent<unknown>) => {
-              setState(e.target.value as string);
-              setCity("");
+              dispatch(setStates(new Set([e.target.value as string])));
+              dispatch(setCities(new Set()));
             },
             showError: false,
           }}
@@ -236,13 +219,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           answerWidth={183}
         />
         <SelectDropdown
-          title="City"
+          title='City'
           dropdownProps={{
-            placeholder: "Select City",
+            placeholder: 'Select City',
             options: CITIES,
-            value: city,
+            value: cities,
             onChange: (e: SelectChangeEvent<unknown>) => {
-              setCity(e.target.value as string);
+              dispatch(setCities(new Set([e.target.value as string])));
             },
             showError: false,
           }}
@@ -250,13 +233,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           answerWidth={183}
         />
         <SelectDropdown
-          title="BEI Chapter"
+          title='BEI Chapter'
           dropdownProps={{
-            placeholder: "Select BEI Chapter",
+            placeholder: 'Select BEI Chapter',
             options: CHAPTERS,
-            value: beiChapter,
+            value: beiChapters,
             onChange: (e: SelectChangeEvent<unknown>) => {
-              setBeiChapter(e.target.value as string);
+              dispatch(setBeiChapters(new Set([e.target.value as string])));
             },
             showError: false,
           }}
@@ -265,38 +248,46 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         />
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
-          <CalendarInput value={dateOfBirth} onChange={setDateOfBirth} />
+          {/* <CalendarInput
+            value={Array.from(dateOfBirths)[0]}
+            onChange={dispatch(dateOfBirths)}
+          /> */}
         </div>
         <div className={styles.question_box}>
-          <div className={[styles.label, styles.email_label].join(" ")}>
+          <div className={[styles.label, styles.email_label].join(' ')}>
             Email Address
           </div>
           <InputField
-            type="email"
-            className={[styles.answer, styles.email_answer].join(" ")}
+            type='email'
+            className={[styles.answer, styles.email_answer].join(' ')}
             inputFieldClassName={styles.answerInput}
-            value={email}
-            placeholder="example@domain.com"
-            onChange={(e) => setEmail(e.target.value)}
+            value={Array.from(emails)[0]}
+            placeholder='example@domain.com'
+            onChange={(e) => dispatch(setEmails(new Set([e.target.value])))}
           />
         </div>
         <div className={styles.question_box}>
           <div
-            className={[styles.label, styles.additional_affil_label].join(" ")}
+            className={[styles.label, styles.additional_affil_label].join(' ')}
           >
             Additional Affiliation
           </div>
           <InputField
-            className={[styles.answer, styles.affiliation_answer].join(" ")}
+            className={[styles.answer, styles.affiliation_answer].join(' ')}
             inputFieldClassName={styles.answerInput}
-            placeholder="Enter Additional Affiliation"
-            onChange={(e) => setAdditionalAffiliation(e.target.value)}
-            value={additionalAffiliation}
+            placeholder='Enter Additional Affiliation'
+            value={Array.from(additionalAffiliations)[0]}
+            onChange={(e) =>
+              dispatch(setAdditionalAffiliations(new Set([e.target.value])))
+            }
           />
         </div>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
-          <CalendarInput value={dateOfJoin} onChange={setDateOfJoin} />
+          {/* <CalendarInput
+            value={Array.from(dateOfJoins)[0]}
+            onChange={dispatch(setDateOfJoins)}
+          /> */}
         </div>
 
         <div className={styles.secondaryInfo}>
@@ -305,19 +296,21 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           </div>
           <div className={styles.question_box}>
             <div
-              className={[styles.label, styles.sec_person_name_label].join(" ")}
+              className={[styles.label, styles.sec_person_name_label].join(' ')}
             >
               First and Last Name
             </div>
             <InputField
               className={[styles.answer, styles.sec_person_name_answer].join(
-                " ",
+                ' '
               )}
               inputFieldClassName={styles.answerInput}
               required={false}
-              placeholder="Enter Name"
-              value={secondaryName}
-              onChange={(e) => setSecondaryName(e.target.value)}
+              placeholder='Enter Name'
+              value={Array.from(secondaryNames)[0]}
+              onChange={(e) =>
+                dispatch(setSecondaryNames(new Set([e.target.value])))
+              }
             />
           </div>
         </div>
@@ -329,21 +322,23 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div className={styles.question_box}>
             <div
               className={[styles.label, styles.sec_person_phone_label].join(
-                " ",
+                ' '
               )}
             >
               Phone Number
             </div>
             <InputField
               className={[styles.answer, styles.sec_person_phone_answer].join(
-                " ",
+                ' '
               )}
               inputFieldClassName={styles.answerInput}
               required={false}
-              type="tel"
-              placeholder="Enter Phone Number"
-              value={secondaryPhoneNumber}
-              onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
+              type='tel'
+              placeholder='Enter Phone Number'
+              value={Array.from(secondaryPhoneNumbers)[0]}
+              onChange={(e) =>
+                dispatch(setSecondaryPhoneNumbers(new Set([e.target.value])))
+              }
             />
           </div>
         </div>

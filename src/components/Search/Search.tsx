@@ -24,6 +24,7 @@ import {
   setBeiChapters,
   setSecondaryPhoneNumbers,
   setSecondaryNames,
+  resetFields,
 } from '@src/redux/reducers/patientSearchReducer';
 
 interface SearchProps {
@@ -48,6 +49,24 @@ export default function Search({ className, onSubmit }: SearchProps) {
     secondaryPhoneNumbers,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
+
+  // Testing
+  console.log({
+    fullName,
+    active,
+    countries: Array.from(countries),
+    states: Array.from(states),
+    cities: Array.from(cities),
+    dateOfBirths: Array.from(dateOfBirths),
+    emails: Array.from(emails),
+    additionalAffiliations: Array.from(additionalAffiliations),
+    dateOfJoins: Array.from(dateOfJoins),
+    beiChapters: Array.from(beiChapters),
+    secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
+    secondaryNames: Array.from(secondaryNames),
+  });
+
+  console.log(Array.from(emails)[0]);
 
   const [searchInput, setSearchInput] = useState<string>(fullName);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
@@ -82,6 +101,26 @@ export default function Search({ className, onSubmit }: SearchProps) {
 
   const onSubmitSearch = useCallback(() => {
     dispatch(setFullName(searchInput));
+
+    dispatch(setFullName('John Doe'));
+    dispatch(setActive(false));
+    dispatch(setCountries(new Set(['Country1', 'Country2'])));
+    dispatch(setStates(new Set(['State1', 'State2'])));
+    dispatch(setCities(new Set(['City1', 'City2'])));
+    dispatch(setDateOfBirths(new Set(['1990-01-01', '1992-02-02'])));
+    dispatch(setEmails(new Set(['email1@example.com', 'email2@example.com'])));
+    dispatch(
+      setAdditionalAffiliations(new Set(['Affiliation1', 'Affiliation2']))
+    );
+    dispatch(setDateOfJoins(new Set(['2020-01-01', '2022-02-02'])));
+    dispatch(setBeiChapters(new Set(['Chapter1', 'Chapter2'])));
+    dispatch(setSecondaryPhoneNumbers(new Set(['1234567890', '0987654321'])));
+    dispatch(
+      setSecondaryNames(new Set(['Secondary Name1', 'Secondary Name2']))
+    );
+
+    // dispatch(resetFields());
+
     onSubmit?.();
   }, [searchInput, dispatch, setFullName, onSubmit]);
 
