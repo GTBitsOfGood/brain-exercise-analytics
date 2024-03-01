@@ -128,7 +128,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     displayValue: `${locCountry.name}`,
   }));
   const countryCode = Country.getAllCountries().filter(
-    (locCountry) => countries === locCountry.name,
+    (locCountry) => countries === locCountry.name
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((locState) => ({
@@ -179,7 +179,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           className={[styles.button_row_button, styles.button_blue].join(' ')}
           onClick={() => {
             setFinal();
-            reset();
           }}
         >
           Apply
@@ -248,10 +247,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         />
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Birth</div>
-          {/* <CalendarInput
+          <CalendarInput
             value={Array.from(dateOfBirths)[0]}
-            onChange={dispatch(dateOfBirths)}
-          /> */}
+            onChange={(newDate) => {
+              const newDateOfBirths = new Set([newDate]);
+              dispatch(setDateOfBirths(newDateOfBirths));
+            }}
+          />
         </div>
         <div className={styles.question_box}>
           <div className={[styles.label, styles.email_label].join(' ')}>
@@ -284,10 +286,13 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
         </div>
         <div className={styles.question_box}>
           <div className={styles.label}>Date of Join</div>
-          {/* <CalendarInput
+          <CalendarInput
             value={Array.from(dateOfJoins)[0]}
-            onChange={dispatch(setDateOfJoins)}
-          /> */}
+            onChange={(newDate) => {
+              const newDateOfJoins = new Set([newDate]);
+              dispatch(setDateOfJoins(newDateOfJoins));
+            }}
+          />
         </div>
 
         <div className={styles.secondaryInfo}>
