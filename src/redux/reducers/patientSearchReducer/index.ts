@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPatientSearchReducer } from '@/common_utils/types';
+/* eslint-disable no-param-reassign */
+
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IPatientSearchReducer } from "@/common_utils/types";
 
 const initialState: IPatientSearchReducer = {
-  fullName: '',
+  fullName: "",
   active: undefined,
   countries: new Set<string>(),
   states: new Set<string>(),
@@ -17,7 +19,7 @@ const initialState: IPatientSearchReducer = {
 };
 
 const patientSearchReducer = createSlice({
-  name: 'patientSearch',
+  name: "patientSearch",
   initialState,
   reducers: {
     setFullName(state, action: PayloadAction<string>) {

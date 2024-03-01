@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  CSSProperties,
-} from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { SelectChangeEvent } from '@mui/material';
 import { Country, State, City } from 'country-state-city';
 import InputField from '@src/components/InputField/InputField';
@@ -12,10 +6,6 @@ import InputField from '@src/components/InputField/InputField';
 import CHAPTERS from '@src/utils/chapters';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import Dropdown, { DropdownProps } from '../../Dropdown/Dropdown';
-import styles from './AdvancedSearch.module.css';
-import 'react-calendar/dist/Calendar.css';
-import CalendarInput from './CalendarInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@src/redux/rootReducer';
 import {
@@ -33,6 +23,11 @@ import {
   setSecondaryNames,
   resetFields,
 } from '@src/redux/reducers/patientSearchReducer';
+import Dropdown, { DropdownProps } from '../../Dropdown/Dropdown';
+import styles from './AdvancedSearch.module.css';
+import 'react-calendar/dist/Calendar.css';
+import CalendarInput from './CalendarInput';
+
 interface SelectDropdownProps<T> {
   title: string;
   style?: CSSProperties;
@@ -85,6 +80,9 @@ interface UpdateParamProp {
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
+  const [country, setCountry] = useState(''); // values chosen before the aply button
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
   const dispatch = useDispatch();
   const {
     fullName,
@@ -128,15 +126,15 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     displayValue: `${locCountry.name}`,
   }));
   const countryCode = Country.getAllCountries().filter(
-    (locCountry) => countries === locCountry.name
+    (locCountry) => country === locCountry.name
   )[0]?.isoCode;
 
   const STATES = State.getStatesOfCountry(countryCode).map((locState) => ({
     value: locState.name,
     displayValue: `${locState.name}`,
   }));
-  const stateCode = State.getStatesOfCountry(countryCode).filter((locState) =>
-    states.has(locState.name)
+  const stateCode = State.getStatesOfCountry(countryCode).filter(
+    (locState) => locState.name === state
   )[0]?.isoCode;
 
   const CITIES = City.getCitiesOfState(countryCode, stateCode).map(

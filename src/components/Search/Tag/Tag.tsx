@@ -1,11 +1,11 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { faX } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './Tag.module.css';
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@src/redux/rootReducer';
-import { IPatientSearchReducer } from '@/common_utils/types';
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
+import { IPatientSearchReducer } from "@/common_utils/types";
+import styles from "./Tag.module.css";
 
 type TagProps<T> = {
   title: string;
@@ -26,7 +26,7 @@ export default function Tag<T>({
 }: TagProps<T>) {
   const dispatch = useDispatch();
   const categorySet = useSelector(
-    (state: RootState) => state.patientSearch[category]
+    (state: RootState) => state.patientSearch[category],
   );
 
   const handleCloseTag = () => {
@@ -49,8 +49,8 @@ export default function Tag<T>({
     <div className={styles.container}>
       <div className={styles.border}>
         <span className={styles.text}>{tagText}</span>
-        <div className={styles['icon-container']} onClick={handleCloseTag}>
-          <FontAwesomeIcon className={styles['x-icon']} icon={faX} size='2xs' />
+        <div className={styles["icon-container"]} onClick={handleCloseTag}>
+          <FontAwesomeIcon className={styles["x-icon"]} icon={faX} size="2xs" />
         </div>
       </div>
     </div>

@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dashboard } from '@mui/icons-material';
-import Search from '@src/components/Search/Search';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dashboard } from "@mui/icons-material";
+import Search from "@src/components/Search/Search";
 
-import PatientGrid from '@src/components/PatientGrid/PatientGrid';
-import { classes } from '@src/utils/utils';
-import { internalRequest } from '@src/utils/requests';
+import PatientGrid from "@src/components/PatientGrid/PatientGrid";
+import { classes } from "@src/utils/utils";
+import { internalRequest } from "@src/utils/requests";
 import {
   SortField,
   HttpMethod,
   IPatientTableEntry,
   SearchResponseBody,
-} from '@/common_utils/types';
+} from "@/common_utils/types";
 
-import { getAuth } from 'firebase/auth';
-import firebaseInit from '@src/firebase/config';
+import { getAuth } from "firebase/auth";
+import firebaseInit from "@src/firebase/config";
 
-import styles from './page.module.css';
-import { RootState } from '@src/redux/rootReducer';
+import { RootState } from "@src/redux/rootReducer";
+import styles from "./page.module.css";
 
 firebaseInit();
 
@@ -51,7 +51,7 @@ export default function Page() {
     getAuth().onAuthStateChanged((user) => {
       if (user) {
         internalRequest<SearchResponseBody<IPatientTableEntry>>({
-          url: '/api/patient/filter-patient',
+          url: "/api/patient/filter-patient",
           method: HttpMethod.POST,
           body: {
             params: {
@@ -117,23 +117,23 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
-      <div className={classes(styles['search-container'])}>
-        <p className={styles['intro-text']}>
+      <div className={classes(styles["search-container"])}>
+        <p className={styles["intro-text"]}>
           To begin viewing analytics, search for a patient here!
         </p>
-        <div className={styles['search-wrapper']}>
+        <div className={styles["search-wrapper"]}>
           <Search />
         </div>
       </div>
       <div
         className={classes(
-          styles['table-container'],
-          styles['table-container-show']
+          styles["table-container"],
+          styles["table-container-show"],
         )}
       >
-        <div className={styles['table-header']}>
+        <div className={styles["table-header"]}>
           <Dashboard />
-          <p className={styles['table-header-text']}>Patient Table</p>
+          <p className={styles["table-header-text"]}>Patient Table</p>
         </div>
         <PatientGrid
           data={filteredUsers}

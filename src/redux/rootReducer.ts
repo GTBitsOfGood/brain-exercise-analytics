@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { combineReducers } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import { combineReducers } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
-import authReducer from './reducers/authReducer';
-import patientSearchReducer from './reducers/patientSearchReducer';
+import authReducer from "./reducers/authReducer";
+import patientSearchReducer from "./reducers/patientSearchReducer";
 
 const createNoopStorage = () => {
   return {
@@ -23,12 +23,12 @@ const createNoopStorage = () => {
 };
 
 const storage =
-  typeof window !== 'undefined'
-    ? createWebStorage('local')
+  typeof window !== "undefined"
+    ? createWebStorage("local")
     : createNoopStorage();
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
 };
 
@@ -37,7 +37,7 @@ const rootReducer = persistReducer(
   combineReducers({
     auth: authReducer,
     patientSearch: patientSearchReducer,
-  })
+  }),
 );
 
 export type RootState = ReturnType<typeof rootReducer>;
