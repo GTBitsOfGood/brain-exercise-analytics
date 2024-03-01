@@ -39,7 +39,6 @@
 .question_box {
   display: flex;
   flex-direction: row;
-  /* height: 30px; */
   border-radius: 12px;
   color: #2b3674;
   font-weight: 600;

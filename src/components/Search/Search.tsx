@@ -71,30 +71,41 @@ export default function Search({
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
   const onSubmitSearch = useCallback(() => {
+    if (showAdvancedSearch) {
+      setShowAdvancedSearch(!showAdvancedSearch);
+    }
     setFullName(searchInput);
     onSubmit?.();
   }, [searchInput, setFullName, onSubmit]);
 
   return (
     <div className={classes(styles.wrapper, className)}>
-      <div className={styles.border}>
+      <div
+        className={[
+          styles["border"],
+          showAdvancedSearch && styles["border-change"],
+        ].join(" ")}
+      >
         <div className={styles["search-no-tags"]}>
           <div className={styles["search-container"]}>
+            <FontAwesomeIcon
+              className={styles["search-icon"]}
+              icon={faSearch}
+              size="sm"
+              onClick={onSubmitSearch}
+              style={{ height: 20 }}
+            />
             <InputField
               className={styles["search-bar"]}
               inputFieldClassName={styles["search-bar-input"]}
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
               placeholder="Search"
             />
           </div>
-          {/* <FontAwesomeIcon
-            className={styles["search-icon"]}
-            icon={faSearch}
-            size="lg"
-            onClick={onSubmitSearch}
-            style={{ height: 28 }}
-          /> */}
+
           <div className={styles["advanced-filter"]}>
             {!showAdvancedSearch ? (
               <FilterAltIcon
