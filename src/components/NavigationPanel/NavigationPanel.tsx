@@ -57,9 +57,9 @@ const NavigationPanel = () => {
     setActiveMetric(null);
     router.push("/patient/dashboard");
   };
-  function handleClick() {
-    // console.log("open Edit Modal");
-  }
+  // function handleClick() {
+  // console.log("open Edit Modal");
+  // }
 
   return (
     <div className={styles.wrapper}>
