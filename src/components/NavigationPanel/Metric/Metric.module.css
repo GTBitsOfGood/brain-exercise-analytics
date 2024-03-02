@@ -6,13 +6,7 @@
   cursor: pointer;
 }
 
-.metrics-container-active {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.metrics-container-inactive {
+.metrics-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -38,6 +32,7 @@
   padding: 5px;
   justify-content: center;
   text-align: center;
+  display: inline;
 }
 
 .analytics-icon-inactive {
@@ -58,7 +53,7 @@
 
 }
 .metric-active {
-  color: #2078c1;
+  color: #2B3674;
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
@@ -72,10 +67,4 @@
   font-weight: 600;
   word-wrap: break-word;
 }
-.metric {
-  color: #2078c1;
-  font-size: 15px;
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  word-wrap: break-word;
-}
+

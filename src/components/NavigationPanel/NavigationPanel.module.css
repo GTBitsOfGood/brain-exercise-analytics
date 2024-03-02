@@ -84,7 +84,7 @@
 }
 
 .red-bubble {
-  background-color: red;
+  background-color: #EA4335;
   color: white;
   width: 24px;
   height: 24px;
@@ -92,7 +92,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 12px;
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  margin-left: 10px;
 }
 
 .icon-shadow {

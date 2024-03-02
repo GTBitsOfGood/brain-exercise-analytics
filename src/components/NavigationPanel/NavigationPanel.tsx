@@ -8,13 +8,13 @@ import { RootState } from "@src/redux/rootReducer";
 import { useSelector } from "react-redux";
 import Metric from "./Metric/Metric";
 import styles from "./NavigationPanel.module.css";
-
+import {useState} from "react";
 const NavigationPanel = () => {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
 
   const router = useRouter();
   const currentPath = usePathname();
-  const { id } = useParams();
+  // const { id } = useParams();
   const isPatientSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
     [currentPath]
@@ -34,15 +34,27 @@ const NavigationPanel = () => {
     () => currentPath.startsWith("/patient/dashboard"),
     [currentPath]
   );
+  const [activeMetric, setActiveMetric] = useState<string | null>(null);
 
-  // const isMath = useMemo(() => currentPath.startsWith("/patient/dashboard#Math"), [currentPath]);
-  // const isReading = useMemo(() => currentPath.startsWith("/patient/dashboard#Reading"), [currentPath]);
-  // const isWriting = useMemo(() => currentPath.startsWith("/patient/dashboard#Writing"), [currentPath]);
-  // const isTrivia = useMemo(() => currentPath.startsWith("/patient/dashboard#Trivia"), [currentPath]);
-  const isMath = useMemo(() => id === "Math", [id]);
-  const isReading = useMemo(() => id === "Reading", [id]);
-  const isWriting = useMemo(() => id === "Writing", [id]);
-  const isTrivia = useMemo(() => id === "Trivia", [id]);
+  const handleMetricClick = (title: string) => {
+    setActiveMetric(title);
+  };
+  const handleVolunteerSearchClick = () => {
+    setActiveMetric(null);
+    router.push("/volunteer/search");
+  };
+  const handlePatientSearchClick = () => {
+    setActiveMetric(null);
+    router.push("/patient/search");
+  };
+  const handleApprovalClick = () => {
+    setActiveMetric(null);
+    router.push("/volunteer/approval"); 
+  };
+  const handleDashboardClick = () => {
+    setActiveMetric(null);
+    router.push("/patient/dashboard");
+  };
   function handleClick() {
     // console.log("open Edit Modal");
   }
@@ -72,7 +84,7 @@ const NavigationPanel = () => {
             <div className={styles[`volunteer-patient-container`]}>
               <div
                 className={styles[`search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`]}
-                onClick={() => router.push("/volunteer/search")} 
+                onClick={() => handleVolunteerSearchClick()} 
               >
                 <div className={styles["icon-shadow"]}>
                   <FontAwesomeIcon
@@ -89,11 +101,11 @@ const NavigationPanel = () => {
               <div
                 className={styles[`overall-metrics-container-${isApproval ? "active" : "inactive"}`]}
                 onClick={() => {
-                  if (!isDashboard) {
-                    router.push("/volunteer/approval"); 
-                  } else {
-                    router.push("#");
-                  }
+                  // if (!isDashboard) {
+                    handleApprovalClick();
+                  // } else {
+                    // router.push("#");
+                  // }
                 }}
               >
                 <div className={styles["icon-shadow"]}>
@@ -104,8 +116,8 @@ const NavigationPanel = () => {
                 </div>
                 <div className={styles["overall-metrics"]}>
                   <span>Pending Approval</span>
-                  <div className={styles["red-bubble"]}>1</div>
                 </div>
+                <div className={styles["red-bubble"]}>1</div>
               </div>
             </div>
           </>
@@ -118,7 +130,7 @@ const NavigationPanel = () => {
             className={
               styles[`search-patient-${isPatientSearch ? "active" : "inactive"}`]
             }
-            onClick={() => router.push("/patient/search")}
+            onClick={() => handlePatientSearchClick()}
           >
             <div className={styles["icon-shadow"]}>
               <FontAwesomeIcon
@@ -143,7 +155,8 @@ const NavigationPanel = () => {
             }
             onClick={() => {
               if (!isDashboard) {
-                router.push("/patient/dashboard");
+                handleDashboardClick();
+                // router.push("/patient/dashboard");
               } else {
                 router.push("#");
               }
@@ -160,10 +173,10 @@ const NavigationPanel = () => {
               <span>Patient Analytics</span>
             </div>
           </div>
-          <Metric title="Math" isActive={id === "Math" ? "active" : "inactive"} />
-          <Metric title="Reading" isActive={isReading ? "active" : "inactive"} />
-          <Metric title="Writing" isActive={isWriting ? "active" : "inactive"} />
-          <Metric title="Trivia" isActive={isTrivia ? "active" : "inactive"} />
+          <Metric title="Math" isActive={activeMetric === "Math"} onClick={() => handleMetricClick("Math")} />
+          <Metric title="Reading" isActive={activeMetric === "Reading"} onClick={() => handleMetricClick("Reading")} />
+          <Metric title="Writing" isActive={activeMetric === "Writing"} onClick={() => handleMetricClick("Writing")} />
+          <Metric title="Trivia" isActive={activeMetric === "Trivia"} onClick={() => handleMetricClick("Trivia")} />
         </div>
         <div className={styles.divider} />
         <div className={styles["patient-container"]}>
