@@ -12,6 +12,7 @@ interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
+  yLabel?: string;
   info?: string;
   legend: { text: string; color: string }[];
 }
@@ -31,6 +32,7 @@ export default function StackedBarChart({
   hoverable = false,
   percentageChange = false,
   legend,
+  yLabel = "",
   fullWidth = false,
   info = "",
 }: DataParams) {
@@ -83,6 +85,7 @@ export default function StackedBarChart({
         hoverable={hoverable}
         percentageChange={percentageChange}
         info={info}
+        yLabel={yLabel}
         fullWidth
       >
         {data.map((d, i) => (
