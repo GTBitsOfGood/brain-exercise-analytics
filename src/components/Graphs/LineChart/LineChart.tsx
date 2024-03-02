@@ -54,10 +54,10 @@ export default function LineChart({
     if (data.length === 0) {
       return [{ interval: "1", value: 1 }];
     }
-    if (data.length > 11) {
+    if (data.length > 10) {
       const step = Math.floor(data.length / 11);
       const tmp = [];
-      for (let i = 0; i < 11; i += 1) {
+      for (let i = 0; i < 10; i += 1) {
         tmp[10 - i] = data[data.length - i * step - 1];
       }
       return tmp;
