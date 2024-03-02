@@ -7,11 +7,13 @@ import {
   Fragment,
   MouseEvent,
   ReactNode,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { D3Data } from "@src/utils/types";
+import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./BarChart.module.scss";
 
@@ -49,14 +51,29 @@ export default function BarChart({
   info = "",
   yLabel = "",
 }: DataParams) {
+  const updateNewData = useCallback(() => {
+    if (data.length === 0) {
+      return [{ interval: "1", value: 1 }];
+    }
+    if (data.length > 11) {
+      const step = Math.floor(data.length / 11);
+      const tmp = [];
+      for (let i = 0; i < 11; i += 1) {
+        tmp[10 - i] = data[data.length - i * step - 1];
+      }
+      return tmp;
+    }
+    return data;
+  }, [data]);
+  const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
   const barWidth = 12;
-  const minWidth = (barWidth + 5) * data.length + 60;
+  const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
-  const updateSize = () => {
+  const updateSize = useCallback(() => {
     if (!fullWidth || !windowSizeRef.current) return;
     setWidth(Math.max(windowSizeRef.current.offsetWidth - 44, minWidth));
-  };
+  }, [fullWidth, minWidth]);
   const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
   const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
@@ -77,9 +94,10 @@ export default function BarChart({
   const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
-    data.length < 2
+    newData.length < 2
       ? null
-      : data[data.length - 1].value / data[data.length - 2].value - 1;
+      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+        1;
 
   const windowRef = useRef(null);
 
@@ -101,7 +119,7 @@ export default function BarChart({
   };
 
   const x = d3.scaleLinear(
-    [0, data.length - 1],
+    [0, newData.length - 1],
     [marginLeft, width - marginRight],
   );
   const y = d3.scaleLinear(
@@ -127,17 +145,17 @@ export default function BarChart({
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
     function indexOfMax() {
-      if (data.length === 0) {
+      if (newData.length === 0) {
         return -1;
       }
 
-      let max = data[0].value;
+      let max = newData[0].value;
       let maxIndex = 0;
 
-      for (let i = 1; i < data.length; i += 1) {
-        if (data[i].value > max) {
+      for (let i = 1; i < newData.length; i += 1) {
+        if (newData[i].value > max) {
           maxIndex = i;
-          max = data[i].value;
+          max = newData[i].value;
         }
       }
 
@@ -151,19 +169,19 @@ export default function BarChart({
     svg.select(".y-axis").remove();
     const xAxisLabelTop = d3
       .axisBottom(x)
-      .ticks(data.length)
+      .ticks(newData.length)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval.split(" ")[0]);
+      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[0]);
 
     const xAxisLabelBottom = d3
       .axisBottom(x)
-      .ticks(data.length)
+      .ticks(newData.length)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval.split(" ")[1]);
+      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
 
     const yAxisLabel = d3
       .axisLeft(y)
@@ -211,7 +229,7 @@ export default function BarChart({
 
     return () => window.removeEventListener("scroll", onScroll);
   }, [
-    data,
+    newData,
     height,
     windowRef,
     x,
@@ -224,7 +242,11 @@ export default function BarChart({
 
   useEffect(() => {
     updateSize();
-  }, [data]);
+  }, [newData, updateSize]);
+
+  useEffect(() => {
+    setNewData(updateNewData());
+  }, [data, updateNewData]);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
     activeIndex === i && (
@@ -291,7 +313,9 @@ export default function BarChart({
             className={styles.percentageChange}
             style={{
               color:
-                actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
+                actualChange !== null && actualChange < 0
+                  ? "#EA4335"
+                  : "#05CD99",
             }}
           >
             {actualChange !== null &&
@@ -315,7 +339,7 @@ export default function BarChart({
       >
         <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
           {children ||
-            data.map((d, i) => {
+            newData.map((d, i) => {
               const color =
                 highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
               return (
@@ -345,7 +369,7 @@ export default function BarChart({
                 </Fragment>
               );
             })}
-          {data.map((d, i) => (
+          {newData.map((d, i) => (
             <HoverableNode key={i} i={i} d={d} />
           ))}
         </g>
