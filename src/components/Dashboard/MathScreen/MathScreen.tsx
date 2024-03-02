@@ -64,6 +64,7 @@ const MathScreen = ({
             info="Vidushi"
             data={accuracyData}
             fullWidth
+            yLabel="Questions"
             // style={{ width: "100%", height: "100%" }}
           />
           <LineChart
@@ -85,6 +86,7 @@ const MathScreen = ({
             data={numQuestionData}
             hoverable
             percentageChange
+            yLabel="Questions"
             fullWidth
             // style={{ width: "100%", height: "100%" }}
           />

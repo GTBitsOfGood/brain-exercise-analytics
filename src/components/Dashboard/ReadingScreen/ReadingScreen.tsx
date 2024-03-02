@@ -75,14 +75,15 @@ export default function ReadingScreen({
       <div className={styles.body}>
         <div className={styles.graphs}>
           <StackedBarChart
-            width={105}
-            height={165}
+            width={325}
+            height={215}
             title="Writing Session Completion History"
             data={sessionHistory}
             legend={[
               { text: "sessions completed without reading", color: "#FF9FB3" },
               { text: "sessions completed with reading", color: "#008AFC" },
             ]}
+            yLabel="Writing"
             hoverable
             percentageChange
             fullWidth
