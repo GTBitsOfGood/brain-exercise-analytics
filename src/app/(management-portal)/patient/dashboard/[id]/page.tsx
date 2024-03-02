@@ -198,10 +198,14 @@ export default function Page({ params }: { params: { id: string } }) {
           difficultyData={math?.avgDifficultyScore ?? dataLine}
           numQuestionData={math?.avgQuestionsCompleted ?? numberOfQuestionData}
           timeData={math?.avgTimePerQuestion ?? dataBar}
-          currentAccuracy="30%"
-          currentDifficulty="50%"
-          totalQuestions="20"
-          totalTime="1 min 30 sec"
+          currentAccuracy={(math?.lastSession.accuracy ?? 0).toString()}
+          currentDifficulty={(
+            math?.lastSession.difficultyScore ?? 0
+          ).toString()}
+          totalQuestions={(
+            math?.lastSession.questionsCompleted ?? 0
+          ).toString()}
+          totalTime={(math?.lastSession.timePerQuestion ?? 0).toString()}
         />
       </div>
       <Divider id="reading" />
@@ -212,9 +216,9 @@ export default function Page({ params }: { params: { id: string } }) {
           readingRate={reading?.avgTimePerPassage ?? dataLine}
           avgPassage={reading?.avgPassagesRead ?? dataBar}
           timeData={reading?.avgWordsPerMin ?? dataBar}
-          totalPassage={"10"}
-          currentTime={"30 sec"}
-          completionStatus={true}
+          totalPassage={(reading?.lastSession.passagesRead ?? 0).toString()}
+          currentTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
+          completionStatus={reading?.lastSession.completed ?? false}
         />
       </div>
       <Divider id="writing" />
@@ -224,9 +228,9 @@ export default function Page({ params }: { params: { id: string } }) {
           sessionHistory={writing?.sessionCompletion ?? dataStacked}
           numCompleted={writing?.avgPromptsAnswered ?? dataBar}
           avgTime={writing?.avgTimePerQuestion ?? dataBar}
-          totalPrompts={"10"}
-          currentTime={"2 min 20 sec"}
-          attemptStatus={false}
+          totalPrompts={(writing?.lastSession.promptsAnswered ?? 0).toString()}
+          currentTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
+          attemptStatus={writing?.lastSession.completed ?? false}
         />
       </div>
       <Divider id="trivia" />
@@ -238,9 +242,11 @@ export default function Page({ params }: { params: { id: string } }) {
             trivia?.avgQuestionsCompleted ?? numberOfQuestionData
           }
           timeData={trivia?.avgTimePerQuestion ?? dataBar}
-          currentAccuracy="65%"
-          totalQuestions="10"
-          totalTime="3 min 15 sec"
+          currentAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
+          totalQuestions={(
+            trivia?.lastSession.questionsCompleted ?? 0
+          ).toString()}
+          totalTime={(trivia?.lastSession.timePerQuestion ?? 0).toString()}
         />
       </div>
     </div>
