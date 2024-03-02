@@ -15,15 +15,15 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "next",
-      },
+        "name": "next"
+      }
     ],
     "paths": {
       "@src/*": ["./src/*"],
       "@server/*": ["./server/*"],
       "@/*": ["./*"],
-      "react": ["./node_modules/@types/react"],
-    },
+      "react": ["./node_modules/@types/react"]
+    }
   },
   "include": [
     "next-env.d.ts",
@@ -32,7 +32,7 @@
     ".next/types/**/*.ts",
     ".eslintrc.js",
     "next.config.js",
-    "src/components/InputField/InputField.tsx",
+    "src/components/InputField/InputField.tsx"
   ],
-  "exclude": ["node_modules", ".next"],
+  "exclude": ["node_modules", ".next"]
 }

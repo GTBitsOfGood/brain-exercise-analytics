@@ -44,10 +44,9 @@
   justify-content: center;
   text-align: center;
   filter: grayscale(93%) brightness(175%);
-
 }
 .metric-active {
-  color: #2B3674;
+  color: #2b3674;
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
@@ -55,10 +54,9 @@
 }
 
 .metric-inactive {
-  color: #E3EAFC;
+  color: #e3eafc;
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
   word-wrap: break-word;
 }
-

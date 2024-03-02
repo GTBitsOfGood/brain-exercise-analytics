@@ -58,7 +58,7 @@
 }
 
 .volunteer-management {
-  color: #9CA5C2;
+  color: #9ca5c2;
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
@@ -67,7 +67,7 @@
   margin-bottom: 15px;
 }
 .patient-management {
-  color: #9CA5C2;
+  color: #9ca5c2;
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
@@ -84,7 +84,7 @@
 }
 
 .red-bubble {
-  background-color: #EA4335;
+  background-color: #ea4335;
   color: white;
   width: 24px;
   height: 24px;
@@ -117,7 +117,7 @@
 }
 
 .icon-inactive {
-  color: #E3EAFC;
+  color: #e3eafc;
   size: large;
   --fa-primary-color: #008afc;
   --fa-secondary-color: #f4f7fe;
@@ -131,7 +131,7 @@
   background: #e7eeff;
   border-radius: 10px;
   border: none;
-  color: #2B3674;
+  color: #2b3674;
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
@@ -148,7 +148,7 @@
   background: white;
   border-radius: 10px;
   border: none;
-  color: #E3EAFC;
+  color: #e3eafc;
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
@@ -163,14 +163,13 @@
   padding-left: 5%;
 }
 
-
 .search-volunteer-active {
   width: 100%;
   height: 40px;
   background: #e7eeff;
   border-radius: 10px;
   border: none;
-  color: #2B3674;
+  color: #2b3674;
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
@@ -187,7 +186,7 @@
   background: white;
   border-radius: 10px;
   border: none;
-  color: #E3EAFC;
+  color: #e3eafc;
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
@@ -219,7 +218,7 @@
   cursor: pointer;
   padding: 0.5vh 0.5vw;
   align-items: center;
-  color: #2B3674;
+  color: #2b3674;
 }
 
 .overall-metrics-container-inactive {
@@ -228,7 +227,7 @@
   cursor: pointer;
   padding: 0.5vh 0.5vw;
   align-items: center;
-  color: #E3EAFC;
+  color: #e3eafc;
 }
 
 .overall-metrics {
@@ -260,7 +259,7 @@
 }
 
 .user-name {
-  color: #008AFC;
+  color: #008afc;
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
