@@ -24,6 +24,12 @@ interface Params {
   streak: Days[];
   startDate: Date;
   lastSessionDate: Date;
+  lastSession: {
+    mathQuestionsCompleted: number;
+    wordsRead: number;
+    promptsCompleted: number;
+    triviaQuestionsCompleted: number;
+  };
   sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
   menuState: [
@@ -134,14 +140,14 @@ export default function OverallDashboard(params: Params) {
               <SmallDataBox
                 className={styles.box}
                 title="Questions Completed"
-                text={"10"}
+                text={params.lastSession.mathQuestionsCompleted.toString()}
                 Icon={SQ}
                 Chip={() => <Chip color="#FF9FB34D">Math</Chip>}
               />
               <SmallDataBox
                 className={styles.box}
                 title="Prompts Completed"
-                text={"20"}
+                text={params.lastSession?.promptsCompleted.toString()}
                 Icon={DI}
                 Chip={() => <Chip color="#32D29633">Writing</Chip>}
               />
@@ -150,14 +156,14 @@ export default function OverallDashboard(params: Params) {
               <SmallDataBox
                 className={styles.box}
                 title="Words Read Per Min"
-                text={"24.8"}
+                text={params.lastSession.wordsRead.toString()}
                 Icon={BI}
                 Chip={() => <Chip color="#008AFC1A">Reading</Chip>}
               />
               <SmallDataBox
                 className={styles.box}
                 title="Questions Completed"
-                text={"13"}
+                text={params.lastSession.triviaQuestionsCompleted.toString()}
                 Icon={QI}
                 Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
               />

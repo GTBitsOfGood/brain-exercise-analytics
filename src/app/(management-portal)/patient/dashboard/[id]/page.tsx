@@ -168,7 +168,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <div className={styles.sectionContainer}>
         <OverallDashboard
           menuState={[dashboardMenu, updateAllAnalytics]}
-          name={overall?.name ?? "John Doe"}
+          name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
           streak={overall?.streak ?? []}
           startDate={
@@ -178,6 +178,14 @@ export default function Page({ params }: { params: { id: string } }) {
             overall?.lastSessionDate
               ? new Date(overall.lastSessionDate)
               : new Date()
+          }
+          lastSession={
+            overall?.lastSession ?? {
+              mathQuestionsCompleted: 0,
+              wordsRead: 0,
+              promptsCompleted: 0,
+              triviaQuestionsCompleted: 0,
+            }
           }
           sessionCompletionHistory={overall?.streakHistory ?? dataBar}
         />
