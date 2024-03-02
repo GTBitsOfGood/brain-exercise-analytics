@@ -2,7 +2,12 @@ import React, { useMemo } from "react";
 import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareRootVariable, faBookOpen, faFileLines, faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSquareRootVariable,
+  faBookOpen,
+  faFileLines,
+  faCircleQuestion,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./Metric.module.css";
 
 const poppins = Poppins({
@@ -19,7 +24,7 @@ type MetricProps = {
 
 const Metric = (metricProps: MetricProps) => {
   const router = useRouter();
-  const pathname = window.location.pathname;
+  const { pathname } = window.location;
   console.log("Current Pathname:", pathname);
   const handleButtonClick = () => {
     metricProps.onClick();
@@ -40,7 +45,7 @@ const Metric = (metricProps: MetricProps) => {
       case "Trivia":
         return faCircleQuestion;
       default:
-        return faSquareRootVariable; 
+        return faSquareRootVariable;
     }
   }, [metricProps.title]);
 
@@ -51,12 +56,20 @@ const Metric = (metricProps: MetricProps) => {
         <div className={styles["metrics-container"]}>
           <div className={styles["dashboard-icon"]}>
             <FontAwesomeIcon
-              className={styles[`analytics-icon-${metricProps.isActive ? "active" : "inactive"}`]}
+              className={
+                styles[
+                  `analytics-icon-${metricProps.isActive ? "active" : "inactive"}`
+                ]
+              }
               icon={icon}
               size="xs"
             />
           </div>
-          <div className={styles[`metric-${metricProps.isActive ? "active" : "inactive"}`]}>
+          <div
+            className={
+              styles[`metric-${metricProps.isActive ? "active" : "inactive"}`]
+            }
+          >
             <span>{metricProps.title}</span>
           </div>
         </div>

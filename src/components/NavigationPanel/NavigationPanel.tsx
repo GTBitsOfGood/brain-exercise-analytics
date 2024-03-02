@@ -1,38 +1,40 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useParams } from "next/navigation";
-import { faChartSimple, faMagnifyingGlass, faUser} from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartSimple,
+  faMagnifyingGlass,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Role, IUser } from "@/common_utils/types";
 import { RootState } from "@src/redux/rootReducer";
 import { useSelector } from "react-redux";
 import Metric from "./Metric/Metric";
 import styles from "./NavigationPanel.module.css";
-import {useState} from "react";
+
 const NavigationPanel = () => {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
 
   const router = useRouter();
   const currentPath = usePathname();
-  // const { id } = useParams();
   const isPatientSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
-    [currentPath]
+    [currentPath],
   );
 
   const isVolunteerSearch = useMemo(
     () => currentPath.startsWith("/volunteer/search"),
-    [currentPath]
+    [currentPath],
   );
 
   const isApproval = useMemo(
     () => currentPath.startsWith("/volunteer/approval"),
-    [currentPath]
+    [currentPath],
   );
 
   const isDashboard = useMemo(
     () => currentPath.startsWith("/patient/dashboard"),
-    [currentPath]
+    [currentPath],
   );
   const [activeMetric, setActiveMetric] = useState<string | null>(null);
 
@@ -49,7 +51,7 @@ const NavigationPanel = () => {
   };
   const handleApprovalClick = () => {
     setActiveMetric(null);
-    router.push("/volunteer/approval"); 
+    router.push("/volunteer/approval");
   };
   const handleDashboardClick = () => {
     setActiveMetric(null);
@@ -83,14 +85,23 @@ const NavigationPanel = () => {
             </div>
             <div className={styles[`volunteer-patient-container`]}>
               <div
-                className={styles[`search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`]}
-                onClick={() => handleVolunteerSearchClick()} 
+                className={
+                  styles[
+                    `search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`
+                  ]
+                }
+                onClick={() => handleVolunteerSearchClick()}
               >
                 <div className={styles["icon-shadow"]}>
                   <FontAwesomeIcon
-                    className={styles[`icon-${isVolunteerSearch ? "active" : "inactive"}`]}
+                    className={
+                      styles[
+                        `icon-${isVolunteerSearch ? "active" : "inactive"}`
+                      ]
+                    }
                     icon={faMagnifyingGlass}
-                    size="sm" />
+                    size="sm"
+                  />
                 </div>
                 <span className={styles["search-volunteer-text"]}>
                   Search Volunteer
@@ -99,20 +110,27 @@ const NavigationPanel = () => {
             </div>
             <div className={styles["metrics-container"]}>
               <div
-                className={styles[`overall-metrics-container-${isApproval ? "active" : "inactive"}`]}
+                className={
+                  styles[
+                    `overall-metrics-container-${isApproval ? "active" : "inactive"}`
+                  ]
+                }
                 onClick={() => {
                   // if (!isDashboard) {
-                    handleApprovalClick();
+                  handleApprovalClick();
                   // } else {
-                    // router.push("#");
+                  // router.push("#");
                   // }
                 }}
               >
                 <div className={styles["icon-shadow"]}>
                   <FontAwesomeIcon
-                    className={styles[`icon-${isApproval ? "active" : "inactive"}`]}
+                    className={
+                      styles[`icon-${isApproval ? "active" : "inactive"}`]
+                    }
                     icon={faUser}
-                    size="sm" />
+                    size="sm"
+                  />
                 </div>
                 <div className={styles["overall-metrics"]}>
                   <span>Pending Approval</span>
@@ -122,19 +140,21 @@ const NavigationPanel = () => {
             </div>
           </>
         )}
-        <div className={styles["patient-management"]}>
-          Patient Management
-        </div>
+        <div className={styles["patient-management"]}>Patient Management</div>
         <div className={styles[`search-patient-container`]}>
           <div
             className={
-              styles[`search-patient-${isPatientSearch ? "active" : "inactive"}`]
+              styles[
+                `search-patient-${isPatientSearch ? "active" : "inactive"}`
+              ]
             }
             onClick={() => handlePatientSearchClick()}
           >
             <div className={styles["icon-shadow"]}>
               <FontAwesomeIcon
-                className={styles[`icon-${isPatientSearch ? "active" : "inactive"}`]}
+                className={
+                  styles[`icon-${isPatientSearch ? "active" : "inactive"}`]
+                }
                 icon={faMagnifyingGlass}
                 size="sm"
               />
@@ -164,7 +184,9 @@ const NavigationPanel = () => {
           >
             <div className={styles["icon-shadow"]}>
               <FontAwesomeIcon
-                className={styles[`icon-${isDashboard ? "active" : "inactive"}`]}
+                className={
+                  styles[`icon-${isDashboard ? "active" : "inactive"}`]
+                }
                 icon={faChartSimple}
                 size="sm"
               />
@@ -173,10 +195,26 @@ const NavigationPanel = () => {
               <span>Patient Analytics</span>
             </div>
           </div>
-          <Metric title="Math" isActive={activeMetric === "Math"} onClick={() => handleMetricClick("Math")} />
-          <Metric title="Reading" isActive={activeMetric === "Reading"} onClick={() => handleMetricClick("Reading")} />
-          <Metric title="Writing" isActive={activeMetric === "Writing"} onClick={() => handleMetricClick("Writing")} />
-          <Metric title="Trivia" isActive={activeMetric === "Trivia"} onClick={() => handleMetricClick("Trivia")} />
+          <Metric
+            title="Math"
+            isActive={activeMetric === "Math"}
+            onClick={() => handleMetricClick("Math")}
+          />
+          <Metric
+            title="Reading"
+            isActive={activeMetric === "Reading"}
+            onClick={() => handleMetricClick("Reading")}
+          />
+          <Metric
+            title="Writing"
+            isActive={activeMetric === "Writing"}
+            onClick={() => handleMetricClick("Writing")}
+          />
+          <Metric
+            title="Trivia"
+            isActive={activeMetric === "Trivia"}
+            onClick={() => handleMetricClick("Trivia")}
+          />
         </div>
         <div className={styles.divider} />
         <div className={styles["patient-container"]}>
