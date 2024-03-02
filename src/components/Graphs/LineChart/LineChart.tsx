@@ -2,9 +2,17 @@
 
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
-import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { D3Data } from "@src/utils/types";
 import { InfoIcon } from "@src/app/icons";
+import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./LineChart.module.scss";
 
@@ -42,15 +50,28 @@ export default function LineChart({
   info = "",
   yLabel = "",
 }: DataParams) {
-  // eslint-disable-next-line no-param-reassign
-  data = data.length === 0 ? [{ interval: "1", value: 1 }] : data;
+  const updateNewData = useCallback(() => {
+    if (data.length === 0) {
+      return [{ interval: "1", value: 1 }];
+    }
+    if (data.length > 11) {
+      const step = Math.floor(data.length / 11);
+      const tmp = [];
+      for (let i = 0; i < 11; i += 1) {
+        tmp[10 - i] = data[data.length - i * step - 1];
+      }
+      return tmp;
+    }
+    return data;
+  }, [data]);
+  const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
-  const updateSize = () => {
+  const updateSize = useCallback(() => {
     if (!fullWidth || !windowSizeRef.current) return;
     setWidth(Math.max(windowSizeRef.current.offsetWidth - 45, minWidth));
-  };
+  }, [fullWidth]);
   const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
   const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
@@ -70,9 +91,10 @@ export default function LineChart({
   const [popupY, setPopupY] = useState(0);
 
   const actualChange =
-    data.length < 2
+    newData.length < 2
       ? null
-      : data[data.length - 1].value / data[data.length - 2].value - 1;
+      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+        1;
 
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
@@ -80,7 +102,7 @@ export default function LineChart({
     const svgRect = svg.getBoundingClientRect();
     const xBound = svgRect.x + marginLeft;
     const range = width - marginRight - marginLeft;
-    const itemWidth = range / (data.length - 1);
+    const itemWidth = range / (newData.length - 1);
     const index = Math.floor(
       (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
     );
@@ -99,7 +121,7 @@ export default function LineChart({
   );
 
   const x = d3.scaleLinear(
-    [0, data.length - 1],
+    [0, newData.length - 1],
     [marginLeft, width - marginRight],
   );
   const line = d3
@@ -130,19 +152,19 @@ export default function LineChart({
     svg.select(".y-axis").remove();
     const xAxisLabelTop = d3
       .axisBottom(x)
-      .ticks(data.length - 1)
+      .ticks(newData.length - 1)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval.split(" ")[0]);
+      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[0]);
 
     const xAxisLabelBottom = d3
       .axisBottom(x)
-      .ticks(data.length - 1)
+      .ticks(newData.length - 1)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => data[d.valueOf()].interval.split(" ")[1]);
+      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
 
     const yAxisLabel = d3
       .axisLeft(y)
@@ -187,7 +209,7 @@ export default function LineChart({
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     width,
-    data,
+    newData,
     height,
     x,
     y,
@@ -199,7 +221,11 @@ export default function LineChart({
 
   useEffect(() => {
     updateSize();
-  }, [data]);
+  }, [newData, updateSize]);
+
+  useEffect(() => {
+    setNewData(updateNewData());
+  }, [data, updateNewData]);
 
   return (
     <div
@@ -245,7 +271,9 @@ export default function LineChart({
             className={styles.percentageChangeIcon}
             style={{
               color:
-                actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
+                actualChange !== null && actualChange < 0
+                  ? "#EA4335"
+                  : "#05CD99",
             }}
           >
             {actualChange !== null &&
@@ -282,17 +310,17 @@ export default function LineChart({
         )}
         <path
           className={styles.linePath}
-          d={line(data.map((d, i) => [i, d.value])) as string | undefined}
+          d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
         />
         <g className={styles.svgComp}>
-          <circle key={-1} cx={x(0)} cy={y(data[0].value)} r="2.5" />
+          <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
           <circle
             key={-2}
-            cx={x(data.length - 1)}
-            cy={y(data[data.length - 1].value)}
+            cx={x(newData.length - 1)}
+            cy={y(newData[newData.length - 1].value)}
             r="2.5"
           />
-          {data.map(
+          {newData.map(
             (d, i) =>
               activeIndex === i && (
                 <Fragment key={i}>
