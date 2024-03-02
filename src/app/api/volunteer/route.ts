@@ -1,4 +1,4 @@
-import { IUser, RecursivePartial } from "@/common_utils/types";
+import { IUser, RecursivePartial, Role } from "@/common_utils/types";
 import { deleteFirebaseUser, updateUserEmail } from "@server/firebase/utils";
 import {
   deleteVolunteer,
@@ -6,6 +6,7 @@ import {
   updateVolunteer,
 } from "@server/mongodb/actions/Volunteer";
 import APIWrapper from "@server/utils/APIWrapper";
+import { getLowerAdminRoles } from "@src/utils/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +15,20 @@ export const GET = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async (req) => {
+  handler: async (req, currentUser) => {
     const email: string | null = req.nextUrl.searchParams.get("email");
     if (!email) {
       throw new Error("Email parameter is missing");
     }
 
+    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
     const user = await getVolunteer(email);
+    if (user === undefined || !lowerRoles.includes(user!.role)) {
+      throw new Error(
+        "User doesn't exist or you do not have permission to acccess this user",
+      );
+    }
+
     return user;
   },
 });
@@ -35,7 +43,7 @@ export const PATCH = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async (req, _, updatedUserRef) => {
+  handler: async (req, currentUser, updatedUserRef) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
     const { email }: { email: string } = reqdata;
     const { newFields } = reqdata;
@@ -44,7 +52,15 @@ export const PATCH = APIWrapper({
       throw new Error("Email parameter is missing");
     }
 
-    if (newFields.email !== undefined && email !== newFields.email) {
+    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
+    const testuser = await getVolunteer(email);
+    if (testuser === undefined || !lowerRoles.includes(testuser!.role)) {
+      throw new Error(
+        "User doesn't exist or you do not have permission to acccess this user",
+      );
+    }
+
+    if (newFields.email !== null && email === newFields.email) {
       await updateUserEmail(email, newFields.email);
     }
 
@@ -62,12 +78,20 @@ export const DELETE = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async (req) => {
+  handler: async (req, currentUser) => {
     const reqdata: DeleteReq = (await req.json()) as DeleteReq;
     const { email }: { email: string } = reqdata;
 
     if (!email) {
       throw new Error("Email parameter is missing");
+    }
+
+    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
+    const testuser = await getVolunteer(email);
+    if (testuser === undefined || !lowerRoles.includes(testuser!.role)) {
+      throw new Error(
+        "User doesn't exist or you do not have permission to acccess this user",
+      );
     }
 
     await deleteFirebaseUser(email);

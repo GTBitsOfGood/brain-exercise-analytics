@@ -225,10 +225,13 @@ export interface SearchRequestBody<T extends object> {
   params: T;
   page?: number;
   sortParams?: SortField;
+  lowerRoles?: Role[];
+  searchall?: boolean;
+  onlyids?: boolean;
 }
 
 export interface SearchResponseBody<T> {
-  data: T[];
+  data: T;
   numRecords: number;
   numPages: number;
   page: number;
