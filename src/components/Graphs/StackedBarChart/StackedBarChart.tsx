@@ -12,6 +12,7 @@ interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
+  yLabel?: string;
   info?: string;
   legend: { text: string; color: string }[];
 }
@@ -31,10 +32,11 @@ export default function StackedBarChart({
   hoverable = false,
   percentageChange = false,
   legend,
+  yLabel = "",
   fullWidth = false,
   info = "",
 }: DataParams) {
-  const barWidth = 20;
+  const barWidth = 12;
   // Same rules as BarChart
   const [width, setWidth] = useState(
     Math.max(providedWidth, (barWidth + 5) * data.length + 60),
@@ -50,10 +52,11 @@ export default function StackedBarChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
+
   const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;
-  const marginBottom = 25;
+  const marginBottom = 40;
   const marginLeft = 35;
   const x = d3.scaleLinear(
     [0, data.length - 1],
@@ -64,8 +67,8 @@ export default function StackedBarChart({
     [height - marginBottom, marginTop],
   );
   useEffect(() => {
-    resizeOptimised();
-  }, []);
+    updateSize();
+  }, [data]);
   return (
     <div
       className={styles.StackedBarChart}
@@ -82,6 +85,7 @@ export default function StackedBarChart({
         hoverable={hoverable}
         percentageChange={percentageChange}
         info={info}
+        yLabel={yLabel}
         fullWidth
       >
         {data.map((d, i) => (

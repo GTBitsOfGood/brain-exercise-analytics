@@ -9,10 +9,11 @@
 
 .titleBox {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin: auto;
   align-items: first baseline;
-  .title {
+  height: 1.25em;
+  .titleText {
     font-family: var(--font-poppins);
     font-weight: 500;
     color: #a3aed0;
@@ -21,6 +22,16 @@
     overflow: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  .labelText {
+    white-space: nowrap;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    font-family: var(--font-inter);
+    font-weight: 500;
+    color: #838383;
+    font-size: 10px;
   }
   .title::-webkit-scrollbar {
     display: none;

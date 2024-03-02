@@ -6,6 +6,7 @@ import {
   WritingIcon,
 } from "@src/app/icons";
 import DateSelector from "@src/components/DateSelector/DateSelector";
+import { DateRangeEnum } from "@/common_utils/types";
 import {
   StackedBarChart,
   SmallDataBox,
@@ -26,6 +27,10 @@ interface InputProp {
   currentTime: string;
   attemptStatus: boolean;
   style?: object;
+  menuState: [
+    selectedValue: DateRangeEnum,
+    setSelectedvalue: (value: DateRangeEnum) => void,
+  ];
 }
 
 export default function WritingScreen({
@@ -36,6 +41,7 @@ export default function WritingScreen({
   currentTime,
   attemptStatus,
   style,
+  menuState,
 }: InputProp) {
   return (
     <div className={styles.container} style={style}>
@@ -43,7 +49,10 @@ export default function WritingScreen({
         <WritingIcon />
         <p>WRITING</p>
         <div className={styles.dateSelector}>
-          <DateSelector />
+          <DateSelector
+            selectedValue={menuState[0]}
+            setSelectedValue={menuState[1]}
+          />
         </div>
       </div>
       <div className={styles.body}>

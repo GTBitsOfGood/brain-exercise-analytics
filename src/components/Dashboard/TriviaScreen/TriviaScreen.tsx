@@ -1,5 +1,6 @@
 import React from "react";
 import { AccuracyIcon, QuestionIcon, TimeIcon } from "@src/app/icons";
+import { DateRangeEnum } from "@/common_utils/types";
 import DateSelector from "../../DateSelector/DateSelector";
 import { SmallDataBox, LineChart, BarChart } from "../../Graphs";
 import styles from "./TriviaScreen.module.css";
@@ -31,6 +32,10 @@ interface InputProp {
   totalQuestions: string;
   totalTime: string;
   style?: object;
+  menuState: [
+    selectedValue: DateRangeEnum,
+    setSelectedvalue: (value: DateRangeEnum) => void,
+  ];
 }
 
 export default function TriviaScreen({
@@ -41,6 +46,7 @@ export default function TriviaScreen({
   totalQuestions,
   totalTime,
   style,
+  menuState,
 }: InputProp) {
   return (
     <div className={styles.container} style={style}>
@@ -48,7 +54,10 @@ export default function TriviaScreen({
         <TriviaIcon />
         <p>TRIVIA</p>
         <div className={styles.dateSelector}>
-          <DateSelector />
+          <DateSelector
+            selectedValue={menuState[0]}
+            setSelectedValue={menuState[1]}
+          />
         </div>
       </div>
       <div className={styles.body}>

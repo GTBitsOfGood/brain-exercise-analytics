@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { Poppins } from "next/font/google";
 import { DateRangeEnum } from "@/common_utils/types";
@@ -14,10 +13,13 @@ const options: DropdownOption<DateRangeEnum>[] = Object.values(
   displayValue: range.toString(),
 }));
 
-function DateSelector() {
-  const [selectedValue, setSelectedValue] = useState<DateRangeEnum>(
-    DateRangeEnum.RECENT,
-  );
+function DateSelector({
+  selectedValue,
+  setSelectedValue,
+}: {
+  selectedValue: DateRangeEnum;
+  setSelectedValue: (value: DateRangeEnum) => void;
+}) {
   return (
     <Dropdown
       options={options}
