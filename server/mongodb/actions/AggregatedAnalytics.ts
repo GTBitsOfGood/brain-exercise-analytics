@@ -7,7 +7,7 @@ import {
   DateRangeEnum,
   AnalyticsSectionEnum,
 } from "@/common_utils/types";
-import { formatDateByRangeEnum } from "@server/utils/utils";
+import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import Analytics from "../models/Analytics";
 
 type TempAggData = Partial<{
@@ -78,11 +78,22 @@ export const getAggregatedAnalytics = async (
   const groupSize = Math.floor(lenOfMetrics / 12);
 
   // reversing the list
-  const reversedWeeklyMetrics = res.weeklyMetrics.reverse();
-  const paddingDate = new Date(res.weeklyMetrics[0].date);
 
-  let lastDate = new Date(res.weeklyMetrics[0].date);
-  let lastDateMax = new Date(res.weeklyMetrics[0].date);
+  const reversedWeeklyMetrics = res.weeklyMetrics.reverse();
+
+  const paddingDate =
+    reversedWeeklyMetrics.length === 0
+      ? new Date(getCurrentMonday().getDate() - 7)
+      : new Date(res.weeklyMetrics[0].date);
+
+  let lastDate =
+    reversedWeeklyMetrics.length === 0
+      ? new Date(getCurrentMonday().getDate() - 7)
+      : new Date(res.weeklyMetrics[0].date);
+  let lastDateMax =
+    reversedWeeklyMetrics.length === 0
+      ? new Date(getCurrentMonday().getDate() - 7)
+      : new Date(res.weeklyMetrics[0].date);
 
   const dbDateVars = new Set<string>();
 

@@ -377,7 +377,7 @@ export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
   return {
     _id: "1",
     name: entry.name,
-    email: entry.email,
+    email: `${entry.email}`,
     phoneNumber: "1234567890",
     patientDetails: entry.patientDetails,
     adminDetails: { active: entry.active },

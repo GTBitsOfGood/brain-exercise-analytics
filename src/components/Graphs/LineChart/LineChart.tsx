@@ -245,7 +245,9 @@ export default function LineChart({
             className={styles.percentageChangeIcon}
             style={{
               color:
-                actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
+                actualChange !== null && actualChange < 0
+                  ? "#EA4335"
+                  : "#05CD99",
             }}
           >
             {actualChange !== null &&
