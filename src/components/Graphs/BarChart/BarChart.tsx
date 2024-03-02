@@ -24,6 +24,7 @@ interface DataParams extends D3Data {
   hoverable?: boolean;
   percentageChange?: boolean;
   highlightLargest?: boolean;
+  yLabel?: string;
   children?: ReactNode;
   info?: string;
 }
@@ -46,6 +47,7 @@ export default function BarChart({
   fullWidth = false,
   children,
   info = "",
+  yLabel = "",
 }: DataParams) {
   const barWidth = 12;
   const minWidth = (barWidth + 5) * data.length + 60;
@@ -262,41 +264,46 @@ export default function BarChart({
       }}
     >
       <div className={styles.titleBox}>
-        <p className={styles.title}>{title}</p>
-        {info !== "" && (
-          <div
-            className={styles.infoBox}
-            onClick={() => {
-              setInfoPopup(true);
-            }}
-            ref={infoButtonRef}
-          >
-            <InfoIcon />
-            <PopupModal
-              show={infoPopup}
-              info={info}
-              style={{
-                position: "fixed",
-                top: `${popupY}px`,
-                zIndex: 500,
-                left: `${popupX}px`,
+        <div style={{ display: "inline-flex" }}>
+          <p className={styles.titleText}>{title}</p>
+          {info !== "" && (
+            <div
+              className={styles.infoBox}
+              onClick={() => {
+                setInfoPopup(true);
               }}
-            />
-          </div>
-        )}
-        <p
-          className={styles.percentageChange}
-          style={{
-            color:
-              actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
-          }}
-        >
-          {actualChange !== null &&
-            percentageChange &&
-            (actualChange < 0
-              ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-              : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-        </p>
+              ref={infoButtonRef}
+            >
+              <InfoIcon />
+              <PopupModal
+                show={infoPopup}
+                info={info}
+                style={{
+                  position: "fixed",
+                  top: `${popupY}px`,
+                  zIndex: 500,
+                  left: `${popupX}px`,
+                }}
+              />
+            </div>
+          )}
+          <p
+            className={styles.percentageChange}
+            style={{
+              color:
+                actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
+            }}
+          >
+            {actualChange !== null &&
+              percentageChange &&
+              (actualChange < 0
+                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+          </p>
+        </div>
+        <div style={{ display: "inline-flex" }}>
+          <p className={styles.labelText}>{yLabel}</p>
+        </div>
       </div>
       <svg
         ref={windowRef}
