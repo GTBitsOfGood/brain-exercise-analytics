@@ -21,6 +21,7 @@ import {
   setSecondaryPhoneNumbers,
   setSecondaryNames,
 } from "@src/redux/reducers/patientSearchReducer";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import styles from "./Search.module.css";
 import Tag from "./Tag/Tag";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
@@ -86,6 +87,17 @@ export default function Search({ className, onSubmit }: SearchProps) {
     onSubmit?.();
   }, [searchInput, dispatch, onSubmit]);
 
+  const curryOnCloseSetTag = useCallback(
+    <T,>(set: Set<T>, action: ActionCreatorWithPayload<Set<T>, string>) => {
+      return (value: T) => {
+        const updatedSet = new Set<T>(set);
+        updatedSet.delete(value);
+        dispatch(action(updatedSet));
+      };
+    },
+    [dispatch],
+  );
+
   return (
     <div className={classes(styles.wrapper, className)}>
       <div className={styles.border}>
@@ -121,8 +133,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`country-${country}`}
                   title="Country"
                   value={country}
-                  category="countries"
-                  setAction={setCountries}
+                  handleClose={curryOnCloseSetTag(countries, setCountries)}
                 />
               ))}
             {states.size > 0 &&
@@ -131,8 +142,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`state-${state}`}
                   title="State"
                   value={state}
-                  category="states"
-                  setAction={setStates}
+                  handleClose={curryOnCloseSetTag(states, setStates)}
                 />
               ))}
             {cities.size > 0 &&
@@ -141,8 +151,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`city-${city}`}
                   title="City"
                   value={city}
-                  category="cities"
-                  setAction={setCities}
+                  handleClose={curryOnCloseSetTag(cities, setCities)}
                 />
               ))}
             {active !== undefined && (
@@ -151,7 +160,6 @@ export default function Search({ className, onSubmit }: SearchProps) {
                 title="Status"
                 value={String(active)}
                 transformData={() => (active ? "Active" : "Inactive")}
-                category="active"
                 onClick={() => {
                   dispatch(setActive(undefined));
                 }}
@@ -163,8 +171,10 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`dob-${dob}`}
                   title="Date of Birth"
                   value={dob}
-                  category="dateOfBirths"
-                  setAction={setDateOfBirths}
+                  handleClose={curryOnCloseSetTag(
+                    dateOfBirths,
+                    setDateOfBirths,
+                  )}
                   transformData={transformDate}
                 />
               ))}
@@ -174,8 +184,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`email-${email}`}
                   title="Email"
                   value={email}
-                  category="emails"
-                  setAction={setEmails}
+                  handleClose={curryOnCloseSetTag(emails, setEmails)}
                 />
               ))}
             {dateOfJoins.size > 0 &&
@@ -184,8 +193,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`join-date-${dateOfJoin}`}
                   title="Join Date"
                   value={dateOfJoin}
-                  category="dateOfJoins"
-                  setAction={setDateOfJoins}
+                  handleClose={curryOnCloseSetTag(dateOfJoins, setDateOfJoins)}
                   transformData={transformDate}
                 />
               ))}
@@ -195,8 +203,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`bei-chapter-${chapter}`}
                   title="BEI Chapter"
                   value={chapter}
-                  category="beiChapters"
-                  setAction={setBeiChapters}
+                  handleClose={curryOnCloseSetTag(beiChapters, setBeiChapters)}
                 />
               ))}
             {secondaryPhoneNumbers.size > 0 &&
@@ -205,8 +212,10 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`phone-number-${secondaryPhoneNumber}`}
                   title="Secondary Phone Number"
                   value={secondaryPhoneNumber}
-                  category="secondaryPhoneNumbers"
-                  setAction={setSecondaryPhoneNumbers}
+                  handleClose={curryOnCloseSetTag(
+                    secondaryPhoneNumbers,
+                    setSecondaryPhoneNumbers,
+                  )}
                   transformData={transformPhoneNumber}
                 />
               ))}
@@ -217,8 +226,10 @@ export default function Search({ className, onSubmit }: SearchProps) {
                     key={`additional-affiliation-${additionalAffiliation}`}
                     title="Additional Affiliation"
                     value={additionalAffiliation}
-                    category="additionalAffiliations"
-                    setAction={setAdditionalAffiliations}
+                    handleClose={curryOnCloseSetTag(
+                      additionalAffiliations,
+                      setAdditionalAffiliations,
+                    )}
                   />
                 ),
               )}
@@ -228,8 +239,10 @@ export default function Search({ className, onSubmit }: SearchProps) {
                   key={`secondary-name-${secondaryName}`}
                   title="Secondary Name"
                   value={secondaryName}
-                  category="secondaryNames"
-                  setAction={setSecondaryNames}
+                  handleClose={curryOnCloseSetTag(
+                    secondaryNames,
+                    setSecondaryNames,
+                  )}
                 />
               ))}
           </div>

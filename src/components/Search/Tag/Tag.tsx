@@ -1,45 +1,29 @@
 import React, { useState } from "react";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@src/redux/rootReducer";
-import { IPatientSearchReducer } from "@/common_utils/types";
-import { setActive } from "@src/redux/reducers/patientSearchReducer";
 import styles from "./Tag.module.css";
 
-type TagProps = {
+type TagProps<T> = {
   title: string;
-  value: string;
-  category: keyof IPatientSearchReducer;
-  setAction?: ActionCreatorWithPayload<Set<string>, string>;
-  transformData?: (value: string) => string;
+  value: T;
+  transformData?: (value: T) => string;
   onClick?: () => void;
+  handleClose?: (value: T) => void;
 };
 
-export default function Tag({
+export default function Tag<T>({
   title,
   value,
-  category,
-  setAction,
   onClick,
+  handleClose,
   transformData,
-}: TagProps) {
+}: TagProps<T>) {
   const [closeTag, setCloseTag] = useState(false);
-  const dispatch = useDispatch();
-  const categorySet = useSelector(
-    (state: RootState) => state.patientSearch[category],
-  );
 
   const handleCloseTag = () => {
     setCloseTag(true);
-    if (!(categorySet instanceof Set)) {
-      return;
-    }
-    const updatedSet = new Set(categorySet);
-    updatedSet.delete(value);
-    if (setAction) {
-      dispatch(setAction(updatedSet));
+    if (handleClose) {
+      handleClose(value);
     }
     if (onClick) {
       onClick();
@@ -48,10 +32,9 @@ export default function Tag({
 
   const tagText = transformData
     ? `${title}: ${transformData(value)}`
-    : `${title}: ${value}`;
+    : `${title}: ${String(value)}`;
 
   if (closeTag) {
-    dispatch(setActive(undefined));
     return null;
   }
 
