@@ -14,6 +14,7 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   yLabel?: string;
   info?: string;
+  gridLines?: boolean;
   legend: { text: string; color: string }[];
 }
 
@@ -34,6 +35,7 @@ export default function StackedBarChart({
   legend,
   yLabel = "",
   fullWidth = false,
+  gridLines = false,
   info = "",
 }: DataParams) {
   const updateNewData = useCallback(() => {
@@ -109,6 +111,7 @@ export default function StackedBarChart({
         info={info}
         yLabel={yLabel}
         fullWidth
+        gridLines={gridLines}
       >
         {data.map((d, i) => (
           <Fragment key={i}>
