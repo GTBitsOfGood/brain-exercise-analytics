@@ -64,6 +64,7 @@ const GroupMathScreen = ({
             info="Vidushi"
             data={accuracyData}
             fullWidth
+            gridLines
           />
           <LineChart
             width={325}
@@ -75,6 +76,7 @@ const GroupMathScreen = ({
             info="Vidushi"
             data={difficultyData}
             fullWidth
+            gridLines
           />
           <BarChart
             width={325}

@@ -27,6 +27,7 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   gradient?: boolean;
   info?: string;
+  gridLines?: boolean;
   yLabel?: string;
 }
 
@@ -37,8 +38,17 @@ export default function LineChart({
   height: providedHeight = 150,
   style = {},
   yAxis = {
-    min: d3.min(data.map((v) => v.value)) ?? 0,
-    max: d3.max(data.map((v) => v.value)) ?? 1,
+    min:
+      (d3.min(data.map((v) => v.value)) ?? 0) -
+      0.1 *
+        ((d3.max(data.map((v) => v.value)) ?? 1) -
+          (d3.min(data.map((v) => v.value)) ?? 0)),
+    max:
+      (d3.max(data.map((v) => v.value)) ?? 1) +
+      0.1 *
+        ((d3.max(data.map((v) => v.value)) ?? 1) -
+          (d3.min(data.map((v) => v.value)) ?? 0)) +
+      0.00001,
     numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
     format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
@@ -49,6 +59,7 @@ export default function LineChart({
   fullWidth,
   info = "",
   yLabel = "",
+  gridLines = false,
 }: DataParams) {
   const updateNewData = useCallback(() => {
     const datapoints = 10;
@@ -148,6 +159,10 @@ export default function LineChart({
       setPopupX(left);
     }
     const svg = d3.select(windowRef.current);
+    svg.select(".x-axis-hor").remove();
+    svg.select(".y-axis-vert").remove();
+    svg.select(".x-axis-grid").remove();
+    svg.select(".y-axis-grid").remove();
     svg.select(".x-axis-top").remove();
     svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
@@ -172,7 +187,7 @@ export default function LineChart({
       .tickValues(
         d3.range(
           yAxis.min,
-          yAxis.max + 0.0001,
+          yAxis.max,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -180,7 +195,57 @@ export default function LineChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat(yAxisFormat);
+    if (gridLines) {
+      const yAxisGrid = d3
+        .axisLeft(y)
+        .tickValues(
+          d3.range(
+            yAxis.min,
+            yAxis.max,
+            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+          ),
+        )
+        .tickSize(-width + marginLeft + marginRight)
+        .tickFormat(() => "");
 
+      const axisVert = d3
+        .axisLeft(y)
+        .tickValues(
+          d3.range(
+            yAxis.min,
+            yAxis.max,
+            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+          ),
+        )
+        .tickSize(0)
+        .tickFormat(() => "");
+
+      const axisHor = d3
+        .axisBottom(x)
+        .ticks(newData.length - 1)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickFormat(() => "");
+
+      svg
+        .append("g")
+        .attr("class", `y-axis-vert`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(axisVert);
+
+      svg
+        .append("g")
+        .attr("class", `y-axis-grid ${styles.yAxis}`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(yAxisGrid);
+
+      svg
+        .append("g")
+        .attr("transform", `translate(-5, ${height - marginBottom})`)
+        .attr("class", "x-axis-hor")
+        .style("font", `10px ${poppins500.style.fontFamily}`)
+        .call(axisHor);
+    }
     svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom})`)
@@ -207,6 +272,7 @@ export default function LineChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     width,
@@ -218,6 +284,7 @@ export default function LineChart({
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
+    gridLines,
   ]);
 
   useEffect(() => {
