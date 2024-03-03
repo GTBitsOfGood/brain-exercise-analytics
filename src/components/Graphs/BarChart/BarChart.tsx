@@ -44,13 +44,13 @@ export default function BarChart({
     min:
       (d3.min(data.map((v) => v.value)) ?? 0) -
       0.1 *
-        ((d3.max(data.map((v) => v.value + 0.00001)) ?? 1) -
+        ((d3.max(data.map((v) => v.value)) ?? 1) -
           (d3.min(data.map((v) => v.value)) ?? 0)),
     max:
-      (d3.max(data.map((v) => v.value + 0.00001)) ?? 1) +
+      (d3.max(data.map((v) => v.value)) ?? 1) +
       0.1 *
-        ((d3.max(data.map((v) => v.value + 0.00001)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
+        ((d3.max(data.map((v) => v.value)) ?? 1) -
+          (d3.min(data.map((v) => v.value)) ?? 0)) + 0.000001,
     numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
     format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
@@ -205,7 +205,7 @@ export default function BarChart({
       .tickValues(
         d3.range(
           yAxis.min,
-          yAxis.max + 0.0001,
+          yAxis.max + 0.000001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -220,7 +220,7 @@ export default function BarChart({
         .tickValues(
           d3.range(
             yAxis.min,
-            yAxis.max,
+            yAxis.max + 0.000001,
             (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
           ),
         )
