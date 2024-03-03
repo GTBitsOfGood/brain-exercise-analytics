@@ -50,7 +50,8 @@ export default function BarChart({
       (d3.max(data.map((v) => v.value)) ?? 1) +
       0.1 *
         ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)) + 0.000001,
+          (d3.min(data.map((v) => v.value)) ?? 0)) +
+      0.000001,
     numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
     format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },

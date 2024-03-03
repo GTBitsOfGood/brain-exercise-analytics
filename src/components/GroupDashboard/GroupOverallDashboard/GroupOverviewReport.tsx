@@ -13,6 +13,7 @@ import { D3Data } from "@src/utils/types";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { BarChart, SmallDataBox } from "../../Graphs";
 import styles from "./GroupOverviewReport.module.scss";
+import GroupSelector from "@src/components/GroupSelector/GroupSelector";
 
 interface Params {
   active: boolean;
@@ -63,7 +64,13 @@ export default function GroupOverviewReport(params: Params) {
           className={styles.title}
           style={{ marginLeft: "20px", color: "#2b3674" }}
         >
-          Overall Dashboard
+          Overview
+        </p>
+        <p style={{ marginLeft: "10px" }}>
+          <GroupSelector
+            selectedValue={params.menuState[0]}
+            setSelectedValue={params.menuState[1]}
+          />
         </p>
         <div className={styles.dateSelector}>
           <DateSelector
@@ -71,7 +78,6 @@ export default function GroupOverviewReport(params: Params) {
             setSelectedValue={params.menuState[1]}
           />
         </div>
-        {/* <Dropdown style={{ marginLeft: "auto" }} /> */}
       </div>
       <div className={styles.dataGrid}>
         <SmallDataBox
