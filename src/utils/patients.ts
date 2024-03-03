@@ -386,6 +386,24 @@ export const numberOfQuestionData = [
   },
 ];
 
+// export const sampleUsers: IUser[] = [].concat(
+//   ...Array(750).fill(null).map((_, fillIndex) =>
+//     sampleTableEntries.map((entry, entryIndex) => ({
+//       name: entry.name,
+//       email: `${entry.email}${fillIndex + 25}`, // Concatenate fillIndex and entryIndex
+//       phoneNumber: "1234567890",
+//       patientDetails: entry.patientDetails,
+//       adminDetails: { active: entry.active },
+//       chapter: entry.chapter,
+//       location: entry.location,
+//       signedUp: true,
+//       verified: true,
+//       approved: AdminApprovalStatus.APPROVED,
+//       role: Role.NONPROFIT_PATIENT,
+//     }))
+//   )
+// );
+
 export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
   return {
     _id: entry._id,

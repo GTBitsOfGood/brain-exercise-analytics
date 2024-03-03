@@ -72,6 +72,7 @@ export const getAggregatedAnalytics = async (
   const user = await User.findOne<IUser>({ _id: userID });
 
   if (!res) {
+    console.log(userID, name);
     throw new Error("User Analytics record not found");
   }
 

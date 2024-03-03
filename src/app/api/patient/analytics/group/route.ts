@@ -34,6 +34,8 @@ export const POST = APIWrapper({
     requireVolunteer: true,
   },
   handler: async (req) => {
+    const start = Date.now();
+
     const reqbody: RequestData = (await req.json()) as RequestData;
     const { filters, range, sections } = reqbody;
 
@@ -413,10 +415,11 @@ export const POST = APIWrapper({
           }
         });
       }
-
-      // break;
     });
 
-    return groupAnalytics;
+    console.log(groupAnalytics);
+    const timeTaken = Date.now() - start;
+    console.log(`Total time taken : ${timeTaken} milliseconds`);
+    return null;
   },
 });
