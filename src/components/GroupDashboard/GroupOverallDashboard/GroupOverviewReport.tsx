@@ -11,9 +11,9 @@ import { CSSProperties, ReactNode } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import DateSelector from "@src/components/DateSelector/DateSelector";
+import GroupSelector from "@src/components/GroupSelector/GroupSelector";
 import { BarChart, SmallDataBox } from "../../Graphs";
 import styles from "./GroupOverviewReport.module.scss";
-import GroupSelector from "@src/components/GroupSelector/GroupSelector";
 
 interface Params {
   active: boolean;

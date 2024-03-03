@@ -74,6 +74,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
 
   // TO BE IMPLEMENTED ONCE WE HAVE THE BACKEND ENDPOINT READY
   const retrieveAnalytics = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
       return {
         overall: {
