@@ -68,6 +68,7 @@ export const getAggregatedAnalytics = async (
   );
 
   if (!res) {
+    console.log(userID, name);
     throw new Error("User Analytics record not found");
   }
 
