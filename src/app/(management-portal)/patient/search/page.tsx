@@ -91,7 +91,6 @@ export default function Page() {
     secondaryNames,
     sortField,
     currentPage,
-    dispatch,
   ]);
 
   useEffect(() => {
@@ -110,7 +109,6 @@ export default function Page() {
     secondaryPhoneNumbers,
     secondaryNames,
     sortField,
-    dispatch,
   ]);
 
   return (
