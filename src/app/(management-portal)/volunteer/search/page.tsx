@@ -8,7 +8,7 @@ import { internalRequest } from "@src/utils/requests";
 import {
   // SortField,
   HttpMethod,
-  IPatientTableEntry,
+  IVolunteerTableEntry,
   SearchResponseBody,
 } from "@/common_utils/types";
 
@@ -133,7 +133,6 @@ export default function Page() {
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
 
   // const [sortField, setSortField] = useState<SortField | undefined>(undefined);
-  // const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
 
   const [currentPage, setCurrentPage] = useState(0);
   // const [pageCount, setPageCount] = useState(0);
@@ -141,8 +140,8 @@ export default function Page() {
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (user) {
-        internalRequest<SearchResponseBody<IPatientTableEntry>>({
-          url: "/api/patient/filter-patient",
+        internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+          url: "/api/volunteer/filter-volunteer",
           method: HttpMethod.POST,
           body: {
             params: {

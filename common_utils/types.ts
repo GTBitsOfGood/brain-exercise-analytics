@@ -278,6 +278,13 @@ export interface IPatientTableEntry
   startDate: Date;
 }
 
+export interface IVolunteerTableEntry
+  extends Omit<IUser, "phoneNumber" | "role"> {
+  active: boolean;
+  startDate: Date;
+  approved: AdminApprovalStatus;
+}
+
 export interface IAggregatedAnalyticsAll
   extends IAggregatedAnalyticsMath,
     IAggregatedAnalyticsTrivia,

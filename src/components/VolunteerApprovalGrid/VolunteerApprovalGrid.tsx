@@ -1,7 +1,12 @@
 import React, { useState, useMemo } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
-import { SortField, VolunteerAccessLevel } from "@/common_utils/types";
+import {
+  SortField,
+  VolunteerAccessLevel,
+  HttpMethod,
+} from "@/common_utils/types";
+import { internalRequest } from "@src/utils/requests";
 
 import Dropdown, { DropdownOption } from "@src/components/Dropdown/Dropdown";
 
@@ -34,9 +39,8 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const itemsPerPage = 10;
   const pageCount = Math.ceil(data.length / itemsPerPage);
-  const [deleteVolunteerId, setDeleteVolunteerId] = useState<number | null>(
-    null,
-  );
+
+  // eslint-disable-next-line
   const [excludedIds, setExcludedIds] = useState<number[]>([]);
 
   const [dropdownValues, setDropdownValues] = useState<{
@@ -51,18 +55,18 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
     ),
   );
 
-  const handleConfirmDelete = (id: number) => {
-    setDeleteVolunteerId(id);
-    if (deleteVolunteerId !== null) {
-      setExcludedIds((current) => [...current, deleteVolunteerId]);
-      // eslint-disable-next-line
-      data = data.filter(
-        (volunteer) =>
-          !excludedIds.includes(volunteer.id) &&
-          volunteer.id !== deleteVolunteerId,
-      );
-      setDeleteVolunteerId(null);
-    }
+  const handleAdminApproval = async (
+    volunteerEmail: string,
+    approvalStatus: boolean,
+  ) => {
+    await internalRequest({
+      url: "/api/volunteer/auth/admin-approval",
+      method: HttpMethod.POST,
+      body: {
+        approvedEmail: volunteerEmail,
+        approved: approvalStatus,
+      },
+    });
   };
 
   const currentItems = useMemo(() => {
@@ -151,7 +155,9 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
         <div className={styles.actionsContainer}>
           <button
             className={styles.approveButton}
-            onClick={() => handleConfirmDelete(volunteer.id)}
+            onClick={() =>
+              handleAdminApproval("volunteerEmail@email.com", true)
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +177,9 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
           </button>
           <button
             className={styles.denyButton}
-            onClick={() => handleConfirmDelete(volunteer.id)}
+            onClick={() =>
+              handleAdminApproval("volunteerEmail@email.com", false)
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

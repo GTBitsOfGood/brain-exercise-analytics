@@ -1,7 +1,11 @@
+"use client";
+
 import React, { useState, useMemo } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
+import { internalRequest } from "@src/utils/requests";
 import {
+  HttpMethod,
   SortField,
   VolunteerAccessLevel,
   VolunteerStatus,
@@ -46,6 +50,7 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
   );
   const [excludedIds, setExcludedIds] = useState<number[]>([]);
 
+  // eslint-disable-next-line
   const [dropdownValues, setDropdownValues] = useState<{
     [volunteerId: number]: {
       accessLevel: VolunteerAccessLevel;
@@ -61,7 +66,7 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
     ),
   );
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deleteVolunteerId !== null) {
       setExcludedIds((current) => [...current, deleteVolunteerId]);
       // eslint-disable-next-line
@@ -70,6 +75,15 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
           !excludedIds.includes(volunteer.id) &&
           volunteer.id !== deleteVolunteerId,
       );
+
+      await internalRequest({
+        url: "/api/volunteer",
+        method: HttpMethod.DELETE,
+        body: {
+          email: "volunteerEmail@email.com",
+        },
+      });
+
       setDeleteVolunteerId(null);
     }
     setPopupOpen(false);
@@ -80,7 +94,7 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
     setDeleteVolunteerId(null);
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = async (id: number) => {
     setDeleteVolunteerId(id);
     setPopupOpen(true);
   };
@@ -140,15 +154,18 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
             options={accessLevelOptions}
             value={dropdownValues[volunteer.id].accessLevel}
             showError={false}
-            onChange={(e: SelectChangeEvent<VolunteerAccessLevel>) => {
-              const newAccessLevel = e.target.value as VolunteerAccessLevel;
-              setDropdownValues((prev) => ({
-                ...prev,
-                [volunteer.id]: {
-                  ...prev[volunteer.id],
-                  accessLevel: newAccessLevel,
+            // eslint-disable-next-line
+            onChange={async(e: SelectChangeEvent<VolunteerAccessLevel>) => {
+              await internalRequest({
+                url: "/api/volunteer",
+                method: HttpMethod.PATCH,
+                body: {
+                  email: "volunteerEmail@email.com",
+                  newFields: {
+                    accessLevel: dropdownValues[volunteer.id].accessLevel,
+                  },
                 },
-              }));
+              });
             }}
             style={{
               borderRadius: 41,
@@ -187,12 +204,18 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
             options={volunteerStatusOptions}
             value={dropdownValues[volunteer.id].status}
             showError={false}
-            onChange={(e: SelectChangeEvent<VolunteerStatus>) => {
-              const newStatus = e.target.value as VolunteerStatus;
-              setDropdownValues((prev) => ({
-                ...prev,
-                [volunteer.id]: { ...prev[volunteer.id], status: newStatus },
-              }));
+            // eslint-disable-next-line
+            onChange={async(e: SelectChangeEvent<VolunteerStatus>) => {
+              await internalRequest({
+                url: "/api/volunteer",
+                method: HttpMethod.PATCH,
+                body: {
+                  email: "volunteerEmail@email.com",
+                  newFields: {
+                    status: dropdownValues[volunteer.id].status,
+                  },
+                },
+              });
             }}
             style={{
               borderRadius: 41,

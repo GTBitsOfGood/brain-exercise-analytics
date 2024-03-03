@@ -8,7 +8,7 @@ import { internalRequest } from "@src/utils/requests";
 import {
   // SortField,
   HttpMethod,
-  IPatientTableEntry,
+  IVolunteerTableEntry,
   SearchResponseBody,
 } from "@/common_utils/types";
 
@@ -141,8 +141,8 @@ export default function Page() {
   useEffect(() => {
     getAuth().onAuthStateChanged((user) => {
       if (user) {
-        internalRequest<SearchResponseBody<IPatientTableEntry>>({
-          url: "/api/patient/filter-patient",
+        internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+          url: "/api/volunteer/filter-volunteer",
           method: HttpMethod.POST,
           body: {
             params: {
@@ -158,6 +158,7 @@ export default function Page() {
               states: Array.from(states),
               cities: Array.from(cities),
               dateOfJoins: Array.from(dateOfJoins),
+              approved: "AdminApprovalStatus.PENDING",
             },
             page: currentPage,
             // sortParams: sortField,
