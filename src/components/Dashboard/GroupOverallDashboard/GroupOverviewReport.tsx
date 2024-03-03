@@ -12,7 +12,7 @@ import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { BarChart, SmallDataBox } from "../../Graphs";
-import styles from "./GroupOverallDashboard.module.scss";
+import styles from "./GroupOverviewReport.module.scss";
 
 interface Params {
   active: boolean;
@@ -54,7 +54,7 @@ function Chip(props: {
   );
 }
 
-export default function OverallDashboard(params: Params) {
+export default function GroupOverviewReport(params: Params) {
   return (
     <div className={styles.OverallDashboard} style={params.style}>
       <div className={styles.titleRow}>

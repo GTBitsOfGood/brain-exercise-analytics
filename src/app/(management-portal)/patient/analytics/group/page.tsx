@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  OverallDashboard,
+  GroupMathScreen,
   MathScreen,
   ReadingScreen,
   WritingScreen,
   TriviaScreen,
-  OverviewReport,
+  GroupOverviewReport,
 } from "@src/components/Dashboard";
 import {
   AnalyticsSectionEnum,
@@ -27,7 +27,6 @@ import {
 
 import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.scss";
-import GroupOverallDashboard from "@src/components/Dashboard/GroupOverallDashboard/GroupOverallDashboard";
 
 export function Divider({ id }: { id?: string }) {
   return (
@@ -670,7 +669,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
         <p className={styles.title}>Patient Analytics</p>
       </div>
       <div className={styles.sectionContainer}>
-        <GroupOverallDashboard
+        <GroupOverviewReport
           menuState={[dashboardMenu, updateAllAnalytics]}
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
@@ -696,7 +695,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       </div>
       <Divider id="math" />
       <div className={styles.sectionContainer}>
-        <MathScreen
+        <GroupMathScreen
           menuState={[mathMenu, updateMathAnalytics]}
           accuracyData={math?.avgAccuracy ?? dataLine}
           difficultyData={math?.avgDifficultyScore ?? dataLine}

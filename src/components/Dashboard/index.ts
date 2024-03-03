@@ -5,6 +5,9 @@ import TriviaScreen from "./TriviaScreen/TriviaScreen";
 import ReadingScreen from "./ReadingScreen/ReadingScreen";
 import WritingScreen from "./WritingScreen/WritingScreen";
 
+import GroupOverviewReport from "./GroupOverallDashboard/GroupOverviewReport";
+import GroupMathScreen from "./GroupMathScreen/GroupMathScreen";
+
 export {
   OverviewReport,
   OverallDashboard,
@@ -12,4 +15,6 @@ export {
   TriviaScreen,
   ReadingScreen,
   WritingScreen,
+  GroupOverviewReport,
+  GroupMathScreen,
 };
