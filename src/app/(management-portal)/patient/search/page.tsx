@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
@@ -24,7 +24,6 @@ import styles from "./page.module.css";
 firebaseInit();
 
 export default function Page() {
-  const dispatch = useDispatch();
   const {
     fullName,
     active,
