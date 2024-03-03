@@ -1,13 +1,12 @@
 import React from "react";
-import { AttemptIcon, PromptsIcon, TimeIcon } from "@src/app/icons";
+import { QuestionIcon, TimeIcon } from "@src/app/icons";
 import { DateRangeEnum } from "@/common_utils/types";
-import styles from "./ReadingScreen.module.css";
+import styles from "./GroupReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
 import {
   StackedBarChart,
   BarChart,
   SmallDataBox,
-  BooleanBox,
   LineChart,
 } from "../../Graphs";
 
@@ -37,11 +36,10 @@ interface InputProp {
     stackedValue: number;
   }[];
   readingRate: { interval: string; value: number }[];
-  avgPassage: { interval: string; value: number }[];
+  avgPassageData: { interval: string; value: number }[];
   timeData: { interval: string; value: number }[];
-  totalPassage: string;
-  currentTime: string;
-  completionStatus: boolean;
+  avgPassageTime: string;
+  avgTime: string;
   style?: object;
   menuState: [
     selectedValue: DateRangeEnum,
@@ -49,14 +47,13 @@ interface InputProp {
   ];
 }
 
-export default function ReadingScreen({
+export default function GroupReadingScreen({
   sessionHistory,
   readingRate,
-  avgPassage,
+  avgPassageData,
   timeData,
-  totalPassage,
-  currentTime,
-  completionStatus,
+  avgPassageTime,
+  avgTime,
   style,
   menuState,
 }: InputProp) {
@@ -83,7 +80,6 @@ export default function ReadingScreen({
               { text: "sessions completed without reading", color: "#FF9FB3" },
               { text: "sessions completed with reading", color: "#008AFC" },
             ]}
-            yLabel="Writing"
             hoverable
             percentageChange
             fullWidth
@@ -92,7 +88,7 @@ export default function ReadingScreen({
             width={325}
             height={210}
             title="Average Passages Read Per Session"
-            data={avgPassage}
+            data={avgPassageData}
             hoverable
             percentageChange
             fullWidth
@@ -123,28 +119,18 @@ export default function ReadingScreen({
           />
         </div>
         <div className={styles.textStats}>
-          <p className={styles.sessionHeading}>Last Session Breakdown</p>
+          <p className={styles.sessionHeading}>Average Session Breakdown</p>
           <SmallDataBox
             className={styles.box}
-            title="Number of Passages Completed"
-            text={totalPassage}
-            Icon={PromptsIcon}
-            // style={{ width: "80%", margin: "auto" }}
+            title="Average Number of Passages Read"
+            text={avgTime}
+            Icon={QuestionIcon}
           />
           <SmallDataBox
             className={styles.box}
-            title="Current Time per Passage"
-            text={currentTime}
+            title="Average Time per Passage"
+            text={avgPassageTime}
             Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <BooleanBox
-            className={styles.box}
-            title="Completion Status"
-            greenText="ATTEMPTED"
-            redText="NOT ATTEMPTED"
-            Icon={AttemptIcon}
-            showGreen={completionStatus}
           />
         </div>
       </div>

@@ -106,28 +106,24 @@ const GroupMathScreen = ({
             title="Average Accuracy"
             text={currentAccuracy}
             Icon={AccuracyIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Difficulty"
             text={currentDifficulty}
             Icon={BarChartIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Number of Question Completed"
             text={totalQuestions}
             Icon={QuestionIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Question"
             text={totalTime}
             Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
         </div>
       </div>

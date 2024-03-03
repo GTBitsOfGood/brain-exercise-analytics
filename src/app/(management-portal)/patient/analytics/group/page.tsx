@@ -2,12 +2,11 @@
 
 import {
   GroupMathScreen,
-  MathScreen,
-  ReadingScreen,
-  WritingScreen,
-  TriviaScreen,
+  GroupReadingScreen,
+  GroupWritingScreen,
   GroupOverviewReport,
-} from "@src/components/Dashboard";
+  GroupTriviaScreen,
+} from "@src/components/GroupDashboard";
 import {
   AnalyticsSectionEnum,
   DateRangeEnum,
@@ -713,43 +712,42 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       </div>
       <Divider id="reading" />
       <div className={styles.sectionContainer}>
-        <ReadingScreen
+        <GroupReadingScreen
           menuState={[readingMenu, updateReadingAnalytics]}
           sessionHistory={reading?.sessionCompletion ?? dataStacked}
           readingRate={reading?.avgTimePerPassage ?? dataLine}
-          avgPassage={reading?.avgPassagesRead ?? dataBar}
+          avgPassageData={reading?.avgPassagesRead ?? dataBar}
           timeData={reading?.avgWordsPerMin ?? dataBar}
-          totalPassage={(reading?.lastSession.passagesRead ?? 0).toString()}
-          currentTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
-          completionStatus={reading?.lastSession.completed ?? false}
+          avgPassageTime={(reading?.lastSession.passagesRead ?? 0).toString()}
+          avgTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
         />
       </div>
       <Divider id="writing" />
       <div className={styles.sectionContainer}>
-        <WritingScreen
+        <GroupWritingScreen
           menuState={[writingMenu, updateWritingAnalytics]}
           sessionHistory={writing?.sessionCompletion ?? dataStacked}
           numCompleted={writing?.avgPromptsAnswered ?? dataBar}
-          avgTime={writing?.avgTimePerQuestion ?? dataBar}
+          avgTimeData={writing?.avgTimePerQuestion ?? dataBar}
           totalPrompts={(writing?.lastSession.promptsAnswered ?? 0).toString()}
-          currentTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
+          avgTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
           attemptStatus={writing?.lastSession.completed ?? false}
         />
       </div>
       <Divider id="trivia" />
       <div className={styles.sectionContainer}>
-        <TriviaScreen
+        <GroupTriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
           accuracyData={trivia?.avgAccuracy ?? dataLine}
           numQuestionData={
             trivia?.avgQuestionsCompleted ?? numberOfQuestionData
           }
           timeData={trivia?.avgTimePerQuestion ?? dataBar}
-          currentAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
+          avgAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(
             trivia?.lastSession.questionsCompleted ?? 0
           ).toString()}
-          totalTime={(trivia?.lastSession.timePerQuestion ?? 0).toString()}
+          avgTime={(trivia?.lastSession.timePerQuestion ?? 0).toString()}
         />
       </div>
     </div>
