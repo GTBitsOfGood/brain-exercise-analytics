@@ -187,7 +187,7 @@ export default function LineChart({
       .tickValues(
         d3.range(
           yAxis.min,
-          yAxis.max,
+          yAxis.max + 0.000001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -201,11 +201,11 @@ export default function LineChart({
         .tickValues(
           d3.range(
             yAxis.min,
-            yAxis.max,
+            yAxis.max + 0.000001,
             (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
           ),
         )
-        .tickSize(-width + marginLeft + marginRight)
+        .tickSize(-width + marginLeft + marginRight - 20)
         .tickFormat(() => "");
 
       const axisVert = d3
@@ -221,7 +221,12 @@ export default function LineChart({
         .tickFormat(() => "");
 
       const axisHor = d3
-        .axisBottom(x)
+        .axisBottom(
+          d3.scaleLinear(
+            [0, newData.length - 1],
+            [marginLeft, width - marginRight + 20],
+          ),
+        )
         .ticks(newData.length - 1)
         .tickSizeOuter(0)
         .tickSizeInner(0)
