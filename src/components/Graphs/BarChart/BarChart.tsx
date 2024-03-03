@@ -22,6 +22,7 @@ const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const inter500 = Inter({ subsets: ["latin"], weight: "500" });
 
 interface DataParams extends D3Data {
+  className?: string;
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
@@ -32,6 +33,7 @@ interface DataParams extends D3Data {
 }
 
 export default function BarChart({
+  className,
   title,
   data,
   width: providedWidth = 375,
@@ -272,7 +274,7 @@ export default function BarChart({
 
   return (
     <div
-      className={styles.BarChart}
+      className={`${className} ${styles.BarChart}`}
       style={{
         width: fullWidth ? "100%" : width + 44,
         minWidth: fullWidth ? minWidth + 44 : undefined,

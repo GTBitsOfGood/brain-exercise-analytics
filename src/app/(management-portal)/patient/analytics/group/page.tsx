@@ -6,6 +6,7 @@ import {
   ReadingScreen,
   WritingScreen,
   TriviaScreen,
+  OverviewReport,
 } from "@src/components/Dashboard";
 import {
   AnalyticsSectionEnum,
@@ -26,6 +27,7 @@ import {
 
 import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.scss";
+import GroupOverallDashboard from "@src/components/Dashboard/GroupOverallDashboard/GroupOverallDashboard";
 
 export function Divider({ id }: { id?: string }) {
   return (
@@ -664,9 +666,11 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
 
   return (
     <div className={styles.container}>
-      <Divider />
+      <div className={styles.overviewReportContainer}>
+        <p className={styles.title}>Patient Analytics</p>
+      </div>
       <div className={styles.sectionContainer}>
-        <OverallDashboard
+        <GroupOverallDashboard
           menuState={[dashboardMenu, updateAllAnalytics]}
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
