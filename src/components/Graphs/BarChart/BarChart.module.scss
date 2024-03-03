@@ -51,3 +51,11 @@
     white-space: nowrap;
   }
 }
+
+.yAxis line{
+  stroke-width: 1px;
+  color: #E3EAFC;
+}
+.yAxis path{
+  display: none;
+}
