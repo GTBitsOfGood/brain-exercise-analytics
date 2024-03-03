@@ -87,7 +87,7 @@ const GroupMathScreen = ({
             percentageChange
             highlightLargest={false}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -98,7 +98,7 @@ const GroupMathScreen = ({
             percentageChange
             highlightLargest={false}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>
