@@ -74,7 +74,7 @@ export default function Search({
     }
     setFullName(searchInput);
     onSubmit?.();
-  }, [searchInput, setFullName, onSubmit]);
+  }, [searchInput, setFullName, showAdvancedSearch, onSubmit]);
 
   return (
     <div className={classes(styles.wrapper, className)}>

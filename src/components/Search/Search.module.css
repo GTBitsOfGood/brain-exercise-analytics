@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
 }
 
 .border {
@@ -31,7 +32,7 @@
   -ms-flex-align: center;
   background-color: #e7eeff;
   border-radius: 8px;
-  flex: 18;
+  flex: 34;
 }
 
 .search-bar {
@@ -64,16 +65,19 @@
   /* color: #2b3674; */
   cursor: pointer;
   padding-top: 15px;
-  padding-left: 10px;
+  padding-left: 15px;
   flex: 1;
 }
 
 .advanced-filter {
   color: #2b3674;
-  padding: 0px 32px 0px 32px;
   word-wrap: break-word;
   cursor: pointer;
-  min-width: max-content;
+  min-width: min-content;
+  flex: 2;
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 13px;
 }
 
 .tags {

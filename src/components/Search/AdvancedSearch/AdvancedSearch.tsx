@@ -11,7 +11,7 @@ import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 import CHAPTERS from "@src/utils/chapters";
 
-import { transformDate, transformPhoneNumber } from "@src/utils/utils";
+import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 
@@ -444,19 +444,20 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 )
               : null}
 
-            <div className={styles.control_buttons}>
-              <div
-                className={[
-                  styles["general-button"],
-                  styles["clear-tag"],
-                  !tagsPresent && styles.disabled,
-                ].join(" ")}
-                onClick={handleClearAppliedTags}
-              >
-                {<ClearTagIcon />}
-                <div>Clear applied tags</div>
+            {tagsPresent && (
+              <div className={styles.control_buttons}>
+                <div
+                  className={[
+                    styles["general-button"],
+                    styles["clear-tag"],
+                  ].join(" ")}
+                  onClick={handleClearAppliedTags}
+                >
+                  <ClearTagIcon className={classes(styles.clear_tag_icon)} />
+                  <div>Clear applied tags</div>
+                </div>
               </div>
-            </div>
+            )}
           </span>
         </div>
       </div>

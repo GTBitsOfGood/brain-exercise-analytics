@@ -32,6 +32,7 @@
   align-items: flex-end;
   row-gap: 12px;
   column-gap: 12px;
+  padding-bottom: 20px;
 
   /* background-color: red; */
 }
@@ -185,9 +186,10 @@
 }
 
 .toggle-button {
+  font-family: var(--font-poppins);
   color: #2b3674;
   height: 31 !important;
-  padding: 8px 15px;
+  padding: 6px 15px;
   font-size: 12px;
   border: 1px solid #d9d9d9;
   transition: background-color 0.3s;
@@ -243,6 +245,10 @@
   border: #e3eafc;
   padding: 8px 12px;
   cursor: pointer;
+}
+
+.clear_tag_icon {
+  height: 18px;
 }
 
 .disabled {
