@@ -5,6 +5,23 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
+import {
+  setFullName,
+  setActive,
+  setCountries,
+  setStates,
+  setCities,
+  setDateOfBirths,
+  setEmails,
+  setAdditionalAffiliations,
+  setDateOfJoins,
+  setBeiChapters,
+  setSecondaryPhoneNumbers,
+  setSecondaryNames,
+} from "@src/redux/reducers/patientSearchReducer";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import styles from "./Search.module.css";
 import Tag from "./Tag/Tag";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
@@ -12,60 +29,28 @@ import InputField from "../InputField/InputField";
 
 interface SearchProps {
   className?: string;
-  setFullName: React.Dispatch<React.SetStateAction<string>>;
-  active: boolean | undefined;
-  setActive: React.Dispatch<React.SetStateAction<boolean | undefined>>;
-  countries: Set<string>;
-  setCountries: React.Dispatch<React.SetStateAction<Set<string>>>;
-  states: Set<string>;
-  setStates: React.Dispatch<React.SetStateAction<Set<string>>>;
-  cities: Set<string>;
-  setCities: React.Dispatch<React.SetStateAction<Set<string>>>;
-  dateOfBirths: Set<string>;
-  setDateOfBirths: React.Dispatch<React.SetStateAction<Set<string>>>;
-  emails: Set<string>;
-  setEmails: React.Dispatch<React.SetStateAction<Set<string>>>;
-  additionalAffiliations: Set<string>;
-  setAdditionalAffiliations: React.Dispatch<React.SetStateAction<Set<string>>>;
-  dateOfJoins: Set<string>;
-  setDateOfJoins: React.Dispatch<React.SetStateAction<Set<string>>>;
-  beiChapters: Set<string>;
-  setBeiChapters: React.Dispatch<React.SetStateAction<Set<string>>>;
-  secondaryPhoneNumbers: Set<string>;
-  setSecondaryPhoneNumbers: React.Dispatch<React.SetStateAction<Set<string>>>;
-  secondaryNames: Set<string>;
-  setSecondaryNames: React.Dispatch<React.SetStateAction<Set<string>>>;
   onSubmit?: () => void;
 }
 
-export default function Search({
-  className,
-  setFullName,
-  active,
-  setActive,
-  countries,
-  setCountries,
-  states,
-  setStates,
-  cities,
-  setCities,
-  dateOfBirths,
-  setDateOfBirths,
-  emails,
-  setEmails,
-  additionalAffiliations,
-  setAdditionalAffiliations,
-  dateOfJoins,
-  setDateOfJoins,
-  beiChapters,
-  setBeiChapters,
-  secondaryPhoneNumbers,
-  setSecondaryPhoneNumbers,
-  secondaryNames,
-  setSecondaryNames,
-  onSubmit,
-}: SearchProps) {
-  const [searchInput, setSearchInput] = useState<string>("");
+export default function Search({ className, onSubmit }: SearchProps) {
+  const dispatch = useDispatch();
+
+  const {
+    fullName,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+  } = useSelector((state: RootState) => state.patientSearch);
+
+  const [searchInput, setSearchInput] = useState<string>(fullName);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
   const tagsPresent = useMemo(
@@ -97,9 +82,21 @@ export default function Search({
   );
 
   const onSubmitSearch = useCallback(() => {
-    setFullName(searchInput);
+    dispatch(setFullName(searchInput));
+
     onSubmit?.();
-  }, [searchInput, setFullName, onSubmit]);
+  }, [searchInput, dispatch, onSubmit]);
+
+  const curryOnCloseSetTag = useCallback(
+    <T,>(set: Set<T>, action: ActionCreatorWithPayload<Set<T>, string>) => {
+      return (value: T) => {
+        const updatedSet = new Set<T>(set);
+        updatedSet.delete(value);
+        dispatch(action(updatedSet));
+      };
+    },
+    [dispatch],
+  );
 
   return (
     <div className={classes(styles.wrapper, className)}>
@@ -136,7 +133,7 @@ export default function Search({
                   key={`country-${country}`}
                   title="Country"
                   value={country}
-                  setList={setCountries}
+                  handleClose={curryOnCloseSetTag(countries, setCountries)}
                 />
               ))}
             {states.size > 0 &&
@@ -145,7 +142,7 @@ export default function Search({
                   key={`state-${state}`}
                   title="State"
                   value={state}
-                  setList={setStates}
+                  handleClose={curryOnCloseSetTag(states, setStates)}
                 />
               ))}
             {cities.size > 0 &&
@@ -154,16 +151,18 @@ export default function Search({
                   key={`city-${city}`}
                   title="City"
                   value={city}
-                  setList={setCities}
+                  handleClose={curryOnCloseSetTag(cities, setCities)}
                 />
               ))}
             {active !== undefined && (
               <Tag
                 key={`active-${active}`}
                 title="Status"
-                value={active}
-                transformData={(val) => (val ? "Active" : "Inactive")}
-                onClick={() => setActive(undefined)}
+                value={String(active)}
+                transformData={() => (active ? "Active" : "Inactive")}
+                onClick={() => {
+                  dispatch(setActive(undefined));
+                }}
               />
             )}
             {dateOfBirths.size > 0 &&
@@ -172,7 +171,10 @@ export default function Search({
                   key={`dob-${dob}`}
                   title="Date of Birth"
                   value={dob}
-                  setList={setDateOfBirths}
+                  handleClose={curryOnCloseSetTag(
+                    dateOfBirths,
+                    setDateOfBirths,
+                  )}
                   transformData={transformDate}
                 />
               ))}
@@ -182,7 +184,7 @@ export default function Search({
                   key={`email-${email}`}
                   title="Email"
                   value={email}
-                  setList={setEmails}
+                  handleClose={curryOnCloseSetTag(emails, setEmails)}
                 />
               ))}
             {dateOfJoins.size > 0 &&
@@ -191,7 +193,7 @@ export default function Search({
                   key={`join-date-${dateOfJoin}`}
                   title="Join Date"
                   value={dateOfJoin}
-                  setList={setDateOfJoins}
+                  handleClose={curryOnCloseSetTag(dateOfJoins, setDateOfJoins)}
                   transformData={transformDate}
                 />
               ))}
@@ -201,7 +203,7 @@ export default function Search({
                   key={`bei-chapter-${chapter}`}
                   title="BEI Chapter"
                   value={chapter}
-                  setList={setBeiChapters}
+                  handleClose={curryOnCloseSetTag(beiChapters, setBeiChapters)}
                 />
               ))}
             {secondaryPhoneNumbers.size > 0 &&
@@ -210,7 +212,10 @@ export default function Search({
                   key={`phone-number-${secondaryPhoneNumber}`}
                   title="Secondary Phone Number"
                   value={secondaryPhoneNumber}
-                  setList={setSecondaryPhoneNumbers}
+                  handleClose={curryOnCloseSetTag(
+                    secondaryPhoneNumbers,
+                    setSecondaryPhoneNumbers,
+                  )}
                   transformData={transformPhoneNumber}
                 />
               ))}
@@ -221,7 +226,10 @@ export default function Search({
                     key={`additional-affiliation-${additionalAffiliation}`}
                     title="Additional Affiliation"
                     value={additionalAffiliation}
-                    setList={setAdditionalAffiliations}
+                    handleClose={curryOnCloseSetTag(
+                      additionalAffiliations,
+                      setAdditionalAffiliations,
+                    )}
                   />
                 ),
               )}
@@ -231,7 +239,10 @@ export default function Search({
                   key={`secondary-name-${secondaryName}`}
                   title="Secondary Name"
                   value={secondaryName}
-                  setList={setSecondaryNames}
+                  handleClose={curryOnCloseSetTag(
+                    secondaryNames,
+                    setSecondaryNames,
+                  )}
                 />
               ))}
           </div>
@@ -242,21 +253,7 @@ export default function Search({
             showAdvancedSearch && styles["advanced-search-container-show"],
           )}
         >
-          <AdvancedSearch
-            active={active}
-            setActive={setActive}
-            setCountries={setCountries}
-            setStates={setStates}
-            setCities={setCities}
-            setDateOfBirths={setDateOfBirths}
-            setEmails={setEmails}
-            setAdditionalAffiliations={setAdditionalAffiliations}
-            setDateOfJoins={setDateOfJoins}
-            setBeiChapters={setBeiChapters}
-            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-            setSecondaryNames={setSecondaryNames}
-            onSubmit={onSubmitSearch}
-          />
+          <AdvancedSearch onSubmit={onSubmitSearch} />
         </div>
       </div>
     </div>
