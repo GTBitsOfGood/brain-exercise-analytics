@@ -6,6 +6,7 @@
   padding: 6% 5%;
   border-radius: 10px;
   font-family: var(--font-poppins);
+  overflow-y: auto;
 }
 
 .container * {

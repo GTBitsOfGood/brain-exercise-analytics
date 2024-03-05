@@ -1,18 +1,29 @@
-import React, {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  CSSProperties,
-  useMemo,
-} from "react";
+import React, { useState, useCallback, CSSProperties, useMemo } from "react";
+
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
+
 import CHAPTERS from "@src/utils/chapters";
 
 import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import {
+  setActive,
+  setCountries,
+  setStates,
+  setCities,
+  setDateOfBirths,
+  setEmails,
+  setAdditionalAffiliations,
+  setDateOfJoins,
+  setBeiChapters,
+  setSecondaryPhoneNumbers,
+  setSecondaryNames,
+} from "@src/redux/reducers/patientSearchReducer";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 
 import styles from "./AdvancedSearch.module.css";
@@ -76,34 +87,14 @@ function SelectDropdown<T>({
 
 interface UpdateParamProp {
   style?: CSSProperties;
-  active: boolean | undefined;
-  setCountries: Dispatch<SetStateAction<Set<string>>>;
-  setStates: Dispatch<SetStateAction<Set<string>>>;
-  setCities: Dispatch<SetStateAction<Set<string>>>;
-  setActive: Dispatch<SetStateAction<boolean | undefined>>;
-  setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
-  setEmails: Dispatch<SetStateAction<Set<string>>>;
-  setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
-  setBeiChapters: Dispatch<SetStateAction<Set<string>>>;
-  setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
-  setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
-  setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
   onSubmit?: () => void;
   className?: string;
-  countries: Set<string>;
-  states: Set<string>;
-  cities: Set<string>;
-  dateOfBirths: Set<string>;
-  emails: Set<string>;
-  additionalAffiliations: Set<string>;
-  dateOfJoins: Set<string>;
-  beiChapters: Set<string>;
-  secondaryPhoneNumbers: Set<string>;
-  secondaryNames: Set<string>;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
-  const [country, setCountry] = useState("");
+  const dispatch = useDispatch();
+
+  const [country, setCountry] = useState(""); // values chosen before the aply button
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
@@ -113,33 +104,48 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [beiChapter, setBeiChapter] = useState("");
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
-  const [activeButton, setActiveButton] = useState<boolean | null>(null);
+
+  const {
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+  } = useSelector(
+    (patientSearchState: RootState) => patientSearchState.patientSearch,
+  );
 
   const tagsPresent = useMemo(
     () =>
-      props.active !== undefined ||
-      props.countries.size > 0 ||
-      props.states.size > 0 ||
-      props.cities.size > 0 ||
-      props.dateOfBirths.size > 0 ||
-      props.emails.size > 0 ||
-      props.additionalAffiliations.size > 0 ||
-      props.dateOfJoins.size > 0 ||
-      props.beiChapters.size > 0 ||
-      props.secondaryPhoneNumbers.size > 0 ||
-      props.secondaryNames.size > 0,
+      active !== undefined ||
+      countries.size > 0 ||
+      states.size > 0 ||
+      cities.size > 0 ||
+      dateOfBirths.size > 0 ||
+      emails.size > 0 ||
+      additionalAffiliations.size > 0 ||
+      dateOfJoins.size > 0 ||
+      beiChapters.size > 0 ||
+      secondaryPhoneNumbers.size > 0 ||
+      secondaryNames.size > 0,
     [
-      props.active,
-      props.countries,
-      props.states,
-      props.cities,
-      props.dateOfBirths,
-      props.emails,
-      props.additionalAffiliations,
-      props.dateOfJoins,
-      props.beiChapters,
-      props.secondaryPhoneNumbers,
-      props.secondaryNames,
+      active,
+      countries,
+      states,
+      cities,
+      dateOfBirths,
+      emails,
+      additionalAffiliations,
+      dateOfJoins,
+      beiChapters,
+      secondaryPhoneNumbers,
+      secondaryNames,
     ],
   );
   const tagsChosen = useMemo(
@@ -167,20 +173,14 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       secondaryName,
     ],
   );
+
   const checkAndUpdateList = useCallback(
-    <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
-      setUpdater((set) => {
-        if (
-          element !== "" &&
-          element !== null &&
-          element !== undefined &&
-          !set.has(element)
-        ) {
-          const newSet = new Set<T>(set);
-          return newSet.add(element);
-        }
-        return set;
-      });
+    <T,>(currentSet: Set<T> | undefined, value: T): Set<T> => {
+      const safeCurrentSet =
+        currentSet instanceof Set ? currentSet : new Set<T>();
+      const updatedSet = new Set<T>(safeCurrentSet);
+      if (value) updatedSet.add(value);
+      return updatedSet;
     },
     [],
   );
@@ -193,40 +193,61 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setEmail("");
     setAdditionalAffiliation("");
     setDateOfJoin("");
+    setBeiChapter("");
     setSecondaryName("");
     setSecondaryPhoneNumber("");
     setBeiChapter("");
   };
 
   const setFinal = () => {
-    checkAndUpdateList(country, props.setCountries);
-    checkAndUpdateList(state, props.setStates);
-    checkAndUpdateList(city, props.setCities);
-    checkAndUpdateList(dateOfBirth, props.setDateOfBirths);
-    checkAndUpdateList(email, props.setEmails);
-    checkAndUpdateList(additionalAffiliation, props.setAdditionalAffiliations);
-    checkAndUpdateList(dateOfJoin, props.setDateOfJoins);
-    checkAndUpdateList(beiChapter, props.setBeiChapters);
-    checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
-    checkAndUpdateList(secondaryName, props.setSecondaryNames);
+    const dispatchMappings = [
+      { condition: country, action: setCountries, value: countries },
+      { condition: state, action: setStates, value: states },
+      { condition: city, action: setCities, value: cities },
+      { condition: dateOfBirth, action: setDateOfBirths, value: dateOfBirths },
+      { condition: email, action: setEmails, value: emails },
+      {
+        condition: additionalAffiliation,
+        action: setAdditionalAffiliations,
+        value: additionalAffiliations,
+      },
+      { condition: dateOfJoin, action: setDateOfJoins, value: dateOfJoins },
+      { condition: beiChapter, action: setBeiChapters, value: beiChapters },
+      {
+        condition: secondaryPhoneNumber,
+        action: setSecondaryPhoneNumbers,
+        value: secondaryPhoneNumbers,
+      },
+      {
+        condition: secondaryName,
+        action: setSecondaryNames,
+        value: secondaryNames,
+      },
+    ];
+
+    dispatchMappings.forEach(({ condition, action, value }) => {
+      if (condition) {
+        dispatch(action(checkAndUpdateList(value, condition)));
+      }
+    });
+
     if (props.onSubmit) {
       props.onSubmit();
     }
   };
   const handleClearAppliedTags = () => {
     if (tagsPresent) {
-      props.setActive(undefined);
-      setActiveButton(null);
-      props.setCountries(new Set());
-      props.setStates(new Set());
-      props.setCities(new Set());
-      props.setBeiChapters(new Set());
-      props.setDateOfBirths(new Set());
-      props.setEmails(new Set());
-      props.setAdditionalAffiliations(new Set());
-      props.setDateOfJoins(new Set());
-      props.setSecondaryNames(new Set());
-      props.setSecondaryPhoneNumbers(new Set());
+      dispatch(setActive(undefined));
+      dispatch(setCountries(new Set()));
+      dispatch(setStates(new Set()));
+      dispatch(setCities(new Set()));
+      dispatch(setBeiChapters(new Set()));
+      dispatch(setDateOfBirths(new Set()));
+      dispatch(setEmails(new Set()));
+      dispatch(setAdditionalAffiliations(new Set()));
+      dispatch(setDateOfJoins(new Set()));
+      dispatch(setSecondaryNames(new Set()));
+      dispatch(setSecondaryPhoneNumbers(new Set()));
     }
   };
   const handleClearChosenTags = () => {
@@ -264,6 +285,17 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     }),
   );
 
+  const curryOnCloseSetTag = useCallback(
+    <T,>(set: Set<T>, action: ActionCreatorWithPayload<Set<T>, string>) => {
+      return (value: T) => {
+        const updatedSet = new Set<T>(set);
+        updatedSet.delete(value);
+        dispatch(action(updatedSet));
+      };
+    },
+    [dispatch],
+  );
+
   return (
     <div className={styles.body} style={props.style}>
       <div className={styles.button_row}>
@@ -271,75 +303,66 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <span className={styles.active_patient_box_label}>
             <div className={styles["toggle-button-group"]}>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${activeButton === null ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : ""}`}
                 value="undefined"
-                onClick={() => {
-                  props.setActive(undefined);
-                  setActiveButton(null);
-                }}
+                onClick={() => dispatch(setActive(undefined))}
               >
                 All Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${activeButton === true ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : ""}`}
                 value="true"
-                onClick={() => {
-                  props.setActive(true);
-                  setActiveButton(true);
-                }}
+                onClick={() => dispatch(setActive(true))}
               >
                 Active Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${activeButton === false ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : ""}`}
                 value="false"
-                onClick={() => {
-                  props.setActive(false);
-                  setActiveButton(false);
-                }}
+                onClick={() => dispatch(setActive(false))}
               >
                 Inactive Patients
               </button>
             </div>
             {tagsPresent
-              ? props.countries.size > 0 &&
-                Array.from(props.countries).map((currCountry) => (
+              ? countries.size > 0 &&
+                Array.from(countries).map((currCountry) => (
                   <div key={`country-${currCountry}`} className={styles.tags}>
                     <Tag
                       title="Country"
                       value={currCountry}
-                      setList={props.setCountries}
+                      handleClose={curryOnCloseSetTag(countries, setCountries)}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.states.size > 0 &&
-                Array.from(props.states).map((currState) => (
+              ? states.size > 0 &&
+                Array.from(states).map((currState) => (
                   <div key={`state-${currState}`} className={styles.tags}>
                     <Tag
                       title="State"
                       value={currState}
-                      setList={props.setStates}
+                      handleClose={curryOnCloseSetTag(states, setStates)}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.cities.size > 0 &&
-                Array.from(props.cities).map((currCity) => (
+              ? cities.size > 0 &&
+                Array.from(cities).map((currCity) => (
                   <div key={`city-${currCity}`} className={styles.tags}>
                     <Tag
                       title="City"
                       value={currCity}
-                      setList={props.setCities}
+                      handleClose={curryOnCloseSetTag(cities, setCities)}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.beiChapters.size > 0 &&
-                Array.from(props.beiChapters).map((currChapter) => (
+              ? beiChapters.size > 0 &&
+                Array.from(beiChapters).map((currChapter) => (
                   <div
                     key={`bei-chapter-${currChapter}`}
                     className={styles.tags}
@@ -347,39 +370,45 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="BEI Chapter"
                       value={currChapter}
-                      setList={props.setBeiChapters}
+                      handleClose={curryOnCloseSetTag(
+                        beiChapters,
+                        setBeiChapters,
+                      )}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.dateOfBirths.size > 0 &&
-                Array.from(props.dateOfBirths).map((currDOB) => (
+              ? dateOfBirths.size > 0 &&
+                Array.from(dateOfBirths).map((currDOB) => (
                   <div key={`dob-${currDOB}`} className={styles.tags}>
                     <Tag
                       title="Date of Birth"
                       value={currDOB}
-                      setList={props.setDateOfBirths}
+                      handleClose={curryOnCloseSetTag(
+                        dateOfBirths,
+                        setDateOfBirths,
+                      )}
                       transformData={transformDate}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.emails.size > 0 &&
-                Array.from(props.emails).map((currEmail) => (
+              ? emails.size > 0 &&
+                Array.from(emails).map((currEmail) => (
                   <div key={`email-${currEmail}`} className={styles.tags}>
                     <Tag
                       title="Email"
                       value={currEmail}
-                      setList={props.setEmails}
+                      handleClose={curryOnCloseSetTag(emails, setEmails)}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.additionalAffiliations.size > 0 &&
-                Array.from(props.additionalAffiliations).map(
+              ? additionalAffiliations.size > 0 &&
+                Array.from(additionalAffiliations).map(
                   (currAdditionalAffiliation) => (
                     <div
                       key={`additional-affiliation-${currAdditionalAffiliation}`}
@@ -388,15 +417,18 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       <Tag
                         title="Additional Affiliation"
                         value={currAdditionalAffiliation}
-                        setList={props.setAdditionalAffiliations}
+                        handleClose={curryOnCloseSetTag(
+                          additionalAffiliations,
+                          setAdditionalAffiliations,
+                        )}
                       />
                     </div>
                   ),
                 )
               : null}
             {tagsPresent
-              ? props.dateOfJoins.size > 0 &&
-                Array.from(props.dateOfJoins).map((currDateOfJoin) => (
+              ? dateOfJoins.size > 0 &&
+                Array.from(dateOfJoins).map((currDateOfJoin) => (
                   <div
                     key={`join-date-${currDateOfJoin}`}
                     className={styles.tags}
@@ -404,15 +436,18 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="Date of Join"
                       value={currDateOfJoin}
-                      setList={props.setDateOfJoins}
+                      handleClose={curryOnCloseSetTag(
+                        dateOfJoins,
+                        setDateOfJoins,
+                      )}
                       transformData={transformDate}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.secondaryNames.size > 0 &&
-                Array.from(props.secondaryNames).map((currSecondaryName) => (
+              ? secondaryNames.size > 0 &&
+                Array.from(secondaryNames).map((currSecondaryName) => (
                   <div
                     key={`secondary-name-${currSecondaryName}`}
                     className={styles.tags}
@@ -420,14 +455,17 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="Secondary Name"
                       value={currSecondaryName}
-                      setList={props.setSecondaryNames}
+                      handleClose={curryOnCloseSetTag(
+                        secondaryNames,
+                        setSecondaryNames,
+                      )}
                     />
                   </div>
                 ))
               : null}
             {tagsPresent
-              ? props.secondaryPhoneNumbers.size > 0 &&
-                Array.from(props.secondaryPhoneNumbers).map(
+              ? secondaryPhoneNumbers.size > 0 &&
+                Array.from(secondaryPhoneNumbers).map(
                   (currSecondaryPhoneNumber) => (
                     <div
                       key={`phone-number-${currSecondaryPhoneNumber}`}
@@ -436,7 +474,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       <Tag
                         title="Secondary Phone Number"
                         value={currSecondaryPhoneNumber}
-                        setList={props.setSecondaryPhoneNumbers}
+                        handleClose={curryOnCloseSetTag(
+                          secondaryPhoneNumbers,
+                          setSecondaryPhoneNumbers,
+                        )}
                         transformData={transformPhoneNumber}
                       />
                     </div>

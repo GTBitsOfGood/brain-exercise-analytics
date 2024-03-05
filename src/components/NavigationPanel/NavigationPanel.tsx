@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Metric from "./Metric/Metric";
 import styles from "./NavigationPanel.module.css";
 
-const NavigationPanel = () => {
+const NavigationPanel = ({ onClick }: { onClick: () => void }) => {
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -20,9 +20,6 @@ const NavigationPanel = () => {
     () => currentPath.startsWith("/patient/dashboard"),
     [currentPath],
   );
-  function handleClick() {
-    // console.log("open Edit Modal");
-  }
 
   return (
     <div className={styles.wrapper}>
@@ -88,14 +85,12 @@ const NavigationPanel = () => {
           <Metric title="trivia" />
         </div>
         <div className={styles.divider} />
-        <div className={styles["patient-container"]}>
-          <a href="#" onClick={handleClick}>
-            <img
-              className={styles["patient-pfp"]}
-              src="https://via.placeholder.com/81x81"
-              alt="Patient Profile Picture"
-            />
-          </a>
+        <div className={styles["patient-container"]} onClick={onClick}>
+          <img
+            className={styles["patient-pfp"]}
+            src="https://via.placeholder.com/81x81"
+            alt="Patient Profile Picture"
+          />
           <div className={styles["patient-info"]}>
             <span className={styles["user-name"]}>User Name</span>
             <span className={styles.position}>Position or title</span>

@@ -1,3 +1,5 @@
+import { Role } from "@/common_utils/types";
+
 export function classes(
   ...classNames: (string | boolean | undefined | null)[]
 ) {
@@ -31,4 +33,16 @@ export function transformPhoneNumber(phoneNumber: string) {
   const lastFour = phoneNumber.slice(6, 10);
 
   return `${areaCode}-${firstThree}-${lastFour}`;
+}
+
+export function getLowerRoles(role: Role): Role[] {
+  const roleIndex = Object.values(Role).indexOf(role);
+  return Object.values(Role).filter((_, i) => i < roleIndex);
+}
+
+export function getLowerAdminRoles(role: Role): Role[] {
+  const roleIndex = Object.values(Role).indexOf(role);
+  return Object.values(Role).filter(
+    (r, i) => i < roleIndex && r !== Role.NONPROFIT_PATIENT,
+  );
 }
