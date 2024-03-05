@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties, useCallback, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
@@ -107,16 +107,16 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     (patientSearchState: RootState) => patientSearchState.patientSearch,
   );
 
-  const checkAndUpdateList = (
-    currentSet: Set<string> | undefined,
-    value: string,
-  ): Set<string> => {
-    const safeCurrentSet =
-      currentSet instanceof Set ? currentSet : new Set<string>();
-    const updatedSet = new Set(safeCurrentSet);
-    if (value) updatedSet.add(value);
-    return updatedSet;
-  };
+  const checkAndUpdateList = useCallback(
+    <T,>(currentSet: Set<T> | undefined, value: T): Set<T> => {
+      const safeCurrentSet =
+        currentSet instanceof Set ? currentSet : new Set<T>();
+      const updatedSet = new Set<T>(safeCurrentSet);
+      if (value) updatedSet.add(value);
+      return updatedSet;
+    },
+    [],
+  );
 
   const reset = () => {
     setCountry("");
