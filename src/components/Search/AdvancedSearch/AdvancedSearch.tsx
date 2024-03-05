@@ -1,16 +1,26 @@
-import React, {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  CSSProperties,
-} from "react";
+import React, { CSSProperties, useCallback, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
+
 import CHAPTERS from "@src/utils/chapters";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
+import {
+  setActive,
+  setCountries,
+  setStates,
+  setCities,
+  setDateOfBirths,
+  setEmails,
+  setAdditionalAffiliations,
+  setDateOfJoins,
+  setBeiChapters,
+  setSecondaryPhoneNumbers,
+  setSecondaryNames,
+} from "@src/redux/reducers/patientSearchReducer";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -64,22 +74,12 @@ function SelectDropdown<T>({
 
 interface UpdateParamProp {
   style?: CSSProperties;
-  active: boolean | undefined;
-  setCountries: Dispatch<SetStateAction<Set<string>>>;
-  setStates: Dispatch<SetStateAction<Set<string>>>;
-  setCities: Dispatch<SetStateAction<Set<string>>>;
-  setActive: Dispatch<SetStateAction<boolean | undefined>>;
-  setDateOfBirths: Dispatch<SetStateAction<Set<string>>>;
-  setEmails: Dispatch<SetStateAction<Set<string>>>;
-  setDateOfJoins: Dispatch<SetStateAction<Set<string>>>;
-  setBeiChapters: Dispatch<SetStateAction<Set<string>>>;
-  setSecondaryPhoneNumbers: Dispatch<SetStateAction<Set<string>>>;
-  setAdditionalAffiliations: Dispatch<SetStateAction<Set<string>>>;
-  setSecondaryNames: Dispatch<SetStateAction<Set<string>>>;
   onSubmit?: () => void;
 }
 
 export const AdvancedSearch = (props: UpdateParamProp) => {
+  const dispatch = useDispatch();
+
   const [country, setCountry] = useState(""); // values chosen before the aply button
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
@@ -91,20 +91,29 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
 
+  const {
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+  } = useSelector(
+    (patientSearchState: RootState) => patientSearchState.patientSearch,
+  );
+
   const checkAndUpdateList = useCallback(
-    <T,>(element: T | null, setUpdater: Dispatch<SetStateAction<Set<T>>>) => {
-      setUpdater((set) => {
-        if (
-          element !== "" &&
-          element !== null &&
-          element !== undefined &&
-          !set.has(element)
-        ) {
-          const newSet = new Set<T>(set);
-          return newSet.add(element);
-        }
-        return set;
-      });
+    <T,>(currentSet: Set<T> | undefined, value: T): Set<T> => {
+      const safeCurrentSet =
+        currentSet instanceof Set ? currentSet : new Set<T>();
+      const updatedSet = new Set<T>(safeCurrentSet);
+      if (value) updatedSet.add(value);
+      return updatedSet;
     },
     [],
   );
@@ -117,21 +126,43 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setEmail("");
     setAdditionalAffiliation("");
     setDateOfJoin("");
+    setBeiChapter("");
     setSecondaryName("");
     setSecondaryPhoneNumber("");
   };
 
   const setFinal = () => {
-    checkAndUpdateList(country, props.setCountries);
-    checkAndUpdateList(state, props.setStates);
-    checkAndUpdateList(city, props.setCities);
-    checkAndUpdateList(dateOfBirth, props.setDateOfBirths);
-    checkAndUpdateList(email, props.setEmails);
-    checkAndUpdateList(additionalAffiliation, props.setAdditionalAffiliations);
-    checkAndUpdateList(dateOfJoin, props.setDateOfJoins);
-    checkAndUpdateList(beiChapter, props.setBeiChapters);
-    checkAndUpdateList(secondaryPhoneNumber, props.setSecondaryPhoneNumbers);
-    checkAndUpdateList(secondaryName, props.setSecondaryNames);
+    const dispatchMappings = [
+      { condition: country, action: setCountries, value: countries },
+      { condition: state, action: setStates, value: states },
+      { condition: city, action: setCities, value: cities },
+      { condition: dateOfBirth, action: setDateOfBirths, value: dateOfBirths },
+      { condition: email, action: setEmails, value: emails },
+      {
+        condition: additionalAffiliation,
+        action: setAdditionalAffiliations,
+        value: additionalAffiliations,
+      },
+      { condition: dateOfJoin, action: setDateOfJoins, value: dateOfJoins },
+      { condition: beiChapter, action: setBeiChapters, value: beiChapters },
+      {
+        condition: secondaryPhoneNumber,
+        action: setSecondaryPhoneNumbers,
+        value: secondaryPhoneNumbers,
+      },
+      {
+        condition: secondaryName,
+        action: setSecondaryNames,
+        value: secondaryNames,
+      },
+    ];
+
+    dispatchMappings.forEach(({ condition, action, value }) => {
+      if (condition) {
+        dispatch(action(checkAndUpdateList(value, condition)));
+      }
+    });
+
     if (props.onSubmit) {
       props.onSubmit();
     }
@@ -167,22 +198,25 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <span className={styles.active_patient_box_label}>
             <ToggleButtonGroup
               color="primary"
-              value={String(props.active)}
+              value={String(active)}
               exclusive
               aria-label="Platform"
             >
               <ToggleButton
                 value="undefined"
-                onClick={() => props.setActive(undefined)}
+                onClick={() => dispatch(setActive(undefined))}
               >
                 All Patients
               </ToggleButton>
-              <ToggleButton value="true" onClick={() => props.setActive(true)}>
+              <ToggleButton
+                value="true"
+                onClick={() => dispatch(setActive(true))}
+              >
                 Active Patients
               </ToggleButton>
               <ToggleButton
                 value="false"
-                onClick={() => props.setActive(false)}
+                onClick={() => dispatch(setActive(false))}
               >
                 Inactive Patients
               </ToggleButton>
