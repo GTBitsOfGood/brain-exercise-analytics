@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Poppins } from "next/font/google";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSquareRootVariable,
@@ -8,6 +8,7 @@ import {
   faFileLines,
   faCircleQuestion,
 } from "@fortawesome/free-solid-svg-icons";
+import useHash from "@src/hooks/useHash";
 import styles from "./Metric.module.css";
 
 const poppins = Poppins({
@@ -18,20 +19,25 @@ const poppins = Poppins({
 
 type MetricProps = {
   title: string;
-  isActive: boolean;
-  onClick: () => void;
 };
 
 const Metric = (metricProps: MetricProps) => {
   const router = useRouter();
-  const { pathname } = window.location;
-  console.log("Current Pathname:", pathname);
+  const currentPath = usePathname();
+  const hash = useHash();
+
+  const isActive = useMemo(
+    () =>
+      currentPath.startsWith("/patient/dashboard") &&
+      hash?.toLowerCase() === metricProps.title.toLowerCase(),
+    [currentPath, metricProps.title, hash],
+  );
+
   const handleButtonClick = () => {
-    metricProps.onClick();
-    if (pathname.startsWith("/patient/dashboard/")) {
-      router.push(`${pathname}#${metricProps.title}`);
+    if (currentPath.startsWith("/patient/dashboard/")) {
+      router.push(`${currentPath}#${metricProps.title.toLowerCase()}`);
     } else {
-      router.push(`/patient/dashboard#${metricProps.title}`);
+      router.push(`/patient/dashboard#${metricProps.title.toLowerCase()}`);
     }
   };
   const icon = useMemo(() => {
@@ -57,19 +63,13 @@ const Metric = (metricProps: MetricProps) => {
           <div className={styles["dashboard-icon"]}>
             <FontAwesomeIcon
               className={
-                styles[
-                  `analytics-icon-${metricProps.isActive ? "active" : "inactive"}`
-                ]
+                styles[`analytics-icon-${isActive ? "active" : "inactive"}`]
               }
               icon={icon}
               size="xs"
             />
           </div>
-          <div
-            className={
-              styles[`metric-${metricProps.isActive ? "active" : "inactive"}`]
-            }
-          >
+          <div className={styles[`metric-${isActive ? "active" : "inactive"}`]}>
             <span>{metricProps.title}</span>
           </div>
         </div>

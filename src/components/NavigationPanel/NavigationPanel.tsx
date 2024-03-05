@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
   faChartSimple,
@@ -12,7 +12,11 @@ import { useSelector } from "react-redux";
 import Metric from "./Metric/Metric";
 import styles from "./NavigationPanel.module.css";
 
-const NavigationPanel = () => {
+interface Props {
+  onClick: () => void;
+}
+
+const NavigationPanel = ({ onClick }: Props) => {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
 
   const router = useRouter();
@@ -36,30 +40,6 @@ const NavigationPanel = () => {
     () => currentPath.startsWith("/patient/dashboard"),
     [currentPath],
   );
-  const [activeMetric, setActiveMetric] = useState<string | null>(null);
-
-  const handleMetricClick = (title: string) => {
-    setActiveMetric(title);
-  };
-  const handleVolunteerSearchClick = () => {
-    setActiveMetric(null);
-    router.push("/volunteer/search");
-  };
-  const handlePatientSearchClick = () => {
-    setActiveMetric(null);
-    router.push("/patient/search");
-  };
-  const handleApprovalClick = () => {
-    setActiveMetric(null);
-    router.push("/volunteer/approval");
-  };
-  const handleDashboardClick = () => {
-    setActiveMetric(null);
-    router.push("/patient/dashboard");
-  };
-  // function handleClick() {
-  // console.log("open Edit Modal");
-  // }
 
   return (
     <div className={styles.wrapper}>
@@ -90,7 +70,7 @@ const NavigationPanel = () => {
                     `search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`
                   ]
                 }
-                onClick={() => handleVolunteerSearchClick()}
+                onClick={() => router.push("/volunteer/search")}
               >
                 <div className={styles["icon-shadow"]}>
                   <FontAwesomeIcon
@@ -115,13 +95,7 @@ const NavigationPanel = () => {
                     `overall-metrics-container-${isApproval ? "active" : "inactive"}`
                   ]
                 }
-                onClick={() => {
-                  // if (!isDashboard) {
-                  handleApprovalClick();
-                  // } else {
-                  // router.push("#");
-                  // }
-                }}
+                onClick={() => router.push("/volunteer/approval")}
               >
                 <div className={styles["icon-shadow"]}>
                   <FontAwesomeIcon
@@ -148,7 +122,7 @@ const NavigationPanel = () => {
                 `search-patient-${isPatientSearch ? "active" : "inactive"}`
               ]
             }
-            onClick={() => handlePatientSearchClick()}
+            onClick={() => router.push("/patient/search")}
           >
             <div className={styles["icon-shadow"]}>
               <FontAwesomeIcon
@@ -173,14 +147,7 @@ const NavigationPanel = () => {
                 }`
               ]
             }
-            onClick={() => {
-              if (!isDashboard) {
-                handleDashboardClick();
-                // router.push("/patient/dashboard");
-              } else {
-                router.push("#");
-              }
-            }}
+            onClick={() => router.push("/patient/dashboard")}
           >
             <div className={styles["icon-shadow"]}>
               <FontAwesomeIcon
@@ -195,26 +162,10 @@ const NavigationPanel = () => {
               <span>Patient Analytics</span>
             </div>
           </div>
-          <Metric
-            title="Math"
-            isActive={activeMetric === "Math"}
-            onClick={() => handleMetricClick("Math")}
-          />
-          <Metric
-            title="Reading"
-            isActive={activeMetric === "Reading"}
-            onClick={() => handleMetricClick("Reading")}
-          />
-          <Metric
-            title="Writing"
-            isActive={activeMetric === "Writing"}
-            onClick={() => handleMetricClick("Writing")}
-          />
-          <Metric
-            title="Trivia"
-            isActive={activeMetric === "Trivia"}
-            onClick={() => handleMetricClick("Trivia")}
-          />
+          <Metric title="Math" />
+          <Metric title="Reading" />
+          <Metric title="Writing" />
+          <Metric title="Trivia" />
         </div>
         <div className={styles.divider} />
         <div className={styles["patient-container"]} onClick={() => onclick}>
@@ -223,7 +174,7 @@ const NavigationPanel = () => {
             src="https://via.placeholder.com/81x81"
             alt="Patient Profile Picture"
           />
-          <div className={styles["patient-info"]}>
+          <div className={styles["patient-info"]} onClick={onClick}>
             <span className={styles["user-name"]}>User Name</span>
             <span className={styles.position}>Position or title</span>
           </div>
