@@ -9,8 +9,8 @@ import APIWrapper from "@server/utils/APIWrapper";
 
 export const GET = APIWrapper({
   config: {
-    requireToken: false,
-    requireVolunteer: false,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const email: string | null = req.nextUrl.searchParams.get("email");
@@ -25,29 +25,29 @@ export const GET = APIWrapper({
 
 type PatchReq = {
   email: string;
-  newData: RecursivePartial<IUser>;
+  newFields: RecursivePartial<IUser>;
 };
 
 export const PATCH = APIWrapper({
   config: {
-    requireToken: false,
-    requireVolunteer: false,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
     const { email }: { email: string } = reqdata;
-    const { newData } = reqdata;
+    const { newFields } = reqdata;
 
     if (!email) {
       throw new Error("Email parameter is missing");
     }
 
-    if (newData.email !== null && email === newData.email) {
+    if (newFields.email !== null && email === newFields.email) {
       console.log("here");
-      await updateUserEmail(email, newData.email);
+      await updateUserEmail(email, newFields.email);
     }
 
-    const user = await updateVolunteer(email, newData);
+    const user = await updateVolunteer(email, newFields);
     return user;
   },
 });
@@ -57,8 +57,8 @@ type DeleteReq = {
 };
 export const DELETE = APIWrapper({
   config: {
-    requireToken: false,
-    requireVolunteer: false,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const reqdata: DeleteReq = (await req.json()) as DeleteReq;
