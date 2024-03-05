@@ -158,7 +158,7 @@ const Modal = () => {
           <div className={styles.inputField}>
             <label>Date of Birth:</label>
             <input
-              placeholder="MM/DD/YYYY"
+              placeholder="mm/dd/yyyy"
               value={updatedBirthDateInput}
               onChange={(e) => {
                 const formattedDate = formatBirthDate(e.target.value);

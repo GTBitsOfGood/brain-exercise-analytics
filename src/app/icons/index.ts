@@ -15,7 +15,7 @@ import SqrtIcon from "./SqrtIcon";
 import BookIcon from "./BookIcon";
 import DocIcon from "./DocIcon";
 import QuestionIcon from "./QuestionIcon";
-
+import ClearTagIcon from "./ClearTagIcon";
 import AccuracyIcon from "./AccuracyIcon";
 import AttemptIcon from "./AttemptIcon";
 import InfoIcon from "./InfoIcon";
@@ -49,4 +49,5 @@ export {
   RootXIcon,
   TimeIcon,
   WritingIcon,
+  ClearTagIcon,
 };
