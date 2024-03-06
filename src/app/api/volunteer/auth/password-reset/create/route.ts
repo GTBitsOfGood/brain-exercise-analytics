@@ -6,7 +6,8 @@ import { sendEmail } from "@server/utils/email";
 
 type RequestData = {
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
 };
 
 export const POST = APIWrapper({
@@ -17,7 +18,7 @@ export const POST = APIWrapper({
       throw new Error("Missing request data");
     }
 
-    if (!requestData.email || !requestData.name) {
+    if (!requestData.email || !requestData.firstName || !requestData.lastName) {
       throw new Error("Missing parameter(s)");
     }
 
@@ -27,7 +28,10 @@ export const POST = APIWrapper({
       throw new Error("User not found.");
     }
 
-    if (user.name !== requestData.name) {
+    if (
+      user.firstName !== requestData.firstName ||
+      user.lastName !== requestData.lastName
+    ) {
       throw new Error("Name doesn't match to existing value");
     }
 

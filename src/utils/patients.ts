@@ -8,7 +8,8 @@ import {
 export const sampleTableEntries: IPatientTableEntry[] = [
   {
     _id: "1",
-    name: "John Doe",
+    firstName: "John",
+    lastName: "Doe",
     birthDate: new Date("1990-01-01"),
     patientDetails: {
       secondaryContactName: "Jane Doe",
@@ -27,7 +28,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "2",
-    name: "Jane Smith",
+    firstName: "Jane",
+    lastName: "Smith",
     birthDate: new Date("1992-02-02"),
     patientDetails: {
       secondaryContactName: "Ella Smith",
@@ -46,7 +48,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "3",
-    name: "Alice Johnson",
+    firstName: "Alice",
+    lastName: "Johnson",
     birthDate: new Date("1985-03-03"),
     patientDetails: {
       secondaryContactName: "Michael Johnson",
@@ -65,7 +68,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "4",
-    name: "Bob Brown",
+    firstName: "Bob",
+    lastName: "Brown",
     birthDate: new Date("1987-04-04"),
     patientDetails: {
       secondaryContactName: "Linda Brown",
@@ -84,7 +88,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "5",
-    name: "Charlie Davis",
+    firstName: "Charlie",
+    lastName: "Davis",
     birthDate: new Date("1995-05-05"),
     patientDetails: {
       secondaryContactName: "Sarah Davis",
@@ -103,7 +108,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "6",
-    name: "Diana Evans",
+    firstName: "Diana",
+    lastName: "Evans",
     birthDate: new Date("1980-06-06"),
     patientDetails: {
       secondaryContactName: "Peter Evans",
@@ -122,7 +128,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "7",
-    name: "Evan Foster",
+    firstName: "Evan",
+    lastName: "Foster",
     birthDate: new Date("1988-07-07"),
     patientDetails: {
       secondaryContactName: "Julia Foster",
@@ -141,7 +148,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "8",
-    name: "Fiona Green",
+    firstName: "Fiona",
+    lastName: "Green",
     birthDate: new Date("1993-08-08"),
     patientDetails: {
       secondaryContactName: "Mark Green",
@@ -160,7 +168,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "9",
-    name: "George Harris",
+    firstName: "George",
+    lastName: "Harris",
     birthDate: new Date("1975-09-09"),
     patientDetails: {
       secondaryContactName: "Lucy Harris",
@@ -179,7 +188,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "10",
-    name: "Hannah Adams",
+    firstName: "Hannah",
+    lastName: "Adams",
     birthDate: new Date("1997-10-10"),
     patientDetails: {
       secondaryContactName: "Oliver Adams",
@@ -198,7 +208,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "11",
-    name: "David Johnson",
+    firstName: "David",
+    lastName: "Johnson",
     birthDate: new Date("1993-08-12"),
     patientDetails: {
       secondaryContactName: "Emma Johnson",
@@ -218,7 +229,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "12",
-    name: "Sophie Brown",
+    firstName: "Sophie",
+    lastName: "Brown",
     birthDate: new Date("1986-11-15"),
     patientDetails: {
       secondaryContactName: "Ryan Brown",
@@ -237,7 +249,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   },
   {
     _id: "13",
-    name: "Oliver White",
+    firstName: "Oliver",
+    lastName: "White",
     birthDate: new Date("1990-03-25"),
     patientDetails: {
       secondaryContactName: "Ava White",
@@ -376,7 +389,8 @@ export const numberOfQuestionData = [
 export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
   return {
     _id: entry._id,
-    name: entry.name,
+    firstName: entry.firstName,
+    lastName: entry.lastName,
     email: entry.email,
     phoneNumber: "1234567890",
     startDate: entry.startDate,

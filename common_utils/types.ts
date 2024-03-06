@@ -37,6 +37,9 @@ export enum Role {
   NONPROFIT_PATIENT = "Nonprofit Patient",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_ADMIN = "Nonprofit Admin",
+  NONPROFIT_CHAPTER_PRESIDENT = "Nonprofit Chapter President",
+  NONPROFIT_REGIONAL_COMMITTEE_MEMBER = "Nonprofit Regional Committee Member",
+  NONPROFIT_DIRECTOR = "Nonprofit Director",
 }
 
 export enum Days {
@@ -75,7 +78,8 @@ export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
   _id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   birthDate: Date;

@@ -10,7 +10,11 @@ const UserSchema = new Schema({
     // index: true,
     // unique: true,
   },
-  name: {
+  firstName: {
+    type: String,
+    default: "",
+  },
+  lastName: {
     type: String,
     default: "",
   },
