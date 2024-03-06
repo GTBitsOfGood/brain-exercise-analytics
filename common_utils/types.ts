@@ -259,6 +259,21 @@ export type PatientSearchParams = {
   dateOfJoins?: string[];
 };
 
+export type IPatientSearchReducer = {
+  fullName: string;
+  active: boolean | undefined;
+  countries: Set<string>;
+  states: Set<string>;
+  cities: Set<string>;
+  dateOfBirths: Set<string>;
+  emails: Set<string>;
+  additionalAffiliations: Set<string>;
+  dateOfJoins: Set<string>;
+  beiChapters: Set<string>;
+  secondaryPhoneNumbers: Set<string>;
+  secondaryNames: Set<string>;
+};
+
 export type VolunteerSearchParams = {
   name?: string;
   approved?: AdminApprovalStatus;
