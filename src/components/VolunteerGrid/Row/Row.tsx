@@ -30,7 +30,7 @@ export default function Row({ volunteer, handleDeleteClick }: Props) {
     () =>
       getLowerAdminRoles(currUserRole).map((role) => ({
         value: role,
-        displayValue: role,
+        displayValue: role.toString().substring(10),
       })),
     [currUserRole],
   );
