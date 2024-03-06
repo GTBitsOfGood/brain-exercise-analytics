@@ -4,7 +4,8 @@ import { IUser, Role } from "@/common_utils/types";
 
 interface SignupData {
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   phoneNumber: string;
   birthDate: Date;
   secondaryContactName: string;
@@ -25,7 +26,8 @@ export const POST = APIWrapper({
     if (
       signupData.birthDate === undefined ||
       signupData.email === undefined ||
-      signupData.name === undefined ||
+      signupData.firstName === undefined ||
+      signupData.lastName === undefined ||
       signupData.phoneNumber === undefined ||
       signupData.secondaryContactName === undefined ||
       signupData.secondaryContactPhone === undefined
@@ -44,7 +46,8 @@ export const POST = APIWrapper({
 
     const newSignUp = await patientSignUp({
       email: signupData.email,
-      name: signupData.name,
+      firstName: signupData.firstName,
+      lastName: signupData.lastName,
       phoneNumber: signupData.phoneNumber,
       birthDate: signupData.birthDate,
       patientDetails: {

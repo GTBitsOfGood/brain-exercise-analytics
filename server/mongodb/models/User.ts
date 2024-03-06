@@ -7,10 +7,14 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
-    index: true,
-    unique: true,
+    // index: true,
+    // unique: true,
   },
-  name: {
+  firstName: {
+    type: String,
+    default: "",
+  },
+  lastName: {
     type: String,
     default: "",
   },
@@ -84,6 +88,10 @@ const UserSchema = new Schema({
       values: Object.values(Role),
     },
     default: Role.NONPROFIT_PATIENT,
+  },
+  imageLink: {
+    type: String,
+    default: "",
   },
 });
 

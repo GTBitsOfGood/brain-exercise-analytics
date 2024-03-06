@@ -101,12 +101,12 @@ export default function Page() {
     )
       return;
     try {
-      const name = `${firstName} ${lastName}`;
       await internalRequest<IUser>({
         url: "/api/volunteer/auth/signup",
         method: HttpMethod.POST,
         body: {
-          name,
+          firstName,
+          lastName,
           phoneNumber: number,
           country: locCountry,
           state: locState,

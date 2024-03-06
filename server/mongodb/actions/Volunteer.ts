@@ -12,7 +12,6 @@ import User from "../models/User";
 import { deleteVerificationLogByEmail } from "./VerificationLog";
 
 type VParam = {
-  name?: RegExp;
   role?: object;
   approved?: object;
   active?: boolean;
@@ -40,9 +39,6 @@ export const getVolunteersFiltered = async ({
   const numOfItems = 8;
 
   const userParamsObject = {} as VParam;
-  if (paramsObject.name) {
-    userParamsObject.name = new RegExp(paramsObject.name, `i`);
-  }
   if (paramsObject.approved !== undefined) {
     userParamsObject.approved = { $in: paramsObject.approved };
   }
@@ -78,6 +74,19 @@ export const getVolunteersFiltered = async ({
   const matchPipeline = {
     $match: { $and: [userParamsObject] },
   } as PipelineStage.Match;
+
+  if (paramsObject.name) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $regexMatch: {
+          input: {
+            $concat: ["$firstName", " ", "$lastName"],
+          },
+          regex: new RegExp(paramsObject.name, `i`),
+        },
+      },
+    });
+  }
 
   if (paramsObject.dateOfBirths) {
     matchPipeline.$match.$and!.push({
