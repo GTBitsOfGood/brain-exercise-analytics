@@ -91,8 +91,9 @@ export interface IUser {
   name: string;
   email: string;
   phoneNumber: string;
+  birthDate: Date;
+  startDate: Date;
   patientDetails: {
-    birthDate: Date;
     secondaryContactName: string;
     secondaryContactPhone: string;
     additionalAffiliation: string;
@@ -122,7 +123,6 @@ export interface IAnalytics {
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
-  startDate: Date;
   active: boolean;
   streak: [string];
   lastSessionMetrics: {
@@ -275,8 +275,17 @@ export type IPatientSearchReducer = {
 };
 
 export type VolunteerSearchParams = {
+  active?: boolean;
   name?: string;
-  approved?: AdminApprovalStatus;
+  countries?: string[];
+  states?: string[];
+  cities?: string[];
+  beiChapters?: string[];
+  dateOfBirths?: string[];
+  emails?: string[];
+  dateOfJoins?: string[];
+  approved?: AdminApprovalStatus[];
+  roles?: Role[];
 };
 
 export interface IPatientTableEntry
@@ -290,7 +299,6 @@ export interface IPatientTableEntry
     | "adminDetails"
   > {
   active: boolean;
-  startDate: Date;
 }
 
 export interface IVolunteerTableEntry

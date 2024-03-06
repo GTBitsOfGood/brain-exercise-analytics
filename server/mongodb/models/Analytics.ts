@@ -16,10 +16,6 @@ const AnalyticsSchema = new Schema({
     type: Number,
     default: 0,
   },
-  startDate: {
-    type: Date,
-    dafault: Date(),
-  },
   active: {
     type: Boolean,
     default: true,

@@ -9,8 +9,8 @@ export const sampleTableEntries: IPatientTableEntry[] = [
   {
     _id: "1",
     name: "John Doe",
+    birthDate: new Date("1990-01-01"),
     patientDetails: {
-      birthDate: new Date("1990-01-01"),
       secondaryContactName: "Jane Doe",
       secondaryContactPhone: "5552221515",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -26,10 +26,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2020-05-05"),
   },
   {
-    _id: "1",
+    _id: "2",
     name: "Jane Smith",
+    birthDate: new Date("1992-02-02"),
     patientDetails: {
-      birthDate: new Date("1992-02-02"),
       secondaryContactName: "Ella Smith",
       secondaryContactPhone: "5553347890",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -45,10 +45,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-01-10"),
   },
   {
-    _id: "1",
+    _id: "3",
     name: "Alice Johnson",
+    birthDate: new Date("1985-03-03"),
     patientDetails: {
-      birthDate: new Date("1985-03-03"),
       secondaryContactName: "Michael Johnson",
       secondaryContactPhone: "5554567890",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -64,10 +64,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-02-20"),
   },
   {
-    _id: "1",
+    _id: "4",
     name: "Bob Brown",
+    birthDate: new Date("1987-04-04"),
     patientDetails: {
-      birthDate: new Date("1987-04-04"),
       secondaryContactName: "Linda Brown",
       secondaryContactPhone: "5555678901",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -83,10 +83,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-03-15"),
   },
   {
-    _id: "1",
+    _id: "5",
     name: "Charlie Davis",
+    birthDate: new Date("1995-05-05"),
     patientDetails: {
-      birthDate: new Date("1995-05-05"),
       secondaryContactName: "Sarah Davis",
       secondaryContactPhone: "5556789012",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -102,10 +102,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-04-22"),
   },
   {
-    _id: "1",
+    _id: "6",
     name: "Diana Evans",
+    birthDate: new Date("1980-06-06"),
     patientDetails: {
-      birthDate: new Date("1980-06-06"),
       secondaryContactName: "Peter Evans",
       secondaryContactPhone: "5557890123",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -121,10 +121,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-05-30"),
   },
   {
-    _id: "1",
+    _id: "7",
     name: "Evan Foster",
+    birthDate: new Date("1988-07-07"),
     patientDetails: {
-      birthDate: new Date("1988-07-07"),
       secondaryContactName: "Julia Foster",
       secondaryContactPhone: "5558901234",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -140,10 +140,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-07-14"),
   },
   {
-    _id: "1",
+    _id: "8",
     name: "Fiona Green",
+    birthDate: new Date("1993-08-08"),
     patientDetails: {
-      birthDate: new Date("1993-08-08"),
       secondaryContactName: "Mark Green",
       secondaryContactPhone: "5559012345",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -159,10 +159,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-08-28"),
   },
   {
-    _id: "1",
+    _id: "9",
     name: "George Harris",
+    birthDate: new Date("1975-09-09"),
     patientDetails: {
-      birthDate: new Date("1975-09-09"),
       secondaryContactName: "Lucy Harris",
       secondaryContactPhone: "5550123456",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -178,10 +178,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-09-12"),
   },
   {
-    _id: "1",
+    _id: "10",
     name: "Hannah Adams",
+    birthDate: new Date("1997-10-10"),
     patientDetails: {
-      birthDate: new Date("1997-10-10"),
       secondaryContactName: "Oliver Adams",
       secondaryContactPhone: "5551234567",
       additionalAffiliation: "Patient visits Florida chapter every Tuesday",
@@ -197,10 +197,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-10-05"),
   },
   {
-    _id: "1",
+    _id: "11",
     name: "David Johnson",
+    birthDate: new Date("1993-08-12"),
     patientDetails: {
-      birthDate: new Date("1993-08-12"),
       secondaryContactName: "Emma Johnson",
       secondaryContactPhone: "5558901234",
       additionalAffiliation: "Patient attends health workshops regularly",
@@ -217,10 +217,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-05-20"),
   },
   {
-    _id: "1",
+    _id: "12",
     name: "Sophie Brown",
+    birthDate: new Date("1986-11-15"),
     patientDetails: {
-      birthDate: new Date("1986-11-15"),
       secondaryContactName: "Ryan Brown",
       secondaryContactPhone: "5552345678",
       additionalAffiliation: "Patient advocates for mental health awareness",
@@ -236,10 +236,10 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     startDate: new Date("2021-06-10"),
   },
   {
-    _id: "1",
+    _id: "13",
     name: "Oliver White",
+    birthDate: new Date("1990-03-25"),
     patientDetails: {
-      birthDate: new Date("1990-03-25"),
       secondaryContactName: "Ava White",
       secondaryContactPhone: "5553456789",
       additionalAffiliation: "Patient volunteers at local health clinics",
@@ -375,10 +375,12 @@ export const numberOfQuestionData = [
 
 export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
   return {
-    _id: "1",
+    _id: entry._id,
     name: entry.name,
     email: entry.email,
     phoneNumber: "1234567890",
+    startDate: entry.startDate,
+    birthDate: entry.birthDate,
     patientDetails: entry.patientDetails,
     adminDetails: { active: entry.active },
     chapter: entry.chapter,

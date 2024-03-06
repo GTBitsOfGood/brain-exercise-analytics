@@ -14,10 +14,10 @@ const Modal = () => {
     name,
     phoneNumber,
     email,
+    birthDate,
     patientDetails,
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
-  const { birthDate } = patientDetails;
   const [updatedName, setUpdatedName] = useState<string>(name);
   const [updatedPhoneNumber, setUpdatedPhoneNumber] =
     useState<string>(phoneNumber);
@@ -68,9 +68,9 @@ const Modal = () => {
         name: updatedName,
         phoneNumber: updatedPhoneNumber,
         email: updatedEmail,
+        birthDate: updatedBirthDate,
         patientDetails: {
           ...patientDetails,
-          birthDate: updatedBirthDate,
         },
       }),
     );

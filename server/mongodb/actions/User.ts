@@ -68,8 +68,8 @@ export const patientSignUp = async (
       $set: {
         name: data.name,
         phoneNumber: data.phoneNumber,
+        birthDate: data.birthDate,
         patientDetails: {
-          birthDate: data.patientDetails.birthDate,
           secondaryContactName: data.patientDetails.secondaryContactName,
           secondaryContactPhone: data.patientDetails.secondaryContactPhone,
         },
@@ -189,7 +189,7 @@ export const getUsersFiltered = async ({
         $in: [
           {
             $dateToString: {
-              date: "$patientDetails.birthDate",
+              date: "$birthDate",
               format: "%m-%d-%Y",
             },
           },
@@ -205,7 +205,7 @@ export const getUsersFiltered = async ({
         $in: [
           {
             $dateToString: {
-              date: "$analyticsRecords.startDate",
+              date: "$startDate",
               format: "%m-%d-%Y",
             },
           },
@@ -242,7 +242,6 @@ export const getUsersFiltered = async ({
     },
     {
       $addFields: {
-        startDate: "$analyticsRecords.startDate",
         active: "$analyticsRecords.active",
       },
     },
