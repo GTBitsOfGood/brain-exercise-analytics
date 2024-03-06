@@ -37,6 +37,9 @@ export enum Role {
   NONPROFIT_PATIENT = "Nonprofit Patient",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_ADMIN = "Nonprofit Admin",
+  NONPROFIT_CHAPTER_PRESIDENT = "Nonprofit Chapter President",
+  NONPROFIT_REGIONAL_COMMITTEE_MEMBER = "Nonprofit Regional Committee Member",
+  NONPROFIT_DIRECTOR = "Nonprofit Director",
 }
 
 export enum Days {
@@ -61,19 +64,6 @@ export enum DateRangeEnum {
   HALF = "6 Months",
   YEAR = "1 Year",
   MAX = "Max",
-}
-
-export enum VolunteerAccessLevel {
-  VOLUNTEER = "Volunteer",
-  CHAPTER_PRESIDENT = "Chapter President",
-  REGIONAL_COMMITTEE_MEMBER = "Regional Committee Member",
-  NATIONAL_COMMITTEE_MEMBER = "National Committee Member",
-  DIRECTOR = "Director",
-}
-
-export enum VolunteerStatus {
-  ACTIVE = "Active",
-  INACTIVE = "Inactive",
 }
 
 export enum AnalyticsSectionEnum {
@@ -301,11 +291,8 @@ export interface IPatientTableEntry
   active: boolean;
 }
 
-export interface IVolunteerTableEntry
-  extends Omit<IUser, "phoneNumber" | "role"> {
-  active: boolean;
+export interface IVolunteerTableEntry extends IUser {
   startDate: Date;
-  approved: AdminApprovalStatus;
 }
 
 export interface IAggregatedAnalyticsAll

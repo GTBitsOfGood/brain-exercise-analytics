@@ -5,45 +5,6 @@
   gap: 20px;
 }
 
-.row {
-  border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
-}
-
-.nameCellContainer {
-  padding-top: 5%;
-}
-
-.dateCellContainer {
-  padding-top: 5%;
-}
-
-.RowCell {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-.RowCell:last-child {
-  border-right: none;
-  border-bottom: none;
-}
-
-.RowCellContainer {
-  width: 100%;
-  height: 100%;
-  color: #2b3674;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 97%;
-  font-family: var(--font-poppins);
-  font-size: 15px;
-  font-weight: 600;
-  padding-left: 7px;
-}
-.RowCellContainer::-webkit-scrollbar {
-  display: none;
-}
-
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -118,15 +79,4 @@
 
 .atLimit {
   visibility: hidden;
-}
-
-.deleteButton {
-  color: red;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.statusContainer {
-  display: flex;
-  align-items: center;
 }

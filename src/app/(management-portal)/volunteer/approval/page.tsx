@@ -6,6 +6,7 @@ import Search from "@src/components/Search/Search";
 import { classes } from "@src/utils/utils";
 import { internalRequest } from "@src/utils/requests";
 import {
+  AdminApprovalStatus,
   // SortField,
   HttpMethod,
   IVolunteerTableEntry,
@@ -20,101 +21,9 @@ import styles from "./page.module.css";
 
 firebaseInit();
 
-const tableData = [
-  {
-    id: 1,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 2,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 3,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 4,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 5,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 6,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 7,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 8,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 9,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 10,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 11,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 12,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-  {
-    id: 13,
-    name: "Name",
-    accessLevel: "Volunteer",
-    dateJoined: "MM/DD/YY",
-    status: true,
-  },
-];
-
 export default function Page() {
+  // Adding the following eslint-disable because we changed the way the Search component works.
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [fullName, setFullName] = useState("");
   const [active, setActive] = useState<boolean | undefined>(undefined);
   const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
@@ -131,6 +40,7 @@ export default function Page() {
     new Set<string>(),
   );
   const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   // const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   // const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
@@ -158,7 +68,7 @@ export default function Page() {
               states: Array.from(states),
               cities: Array.from(cities),
               dateOfJoins: Array.from(dateOfJoins),
-              approved: "AdminApprovalStatus.PENDING",
+              approved: [AdminApprovalStatus.PENDING],
             },
             page: currentPage,
             // sortParams: sortField,
@@ -209,31 +119,7 @@ export default function Page() {
       <div className={classes(styles["search-container"])}>
         <p className={styles["intro-text"]}>Search for a volunteer here!</p>
         <div className={styles["search-wrapper"]}>
-          <Search
-            setFullName={setFullName}
-            active={active}
-            setActive={setActive}
-            countries={countries}
-            setCountries={setCountries}
-            states={states}
-            setStates={setStates}
-            cities={cities}
-            setCities={setCities}
-            dateOfBirths={dateOfBirths}
-            setDateOfBirths={setDateOfBirths}
-            emails={emails}
-            setEmails={setEmails}
-            additionalAffiliations={additionalAffiliations}
-            setAdditionalAffiliations={setAdditionalAffiliations}
-            dateOfJoins={dateOfJoins}
-            setDateOfJoins={setDateOfJoins}
-            beiChapters={beiChapters}
-            setBeiChapters={setBeiChapters}
-            secondaryPhoneNumbers={secondaryPhoneNumbers}
-            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-            secondaryNames={secondaryNames}
-            setSecondaryNames={setSecondaryNames}
-          />
+          <Search />
         </div>
       </div>
       <div
@@ -257,7 +143,7 @@ export default function Page() {
           </svg>
           <p className={styles["table-header-text"]}>Pending Approval</p>
         </div>
-        <VolunteerApprovalGrid data={tableData} />
+        <VolunteerApprovalGrid data={[]} />
       </div>
     </div>
   );

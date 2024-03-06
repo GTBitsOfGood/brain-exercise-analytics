@@ -111,7 +111,6 @@ export default function PatientGrid(params: PatientGridProps) {
   return (
     <div className={styles.Container}>
       <DataGrid
-        rows={rows}
         columns={columns}
         sortField={params.sortField}
         setSortField={params.setSortField}

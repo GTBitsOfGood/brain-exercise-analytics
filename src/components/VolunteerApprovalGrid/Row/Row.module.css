@@ -1,0 +1,68 @@
+.row {
+  border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.RowCellContainer {
+  width: 100%;
+  color: #2b3674;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 97%;
+  font-family: var(--font-poppins);
+  font-size: 15px;
+  font-weight: 600;
+  padding-left: 7px;
+}
+
+.RowCellContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.actionsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  flex-direction: row;
+}
+
+.approveButton {
+  border-radius: 10px;
+  background: rgba(50, 210, 150, 0.2);
+  cursor: pointer;
+  display: flex;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  color: #2b3674;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20.968px; /* 174.737% */
+  letter-spacing: -0.24px;
+}
+
+.denyButton {
+  border-radius: 10px;
+  background: rgba(240, 80, 110, 0.2);
+  cursor: pointer;
+  display: flex;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  color: #2b3674;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20.968px; /* 174.737% */
+  letter-spacing: -0.24px;
+}
