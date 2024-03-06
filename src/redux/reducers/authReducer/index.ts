@@ -33,6 +33,7 @@ const initialState: IUser = {
   verified: false,
   approved: AdminApprovalStatus.PENDING,
   role: Role.NONPROFIT_PATIENT,
+  imageLink: "",
 };
 
 // Helper function to copy all properties from newState over to the existing state
@@ -69,6 +70,7 @@ const setState = (state: IUser, newState: RecursivePartial<IUser>): IUser => {
     newState.verified === undefined ? state.verified : newState.verified;
   state.approved = newState.approved ?? state.approved;
   state.role = newState.role ?? state.role;
+  state.imageLink = newState.imageLink ?? state.imageLink;
   return state;
 };
 

@@ -118,6 +118,7 @@ function APIWrapper(route: Route<unknown>) {
       );
     } catch (e) {
       if (e instanceof mongoose.Error) {
+        console.log(e);
         return NextResponse.json(
           {
             success: false,

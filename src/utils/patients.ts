@@ -389,5 +389,6 @@ export const sampleUsers: IUser[] = sampleTableEntries.map((entry) => {
     verified: true,
     approved: AdminApprovalStatus.APPROVED,
     role: Role.NONPROFIT_PATIENT,
+    imageLink: "",
   };
 });

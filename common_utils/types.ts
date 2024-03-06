@@ -98,6 +98,7 @@ export interface IUser {
   verified: boolean;
   approved: AdminApprovalStatus;
   role: Role;
+  imageLink: string;
 }
 
 export interface IVerificationLog {
@@ -284,6 +285,7 @@ export interface IPatientTableEntry
     | "verified"
     | "approved"
     | "adminDetails"
+    | "imageLink"
   > {
   active: boolean;
 }
