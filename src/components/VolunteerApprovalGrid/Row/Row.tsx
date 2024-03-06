@@ -49,7 +49,9 @@ export default function Row({ volunteer }: Props) {
   return (
     <tr className={styles.row} key={volunteer._id}>
       <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.name}</div>
+        <div
+          className={styles.RowCellContainer}
+        >{`${volunteer.firstName} ${volunteer.lastName}`}</div>
       </td>
       <td className={styles.RowCell}>
         <div className={styles.RowCellContainer}>

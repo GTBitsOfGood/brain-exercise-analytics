@@ -46,7 +46,7 @@ export default function Row({ volunteer, handleDeleteClick }: Props) {
         <div
           className={classes(styles.RowCellContainer, styles.nameCellContainer)}
         >
-          {volunteer.name}
+          {`${volunteer.firstName} ${volunteer.lastName}`}
         </div>
       </td>
       <td className={styles.RowCell}>

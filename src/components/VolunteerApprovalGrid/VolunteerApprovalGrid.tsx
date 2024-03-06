@@ -9,7 +9,7 @@ import styles from "./VolunteerApprovalGrid.module.css";
 import Row from "./Row/Row";
 
 const volunteersColumns: GridColDef[] = [
-  { field: "name", headerName: "Name", sortable: true },
+  { field: "firstName", headerName: "Name", sortable: true },
   { field: "startDate", headerName: "Date Joined", sortable: true },
   { field: "role", headerName: "Access Level", sortable: true },
   { field: "actions", headerName: "", sortable: false },
