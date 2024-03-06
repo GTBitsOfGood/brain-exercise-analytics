@@ -46,8 +46,8 @@ export const POST = APIWrapper({
       email: signupData.email,
       name: signupData.name,
       phoneNumber: signupData.phoneNumber,
+      birthDate: signupData.birthDate,
       patientDetails: {
-        birthDate: signupData.birthDate,
         secondaryContactName: signupData.secondaryContactName,
         secondaryContactPhone: signupData.secondaryContactPhone,
         additionalAffiliation: "",

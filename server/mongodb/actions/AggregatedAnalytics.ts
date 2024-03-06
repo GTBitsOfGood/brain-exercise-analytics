@@ -6,9 +6,11 @@ import {
   IAnalytics,
   DateRangeEnum,
   AnalyticsSectionEnum,
+  IUser,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum } from "@server/utils/utils";
 import Analytics from "../models/Analytics";
+import User from "../models/User";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -65,6 +67,8 @@ export const getAggregatedAnalytics = async (
     { userID },
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
+
+  const user = await User.findOne<IUser>({ _id: userID });
 
   if (!res) {
     throw new Error("User Analytics record not found");
@@ -400,7 +404,7 @@ export const getAggregatedAnalytics = async (
         finalAggregation.overall = {
           ...result.overall,
           streak: res.streak,
-          startDate: res.startDate,
+          startDate: user?.startDate ?? new Date(),
           lastSessionDate: res.lastSessionMetrics.date,
           totalSessionsCompleted: res.totalSessionsCompleted,
           lastSession: {

@@ -89,7 +89,7 @@ export default function PatientGrid(params: PatientGridProps) {
             id: v._id,
             firstName: v.name.split(" ")[0],
             lastName: v.name.split(" ")[1],
-            dateOfBirth: transformDate(v.patientDetails.birthDate),
+            dateOfBirth: transformDate(v.birthDate),
             active: v.active,
             email: v.email,
             chapter: v.chapter,

@@ -18,9 +18,16 @@ const UserSchema = new Schema({
     type: String,
     default: "",
   },
+  birthDate: {
+    type: Date,
+    default: Date(),
+  },
+  startDate: {
+    type: Date,
+    default: Date(),
+  },
   patientDetails: {
     type: {
-      birthDate: Date,
       secondaryContactName: String,
       secondaryContactPhone: String,
       additionalAffiliation: String,

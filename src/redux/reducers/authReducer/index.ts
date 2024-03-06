@@ -13,8 +13,9 @@ const initialState: IUser = {
   name: "",
   email: "",
   phoneNumber: "",
+  startDate: new Date(),
+  birthDate: new Date(),
   patientDetails: {
-    birthDate: new Date(),
     secondaryContactName: "",
     secondaryContactPhone: "",
     additionalAffiliation: "",
@@ -40,9 +41,9 @@ const setState = (state: IUser, newState: RecursivePartial<IUser>): IUser => {
   state.name = newState.name ?? state.name;
   state.email = newState.email ?? state.email;
   state.phoneNumber = newState.phoneNumber ?? state.phoneNumber;
+  state.startDate = newState.startDate ?? state.startDate;
+  state.birthDate = newState.birthDate ?? state.birthDate;
   state.patientDetails = {
-    birthDate:
-      newState.patientDetails?.birthDate ?? state.patientDetails.birthDate,
     secondaryContactName:
       newState.patientDetails?.secondaryContactName ??
       state.patientDetails.secondaryContactName,
