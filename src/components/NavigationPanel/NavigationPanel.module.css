@@ -3,9 +3,12 @@
   flex-direction: column;
   background-color: white;
   min-height: 100vh;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 10% 8%;
+  overflow-y: scroll;
+  height: 100vh;
+  white-space: nowrap;
 }
 
 .BEI-image {
@@ -40,6 +43,37 @@
   line-height: 19px;
   letter-spacing: 1.8px;
   word-wrap: break-word;
+  margin-bottom: -50px;
+}
+
+.admin-portal {
+  color: #008afc;
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: 1.8px;
+  word-wrap: break-word;
+  margin-bottom: -50px;
+}
+
+.volunteer-management {
+  color: #9ca5c2;
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  word-wrap: break-word;
+  margin-left: -65px;
+  margin-bottom: 15px;
+}
+.patient-management {
+  color: #9ca5c2;
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  word-wrap: break-word;
+  margin-left: -80px;
+  margin-bottom: 15px;
 }
 
 .divider {
@@ -47,6 +81,21 @@
   margin: 17% 0;
   height: 1.5px;
   background-color: #c8c8c8;
+}
+
+.red-bubble {
+  background-color: #ea4335;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  margin-left: 10px;
 }
 
 .icon-shadow {
@@ -58,8 +107,17 @@
   text-align: center;
 }
 
-.statistics-icon {
+.icon-active {
   color: #008afc;
+  size: large;
+  --fa-primary-color: #008afc;
+  --fa-secondary-color: #f4f7fe;
+  --fa-secondary-opacity: 0.4;
+  padding-right: 7%;
+}
+
+.icon-inactive {
+  color: #e3eafc;
   size: large;
   --fa-primary-color: #008afc;
   --fa-secondary-color: #f4f7fe;
@@ -73,7 +131,7 @@
   background: #e7eeff;
   border-radius: 10px;
   border: none;
-  color: #2078c1;
+  color: #2b3674;
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
@@ -90,7 +148,7 @@
   background: white;
   border-radius: 10px;
   border: none;
-  color: #2078c1;
+  color: #e3eafc;
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-poppins);
@@ -102,6 +160,44 @@
 }
 
 .search-patient-text {
+  padding-left: 5%;
+}
+
+.search-volunteer-active {
+  width: 100%;
+  height: 40px;
+  background: #e7eeff;
+  border-radius: 10px;
+  border: none;
+  color: #2b3674;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-poppins);
+  cursor: pointer;
+  padding: 0.5vh 0.5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.search-volunteer-inactive {
+  width: 100%;
+  height: 40px;
+  background: white;
+  border-radius: 10px;
+  border: none;
+  color: #e3eafc;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-poppins);
+  cursor: pointer;
+  padding: 0.5vh 0.5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.search-volunteer-text {
   padding-left: 5%;
 }
 
@@ -122,6 +218,7 @@
   cursor: pointer;
   padding: 0.5vh 0.5vw;
   align-items: center;
+  color: #2b3674;
 }
 
 .overall-metrics-container-inactive {
@@ -130,10 +227,10 @@
   cursor: pointer;
   padding: 0.5vh 0.5vw;
   align-items: center;
+  color: #e3eafc;
 }
 
 .overall-metrics {
-  color: #2078c1;
   font-size: 15px;
   font-family: var(--font-poppins);
   font-weight: 600;
@@ -143,6 +240,7 @@
 
 .patient-container {
   display: flex;
+  padding-bottom: 30px;
 }
 
 .patient-pfp {
@@ -161,8 +259,8 @@
 }
 
 .user-name {
-  color: #0065b8;
-  font-size: 15px;
+  color: #008afc;
+  font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;
   word-wrap: break-word;
