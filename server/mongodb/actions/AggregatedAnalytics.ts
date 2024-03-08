@@ -48,6 +48,7 @@ type Result = Partial<{
 
 export const getAggregatedAnalytics = async (
   userID: string,
+  name: string,
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
 ): Promise<Partial<IAggregatedAnalyticsAll>> => {
@@ -403,6 +404,7 @@ export const getAggregatedAnalytics = async (
         if (!result.overall) return;
         finalAggregation.overall = {
           ...result.overall,
+          active: res.active,
           streak: res.streak,
           startDate: user?.startDate ?? new Date(),
           lastSessionDate: res.lastSessionMetrics.date,
@@ -415,6 +417,7 @@ export const getAggregatedAnalytics = async (
             triviaQuestionsCompleted:
               res.lastSessionMetrics.trivia.questionsAttempted,
           },
+          name,
         };
         break;
       }

@@ -116,7 +116,7 @@ export interface IAnalytics {
   userID: string;
   totalSessionsCompleted: number;
   active: boolean;
-  streak: [string];
+  streak: Days[];
   lastSessionMetrics: {
     date: Date;
     math: {
@@ -298,13 +298,19 @@ export interface IVolunteerTableEntry extends IUser {
   startDate: Date;
 }
 
+/* Single Patient Analytics Types */
+
 export interface IAggregatedAnalyticsAll
-  extends IAggregatedAnalyticsMath,
+  extends IAggregatedAnalyticsOverall,
+    IAggregatedAnalyticsMath,
     IAggregatedAnalyticsTrivia,
     IAggregatedAnalyticsReading,
-    IAggregatedAnalyticsWriting {
+    IAggregatedAnalyticsWriting {}
+
+export interface IAggregatedAnalyticsOverall {
   overall: {
-    streak: string[];
+    active: boolean;
+    streak: Days[];
     startDate: Date;
     lastSessionDate: Date;
     totalSessionsCompleted: number;
@@ -315,6 +321,7 @@ export interface IAggregatedAnalyticsAll
       promptsCompleted: number;
       triviaQuestionsCompleted: number;
     };
+    name: string;
   };
 }
 
@@ -375,3 +382,40 @@ export interface IAggregatedOverallAnalytics {
   totalUsers: number;
   activeHistory: DataRecord[];
 }
+
+/* Group Patient Analytics Types */
+
+export interface IAggregatedGroupAnalyticsAll
+  extends IAggregatedGroupAnalyticsOverall,
+    IAggregatedGroupAnalyticsMath,
+    IAggregatedGroupAnalyticsReading,
+    IAggregatedGroupAnalyticsWriting,
+    IAggregatedGroupAnalyticsTrivia {}
+
+export type IAggregatedGroupAnalyticsOverall = {
+  overall: Omit<
+    IAggregatedAnalyticsOverall["overall"],
+    "name" | "streak" | "active" | "startDate" | "lastSessionDate"
+  > & {
+    totalUsers: number;
+    activeUsers: number;
+  };
+};
+export type IAggregatedGroupAnalyticsMath = IAggregatedAnalyticsMath;
+export type IAggregatedGroupAnalyticsTrivia = IAggregatedAnalyticsTrivia;
+export type IAggregatedGroupAnalyticsReading = {
+  reading: Omit<IAggregatedAnalyticsReading["reading"], "lastSession"> & {
+    lastSession: Omit<
+      IAggregatedAnalyticsReading["reading"]["lastSession"],
+      "completed"
+    >;
+  };
+};
+export type IAggregatedGroupAnalyticsWriting = {
+  writing: Omit<IAggregatedAnalyticsWriting["writing"], "lastSession"> & {
+    lastSession: Omit<
+      IAggregatedAnalyticsWriting["writing"]["lastSession"],
+      "completed"
+    >;
+  };
+};

@@ -11,24 +11,34 @@ import {
   BarChartIcon,
 } from "@src/app/icons";
 import { CSSProperties, ReactNode } from "react";
-import { Days } from "@/common_utils/types";
+import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import ActiveIndicatorBox from "@src/components/ActiveIndicatorBox/ActiveIndicatorBox";
+import DateSelector from "@src/components/DateSelector/DateSelector";
 import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
 import styles from "./OverallDashboard.module.scss";
 
 interface Params {
+  active: boolean;
+  name: string;
   streak: Days[];
   startDate: Date;
-  endDate: Date;
+  lastSessionDate: Date;
+  lastSession: {
+    mathQuestionsCompleted: number;
+    wordsRead: number;
+    promptsCompleted: number;
+    triviaQuestionsCompleted: number;
+  };
   sessionCompletionHistory: D3Data["data"];
   style?: CSSProperties;
+  menuState: [
+    selectedValue: DateRangeEnum,
+    setSelectedvalue: (value: DateRangeEnum) => void,
+  ];
 
   // Need to update with the schema of the response we will get from the backend
 }
-
-// For the name of the user it would be really useful to have a reducer store this information globally during authentication (like in the mobile app)
-const currentUser = "John Doe";
 
 const options: Intl.DateTimeFormatOptions = {
   weekday: "short",
@@ -75,13 +85,19 @@ export default function OverallDashboard(params: Params) {
           className={styles.title}
           style={{ color: "#a3aed0", marginLeft: "62px" }}
         >
-          {currentUser}
+          {params.name}
         </p>
         <ActiveIndicatorBox
-          active
+          active={params.active}
           style={{ marginLeft: "17px", marginRight: "10px" }}
         />
         <IGI />
+        <div className={styles.dateSelector}>
+          <DateSelector
+            selectedValue={params.menuState[0]}
+            setSelectedValue={params.menuState[1]}
+          />
+        </div>
         {/* <Dropdown style={{ marginLeft: "auto" }} /> */}
       </div>
       <WeeklyProgress days={params.streak} />
@@ -95,8 +111,8 @@ export default function OverallDashboard(params: Params) {
           />
           <SmallDataBox
             className={styles.box}
-            title="End Date"
-            text={formatDate(params.endDate)}
+            title="Date of Last Session"
+            text={formatDate(params.lastSessionDate)}
             Icon={PF}
           />
           <SmallDataBox
@@ -124,14 +140,14 @@ export default function OverallDashboard(params: Params) {
               <SmallDataBox
                 className={styles.box}
                 title="Questions Completed"
-                text={"10"}
+                text={params.lastSession.mathQuestionsCompleted.toString()}
                 Icon={SQ}
                 Chip={() => <Chip color="#FF9FB34D">Math</Chip>}
               />
               <SmallDataBox
                 className={styles.box}
                 title="Prompts Completed"
-                text={"20"}
+                text={params.lastSession?.promptsCompleted.toString()}
                 Icon={DI}
                 Chip={() => <Chip color="#32D29633">Writing</Chip>}
               />
@@ -140,14 +156,14 @@ export default function OverallDashboard(params: Params) {
               <SmallDataBox
                 className={styles.box}
                 title="Words Read Per Min"
-                text={"24.8"}
+                text={params.lastSession.wordsRead.toString()}
                 Icon={BI}
                 Chip={() => <Chip color="#008AFC1A">Reading</Chip>}
               />
               <SmallDataBox
                 className={styles.box}
                 title="Questions Completed"
-                text={"13"}
+                text={params.lastSession.triviaQuestionsCompleted.toString()}
                 Icon={QI}
                 Chip={() => <Chip color="#FBBC054D">Trivia</Chip>}
               />
