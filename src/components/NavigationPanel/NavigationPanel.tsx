@@ -50,15 +50,13 @@ const NavigationPanel = ({ onClick }: Props) => {
       />
       <div className={styles["text-wrapper"]}>
         <span className={styles.bei}>Brain Exercise Initiative</span>
-        {user.role === Role.NONPROFIT_ADMIN ? (
+        {user.role !== Role.NONPROFIT_VOLUNTEER ? (
           <span className={styles["admin-portal"]}>Admin Portal</span>
         ) : (
-          user.role === Role.NONPROFIT_PATIENT && (
-            <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
-          )
+          <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
         )}
         <div className={styles.divider} />
-        {user.role === Role.NONPROFIT_ADMIN && (
+        {user.role !== Role.NONPROFIT_VOLUNTEER && (
           <>
             <div className={styles["volunteer-management"]}>
               Volunteer Management
