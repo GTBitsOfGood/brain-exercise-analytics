@@ -1,16 +1,8 @@
 .volunteerGridWrapper {
-  max-width: 1000px;
-  margin: 20px auto;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: #ffffff;
-  color: #2b3674;
-  font-size: 15.988px;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: -0.32px;
-  height: 57vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .table {
@@ -25,50 +17,6 @@
 
 .topRowContainer {
   padding: 10px 15px;
-}
-
-.actionsContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  flex-direction: row;
-}
-
-.approveButton {
-  border-radius: 10px;
-  background: rgba(50, 210, 150, 0.2);
-  cursor: pointer;
-  display: flex;
-  padding: 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  color: #2b3674;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20.968px; /* 174.737% */
-  letter-spacing: -0.24px;
-}
-
-.denyButton {
-  border-radius: 10px;
-  background: rgba(240, 80, 110, 0.2);
-  cursor: pointer;
-  display: flex;
-  padding: 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  color: #2b3674;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20.968px; /* 174.737% */
-  letter-spacing: -0.24px;
 }
 
 .pageButton {

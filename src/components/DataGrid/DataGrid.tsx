@@ -5,9 +5,8 @@ import { SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 import styles from "./DataGrid.module.css";
 
-export interface GridDataParams<T> {
+export interface GridDataParams {
   columns: GridColDef[];
-  rows: T[];
   sortField: SortField | undefined;
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
   ColumnSizes: React.FC;
@@ -46,13 +45,13 @@ function SortButton({
   );
 }
 
-export default function DataGrid<T>({
+export default function DataGrid({
   columns,
   sortField,
   setSortField,
   ColumnSizes,
   Rows,
-}: GridDataParams<T>) {
+}: GridDataParams) {
   return (
     <div className={styles.DataGrid}>
       <div className={styles.Container}>

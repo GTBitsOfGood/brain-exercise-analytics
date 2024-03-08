@@ -1,120 +1,83 @@
-import React, { useState, useMemo } from "react";
+"use client";
+
+import React, { useCallback, useState } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
-import { SortField } from "@/common_utils/types";
-import { classes } from "@src/utils/utils";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod, IUser, Role, SortField } from "@/common_utils/types";
+import { GridColDef } from "@src/utils/types";
+import { sampleUsers } from "@src/utils/patients";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
+import Row from "./Row/Row";
 
-interface IVolunteer {
-  id: number;
-  name: string;
-  title: string;
-  dateJoined: string;
-  status: boolean;
-}
-
-interface GridColDef<T> {
-  field: string;
-  headerName: string;
-  sortable?: boolean;
-  renderCell?: (params: T) => JSX.Element;
-}
-
-const volunteersColumns: GridColDef<IVolunteer>[] = [
-  { field: "name", headerName: "Name", sortable: true },
-  { field: "title", headerName: "Title", sortable: true },
-  { field: "dateJoined", headerName: "Date Joined", sortable: true },
-  { field: "status", headerName: "Status", sortable: true },
+const volunteersColumns: GridColDef[] = [
+  { field: "firstName", headerName: "Name", sortable: true },
+  { field: "startDate", headerName: "Date Joined", sortable: true },
+  { field: "role", headerName: "Access Level", sortable: true },
+  { field: "active", headerName: "Status", sortable: true },
   { field: "actions", headerName: "", sortable: false },
 ];
 
-const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
+const VolunteerGrid: React.FC<{ data: IUser[] }> = ({ data }) => {
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const itemsPerPage = 10;
   const pageCount = Math.ceil(data.length / itemsPerPage);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [deleteVolunteerId, setDeleteVolunteerId] = useState<number | null>(
+  const [deleteVolunteerId, setDeleteVolunteerId] = useState<string | null>(
     null,
   );
-  const [excludedIds, setExcludedIds] = useState<number[]>([]);
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deleteVolunteerId !== null) {
-      setExcludedIds((current) => [...current, deleteVolunteerId]);
-      // eslint-disable-next-line
-      data = data.filter(
-        (volunteer) =>
-          !excludedIds.includes(volunteer.id) &&
-          volunteer.id !== deleteVolunteerId,
-      );
+      await internalRequest({
+        url: "/api/volunteer",
+        method: HttpMethod.DELETE,
+        body: {
+          email: "volunteerEmail@email.com",
+        },
+      });
+
       setDeleteVolunteerId(null);
     }
     setPopupOpen(false);
   };
 
-  const handleClosePopup = () => {
+  const handleClosePopup = useCallback(() => {
     setPopupOpen(false);
     setDeleteVolunteerId(null);
-  };
+  }, []);
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = useCallback(async (id: string) => {
     setDeleteVolunteerId(id);
     setPopupOpen(true);
-  };
-
-  const currentItems = useMemo(() => {
-    const start = currentPage * itemsPerPage;
-    const end = start + itemsPerPage;
-    return data
-      .filter((volunteer) => !excludedIds.includes(volunteer.id))
-      .slice(start, end);
-  }, [currentPage, itemsPerPage, data, excludedIds]);
+  }, []);
 
   function ColumnSizes() {
     return (
       <colgroup>
         <col style={{ width: "20%" }} />
+        <col style={{ width: "15%" }} />
         <col style={{ width: "20%" }} />
         <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
+        <col style={{ width: "11%" }} />
       </colgroup>
     );
   }
 
-  // Construct Rows from the currentItems
-  const Rows = currentItems.map((volunteer) => (
-    <tr className={styles.row} key={volunteer.id}>
-      <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.name}</div>
-      </td>
-      <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.title}</div>
-      </td>
-      <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.dateJoined}</div>
-      </td>
-      <td className={classes(styles.RowCell, styles.statusContainer)}>
-        <label className={styles.statusToggle}>
-          <input type="checkbox" />
-          <span />
-        </label>
-        <span className={styles.RowCellContainer}>
-          {volunteer.status ? "Active" : "Inactive"}
-        </span>
-      </td>
-      <td>
-        <text
-          className={classes(styles.RowCellContainer, styles.deleteButton)}
-          onClick={() => handleDeleteClick(volunteer.id)}
-        >
-          Delete Account
-        </text>
-      </td>
-    </tr>
-  ));
+  // Construct Rows from the sampleUsers
+  const Rows = sampleUsers.map((volunteer) => {
+    // changing the role of sampleUsers for testing purposes. Remove this once integrated with actual data.
+    const v: IUser = { ...volunteer, role: Role.NONPROFIT_VOLUNTEER };
+    return (
+      <Row
+        key={`volunteer-${volunteer._id}`}
+        volunteer={v}
+        handleDeleteClick={handleDeleteClick}
+      />
+    );
+  });
 
   return (
     <div className={styles.volunteerGridWrapper}>
@@ -123,7 +86,6 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
           columns={volunteersColumns}
           sortField={sortField}
           setSortField={setSortField}
-          rows={currentItems}
           ColumnSizes={ColumnSizes}
           Rows={Rows}
         />
