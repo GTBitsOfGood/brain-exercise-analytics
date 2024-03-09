@@ -82,6 +82,12 @@
   padding-top: 4%;
 }
 
+.roleField {
+  display: flex;
+  flex-direction: column;
+  padding-top: 4%;
+}
+
 .cityStateFields {
   display: flex;
   column-gap: 10px;

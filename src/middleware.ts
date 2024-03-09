@@ -4,22 +4,24 @@ import {
   HttpMethod,
   IUser,
   AdminApprovalStatus,
-} from "@/common_utils/types";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+} from '@/common_utils/types';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   // Assume a "Cookie:nextjs=fast" header to be present on the incoming request
   // Getting cookies from the request using the `RequestCookies` API
   const path = request.nextUrl.pathname;
-  if (path === "/") {
+  return NextResponse.next();
+
+  if (path === '/') {
     return NextResponse.redirect(
-      new URL("/auth/login", request.nextUrl.origin),
+      new URL('/auth/login', request.nextUrl.origin)
     );
   }
 
   const { user = {} as IUser, keepLogged = false } = JSON.parse(
-    request.cookies.get("authUser")?.value ?? "{}",
+    request.cookies.get('authUser')?.value ?? '{}'
   ) as IAuthUserCookie;
 
   /* Unprotected routes; no need to check for user data */
@@ -40,12 +42,12 @@ export async function middleware(request: NextRequest) {
       iii. Verify is not true: redirect to /auth/email-verification if not already there
       iv. SignUp is not true: redirect to /auth/information if not already there
   */
-  if (!request.cookies.has("authUser")) {
+  if (!request.cookies.has('authUser')) {
     if (path.match(/\/auth\/(login|signup)/g)) {
       return NextResponse.next();
     }
     return NextResponse.redirect(
-      new URL("/auth/login", request.nextUrl.origin),
+      new URL('/auth/login', request.nextUrl.origin)
     );
   }
 
@@ -62,11 +64,11 @@ export async function middleware(request: NextRequest) {
   ) {
     if (
       path.match(
-        /\/auth\/(login|signup|email-verification|information|admin-approval)/g,
+        /\/auth\/(login|signup|email-verification|information|admin-approval)/g
       )
     ) {
       return NextResponse.redirect(
-        new URL("/patient/search", request.nextUrl.origin),
+        new URL('/patient/search', request.nextUrl.origin)
       );
     }
     return NextResponse.next();
@@ -82,18 +84,18 @@ export async function middleware(request: NextRequest) {
           id: user._id,
           secret: process.env.INTERNAL_SECRET,
         }),
-      },
+      }
     )
   ).json()) as { success: boolean; message: string; payload: object };
 
   /* If the response is not successful, redirect to /auth/login */
   if (!response || response.success === false || !response.payload) {
-    request.cookies.delete("authUser");
+    request.cookies.delete('authUser');
     if (path.match(/\/auth\/(login|signup)/g)) {
       return NextResponse.next();
     }
     return NextResponse.redirect(
-      new URL("/auth/login", request.nextUrl.origin),
+      new URL('/auth/login', request.nextUrl.origin)
     );
   }
 
@@ -114,11 +116,11 @@ export async function middleware(request: NextRequest) {
   ) {
     if (
       path.match(
-        /\/auth\/(login|signup|email-verification|information|admin-approval)/g,
+        /\/auth\/(login|signup|email-verification|information|admin-approval)/g
       )
     ) {
       Response = NextResponse.redirect(
-        new URL("/patient/search", request.nextUrl.origin),
+        new URL('/patient/search', request.nextUrl.origin)
       );
     } else {
       Response = NextResponse.next();
@@ -133,7 +135,7 @@ export async function middleware(request: NextRequest) {
       Response = NextResponse.next();
     } else {
       Response = NextResponse.redirect(
-        new URL("/auth/admin-approval", request.nextUrl.origin),
+        new URL('/auth/admin-approval', request.nextUrl.origin)
       );
     }
   } else if (fetchedUser.verified) {
@@ -146,7 +148,7 @@ export async function middleware(request: NextRequest) {
       Response = NextResponse.next();
     } else {
       Response = NextResponse.redirect(
-        new URL("/auth/information", request.nextUrl.origin),
+        new URL('/auth/information', request.nextUrl.origin)
       );
     }
   } else {
@@ -160,19 +162,19 @@ export async function middleware(request: NextRequest) {
       Response = NextResponse.next();
     } else {
       Response = NextResponse.redirect(
-        new URL("/auth/email-verification", request.nextUrl.origin),
+        new URL('/auth/email-verification', request.nextUrl.origin)
       );
     }
   }
 
   Response.cookies.set(
-    "authUser",
+    'authUser',
     JSON.stringify({ user: fetchedUser, keepLogged }),
-    keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
+    keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined
   );
   return Response;
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

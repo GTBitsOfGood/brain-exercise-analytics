@@ -1,6 +1,7 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+  /* background: red; */
 }
 
 .text-wrapper {
@@ -10,7 +11,7 @@
   height: 20%;
 }
 
-.welcome {
+.bei {
   font-family: var(--font-poppins);
   color: black;
   font-size: 48px;
@@ -19,7 +20,7 @@
   padding-bottom: 1%;
 }
 
-.bei {
+.slogan {
   color: black;
   font-size: 33px;
   font-family: var(--font-poppins);
