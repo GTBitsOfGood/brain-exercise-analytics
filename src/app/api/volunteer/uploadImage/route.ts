@@ -3,10 +3,11 @@ import APIWrapper from "@server/utils/APIWrapper";
 export const POST = APIWrapper({
   config: {
     requireToken: true,
+    requireVolunteer: true,
   },
   handler: async () => {
     return {
-      test: "Hello world",
+      message: "Hello from Tuan",
     };
   },
 });

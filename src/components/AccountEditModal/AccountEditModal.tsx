@@ -6,6 +6,8 @@ import { formatPhoneNumber } from "@src/utils/utils";
 import { update, logout } from "../../redux/reducers/authReducer/index";
 import styles from "./AccountEditModal.module.css";
 import ActiveIndicatorBox from "../ActiveIndicatorBox/ActiveIndicatorBox";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod } from "@/common_utils/types";
 
 const Modal = () => {
   const [edit, setEdit] = useState<boolean>(false);
@@ -20,7 +22,7 @@ const Modal = () => {
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
   const [updatedName, setUpdatedName] = useState<string>(
-    `${firstName} ${lastName}`,
+    `${firstName} ${lastName}`
   );
   const [updatedPhoneNumber, setUpdatedPhoneNumber] =
     useState<string>(phoneNumber);
@@ -36,11 +38,11 @@ const Modal = () => {
     return `${month}/${day}/${year}`;
   }
   const [unupdatedBirthDate, setUnupdatedBirthDate] = useState(
-    new Date(birthDate),
+    new Date(birthDate)
   );
   const [updatedBirthDate, setUpdatedBirthDate] = useState(new Date(birthDate));
   const [updatedBirthDateInput, setUpdatedBirthDateInput] = useState(
-    formatDateToString(new Date(birthDate)),
+    formatDateToString(new Date(birthDate))
   );
 
   useEffect(() => {
@@ -76,7 +78,7 @@ const Modal = () => {
         patientDetails: {
           ...patientDetails,
         },
-      }),
+      })
     );
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
@@ -109,6 +111,14 @@ const Modal = () => {
     if (rawValue.length > 10) return;
     setUpdatedPhoneNumber(rawValue);
   };
+  const handleChangeImage = async () => {
+    const ret = await internalRequest({
+      url: "/api/volunteer/uploadImage",
+      method: HttpMethod.POST,
+      body: {},
+    });
+    console.log(ret);
+  };
 
   return (
     <div className={styles.container}>
@@ -123,10 +133,12 @@ const Modal = () => {
       <div className={styles.info}>
         {/* <span onClick={closeModal}>&times;</span> */}
         <div className={styles.header}>
-          <img
-            src="https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/141.jpg"
-            alt="Description of the image"
-          />
+          <button onClick={handleChangeImage}>
+            <img
+              src="https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/141.jpg"
+              alt="Description of the image"
+            />
+          </button>
           <div className={styles.myContainer}>
             <div className={styles.first}>
               <label>{`${firstName} ${lastName}`}</label>
