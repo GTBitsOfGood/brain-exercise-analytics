@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Country, State, City } from "country-state-city";
@@ -132,6 +132,27 @@ export default function Page() {
       setShowGeneralError(true);
     }
   };
+
+  useEffect(() => {
+    const handleEnterKeyPress = (e: { key: string }) => {
+      if (e.key === "Enter") {
+        redirect();
+      }
+    };
+
+    window.addEventListener("keydown", handleEnterKeyPress);
+
+    return () => window.removeEventListener("keydown", handleEnterKeyPress);
+  }, [
+    firstName,
+    lastName,
+    number,
+    locCountry,
+    locState,
+    locCity,
+    role,
+    chapter,
+  ]);
 
   return (
     <Layout>

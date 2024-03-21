@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CheckBox,
   CheckBoxOutlineBlank,
@@ -109,6 +109,20 @@ export default function Page() {
   };
 
   const CheckIcon = keepLogged ? CheckBox : CheckBoxOutlineBlank;
+
+  useEffect(() => {
+    const handleKeyDown = (event: { key: string }) => {
+      if (event.key === "Enter") {
+        handleEmailSignIn();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [email, password]);
 
   return (
     <Layout>

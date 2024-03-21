@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
@@ -111,6 +111,19 @@ export default function Page() {
 
   const handleGoogleSignIn = async () => handleSignUp(googleSignIn);
 
+  useEffect(() => {
+    const handleKeyDown = (e: { key: string }) => {
+      if (e.key === "Enter") {
+        handleEmailSignUp();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [email, password, confirmPassword]);
   return (
     <Layout>
       <span className={styles.signUpLabel}>Create an account</span>
