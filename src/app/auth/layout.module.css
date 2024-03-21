@@ -1,0 +1,39 @@
+.screen {
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splitScreen {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.leftPanel {
+  flex: 60%;
+  background-color: #f4f7fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.rightPanel {
+  flex: 40%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.rightContainer {
+  width: 74%;
+  height: 65%;
+}
