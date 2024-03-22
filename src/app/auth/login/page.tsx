@@ -187,6 +187,20 @@ export default function Page() {
         </div>
       </div>
 
+      <div className={styles.checkboxContainer}>
+        <div className={styles.checkboxLabel}>
+          <CheckIcon
+            className={styles.checkboxIcon}
+            sx={{ width: "18px" }}
+            onClick={toggleKeepMeLoggedIn}
+          />
+          <p>Keep me logged in</p>
+        </div>
+        <a className={styles.forgotPassword} href="/auth/password-reset">
+          Forgot password?
+        </a>
+      </div>
+
       {showGeneralError && (
         <div className={styles.generalError}>
           <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />

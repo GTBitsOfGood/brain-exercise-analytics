@@ -28,6 +28,7 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
     options,
     value,
     title,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     required,
     placeholder,
     showError,
