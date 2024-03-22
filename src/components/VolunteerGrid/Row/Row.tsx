@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useState } from "react";
 import { HttpMethod, IUser, Role } from "@/common_utils/types";
 import { SelectChangeEvent } from "@mui/material";
@@ -14,7 +16,7 @@ interface Props {
   handleDeleteClick: (id: string) => void;
 }
 
-export default function Row({ volunteer, handleDeleteClick }: Props) {
+export function Row({ volunteer, handleDeleteClick }: Props) {
   // Role of user corresponding to the given row
   const [updatedRole, setUpdatedRole] = useState(volunteer.role);
   const [updatedActive, setUpdatedActive] = useState(
