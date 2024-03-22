@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
@@ -75,16 +75,27 @@ export default function Page() {
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: { key: string }) => {
+      if (e.key === "Enter") {
+        continueButtonFunction();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [firstName, lastName, email]);
+
   return (
     <Layout>
       {!validateInputs && (
         <div className={styles["right-container"]}>
-          <span className={styles["password-reset"]}>Account Recovery</span>
+          <span className={styles["password-reset"]}>Account recovery</span>
           <p className={styles.description}>
             If you&apos;ve forgotten your password, you&apos;ll need to reset
-            your password to proceed.
-            <br />
-            Please complete the form below to reset your account.
+            your password to proceed. Please complete the form below to reset
+            your account.
           </p>
           <div className={styles.inputs}>
             <div className={styles["first-last-name"]}>

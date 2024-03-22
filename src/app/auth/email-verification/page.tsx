@@ -79,7 +79,7 @@ export default function Page() {
       )}
       {loadingState === State.SUCCESS && (
         <div className={styles["right-container"]}>
-          <span className={styles["password-reset"]}>Email has been sent!</span>
+          <span className={styles["password-reset"]}>Email sent!</span>
           <p className={styles.description}>
             We&apos;ve sent an email verification link to your inbox. Please use
             the link provided in the email to verify your email and proceed.
