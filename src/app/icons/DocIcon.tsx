@@ -55,11 +55,10 @@
 
 // export default DocIcon;
 
-
 // import React from 'react';
 
 // interface DocIconProps {
-//   className?: string; 
+//   className?: string;
 // }
 
 // const DocIcon: React.FC<DocIconProps> = ({ className }) => (
@@ -93,7 +92,7 @@
 //   <svg
 //     width="14"
 //     height="17"
-//     viewBox="-1 -1 17 20" 
+//     viewBox="-1 -1 17 20"
 //     fill="none"
 //     xmlns="http://www.w3.org/2000/svg"
 //     className={className}
@@ -111,22 +110,22 @@
 
 // export default DocIcon;
 
-import React from 'react';
+import React from "react";
 
 interface DocIconProps {
   className?: string;
-  isActive?: boolean; 
+  isActive?: boolean;
 }
 
-const DocIcon: React.FC<DocIconProps> = ({ className, isActive }) => (
+const DocIcon = ({ className, isActive }: DocIconProps) => (
   <svg
     width="14"
     height="17"
-    viewBox="-1 -1 17 20" 
+    viewBox="-1 -1 17 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ verticalAlign: 'middle' }}
+    style={{ verticalAlign: "middle" }}
   >
     <path
       d="M3.82471 7.03664H9.94729M3.82471 13.1592H9.94729M3.82471 10.0979H6.886M0.763428 15.7613V1.37326C0.763428 1.25147 0.811807 1.13467 0.897922 1.04856C0.984038 0.962442 1.10084 0.914062 1.22262 0.914062H10.1401C10.2619 0.91417 10.3786 0.962619 10.4646 1.04876L12.8739 3.45799C12.9167 3.50077 12.9507 3.5516 12.9738 3.60756C12.9969 3.66351 13.0087 3.72348 13.0086 3.78402V15.7613C13.0086 15.8216 12.9967 15.8813 12.9736 15.937C12.9505 15.9927 12.9167 16.0434 12.8741 16.086C12.8314 16.1286 12.7808 16.1625 12.7251 16.1855C12.6694 16.2086 12.6097 16.2205 12.5494 16.2205H1.22262C1.16232 16.2205 1.10261 16.2086 1.0469 16.1855C0.991183 16.1625 0.940562 16.1286 0.897922 16.086C0.855282 16.0434 0.821458 15.9927 0.798382 15.937C0.775305 15.8813 0.763428 15.8216 0.763428 15.7613Z"

@@ -5,11 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 //   faMagnifyingGlass,
 //   faUser,
 // } from "@fortawesome/free-solid-svg-icons";
-import {
-  SearchIcon, 
-  BarChartIcon,
-  PersonIcon,
-} from "@src/app/icons"
+import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Role, IUser } from "@/common_utils/types";
 import { RootState } from "@src/redux/rootReducer";
@@ -46,7 +42,6 @@ const NavigationPanel = ({ onClick }: Props) => {
     [currentPath],
   );
 
-
   return (
     <div className={styles.wrapper}>
       <img
@@ -56,15 +51,13 @@ const NavigationPanel = ({ onClick }: Props) => {
       />
       <div className={styles["text-wrapper"]}>
         <span className={styles.bei}>Brain Exercise Initiative</span>
-        {user.role === Role.NONPROFIT_ADMIN ? (
+        {user.role !== Role.NONPROFIT_VOLUNTEER ? (
           <span className={styles["admin-portal"]}>Admin Portal</span>
         ) : (
-          user.role === Role.NONPROFIT_PATIENT && (
-            <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
-          )
+          <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
         )}
         <div className={styles.divider} />
-        {user.role === Role.NONPROFIT_ADMIN && (
+        {user.role !== Role.NONPROFIT_VOLUNTEER && (
           <>
             <div className={styles["volunteer-management"]}>
               Volunteer Management
@@ -153,7 +146,7 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles["metrics-container"]}>
           <div
             className={`${styles[`overall-metrics-container-${isDashboard ? "active" : "inactive"}`]} ${!isDashboard ? styles.disabled : ""}`}
-            onClick={() => document.location.replace(`${"overall"}`)} //changed? -> but causes url to be wonky. router.push("/patient/dashboard")}
+            onClick={() => document.location.replace(`${"overall"}`)} // changed? -> but causes url to be wonky. router.push("/patient/dashboard")}
           >
             <div className={styles["icon-shadow"]}>
               {/* <BarChartIcon className={`icon-${isDashboard ? "active" : "inactive"}`} /> */}
@@ -164,9 +157,10 @@ const NavigationPanel = ({ onClick }: Props) => {
                 icon={faChartSimple}
                 size="sm"
               /> */}
-              <BarChartIcon className={`icon-${isDashboard ? "active" : "inactive"}`} />
+              <BarChartIcon
+                className={`icon-${isDashboard ? "active" : "inactive"}`}
+              />
               {/* <BarChartIcon className={"icon-inactive"} /> */}
-
             </div>
             <div className={styles["overall-metrics"]}>
               <span>Patient Analytics</span>
@@ -195,4 +189,3 @@ const NavigationPanel = ({ onClick }: Props) => {
 };
 
 export default NavigationPanel;
-

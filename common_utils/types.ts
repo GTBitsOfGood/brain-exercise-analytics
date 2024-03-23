@@ -37,6 +37,9 @@ export enum Role {
   NONPROFIT_PATIENT = "Nonprofit Patient",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_ADMIN = "Nonprofit Admin",
+  NONPROFIT_CHAPTER_PRESIDENT = "Nonprofit Chapter President",
+  NONPROFIT_REGIONAL_COMMITTEE_MEMBER = "Nonprofit Regional Committee Member",
+  NONPROFIT_DIRECTOR = "Nonprofit Director",
 }
 
 export enum Days {
@@ -75,11 +78,13 @@ export interface IUser {
   // the unqiue id assigned to a user. Let MongoDB create this when you insert a document
   // without any_id attribute
   _id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
+  birthDate: Date;
+  startDate: Date;
   patientDetails: {
-    birthDate: Date;
     secondaryContactName: string;
     secondaryContactPhone: string;
     additionalAffiliation: string;
@@ -97,6 +102,7 @@ export interface IUser {
   verified: boolean;
   approved: AdminApprovalStatus;
   role: Role;
+  imageLink: string;
 }
 
 export interface IVerificationLog {
@@ -109,7 +115,6 @@ export interface IAnalytics {
   _id?: string;
   userID: string;
   totalSessionsCompleted: number;
-  startDate: Date;
   active: boolean;
   streak: [string];
   lastSessionMetrics: {
@@ -262,8 +267,17 @@ export type IPatientSearchReducer = {
 };
 
 export type VolunteerSearchParams = {
+  active?: boolean;
   name?: string;
-  approved?: AdminApprovalStatus;
+  countries?: string[];
+  states?: string[];
+  cities?: string[];
+  beiChapters?: string[];
+  dateOfBirths?: string[];
+  emails?: string[];
+  dateOfJoins?: string[];
+  approved?: AdminApprovalStatus[];
+  roles?: Role[];
 };
 
 export interface IPatientTableEntry
@@ -275,9 +289,9 @@ export interface IPatientTableEntry
     | "verified"
     | "approved"
     | "adminDetails"
+    | "imageLink"
   > {
   active: boolean;
-  startDate: Date;
 }
 
 export interface IAggregatedAnalyticsAll

@@ -15,7 +15,7 @@ import SqrtIcon from "./SqrtIcon";
 import BookIcon from "./BookIcon";
 import DocIcon from "./DocIcon";
 import QuestionIcon from "./QuestionIcon";
-
+import ClearTagIcon from "./ClearTagIcon";
 import AccuracyIcon from "./AccuracyIcon";
 import AttemptIcon from "./AttemptIcon";
 import InfoIcon from "./InfoIcon";
@@ -23,8 +23,8 @@ import PromptsIcon from "./PromptsIcon";
 import RootXIcon from "./RootXIcon";
 import TimeIcon from "./TimeIcon";
 import WritingIcon from "./WritingIcon";
-
 import SearchIcon from "./SearchIcon";
+
 export {
   BarChartIcon,
   PersonIcon,
@@ -51,4 +51,5 @@ export {
   TimeIcon,
   WritingIcon,
   SearchIcon,
+  ClearTagIcon,
 };

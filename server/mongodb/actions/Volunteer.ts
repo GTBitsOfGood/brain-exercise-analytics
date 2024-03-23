@@ -1,5 +1,4 @@
 import {
-  AdminApprovalStatus,
   IUser,
   RecursivePartial,
   Role,
@@ -13,104 +12,113 @@ import User from "../models/User";
 import { deleteVerificationLogByEmail } from "./VerificationLog";
 
 type VParam = {
-  name?: RegExp;
   role?: object;
-  approved?: AdminApprovalStatus;
+  approved?: object;
+  active?: boolean;
+  "location.country"?: object;
+  "location.state"?: object;
+  "location.city"?: object;
+  beiChapter?: object;
+  birthDate?: object;
+  email?: object;
+  joinDate?: object;
 };
+
+interface Body<T extends object> extends SearchRequestBody<T> {
+  allowedRoles: Role[];
+}
 
 export const getVolunteersFiltered = async ({
   params: paramsObject,
   page,
   sortParams,
-}: SearchRequestBody<VolunteerSearchParams>): Promise<
+  allowedRoles,
+}: Body<VolunteerSearchParams>): Promise<
   SearchResponseBody<IUser[]> | undefined
 > => {
   const numOfItems = 8;
 
   const userParamsObject = {} as VParam;
-  if (paramsObject.name) {
-    userParamsObject.name = new RegExp(paramsObject.name, `i`);
-  }
   if (paramsObject.approved !== undefined) {
-    userParamsObject.approved = paramsObject.approved;
+    userParamsObject.approved = { $in: paramsObject.approved };
   }
+
+  const allowedAdminRoles = allowedRoles.filter(
+    (role) => role !== Role.NONPROFIT_PATIENT,
+  );
   userParamsObject.role = {
-    $ne: Role.NONPROFIT_PATIENT,
+    $nin: paramsObject.roles
+      ? paramsObject.roles.filter((role) => allowedAdminRoles.includes(role))
+      : allowedRoles,
   };
 
-  // if (paramsObject.name) {
-  //   userParamsObject.name = new RegExp(paramsObject.name, `i`);
-  // }
-  // if (paramsObject.emails) {
-  //   userParamsObject.email = { $in: paramsObject.emails };
-  // }
-  // if (paramsObject.secondaryNames) {
-  //   userParamsObject["patientDetails.secondaryContactName"] = {
-  //     $in: paramsObject.secondaryNames.map(
-  //       (secondaryName) => new RegExp(secondaryName, `i`),
-  //     ),
-  //   };
-  // }
-  // if (paramsObject.secondaryPhones) {
-  //   userParamsObject["patientDetails.secondaryContactPhone"] = {
-  //     $in: paramsObject.secondaryPhones,
-  //   };
-  // }
-  // if (paramsObject.countries) {
-  //   userParamsObject["location.country"] = { $in: paramsObject.countries };
-  // }
-  // if (paramsObject.states) {
-  //   userParamsObject["location.state"] = { $in: paramsObject.states };
-  // }
-  // if (paramsObject.cities) {
-  //   userParamsObject["location.city"] = { $in: paramsObject.cities };
-  // }
-  // if (paramsObject.additionalAffiliations) {
-  //   userParamsObject.additionalAffiliation = {
-  //     $in: paramsObject.additionalAffiliations,
-  //   };
-  // }
-  // if (paramsObject.beiChapters) {
-  //   userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
-  // }
-  // if (paramsObject.active !== undefined) {
-  //   userParamsObject["analyticsRecords.active"] = paramsObject.active;
-  // }
-  //  if (paramsObject.dateOfBirths) {
-  //   matchPipeline.$match.$and!.push({
-  //     $expr: {
-  //       $in: [
-  //         {
-  //           $dateToString: {
-  //             date: "$patientDetails.birthDate",
-  //             format: "%m-%d-%Y",
-  //           },
-  //         },
-  //         paramsObject.dateOfBirths,
-  //       ],
-  //     },
-  //   });
-  // }
-
-  // if (paramsObject.dateOfJoins) {
-  //   matchPipeline.$match.$and!.push({
-  //     $expr: {
-  //       $in: [
-  //         {
-  //           $dateToString: {
-  //             date: "$analyticsRecords.startDate",
-  //             format: "%m-%d-%Y",
-  //           },
-  //         },
-  //         paramsObject.dateOfJoins,
-  //       ],
-  //     },
-  //   });
-  // }
+  if (paramsObject.emails) {
+    userParamsObject.email = { $in: paramsObject.emails };
+  }
+  if (paramsObject.countries) {
+    userParamsObject["location.country"] = { $in: paramsObject.countries };
+  }
+  if (paramsObject.states) {
+    userParamsObject["location.state"] = { $in: paramsObject.states };
+  }
+  if (paramsObject.cities) {
+    userParamsObject["location.city"] = { $in: paramsObject.cities };
+  }
+  if (paramsObject.beiChapters) {
+    userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
+  }
+  if (paramsObject.active !== undefined) {
+    userParamsObject.active = paramsObject.active;
+  }
 
   const matchPipeline = {
     $match: { $and: [userParamsObject] },
   } as PipelineStage.Match;
+
+  if (paramsObject.name) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $regexMatch: {
+          input: {
+            $concat: ["$firstName", " ", "$lastName"],
+          },
+          regex: new RegExp(paramsObject.name, `i`),
+        },
+      },
+    });
+  }
+
+  if (paramsObject.dateOfBirths) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $in: [
+          {
+            $dateToString: {
+              date: "$birthDate",
+              format: "%m-%d-%Y",
+            },
+          },
+          paramsObject.dateOfBirths,
+        ],
+      },
+    });
+  }
+
+  if (paramsObject.dateOfJoins) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $in: [
+          {
+            $dateToString: {
+              date: "$startDate",
+              format: "%m-%d-%Y",
+            },
+          },
+          paramsObject.dateOfJoins,
+        ],
+      },
+    });
+  }
 
   const sortPipeline = (
     sortParams
@@ -123,26 +131,6 @@ export const getVolunteersFiltered = async ({
   ) as PipelineStage.Sort;
 
   const userFiltering = await User.aggregate([
-    {
-      $lookup: {
-        from: "analytics",
-        localField: "_id",
-        foreignField: "userID",
-        as: "analyticsRecords",
-      },
-    },
-    {
-      $unwind: {
-        path: "$analyticsRecords",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $addFields: {
-        startDate: "$analyticsRecords.startDate",
-        active: "$analyticsRecords.active",
-      },
-    },
     matchPipeline,
     {
       $project: {

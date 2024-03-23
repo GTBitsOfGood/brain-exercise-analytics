@@ -1,7 +1,7 @@
 // import React from 'react';
 
 // interface SqrtIconProps {
-//   className?: string; 
+//   className?: string;
 // }
 
 // const SqrtIcon: React.FC<SqrtIconProps> = ({ className }) => (
@@ -29,14 +29,14 @@
 
 // export default SqrtIcon;
 
-import React from 'react';
+import React from "react";
 
 interface SqrtIconProps {
   className?: string;
-  isActive?: boolean; 
+  isActive?: boolean;
 }
 
-const SqrtIcon: React.FC<SqrtIconProps> = ({ className, isActive }) => (
+const SqrtIcon = ({ className, isActive }: SqrtIconProps) => (
   <svg
     width="29"
     height="29"
@@ -49,7 +49,7 @@ const SqrtIcon: React.FC<SqrtIconProps> = ({ className, isActive }) => (
       <path
         id="Vector"
         d="M22.9583 6.04297H14.5L9.66667 22.9596L6.04167 15.7096H3.625M16.9167 15.7096L24.1667 22.9596M16.9167 22.9596L24.1667 15.7096"
-        stroke={isActive ? "#008AFC" : "#E3EAFC"} 
+        stroke={isActive ? "#008AFC" : "#E3EAFC"}
         strokeWidth="2.41667"
         strokeLinecap="round"
         strokeLinejoin="round"

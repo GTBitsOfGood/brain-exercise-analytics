@@ -66,10 +66,11 @@ export const patientSignUp = async (
     { email: data.email },
     {
       $set: {
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         phoneNumber: data.phoneNumber,
+        birthDate: data.birthDate,
         patientDetails: {
-          birthDate: data.patientDetails.birthDate,
           secondaryContactName: data.patientDetails.secondaryContactName,
           secondaryContactPhone: data.patientDetails.secondaryContactPhone,
         },
@@ -84,7 +85,8 @@ export const patientSignUp = async (
 
 export const volunteerSignUp = async (
   email: string,
-  name: string,
+  firstName: string,
+  lastName: string,
   phoneNumber: string,
   country: string,
   state: string,
@@ -95,7 +97,8 @@ export const volunteerSignUp = async (
     { email },
     {
       $set: {
-        name,
+        firstName,
+        lastName,
         phoneNumber,
         signedUp: true,
         location: {
@@ -113,7 +116,6 @@ export const volunteerSignUp = async (
 };
 
 type UParam = {
-  name?: RegExp;
   email?: object;
   role: Role;
   "patientDetails.birthDate"?: object;
@@ -140,9 +142,6 @@ export const getUsersFiltered = async ({
     role: Role.NONPROFIT_PATIENT,
   } as UParam;
 
-  if (paramsObject.name) {
-    userParamsObject.name = new RegExp(paramsObject.name, `i`);
-  }
   if (paramsObject.emails) {
     userParamsObject.email = { $in: paramsObject.emails };
   }
@@ -183,13 +182,26 @@ export const getUsersFiltered = async ({
     $match: { $and: [userParamsObject] },
   } as PipelineStage.Match;
 
+  if (paramsObject.name) {
+    matchPipeline.$match.$and!.push({
+      $expr: {
+        $regexMatch: {
+          input: {
+            $concat: ["$firstName", " ", "$lastName"],
+          },
+          regex: new RegExp(paramsObject.name, `i`),
+        },
+      },
+    });
+  }
+
   if (paramsObject.dateOfBirths) {
     matchPipeline.$match.$and!.push({
       $expr: {
         $in: [
           {
             $dateToString: {
-              date: "$patientDetails.birthDate",
+              date: "$birthDate",
               format: "%m-%d-%Y",
             },
           },
@@ -205,7 +217,7 @@ export const getUsersFiltered = async ({
         $in: [
           {
             $dateToString: {
-              date: "$analyticsRecords.startDate",
+              date: "$startDate",
               format: "%m-%d-%Y",
             },
           },
@@ -242,7 +254,6 @@ export const getUsersFiltered = async ({
     },
     {
       $addFields: {
-        startDate: "$analyticsRecords.startDate",
         active: "$analyticsRecords.active",
       },
     },

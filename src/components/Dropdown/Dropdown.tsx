@@ -45,7 +45,7 @@ const StyledSelect = styled(Select)(() => ({
   "&.MuiOutlinedInput-root": {
     "& fieldset": {
       border: "0px solid",
-      borderRadius: "16px",
+      // borderRadius: "10px",
     },
   },
 }));
@@ -104,7 +104,7 @@ function Dropdown<T>(props: DropdownProps<T>) {
         onChange={onSelectChange as (e: SelectChangeEvent<unknown>) => void}
         style={{
           textAlign: "left",
-          borderRadius: "16px",
+          // borderRadius: "16px",
           borderWidth: "1px",
           borderStyle: "solid",
           paddingRight: "0px",

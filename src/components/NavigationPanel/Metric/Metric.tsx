@@ -3,20 +3,7 @@
 import React, { useMemo } from "react";
 import { Poppins } from "next/font/google";
 import { usePathname, useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import {
-//   faSquareRootVariable,
-//   faBookOpen,
-//   faFileLines,
-//   faCircleQuestion,
-// } from "@fortawesome/free-solid-svg-icons";
-import {
-  SqrtIcon, 
-  BarChartIcon,
-  BookIcon,
-  QuestionIcon,
-  DocIcon,
-} from "@src/app/icons"
+import { SqrtIcon, BookIcon, QuestionIcon, DocIcon } from "@src/app/icons";
 import useHash from "@src/hooks/useHash";
 import styles from "./Metric.module.css";
 
@@ -51,75 +38,63 @@ const Metric = (metricProps: MetricProps) => {
     }
     console.log(isActive);
   };
-  // const icon = useMemo(() => {
-  //   // switch (metricProps.title) {
-  //   //   case "Math":
-  //   //     return <SqrtIcon className={`analytics-icon-${isActive ? "active" : "inactive"}`} />;
-  //   //     // return faSquareRootVariable;
-  //   //   case "Reading":
-  //   //     return <BookIcon className={`analytics-icon-${isActive ? "active" : "inactive"}`} />;
-  //   //     // return faBookOpen;
-  //   //   case "Writing":
-  //   //     return <BookIcon className={`analytics-icon-${isActive ? "active" : "inactive"}`} />;
-  //   //     // return faFileLines;
-  //   //   case "Trivia":
-  //   //     return <QuestionIcon className={`analytics-icon-${isActive ? "active" : "inactive"}`} />;
-  //   //     // return faCircleQuestion;
-  //   //   default:
-  //   //     return <BarChartIcon className={`analytics-icon-${isActive ? "active" : "inactive"}`} />;
-  //   //     // return faSquareRootVariable;
-  //   // }
-  //   // switch (metricProps.title) {
-  //   //   case "Math":
-  //   //     return <SqrtIcon className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //   //   case "Reading":
-  //   //     return <BookIcon className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //   //   case "Writing":
-  //   //     return <DocIcon className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //   //   case "Trivia":
-  //   //     return <QuestionIcon className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //   //   default:
-  //   //     return <BarChartIcon className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //   // }
-  //   switch (metricProps.title) {
-  //     case "Math":
-  //       return <SqrtIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //     case "Reading":
-  //       return <BookIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //     case "Writing":
-  //       return <DocIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //     case "Trivia":
-  //       return <QuestionIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-  //     default:
-  //   }
-  // }, [metricProps.title]);
-
-  let icon = null;
-  switch (metricProps.title) {
-    case "Math":
-      icon = <SqrtIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-      break;
-    case "Reading":
-      icon = <BookIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-      break;
-    case "Writing":
-      icon = <DocIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-      break;
-    case "Trivia":
-      icon = <QuestionIcon isActive={isActive} className={styles[`analytics-icon-${isActive ? "active" : "inactive"}`]} />;
-      break;
-    default:
-      break;
-  }
-  
+  const icon = useMemo(() => {
+    switch (metricProps.title) {
+      case "Math":
+        return (
+          <SqrtIcon
+            isActive={isActive}
+            className={
+              styles[`analytics-icon-${isActive ? "active" : "inactive"}`]
+            }
+          />
+        );
+      case "Reading":
+        return (
+          <BookIcon
+            isActive={isActive}
+            className={
+              styles[`analytics-icon-${isActive ? "active" : "inactive"}`]
+            }
+          />
+        );
+      case "Writing":
+        return (
+          <DocIcon
+            isActive={isActive}
+            className={
+              styles[`analytics-icon-${isActive ? "active" : "inactive"}`]
+            }
+          />
+        );
+      case "Trivia":
+        return (
+          <QuestionIcon
+            isActive={isActive}
+            className={
+              styles[`analytics-icon-${isActive ? "active" : "inactive"}`]
+            }
+          />
+        );
+      default:
+        return <></>;
+    }
+  }, [metricProps.title, isActive]);
 
   return (
     // <div className={styles.wrapper} onClick={() => handleButtonClick()}>
     // <div className={styles.wrapper} onClick={isClickable ? () => handleButtonClick() : undefined}>
-    <div className={`${styles.wrapper} ${!isClickable ? styles.disabled : ''}`} onClick={isClickable ? () => handleButtonClick() : undefined}>
+    <div
+      className={`${styles.wrapper} ${!isClickable ? styles.disabled : ""}`}
+      onClick={isClickable ? () => handleButtonClick() : undefined}
+    >
       <main className={poppins.variable}>
         <div className={styles["text-wrapper"]}></div>
-        <div className={styles[`metrics-container-${isActive ? "active" : "inactive"}`]}>
+        <div
+          className={
+            styles[`metrics-container-${isActive ? "active" : "inactive"}`]
+          }
+        >
           <div className={styles["dashboard-icon"]}>
             {icon}
             {/* <FontAwesomeIcon
@@ -140,7 +115,6 @@ const Metric = (metricProps: MetricProps) => {
 };
 
 export default Metric;
-
 
 // // new stuff
 // "use client"
@@ -173,7 +147,6 @@ export default Metric;
 //     [currentPath, metricProps.title, hash]
 //   );
 
-
 //   const isClickable = currentPath.startsWith("/patient/dashboard");
 
 //   const handleButtonClick = () => {
@@ -190,11 +163,11 @@ export default Metric;
 //       const readingRef = document.getElementById("reading");
 //       const writingRef = document.getElementById("writing");
 //       const triviaRef = document.getElementById("trivia");
-  
+
 //       if (!mathRef || !readingRef || !writingRef || !triviaRef) {
-//         return; 
+//         return;
 //       }
-  
+
 //       if (scrollY < mathRef.offsetTop - 100) {
 //         router.push("#overall");
 //       } else if (
@@ -216,14 +189,13 @@ export default Metric;
 //         router.push("#trivia");
 //       }
 //     };
-  
+
 //     window.addEventListener("scroll", handleScroll);
-  
+
 //     return () => {
 //       window.removeEventListener("scroll", handleScroll);
 //     };
 //   }, [router]);
-  
 
 //   let icon = null;
 //   switch (metricProps.title) {

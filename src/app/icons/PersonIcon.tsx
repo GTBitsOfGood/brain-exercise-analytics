@@ -34,13 +34,9 @@
 
 // export default PersonIcon;
 
-import React from 'react';
+import React from "react";
 
-interface PersonIconProps {
-  className?: string; 
-}
-
-const PersonIcon: React.FC<PersonIconProps> = ({ className }) => (
+const PersonIcon = ({ className }: { className?: string }) => (
   <svg
     width="12"
     height="16"
@@ -48,8 +44,7 @@ const PersonIcon: React.FC<PersonIconProps> = ({ className }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ verticalAlign: 'middle', marginLeft: '2px'}}
-
+    style={{ verticalAlign: "middle", marginLeft: "2px" }}
   >
     <g id="tabler:search">
       <path
@@ -65,4 +60,3 @@ const PersonIcon: React.FC<PersonIconProps> = ({ className }) => (
 );
 
 export default PersonIcon;
-

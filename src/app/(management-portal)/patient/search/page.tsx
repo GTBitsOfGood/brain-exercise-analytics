@@ -113,9 +113,7 @@ export default function Page() {
   return (
     <div className={styles.container}>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>
-          To begin viewing analytics, search for a patient here!
-        </p>
+        <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
         <div className={styles["search-wrapper"]}>
           <Search />
         </div>

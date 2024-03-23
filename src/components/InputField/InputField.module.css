@@ -11,7 +11,7 @@
 
 .input-label {
   color: #2b3674;
-  font-size: 13px;
+  font-size: 12px;
   font-family: var(--font-poppins);
   font-weight: 600;
   line-height: 14px;
@@ -21,7 +21,7 @@
 
 .asterisk {
   color: #005aa3;
-  font-size: 13px;
+  font-size: 12px;
   font-family: var(--font-poppins);
   font-weight: 500;
   line-height: 14px;
@@ -37,7 +37,7 @@
   width: 100%;
   font-size: 12px;
   font-family: var(--font-poppins);
-  font-weight: 500;
+  /* font-weight: 500; */
   line-height: 35px;
   word-wrap: break-word;
   resize: none;
@@ -97,4 +97,14 @@
   color: #ff0000;
   padding-left: 5px;
   font-size: 11px;
+}
+.icon-container {
+  display: flex;
+  flex-direction: row;
+}
+.icon {
+  padding-left: 17px;
+  display: flex;
+  align-items: center;
+  color: #8f9bba;
 }

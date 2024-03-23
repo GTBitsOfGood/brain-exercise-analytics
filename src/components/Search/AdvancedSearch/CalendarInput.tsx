@@ -20,15 +20,18 @@ const StyledDatePicker = styled(DatePicker)(() => ({
   "& .MuiInputBase-root": {
     fontSize: 12,
     fontFamily: poppins500.style.fontFamily,
+    borderRadius: "10px",
+    color: "orange",
   },
   "& .MuiOutlinedInput-root": {
-    height: "30px",
+    height: "31px",
     "& fieldset": {
-      border: "0px solid black",
+      border: "0px solid red",
       outline: "none",
+      borderRadius: "10",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#3b82f6",
+      borderColor: "#008AFC",
     },
   },
 })) as typeof DatePicker;

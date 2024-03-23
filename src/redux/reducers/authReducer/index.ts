@@ -10,11 +10,13 @@ import { deleteCookie } from "cookies-next";
 
 const initialState: IUser = {
   _id: "",
-  name: "",
+  firstName: "",
+  lastName: "",
   email: "",
   phoneNumber: "",
+  startDate: new Date(),
+  birthDate: new Date(),
   patientDetails: {
-    birthDate: new Date(),
     secondaryContactName: "",
     secondaryContactPhone: "",
     additionalAffiliation: "",
@@ -32,17 +34,19 @@ const initialState: IUser = {
   verified: false,
   approved: AdminApprovalStatus.PENDING,
   role: Role.NONPROFIT_PATIENT,
+  imageLink: "",
 };
 
 // Helper function to copy all properties from newState over to the existing state
 const setState = (state: IUser, newState: RecursivePartial<IUser>): IUser => {
   state._id = newState._id ?? state._id;
-  state.name = newState.name ?? state.name;
+  state.firstName = newState.firstName ?? state.firstName;
+  state.lastName = newState.lastName ?? state.lastName;
   state.email = newState.email ?? state.email;
   state.phoneNumber = newState.phoneNumber ?? state.phoneNumber;
+  state.startDate = newState.startDate ?? state.startDate;
+  state.birthDate = newState.birthDate ?? state.birthDate;
   state.patientDetails = {
-    birthDate:
-      newState.patientDetails?.birthDate ?? state.patientDetails.birthDate,
     secondaryContactName:
       newState.patientDetails?.secondaryContactName ??
       state.patientDetails.secondaryContactName,
@@ -68,6 +72,7 @@ const setState = (state: IUser, newState: RecursivePartial<IUser>): IUser => {
     newState.verified === undefined ? state.verified : newState.verified;
   state.approved = newState.approved ?? state.approved;
   state.role = newState.role ?? state.role;
+  state.imageLink = newState.imageLink ?? state.imageLink;
   return state;
 };
 

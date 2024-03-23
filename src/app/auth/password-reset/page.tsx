@@ -48,7 +48,8 @@ export default function Page() {
           method: HttpMethod.POST,
           body: {
             email,
-            name: `${firstName} ${lastName}`,
+            firstName,
+            lastName,
           },
           authRequired: false,
         });

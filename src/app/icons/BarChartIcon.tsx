@@ -31,18 +31,18 @@
 // export default BarChartIcon;
 
 // import React from 'react';
-// import styles from '../../components/NavigationPanel/NavigationPanel.module.css'; 
+// import styles from '../../components/NavigationPanel/NavigationPanel.module.css';
 // interface BarChartIconProps {
 //   className?: string; // Define className as an optional prop
 // }
 
-import React from 'react';
+import React from "react";
 
 interface BarChartIconProps {
-  className?: string; 
+  className?: string;
 }
 
-const BarChartIcon: React.FC<BarChartIconProps> = ({ className }) => (
+const BarChartIcon = ({ className }: BarChartIconProps) => (
   <svg
     width="12"
     height="12"
@@ -53,11 +53,10 @@ const BarChartIcon: React.FC<BarChartIconProps> = ({ className }) => (
   >
     <path
       d="M2.0039 4.19823H2.16029C2.76239 4.19823 3.25501 4.69086 3.25501 5.29295V10.7666C3.25501 11.3687 2.76239 11.8613 2.16029 11.8613H2.0039C1.4018 11.8613 0.90918 11.3687 0.90918 10.7666V5.29295C0.90918 4.69086 1.4018 4.19823 2.0039 4.19823ZM6.38279 0.914062C6.98489 0.914062 7.47751 1.40669 7.47751 2.00879V10.7666C7.47751 11.3687 6.98489 11.8613 6.38279 11.8613C5.78069 11.8613 5.28807 11.3687 5.28807 10.7666V2.00879C5.28807 1.40669 5.78069 0.914062 6.38279 0.914062ZM10.7617 7.16962C11.3638 7.16962 11.8564 7.66224 11.8564 8.26434V10.7666C11.8564 11.3687 11.3638 11.8613 10.7617 11.8613C10.1596 11.8613 9.66696 11.3687 9.66696 10.7666V8.26434C9.66696 7.66224 10.1596 7.16962 10.7617 7.16962Z"
-      fill={`${className=="icon-active" ? "#008afc" : "#E3EAFC"}`}
+      fill={`${className === "icon-active" ? "#008afc" : "#E3EAFC"}`}
       // fill="#E3EAFC"
     />
   </svg>
 );
 
 export default BarChartIcon;
-
