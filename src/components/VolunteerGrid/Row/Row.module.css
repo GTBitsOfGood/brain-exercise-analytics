@@ -3,11 +3,11 @@
 }
 
 .nameCellContainer {
-  padding-top: 5%;
+  padding-top: 1%;
 }
 
 .dateCellContainer {
-  padding-top: 5%;
+  padding-top: 1%;
 }
 
 .RowCell {
@@ -20,9 +20,16 @@
   border-bottom: none;
 }
 
+.RowCell > button {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
 .RowCellContainer {
   width: 100%;
-  height: 100%;
   color: #2b3674;
   white-space: nowrap;
   overflow: hidden;
@@ -33,8 +40,90 @@
   font-weight: 600;
   padding-left: 7px;
 }
+
 .RowCellContainer::-webkit-scrollbar {
   display: none;
+}
+
+.ExpandedRow {
+  width: 100%;
+  border-radius: 5px;
+  background-color: var(--Selected-Blue, #e7eeff);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.ExpandedRowContainer {
+  display: flex;
+  width: min-content;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: var(--Selected-Blue, #e7eeff);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  column-gap: 13px;
+}
+
+.ExpandedRowColumn {
+  display: flex;
+  color: #2b3674;
+  font-size: 13px;
+  flex-direction: column;
+}
+
+.ExpandedRowColumn > div:first-child {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ExpandedRowColumn > div {
+  margin-bottom: 4px;
+}
+
+.Header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 2px solid lightgrey;
+}
+
+.DetailRow {
+  display: flex;
+  margin-bottom: 5px;
+  flex-direction: row;
+}
+
+.Detail {
+  display: flex;
+  width: 300px;
+}
+
+.Label {
+  font-weight: bold;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.Content {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.InviteButton {
+  display: inline-flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 41px;
+  background: var(--Light-Orange, #fce8dc);
+  transition: background-color 0.3s; /* Smooth transition for interactions */
+  color: #2b3674;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .deleteButton {

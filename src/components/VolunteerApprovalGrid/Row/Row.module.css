@@ -6,6 +6,14 @@
   border-bottom: none;
 }
 
+.RowCell > button {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
 .RowCellContainer {
   width: 100%;
   color: #2b3674;
@@ -21,6 +29,70 @@
 
 .RowCellContainer::-webkit-scrollbar {
   display: none;
+}
+
+.ExpandedRow {
+  width: 100%;
+  border-radius: 5px;
+  background-color: var(--Selected-Blue, #e7eeff);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.ExpandedRowContainer {
+  display: flex;
+  width: min-content;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: var(--Selected-Blue, #e7eeff);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  column-gap: 13px;
+}
+
+.ExpandedRowColumn {
+  display: flex;
+  color: #2b3674;
+  font-size: 13px;
+  flex-direction: column;
+}
+
+.ExpandedRowColumn > div:first-child {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ExpandedRowColumn > div {
+  margin-bottom: 4px;
+}
+
+.Header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 2px solid lightgrey;
+}
+
+.DetailRow {
+  display: flex;
+  margin-bottom: 5px;
+  flex-direction: row;
+}
+
+.Detail {
+  display: flex;
+  width: 300px;
+}
+
+.Label {
+  font-weight: bold;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.Content {
+  flex-grow: 1;
+  text-align: left;
 }
 
 .actionsContainer {

@@ -8,7 +8,7 @@ import { GridColDef } from "@src/utils/types";
 
 import { sampleUsers } from "@src/utils/patients";
 import styles from "./VolunteerApprovalGrid.module.css";
-import Row from "./Row/Row";
+import { Row } from "./Row/Row";
 
 interface VolunteerApprovalGridProps {
   data: IUser[];
@@ -20,6 +20,7 @@ interface VolunteerApprovalGridProps {
 }
 
 const columns: GridColDef[] = [
+  { field: "id", headerName: "", width: 90 },
   { field: "firstName", headerName: "Name", sortable: true },
   { field: "startDate", headerName: "Date Joined", sortable: true },
   { field: "role", headerName: "Access Level", sortable: true },
@@ -29,6 +30,7 @@ const columns: GridColDef[] = [
 function ColumnSizes() {
   return (
     <colgroup>
+      <col style={{ width: "2%" }} />
       <col style={{ width: "25%" }} />
       <col style={{ width: "15%" }} />
       <col style={{ width: "30%" }} />

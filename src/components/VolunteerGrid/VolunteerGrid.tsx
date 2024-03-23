@@ -21,6 +21,7 @@ interface VolunteerGridProps {
 }
 
 const columns: GridColDef[] = [
+  { field: "id", headerName: "", width: 90 },
   { field: "firstName", headerName: "Name", sortable: true },
   { field: "startDate", headerName: "Date Joined", sortable: true },
   { field: "role", headerName: "Access Level", sortable: true },
@@ -31,6 +32,7 @@ const columns: GridColDef[] = [
 function ColumnSizes() {
   return (
     <colgroup>
+      <col style={{ width: "2%" }} />
       <col style={{ width: "20%" }} />
       <col style={{ width: "15%" }} />
       <col style={{ width: "20%" }} />
