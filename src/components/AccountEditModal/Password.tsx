@@ -1,9 +1,7 @@
-import { useDispatch } from "react-redux";
 import { useState } from "react";
 import styles from "./AccountEditModal.module.css";
 
 export default function Password() {
-  const dispatch = useDispatch();
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");

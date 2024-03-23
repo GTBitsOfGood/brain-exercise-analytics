@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
 import { update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod } from "@/common_utils/types";
 import ActiveIndicatorBox from "../ActiveIndicatorBox/ActiveIndicatorBox";
 import styles from "./AccountEditModal.module.css";
 
@@ -60,6 +62,27 @@ export default function Profile() {
   };
 
   const handleSaveChanges = () => {
+    internalRequest({
+      url: "/api/volunteer",
+      method: HttpMethod.PATCH,
+      authRequired: true,
+      body: {
+        email,
+        newFields: {
+          firstName: updatedFirstName,
+          lastName: updatedLastName,
+          phoneNumber: updatedPhoneNumber,
+          email: updatedEmail,
+          birthDate: updatedBirthDate,
+        },
+      },
+    })
+      .then(() => {
+        console.log("Submmited");
+      })
+      .catch((error) => {
+        console.log("Did not submit", error);
+      });
     dispatch(
       update({
         firstName: updatedFirstName,
