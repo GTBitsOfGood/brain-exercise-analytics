@@ -22,8 +22,8 @@ import {
   setBeiChapters,
   setVolunteerRoles,
 } from "@src/redux/reducers/volunteerSearchReducer";
+import { Role } from "@/common_utils/types";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
-
 import styles from "./VolunteerAdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
 import CalendarInput from "./CalendarInput";
@@ -115,8 +115,6 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     // console.log(volunteerSearchState);
     return volunteerSearchState.volunteerSearch;
   });
-  const sel = useSelector((r: RootState) => r);
-  console.log(sel);
 
   const tagsPresent = useMemo(
     () =>
@@ -259,6 +257,11 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
       displayValue: `${locCity.name}`,
     }),
   );
+
+  const ROLES = Object.keys(Role).map((key) => ({
+    value: Role[key as keyof typeof Role],
+    displayValue: Role[key as keyof typeof Role],
+  }));
 
   const curryOnCloseSetTag = useCallback(
     <T,>(set: Set<T>, action: ActionCreatorWithPayload<Set<T>, string>) => {
@@ -409,10 +412,9 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                       title="Role"
                       value={role}
                       handleClose={curryOnCloseSetTag(
-                        dateOfJoins,
-                        setDateOfJoins,
+                        volunteerRoles,
+                        setVolunteerRoles,
                       )}
-                      transformData={transformDate}
                     />
                   </div>
                 ))
@@ -558,6 +560,27 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
         >
           <div className={styles.label}>Date of Join</div>
           <CalendarInput value={dateOfJoin} onChange={setDateOfJoin} />
+        </div>
+        <div
+          className={[
+            styles.question_box,
+            volunteerRole && styles.hodingValue,
+          ].join(" ")}
+        >
+          <SelectDropdown
+            title="Volunteer Role"
+            dropdownProps={{
+              placeholder: "Select Volunteer Role",
+              options: ROLES,
+              value: volunteerRole,
+              onChange: (e: SelectChangeEvent<unknown>) => {
+                setVolunteerRole(e.target.value as string);
+              },
+              showError: false,
+            }}
+            labelWidth={120}
+            answerWidth={200}
+          />
         </div>
       </div>
       <div className={styles.control_buttons}>
