@@ -4,6 +4,7 @@ import { useState } from "react";
 import { logout } from "../../redux/reducers/authReducer/index";
 import styles from "./AccountEditModal.module.css";
 import Profile from "./Profile";
+import Password from "./Password";
 
 const enum Page {
   PROFILE,
@@ -44,8 +45,7 @@ const Modal = () => {
       <div className={styles.vl}></div>
       <div className={styles.info}>
         {/* <span onClick={closeModal}>&times;</span> */}
-        {page === Page.PROFILE ? <Profile /> : <></>}
-        {/* {page === Page.PASSWORD && <Password/>} */}
+        {page === Page.PROFILE ? <Profile /> : <Password />}
       </div>
     </div>
   );
