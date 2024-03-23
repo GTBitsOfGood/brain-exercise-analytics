@@ -3,39 +3,72 @@
   flex-direction: row;
   padding-top: 3vh;
   padding-left: 17%;
-  cursor: pointer;
-}
-
-.metrics-container {
-  display: flex;
-  flex-direction: row;
   align-items: center;
 }
 
-.analytics-icon-active {
-  color: #008afc;
-  --fa-primary-color: #008afc;
-  --fa-secondary-color: #f4f7fe;
-  --fa-secondary-opacity: 0.4;
-  padding-right: 7%;
+.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.metrics-container-active {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 10px;
+  width: 180px;
+  height: 40px;
+  background-color: #e7eeff;
+  border-radius: 10px;
+  border: none;
+}
+
+.metrics-container-inactive {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  /* background: ; */
+  padding-left: 10px;
+  width: 180px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+}
+
+.dashboard-icon {
   background-color: #f4f7fe;
+  border-radius: 9999px;
+  height: 25px;
+  width: 25px;
+  justify-content: center;
+  text-align: center;
+  margin-right: 8px;
+}
+.analytics-icon-active {
+  color: #008afc; /*not really needed since svg covers color)
+  /* --fa-primary-color: #008afc;
+  --fa-secondary-color: #f4f7fe;
+  --fa-secondary-opacity: 0.4; */
+  padding-right: 7%; 
+  /* background: #f4f7fe; */
   border-radius: 50%;
   margin-right: 20px;
   height: 25px;
-  width: 25px;
+  width: 25px; 
   padding: 5px;
   justify-content: center;
   text-align: center;
-  display: inline;
+  /* display: inline; */
 }
 
 .analytics-icon-inactive {
   color: #008afc;
-  --fa-primary-color: #008afc;
+  /* --fa-primary-color: #008afc;
   --fa-secondary-color: #f4f7fe;
-  --fa-secondary-opacity: 0.4;
+  --fa-secondary-opacity: 0.4; */
   padding-right: 7%;
-  background-color: #f4f7fe;
+  /* background-color: #f4f7fe; */
   border-radius: 50%;
   margin-right: 20px;
   height: 25px;
@@ -43,7 +76,7 @@
   padding: 5px;
   justify-content: center;
   text-align: center;
-  filter: grayscale(93%) brightness(175%);
+  /* filter: grayscale(93%) brightness(175%); */
 }
 .metric-active {
   color: #2b3674;
@@ -51,6 +84,17 @@
   font-family: var(--font-poppins);
   font-weight: 600;
   word-wrap: break-word;
+  cursor: pointer;
+  padding: 0.5vh 0.5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  /* width: 150px;
+  height: 40px;
+  background-color: #e7eeff;
+  border-radius: 10px;
+  border: none; */
 }
 
 .metric-inactive {
@@ -59,4 +103,15 @@
   font-family: var(--font-poppins);
   font-weight: 600;
   word-wrap: break-word;
+  cursor: pointer;
+  padding: 0.5vh 0.5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  /* background: ; */
+  /* width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  border: none; */
 }
