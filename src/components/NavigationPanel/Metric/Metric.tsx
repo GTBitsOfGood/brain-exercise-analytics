@@ -36,8 +36,8 @@ const Metric = (metricProps: MetricProps) => {
     } else {
       router.push(`/patient/dashboard#${metricProps.title.toLowerCase()}`);
     }
-    console.log(isActive);
   };
+
   const icon = useMemo(() => {
     switch (metricProps.title) {
       case "Math":

@@ -1,5 +1,5 @@
-
 "use client";
+
 import React, { useEffect, useRef } from "react";
 import {
   OverallDashboard,
@@ -17,7 +17,6 @@ import {
 } from "@src/utils/patients";
 
 import styles from "./page.module.scss";
-import { useRouter } from 'next/navigation';
 
 export function Divider({ id }: { id?: string }) {
   return (
@@ -34,53 +33,54 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page() {
-  const overallRef = useRef<HTMLDivElement>(null);
   const mathRef = useRef<HTMLDivElement>(null);
   const readingRef = useRef<HTMLDivElement>(null);
   const writingRef = useRef<HTMLDivElement>(null);
   const triviaRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  
+
   useEffect(() => {
     const observerOptions = {
       root: null,
       rootMargin: "0px",
-      threshold: 0.8, 
+      threshold: 0.8,
     };
 
-    const observerCallback: IntersectionObserverCallback = (
-      entries,
-      observer
-    ) => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute("id");
           if (id) {
-            // console.log("some test");
-            // router.push(`#${id}`);
-            document.location.replace(`${id}`);
+            document.location.replace(`#${id}`);
           }
         }
       });
     };
-    
-    const observerOverall = new IntersectionObserver(observerCallback, observerOptions);
-    if (overallRef.current) observerOverall.observe(overallRef.current);
 
-    const observerMath = new IntersectionObserver(observerCallback, observerOptions);
+    const observerMath = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
     if (mathRef.current) observerMath.observe(mathRef.current);
 
-    const observerReading = new IntersectionObserver(observerCallback, observerOptions);
+    const observerReading = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
     if (readingRef.current) observerReading.observe(readingRef.current);
 
-    const observerWriting = new IntersectionObserver(observerCallback, observerOptions);
+    const observerWriting = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
     if (writingRef.current) observerWriting.observe(writingRef.current);
 
-    const observerTrivia = new IntersectionObserver(observerCallback, observerOptions);
+    const observerTrivia = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
     if (triviaRef.current) observerTrivia.observe(triviaRef.current);
 
     return () => {
-      observerOverall.disconnect();
       observerMath.disconnect();
       observerReading.disconnect();
       observerWriting.disconnect();
@@ -90,7 +90,7 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
-      <div ref={overallRef} id="overall" className={styles.sectionContainer}>
+      <div className={styles.sectionContainer}>
         <OverallDashboard
           streak={[
             Days.Sunday,
