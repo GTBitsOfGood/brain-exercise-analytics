@@ -16,7 +16,7 @@
 .left {
   flex-direction: column;
   display: flex;
-  gap: 10px;
+  gap: 16pxpx;
   background-color: white;
   padding-right: 7%;
   font-weight: 600;
@@ -26,12 +26,24 @@
 }
 .profile {
   color: #2078c1;
+  border-radius: 12px;
+  width: 200px;
+  height: 58px;
+  padding: 16px;
 }
 .password {
-  color: #979797;
+  color: #2078c1;
+  border-radius: 12px;
+  width: 200px;
+  height: 58px;
+  padding: 16px;
 }
 .signout {
   color: #ea4335;
+  border-radius: 12px;
+  width: 200px;
+  height: 58px;
+  padding: 16px;
 }
 .vl {
   border-left: 1.5px solid #c8c8c8;
@@ -42,11 +54,26 @@
   background-color: white;
   width: 100%;
   padding-left: 5%;
+  height: 100%;
+  overflow: scroll;
 }
 .inputs {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.inputHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  gap: 1fr;
 }
 
 .inputField {
@@ -57,8 +84,9 @@
 }
 .inputField input {
   height: 40px;
-  border-radius: 5px;
+  border-radius: 12px;
   font-size: 13px;
+  border: 1px solid var(--Dark-Blue-Grey, #9CA5C2);
 }
 .nonEditable {
   background-color: #e7eeff;
@@ -77,6 +105,12 @@
 .inputField label {
   font-size: 17px;
   font-weight: 600;
+}
+.inputFieldRow {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  width: 100%;
 }
 .header {
   display: flex;
@@ -116,21 +150,29 @@
   padding-left: 30px;
 }
 .editButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 42px;
+  padding: 5px;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}
+.submitButton {
   border-radius: 10px;
   padding: 15px 30px;
-  border: 1px solid #008afc;
+  border: 0px;
   font-weight: bold;
   background-color: #008afc;
   color: white;
   cursor: pointer;
 }
 .disabled {
-  color: #979797;
-  background-color: white;
-  border: 1px solid #979797;
+  background-color: #E3EAFC;
+  color: #2B3674;
 }
 .buttons {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 15px;
 }
