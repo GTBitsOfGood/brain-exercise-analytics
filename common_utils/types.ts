@@ -266,6 +266,19 @@ export type IPatientSearchReducer = {
   secondaryNames: Set<string>;
 };
 
+export type IVolunteerSearchReducer = {
+  fullName: string;
+  active: boolean | undefined;
+  countries: Set<string>;
+  states: Set<string>;
+  cities: Set<string>;
+  dateOfBirths: Set<string>;
+  emails: Set<string>;
+  dateOfJoins: Set<string>;
+  beiChapters: Set<string>;
+  volunteerRoles: Set<string>;
+};
+
 export type VolunteerSearchParams = {
   active?: boolean;
   name?: string;
