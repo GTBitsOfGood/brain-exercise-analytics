@@ -98,7 +98,8 @@
 }
 
 .metric-inactive {
-  color: #e3eafc;
+  color: #e3eafc; 
+  /* color: #2b3674; */
   font-size: 16px;
   font-family: var(--font-poppins);
   font-weight: 600;

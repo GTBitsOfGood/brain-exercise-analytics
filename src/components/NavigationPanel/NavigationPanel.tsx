@@ -22,6 +22,12 @@ const NavigationPanel = ({ onClick }: Props) => {
 
   const router = useRouter();
   const currentPath = usePathname();
+  // const [isClickable, setIsClickable] = useState<boolean>(false);
+ 
+  const isClickable = useMemo(
+    () => currentPath.startsWith("/patient/dashboard"),
+    [currentPath],
+  );
   const isPatientSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
     [currentPath],
@@ -146,7 +152,7 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles["metrics-container"]}>
           <div
             className={`${styles[`overall-metrics-container-${isDashboard ? "active" : "inactive"}`]} ${!isDashboard ? styles.disabled : ""}`}
-            onClick={() => document.location.replace(`${"overall"}`)} // changed? -> but causes url to be wonky. router.push("/patient/dashboard")}
+            onClick={() => document.location.replace(`${"overall"}`)} // router.push("/patient/dashboard")} //  // changed? -> but causes url to be wonky. 
           >
             <div className={styles["icon-shadow"]}>
               {/* <BarChartIcon className={`icon-${isDashboard ? "active" : "inactive"}`} /> */}
@@ -166,10 +172,10 @@ const NavigationPanel = ({ onClick }: Props) => {
               <span>Patient Analytics</span>
             </div>
           </div>
-          <Metric title="Math" />
-          <Metric title="Reading" />
-          <Metric title="Writing" />
-          <Metric title="Trivia" />
+          <Metric title="Math" isClickable={isClickable} />
+          <Metric title="Reading" isClickable={isClickable} />
+          <Metric title="Writing" isClickable={isClickable} />
+          <Metric title="Trivia" isClickable={isClickable} />
         </div>
         <div className={styles.divider} />
         <div className={styles["patient-container"]} onClick={() => onclick}>
