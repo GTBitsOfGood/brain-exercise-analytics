@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { RootState } from "@src/redux/rootReducer";
 import { formatPhoneNumber } from "@src/utils/utils";
@@ -111,14 +111,41 @@ const Modal = () => {
     if (rawValue.length > 10) return;
     setUpdatedPhoneNumber(rawValue);
   };
-  const handleChangeImage = async () => {
-    const ret = await internalRequest({
-      url: "/api/volunteer/uploadImage",
-      method: HttpMethod.POST,
-      body: {},
-    });
-    console.log(ret);
+
+  // IMAGE UPLOAD
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState("null");
+  // const handleChangeImage = async () => {
+  //   // const ret = await internalRequest({
+  //   //   url: "/api/volunteer/uploadImage",
+  //   //   method: HttpMethod.POST,
+  //   //   body: {},
+  //   // });
+  //   // console.log(ret);
+  //   console.log("hihi");
+  // };
+
+  const openDialog = () => {
+    fileInputRef.current?.click();
   };
+  function handleImageChange(e) {
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      const fileSizeInMB = selectedFile.size / (1024 * 1024);
+      const maxSizeMB = 5;
+
+      if (fileSizeInMB > maxSizeMB) {
+        console.error("Selected file exceeds the maximum size limit of 5 MB");
+        return;
+      }
+      setSelectedImage(selectedFile);
+    }
+  }
+  useEffect(() => {
+    console.log("slected image is below");
+    console.log(selectedImage);
+  }, [selectedImage]);
 
   return (
     <div className={styles.container}>
@@ -133,12 +160,25 @@ const Modal = () => {
       <div className={styles.info}>
         {/* <span onClick={closeModal}>&times;</span> */}
         <div className={styles.header}>
-          <button onClick={handleChangeImage}>
+          <div>
             <img
               src="https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/141.jpg"
-              alt="Description of the image"
+              alt="Profile Image"
+              className={styles.profileImage}
+              onClick={openDialog}
             />
-          </button>
+
+            {edit && (
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+            )}
+          </div>
+
           <div className={styles.myContainer}>
             <div className={styles.first}>
               <label>{`${firstName} ${lastName}`}</label>
