@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { Poppins } from "next/font/google";
 import { usePathname, useRouter } from "next/navigation";
 import { SqrtIcon, BookIcon, QuestionIcon, DocIcon } from "@src/app/icons";
