@@ -119,15 +119,6 @@ const Modal = () => {
   // IMAGE UPLOAD
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState("null");
-  // const handleChangeImage = async () => {
-  //   const ret = await internalRequest({
-  //     url: "/api/volunteer/uploadImage",
-  //     method: HttpMethod.POST,
-  //     body: {},
-  //   });
-  //   console.log(ret);
-  //   console.log("hihi");
-  // };
 
   const openDialog = () => {
     fileInputRef.current?.click();
@@ -150,17 +141,26 @@ const Modal = () => {
   };
 
   const saveProfileImage = async () => {
+    if (!selectedImage) {
+      console.error("No image selected");
+      return;
+    }
+
+    if (selectedImage) {
+      console.log(selectedImage);
+    }
+    // console.log("saveProfileImage" + selectedImage);
     const ret = await internalRequest({
       url: "/api/volunteer/uploadImage",
       method: HttpMethod.POST,
-      body: {},
+      body: { selectedImage },
     });
     console.log(ret);
     console.log("save Profile");
   };
   useEffect(() => {
-    console.log("slected image is below");
-    console.log(selectedImage);
+    // console.log("slected image is below");
+    // console.log(selectedImage);
   }, [selectedImage]);
 
   return (
