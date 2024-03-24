@@ -32,7 +32,7 @@ export async function internalRequest<T>({
     });
 
     idToken = await currentUser.getIdToken();
-    console.log(idToken)
+    // console.log(idToken)
     const { email } = currentUser;
     if (email === null) {
       throw new Error("Email does not exist on user");

@@ -18,6 +18,7 @@ const Modal = () => {
     phoneNumber,
     email,
     birthDate,
+    imageLink,
     patientDetails,
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
@@ -78,10 +79,13 @@ const Modal = () => {
         patientDetails: {
           ...patientDetails,
         },
+        // imageLink: "hihihihihii",
       })
     );
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
+    // console.log("this is value of IL from reducer: " + imageLink);
+    saveProfileImage();
   };
 
   const handleCancel = () => {
@@ -116,19 +120,19 @@ const Modal = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState("null");
   // const handleChangeImage = async () => {
-  //   // const ret = await internalRequest({
-  //   //   url: "/api/volunteer/uploadImage",
-  //   //   method: HttpMethod.POST,
-  //   //   body: {},
-  //   // });
-  //   // console.log(ret);
+  //   const ret = await internalRequest({
+  //     url: "/api/volunteer/uploadImage",
+  //     method: HttpMethod.POST,
+  //     body: {},
+  //   });
+  //   console.log(ret);
   //   console.log("hihi");
   // };
 
   const openDialog = () => {
     fileInputRef.current?.click();
   };
-  function handleImageChange(e) {
+  const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
 
     if (selectedFile) {
@@ -136,12 +140,24 @@ const Modal = () => {
       const maxSizeMB = 5;
 
       if (fileSizeInMB > maxSizeMB) {
+        // need to log the error message correctly
         console.error("Selected file exceeds the maximum size limit of 5 MB");
+
         return;
       }
       setSelectedImage(selectedFile);
     }
-  }
+  };
+
+  const saveProfileImage = async () => {
+    const ret = await internalRequest({
+      url: "/api/volunteer/uploadImage",
+      method: HttpMethod.POST,
+      body: {},
+    });
+    console.log(ret);
+    console.log("save Profile");
+  };
   useEffect(() => {
     console.log("slected image is below");
     console.log(selectedImage);
