@@ -1,12 +1,6 @@
 import React, { useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
-// import {
-//   faChartSimple,
-//   faMagnifyingGlass,
-//   faUser,
-// } from "@fortawesome/free-solid-svg-icons";
 import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Role, IUser } from "@/common_utils/types";
 import { RootState } from "@src/redux/rootReducer";
 import { useSelector } from "react-redux";
@@ -22,12 +16,12 @@ const NavigationPanel = ({ onClick }: Props) => {
 
   const router = useRouter();
   const currentPath = usePathname();
-  // const [isClickable, setIsClickable] = useState<boolean>(false);
- 
+
   const isClickable = useMemo(
     () => currentPath.startsWith("/patient/dashboard"),
     [currentPath],
   );
+
   const isPatientSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
     [currentPath],
@@ -50,19 +44,26 @@ const NavigationPanel = ({ onClick }: Props) => {
 
   return (
     <div className={styles.wrapper}>
-      <img
-        className={styles["BEI-image"]}
-        src="https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png"
-        alt="BEI Image"
-      />
-      <div className={styles["text-wrapper"]}>
-        <span className={styles.bei}>Brain Exercise Initiative</span>
-        {user.role !== Role.NONPROFIT_VOLUNTEER ? (
-          <span className={styles["admin-portal"]}>Admin Portal</span>
-        ) : (
-          <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
-        )}
+      <div className={styles.topSection}>
+        <div className={styles.center}>
+        <img
+          className={styles["BEI-image"]}
+          src="https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png"
+          alt="BEI Image"
+        />
+        </div>
+        <div className={styles["text-wrapper"]}>
+          <span className={styles.bei}>Brain Exercise Initiative</span>
+          {user.role !== Role.NONPROFIT_VOLUNTEER ? (
+            <span className={styles["admin-portal"]}>Admin Portal</span>
+          ) : (
+            <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
+          )}
+        </div>
         <div className={styles.divider} />
+      </div>
+      
+      <div className={styles.middleSection}>
         {user.role !== Role.NONPROFIT_VOLUNTEER && (
           <>
             <div className={styles["volunteer-management"]}>
@@ -78,16 +79,6 @@ const NavigationPanel = ({ onClick }: Props) => {
                 onClick={() => router.push("/volunteer/search")}
               >
                 <div className={styles["icon-shadow"]}>
-                  {/* <FontAwesomeIcon
-                    className={
-                      styles[
-                        `icon-${isVolunteerSearch ? "active" : "inactive"}`
-                      ]
-                    }
-                    icon={faMagnifyingGlass}
-                    size="sm"
-                  /> */}
-                  {/* <SearchIcon className={styles[`icon-${isVolunteerSearch ? "active" : "inactive"}`}] /> */}
                   <SearchIcon className={styles["icon-active"]} />
                 </div>
                 <span className={styles["search-volunteer-text"]}>
@@ -105,15 +96,7 @@ const NavigationPanel = ({ onClick }: Props) => {
                 onClick={() => router.push("/volunteer/approval")}
               >
                 <div className={styles["icon-shadow"]}>
-                  {/* <FontAwesomeIcon
-                    className={
-                      styles[`icon-${isApproval ? "active" : "inactive"}`]
-                    }
-                    icon={faUser}
-                    size="sm"
-                  /> */}
                   <PersonIcon className={styles["icon-active"]} />
-                  {/* <PersonIcon className={styles[`icon-${isApproval ? "active" : "inactive"}`]} /> */}
                 </div>
                 <div className={styles["overall-metrics"]}>
                   <span>Pending Approval</span>
@@ -134,14 +117,6 @@ const NavigationPanel = ({ onClick }: Props) => {
             onClick={() => router.push("/patient/search")}
           >
             <div className={styles["icon-shadow"]}>
-              {/* <FontAwesomeIcon
-                className={
-                  styles[`icon-${isPatientSearch ? "active" : "inactive"}`]
-                }
-                icon={faMagnifyingGlass}
-                size="sm"
-              /> */}
-              {/* <SearchIcon className={`icon-${isPatientSearch ? "active" : "inactive"}`} /> */}
               <SearchIcon className={"icon-active"} />
             </div>
             <span className={styles["search-patient-text"]}>
@@ -152,21 +127,10 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles["metrics-container"]}>
           <div
             className={`${styles[`overall-metrics-container-${isDashboard ? "active" : "inactive"}`]} ${!isDashboard ? styles.disabled : ""}`}
-            onClick={() => document.location.replace(`${"overall"}`)} // router.push("/patient/dashboard")} //  // changed? -> but causes url to be wonky. 
+            onClick={() => document.location.replace(`${"overall"}`)}
           >
             <div className={styles["icon-shadow"]}>
-              {/* <BarChartIcon className={`icon-${isDashboard ? "active" : "inactive"}`} /> */}
-              {/* <FontAwesomeIcon
-                className={
-                  styles[`icon-${isDashboard ? "active" : "inactive"}`]
-                }
-                icon={faChartSimple}
-                size="sm"
-              /> */}
-              <BarChartIcon
-                className={`icon-${isDashboard ? "active" : "inactive"}`}
-              />
-              {/* <BarChartIcon className={"icon-inactive"} /> */}
+              <BarChartIcon className={`icon-${isDashboard ? "active" : "inactive"}`} />
             </div>
             <div className={styles["overall-metrics"]}>
               <span>Patient Analytics</span>
@@ -177,14 +141,17 @@ const NavigationPanel = ({ onClick }: Props) => {
           <Metric title="Writing" isClickable={isClickable} />
           <Metric title="Trivia" isClickable={isClickable} />
         </div>
+      </div>
+
+      <div className={styles.bottomSection}>
         <div className={styles.divider} />
-        <div className={styles["patient-container"]} onClick={() => onclick}>
+        <div className={styles["patient-container"]} onClick={onClick}>
           <img
             className={styles["patient-pfp"]}
             src="https://via.placeholder.com/81x81"
             alt="Patient Profile Picture"
           />
-          <div className={styles["patient-info"]} onClick={onClick}>
+          <div className={styles["patient-info"]}>
             <span className={styles["user-name"]}>User Name</span>
             <span className={styles.position}>Position or title</span>
           </div>
