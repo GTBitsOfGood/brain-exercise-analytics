@@ -8,7 +8,8 @@ import {
   DataRecord,
 } from "@/common_utils/types";
 import { getUsersFiltered } from "@server/mongodb/actions/User";
-import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
+import { getAggregatedAnalytics, getAggregatedAnalyticsGroup } from "@server/mongodb/actions/AggregatedAnalytics";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 type RequestData = {
   filters: PatientSearchParams;
@@ -68,27 +69,49 @@ export const POST = APIWrapper({
     if (users === undefined) {
       throw new Error("No patients found with parameters");
     }
-
+    
+    let userstime = Date.now() - start;
+    console.log(`Fetch time taken : ${userstime} milliseconds`);
+    userstime = Date.now();
+    
     const usersLength = users.data.length;
+  
 
     const groupAnalytics: Partial<IAggregatedGroupAnalyticsAll> =
       {} as Partial<IAggregatedGroupAnalyticsAll>;
 
-    const promises = users.data.map(async (element) => {
-      const data = await getAggregatedAnalytics(
-        element._id,
-        element.name,
-        range,
-        updatedSections,
-      );
-      // Return whatever data you need from getAggregatedAnalytics
-      return data;
-    });
-
-    const aggregatedDataArray = await Promise.all(promises);
-
-    // console.log(aggregatedDataArray)
-
+    // const promises = users.data.map(async (element) => {
+    //   const data = await getAggregatedAnalytics(
+    //     element._id,
+    //     element.name,
+    //     range,
+    //     updatedSections,
+    //   );
+    //   // Return whatever data you need from getAggregatedAnalytics
+    //   return data;
+    // });
+    
+    let promisecreator = Date.now() - userstime;
+    promisecreator = Date.now();
+    
+    
+    
+    // const aggregatedDataArray = await Promise.all(promises);
+    
+    const usersids = users.data.map(element => element._id)
+    
+    const aggregatedDataArray = await getAggregatedAnalyticsGroup(
+      usersids,
+      "",
+      range,
+      updatedSections
+    )
+    
+    
+    let promisetime = Date.now() - promisecreator;
+    console.log(`Promise time taken : ${promisetime} milliseconds`);
+    promisetime = Date.now();
+    
     aggregatedDataArray.forEach((data) => {
       // for (const userdatadict of users.data) {
       //   const data = await getAggregatedAnalytics(
@@ -417,9 +440,12 @@ export const POST = APIWrapper({
       }
     });
 
-    console.log(groupAnalytics);
+    
+    const looptime = Date.now() - promisetime;
+    console.log(`Loop time taken : ${looptime} milliseconds`);
     const timeTaken = Date.now() - start;
     console.log(`Total time taken : ${timeTaken} milliseconds`);
+    
     return null;
   },
 });

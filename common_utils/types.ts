@@ -37,6 +37,7 @@ export enum Role {
   NONPROFIT_PATIENT = "Nonprofit Patient",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_ADMIN = "Nonprofit Admin",
+  NONPROFIT_DIRECTOR = "Nonprofit Director",
 }
 
 export enum Days {
