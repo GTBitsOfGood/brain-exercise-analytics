@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 interface SearchIconProps {
-  className?: string; 
+  className?: string;
 }
 
 const SearchIcon: React.FC<SearchIconProps> = ({ className }) => (
@@ -12,8 +12,7 @@ const SearchIcon: React.FC<SearchIconProps> = ({ className }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{marginTop: '2px', marginLeft: '2px'}}
-
+    style={{ marginTop: "2px", marginLeft: "2px" }}
   >
     <g id="tabler:search">
       <path
@@ -28,4 +27,3 @@ const SearchIcon: React.FC<SearchIconProps> = ({ className }) => (
 );
 
 export default SearchIcon;
-

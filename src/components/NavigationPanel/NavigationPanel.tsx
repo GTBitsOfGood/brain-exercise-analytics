@@ -46,11 +46,11 @@ const NavigationPanel = ({ onClick }: Props) => {
     <div className={styles.wrapper}>
       <div className={styles.topSection}>
         <div className={styles.center}>
-        <img
-          className={styles["BEI-image"]}
-          src="https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png"
-          alt="BEI Image"
-        />
+          <img
+            className={styles["BEI-image"]}
+            src="https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png"
+            alt="BEI Image"
+          />
         </div>
         <div className={styles["text-wrapper"]}>
           <span className={styles.bei}>Brain Exercise Initiative</span>
@@ -62,7 +62,7 @@ const NavigationPanel = ({ onClick }: Props) => {
         </div>
         <div className={styles.divider} />
       </div>
-      
+
       <div className={styles.middleSection}>
         {user.role !== Role.NONPROFIT_VOLUNTEER && (
           <>
@@ -130,7 +130,9 @@ const NavigationPanel = ({ onClick }: Props) => {
             onClick={() => document.location.replace(`${"overall"}`)}
           >
             <div className={styles["icon-shadow"]}>
-              <BarChartIcon className={`icon-${isDashboard ? "active" : "inactive"}`} />
+              <BarChartIcon
+                className={`icon-${isDashboard ? "active" : "inactive"}`}
+              />
             </div>
             <div className={styles["overall-metrics"]}>
               <span>Patient Analytics</span>

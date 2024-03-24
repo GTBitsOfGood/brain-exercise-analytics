@@ -44,28 +44,44 @@ const Metric = (metricProps: MetricProps) => {
         return (
           <SqrtIcon
             isActive={metricProps.isClickable}
-            className={styles[`analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`]}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
           />
         );
       case "Reading":
         return (
           <BookIcon
             isActive={metricProps.isClickable}
-            className={styles[`analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`]}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
           />
         );
       case "Writing":
         return (
           <DocIcon
             isActive={metricProps.isClickable}
-            className={styles[`analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`]}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
           />
         );
       case "Trivia":
         return (
           <QuestionIcon
             isActive={metricProps.isClickable}
-            className={styles[`analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`]}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
           />
         );
       default:
@@ -85,10 +101,14 @@ const Metric = (metricProps: MetricProps) => {
             styles[`metrics-container-${isActive ? "active" : "inactive"}`]
           }
         >
-          <div className={styles["dashboard-icon"]}>
-            {icon}
-          </div>
-          <div className={styles[`metric-${metricProps.isClickable ? "active" : "inactive"}`]}>
+          <div className={styles["dashboard-icon"]}>{icon}</div>
+          <div
+            className={
+              styles[
+                `metric-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
+          >
             <span>{metricProps.title}</span>
           </div>
         </div>
