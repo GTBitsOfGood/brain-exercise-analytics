@@ -3,7 +3,7 @@
   font-size: 28px;
   font-family: var(--font-poppins);
   font-weight: 700;
-  line-height: 56px;
+  padding-bottom: 6px;
   word-wrap: break-word;
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, MouseEvent, useState } from "react";
 import {
   CheckBox,
   CheckBoxOutlineBlank,
@@ -20,7 +20,6 @@ import { setCookie } from "cookies-next";
 import { update } from "@src/redux/reducers/authReducer";
 import { useDispatch } from "react-redux";
 import styles from "./page.module.css";
-import Layout from "../AuthLayout";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -84,7 +83,10 @@ export default function Page() {
     }
   };
 
-  const handleEmailSignIn = async () => {
+  const handleEmailSignIn = async (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
     resetErrors();
     let hasError = false;
 
@@ -110,23 +112,9 @@ export default function Page() {
 
   const CheckIcon = keepLogged ? CheckBox : CheckBoxOutlineBlank;
 
-  useEffect(() => {
-    const handleKeyDown = (event: { key: string }) => {
-      if (event.key === "Enter") {
-        handleEmailSignIn();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [email, password]);
-
   return (
-    <Layout>
-      <span className={styles.welcome}>Log in</span>
+    <div>
+      <p className={styles.welcome}>Log in</p>
       <p className={styles.descriptionText}>
         Enter your email and password to sign in!
       </p>
@@ -153,68 +141,70 @@ export default function Page() {
           src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
         />
       </div>
-      <div className={styles.inputFields}>
-        <div className={styles.emailField}>
-          <InputField
-            title="Email"
-            placeholder="example@email.com"
-            required={true}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailError("");
-              setShowGeneralError(false);
-            }}
-            showError={emailError !== ""}
-            error={emailError}
-          />
+      <form onSubmit={handleEmailSignIn}>
+        <div className={styles.inputFields}>
+          <div className={styles.emailField}>
+            <InputField
+              title="Email"
+              placeholder="example@email.com"
+              required={true}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError("");
+                setShowGeneralError(false);
+              }}
+              showError={emailError !== ""}
+              error={emailError}
+            />
+          </div>
+          <div className={styles.passwords}>
+            <InputField
+              title="Password"
+              type="password"
+              required={true}
+              placeholder="Minimum 8 Characters"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError("");
+                setShowGeneralError(false);
+              }}
+              showError={passwordError.length !== 0}
+              error={passwordError}
+            />
+          </div>
         </div>
-        <div className={styles.passwords}>
-          <InputField
-            title="Password"
-            type="password"
-            required={true}
-            placeholder="Minimum 8 Characters"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setPasswordError("");
-              setShowGeneralError(false);
-            }}
-            showError={passwordError.length !== 0}
-            error={passwordError}
-          />
-        </div>
-      </div>
 
-      <div className={styles.checkboxContainer}>
-        <div className={styles.checkboxLabel}>
-          <CheckIcon
-            className={styles.checkboxIcon}
-            sx={{ width: "18px" }}
-            onClick={toggleKeepMeLoggedIn}
-          />
-          <p>Keep me logged in</p>
+        <div className={styles.checkboxContainer}>
+          <div className={styles.checkboxLabel}>
+            <CheckIcon
+              className={styles.checkboxIcon}
+              sx={{ width: "18px" }}
+              onClick={toggleKeepMeLoggedIn}
+            />
+            <p>Keep me logged in</p>
+          </div>
+          <a className={styles.forgotPassword} href="/auth/password-reset">
+            Forgot password?
+          </a>
         </div>
-        <a className={styles.forgotPassword} href="/auth/password-reset">
-          Forgot password?
-        </a>
-      </div>
 
-      {showGeneralError && (
-        <div className={styles.generalError}>
-          <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
-          <p className={styles.errorMessage}>
-            Error: An internal server error has occurred. Please try again
-            later.
-          </p>
+        {showGeneralError && (
+          <div className={styles.generalError}>
+            <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
+            <p className={styles.errorMessage}>
+              Error: An internal server error has occurred. Please try again
+              later.
+            </p>
+          </div>
+        )}
+        <div className={styles.signInButtonContainer}>
+          <button className={styles.signInButton} onClick={handleEmailSignIn}>
+            Continue
+          </button>
         </div>
-      )}
-      <div className={styles.signInButtonContainer}>
-        <button className={styles.signInButton} onClick={handleEmailSignIn}>
-          Continue
-        </button>
-      </div>
+      </form>
 
       <div className={styles.bottomTextContainer}>
         <div className={styles.dontHaveAccountLabel}>
@@ -224,6 +214,6 @@ export default function Page() {
           Sign up now
         </a>
       </div>
-    </Layout>
+    </div>
   );
 }

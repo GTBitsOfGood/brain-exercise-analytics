@@ -3,7 +3,7 @@
   font-size: 28px;
   font-family: var(--font-poppins);
   font-weight: 700;
-  line-height: 56px;
+  padding-bottom: 6px;
   word-wrap: break-word;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .forgotPassword {
-  color: #005aa3;
+  color: #008afc;
   font-size: 12px;
   font-weight: 600;
   display: flex;

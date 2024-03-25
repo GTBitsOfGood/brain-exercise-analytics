@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, MouseEvent, useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
@@ -16,7 +16,6 @@ import { emailSignUp } from "@src/firebase/email_signin";
 import { IUser, HttpMethod } from "@/common_utils/types";
 
 import styles from "./page.module.css";
-import Layout from "../AuthLayout";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -69,7 +68,10 @@ export default function Page() {
     }
   };
 
-  const handleEmailSignUp = async () => {
+  const handleEmailSignUp = async (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
     resetErrors();
 
     let hasError = false;
@@ -111,22 +113,9 @@ export default function Page() {
 
   const handleGoogleSignIn = async () => handleSignUp(googleSignIn);
 
-  useEffect(() => {
-    const handleKeyDown = (e: { key: string }) => {
-      if (e.key === "Enter") {
-        handleEmailSignUp();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [email, password, confirmPassword]);
   return (
-    <Layout>
-      <span className={styles.signUpLabel}>Create an account</span>
+    <div>
+      <p className={styles.signUpLabel}>Create an account</p>
       <p className={styles.descriptionText}>
         Enter your email and password to sign up!
       </p>
@@ -155,70 +144,72 @@ export default function Page() {
         />
       </div>
 
-      <div className={styles.inputFields}>
-        <div className={styles.emailField}>
-          <InputField
-            title="Email"
-            placeholder="mail@simple.com"
-            required={true}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailError("");
-              setShowGeneralError(false);
-            }}
-            showError={emailError !== ""}
-            error={emailError}
-          />
+      <form onSubmit={handleEmailSignUp}>
+        <div className={styles.inputFields}>
+          <div className={styles.emailField}>
+            <InputField
+              title="Email"
+              placeholder="mail@simple.com"
+              required={true}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError("");
+                setShowGeneralError(false);
+              }}
+              showError={emailError !== ""}
+              error={emailError}
+            />
+          </div>
+          <div className={styles.passwords}>
+            <InputField
+              title="Password"
+              type="password"
+              required={true}
+              placeholder="Min. 8 characters"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError("");
+                setShowGeneralError(false);
+              }}
+              showError={passwordError.length !== 0}
+              error={passwordError}
+            />
+          </div>
+          <div className={styles.passwords}>
+            <InputField
+              title="Confirm Password"
+              type="password"
+              required={true}
+              placeholder="Min. 8 characters"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                setConfirmPasswordError("");
+                setShowGeneralError(false);
+              }}
+              showError={confirmPasswordError.length !== 0}
+              error={confirmPasswordError}
+            />
+          </div>
         </div>
-        <div className={styles.passwords}>
-          <InputField
-            title="Password"
-            type="password"
-            required={true}
-            placeholder="Min. 8 characters"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setPasswordError("");
-              setShowGeneralError(false);
-            }}
-            showError={passwordError.length !== 0}
-            error={passwordError}
-          />
-        </div>
-        <div className={styles.passwords}>
-          <InputField
-            title="Confirm Password"
-            type="password"
-            required={true}
-            placeholder="Min. 8 characters"
-            value={confirmPassword}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-              setConfirmPasswordError("");
-              setShowGeneralError(false);
-            }}
-            showError={confirmPasswordError.length !== 0}
-            error={confirmPasswordError}
-          />
-        </div>
-      </div>
 
-      {showGeneralError && (
-        <div className={styles.generalError}>
-          <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
-          <p className={styles.errorMessage}>
-            Error: An internal server error has occurred. Please try again
-            later.
-          </p>
+        {showGeneralError && (
+          <div className={styles.generalError}>
+            <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
+            <p className={styles.errorMessage}>
+              Error: An internal server error has occurred. Please try again
+              later.
+            </p>
+          </div>
+        )}
+        <div className={styles.continueButtonContainer}>
+          <button className={styles.continueButton} onClick={handleEmailSignUp}>
+            Continue
+          </button>
         </div>
-      )}
-      <div className={styles.continueButtonContainer}>
-        <button className={styles.continueButton} onClick={handleEmailSignUp}>
-          Continue
-        </button>
-      </div>
+      </form>
 
       <div className={styles.bottomTextContainer}>
         <div className={styles.alreadyHaveAccountLabel}>
@@ -228,6 +219,6 @@ export default function Page() {
           Sign in now
         </a>
       </div>
-    </Layout>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, MouseEvent, useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Country, State, City } from "country-state-city";
@@ -15,7 +15,6 @@ import { formatPhoneNumber } from "@src/utils/utils";
 
 import CHAPTERS from "@src/utils/chapters";
 import styles from "./page.module.css";
-import Layout from "../AuthLayout";
 
 export default function Page() {
   const [firstName, setFirstName] = useState("");
@@ -84,7 +83,10 @@ export default function Page() {
     setShowGeneralError(false);
   };
 
-  const redirect = async () => {
+  const onSubmit = async (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
     resetErrors();
     if (firstName.trim() === "")
       setFirstNameError("First name can't be blank.");
@@ -133,182 +135,165 @@ export default function Page() {
     }
   };
 
-  useEffect(() => {
-    const handleEnterKeyPress = (e: { key: string }) => {
-      if (e.key === "Enter") {
-        redirect();
-      }
-    };
-
-    window.addEventListener("keydown", handleEnterKeyPress);
-
-    return () => window.removeEventListener("keydown", handleEnterKeyPress);
-  }, [
-    firstName,
-    lastName,
-    number,
-    locCountry,
-    locState,
-    locCity,
-    role,
-    chapter,
-  ]);
-
   return (
-    <Layout>
-      <span className={styles.accountRecovery}>Personal Information</span>
+    <div>
+      <p className={styles.accountRecovery}>Personal Information</p>
       <p className={styles.descriptionText}>
         Fill in your information to complete your sign up
       </p>
-      <div className={styles.inputFields}>
-        <div className={styles.firstLastName}>
-          <div className={styles.nameField}>
+      <form onSubmit={onSubmit}>
+        <div className={styles.inputFields}>
+          <div className={styles.firstLastName}>
+            <div className={styles.nameField}>
+              <InputField
+                title="First Name"
+                placeholder="Your first name"
+                required={true}
+                value={firstName}
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                  setFirstNameError("");
+                }}
+                showError={firstNameError !== ""}
+                error={firstNameError}
+              />
+            </div>
+            <div className={styles.nameField}>
+              <InputField
+                title="Last Name"
+                placeholder="Your last name"
+                required={true}
+                value={lastName}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                  setLastNameError("");
+                }}
+                showError={lastNameError !== ""}
+                error={lastNameError}
+              />
+            </div>
+          </div>
+          <div className={styles.emailField}>
             <InputField
-              title="First Name"
-              placeholder="Your first name"
+              title="Phone Number"
+              placeholder="Your number"
               required={true}
-              value={firstName}
+              value={formatPhoneNumber(number) || ""}
               onChange={(e) => {
-                setFirstName(e.target.value);
-                setFirstNameError("");
+                handlePhoneChange(e);
+                setNumberError("");
               }}
-              showError={firstNameError !== ""}
-              error={firstNameError}
+              showError={numberError !== ""}
+              error={numberError}
             />
           </div>
-          <div className={styles.nameField}>
-            <InputField
-              title="Last Name"
-              placeholder="Your last name"
-              required={true}
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-                setLastNameError("");
-              }}
-              showError={lastNameError !== ""}
-              error={lastNameError}
-            />
-          </div>
-        </div>
-        <div className={styles.emailField}>
-          <InputField
-            title="Phone Number"
-            placeholder="Your number"
-            required={true}
-            value={formatPhoneNumber(number) || ""}
-            onChange={(e) => {
-              handlePhoneChange(e);
-              setNumberError("");
-            }}
-            showError={numberError !== ""}
-            error={numberError}
-          />
-        </div>
-        <div className={styles.locationField}>
-          <AuthDropdown
-            title="Location"
-            required={true}
-            placeholder="Select Your Country"
-            options={COUNTRIES}
-            value={locCountry}
-            onChange={(e) => {
-              setLocCountry(e.target.value);
-              setLocState("");
-              setLocCity("");
-              setCountryError("");
-              setStateError("");
-              setCityError("");
-            }}
-            showError={countryError !== ""}
-            error={countryError}
-          />
-        </div>
-        {locCountry === "" ? null : (
-          <div className={styles.cityStateFields}>
+          <div className={styles.locationField}>
             <AuthDropdown
+              title="Location"
               required={true}
-              placeholder="Select Your State"
-              options={STATES}
-              value={locState}
+              placeholder="Select Your Country"
+              options={COUNTRIES}
+              value={locCountry}
               onChange={(e) => {
-                setLocState(e.target.value);
+                setLocCountry(e.target.value);
+                setLocState("");
                 setLocCity("");
+                setCountryError("");
                 setStateError("");
                 setCityError("");
               }}
-              showError={stateError !== ""}
-              error={stateError}
-            />
-            <AuthDropdown
-              required={true}
-              placeholder="Select Your City"
-              options={CITIES}
-              value={locCity}
-              onChange={(e) => {
-                setLocCity(e.target.value);
-                setCityError("");
-              }}
-              showError={cityError !== ""}
-              error={cityError}
+              showError={countryError !== ""}
+              error={countryError}
             />
           </div>
-        )}
-        <div className={styles.roleField}>
-          <AuthDropdown
-            title="Role"
-            required={true}
-            placeholder="Select your role"
-            options={ROLES}
-            value={role}
-            onChange={(e) => {
-              setRole(e.target.value);
-              setRoleError("");
-            }}
-            showError={roleError !== ""}
-            error={roleError}
-          />
-        </div>
-        <div className={styles.locationField}>
-          <AuthDropdown
-            title="Chapter"
-            required={true}
-            placeholder="Select Your Chaper"
-            options={CHAPTERS}
-            value={chapter}
-            onChange={(e) => {
-              setChapter(e.target.value);
-              setChapterError("");
-            }}
-            showError={chapterError !== ""}
-            error={chapterError}
-          />
-        </div>
-        <div className={styles.chapterNotFound}>
-          <ErrorOutlineIcon
-            className={styles.notFoundIcon}
-            sx={{ width: "18px" }}
-          />
-          <p className={styles.notFoundMessage}>
-            Don&apos;t see your Chapter? Contact{" "}
-            <strong className={styles.notFoundEmail}>example@email.com</strong>
-          </p>
-        </div>
-        {showGeneralError && (
-          <div className={styles.generalError}>
-            <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
-            <p className={styles.errorMessage}>
-              Error: An internal server error has occurred. Please try again
-              later.
+          {locCountry === "" ? null : (
+            <div className={styles.cityStateFields}>
+              <AuthDropdown
+                required={true}
+                placeholder="Select Your State"
+                options={STATES}
+                value={locState}
+                onChange={(e) => {
+                  setLocState(e.target.value);
+                  setLocCity("");
+                  setStateError("");
+                  setCityError("");
+                }}
+                showError={stateError !== ""}
+                error={stateError}
+              />
+              <AuthDropdown
+                required={true}
+                placeholder="Select Your City"
+                options={CITIES}
+                value={locCity}
+                onChange={(e) => {
+                  setLocCity(e.target.value);
+                  setCityError("");
+                }}
+                showError={cityError !== ""}
+                error={cityError}
+              />
+            </div>
+          )}
+          <div className={styles.roleField}>
+            <AuthDropdown
+              title="Role"
+              required={true}
+              placeholder="Select your role"
+              options={ROLES}
+              value={role}
+              onChange={(e) => {
+                setRole(e.target.value);
+                setRoleError("");
+              }}
+              showError={roleError !== ""}
+              error={roleError}
+            />
+          </div>
+          <div className={styles.locationField}>
+            <AuthDropdown
+              title="Chapter"
+              required={true}
+              placeholder="Select Your Chaper"
+              options={CHAPTERS}
+              value={chapter}
+              onChange={(e) => {
+                setChapter(e.target.value);
+                setChapterError("");
+              }}
+              showError={chapterError !== ""}
+              error={chapterError}
+            />
+          </div>
+          <div className={styles.chapterNotFound}>
+            <ErrorOutlineIcon
+              className={styles.notFoundIcon}
+              sx={{ width: "18px" }}
+            />
+            <p className={styles.notFoundMessage}>
+              Don&apos;t see your Chapter? Contact{" "}
+              <strong className={styles.notFoundEmail}>
+                example@email.com
+              </strong>
             </p>
           </div>
-        )}
-        <div className={styles.continueButtonContainer}>
-          <button className={styles.continueButton} onClick={() => redirect()}>
-            Continue
-          </button>
+          {showGeneralError && (
+            <div className={styles.generalError}>
+              <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
+              <p className={styles.errorMessage}>
+                Error: An internal server error has occurred. Please try again
+                later.
+              </p>
+            </div>
+          )}
+          <div className={styles.continueButtonContainer}>
+            <button className={styles.continueButton} onClick={onSubmit}>
+              Continue
+            </button>
+          </div>
         </div>
-      </div>
-    </Layout>
+      </form>
+    </div>
   );
 }
