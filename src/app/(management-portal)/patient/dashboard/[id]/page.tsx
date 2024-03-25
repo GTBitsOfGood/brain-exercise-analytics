@@ -90,6 +90,7 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
+      <Divider />
       <div className={styles.sectionContainer}>
         <OverallDashboard
           streak={[

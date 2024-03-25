@@ -5,7 +5,7 @@ interface BookIconProps {
   className?: string;
 }
 
-const BookIcon = ({ isActive, className }: BookIconProps) => (
+const BookIcon = ({ isActive = true, className }: BookIconProps) => (
   <svg
     width="28"
     height="28"

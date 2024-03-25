@@ -5,7 +5,7 @@ interface DocIconProps {
   isActive?: boolean;
 }
 
-const DocIcon = ({ className, isActive }: DocIconProps) => (
+const DocIcon = ({ className, isActive = true }: DocIconProps) => (
   <svg
     width="14"
     height="17"

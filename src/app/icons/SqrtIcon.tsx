@@ -5,7 +5,7 @@ interface SqrtIconProps {
   isActive?: boolean;
 }
 
-const SqrtIcon = ({ className, isActive }: SqrtIconProps) => (
+const SqrtIcon = ({ className, isActive = true }: SqrtIconProps) => (
   <svg
     width="29"
     height="29"

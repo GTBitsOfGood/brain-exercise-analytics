@@ -5,7 +5,7 @@ interface QuestionIconProps {
   isActive?: boolean;
 }
 
-const QuestionIcon = ({ className, isActive }: QuestionIconProps) => (
+const QuestionIcon = ({ className, isActive = true }: QuestionIconProps) => (
   <svg
     width="29"
     height="29"
