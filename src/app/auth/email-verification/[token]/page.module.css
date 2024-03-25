@@ -1,43 +1,9 @@
-.screen {
-  width: 100vw;
-  height: 100vh;
-  background: white;
-  display: flex;
-  align-items: center;
-  padding-top: 8%;
-  padding-left: 11%;
-  padding-right: 8%;
-}
-
-.split-screen {
-  display: flex;
-  width: 100%;
-}
-
-.left {
-  flex: 27;
-}
-
-.middle-space {
-  flex: 25;
-}
-
-.right {
-  flex: 30;
-  display: flex;
-  flex-direction: column;
-}
-
-.right-container {
-  width: 74%;
-}
-
 .password-reset {
   color: #2b3674;
   font-size: 28px;
   font-family: var(--font-poppins);
   font-weight: 700;
-  line-height: 56px;
+  padding-bottom: 6px;
   word-wrap: break-word;
 }
 

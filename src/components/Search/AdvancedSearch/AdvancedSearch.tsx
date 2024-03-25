@@ -36,6 +36,7 @@ interface SelectDropdownProps<T> {
   style?: CSSProperties;
   labelWidth: number;
   answerWidth: number;
+  showFocusedBorder?: boolean;
   dropdownProps: DropdownProps<T>;
 }
 
@@ -76,6 +77,9 @@ function SelectDropdown<T>({
               height: "30px",
               "& fieldset": {
                 borderRadius: "10px",
+              },
+              "&.Mui-focused fieldset": {
+                border: "none",
               },
             },
           }}

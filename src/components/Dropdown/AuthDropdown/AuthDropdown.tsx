@@ -28,6 +28,7 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
     options,
     value,
     title,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     required,
     placeholder,
     showError,
@@ -40,7 +41,6 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
       {title !== undefined ? (
         <div className={styles["label-container"]}>
           <label className={styles["input-label"]}>{title}</label>
-          {required && <label className={styles.asterisk}>*</label>}
         </div>
       ) : null}
       <Dropdown

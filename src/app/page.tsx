@@ -169,7 +169,7 @@ export default function Home() {
       />
       <SmallDataBox
         title={"Number of questions completed"}
-        Icon={PersonIcon}
+        Icon={() => <PersonIcon />}
         text={"20 / 1 hr 50 min"}
       />
       <div>
