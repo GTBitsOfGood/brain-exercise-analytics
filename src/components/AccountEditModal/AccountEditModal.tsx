@@ -8,6 +8,7 @@ import styles from "./AccountEditModal.module.css";
 import ActiveIndicatorBox from "../ActiveIndicatorBox/ActiveIndicatorBox";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@/common_utils/types";
+const { BlobServiceClient } = require("@azure/storage-blob");
 
 const Modal = () => {
   const [edit, setEdit] = useState<boolean>(false);
@@ -119,6 +120,7 @@ const Modal = () => {
   // IMAGE UPLOAD
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState("null");
+  const [sasToken, setSasToken] = useState("null");
 
   const openDialog = () => {
     fileInputRef.current?.click();
@@ -140,28 +142,44 @@ const Modal = () => {
     }
   };
 
+  // CORE
   const saveProfileImage = async () => {
-    if (!selectedImage) {
-      console.error("No image selected");
-      return;
-    }
+    try {
+      if (!selectedImage) {
+        console.error("No image selected");
+        return;
+      }
 
-    if (selectedImage) {
-      console.log(selectedImage);
+      console.log(selectedImage.name);
+      const fileName = selectedImage.name;
+
+      const retSas = await internalRequest({
+        url: "/api/volunteer/uploadImage",
+        method: HttpMethod.POST,
+        body: { email, fileName },
+      });
+      setSasToken(retSas);
+
+      const blobServiceClient = new BlobServiceClient(
+        `https://beiaccount.blob.core.windows.net/?${retSas}`
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient("profileimage");
+      const blobClient = containerClient.getBlockBlobClient(fileName);
+      const response = await blobClient.uploadData(selectedImage);
+      console.log("image Link:");
+      console.log(blobClient.url);
+      console.log("Image uploaded successfully:", response);
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
-    // console.log("saveProfileImage" + selectedImage);
-    const ret = await internalRequest({
-      url: "/api/volunteer/uploadImage",
-      method: HttpMethod.POST,
-      body: { selectedImage },
-    });
-    console.log(ret);
-    console.log("save Profile");
   };
+
   useEffect(() => {
     // console.log("slected image is below");
     // console.log(selectedImage);
-  }, [selectedImage]);
+    console.log("useState of sas:" + sasToken);
+  }, [sasToken]);
 
   return (
     <div className={styles.container}>
