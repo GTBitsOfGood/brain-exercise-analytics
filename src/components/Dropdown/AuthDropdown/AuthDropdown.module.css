@@ -17,15 +17,6 @@
   word-wrap: break-word;
 }
 
-.asterisk {
-  color: #005aa3;
-  font-size: 13px;
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  line-height: 14px;
-  word-wrap: break-word;
-}
-
 .dropdown-container {
   padding-top: 8px;
   position: relative;

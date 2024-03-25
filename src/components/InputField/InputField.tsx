@@ -40,9 +40,6 @@ const InputField = (InputFieldProps: InputFieldProps) => {
           <label className={styles["input-label"]}>
             {InputFieldProps.title}
           </label>
-          {InputFieldProps.required && (
-            <label className={styles.asterisk}>*</label>
-          )}
         </div>
       ) : null}
       <div className={styles["input-container"]}>
