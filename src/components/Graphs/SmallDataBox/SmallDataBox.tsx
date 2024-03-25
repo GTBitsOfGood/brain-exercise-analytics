@@ -9,7 +9,13 @@ const inter600 = Inter({ subsets: ["latin"], weight: "600" });
 interface DataParams {
   className?: string;
   title: string;
-  Icon: () => JSX.Element;
+  Icon: ({
+    className,
+    isActive,
+  }: {
+    className?: string;
+    isActive?: boolean;
+  }) => JSX.Element;
   text: string;
   Chip?: () => ReactNode;
   style?: CSSProperties;
