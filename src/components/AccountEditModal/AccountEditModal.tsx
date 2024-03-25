@@ -153,19 +153,26 @@ const Modal = () => {
       console.log(selectedImage.name);
       const fileName = selectedImage.name;
 
-      const retSas = await internalRequest({
+      const ressss = await internalRequest({
         url: "/api/volunteer/uploadImage",
         method: HttpMethod.POST,
         body: { email, fileName },
       });
+
+      const retSas = ressss.sasToken;
       setSasToken(retSas);
+
+      if (!sasToken) {
+        console.error("Error: sasToken is undefined");
+        return;
+      }
 
       const blobServiceClient = new BlobServiceClient(
         `https://beiaccount.blob.core.windows.net/?${retSas}`
       );
       const containerClient =
         blobServiceClient.getContainerClient("profileimage");
-      const blobClient = containerClient.getBlockBlobClient(fileName);
+      const blobClient = containerClient.getBlockBlobClient(ressss.blobName);
       const response = await blobClient.uploadData(selectedImage);
       console.log("image Link:");
       console.log(blobClient.url);

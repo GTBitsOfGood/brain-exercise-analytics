@@ -5,12 +5,14 @@ import {
   generateBlobSASQueryParameters,
   BlobSASPermissions
 } from "@azure/storage-blob";
-
+import { v4 as uuidv4 } from "uuid";
 
 type RequestData = {
   email: string;
   fileName: string;
 };
+
+
 export const POST = APIWrapper({
   config: {
     requireToken: true,
@@ -30,7 +32,12 @@ export const POST = APIWrapper({
     const storageCredential = new StorageSharedKeyCredential(accountName, accountKey);
     // const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, storageCredential);
     const containerName = "profileimage";
-    const blobName = requestData.fileName; 
+
+
+    // const uniqueBlob = uuidv4();
+
+    // const blobName = requestData.fileName; 
+    const blobName =  uuidv4();
     const expiryDate = new Date(new Date().getTime() + 86400);
     const permissions = new BlobSASPermissions();
     permissions.write = true;
@@ -45,6 +52,6 @@ export const POST = APIWrapper({
   storageCredential
 ).toString();
 
-    return sasToken
+     return {sasToken, blobName} ;
   },
 });
