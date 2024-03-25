@@ -47,7 +47,7 @@ export default function Page() {
         setLoadingState(State.ERROR);
       }
     },
-    [router],
+    [router]
   );
 
   useEffect(() => {

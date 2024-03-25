@@ -69,7 +69,9 @@ const Modal = () => {
     setEdit(true);
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
+    const imgURL = await uploadProfileImage();
+    console.log("image url: ", imgURL);
     dispatch(
       update({
         firstName: updatedName.split(" ")[0] ?? "",
@@ -80,13 +82,11 @@ const Modal = () => {
         patientDetails: {
           ...patientDetails,
         },
-        // imageLink: "hihihihihii",
+        imageLink: imgURL,
       })
     );
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
-    // console.log("this is value of IL from reducer: " + imageLink);
-    saveProfileImage();
   };
 
   const handleCancel = () => {
@@ -142,25 +142,20 @@ const Modal = () => {
     }
   };
 
-  // CORE
-  const saveProfileImage = async () => {
+  // CORE IMPLEMENTATION
+  const uploadAzureImage = async () => {
     try {
       if (!selectedImage) {
         console.error("No image selected");
         return;
       }
-
-      console.log(selectedImage.name);
-      const fileName = selectedImage.name;
-
-      const ressss = await internalRequest({
-        url: "/api/volunteer/uploadImage",
-        method: HttpMethod.POST,
-        body: { email, fileName },
+      const res = await internalRequest({
+        url: "/api/volunteer/profile-image/sas-token",
+        method: HttpMethod.GET,
+        body: {},
       });
 
-      const retSas = ressss.sasToken;
-      setSasToken(retSas);
+      setSasToken(res.sasToken);
 
       if (!sasToken) {
         console.error("Error: sasToken is undefined");
@@ -168,25 +163,38 @@ const Modal = () => {
       }
 
       const blobServiceClient = new BlobServiceClient(
-        `https://beiaccount.blob.core.windows.net/?${retSas}`
+        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`
       );
       const containerClient =
         blobServiceClient.getContainerClient("profileimage");
-      const blobClient = containerClient.getBlockBlobClient(ressss.blobName);
+      const blobClient = containerClient.getBlockBlobClient(res.blobName);
       const response = await blobClient.uploadData(selectedImage);
-      console.log("image Link:");
-      console.log(blobClient.url);
-      console.log("Image uploaded successfully:", response);
+      console.log("newSAS:" + blobClient.url);
+
+      return blobClient.url;
     } catch (error) {
       console.error("Error uploading image:", error);
     }
   };
+  const storeImageLink = async (newImageLink) => {
+    const res = await internalRequest({
+      url: "/api/volunteer/profile-image/image-link",
+      method: HttpMethod.POST,
+      body: { newImageLink },
+    });
+    // console.log(res);
+  };
+  const uploadProfileImage = async () => {
+    // Upload the image as a to Azure Storage Blob
+    const imgURL = await uploadAzureImage();
+    // Store the imageUrl in MongoDB
+    storeImageLink(imgURL);
+    return imgURL;
+  };
 
-  useEffect(() => {
-    // console.log("slected image is below");
-    // console.log(selectedImage);
-    console.log("useState of sas:" + sasToken);
-  }, [sasToken]);
+  useEffect(() => {}, []);
+
+  console.log("current imglink in reducer: " + imageLink);
 
   return (
     <div className={styles.container}>
