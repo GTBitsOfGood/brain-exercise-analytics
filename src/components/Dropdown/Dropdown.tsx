@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useCallback, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useMemo } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { classes } from "@src/utils/utils";
@@ -9,6 +9,7 @@ import {
   MenuProps,
   Select,
   SelectChangeEvent,
+  SelectProps,
   SxProps,
   Theme,
   styled,
@@ -38,6 +39,7 @@ export interface DropdownProps<T> {
   menuProps?: Partial<MenuProps>;
   menuItemStyle?: React.CSSProperties;
   style?: React.CSSProperties;
+  selectProps?: SelectProps;
 }
 
 const poppins400 = Poppins({
@@ -69,10 +71,8 @@ function Dropdown<T>(props: DropdownProps<T>) {
     menuProps,
     menuItemStyle,
     style,
+    selectProps,
   } = props;
-
-  const [isOpen, setIsOpen] = useState(false);
-  const dynamicBorderRadius = isOpen ? "12px 12px 0 0" : "12px";
 
   const onSelectChange = useCallback(
     (e: SelectChangeEvent<T>) => {
@@ -112,12 +112,8 @@ function Dropdown<T>(props: DropdownProps<T>) {
         className={styles["input-field"]}
         value={displayValue}
         onChange={onSelectChange as (e: SelectChangeEvent<unknown>) => void}
-        open={isOpen}
-        onOpen={() => setIsOpen(true)}
-        onClose={() => setIsOpen(false)}
         style={{
           textAlign: "left",
-          borderRadius: dynamicBorderRadius,
           borderWidth: "1px",
           borderStyle: "solid",
           paddingRight: "0px",
@@ -130,8 +126,6 @@ function Dropdown<T>(props: DropdownProps<T>) {
           PaperProps: {
             sx: {
               maxHeight: 200,
-              borderRadius: "0 0 12px 12px",
-              boxShadow: "0px 50px 100px 100px #7090B026",
             },
           },
           ...menuProps,
@@ -139,10 +133,13 @@ function Dropdown<T>(props: DropdownProps<T>) {
         sx={sx}
         renderValue={() => displayValue}
         IconComponent={KeyboardArrowDownIcon}
+        {...selectProps}
       >
-        <MenuItem value=" " disabled>
-          <div className={styles.defaultMenuItem}>{placeholder}</div>
-        </MenuItem>
+        {placeholder && (
+          <MenuItem value=" " disabled>
+            <div className={styles.defaultMenuItem}>{placeholder}</div>
+          </MenuItem>
+        )}
         {options.map((option, index) => {
           if (React.isValidElement(option)) {
             return option;
