@@ -30,7 +30,7 @@ const Page = () => {
   return (
     <div>
       {adminApprovalStatus === AdminApprovalStatus.PENDING && (
-        <div className={styles["right-container"]}>
+        <>
           <p className={styles["password-reset"]}>
             Waiting for Admin Approval!
           </p>
@@ -38,16 +38,16 @@ const Page = () => {
             Your account is being reviewed for approval. You’ll receive an email
             pending your account approval.
           </p>
-        </div>
+        </>
       )}
       {adminApprovalStatus === AdminApprovalStatus.REJECTED && (
-        <div className={styles["right-container"]}>
+        <>
           <p className={styles["password-reset"]}>Admin Approval Denied</p>
           <p className={styles.description}>
             An admin has denied your volunteer status. Contact your local BEI
             chapter or bei2023@gmail.com for more information.
           </p>
-        </div>
+        </>
       )}
     </div>
   );
