@@ -1,8 +1,11 @@
 import APIWrapper from "@server/utils/APIWrapper";
+import {
+  postVolunteerImageLink,
+} from "@server/mongodb/actions/Volunteer";
 
-
-type RequestData = {
+type postRequest = {
   newImageLink: string;
+  email: string
 };
 
 export const POST = APIWrapper({
@@ -10,17 +13,21 @@ export const POST = APIWrapper({
     requireToken: true,
   },
   handler: async (req) => {
-      const requestData = (await req.json()) as RequestData;
+      const requestData = (await req.json()) as postRequest;
+      const email = requestData.email
+      const newImageLink = requestData.newImageLink
       if (!requestData ) {
       throw new Error("Missing request data");
     }
-    if (!requestData.newImageLink) {
+    if (!email) {
       throw new Error("Missing image link in request data");
     }
-    return {
-      message: "from POST image link api",
-      imageLinkThatStored: requestData.newImageLink
-    };
+    if (!newImageLink) {
+      throw new Error("Missing image link in request data");
+    }
+    const user = await postVolunteerImageLink(email, newImageLink)
+
+    return user
   },
 });
 

@@ -180,9 +180,9 @@ const Modal = () => {
     const res = await internalRequest({
       url: "/api/volunteer/profile-image/image-link",
       method: HttpMethod.POST,
-      body: { newImageLink },
+      body: { newImageLink, email },
     });
-    // console.log(res);
+    console.log(res);
   };
   const uploadProfileImage = async () => {
     // Upload the image as a to Azure Storage Blob
@@ -194,7 +194,7 @@ const Modal = () => {
 
   useEffect(() => {}, []);
 
-  console.log("current imglink in reducer: " + imageLink);
+  // console.log("current imglink in reducer: " + imageLink);
 
   return (
     <div className={styles.container}>

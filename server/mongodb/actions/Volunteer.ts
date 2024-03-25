@@ -205,3 +205,13 @@ export const deleteVolunteer = async (email: string): Promise<null> => {
 
   return null;
 };
+
+export const postVolunteerImageLink = async (email: string, newImageLink: string): Promise<IUser | null> => {
+    const updatedUser = await User.findOneAndUpdate(
+      { email }, 
+      { $set: { imageLink: newImageLink } }, 
+      { new: true } 
+    );
+    return updatedUser;
+  
+};
