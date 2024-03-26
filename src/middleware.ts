@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
   /*
     If the user is already verified, signed up, and approved:
       a. redirect to /patient/search if they are on an auth page
-      b. otherwise, continue to the intended page. This prevents pages like `/patient/dashboard` from
+      b. otherwise, continue to the intended page. This prevents pages like `/patient/analytics` from
         redirecting to `/patient/search`.
   */
   if (
@@ -106,7 +106,7 @@ export async function middleware(request: NextRequest) {
   /*
   Now, with the refreshed user data, if the user is already verified, signed up, and approved:
     a. redirect to /patient/search if they are on an auth page
-    b. otherwise, continue to the intended page. This prevents pages like `/patient/dashboard` fromredirecting to `/patient/search`.
+    b. otherwise, continue to the intended page. This prevents pages like `/patient/analytics` fromredirecting to `/patient/search`.
   */
   if (
     fetchedUser.signedUp &&

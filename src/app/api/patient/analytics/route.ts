@@ -9,8 +9,8 @@ import { getUserById } from "@server/mongodb/actions/User";
 
 export const GET = APIWrapper({
   config: {
-    // requireToken: true,
-    // requireVolunteer: true,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
@@ -41,9 +41,7 @@ export const GET = APIWrapper({
     }
 
     const updatedSections = sections.includes(AnalyticsSectionEnum.OVERALL)
-      ? Object.values(AnalyticsSectionEnum).filter(
-          (section) => section !== AnalyticsSectionEnum.OVERALL,
-        )
+      ? Object.values(AnalyticsSectionEnum)
       : Array.from(new Set(sections));
 
     const user = await getUserById(id);
@@ -51,7 +49,8 @@ export const GET = APIWrapper({
       throw new Error("User is not a patient");
     }
 
-    const data = await getAggregatedAnalytics(id, range, updatedSections);
+    const name = `${user.firstName} ${user.lastName}`;
+    const data = await getAggregatedAnalytics(id, name, range, updatedSections);
 
     return data;
   },

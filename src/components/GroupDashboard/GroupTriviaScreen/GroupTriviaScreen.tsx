@@ -3,7 +3,7 @@ import { AccuracyIcon, QuestionIcon, TimeIcon } from "@src/app/icons";
 import { DateRangeEnum } from "@/common_utils/types";
 import DateSelector from "../../DateSelector/DateSelector";
 import { SmallDataBox, LineChart, BarChart } from "../../Graphs";
-import styles from "./TriviaScreen.module.css";
+import styles from "./GroupTriviaScreen.module.css";
 
 const TriviaIcon = () => {
   return (
@@ -28,9 +28,9 @@ interface InputProp {
   accuracyData: { interval: string; value: number }[];
   numQuestionData: { interval: string; value: number }[];
   timeData: { interval: string; value: number }[];
-  currentAccuracy: string;
+  avgAccuracy: string;
   totalQuestions: string;
-  totalTime: string;
+  avgTime: string;
   style?: object;
   menuState: [
     selectedValue: DateRangeEnum,
@@ -38,13 +38,13 @@ interface InputProp {
   ];
 }
 
-export default function TriviaScreen({
+export default function GroupTriviaScreen({
   accuracyData,
   numQuestionData,
   timeData,
-  currentAccuracy,
+  avgAccuracy,
   totalQuestions,
-  totalTime,
+  avgTime,
   style,
   menuState,
 }: InputProp) {
@@ -72,7 +72,7 @@ export default function TriviaScreen({
             info="Vidushi"
             data={accuracyData}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -82,7 +82,7 @@ export default function TriviaScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -92,31 +92,30 @@ export default function TriviaScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
             className={styles.box}
-            title="Current Accuracy"
-            text={currentAccuracy}
+            title="Average Accuracy"
+            text={avgAccuracy}
             Icon={AccuracyIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
-            title="Number of Question Completed"
+            title="Average Number of Question Completed"
             text={totalQuestions}
             Icon={QuestionIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
-            title="Current Time per Question"
-            text={totalTime}
+            title="Average Time per Question"
+            text={avgTime}
             Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
         </div>
       </div>

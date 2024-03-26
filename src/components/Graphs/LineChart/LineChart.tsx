@@ -1,15 +1,24 @@
 "use client";
 
-import { Poppins } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
-import { Fragment, MouseEvent, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { D3Data } from "@src/utils/types";
 import { InfoIcon } from "@src/app/icons";
+import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./LineChart.module.scss";
 
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
-const poppins600 = Poppins({ subsets: ["latin"], weight: "600" });
+const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
+const inter500 = Inter({ subsets: ["latin"], weight: "500" });
 
 interface DataParams extends D3Data {
   className?: string;
@@ -18,6 +27,8 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   gradient?: boolean;
   info?: string;
+  gridLines?: boolean;
+  yLabel?: string;
 }
 
 export default function LineChart({
@@ -27,8 +38,16 @@ export default function LineChart({
   height: providedHeight = 150,
   style = {},
   yAxis = {
-    min: d3.min(data.map((v) => v.value)) ?? 0,
-    max: d3.max(data.map((v) => v.value)) ?? 1,
+    min:
+      (d3.min(data.map((v) => v.value)) ?? 0) -
+      0.1 *
+        ((d3.max(data.map((v) => v.value)) ?? 1) -
+          (d3.min(data.map((v) => v.value)) ?? 0)),
+    max:
+      (d3.max(data.map((v) => v.value)) ?? 1) +
+      0.1 *
+        ((d3.max(data.map((v) => v.value)) ?? 1) -
+          (d3.min(data.map((v) => v.value)) ?? 0)),
     numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
     format: (d: d3.NumberValue) => d3.format(".2f")(d),
   },
@@ -38,25 +57,44 @@ export default function LineChart({
   gradient = false,
   fullWidth,
   info = "",
+  yLabel = "",
+  gridLines = false,
 }: DataParams) {
+  const updateNewData = useCallback(() => {
+    const datapoints = 10;
+    if (data.length === 0) {
+      return [{ interval: "1", value: 1 }];
+    }
+    if (data.length > datapoints) {
+      const step = Math.floor(data.length / datapoints);
+      const tmp = [];
+      for (let i = 0; i < datapoints; i += 1) {
+        tmp[datapoints - 1 - i] = data[data.length - i * step - 1];
+      }
+      return tmp;
+    }
+    return data;
+  }, [data]);
+  const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
-  const updateSize = () => {
+  const updateSize = useCallback(() => {
     if (!fullWidth || !windowSizeRef.current) return;
     setWidth(Math.max(windowSizeRef.current.offsetWidth - 45, minWidth));
-  };
+  }, [fullWidth]);
   const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
   const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
+
   const height = Math.max(providedHeight, 100);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
   const marginRight = 20;
-  const marginBottom = 40;
+  const marginBottom = 65;
   const marginLeft = 40;
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
@@ -64,9 +102,10 @@ export default function LineChart({
   const [popupY, setPopupY] = useState(0);
 
   const actualChange =
-    data.length < 2
+    newData.length < 2
       ? null
-      : data[data.length - 1].value / data[data.length - 2].value - 1;
+      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+        1;
 
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
@@ -74,7 +113,7 @@ export default function LineChart({
     const svgRect = svg.getBoundingClientRect();
     const xBound = svgRect.x + marginLeft;
     const range = width - marginRight - marginLeft;
-    const itemWidth = range / (data.length - 1);
+    const itemWidth = range / (newData.length - 1);
     const index = Math.floor(
       (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
     );
@@ -93,7 +132,7 @@ export default function LineChart({
   );
 
   const x = d3.scaleLinear(
-    [0, data.length - 1],
+    [0, newData.length - 1],
     [marginLeft, width - marginRight],
   );
   const line = d3
@@ -107,6 +146,7 @@ export default function LineChart({
     // clean up code
     window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
+
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
@@ -118,21 +158,35 @@ export default function LineChart({
       setPopupX(left);
     }
     const svg = d3.select(windowRef.current);
-    svg.select(".x-axis").remove();
+    svg.select(".x-axis-hor").remove();
+    svg.select(".y-axis-vert").remove();
+    svg.select(".x-axis-grid").remove();
+    svg.select(".y-axis-grid").remove();
+    svg.select(".x-axis-top").remove();
+    svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
-    const xAxisLabel = d3
+    const xAxisLabelTop = d3
       .axisBottom(x)
-      .ticks(data.length - 1)
+      .ticks(newData.length - 1)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d, i) => data[i].interval);
+      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[0]);
+
+    const xAxisLabelBottom = d3
+      .axisBottom(x)
+      .ticks(newData.length - 1)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickPadding(15)
+      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
+
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(
         d3.range(
           yAxis.min,
-          yAxis.max + 0.0001,
+          yAxis.max + 0.000001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -140,15 +194,80 @@ export default function LineChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat(yAxisFormat);
+    if (gridLines) {
+      const yAxisGrid = d3
+        .axisLeft(y)
+        .tickValues(
+          d3.range(
+            yAxis.min,
+            yAxis.max + 0.000001,
+            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+          ),
+        )
+        .tickSize(-width + marginLeft + marginRight - 20)
+        .tickFormat(() => "");
 
+      const axisVert = d3
+        .axisLeft(y)
+        .tickValues(
+          d3.range(
+            yAxis.min,
+            yAxis.max,
+            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+          ),
+        )
+        .tickSize(0)
+        .tickFormat(() => "");
+
+      const axisHor = d3
+        .axisBottom(
+          d3.scaleLinear(
+            [0, newData.length - 1],
+            [marginLeft, width - marginRight + 20],
+          ),
+        )
+        .ticks(newData.length - 1)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickFormat(() => "");
+
+      svg
+        .append("g")
+        .attr("class", `y-axis-vert`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(axisVert);
+
+      svg
+        .append("g")
+        .attr("class", `y-axis-grid ${styles.yAxis}`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(yAxisGrid);
+
+      svg
+        .append("g")
+        .attr("transform", `translate(-5, ${height - marginBottom})`)
+        .attr("class", "x-axis-hor")
+        .style("font", `10px ${poppins500.style.fontFamily}`)
+        .call(axisHor);
+    }
     svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom})`)
-      .attr("class", "x-axis")
-      .style("font", `9px ${poppins600.style.fontFamily}`)
-      .style("color", "#B0BBD5")
-      .call(xAxisLabel)
+      .attr("class", "x-axis-top")
+      .style("font", `10px ${poppins500.style.fontFamily}`)
+      .style("color", "#343539")
+      .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
+
+    svg
+      .append("g")
+      .attr("transform", `translate(0, ${height - marginBottom + 15})`)
+      .attr("class", "x-axis-bottom")
+      .style("font", `10px ${inter500.style.fontFamily}`)
+      .style("color", "#B0BBD5")
+      .call(xAxisLabelBottom)
+      .call((g) => g.select(".domain").remove());
+
     svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)
@@ -157,9 +276,11 @@ export default function LineChart({
       .style("color", "#A5A5A5")
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
-    data,
+    width,
+    newData,
     height,
     x,
     y,
@@ -167,11 +288,16 @@ export default function LineChart({
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
+    gridLines,
   ]);
 
   useEffect(() => {
-    resizeOptimised();
-  }, []);
+    updateSize();
+  }, [newData, updateSize]);
+
+  useEffect(() => {
+    setNewData(updateNewData());
+  }, [data, updateNewData]);
 
   return (
     <div
@@ -190,44 +316,51 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <p className={styles.titleText}>{title}</p>
-        {info !== "" && (
-          <div
-            className={styles.info}
-            onClick={() => {
-              setInfoPopup(true);
-            }}
-            ref={infoButtonRef}
-          >
-            <InfoIcon />
-            <PopupModal
-              show={infoPopup}
-              info="Some information about line chart should come here."
-              style={{
-                position: "fixed",
-                top: `${popupY}px`,
-                zIndex: 500,
-                left: `${popupX}px`,
+        <div style={{ display: "inline-flex" }}>
+          <p className={styles.titleText}>{title}</p>
+          {info !== "" && (
+            <div
+              className={styles.info}
+              onClick={() => {
+                setInfoPopup(true);
               }}
-            />
-          </div>
-        )}
-        <p
-          className={styles.percentageChangeIcon}
-          style={{
-            color:
-              actualChange !== null && actualChange < 0 ? "#EA4335" : "#05CD99",
-          }}
-        >
-          {actualChange !== null &&
-            percentageChange &&
-            (actualChange < 0
-              ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-              : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-        </p>
-        <p className={styles.percentageChange}>
-          {actualChange !== null && percentageChange}
-        </p>
+              ref={infoButtonRef}
+            >
+              <InfoIcon />
+              <PopupModal
+                show={infoPopup}
+                info="Some information about line chart should come here."
+                style={{
+                  position: "fixed",
+                  top: `${popupY}px`,
+                  zIndex: 500,
+                  left: `${popupX}px`,
+                }}
+              />
+            </div>
+          )}
+          <p
+            className={styles.percentageChangeIcon}
+            style={{
+              color:
+                actualChange !== null && actualChange < 0
+                  ? "#EA4335"
+                  : "#05CD99",
+            }}
+          >
+            {actualChange !== null &&
+              percentageChange &&
+              (actualChange < 0
+                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+          </p>
+          <p className={styles.percentageChange}>
+            {actualChange !== null && percentageChange}
+          </p>
+        </div>
+        <div style={{ display: "inline-flex" }}>
+          <p className={styles.labelText}>{yLabel}</p>
+        </div>
       </div>
       <svg
         ref={windowRef}
@@ -235,7 +368,7 @@ export default function LineChart({
         height={height}
         onMouseMove={hoverable ? handleMouseMove : undefined}
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 20 }}
       >
         {gradient && (
           <filter id="drop-shadow" height={"180%"}>
@@ -249,17 +382,17 @@ export default function LineChart({
         )}
         <path
           className={styles.linePath}
-          d={line(data.map((d, i) => [i, d.value])) as string | undefined}
+          d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
         />
         <g className={styles.svgComp}>
-          <circle key={-1} cx={x(0)} cy={y(data[0].value)} r="2.5" />
+          <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
           <circle
             key={-2}
-            cx={x(data.length - 1)}
-            cy={y(data[data.length - 1].value)}
+            cx={x(newData.length - 1)}
+            cy={y(newData[newData.length - 1].value)}
             r="2.5"
           />
-          {data.map(
+          {newData.map(
             (d, i) =>
               activeIndex === i && (
                 <Fragment key={i}>
