@@ -954,7 +954,5 @@ export const getAggregatedAnalyticsGroup = async (
     out.push(finalAggregation);
   }
 
-  const looptime = Date.now() - promisecreator;
-  console.log(`Loop time 1 taken : ${looptime} milliseconds`);
   return out;
 };
