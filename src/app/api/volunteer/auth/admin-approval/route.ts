@@ -1,8 +1,10 @@
 import { AdminApprovalStatus } from "@/common_utils/types";
+import { deleteFirebaseUser } from "@server/firebase/utils";
 import {
   getUserByEmail,
   updateUserAdminApproval,
 } from "@server/mongodb/actions/User";
+import User from "@server/mongodb/models/User";
 import APIWrapper from "@server/utils/APIWrapper";
 import { sendEmail } from "@server/utils/email";
 
@@ -50,6 +52,11 @@ export const POST = APIWrapper({
         ? "approved"
         : "denied"
     }`;
+
+    if (requestData.approved === false) {
+      await deleteFirebaseUser(requestData.approvedEmail);
+      await User.deleteOne({ email: requestData.approvedEmail });
+    }
 
     await sendEmail(userEmail, emailSubject, emailContent, {
       backlinkUrl,

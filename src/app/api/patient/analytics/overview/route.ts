@@ -4,8 +4,8 @@ import { DateRangeEnum } from "@/common_utils/types";
 
 export const GET = APIWrapper({
   config: {
-    // requireToken: true,
-    // requireVolunteer: true,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);

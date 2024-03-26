@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
@@ -14,30 +15,28 @@ import {
   SearchResponseBody,
 } from "@/common_utils/types";
 
-import { getAuth } from "firebase/auth";
 import firebaseInit from "@src/firebase/config";
 
+import { RootState } from "@src/redux/rootReducer";
 import styles from "./page.module.css";
 
 firebaseInit();
 
 export default function Page() {
-  const [fullName, setFullName] = useState("");
-  const [active, setActive] = useState<boolean | undefined>(undefined);
-  const [countries, setCountries] = useState(new Set<string>()); // values chosen before the apply button
-  const [states, setStates] = useState(new Set<string>());
-  const [cities, setCities] = useState(new Set<string>());
-  const [dateOfBirths, setDateOfBirths] = useState(new Set<string>());
-  const [emails, setEmails] = useState(new Set<string>());
-  const [additionalAffiliations, setAdditionalAffiliations] = useState(
-    new Set<string>(),
-  );
-  const [dateOfJoins, setDateOfJoins] = useState(new Set<string>());
-  const [beiChapters, setBeiChapters] = useState(new Set<string>());
-  const [secondaryPhoneNumbers, setSecondaryPhoneNumbers] = useState(
-    new Set<string>(),
-  );
-  const [secondaryNames, setSecondaryNames] = useState(new Set<string>());
+  const {
+    fullName,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+  } = useSelector((state: RootState) => state.patientSearch);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
@@ -46,34 +45,30 @@ export default function Page() {
   const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
-    getAuth().onAuthStateChanged((user) => {
-      if (user) {
-        internalRequest<SearchResponseBody<IPatientTableEntry>>({
-          url: "/api/patient/filter-patient",
-          method: HttpMethod.POST,
-          body: {
-            params: {
-              name: fullName,
-              dateOfBirths: Array.from(dateOfBirths),
-              emails: Array.from(emails),
-              additionalAffiliations: Array.from(additionalAffiliations),
-              secondaryNames: Array.from(secondaryNames),
-              secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
-              beiChapters: Array.from(beiChapters),
-              active,
-              countries: Array.from(countries),
-              states: Array.from(states),
-              cities: Array.from(cities),
-              dateOfJoins: Array.from(dateOfJoins),
-            },
-            page: currentPage,
-            sortParams: sortField,
-          },
-        }).then((res) => {
-          setPageCount(res?.numPages ?? 0);
-          setFilteredUsers(res?.data ?? []);
-        });
-      }
+    internalRequest<SearchResponseBody<IPatientTableEntry>>({
+      url: "/api/patient/filter-patient",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          name: fullName,
+          dateOfBirths: Array.from(dateOfBirths),
+          emails: Array.from(emails),
+          additionalAffiliations: Array.from(additionalAffiliations),
+          secondaryNames: Array.from(secondaryNames),
+          secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
+          beiChapters: Array.from(beiChapters),
+          active,
+          countries: Array.from(countries),
+          states: Array.from(states),
+          cities: Array.from(cities),
+          dateOfJoins: Array.from(dateOfJoins),
+        },
+        page: currentPage,
+        sortParams: sortField,
+      },
+    }).then((res) => {
+      setPageCount(res?.numPages ?? 0);
+      setFilteredUsers(res?.data ?? []);
     });
   }, [
     fullName,
@@ -113,35 +108,9 @@ export default function Page() {
   return (
     <div className={styles.container}>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>
-          To begin viewing analytics, search for a patient here!
-        </p>
+        <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
         <div className={styles["search-wrapper"]}>
-          <Search
-            setFullName={setFullName}
-            active={active}
-            setActive={setActive}
-            countries={countries}
-            setCountries={setCountries}
-            states={states}
-            setStates={setStates}
-            cities={cities}
-            setCities={setCities}
-            dateOfBirths={dateOfBirths}
-            setDateOfBirths={setDateOfBirths}
-            emails={emails}
-            setEmails={setEmails}
-            additionalAffiliations={additionalAffiliations}
-            setAdditionalAffiliations={setAdditionalAffiliations}
-            dateOfJoins={dateOfJoins}
-            setDateOfJoins={setDateOfJoins}
-            beiChapters={beiChapters}
-            setBeiChapters={setBeiChapters}
-            secondaryPhoneNumbers={secondaryPhoneNumbers}
-            setSecondaryPhoneNumbers={setSecondaryPhoneNumbers}
-            secondaryNames={secondaryNames}
-            setSecondaryNames={setSecondaryNames}
-          />
+          <Search />
         </div>
       </div>
       <div

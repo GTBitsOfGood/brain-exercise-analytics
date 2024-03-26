@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { ReactNode, useCallback, useMemo } from "react";
 
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { classes } from "@src/utils/utils";
 import {
   MenuItem,
   MenuProps,
   Select,
   SelectChangeEvent,
+  SelectProps,
   SxProps,
   Theme,
   styled,
 } from "@mui/material";
 import { Poppins } from "next/font/google";
 import styles from "./Dropdown.module.css";
+
+const poppins = Poppins({
+  subsets: ["latin-ext"],
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export interface DropdownOption<T> {
   value: T;
@@ -22,7 +30,7 @@ export interface DropdownOption<T> {
 
 export interface DropdownProps<T> {
   className?: string;
-  options: DropdownOption<T>[];
+  options: (DropdownOption<T> | ReactNode)[];
   value: T;
   showError: boolean;
   placeholder?: string;
@@ -31,6 +39,7 @@ export interface DropdownProps<T> {
   menuProps?: Partial<MenuProps>;
   menuItemStyle?: React.CSSProperties;
   style?: React.CSSProperties;
+  selectProps?: SelectProps;
 }
 
 const poppins400 = Poppins({
@@ -45,15 +54,9 @@ const StyledSelect = styled(Select)(() => ({
   "&.MuiOutlinedInput-root": {
     "& fieldset": {
       border: "0px solid",
-      borderRadius: "16px",
+      // borderRadius: "10px",
     },
   },
-}));
-
-const StyledMenuItem = styled(MenuItem)(() => ({
-  fontSize: 12,
-  fontFamily: poppins400.style.fontFamily,
-  color: "#313144",
 }));
 
 function Dropdown<T>(props: DropdownProps<T>) {
@@ -68,6 +71,7 @@ function Dropdown<T>(props: DropdownProps<T>) {
     menuProps,
     menuItemStyle,
     style,
+    selectProps,
   } = props;
 
   const onSelectChange = useCallback(
@@ -77,10 +81,16 @@ function Dropdown<T>(props: DropdownProps<T>) {
     [onChange],
   );
 
-  const displayValue = useMemo(
-    () => options.find((o) => o.value === value)?.displayValue ?? " ",
-    [options, value],
-  );
+  const displayValue = useMemo(() => {
+    const option = options.find(
+      (o) =>
+        !React.isValidElement(o) && (o as DropdownOption<T>).value === value,
+    ) as DropdownOption<T> | undefined;
+    if (option) {
+      return option.displayValue;
+    }
+    return placeholder;
+  }, [options, value, placeholder]);
 
   const extraStyle = useMemo(
     () =>
@@ -104,11 +114,10 @@ function Dropdown<T>(props: DropdownProps<T>) {
         onChange={onSelectChange as (e: SelectChangeEvent<unknown>) => void}
         style={{
           textAlign: "left",
-          borderRadius: "16px",
           borderWidth: "1px",
           borderStyle: "solid",
           paddingRight: "0px",
-          color: displayValue === " " ? "#a3aed0" : "#313144",
+          color: displayValue === placeholder ? "#a3aed0" : "#313144",
           ...extraStyle,
           ...style,
         }}
@@ -122,19 +131,32 @@ function Dropdown<T>(props: DropdownProps<T>) {
           ...menuProps,
         }}
         sx={sx}
+        renderValue={() => displayValue}
+        IconComponent={KeyboardArrowDownIcon}
+        {...selectProps}
       >
-        <StyledMenuItem value=" " disabled>
-          {placeholder}
-        </StyledMenuItem>
-        {options.map((option, index) => (
-          <StyledMenuItem
-            key={index}
-            value={option.value as string}
-            style={menuItemStyle}
-          >
-            {option.displayValue}
-          </StyledMenuItem>
-        ))}
+        {placeholder && (
+          <MenuItem value=" " disabled>
+            <div className={styles.defaultMenuItem}>{placeholder}</div>
+          </MenuItem>
+        )}
+        {options.map((option, index) => {
+          if (React.isValidElement(option)) {
+            return option;
+          }
+
+          const dropdownOption = option as DropdownOption<T>;
+          return (
+            <MenuItem key={index} value={dropdownOption.value as string}>
+              <div
+                className={classes(styles.defaultMenuItem, poppins.className)}
+                style={menuItemStyle}
+              >
+                {dropdownOption.displayValue}
+              </div>
+            </MenuItem>
+          );
+        })}
       </StyledSelect>
     </div>
   );

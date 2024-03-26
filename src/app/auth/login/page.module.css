@@ -1,43 +1,9 @@
-.screen {
-  width: 100vw;
-  height: 100vh;
-  background: white;
-  display: flex;
-  align-items: center;
-  padding-top: 8%;
-  padding-left: 11%;
-  padding-right: 8%;
-}
-
-.splitScreen {
-  display: flex;
-  width: 100%;
-}
-
-.leftPanel {
-  flex: 27;
-}
-
-.middleSpace {
-  flex: 25;
-}
-
-.rightPanel {
-  flex: 30;
-  display: flex;
-  flex-direction: column;
-}
-
-.rightContainer {
-  width: 74%;
-}
-
 .welcome {
   color: #2b3674;
   font-size: 28px;
   font-family: var(--font-poppins);
   font-weight: 700;
-  line-height: 56px;
+  padding-bottom: 6px;
   word-wrap: break-word;
 }
 
@@ -129,7 +95,7 @@
 
 .signInButton {
   color: white;
-  background-color: #005aa3;
+  background-color: #008afc;
   font-size: 14px;
   font-family: var(--font-poppins);
   font-weight: 700;
@@ -137,7 +103,7 @@
   width: 100%;
   height: 45px;
   padding: 10px 8px;
-  border-radius: 16px;
+  border-radius: 12px;
   border: none;
   justify-content: center;
   align-items: center;
@@ -176,7 +142,7 @@
 }
 
 .forgotPassword {
-  color: #005aa3;
+  color: #008afc;
   font-size: 12px;
   font-weight: 600;
   display: flex;
@@ -190,13 +156,13 @@
 .dontHaveAccountLabel {
   color: #1a1a1a;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
   display: flex;
   align-items: center;
 }
 
 .signUpButton {
-  color: #007aff;
+  color: #008afc;
   font-size: 12px;
   font-weight: 600;
   display: flex;
@@ -210,15 +176,15 @@
   background-color: #a3aed0;
   font-size: 14px;
   font-family: var(--font-poppins);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 14px;
   word-wrap: break-word;
   text-align: center;
   width: 100%;
   height: 43px;
-  background: #f4f7fe;
-  border-radius: 16px;
-  border: none;
+  background: white;
+  border-radius: 12px;
+  border: 1px #e0e5f2 solid;
   justify-content: center;
   align-items: center;
   cursor: pointer;

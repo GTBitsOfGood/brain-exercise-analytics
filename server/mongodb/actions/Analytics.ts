@@ -12,10 +12,8 @@ export const getAnalyticsByID = async (
 export const createAnalyticsID = async (
   userID: string,
 ): Promise<IAnalytics> => {
-  const today = new Date();
   const analytics = (await Analytics.create({
     userID,
-    startDate: today,
   })) as IAnalytics;
   return analytics;
 };

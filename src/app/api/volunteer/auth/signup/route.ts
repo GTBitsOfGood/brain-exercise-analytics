@@ -4,7 +4,8 @@ import APIWrapper from "@server/utils/APIWrapper";
 
 type SignupData = {
   signedInEmail: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   phoneNumber: string;
   country: string;
   state: string;
@@ -29,7 +30,8 @@ export const POST = APIWrapper({
       signupData.city === undefined ||
       signupData.country === undefined ||
       signupData.signedInEmail === undefined ||
-      signupData.name === undefined ||
+      signupData.firstName === undefined ||
+      signupData.lastName === undefined ||
       signupData.phoneNumber === undefined ||
       signupData.state === undefined
     ) {
@@ -46,7 +48,8 @@ export const POST = APIWrapper({
 
     const newSignUp = await volunteerSignUp(
       signupData.signedInEmail,
-      signupData.name,
+      signupData.firstName,
+      signupData.lastName,
       signupData.phoneNumber,
       signupData.country,
       signupData.state,

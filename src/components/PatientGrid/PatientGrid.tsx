@@ -22,12 +22,12 @@ interface PatientGridProps {
 const columns: GridColDef[] = [
   { field: "id", headerName: "", width: 90 },
   {
-    field: "first name",
+    field: "firstName",
     headerName: "First Name",
     sortable: true,
   },
   {
-    field: "last name",
+    field: "lastName",
     headerName: "Last Name",
     sortable: true,
   },
@@ -87,9 +87,9 @@ export default function PatientGrid(params: PatientGridProps) {
         (v) =>
           ({
             id: v._id,
-            firstName: v.name.split(" ")[0],
-            lastName: v.name.split(" ")[1],
-            dateOfBirth: transformDate(v.patientDetails.birthDate),
+            firstName: v.firstName,
+            lastName: v.lastName,
+            dateOfBirth: transformDate(v.birthDate),
             active: v.active,
             email: v.email,
             chapter: v.chapter,
@@ -111,7 +111,6 @@ export default function PatientGrid(params: PatientGridProps) {
   return (
     <div className={styles.Container}>
       <DataGrid
-        rows={rows}
         columns={columns}
         sortField={params.sortField}
         setSortField={params.setSortField}

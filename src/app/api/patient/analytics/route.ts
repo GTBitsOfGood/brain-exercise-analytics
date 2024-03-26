@@ -9,8 +9,8 @@ import { getUserById } from "@server/mongodb/actions/User";
 
 export const GET = APIWrapper({
   config: {
-    // requireToken: true,
-    // requireVolunteer: true,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
@@ -48,12 +48,9 @@ export const GET = APIWrapper({
     if (user?.role !== Role.NONPROFIT_PATIENT) {
       throw new Error("User is not a patient");
     }
-    const data = await getAggregatedAnalytics(
-      id,
-      user.name,
-      range,
-      updatedSections,
-    );
+
+    const name = `${user.firstName} ${user.lastName}`;
+    const data = await getAggregatedAnalytics(id, name, range, updatedSections);
 
     return data;
   },

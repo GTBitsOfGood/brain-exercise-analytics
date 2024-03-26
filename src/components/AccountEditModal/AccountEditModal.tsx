@@ -11,14 +11,17 @@ const Modal = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
-    name,
+    firstName,
+    lastName,
     phoneNumber,
     email,
+    birthDate,
     patientDetails,
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
-  const { birthDate } = patientDetails;
-  const [updatedName, setUpdatedName] = useState<string>(name);
+  const [updatedName, setUpdatedName] = useState<string>(
+    `${firstName} ${lastName}`,
+  );
   const [updatedPhoneNumber, setUpdatedPhoneNumber] =
     useState<string>(phoneNumber);
   const [updatedEmail, setUpdatedEmail] = useState<string>(email);
@@ -65,12 +68,13 @@ const Modal = () => {
   const handleSaveChanges = () => {
     dispatch(
       update({
-        name: updatedName,
+        firstName: updatedName.split(" ")[0] ?? "",
+        lastName: updatedName.split(" ")[1] ?? "",
         phoneNumber: updatedPhoneNumber,
         email: updatedEmail,
+        birthDate: updatedBirthDate,
         patientDetails: {
           ...patientDetails,
-          birthDate: updatedBirthDate,
         },
       }),
     );
@@ -79,7 +83,7 @@ const Modal = () => {
   };
 
   const handleCancel = () => {
-    setUpdatedName(name);
+    setUpdatedName(`${firstName} ${lastName}`);
     setUpdatedPhoneNumber(phoneNumber);
     setUpdatedEmail(email);
     setUpdatedBirthDate(unupdatedBirthDate);
@@ -125,7 +129,7 @@ const Modal = () => {
           />
           <div className={styles.myContainer}>
             <div className={styles.first}>
-              <label>{name}</label>
+              <label>{`${firstName} ${lastName}`}</label>
               <ActiveIndicatorBox active={active} />
             </div>
             <div className={styles.second}>
@@ -158,7 +162,7 @@ const Modal = () => {
           <div className={styles.inputField}>
             <label>Date of Birth:</label>
             <input
-              placeholder="MM/DD/YYYY"
+              placeholder="mm/dd/yyyy"
               value={updatedBirthDateInput}
               onChange={(e) => {
                 const formattedDate = formatBirthDate(e.target.value);

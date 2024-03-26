@@ -6,6 +6,7 @@ import { persistReducer } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 import authReducer from "./reducers/authReducer";
+import patientSearchReducer from "./reducers/patientSearchReducer";
 
 const createNoopStorage = () => {
   return {
@@ -35,6 +36,7 @@ const rootReducer = persistReducer(
   persistConfig,
   combineReducers({
     auth: authReducer,
+    patientSearch: patientSearchReducer,
   }),
 );
 

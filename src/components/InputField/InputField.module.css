@@ -11,21 +11,12 @@
 
 .input-label {
   color: #2b3674;
-  font-size: 13px;
+  font-size: 12px;
   font-family: var(--font-poppins);
   font-weight: 600;
   line-height: 14px;
   word-wrap: break-word;
   padding-bottom: 8px;
-}
-
-.asterisk {
-  color: #005aa3;
-  font-size: 13px;
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  line-height: 14px;
-  word-wrap: break-word;
 }
 
 .input-container {
@@ -37,12 +28,12 @@
   width: 100%;
   font-size: 12px;
   font-family: var(--font-poppins);
-  font-weight: 500;
+  /* font-weight: 500; */
   line-height: 35px;
   word-wrap: break-word;
   resize: none;
   height: 40px;
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px #e0e5f2 solid;
   padding-left: 17px;
   padding-right: 43px;
@@ -50,7 +41,7 @@
 
 .input-field:focus {
   outline: none;
-  border: 2px solid rgb(59 130 246);
+  border: 2px solid #2b3674;
 }
 
 .password-field {
@@ -97,4 +88,14 @@
   color: #ff0000;
   padding-left: 5px;
   font-size: 11px;
+}
+.icon-container {
+  display: flex;
+  flex-direction: row;
+}
+.icon {
+  padding-left: 17px;
+  display: flex;
+  align-items: center;
+  color: #8f9bba;
 }

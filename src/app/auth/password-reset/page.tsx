@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { FormEvent, MouseEvent, useState } from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
-import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@/common_utils/types";
@@ -30,7 +29,11 @@ export default function Page() {
     setShowGeneralError(false);
   };
 
-  const continueButtonFunction = async () => {
+  const continueButtonFunction = async (
+    event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+
     resetErrors();
     setContinueClicked(true);
     setEmailError(email.length === 0 ? "Email can't be blank." : "");
@@ -48,7 +51,8 @@ export default function Page() {
           method: HttpMethod.POST,
           body: {
             email,
-            name: `${firstName} ${lastName}`,
+            firstName,
+            lastName,
           },
           authRequired: false,
         });
@@ -75,107 +79,98 @@ export default function Page() {
   };
 
   return (
-    <div className={styles.screen}>
-      <div className={styles["split-screen"]}>
-        <div className={styles.left}>
-          <LeftSideOfPage />
-        </div>
-        <div className={styles["middle-space"]} />
-        <div className={styles.right}>
-          {!validateInputs && (
-            <div className={styles["right-container"]}>
-              <span className={styles["password-reset"]}>Account Recovery</span>
-              <p className={styles.description}>
-                If you&apos;ve forgotten your password, you&apos;ll need to
-                reset your password to proceed.
-                <br />
-                Please complete the form below to reset your account.
-              </p>
-              <div className={styles.inputs}>
-                <div className={styles["first-last-name"]}>
-                  <div className={styles.name}>
-                    <InputField
-                      title="First Name"
-                      placeholder="Your first name"
-                      required={true}
-                      value={firstName}
-                      onChange={(e) => {
-                        setFirstName(e.target.value);
-                        setFirstNameError("");
-                        setShowGeneralError(false);
-                      }}
-                      showError={firstNameError !== ""}
-                      error={firstNameError}
-                    />
-                  </div>
-                  <div className={styles.name}>
-                    <InputField
-                      title="Last Name"
-                      placeholder="Your last name"
-                      required={true}
-                      value={lastName}
-                      onChange={(e) => {
-                        setLastName(e.target.value);
-                        setLastNameError("");
-                        setShowGeneralError(false);
-                      }}
-                      showError={lastNameError !== ""}
-                      error={lastNameError}
-                    />
-                  </div>
-                </div>
-                <div className={styles.email}>
+    <div>
+      {!validateInputs && (
+        <>
+          <p className={styles["password-reset"]}>Account recovery</p>
+          <p className={styles.description}>
+            If you&apos;ve forgotten your password, you&apos;ll need to reset
+            your password to proceed. Please complete the form below to reset
+            your account.
+          </p>
+          <form onSubmit={continueButtonFunction}>
+            <div className={styles.inputs}>
+              <div className={styles["first-last-name"]}>
+                <div className={styles.name}>
                   <InputField
-                    title="Email"
-                    placeholder="mail@simple.com"
+                    title="First Name"
+                    placeholder="Your first name"
                     required={true}
-                    value={email}
+                    value={firstName}
                     onChange={(e) => {
-                      setEmail(e.target.value);
-                      setEmailError("");
+                      setFirstName(e.target.value);
+                      setFirstNameError("");
                       setShowGeneralError(false);
                     }}
-                    showError={emailError !== ""}
-                    error={emailError}
+                    showError={firstNameError !== ""}
+                    error={firstNameError}
+                  />
+                </div>
+                <div className={styles.name}>
+                  <InputField
+                    title="Last Name"
+                    placeholder="Your last name"
+                    required={true}
+                    value={lastName}
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                      setLastNameError("");
+                      setShowGeneralError(false);
+                    }}
+                    showError={lastNameError !== ""}
+                    error={lastNameError}
                   />
                 </div>
               </div>
-              {showGeneralError && (
-                <div className={styles["general-error"]}>
-                  <ErrorIcon
-                    className={styles["error-icon"]}
-                    sx={{ width: "18px" }}
-                  />
-                  <p className={styles["error-message"]}>
-                    Error: An internal server error has occurred. Please try
-                    again later.
-                  </p>
-                </div>
-              )}
-              <div className={styles["continue-button-container"]}>
-                <button
-                  className={styles["continue-button"]}
-                  onClick={continueButtonFunction}
-                >
-                  Continue
-                </button>
+              <div className={styles.email}>
+                <InputField
+                  title="Email"
+                  placeholder="mail@simple.com"
+                  required={true}
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError("");
+                    setShowGeneralError(false);
+                  }}
+                  showError={emailError !== ""}
+                  error={emailError}
+                />
               </div>
             </div>
-          )}
+            {showGeneralError && (
+              <div className={styles["general-error"]}>
+                <ErrorIcon
+                  className={styles["error-icon"]}
+                  sx={{ width: "18px" }}
+                />
+                <p className={styles["error-message"]}>
+                  Error: An internal server error has occurred. Please try again
+                  later.
+                </p>
+              </div>
+            )}
+            <div className={styles["continue-button-container"]}>
+              <button
+                className={styles["continue-button"]}
+                onClick={continueButtonFunction}
+              >
+                Continue
+              </button>
+            </div>
+          </form>
+        </>
+      )}
 
-          {continueClicked && validateInputs && (
-            <div>
-              <span className={styles["email-sent-text"]}>
-                Email has been sent!
-              </span>
-              <p className={styles["email-sent-description"]}>
-                We&apos;ve just sent the password reset link to your email.
-                Please use the provided link to reset your password!
-              </p>
-            </div>
-          )}
+      {continueClicked && validateInputs && (
+        <div>
+          <p className={styles["email-sent-text"]}>Email has been sent!</p>
+          <p className={styles["email-sent-description"]}>
+            We&apos;ve just sent the password reset link to your email. Please
+            use the provided link to reset your password!
+          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 }

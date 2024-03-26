@@ -1,129 +1,97 @@
-import React, { useState, useMemo } from "react";
+"use client";
+
+import React, { useCallback, useState } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
-import { SortField } from "@/common_utils/types";
-import { classes } from "@src/utils/utils";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod, IUser, SortField } from "@/common_utils/types";
+import { GridColDef } from "@src/utils/types";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
+import { Row } from "./Row/Row";
 
-interface IVolunteer {
-  id: number;
-  name: string;
-  title: string;
-  dateJoined: string;
-  status: boolean;
+interface VolunteerGridProps {
+  data: IUser[];
+  sortField: SortField | undefined;
+  setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  pageCount: number;
+  currentPage: number;
+  refreshUsers: () => void;
 }
 
-interface GridColDef<T> {
-  field: string;
-  headerName: string;
-  sortable?: boolean;
-  renderCell?: (params: T) => JSX.Element;
-}
-
-const volunteersColumns: GridColDef<IVolunteer>[] = [
-  { field: "name", headerName: "Name", sortable: true },
-  { field: "title", headerName: "Title", sortable: true },
-  { field: "dateJoined", headerName: "Date Joined", sortable: true },
-  { field: "status", headerName: "Status", sortable: true },
+const columns: GridColDef[] = [
+  { field: "id", headerName: "", width: 90 },
+  { field: "firstName", headerName: "Name", sortable: true },
+  { field: "startDate", headerName: "Date Joined", sortable: true },
+  { field: "role", headerName: "Access Level", sortable: true },
+  { field: "adminDetails.active", headerName: "Status", sortable: true },
   { field: "actions", headerName: "", sortable: false },
 ];
 
-const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
-  const [sortField, setSortField] = useState<SortField | undefined>(undefined);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const itemsPerPage = 10;
-  const pageCount = Math.ceil(data.length / itemsPerPage);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [deleteVolunteerId, setDeleteVolunteerId] = useState<number | null>(
-    null,
+function ColumnSizes() {
+  return (
+    <colgroup>
+      <col style={{ width: "2%" }} />
+      <col style={{ width: "20%" }} />
+      <col style={{ width: "15%" }} />
+      <col style={{ width: "20%" }} />
+      <col style={{ width: "20%" }} />
+      <col style={{ width: "13%" }} />
+    </colgroup>
   );
-  const [excludedIds, setExcludedIds] = useState<number[]>([]);
+}
 
-  const handleConfirmDelete = () => {
-    if (deleteVolunteerId !== null) {
-      setExcludedIds((current) => [...current, deleteVolunteerId]);
-      // eslint-disable-next-line
-      data = data.filter(
-        (volunteer) =>
-          !excludedIds.includes(volunteer.id) &&
-          volunteer.id !== deleteVolunteerId,
-      );
-      setDeleteVolunteerId(null);
+export default function VolunteerGrid(params: VolunteerGridProps) {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [deleteVolunteerEmail, setDeleteVolunteerEmail] = useState<
+    string | null
+  >(null);
+
+  const handleConfirmDelete = async () => {
+    if (deleteVolunteerEmail !== null) {
+      await internalRequest({
+        url: "/api/volunteer",
+        method: HttpMethod.DELETE,
+        body: {
+          email: deleteVolunteerEmail,
+        },
+      });
+
+      setDeleteVolunteerEmail(null);
+      params.refreshUsers();
     }
     setPopupOpen(false);
   };
 
-  const handleClosePopup = () => {
+  const handleClosePopup = useCallback(() => {
     setPopupOpen(false);
-    setDeleteVolunteerId(null);
-  };
+    setDeleteVolunteerEmail(null);
+  }, []);
 
-  const handleDeleteClick = (id: number) => {
-    setDeleteVolunteerId(id);
+  const handleDeleteClick = useCallback(async (email: string) => {
+    setDeleteVolunteerEmail(email);
     setPopupOpen(true);
-  };
+  }, []);
 
-  const currentItems = useMemo(() => {
-    const start = currentPage * itemsPerPage;
-    const end = start + itemsPerPage;
-    return data
-      .filter((volunteer) => !excludedIds.includes(volunteer.id))
-      .slice(start, end);
-  }, [currentPage, itemsPerPage, data, excludedIds]);
-
-  function ColumnSizes() {
+  // Construct Rows from the data
+  const Rows = params.data.map((volunteer) => {
     return (
-      <colgroup>
-        <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
-        <col style={{ width: "20%" }} />
-      </colgroup>
+      <Row
+        key={`volunteer-${volunteer._id}`}
+        volunteer={volunteer}
+        handleDeleteClick={handleDeleteClick}
+      />
     );
-  }
-
-  // Construct Rows from the currentItems
-  const Rows = currentItems.map((volunteer) => (
-    <tr className={styles.row} key={volunteer.id}>
-      <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.name}</div>
-      </td>
-      <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.title}</div>
-      </td>
-      <td className={styles.RowCell}>
-        <div className={styles.RowCellContainer}>{volunteer.dateJoined}</div>
-      </td>
-      <td className={classes(styles.RowCell, styles.statusContainer)}>
-        <label className={styles.statusToggle}>
-          <input type="checkbox" />
-          <span />
-        </label>
-        <span className={styles.RowCellContainer}>
-          {volunteer.status ? "Active" : "Inactive"}
-        </span>
-      </td>
-      <td>
-        <text
-          className={classes(styles.RowCellContainer, styles.deleteButton)}
-          onClick={() => handleDeleteClick(volunteer.id)}
-        >
-          Delete Account
-        </text>
-      </td>
-    </tr>
-  ));
+  });
 
   return (
     <div className={styles.volunteerGridWrapper}>
       <div className={styles.volunteerGridTable}>
         <DataGrid
-          columns={volunteersColumns}
-          sortField={sortField}
-          setSortField={setSortField}
-          rows={currentItems}
+          columns={columns}
+          sortField={params.sortField}
+          setSortField={params.setSortField}
           ColumnSizes={ColumnSizes}
           Rows={Rows}
         />
@@ -132,12 +100,10 @@ const VolunteerGrid: React.FC<{ data: IVolunteer[] }> = ({ data }) => {
         <Popup onClose={handleClosePopup} onConfirm={handleConfirmDelete} />
       )}
       <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        pageCount={pageCount}
+        setCurrentPage={params.setCurrentPage}
+        pageCount={params.pageCount}
+        currentPage={params.currentPage}
       />
     </div>
   );
-};
-
-export default VolunteerGrid;
+}

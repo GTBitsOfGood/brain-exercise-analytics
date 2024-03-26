@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { FormEvent, MouseEvent, useState } from "react";
 import {
   CheckBox,
   CheckBoxOutlineBlank,
@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
 
-import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import googleSignIn from "@src/firebase/google_signin";
@@ -84,7 +83,10 @@ export default function Page() {
     }
   };
 
-  const handleEmailSignIn = async () => {
+  const handleEmailSignIn = async (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
     resetErrors();
     let hasError = false;
 
@@ -111,123 +113,106 @@ export default function Page() {
   const CheckIcon = keepLogged ? CheckBox : CheckBoxOutlineBlank;
 
   return (
-    <div className={styles.screen}>
-      <div className={styles.splitScreen}>
-        <div className={styles.leftPanel}>
-          <LeftSideOfPage />
-        </div>
-        <div className={styles.middleSpace} />
-        <div className={styles.rightPanel}>
-          <div className={styles.rightContainer}>
-            <span className={styles.welcome}>Welcome</span>
-            <p className={styles.descriptionText}>
-              Enter your email and password to sign in!
-            </p>
-            <div className={styles.googleButtonContainer}>
-              <button
-                className={styles.googleButton}
-                onClick={handleGoogleSignIn}
-              >
-                <img
-                  className={styles.googleGLogo}
-                  alt="Google g logo"
-                  src="https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg"
-                />
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>Sign in with Google
-              </button>
-            </div>
-            <div className={styles.separator}>
-              <img
-                className={styles.line}
-                alt="Line"
-                src="https://c.animaapp.com/2gdwBOyI/img/line-17.svg"
-              />
-              <div className={styles.textWrapper4}>or</div>
-              <img
-                className={styles.line}
-                alt="Line"
-                src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
-              />
-            </div>
-            <div className={styles.inputFields}>
-              <div className={styles.emailField}>
-                <InputField
-                  title="Email"
-                  placeholder="mail@simple.com"
-                  required={true}
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setEmailError("");
-                    setShowGeneralError(false);
-                  }}
-                  showError={emailError !== ""}
-                  error={emailError}
-                />
-              </div>
-              <div className={styles.passwords}>
-                <InputField
-                  title="Password"
-                  type="password"
-                  required={true}
-                  placeholder="Min. 8 characters"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setPasswordError("");
-                    setShowGeneralError(false);
-                  }}
-                  showError={passwordError.length !== 0}
-                  error={passwordError}
-                />
-              </div>
-            </div>
-            <div className={styles.checkboxContainer}>
-              <div className={styles.checkboxLabel}>
-                <CheckIcon
-                  className={styles.checkboxIcon}
-                  sx={{ width: "18px" }}
-                  onClick={toggleKeepMeLoggedIn}
-                />
-                <p>Keep me logged in</p>
-              </div>
-              <a className={styles.forgotPassword} href="/auth/password-reset">
-                Forgot password?
-              </a>
-            </div>
-
-            {showGeneralError && (
-              <div className={styles.generalError}>
-                <ErrorIcon
-                  className={styles.errorIcon}
-                  sx={{ width: "18px" }}
-                />
-                <p className={styles.errorMessage}>
-                  Error: An internal server error has occurred. Please try again
-                  later.
-                </p>
-              </div>
-            )}
-            <div className={styles.signInButtonContainer}>
-              <button
-                className={styles.signInButton}
-                onClick={handleEmailSignIn}
-              >
-                Sign In
-              </button>
-            </div>
-
-            <div className={styles.bottomTextContainer}>
-              <div className={styles.dontHaveAccountLabel}>
-                Don&apos;t have an Account?{" "}
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              </div>
-              <a className={styles.signUpButton} href="/auth/signup">
-                Sign up now
-              </a>
-            </div>
+    <div>
+      <p className={styles.welcome}>Log in</p>
+      <p className={styles.descriptionText}>
+        Enter your email and password to sign in!
+      </p>
+      <div className={styles.googleButtonContainer}>
+        <button className={styles.googleButton} onClick={handleGoogleSignIn}>
+          <img
+            className={styles.googleGLogo}
+            alt="Google g logo"
+            src="https://c.animaapp.com/2gdwBOyI/img/google--g--logo-1.svg"
+          />
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>Continue with Google
+        </button>
+      </div>
+      <div className={styles.separator}>
+        <img
+          className={styles.line}
+          alt="Line"
+          src="https://c.animaapp.com/2gdwBOyI/img/line-17.svg"
+        />
+        <div className={styles.textWrapper4}>or</div>
+        <img
+          className={styles.line}
+          alt="Line"
+          src="https://c.animaapp.com/2gdwBOyI/img/line-18.svg"
+        />
+      </div>
+      <form onSubmit={handleEmailSignIn}>
+        <div className={styles.inputFields}>
+          <div className={styles.emailField}>
+            <InputField
+              title="Email"
+              placeholder="example@email.com"
+              required={true}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError("");
+                setShowGeneralError(false);
+              }}
+              showError={emailError !== ""}
+              error={emailError}
+            />
+          </div>
+          <div className={styles.passwords}>
+            <InputField
+              title="Password"
+              type="password"
+              required={true}
+              placeholder="Minimum 8 Characters"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError("");
+                setShowGeneralError(false);
+              }}
+              showError={passwordError.length !== 0}
+              error={passwordError}
+            />
           </div>
         </div>
+
+        <div className={styles.checkboxContainer}>
+          <div className={styles.checkboxLabel}>
+            <CheckIcon
+              className={styles.checkboxIcon}
+              sx={{ width: "18px" }}
+              onClick={toggleKeepMeLoggedIn}
+            />
+            <p>Keep me logged in</p>
+          </div>
+          <a className={styles.forgotPassword} href="/auth/password-reset">
+            Forgot password?
+          </a>
+        </div>
+
+        {showGeneralError && (
+          <div className={styles.generalError}>
+            <ErrorIcon className={styles.errorIcon} sx={{ width: "18px" }} />
+            <p className={styles.errorMessage}>
+              Error: An internal server error has occurred. Please try again
+              later.
+            </p>
+          </div>
+        )}
+        <div className={styles.signInButtonContainer}>
+          <button className={styles.signInButton} onClick={handleEmailSignIn}>
+            Continue
+          </button>
+        </div>
+      </form>
+
+      <div className={styles.bottomTextContainer}>
+        <div className={styles.dontHaveAccountLabel}>
+          Don&apos;t have an account? <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <a className={styles.signUpButton} href="/auth/signup">
+          Sign up now
+        </a>
       </div>
     </div>
   );
