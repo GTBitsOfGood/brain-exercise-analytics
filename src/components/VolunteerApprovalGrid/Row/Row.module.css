@@ -43,7 +43,7 @@
 }
 
 .ExpandedRowContainer {
-  width: 111%;
+  width: 108.2%;
   border-radius: 5px;
   background-color: var(--Selected-Blue, #e7eeff);
   display: flex;
@@ -51,7 +51,7 @@
   padding: 15px;
   column-gap: 13px;
   flex-wrap: wrap;
-  margin: 0 -5%;
+  margin: 0 0 0 -3.8%;
 }
 
 .ExpandedRowColumn {
