@@ -13,8 +13,9 @@ export const GET = APIWrapper({
   },
   handler: async () => {
     const accountName = "beiaccount";
-    const accountKey =
-      "w7TfstwMdQh4bVQ7H2fTrlOgX3/5SBNkFunKA1aUm6MAzqY3dPkANcvGN0ISSSbuYTXOog5G4Wi0+AStREzOtw==";
+    // const accountKey =
+    //   "w7TfstwMdQh4bVQ7H2fTrlOgX3/5SBNkFunKA1aUm6MAzqY3dPkANcvGN0ISSSbuYTXOog5G4Wi0+AStREzOtw==";
+    const accountKey = process.env.AZURE_ACCOUNT_KEY
     const storageCredential = new StorageSharedKeyCredential(
       accountName,
       accountKey,
