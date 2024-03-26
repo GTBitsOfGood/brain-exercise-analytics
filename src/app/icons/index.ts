@@ -23,6 +23,8 @@ import PromptsIcon from "./PromptsIcon";
 import RootXIcon from "./RootXIcon";
 import TimeIcon from "./TimeIcon";
 import WritingIcon from "./WritingIcon";
+import PencilIcon from "./PencilIcon";
+import SearchIcon from "./SearchIcon";
 
 export {
   BarChartIcon,
@@ -49,5 +51,7 @@ export {
   RootXIcon,
   TimeIcon,
   WritingIcon,
+  SearchIcon,
   ClearTagIcon,
+  PencilIcon,
 };

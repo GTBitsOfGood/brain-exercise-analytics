@@ -1,5 +1,6 @@
 import React from "react";
 import { AttemptIcon, PromptsIcon, TimeIcon } from "@src/app/icons";
+import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./ReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
 import {
@@ -42,6 +43,10 @@ interface InputProp {
   currentTime: string;
   completionStatus: boolean;
   style?: object;
+  menuState: [
+    selectedValue: DateRangeEnum,
+    setSelectedvalue: (value: DateRangeEnum) => void,
+  ];
 }
 
 export default function ReadingScreen({
@@ -53,6 +58,7 @@ export default function ReadingScreen({
   currentTime,
   completionStatus,
   style,
+  menuState,
 }: InputProp) {
   return (
     <div className={styles.container} style={style}>
@@ -60,20 +66,24 @@ export default function ReadingScreen({
         <ReadingIcon />
         <p>READING</p>
         <div className={styles.dateSelector}>
-          <DateSelector />
+          <DateSelector
+            selectedValue={menuState[0]}
+            setSelectedValue={menuState[1]}
+          />
         </div>
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
           <StackedBarChart
-            width={105}
-            height={165}
-            title="Writing Session Completion History"
+            width={325}
+            height={215}
+            title="Reading Session Completion History"
             data={sessionHistory}
             legend={[
               { text: "sessions completed without reading", color: "#FF9FB3" },
               { text: "sessions completed with reading", color: "#008AFC" },
             ]}
+            yLabel="Writing"
             hoverable
             percentageChange
             fullWidth

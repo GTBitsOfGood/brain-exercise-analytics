@@ -19,15 +19,6 @@
   padding-bottom: 8px;
 }
 
-.asterisk {
-  color: #005aa3;
-  font-size: 12px;
-  font-family: var(--font-poppins);
-  font-weight: 500;
-  line-height: 14px;
-  word-wrap: break-word;
-}
-
 .input-container {
   position: relative;
 }
@@ -42,7 +33,7 @@
   word-wrap: break-word;
   resize: none;
   height: 40px;
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px #e0e5f2 solid;
   padding-left: 17px;
   padding-right: 43px;
@@ -50,7 +41,7 @@
 
 .input-field:focus {
   outline: none;
-  border: 2px solid rgb(59 130 246);
+  border: 2px solid #2b3674;
 }
 
 .password-field {

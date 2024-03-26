@@ -1,0 +1,64 @@
+.dateSelector {
+  margin-left: auto;
+  padding-right: 20px;
+}
+
+.OverallDashboard {
+  width: 100%;
+  height: max-content;
+
+  .titleRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 51px;
+
+    .title {
+      font-family: var(--font-poppins);
+      font-weight: 700;
+      font-size: 22px;
+      font-style: normal;
+    }
+  }
+
+  .dataGrid {
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
+    gap: 15px;
+    .box {
+      width: 190px;
+      box-shadow: 12.02189px 14.59801px 34.34826px 3.43483px
+        rgba(112, 144, 176, 0.08);
+    }
+  }
+
+  .middleContainer {
+    display: inline-flex;
+    flex-direction: row;
+    column-gap: 15px;
+    margin-top: 26px;
+    margin-bottom: 26px;
+    .graph {
+      flex: 2;
+    }
+  }
+
+  .bottomContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+
+    .box {
+      width: 100%;
+      height: 88px;
+    }
+    .title {
+      font-family: var(--font-poppins);
+      font-weight: 600;
+      font-size: 22px;
+      color: #2b3674;
+    }
+  }
+}

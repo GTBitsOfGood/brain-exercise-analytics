@@ -15,7 +15,6 @@ import {
   SearchResponseBody,
 } from "@/common_utils/types";
 
-import { getAuth } from "firebase/auth";
 import firebaseInit from "@src/firebase/config";
 
 import { RootState } from "@src/redux/rootReducer";
@@ -46,34 +45,30 @@ export default function Page() {
   const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
-    getAuth().onAuthStateChanged((user) => {
-      if (user) {
-        internalRequest<SearchResponseBody<IPatientTableEntry>>({
-          url: "/api/patient/filter-patient",
-          method: HttpMethod.POST,
-          body: {
-            params: {
-              name: fullName,
-              dateOfBirths: Array.from(dateOfBirths),
-              emails: Array.from(emails),
-              additionalAffiliations: Array.from(additionalAffiliations),
-              secondaryNames: Array.from(secondaryNames),
-              secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
-              beiChapters: Array.from(beiChapters),
-              active,
-              countries: Array.from(countries),
-              states: Array.from(states),
-              cities: Array.from(cities),
-              dateOfJoins: Array.from(dateOfJoins),
-            },
-            page: currentPage,
-            sortParams: sortField,
-          },
-        }).then((res) => {
-          setPageCount(res?.numPages ?? 0);
-          setFilteredUsers(res?.data ?? []);
-        });
-      }
+    internalRequest<SearchResponseBody<IPatientTableEntry>>({
+      url: "/api/patient/filter-patient",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          name: fullName,
+          dateOfBirths: Array.from(dateOfBirths),
+          emails: Array.from(emails),
+          additionalAffiliations: Array.from(additionalAffiliations),
+          secondaryNames: Array.from(secondaryNames),
+          secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
+          beiChapters: Array.from(beiChapters),
+          active,
+          countries: Array.from(countries),
+          states: Array.from(states),
+          cities: Array.from(cities),
+          dateOfJoins: Array.from(dateOfJoins),
+        },
+        page: currentPage,
+        sortParams: sortField,
+      },
+    }).then((res) => {
+      setPageCount(res?.numPages ?? 0);
+      setFilteredUsers(res?.data ?? []);
     });
   }, [
     fullName,

@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Poppins } from "next/font/google";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { SqrtIcon, BookIcon, QuestionIcon, DocIcon } from "@src/app/icons";
+import useHash from "@src/hooks/useHash";
 import styles from "./Metric.module.css";
 
 const poppins = Poppins({
@@ -14,30 +15,101 @@ const poppins = Poppins({
 
 type MetricProps = {
   title: string;
+  isClickable: boolean;
 };
 
-const Metric = (MetricProps: MetricProps) => {
+const Metric = (metricProps: MetricProps) => {
   const router = useRouter();
-  const pathname = usePathname();
+  const currentPath = usePathname();
+  const hash = useHash();
+
+  const isActive = useMemo(
+    () =>
+      currentPath.startsWith("/patient/analytics") &&
+      hash?.toLowerCase() === metricProps.title.toLowerCase(),
+    [currentPath, metricProps.title, hash],
+  );
 
   const handleButtonClick = () => {
-    if (pathname.startsWith("/patient/dashboard/")) {
-      router.push(`${pathname}#${MetricProps.title}`);
+    if (currentPath.startsWith("/patient/analytics/")) {
+      router.push(`${currentPath}#${metricProps.title.toLowerCase()}`);
     } else {
-      router.push(`/patient/dashboard#${MetricProps.title}`);
+      router.push(`/patient/analytics#${metricProps.title.toLowerCase()}`);
     }
   };
 
+  const icon = useMemo(() => {
+    switch (metricProps.title) {
+      case "Math":
+        return (
+          <SqrtIcon
+            isActive={metricProps.isClickable}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
+          />
+        );
+      case "Reading":
+        return (
+          <BookIcon
+            isActive={metricProps.isClickable}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
+          />
+        );
+      case "Writing":
+        return (
+          <DocIcon
+            isActive={metricProps.isClickable}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
+          />
+        );
+      case "Trivia":
+        return (
+          <QuestionIcon
+            isActive={metricProps.isClickable}
+            className={
+              styles[
+                `analytics-icon-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
+          />
+        );
+      default:
+        return <></>;
+    }
+  }, [metricProps.title, metricProps.isClickable]);
+
   return (
-    <div className={styles.wrapper} onClick={handleButtonClick}>
+    <div
+      className={`${styles.wrapper} ${!metricProps.isClickable ? styles.disabled : ""}`}
+      onClick={metricProps.isClickable ? () => handleButtonClick() : undefined}
+    >
       <main className={poppins.variable}>
         <div className={styles["text-wrapper"]}></div>
-        <div className={styles["metrics-container"]}>
-          <div className={styles["dashboard-icon"]}>
-            <DashboardIcon />
-          </div>
-          <div className={styles.metric}>
-            <span>{MetricProps.title.toUpperCase()}</span>
+        <div
+          className={
+            styles[`metrics-container-${isActive ? "active" : "inactive"}`]
+          }
+        >
+          <div className={styles["dashboard-icon"]}>{icon}</div>
+          <div
+            className={
+              styles[
+                `metric-${metricProps.isClickable ? "active" : "inactive"}`
+              ]
+            }
+          >
+            <span>{metricProps.title}</span>
           </div>
         </div>
       </main>

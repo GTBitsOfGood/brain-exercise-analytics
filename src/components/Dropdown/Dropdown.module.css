@@ -6,3 +6,11 @@
 .input-field {
   height: 40px;
 }
+
+.defaultMenuItem {
+  width: 100%;
+  font-size: 12px;
+  font-family: var(--font-poppins);
+  font-weight: 400;
+  color: #313144;
+}

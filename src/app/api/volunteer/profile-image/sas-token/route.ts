@@ -12,13 +12,14 @@ export const GET = APIWrapper({
     requireVolunteer: true,
   },
   handler: async () => {
-    const accountName = process.env.ACCOUNT_NAME;
-    const accountKey = process.env.AZURE_ACCOUNT_KEY;
+    const accountName = process.env.AZURE_ACCOUNT_NAME as string;
+    const accountKey = process.env.AZURE_ACCOUNT_KEY as string;
+    const containerName = process.env.AZURE_CONTAINER_NAME as string;
+
     const storageCredential = new StorageSharedKeyCredential(
       accountName,
       accountKey,
     );
-    const containerName = process.env.CONTAINER_NAME;
     const blobName = uuidv4();
     const expiryDate = new Date(new Date().getTime() + 86400);
     const permissions = new BlobSASPermissions();

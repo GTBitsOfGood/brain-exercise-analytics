@@ -1,0 +1,262 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 12px;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  background-color: white;
+  margin-top: 5px;
+  padding: 12px 12px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: #444;
+  /* background-color: red; */
+}
+
+.answer::placeholder {
+  color: #888888;
+}
+
+.button_row {
+  margin-bottom: 20px;
+  display: flex;
+  /* background-color: red; */
+  flex-wrap: wrap;
+}
+
+.all_questions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  row-gap: 12px;
+  column-gap: 12px;
+  padding-bottom: 20px;
+
+  /* background-color: red; */
+}
+
+.question_box {
+  display: flex;
+  flex-direction: row;
+  border-radius: 12px;
+  color: #2b3674;
+  font-weight: 600;
+}
+.hodingValue {
+  border: 2px solid #008afc;
+  border-radius: 12px;
+}
+
+.label {
+  text-align: left;
+  margin-top: auto;
+  vertical-align: middle;
+  padding: 7px 15px;
+  height: 100%;
+  border: 1px solid #d9d9d9;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right: 0;
+  background-color: #f4f7fe;
+  font-size: 12px;
+}
+
+.select-dropdown-label {
+  background-color: #f4f7fe;
+  height: 31px;
+  display: flex;
+  align-items: center;
+}
+
+.email_label {
+  width: 120px;
+}
+
+.role_label {
+  width: 120px;
+}
+
+.email_answer {
+  width: 200px;
+}
+
+.additional_affil_label {
+  width: 156px;
+}
+
+.affiliation_answer {
+  width: 220px;
+}
+
+.sec_person_name_label {
+  width: 154px;
+  white-space: nowrap;
+  padding: 7px 15px;
+}
+
+.sec_person_name_answer {
+  width: 220px;
+}
+
+.sec_person_phone_label {
+  width: 125px;
+}
+
+.sec_person_phone_answer {
+  width: 220px;
+}
+
+.select-dropdown-answer {
+  display: inline-block;
+  border: 1px solid #d9d9d9;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #f4f7fe;
+}
+
+.answer {
+  border: 1px solid #d9d9d9 !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  /* background-color: purple; */
+  background-color: #f4f7fe;
+}
+
+.answerInput {
+  height: 31px !important;
+  /* border-radius: 10px !important; */
+  border: 0px solid !important;
+  /* background-color: red; */
+  /* fix me  */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #f4f7fe;
+}
+
+.secondaryInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.secondaryInfo > .question_box {
+  margin-top: 6px;
+  /* background-color: red; */
+}
+
+.secondaryInfoTitle {
+  font-size: 12px;
+  text-align: left;
+  margin-top: -8px;
+  color: #9ca5c2;
+  font-weight: 600;
+}
+
+.active_patient_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: green; */
+}
+
+.active_patient_box_label {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 12px;
+  column-gap: 12px;
+  height: 31 !important;
+}
+
+.general-button {
+  height: 31px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+.add-button {
+  background-color: #008afc;
+  color: white;
+  cursor: pointer;
+}
+
+.toggle-button-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.toggle-button {
+  font-family: var(--font-poppins);
+  color: #2b3674;
+  height: 31 !important;
+  padding: 6px 15px;
+  font-size: 12px;
+  border: 1px solid #d9d9d9;
+  transition: background-color 0.3s;
+  background-color: #f4f7fe;
+  cursor: pointer;
+}
+
+.toggle-button-left {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right: 0;
+}
+
+.toggle-button-right {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-left: 0;
+}
+
+.active-button {
+  background-color: #e3eafc;
+  color: #2b3674;
+  font-weight: 600;
+}
+.clear-button {
+  background-color: white;
+  color: #2b3674;
+  border: 1px solid #d9d9d9;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  row-gap: 12px;
+}
+.calendarContainer {
+  width: 146px;
+  background-color: #f4f7fe;
+}
+
+.control_buttons {
+  display: flex;
+  justify-content: flex-end;
+  font-weight: 600;
+  gap: 12px;
+}
+.clear-tag {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+  background-color: #e3eafc;
+  color: #2b3674;
+  border: #e3eafc;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.clear_tag_icon {
+  height: 18px;
+}
+
+.disabled {
+  color: #e3eafc;
+  background-color: #f4f7fe;
+  pointer-events: none;
+}

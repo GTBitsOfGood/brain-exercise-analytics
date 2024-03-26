@@ -24,7 +24,7 @@ export const POST = APIWrapper({
           val !== undefined &&
           val !== null &&
           (typeof val !== "string" || val.length > 0) &&
-          val.constructor !== Array,
+          (val.constructor !== Array || val.length > 0),
       ),
     );
 

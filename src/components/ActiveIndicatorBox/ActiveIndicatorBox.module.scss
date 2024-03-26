@@ -1,20 +1,16 @@
 .ActiveIndicatorBox {
-  width: 95.232px;
-  height: 41.937px;
   border-radius: 13.105px;
   background-color: rgba(5, 205, 153, 0.1);
-  padding-top: 10.48px;
-  padding-bottom: 10.48px;
-  padding-left: 12px;
+  padding: 10.48px 12px;
 
   .container {
     display: flex;
     align-items: center;
-    column-gap: 4px;
+    column-gap: 6px;
 
     .text {
       color: #2b3674;
-      font-family: var(--font-dm-sans);
+      font-family: var(--font-poppins);
       font-weight: 700;
       font-size: 12px;
       font-style: normal;
