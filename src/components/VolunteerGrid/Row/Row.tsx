@@ -32,7 +32,7 @@ interface Props {
 function ExpandedRow({ row }: { row: IUser }) {
   return (
     <tr>
-      <td colSpan={8}>
+      <td colSpan={6}>
         <div className={styles.ExpandedRowContainer}>
           <div className={styles.ExpandedRowColumn}>
             <ProfilePicIcon />
@@ -47,7 +47,7 @@ function ExpandedRow({ row }: { row: IUser }) {
               <div className={styles.Detail}>
                 <span className={styles.Label}>Date Joined</span>
                 <span className={styles.Content}>
-                  {row.startDate.toLocaleDateString()}
+                  {new Date(row.startDate).toLocaleDateString()}
                 </span>
               </div>
             </div>
@@ -55,7 +55,7 @@ function ExpandedRow({ row }: { row: IUser }) {
               <div className={styles.Detail}>
                 <span className={styles.Label}>Date of Birth</span>
                 <span className={styles.Content}>
-                  {row.birthDate.toLocaleDateString()}
+                  {new Date(row.birthDate).toLocaleDateString()}
                 </span>
               </div>
               <div className={styles.Detail}>
@@ -197,14 +197,14 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
           </div>
         </td>
         {volunteer.approved === AdminApprovalStatus.PENDING ? (
-          <td className={classes(styles.RowCell, styles.statusContainer)}>
-            <span className={styles.RowCellContainer}>
-              <button className={styles.InviteButton}>Invite Pending</button>
-            </span>
+          <td className={styles.RowCell}>
+            <div className={styles.RowCellContainer}>
+              <div className={styles.InvitePending}>Invite Pending</div>
+            </div>
           </td>
         ) : (
-          <td className={classes(styles.RowCell, styles.statusContainer)}>
-            <span className={styles.RowCellContainer}>
+          <td className={styles.RowCell}>
+            <div className={styles.RowCellContainer}>
               <Dropdown
                 options={volunteerStatusOptions}
                 value={updatedActive}
@@ -252,7 +252,7 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
                   lineHeight: "normal",
                 }}
               />
-            </span>
+            </div>
           </td>
         )}
         <td>

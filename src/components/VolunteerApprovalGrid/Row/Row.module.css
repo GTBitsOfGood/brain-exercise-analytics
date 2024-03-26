@@ -1,5 +1,7 @@
 .row {
   border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
+  width: 100%;
+  height: 65px;
 }
 
 .row:last-child {
@@ -41,14 +43,15 @@
 }
 
 .ExpandedRowContainer {
-  display: flex;
-  width: min-content;
+  width: 111%;
   border-radius: 5px;
-  box-sizing: border-box;
   background-color: var(--Selected-Blue, #e7eeff);
-  padding-top: 15px;
-  padding-bottom: 15px;
+  display: flex;
+  border-radius: 5px;
+  padding: 15px;
   column-gap: 13px;
+  flex-wrap: wrap;
+  margin: 0 -5%;
 }
 
 .ExpandedRowColumn {
@@ -97,9 +100,8 @@
 
 .actionsContainer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
+  column-gap: 10px;
   flex-direction: row;
 }
 
@@ -108,7 +110,7 @@
   background: rgba(50, 210, 150, 0.2);
   cursor: pointer;
   display: flex;
-  padding: 12px;
+  padding: 10px 12px;
   justify-content: center;
   align-items: center;
   gap: 6px;

@@ -33,7 +33,7 @@ function ColumnSizes() {
       <col style={{ width: "2%" }} />
       <col style={{ width: "25%" }} />
       <col style={{ width: "15%" }} />
-      <col style={{ width: "30%" }} />
+      <col style={{ width: "27%" }} />
       <col style={{ width: "20%" }} />
     </colgroup>
   );

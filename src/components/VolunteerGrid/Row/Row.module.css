@@ -1,5 +1,7 @@
 .row {
   border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
+  width: 100%;
+  height: 65px;
 }
 
 .nameCellContainer {
@@ -45,24 +47,16 @@
   display: none;
 }
 
-.ExpandedRow {
-  width: 100%;
-  border-radius: 5px;
-  background-color: var(--Selected-Blue, #e7eeff);
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-}
-
 .ExpandedRowContainer {
-  display: flex;
-  width: min-content;
+  width: 111%;
   border-radius: 5px;
-  box-sizing: border-box;
   background-color: var(--Selected-Blue, #e7eeff);
-  padding-top: 15px;
-  padding-bottom: 15px;
+  display: flex;
+  border-radius: 5px;
+  padding: 15px;
   column-gap: 13px;
+  flex-wrap: wrap;
+  margin: 0 -5%;
 }
 
 .ExpandedRowColumn {
@@ -109,7 +103,7 @@
   text-align: left;
 }
 
-.InviteButton {
+.InvitePending {
   display: inline-flex;
   padding: 8px 16px;
   align-items: center;
@@ -119,7 +113,7 @@
   background: var(--Light-Orange, #fce8dc);
   transition: background-color 0.3s; /* Smooth transition for interactions */
   color: #2b3674;
-  font-family: Poppins;
+  font-family: var(--font-poppins);
   font-size: 14px;
   font-style: italic;
   font-weight: 600;
@@ -130,9 +124,4 @@
   color: red;
   cursor: pointer;
   transition: background-color 0.2s;
-}
-
-.statusContainer {
-  display: flex;
-  align-items: center;
 }

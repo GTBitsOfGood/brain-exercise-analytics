@@ -29,7 +29,7 @@ interface Props {
 function ExpandedRow({ row }: { row: IUser }) {
   return (
     <tr>
-      <td colSpan={8}>
+      <td colSpan={5}>
         <div className={styles.ExpandedRowContainer}>
           <div className={styles.ExpandedRowColumn}>
             <ProfilePicIcon />
