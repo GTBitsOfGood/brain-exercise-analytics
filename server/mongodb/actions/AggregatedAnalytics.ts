@@ -50,9 +50,6 @@ export const getAggregatedAnalytics = async (
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
 ): Promise<Partial<IAggregatedAnalyticsAll>> => {
-  
-
-  
   let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
   if (range === DateRangeEnum.RECENT) {
@@ -71,7 +68,6 @@ export const getAggregatedAnalytics = async (
   );
 
   if (!res) {
-    console.log(userID, name);
     throw new Error("User Analytics record not found");
   }
 
@@ -494,11 +490,9 @@ export const getAggregatedAnalytics = async (
         break;
     }
   });
-  
 
   return finalAggregation;
 };
-
 
 export const getAggregatedAnalyticsGroup = async (
   userIDs: string[],
@@ -506,7 +500,6 @@ export const getAggregatedAnalyticsGroup = async (
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
 ): Promise<Partial<IAggregatedAnalyticsAll>[]> => {
-
   let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
   if (range === DateRangeEnum.RECENT) {
@@ -519,36 +512,23 @@ export const getAggregatedAnalyticsGroup = async (
     numOfWeeks = 52; // 52
   }
 
-  
-  let start = Date.now()
-  
-  
-  
-  
   const users = await Analytics.find<IAnalytics>(
     { userID: { $in: userIDs } },
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
-  ).lean();
-
-  
-  let promisecreator = Date.now() - start;
-  console.log(`Promise Creation time taken : ${promisecreator} milliseconds`);
-  promisecreator = Date.now()
-  
+  )
+    .limit(1000)
+    .lean();
 
   if (!users) {
     throw new Error("User Analytics record not found");
   }
-  
-  
-  const out: Partial<IAggregatedAnalyticsAll>[] = []
-  
-  var len = users.length
-  const lastMonday = new Date(getCurrentMonday().getDate() - 7)
-  
-  while (len--) {
-    
-    let res = users[len]
+
+  const out: Partial<IAggregatedAnalyticsAll>[] = [];
+
+  const lastMonday = new Date(getCurrentMonday().getDate() - 7);
+
+  for (let i = 0; i < users.length; i += 1) {
+    const res = users[i] as IAnalytics;
 
     const groupSumDict: Record<string, TempAggData> = {};
 
@@ -898,7 +878,8 @@ export const getAggregatedAnalyticsGroup = async (
               mathQuestionsCompleted:
                 res.lastSessionMetrics.math.questionsAttempted,
               wordsRead: res.lastSessionMetrics.reading.passagesRead,
-              promptsCompleted: res.lastSessionMetrics.writing.questionsAnswered, // writing
+              promptsCompleted:
+                res.lastSessionMetrics.writing.questionsAnswered, // writing
               triviaQuestionsCompleted:
                 res.lastSessionMetrics.trivia.questionsAttempted,
             },
@@ -917,7 +898,8 @@ export const getAggregatedAnalyticsGroup = async (
                   : res.lastSessionMetrics.math.questionsCorrect /
                     res.lastSessionMetrics.math.questionsAttempted,
               difficultyScore: res.lastSessionMetrics.math.finalDifficultyScore,
-              questionsCompleted: res.lastSessionMetrics.math.questionsAttempted,
+              questionsCompleted:
+                res.lastSessionMetrics.math.questionsAttempted,
               timePerQuestion: res.lastSessionMetrics.math.timePerQuestion,
             },
           };
@@ -968,12 +950,11 @@ export const getAggregatedAnalyticsGroup = async (
           break;
       }
     });
-    
-    out.push(finalAggregation)
-   
+
+    out.push(finalAggregation);
   }
-  
-  let looptime = Date.now() - promisecreator;
+
+  const looptime = Date.now() - promisecreator;
   console.log(`Loop time 1 taken : ${looptime} milliseconds`);
-  return out
+  return out;
 };
