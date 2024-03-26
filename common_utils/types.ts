@@ -294,6 +294,10 @@ export interface IPatientTableEntry
   active: boolean;
 }
 
+export interface IVolunteerTableEntry extends IUser {
+  startDate: Date;
+}
+
 export interface IAggregatedAnalyticsAll
   extends IAggregatedAnalyticsMath,
     IAggregatedAnalyticsTrivia,

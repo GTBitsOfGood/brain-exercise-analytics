@@ -127,11 +127,12 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles["metrics-container"]}>
           <div
             className={`${styles[`overall-metrics-container-${isDashboard ? "active" : "inactive"}`]} ${!isDashboard ? styles.disabled : ""}`}
-            onClick={() => document.location.replace(`${"overall"}`)}
+            onClick={() => router.push("#")}
           >
             <div className={styles["icon-shadow"]}>
               <BarChartIcon
                 className={`icon-${isDashboard ? "active" : "inactive"}`}
+                isActive={isDashboard}
               />
             </div>
             <div className={styles["overall-metrics"]}>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,6 +37,9 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
     onChange,
   } = props;
 
+  const [isOpen, setIsOpen] = useState(false);
+  const dynamicBorderRadius = isOpen ? "12px 12px 0 0" : "12px";
+
   return (
     <div className={classes(styles.container, className)}>
       {title !== undefined ? (
@@ -51,6 +55,21 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
         onChange={onChange}
         showError={showError}
         sx={{ fontSize: "11px" }}
+        selectProps={{
+          open: isOpen,
+          onOpen: () => setIsOpen(true),
+          onClose: () => setIsOpen(false),
+        }}
+        style={{ borderRadius: dynamicBorderRadius }}
+        menuProps={{
+          PaperProps: {
+            sx: {
+              maxHeight: 200,
+              borderRadius: "0 0 12px 12px",
+              boxShadow: "0px 50px 100px 100px #7090B026",
+            },
+          },
+        }}
       />
       {showError && error !== undefined && (
         <div className={styles["error-container"]}>
