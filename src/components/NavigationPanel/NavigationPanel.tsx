@@ -1,11 +1,13 @@
 import React, { useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
-import { Role, IUser } from "@/common_utils/types";
-import { RootState } from "@src/redux/rootReducer";
+
 import { useSelector } from "react-redux";
-import Metric from "./Metric/Metric";
+import { RootState } from "@src/redux/rootReducer";
+import { Role, IUser } from "@/common_utils/types";
+import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
+
 import styles from "./NavigationPanel.module.css";
+import Metric from "./Metric/Metric";
 
 interface Props {
   onClick: () => void;
@@ -41,6 +43,11 @@ const NavigationPanel = ({ onClick }: Props) => {
     () => currentPath.startsWith("/patient/analytics"),
     [currentPath],
   );
+
+  const { firstName, lastName, role, imageLink } = useSelector<
+    RootState,
+    IUser
+  >((state) => state.auth);
 
   return (
     <div className={styles.wrapper}>
@@ -151,12 +158,14 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles["patient-container"]} onClick={onClick}>
           <img
             className={styles["patient-pfp"]}
-            src="https://via.placeholder.com/81x81"
+            src={imageLink || "https://via.placeholder.com/81x81"}
             alt="Patient Profile Picture"
           />
           <div className={styles["patient-info"]}>
-            <span className={styles["user-name"]}>User Name</span>
-            <span className={styles.position}>Position or title</span>
+            <span className={styles["user-name"]}>
+              {firstName} {lastName}
+            </span>
+            <span className={styles.position}>{role}</span>
           </div>
         </div>
       </div>

@@ -16,9 +16,9 @@
 .left {
   flex-direction: column;
   display: flex;
-  gap: 10px;
+  gap: 16px;
   background-color: white;
-  padding-right: 7%;
+  padding-right: 3%;
   font-weight: 600;
 }
 .left > div {
@@ -26,12 +26,24 @@
 }
 .profile {
   color: #2078c1;
+  border-radius: 12px;
+  width: 200px;
+  height: 58px;
+  padding: 16px;
 }
 .password {
-  color: #979797;
+  color: #2078c1;
+  border-radius: 12px;
+  width: 200px;
+  height: 58px;
+  padding: 16px;
 }
 .signout {
   color: #ea4335;
+  border-radius: 12px;
+  width: 200px;
+  height: 58px;
+  padding: 16px;
 }
 .vl {
   border-left: 1.5px solid #c8c8c8;
@@ -41,7 +53,9 @@
 .info {
   background-color: white;
   width: 100%;
-  padding-left: 5%;
+  padding: 0% 3%;
+  height: 100%;
+  overflow: auto;
 }
 .inputs {
   display: flex;
@@ -49,16 +63,31 @@
   gap: 15px;
 }
 
+.inputHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  gap: 1fr;
+}
+
 .inputField {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 9px;
   color: #2b3674;
 }
 .inputField input {
   height: 40px;
-  border-radius: 5px;
+  border-radius: 12px;
   font-size: 13px;
+  border: 1px solid var(--Dark-Blue-Grey, #9ca5c2);
 }
 .nonEditable {
   background-color: #e7eeff;
@@ -78,6 +107,12 @@
   font-size: 17px;
   font-weight: 600;
 }
+.inputFieldRow {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  width: 100%;
+}
 .header {
   display: flex;
   flex-direction: row;
@@ -91,6 +126,7 @@
 .myContainer {
   background-color: white;
   width: 100%;
+  padding-left: 30px;
 }
 .myContainer label {
   font-size: 0.8cm;
@@ -99,38 +135,57 @@
 .first {
   display: flex;
   flex-direction: row;
-  padding-left: 30px;
   gap: 10px;
   background-color: white;
 }
-
 .first > label {
   font-weight: 600;
 }
-
 .second {
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 30px;
+  color: #9ca5c2;
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 5px;
 }
+.third {
+  display: flex;
+  gap: 10px;
+}
+.tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+.tag > p {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
 .editButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 42px;
+  padding: 5px;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}
+.submitButton {
   border-radius: 10px;
   padding: 15px 30px;
-  border: 1px solid #008afc;
+  border: 0px;
   font-weight: bold;
   background-color: #008afc;
   color: white;
   cursor: pointer;
 }
 .disabled {
-  color: #979797;
-  background-color: white;
-  border: 1px solid #979797;
+  background-color: #e3eafc;
+  color: #2b3674;
 }
 .buttons {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 15px;
 }

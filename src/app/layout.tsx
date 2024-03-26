@@ -22,7 +22,7 @@ const inter = Inter({
 
 const dmSans = DM_Sans({
   subsets: ["latin-ext"],
-  variable: "--font-dm-sans",
+  variable: "--font-poppins",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
