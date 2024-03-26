@@ -4,9 +4,8 @@ import React, { useCallback, useState } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod, IUser, Role, SortField } from "@/common_utils/types";
+import { HttpMethod, IUser, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
-import { sampleUsers } from "@src/utils/patients";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
 import { Row } from "./Row/Row";
@@ -18,6 +17,7 @@ interface VolunteerGridProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
   currentPage: number;
+  refreshUsers: () => void;
 }
 
 const columns: GridColDef[] = [
@@ -25,7 +25,7 @@ const columns: GridColDef[] = [
   { field: "firstName", headerName: "Name", sortable: true },
   { field: "startDate", headerName: "Date Joined", sortable: true },
   { field: "role", headerName: "Access Level", sortable: true },
-  { field: "active", headerName: "Status", sortable: true },
+  { field: "adminDetails.active", headerName: "Status", sortable: true },
   { field: "actions", headerName: "", sortable: false },
 ];
 
@@ -44,43 +44,42 @@ function ColumnSizes() {
 
 export default function VolunteerGrid(params: VolunteerGridProps) {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [deleteVolunteerId, setDeleteVolunteerId] = useState<string | null>(
-    null,
-  );
+  const [deleteVolunteerEmail, setDeleteVolunteerEmail] = useState<
+    string | null
+  >(null);
 
   const handleConfirmDelete = async () => {
-    if (deleteVolunteerId !== null) {
+    if (deleteVolunteerEmail !== null) {
       await internalRequest({
         url: "/api/volunteer",
         method: HttpMethod.DELETE,
         body: {
-          email: "volunteerEmail@email.com",
+          email: deleteVolunteerEmail,
         },
       });
 
-      setDeleteVolunteerId(null);
+      setDeleteVolunteerEmail(null);
+      params.refreshUsers();
     }
     setPopupOpen(false);
   };
 
   const handleClosePopup = useCallback(() => {
     setPopupOpen(false);
-    setDeleteVolunteerId(null);
+    setDeleteVolunteerEmail(null);
   }, []);
 
-  const handleDeleteClick = useCallback(async (id: string) => {
-    setDeleteVolunteerId(id);
+  const handleDeleteClick = useCallback(async (email: string) => {
+    setDeleteVolunteerEmail(email);
     setPopupOpen(true);
   }, []);
 
-  // Construct Rows from the sampleUsers
-  const Rows = sampleUsers.map((volunteer) => {
-    // changing the role of sampleUsers for testing purposes. Remove this once integrated with actual data.
-    const v: IUser = { ...volunteer, role: Role.NONPROFIT_VOLUNTEER };
+  // Construct Rows from the data
+  const Rows = params.data.map((volunteer) => {
     return (
       <Row
         key={`volunteer-${volunteer._id}`}
-        volunteer={v}
+        volunteer={volunteer}
         handleDeleteClick={handleDeleteClick}
       />
     );

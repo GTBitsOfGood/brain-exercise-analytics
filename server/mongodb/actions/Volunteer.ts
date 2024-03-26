@@ -46,10 +46,11 @@ export const getVolunteersFiltered = async ({
   const allowedAdminRoles = allowedRoles.filter(
     (role) => role !== Role.NONPROFIT_PATIENT,
   );
+
   userParamsObject.role = {
-    $nin: paramsObject.roles
+    $in: paramsObject.roles
       ? paramsObject.roles.filter((role) => allowedAdminRoles.includes(role))
-      : allowedRoles,
+      : allowedAdminRoles,
   };
 
   if (paramsObject.emails) {

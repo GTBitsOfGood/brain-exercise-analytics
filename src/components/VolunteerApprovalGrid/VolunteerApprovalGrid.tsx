@@ -3,10 +3,9 @@
 import React from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
-import { IUser, Role, SortField } from "@/common_utils/types";
+import { IUser, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 
-import { sampleUsers } from "@src/utils/patients";
 import styles from "./VolunteerApprovalGrid.module.css";
 import { Row } from "./Row/Row";
 
@@ -17,6 +16,7 @@ interface VolunteerApprovalGridProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
   currentPage: number;
+  refreshUsers: () => void;
 }
 
 const columns: GridColDef[] = [
@@ -42,11 +42,15 @@ function ColumnSizes() {
 export default function VolunteerApprovalGrid(
   params: VolunteerApprovalGridProps,
 ) {
-  // Construct Rows from the sampleUsers
-  const Rows = sampleUsers.map((volunteer) => {
-    // changing the role of sampleUsers for testing purposes. Remove this once integrated with actual data.
-    const v: IUser = { ...volunteer, role: Role.NONPROFIT_VOLUNTEER };
-    return <Row key={`volunteer-${volunteer._id}`} volunteer={v} />;
+  // Construct Rows from the volunteers
+  const Rows = params.data.map((volunteer) => {
+    return (
+      <Row
+        key={`volunteer-${volunteer._id}`}
+        volunteer={volunteer}
+        refreshUsers={params.refreshUsers}
+      />
+    );
   });
 
   return (

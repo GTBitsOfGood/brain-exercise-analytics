@@ -43,7 +43,6 @@ export const PATCH = APIWrapper({
     }
 
     if (newFields.email !== null && email === newFields.email) {
-      console.log("here");
       await updateUserEmail(email, newFields.email);
     }
 

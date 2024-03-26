@@ -23,6 +23,7 @@ import styles from "./Row.module.css";
 
 interface Props {
   volunteer: IUser;
+  refreshUsers: () => void;
 }
 
 function ExpandedRow({ row }: { row: IUser }) {
@@ -43,7 +44,7 @@ function ExpandedRow({ row }: { row: IUser }) {
               <div className={styles.Detail}>
                 <span className={styles.Label}>Date Joined</span>
                 <span className={styles.Content}>
-                  {row.startDate.toLocaleDateString()}
+                  {new Date(row.startDate).toLocaleDateString()}
                 </span>
               </div>
             </div>
@@ -51,7 +52,7 @@ function ExpandedRow({ row }: { row: IUser }) {
               <div className={styles.Detail}>
                 <span className={styles.Label}>Date of Birth</span>
                 <span className={styles.Content}>
-                  {row.birthDate.toLocaleDateString()}
+                  {new Date(row.birthDate).toLocaleDateString()}
                 </span>
               </div>
               <div className={styles.Detail}>
@@ -80,7 +81,7 @@ function ExpandedRow({ row }: { row: IUser }) {
   );
 }
 
-export function Row({ volunteer }: Props) {
+export function Row({ volunteer, refreshUsers }: Props) {
   const [view, setView] = useState<boolean>(false);
   const handleClick = useCallback(() => setView((v) => !v), []);
   // Role of user corresponding to the given row
@@ -112,6 +113,7 @@ export function Row({ volunteer }: Props) {
         approved: approvalStatus,
       },
     });
+    refreshUsers();
   };
 
   return (
@@ -145,8 +147,18 @@ export function Row({ volunteer }: Props) {
               value={updatedRole}
               showError={false}
               onChange={(e: SelectChangeEvent<Role>) => {
-                setUpdatedRole(e.target.value as Role);
-                // Make a request to update role on MongoDB
+                const newRole = e.target.value as Role;
+                setUpdatedRole(newRole as Role);
+                internalRequest<IUser>({
+                  url: "/api/volunteer",
+                  method: HttpMethod.PATCH,
+                  body: {
+                    email: volunteer.email,
+                    newFields: {
+                      role: newRole,
+                    },
+                  },
+                });
               }}
               style={{
                 borderRadius: 41,
@@ -183,18 +195,14 @@ export function Row({ volunteer }: Props) {
           <div className={styles.actionsContainer}>
             <button
               className={styles.approveButton}
-              onClick={() =>
-                handleAdminApproval("volunteerEmail@email.com", true)
-              }
+              onClick={() => handleAdminApproval(volunteer.email, true)}
             >
               <CheckCircle />
               Approve
             </button>
             <button
               className={styles.denyButton}
-              onClick={() =>
-                handleAdminApproval("volunteerEmail@email.com", false)
-              }
+              onClick={() => handleAdminApproval(volunteer.email, false)}
             >
               <XCircle />
               Deny

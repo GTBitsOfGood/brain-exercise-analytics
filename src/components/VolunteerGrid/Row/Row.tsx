@@ -158,9 +158,9 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
                   url: "/api/volunteer",
                   method: HttpMethod.PATCH,
                   body: {
-                    email: "volunteerEmail@email.com",
+                    email: volunteer.email,
                     newFields: {
-                      accessLevel: newRole,
+                      role: newRole,
                     },
                   },
                 });
@@ -216,9 +216,9 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
                     url: "/api/volunteer",
                     method: HttpMethod.PATCH,
                     body: {
-                      email: "volunteerEmail@email.com",
+                      email: volunteer.email,
                       newFields: {
-                        status: newActive,
+                        "adminDetails.active": newActive,
                       },
                     },
                   });
@@ -262,7 +262,7 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
               styles.RowCellContainer,
               styles.deleteButton,
             )}
-            onClick={() => handleDeleteClick(volunteer._id)}
+            onClick={() => handleDeleteClick(volunteer.email)}
           >
             Delete Account
           </text>
