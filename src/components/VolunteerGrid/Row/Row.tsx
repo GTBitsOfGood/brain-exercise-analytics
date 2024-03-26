@@ -226,7 +226,7 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
                 style={{
                   borderRadius: 41,
                   color: "#2B3674",
-                  backgroundColor: "#D6F6EA",
+                  backgroundColor: updatedActive ? "#D6F6EA" : "#FCDCE2",
                   border: "none",
                   width: "min-content",
                   maxWidth: "100%",
