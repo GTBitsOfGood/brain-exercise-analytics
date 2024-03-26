@@ -8,8 +8,7 @@ import {
   DataRecord,
 } from "@/common_utils/types";
 import { getUsersFiltered } from "@server/mongodb/actions/User";
-import { getAggregatedAnalytics, getAggregatedAnalyticsGroup } from "@server/mongodb/actions/AggregatedAnalytics";
-import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
+import { getAggregatedAnalyticsGroup } from "@server/mongodb/actions/AggregatedAnalytics";
 
 type RequestData = {
   filters: PatientSearchParams;
@@ -35,8 +34,6 @@ export const POST = APIWrapper({
     requireVolunteer: true,
   },
   handler: async (req) => {
-    const start = Date.now();
-
     const reqbody: RequestData = (await req.json()) as RequestData;
     const { filters, range, sections } = reqbody;
 
@@ -69,13 +66,8 @@ export const POST = APIWrapper({
     if (users === undefined) {
       throw new Error("No patients found with parameters");
     }
-    
-    let userstime = Date.now() - start;
-    console.log(`Fetch time taken : ${userstime} milliseconds`);
-    userstime = Date.now();
-    
+
     const usersLength = users.data.length;
-  
 
     const groupAnalytics: Partial<IAggregatedGroupAnalyticsAll> =
       {} as Partial<IAggregatedGroupAnalyticsAll>;
@@ -90,28 +82,18 @@ export const POST = APIWrapper({
     //   // Return whatever data you need from getAggregatedAnalytics
     //   return data;
     // });
-    
-    let promisecreator = Date.now() - userstime;
-    promisecreator = Date.now();
-    
-    
-    
+
     // const aggregatedDataArray = await Promise.all(promises);
-    
-    const usersids = users.data.map(element => element._id)
-    
+
+    const usersids = users.data.map((element) => element._id);
+
     const aggregatedDataArray = await getAggregatedAnalyticsGroup(
       usersids,
       "",
       range,
-      updatedSections
-    )
-    
-    
-    let promisetime = Date.now() - promisecreator;
-    console.log(`Promise time taken : ${promisetime} milliseconds`);
-    promisetime = Date.now();
-    
+      updatedSections,
+    );
+
     aggregatedDataArray.forEach((data) => {
       // for (const userdatadict of users.data) {
       //   const data = await getAggregatedAnalytics(
@@ -136,33 +118,33 @@ export const POST = APIWrapper({
               triviaQuestionsCompleted: 0,
             },
           };
-
-          groupAnalytics.overall.totalUsers += 1;
-          groupAnalytics.overall.activeUsers += data.overall.active ? 1 : 0;
-          groupAnalytics.overall.totalSessionsCompleted +=
-            data.overall.totalSessionsCompleted / usersLength;
-          groupAnalytics.overall.lastSession.mathQuestionsCompleted +=
-            data.overall.lastSession.mathQuestionsCompleted / usersLength;
-          groupAnalytics.overall.lastSession.wordsRead +=
-            data.overall.lastSession.wordsRead / usersLength;
-          groupAnalytics.overall.lastSession.promptsCompleted +=
-            data.overall.lastSession.promptsCompleted / usersLength;
-          groupAnalytics.overall.lastSession.triviaQuestionsCompleted +=
-            data.overall.lastSession.triviaQuestionsCompleted / usersLength;
-
-          const count = 0;
-          data.overall.streakHistory.forEach((element: DataRecord) => {
-            const modifiedElement = { ...element };
-            modifiedElement.value /= usersLength;
-
-            if (groupAnalytics.overall!.streakHistory[count] === undefined) {
-              groupAnalytics.overall!.streakHistory.push(modifiedElement);
-            } else {
-              groupAnalytics.overall!.streakHistory[count].value +=
-                modifiedElement.value;
-            }
-          });
         }
+        groupAnalytics.overall.totalUsers += 1;
+        groupAnalytics.overall.activeUsers += data.overall.active ? 1 : 0;
+        groupAnalytics.overall.totalSessionsCompleted +=
+          data.overall.totalSessionsCompleted / usersLength;
+        groupAnalytics.overall.lastSession.mathQuestionsCompleted +=
+          data.overall.lastSession.mathQuestionsCompleted / usersLength;
+        groupAnalytics.overall.lastSession.wordsRead +=
+          data.overall.lastSession.wordsRead / usersLength;
+        groupAnalytics.overall.lastSession.promptsCompleted +=
+          data.overall.lastSession.promptsCompleted / usersLength;
+        groupAnalytics.overall.lastSession.triviaQuestionsCompleted +=
+          data.overall.lastSession.triviaQuestionsCompleted / usersLength;
+
+        const count = 0;
+        data.overall.streakHistory.forEach((element: DataRecord) => {
+          const modifiedElement = { ...element };
+          modifiedElement.value /= usersLength;
+
+          if (groupAnalytics.overall!.streakHistory[count] === undefined) {
+            groupAnalytics.overall!.streakHistory.push(modifiedElement);
+          } else {
+            groupAnalytics.overall!.streakHistory[count].value +=
+              modifiedElement.value;
+          }
+        });
+
         if (data.overall.active) {
           groupAnalytics.overall.activeUsers += 1;
         }
@@ -440,12 +422,8 @@ export const POST = APIWrapper({
       }
     });
 
-    
-    const looptime = Date.now() - promisetime;
-    console.log(`Loop time taken : ${looptime} milliseconds`);
-    const timeTaken = Date.now() - start;
-    console.log(`Total time taken : ${timeTaken} milliseconds`);
-    
+    console.log(groupAnalytics.math?.avgQuestionsCompleted);
+
     return null;
   },
 });
