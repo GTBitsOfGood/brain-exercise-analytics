@@ -2,12 +2,11 @@
 
 import { PersonIcon, PeopleIcon } from "@src/app/icons";
 import { CSSProperties, useState } from "react";
+import { IAggregatedOverallAnalytics } from "@/common_utils/types";
 import { LineChart, SmallDataBox } from "../../Graphs";
 import styles from "./OverviewReport.module.scss";
 
-interface Params {
-  activeUsers: number;
-  totalUsers: number;
+interface Params extends IAggregatedOverallAnalytics {
   style?: CSSProperties;
 }
 // Need data to pass to Linechart
@@ -42,24 +41,7 @@ export default function OverviewReport(params: Params) {
             height={150}
             title="New Users Over Time"
             hoverable
-            data={[
-              {
-                interval: "9/17",
-                value: 1,
-              },
-              {
-                interval: "10/17",
-                value: 5,
-              },
-              {
-                interval: "10/24",
-                value: 15,
-              },
-              {
-                interval: "10/31",
-                value: 40,
-              },
-            ]}
+            data={params.activeHistory}
             style={{
               opacity: showGraph ? 1 : 0,
               zIndex: showGraph ? 1 : -1,

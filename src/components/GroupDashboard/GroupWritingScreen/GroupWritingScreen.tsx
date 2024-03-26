@@ -1,19 +1,9 @@
 import React from "react";
-import {
-  PromptsIcon,
-  TimeIcon,
-  AttemptIcon,
-  WritingIcon,
-} from "@src/app/icons";
+import { PromptsIcon, TimeIcon, WritingIcon } from "@src/app/icons";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { DateRangeEnum } from "@/common_utils/types";
-import {
-  StackedBarChart,
-  SmallDataBox,
-  BarChart,
-  BooleanBox,
-} from "../../Graphs";
-import styles from "./WritingScreen.module.css";
+import { StackedBarChart, SmallDataBox, BarChart } from "../../Graphs";
+import styles from "./GroupWritingScreen.module.css";
 
 interface InputProp {
   sessionHistory: {
@@ -22,9 +12,9 @@ interface InputProp {
     stackedValue: number;
   }[];
   numCompleted: { interval: string; value: number }[];
-  avgTime: { interval: string; value: number }[];
+  avgTimeData: { interval: string; value: number }[];
   totalPrompts: string;
-  currentTime: string;
+  avgTime: string;
   attemptStatus: boolean;
   style?: object;
   menuState: [
@@ -33,13 +23,12 @@ interface InputProp {
   ];
 }
 
-export default function WritingScreen({
+export default function GroupWritingScreen({
   sessionHistory,
   numCompleted,
-  avgTime,
+  avgTimeData,
   totalPrompts,
-  currentTime,
-  attemptStatus,
+  avgTime,
   style,
   menuState,
 }: InputProp) {
@@ -70,6 +59,7 @@ export default function WritingScreen({
             hoverable
             percentageChange
             fullWidth
+            gridLines
           />
           <BarChart
             width={325}
@@ -79,45 +69,34 @@ export default function WritingScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
             info="Some info for testing purposes in bar chart"
           />
           <BarChart
             width={325}
             height={185}
             title="Average Time Spent Per Prompt"
-            data={avgTime}
+            data={avgTimeData}
             info="Some info for testing purposes in bar chart"
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
             className={styles.box}
-            title="Number of Prompts Completed"
+            title="Average Number of Prompts Completed"
             text={totalPrompts}
             Icon={PromptsIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
-            title="Current Time per Prompt"
-            text={currentTime}
+            title="Average Time per Prompt"
+            text={avgTime}
             Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <BooleanBox
-            className={styles.box}
-            title="Completion Status"
-            greenText="ATTEMPTED"
-            redText="NOT ATTEMPTED"
-            Icon={AttemptIcon}
-            showGreen={attemptStatus}
-            // style={{ width: "80%", margin: "auto" }}
           />
         </div>
       </div>

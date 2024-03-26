@@ -1,9 +1,9 @@
 "use client";
 
 import * as d3 from "d3";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
-import { StackedDataRecord } from "@/common_utils/types";
+import { DataRecord, StackedDataRecord } from "@/common_utils/types";
 import BarChart from "../BarChart/BarChart";
 import styles from "./StackedBarChart.module.scss";
 
@@ -12,7 +12,9 @@ interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
+  yLabel?: string;
   info?: string;
+  gridLines?: boolean;
   legend: { text: string; color: string }[];
 }
 
@@ -31,29 +33,49 @@ export default function StackedBarChart({
   hoverable = false,
   percentageChange = false,
   legend,
+  yLabel = "",
   fullWidth = false,
+  gridLines = false,
   info = "",
 }: DataParams) {
-  const barWidth = 20;
+  const updateNewData = useCallback(() => {
+    const datapoints = 10;
+    if (data.length === 0) {
+      return [{ interval: "1", value: 1 }];
+    }
+    if (data.length > datapoints) {
+      const step = Math.floor(data.length / datapoints);
+      const tmp = [];
+      for (let i = 0; i < datapoints; i += 1) {
+        tmp[datapoints - 1 - i] = data[data.length - i * step - 1];
+      }
+      return tmp;
+    }
+    return data;
+  }, [data]);
+  const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+
+  const barWidth = 12;
   // Same rules as BarChart
   const [width, setWidth] = useState(
     Math.max(providedWidth, (barWidth + 5) * data.length + 60),
   );
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
-  const updateSize = () => {
+  const updateSize = useCallback(() => {
     if (!fullWidth || !windowSizeRef.current) return;
     setWidth(windowSizeRef.current.offsetWidth - 44);
-  };
+  }, [fullWidth]);
   const resizeRef = useRef<undefined | NodeJS.Timeout>(undefined);
   const resizeOptimised = () => {
     clearTimeout(resizeRef.current);
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
+
   const height = Math.max(providedHeight, 80);
   const marginTop = 20;
   const marginRight = 25;
-  const marginBottom = 25;
+  const marginBottom = 40;
   const marginLeft = 35;
   const x = d3.scaleLinear(
     [0, data.length - 1],
@@ -64,8 +86,13 @@ export default function StackedBarChart({
     [height - marginBottom, marginTop],
   );
   useEffect(() => {
-    resizeOptimised();
-  }, []);
+    updateSize();
+  }, [newData, updateSize]);
+
+  useEffect(() => {
+    setNewData(updateNewData());
+  }, [data, updateNewData]);
+
   return (
     <div
       className={styles.StackedBarChart}
@@ -82,7 +109,9 @@ export default function StackedBarChart({
         hoverable={hoverable}
         percentageChange={percentageChange}
         info={info}
+        yLabel={yLabel}
         fullWidth
+        gridLines={gridLines}
       >
         {data.map((d, i) => (
           <Fragment key={i}>

@@ -6,6 +6,7 @@ import { DateRangeEnum } from "@/common_utils/types";
 import Dropdown, { DropdownOption } from "../Dropdown/Dropdown";
 
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
+const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
 const options: DropdownOption<DateRangeEnum>[] = Object.values(
   DateRangeEnum,
 ).map((range) => ({
@@ -13,7 +14,7 @@ const options: DropdownOption<DateRangeEnum>[] = Object.values(
   displayValue: range.toString(),
 }));
 
-function DateSelector({
+function GroupSelector({
   selectedValue,
   setSelectedValue,
 }: {
@@ -30,9 +31,11 @@ function DateSelector({
       }}
       style={{
         borderRadius: 0,
-        color: "#8d8d8d",
+        color: "#2B3674",
         border: "none",
-        width: "130px",
+        fontSize: "18px",
+        fontFamily: poppins500.style.fontFamily,
+        width: "180px",
         textAlign: "center",
       }}
       sx={{
@@ -44,12 +47,18 @@ function DateSelector({
       }}
       menuItemStyle={{
         justifyContent: "center",
-        color: "#313144",
-        fontSize: "12px",
-        fontFamily: poppins500.style.fontFamily,
+        color: "#2B3674",
+        backgroundColor: "#FCE8DC",
+        borderRadius: "10px",
+        marginBottom: "10px",
+        marginLeft: "16px",
+        marginRight: "auto",
+        width: "fit-content",
+        fontSize: "16px",
+        fontFamily: poppins400.style.fontFamily,
       }}
     />
   );
 }
 
-export default DateSelector;
+export default GroupSelector;

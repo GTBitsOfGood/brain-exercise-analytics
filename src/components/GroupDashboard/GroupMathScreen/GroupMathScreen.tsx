@@ -8,7 +8,7 @@ import {
 } from "@src/app/icons";
 import { LineChart, BarChart, SmallDataBox } from "@src/components/Graphs";
 import { DateRangeEnum } from "@/common_utils/types";
-import styles from "./MathScreen.module.css";
+import styles from "./GroupMathScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
 
 interface InputProp {
@@ -28,7 +28,7 @@ interface InputProp {
   ];
 }
 
-const MathScreen = ({
+const GroupMathScreen = ({
   accuracyData,
   difficultyData,
   numQuestionData,
@@ -64,8 +64,7 @@ const MathScreen = ({
             info="Vidushi"
             data={accuracyData}
             fullWidth
-            yLabel="Questions"
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <LineChart
             width={325}
@@ -77,7 +76,7 @@ const MathScreen = ({
             info="Vidushi"
             data={difficultyData}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -86,9 +85,9 @@ const MathScreen = ({
             data={numQuestionData}
             hoverable
             percentageChange
-            yLabel="Questions"
+            highlightLargest={false}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -97,39 +96,36 @@ const MathScreen = ({
             data={timeData}
             hoverable
             percentageChange
+            highlightLargest={false}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>
-          <p className={styles.sessionHeading}>Last Session Breakdown</p>
+          <p className={styles.sessionHeading}>Average Session Breakdown</p>
           <SmallDataBox
             className={styles.box}
-            title="Current Accuracy"
+            title="Average Accuracy"
             text={currentAccuracy}
             Icon={AccuracyIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
-            title="Current Difficulty"
+            title="Average Difficulty"
             text={currentDifficulty}
             Icon={BarChartIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
-            title="Number of Question Completed"
+            title="Average Number of Question Completed"
             text={totalQuestions}
             Icon={QuestionIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
-            title="Current Time per Question"
+            title="Average Time per Question"
             text={totalTime}
             Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
         </div>
       </div>
@@ -137,4 +133,4 @@ const MathScreen = ({
   );
 };
 
-export default MathScreen;
+export default GroupMathScreen;

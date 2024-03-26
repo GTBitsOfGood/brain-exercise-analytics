@@ -18,7 +18,7 @@ const NavigationPanel = ({ onClick }: Props) => {
   const currentPath = usePathname();
 
   const isClickable = useMemo(
-    () => currentPath.startsWith("/patient/dashboard"),
+    () => currentPath.startsWith("/patient/analytics"),
     [currentPath],
   );
 
@@ -37,8 +37,8 @@ const NavigationPanel = ({ onClick }: Props) => {
     [currentPath],
   );
 
-  const isDashboard = useMemo(
-    () => currentPath.startsWith("/patient/dashboard"),
+  const isAnalytics = useMemo(
+    () => currentPath.startsWith("/patient/analytics"),
     [currentPath],
   );
 
@@ -126,13 +126,13 @@ const NavigationPanel = ({ onClick }: Props) => {
         </div>
         <div className={styles["metrics-container"]}>
           <div
-            className={`${styles[`overall-metrics-container-${isDashboard ? "active" : "inactive"}`]} ${!isDashboard ? styles.disabled : ""}`}
+            className={`${styles[`overall-metrics-container-${isAnalytics ? "active" : "inactive"}`]} ${!isAnalytics ? styles.disabled : ""}`}
             onClick={() => router.push("#")}
           >
             <div className={styles["icon-shadow"]}>
               <BarChartIcon
-                className={`icon-${isDashboard ? "active" : "inactive"}`}
-                isActive={isDashboard}
+                className={`icon-${isAnalytics ? "active" : "inactive"}`}
+                isActive={isAnalytics}
               />
             </div>
             <div className={styles["overall-metrics"]}>
