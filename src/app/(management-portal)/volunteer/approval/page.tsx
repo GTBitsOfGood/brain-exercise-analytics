@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
-import Search from "@src/components/Search/Search";
+import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
 
 import VolunteerApprovalGrid from "@src/components/VolunteerApprovalGrid/VolunteerApprovalGrid";
 import { classes } from "@src/utils/utils";
@@ -32,12 +32,10 @@ export default function Page() {
     cities,
     dateOfBirths,
     emails,
-    additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
-  } = useSelector((state: RootState) => state.patientSearch);
+    volunteerRoles,
+  } = useSelector((state: RootState) => state.volunteerSearch);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
@@ -56,15 +54,13 @@ export default function Page() {
           name: fullName,
           dateOfBirths: Array.from(dateOfBirths),
           emails: Array.from(emails),
-          additionalAffiliations: Array.from(additionalAffiliations),
-          secondaryNames: Array.from(secondaryNames),
-          secondaryPhoneNumbers: Array.from(secondaryPhoneNumbers),
           beiChapters: Array.from(beiChapters),
           active,
           countries: Array.from(countries),
           states: Array.from(states),
           cities: Array.from(cities),
           dateOfJoins: Array.from(dateOfJoins),
+          roles: Array.from(volunteerRoles),
           approved: [AdminApprovalStatus.PENDING],
         },
         page: currentPage,
@@ -76,19 +72,17 @@ export default function Page() {
     });
   }, [
     fullName,
+    dateOfBirths,
+    emails,
+    beiChapters,
     active,
     countries,
     states,
     cities,
-    dateOfBirths,
-    emails,
-    additionalAffiliations,
     dateOfJoins,
-    beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
-    sortField,
+    volunteerRoles,
     currentPage,
+    sortField,
   ]);
 
   useEffect(() => {
@@ -105,11 +99,9 @@ export default function Page() {
     cities,
     dateOfBirths,
     emails,
-    additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
+    volunteerRoles,
     sortField,
   ]);
 
@@ -118,7 +110,7 @@ export default function Page() {
       <div className={classes(styles["search-container"])}>
         <p className={styles["intro-text"]}>Search for a volunteer here!</p>
         <div className={styles["search-wrapper"]}>
-          <Search />
+          <VolunteerSearch />
         </div>
       </div>
       <div
