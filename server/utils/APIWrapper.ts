@@ -1,7 +1,7 @@
 // Modified API Wrapper Inspired By Nationals NPP Portal: https://github.com/GTBitsOfGood/national-npp/blob/main/server/utils/APIWrapper.ts
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import { IUser, Role } from "@/common_utils/types";
+import { IAuthUserCookie, IUser, Role } from "@/common_utils/types";
 import { getEmailFromIdToken } from "@server/firebase/auth";
 import dbConnect from "@server/mongodb/config";
 import firebaseConfig from "@server/firebase/config";
@@ -18,7 +18,11 @@ interface RouteConfig {
 
 interface Route<T> {
   config?: RouteConfig;
-  handler: (req: NextRequest, currentUser?: IUser | undefined) => Promise<T>;
+  handler: (
+    req: NextRequest,
+    currentUser?: IUser | undefined,
+    updatedUserRef?: IUser[],
+  ) => Promise<T>;
 }
 
 function APIWrapper(route: Route<unknown>) {
@@ -78,6 +82,7 @@ function APIWrapper(route: Route<unknown>) {
           }
           await getAuth().verifyIdToken(idToken);
         } catch (e) {
+          console.log(e);
           return NextResponse.json(
             {
               success: false,
@@ -105,17 +110,35 @@ function APIWrapper(route: Route<unknown>) {
         }
       }
 
-      const data = await handler(req, currentUser);
+      const updatedUserRef: IUser[] = [];
+      const data = await handler(req, currentUser, updatedUserRef);
+      let response;
       if (config?.handleResponse) {
-        return NextResponse.json(
+        response = NextResponse.json(
           { success: true, payload: null },
           { status: 200 },
         );
+      } else {
+        response = NextResponse.json(
+          { success: true, payload: data },
+          { status: 200 },
+        );
       }
-      return NextResponse.json(
-        { success: true, payload: data },
-        { status: 200 },
-      );
+
+      if (updatedUserRef.length === 1) {
+        const { keepLogged = false } = JSON.parse(
+          req.cookies.get("authUser")?.value ?? "{}",
+        ) as IAuthUserCookie;
+
+        req.cookies.get("authUser");
+        response.cookies.set(
+          "authUser",
+          JSON.stringify({ user: updatedUserRef[0], keepLogged }),
+          keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
+        );
+      }
+
+      return response;
     } catch (e) {
       if (e instanceof mongoose.Error) {
         console.log(e);

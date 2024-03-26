@@ -33,7 +33,7 @@ export const PATCH = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async (req) => {
+  handler: async (req, _, updatedUserRef) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
     const { email }: { email: string } = reqdata;
     const { newFields } = reqdata;
@@ -42,11 +42,13 @@ export const PATCH = APIWrapper({
       throw new Error("Email parameter is missing");
     }
 
-    if (newFields.email !== null && email === newFields.email) {
-      await updateUserEmail(email, newFields.email);
+    if (newFields.email !== undefined && email !== newFields.email) {
+      const res = await updateUserEmail(email, newFields.email);
+      console.log(res);
     }
 
     const user = await updateVolunteer(email, newFields);
+    updatedUserRef?.push(user!);
     return user;
   },
 });

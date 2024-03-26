@@ -105,9 +105,13 @@
   flex-direction: row;
 }
 
-.approveButton {
+.actionsContainer > * {
+  font-family: var(--font-poppins);
+  font-size: 12px;
+  font-weight: 600;
+  color: #2b3674;
+
   border-radius: 10px;
-  background: rgba(50, 210, 150, 0.2);
   cursor: pointer;
   display: flex;
   padding: 10px 12px;
@@ -115,28 +119,12 @@
   align-items: center;
   gap: 6px;
   border: none;
-  color: #2b3674;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20.968px; /* 174.737% */
-  letter-spacing: -0.24px;
+}
+
+.approveButton {
+  background: rgba(50, 210, 150, 0.2);
 }
 
 .denyButton {
-  border-radius: 10px;
   background: rgba(240, 80, 110, 0.2);
-  cursor: pointer;
-  display: flex;
-  padding: 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  color: #2b3674;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20.968px; /* 174.737% */
-  letter-spacing: -0.24px;
 }

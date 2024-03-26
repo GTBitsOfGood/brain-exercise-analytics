@@ -60,10 +60,12 @@ export default function Page() {
     displayValue: `${city.name}`,
   }));
 
-  const ROLES = Object.values(Role).map((roleOption) => ({
-    value: roleOption,
-    displayValue: roleOption,
-  }));
+  const ROLES = Object.values(Role)
+    .filter((roleOption) => roleOption !== Role.NONPROFIT_PATIENT)
+    .map((roleOption) => ({
+      value: roleOption,
+      displayValue: roleOption,
+    }));
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\D/g, "");

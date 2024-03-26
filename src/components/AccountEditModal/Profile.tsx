@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import { formatPhoneNumber } from "@src/utils/utils";
 import { useEffect, useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
-import { update } from "@src/redux/reducers/authReducer";
+import { logout, update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@/common_utils/types";
+import { HttpMethod, IUser } from "@/common_utils/types";
 import styles from "./AccountEditModal.module.css";
 import Chip from "../Chip/Chip";
 
 export default function Profile() {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const {
     firstName,
     lastName,
@@ -62,8 +65,8 @@ export default function Profile() {
     setEdit(true);
   };
 
-  const handleSaveChanges = () => {
-    internalRequest({
+  const handleSaveChanges = async () => {
+    const updatedUser = await internalRequest<IUser>({
       url: "/api/volunteer",
       method: HttpMethod.PATCH,
       authRequired: true,
@@ -78,21 +81,22 @@ export default function Profile() {
         },
       },
     })
-      .then(() => {
+      .then((user) => {
         console.log("Submmited");
+        return user;
       })
       .catch((error) => {
         console.log("Did not submit", error);
+        throw error;
       });
-    dispatch(
-      update({
-        firstName: updatedFirstName,
-        lastName: updatedLastName,
-        phoneNumber: updatedPhoneNumber,
-        email: updatedEmail,
-        birthDate: updatedBirthDate,
-      }),
-    );
+
+    // Logout user if email is changed so they can reauthenticate
+    if (updatedEmail !== email) {
+      dispatch(logout());
+      router.push("/auth/login");
+    }
+
+    dispatch(update(updatedUser));
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
   };
