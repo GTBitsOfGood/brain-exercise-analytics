@@ -21,6 +21,8 @@ export const GET = APIWrapper({
     const expiryDate = new Date(new Date().getTime() + 86400);
     const permissions = new BlobSASPermissions();
     permissions.write = true;
+    permissions.read = true;
+    permissions.delete = true;
 
     const sasToken = generateBlobSASQueryParameters(
   {

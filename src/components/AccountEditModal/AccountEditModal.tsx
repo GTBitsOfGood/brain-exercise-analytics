@@ -85,11 +85,14 @@ const Modal = () => {
         imageLink: imgURL,
       })
     );
+    setTempImageLink(null);
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
   };
 
   const handleCancel = () => {
+    setSelectedImage(null);
+    setTempImageLink(null);
     setUpdatedName(`${firstName} ${lastName}`);
     setUpdatedPhoneNumber(phoneNumber);
     setUpdatedEmail(email);
@@ -119,9 +122,11 @@ const Modal = () => {
 
   // IMAGE UPLOAD
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedImage, setSelectedImage] = useState("null");
-  const [sasToken, setSasToken] = useState("null");
+  // const [selectedImage, setSelectedImage] = useState("null");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [tempImageLink, setTempImageLink] = useState<string | null>(null);
 
+  const [sasToken, setSasToken] = useState("null");
   const openDialog = () => {
     fileInputRef.current?.click();
   };
@@ -135,10 +140,10 @@ const Modal = () => {
       if (fileSizeInMB > maxSizeMB) {
         // need to log the error message correctly
         console.error("Selected file exceeds the maximum size limit of 5 MB");
-
         return;
       }
       setSelectedImage(selectedFile);
+      setTempImageLink(URL.createObjectURL(selectedFile));
     }
   };
 
@@ -210,22 +215,25 @@ const Modal = () => {
         {/* <span onClick={closeModal}>&times;</span> */}
         <div className={styles.header}>
           <div>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/141.jpg"
-              alt="Profile Image"
-              className={styles.profileImage}
-              onClick={openDialog}
-            />
-
-            {edit && (
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageChange}
+            <div>
+              <img
+                src={tempImageLink || imageLink}
+                alt="Profile Image"
+                className={styles.profileImage}
+                onClick={openDialog}
+                style={{ width: "120px", height: "120px", cursor: "pointer" }}
               />
-            )}
+
+              {edit && (
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
+                />
+              )}
+            </div>
           </div>
 
           <div className={styles.myContainer}>
