@@ -16,9 +16,9 @@
 .left {
   flex-direction: column;
   display: flex;
-  gap: 16pxpx;
+  gap: 16px;
   background-color: white;
-  padding-right: 7%;
+  padding-right: 3%;
   font-weight: 600;
 }
 .left > div {
@@ -53,9 +53,9 @@
 .info {
   background-color: white;
   width: 100%;
-  padding-left: 5%;
+  padding: 0% 3%;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 .inputs {
   display: flex;
@@ -78,6 +78,7 @@
 
 .inputField {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 9px;
   color: #2b3674;
@@ -86,7 +87,7 @@
   height: 40px;
   border-radius: 12px;
   font-size: 13px;
-  border: 1px solid var(--Dark-Blue-Grey, #9CA5C2);
+  border: 1px solid var(--Dark-Blue-Grey, #9ca5c2);
 }
 .nonEditable {
   background-color: #e7eeff;
@@ -125,6 +126,7 @@
 .myContainer {
   background-color: white;
   width: 100%;
+  padding-left: 30px;
 }
 .myContainer label {
   font-size: 0.8cm;
@@ -133,22 +135,33 @@
 .first {
   display: flex;
   flex-direction: row;
-  padding-left: 30px;
   gap: 10px;
   background-color: white;
 }
-
 .first > label {
   font-weight: 600;
 }
-
 .second {
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 30px;
+  color: #9ca5c2;
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 5px;
 }
+.third {
+  display: flex;
+  gap: 10px;
+}
+.tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+.tag > p {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
 .editButton {
   height: 40px;
   width: 40px;
@@ -168,8 +181,8 @@
   cursor: pointer;
 }
 .disabled {
-  background-color: #E3EAFC;
-  color: #2B3674;
+  background-color: #e3eafc;
+  color: #2b3674;
 }
 .buttons {
   display: flex;

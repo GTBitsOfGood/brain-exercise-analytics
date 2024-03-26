@@ -24,7 +24,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 97%;
-  font-family: var(--font-dm-sans);
+  font-family: var(--font-poppins);
   font-size: 13px;
   padding-left: 7px;
 }
@@ -50,7 +50,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-dm-sans);
+  font-family: var(--font-poppins);
   font-size: 12px;
 }
 

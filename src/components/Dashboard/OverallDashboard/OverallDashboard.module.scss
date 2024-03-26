@@ -1,31 +1,6 @@
-.Chip {
-  width: fit-content;
-  padding: 1px 8px;
-  border-radius: 10px;
-  text-align: center;
-
-  .text {
-    color: #2b3674;
-    font-family: var(--font-dm-sans);
-    font-weight: 700;
-    font-size: 10px;
-    line-height: 20.968px;
-    letter-spacing: -0.2px;
-  }
-}
-
 .dateSelector {
   margin-left: auto;
   padding-right: 20px;
-}
-
-.ChipTypography {
-  color: #2b3674;
-  font-family: var(--font-dm-sans);
-  font-weight: 700;
-  font-size: 10px;
-  line-height: 20.968px;
-  letter-spacing: -0.2px;
 }
 
 .OverallDashboard {
@@ -40,7 +15,7 @@
     margin-bottom: 51px;
 
     .title {
-      font-family: var(--font-dm-sans);
+      font-family: var(--font-poppins);
       font-weight: 700;
       font-size: 29.705px;
       font-style: normal;
@@ -74,7 +49,7 @@
       flex: 2.5;
 
       .title {
-        font-family: var(--font-dm-sans);
+        font-family: var(--font-poppins);
         font-weight: 600;
         font-size: 22px;
         color: #2b3674;

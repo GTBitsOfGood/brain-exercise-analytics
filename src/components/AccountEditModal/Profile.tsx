@@ -6,8 +6,8 @@ import { update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@/common_utils/types";
-import ActiveIndicatorBox from "../ActiveIndicatorBox/ActiveIndicatorBox";
 import styles from "./AccountEditModal.module.css";
+import Chip from "../Chip/Chip";
 
 export default function Profile() {
   const [edit, setEdit] = useState<boolean>(false);
@@ -18,7 +18,8 @@ export default function Profile() {
     phoneNumber,
     email,
     birthDate,
-    patientDetails,
+    chapter,
+    role,
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
   const [updatedFirstName, setUpdatedFirstName] = useState<string>(
@@ -90,9 +91,6 @@ export default function Profile() {
         phoneNumber: updatedPhoneNumber,
         email: updatedEmail,
         birthDate: updatedBirthDate,
-        patientDetails: {
-          ...patientDetails,
-        },
       }),
     );
     setUnupdatedBirthDate(updatedBirthDate);
@@ -137,13 +135,23 @@ export default function Profile() {
         <div className={styles.myContainer}>
           <div className={styles.first}>
             <label>{`${firstName} ${lastName}`}</label>
-            <ActiveIndicatorBox active={active} />
           </div>
           <div className={styles.second}>
-            <div>
-              <div>BEI Chapter Name</div>
-              <div>Position or Title</div>
-            </div>
+            <div>{chapter}</div>
+          </div>
+          <div className={styles.third}>
+            <Chip className={styles.tag} color="#E3EAFC">
+              {role}
+            </Chip>
+            {active ? (
+              <Chip className={styles.tag} color="#D6F6EA">
+                Active
+              </Chip>
+            ) : (
+              <Chip className={styles.tag} color="#FCDCE2">
+                Inactive
+              </Chip>
+            )}
           </div>
         </div>
       </div>

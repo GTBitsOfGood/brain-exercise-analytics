@@ -7,11 +7,12 @@ import {
   PersonIcon,
   PeopleIcon,
 } from "@src/app/icons";
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import GroupSelector from "@src/components/GroupSelector/GroupSelector";
+import Chip from "@src/components/Chip/Chip";
 import { BarChart, SmallDataBox } from "../../Graphs";
 import styles from "./GroupOverviewReport.module.scss";
 
@@ -35,24 +36,6 @@ interface Params {
   ];
 
   // Need to update with the schema of the response we will get from the backend
-}
-
-function Chip(props: {
-  color: string;
-  style?: CSSProperties;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className={styles.Chip}
-      style={{
-        backgroundColor: props.color,
-        ...props.style,
-      }}
-    >
-      <p className={styles.text}>{props.children}</p>
-    </div>
-  );
 }
 
 export default function GroupOverviewReport(params: Params) {

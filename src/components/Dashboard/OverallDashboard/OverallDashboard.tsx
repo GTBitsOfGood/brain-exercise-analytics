@@ -10,9 +10,10 @@ import {
   QuestionIcon as QI,
   BarChartIcon,
 } from "@src/app/icons";
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
+import Chip from "@src/components/Chip/Chip";
 import ActiveIndicatorBox from "@src/components/ActiveIndicatorBox/ActiveIndicatorBox";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
@@ -50,24 +51,6 @@ function formatDate(date: Date) {
   const str = date.toLocaleDateString("en-us", options);
   const arr = str.split(" ");
   return [arr[2], arr[0], arr[1]].join(" ");
-}
-
-function Chip(props: {
-  color: string;
-  style?: CSSProperties;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className={styles.Chip}
-      style={{
-        backgroundColor: props.color,
-        ...props.style,
-      }}
-    >
-      <p className={styles.text}>{props.children}</p>
-    </div>
-  );
 }
 
 export default function OverallDashboard(params: Params) {
