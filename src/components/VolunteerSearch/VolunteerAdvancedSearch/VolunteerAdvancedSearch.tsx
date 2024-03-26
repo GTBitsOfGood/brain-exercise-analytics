@@ -75,6 +75,9 @@ function SelectDropdown<T>({
               "& fieldset": {
                 borderRadius: "10px",
               },
+              "&.Mui-focused fieldset": {
+                border: "none",
+              },
             },
           }}
         />

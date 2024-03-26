@@ -14,7 +14,7 @@ import { deleteVerificationLogByEmail } from "./VerificationLog";
 type VParam = {
   role?: object;
   approved?: object;
-  "patientDetails.active"?: boolean;
+  "adminDetails.active"?: boolean;
   "location.country"?: object;
   "location.state"?: object;
   "location.city"?: object;
@@ -69,7 +69,7 @@ export const getVolunteersFiltered = async ({
     userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
   }
   if (paramsObject.active !== undefined) {
-    userParamsObject["patientDetails.active"] = paramsObject.active;
+    userParamsObject["adminDetails.active"] = paramsObject.active;
   }
 
   const matchPipeline = {
