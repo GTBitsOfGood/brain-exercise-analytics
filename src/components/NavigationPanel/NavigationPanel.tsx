@@ -1,21 +1,41 @@
-"use client";
-
 import React, { useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { faChartSimple } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import { IUser } from "@/common_utils/types";
+import { Role, IUser } from "@/common_utils/types";
+import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
+
 import styles from "./NavigationPanel.module.css";
 import Metric from "./Metric/Metric";
 
-const NavigationPanel = ({ onClick }: { onClick: () => void }) => {
+interface Props {
+  onClick: () => void;
+}
+
+const NavigationPanel = ({ onClick }: Props) => {
+  const user = useSelector<RootState>((state) => state.auth) as IUser;
+
   const router = useRouter();
   const currentPath = usePathname();
 
-  const isSearch = useMemo(
+  const isClickable = useMemo(
+    () => currentPath.startsWith("/patient/dashboard"),
+    [currentPath],
+  );
+
+  const isPatientSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
+    [currentPath],
+  );
+
+  const isVolunteerSearch = useMemo(
+    () => currentPath.startsWith("/volunteer/search"),
+    [currentPath],
+  );
+
+  const isApproval = useMemo(
+    () => currentPath.startsWith("/volunteer/approval"),
     [currentPath],
   );
 
@@ -31,67 +51,109 @@ const NavigationPanel = ({ onClick }: { onClick: () => void }) => {
 
   return (
     <div className={styles.wrapper}>
-      <img
-        className={styles["BEI-image"]}
-        src="https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png"
-        alt="BEI Image"
-      />
-      <div className={styles["text-wrapper"]}>
-        <span className={styles.bei}>Brain Exercise Initiative</span>
-        <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
+      <div className={styles.topSection}>
+        <div className={styles.center}>
+          <img
+            className={styles["BEI-image"]}
+            src="https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png"
+            alt="BEI Image"
+          />
+        </div>
+        <div className={styles["text-wrapper"]}>
+          <span className={styles.bei}>Brain Exercise Initiative</span>
+          {user.role !== Role.NONPROFIT_VOLUNTEER ? (
+            <span className={styles["admin-portal"]}>Admin Portal</span>
+          ) : (
+            <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
+          )}
+        </div>
         <div className={styles.divider} />
+      </div>
+
+      <div className={styles.middleSection}>
+        {user.role !== Role.NONPROFIT_VOLUNTEER && (
+          <>
+            <div className={styles["volunteer-management"]}>
+              Volunteer Management
+            </div>
+            <div className={styles[`volunteer-patient-container`]}>
+              <div
+                className={
+                  styles[
+                    `search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`
+                  ]
+                }
+                onClick={() => router.push("/volunteer/search")}
+              >
+                <div className={styles["icon-shadow"]}>
+                  <SearchIcon className={styles["icon-active"]} />
+                </div>
+                <span className={styles["search-volunteer-text"]}>
+                  Search Volunteer
+                </span>
+              </div>
+            </div>
+            <div className={styles["metrics-container"]}>
+              <div
+                className={
+                  styles[
+                    `approval-container-${isApproval ? "active" : "inactive"}`
+                  ]
+                }
+                onClick={() => router.push("/volunteer/approval")}
+              >
+                <div className={styles["icon-shadow"]}>
+                  <PersonIcon className={styles["icon-active"]} />
+                </div>
+                <div className={styles["overall-metrics"]}>
+                  <span>Pending Approval</span>
+                </div>
+                <div className={styles["red-bubble"]}>1</div>
+              </div>
+            </div>
+          </>
+        )}
+        <div className={styles["patient-management"]}>Patient Management</div>
         <div className={styles[`search-patient-container`]}>
           <div
             className={
-              styles[`search-patient-${isSearch ? "active" : "inactive"}`]
+              styles[
+                `search-patient-${isPatientSearch ? "active" : "inactive"}`
+              ]
             }
             onClick={() => router.push("/patient/search")}
           >
             <div className={styles["icon-shadow"]}>
-              <FontAwesomeIcon
-                className={styles["statistics-icon"]}
-                icon={faChartSimple}
-                size="sm"
-              />
+              <SearchIcon className={"icon-active"} />
             </div>
             <span className={styles["search-patient-text"]}>
-              SEARCH PATIENT
+              Search Patients
             </span>
           </div>
         </div>
         <div className={styles["metrics-container"]}>
           <div
-            className={
-              styles[
-                `overall-metrics-container-${
-                  isDashboard ? "active" : "inactive"
-                }`
-              ]
-            }
-            onClick={() => {
-              if (!isDashboard) {
-                router.push("/patient/dashboard");
-              } else {
-                router.push("#");
-              }
-            }}
+            className={`${styles[`overall-metrics-container-${isDashboard ? "active" : "inactive"}`]} ${!isDashboard ? styles.disabled : ""}`}
+            onClick={() => router.push("#")}
           >
             <div className={styles["icon-shadow"]}>
-              <FontAwesomeIcon
-                className={styles["statistics-icon"]}
-                icon={faChartSimple}
-                size="sm"
+              <BarChartIcon
+                className={`icon-${isDashboard ? "active" : "inactive"}`}
+                isActive={isDashboard}
               />
             </div>
             <div className={styles["overall-metrics"]}>
-              <span>PATIENT OVERALL METRICS</span>
+              <span>Patient Analytics</span>
             </div>
           </div>
-          <Metric title="math" />
-          <Metric title="reading" />
-          <Metric title="writing" />
-          <Metric title="trivia" />
+          <Metric title="Math" isClickable={isClickable} />
+          <Metric title="Reading" isClickable={isClickable} />
+          <Metric title="Writing" isClickable={isClickable} />
+          <Metric title="Trivia" isClickable={isClickable} />
         </div>
+      </div>
+
+      <div className={styles.bottomSection}>
         <div className={styles.divider} />
         <div className={styles["patient-container"]} onClick={onClick}>
           <img

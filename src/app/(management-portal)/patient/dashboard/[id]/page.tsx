@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import {
   OverallDashboard,
   MathScreen,
@@ -32,6 +33,61 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page() {
+  const mathRef = useRef<HTMLDivElement>(null);
+  const readingRef = useRef<HTMLDivElement>(null);
+  const writingRef = useRef<HTMLDivElement>(null);
+  const triviaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.8,
+    };
+
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          if (id) {
+            document.location.replace(`#${id}`);
+          }
+        }
+      });
+    };
+
+    const observerMath = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    if (mathRef.current) observerMath.observe(mathRef.current);
+
+    const observerReading = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    if (readingRef.current) observerReading.observe(readingRef.current);
+
+    const observerWriting = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    if (writingRef.current) observerWriting.observe(writingRef.current);
+
+    const observerTrivia = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    if (triviaRef.current) observerTrivia.observe(triviaRef.current);
+
+    return () => {
+      observerMath.disconnect();
+      observerReading.disconnect();
+      observerWriting.disconnect();
+      observerTrivia.disconnect();
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
       <Divider />
@@ -50,7 +106,7 @@ export default function Page() {
         />
       </div>
       <Divider id="math" />
-      <div className={styles.sectionContainer}>
+      <div ref={mathRef} id="math" className={styles.sectionContainer}>
         <MathScreen
           accuracyData={dataLine}
           difficultyData={dataLine}
@@ -63,7 +119,7 @@ export default function Page() {
         />
       </div>
       <Divider id="reading" />
-      <div className={styles.sectionContainer}>
+      <div ref={readingRef} id="reading" className={styles.sectionContainer}>
         <ReadingScreen
           sessionHistory={dataStacked}
           readingRate={dataLine}
@@ -75,7 +131,7 @@ export default function Page() {
         />
       </div>
       <Divider id="writing" />
-      <div className={styles.sectionContainer}>
+      <div ref={writingRef} id="writing" className={styles.sectionContainer}>
         <WritingScreen
           sessionHistory={dataStacked}
           numCompleted={dataBar}
@@ -86,7 +142,7 @@ export default function Page() {
         />
       </div>
       <Divider id="trivia" />
-      <div className={styles.sectionContainer}>
+      <div ref={triviaRef} id="trivia" className={styles.sectionContainer}>
         <TriviaScreen
           accuracyData={dataLine}
           numQuestionData={numberOfQuestionData}
