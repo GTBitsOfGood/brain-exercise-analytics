@@ -666,7 +666,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
   return (
     <div className={styles.container}>
       <div className={styles.overviewReportContainer}>
-        <p className={styles.title}>Patient Analytics</p>
+        <p className={styles.title}>Patient Group Analytics</p>
       </div>
       <div className={styles.sectionContainer}>
         <GroupOverviewReport

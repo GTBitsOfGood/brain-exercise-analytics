@@ -220,7 +220,6 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className={styles.container}>
-      <Divider />
       <div className={styles.sectionContainer}>
         <OverallDashboard
           menuState={[dashboardMenu, updateAllAnalytics]}

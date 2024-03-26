@@ -25,16 +25,16 @@ const Metric = (metricProps: MetricProps) => {
 
   const isActive = useMemo(
     () =>
-      currentPath.startsWith("/patient/dashboard") &&
+      currentPath.startsWith("/patient/analytics") &&
       hash?.toLowerCase() === metricProps.title.toLowerCase(),
     [currentPath, metricProps.title, hash],
   );
 
   const handleButtonClick = () => {
-    if (currentPath.startsWith("/patient/dashboard/")) {
+    if (currentPath.startsWith("/patient/analytics/")) {
       router.push(`${currentPath}#${metricProps.title.toLowerCase()}`);
     } else {
-      router.push(`/patient/dashboard#${metricProps.title.toLowerCase()}`);
+      router.push(`/patient/analytics#${metricProps.title.toLowerCase()}`);
     }
   };
 
