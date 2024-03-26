@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { deleteCookie } from "cookies-next";
 
-import LeftSideOfPage from "@src/components/LeftSideOfPage/LeftSideOfPage";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod } from "@/common_utils/types";
 import { getAuth } from "firebase/auth";
@@ -66,39 +65,26 @@ export default function Page() {
   }
 
   return (
-    <div className={styles.screen}>
-      <div className={styles["split-screen"]}>
-        <div className={styles.left}>
-          <LeftSideOfPage />
-        </div>
-        <div className={styles["middle-space"]} />
-        <div className={styles.right}>
-          {loadingState === State.ERROR && (
-            <div className={styles["right-container"]}>
-              <span className={styles["password-reset"]}>
-                Error sending email
-              </span>
-              <p className={styles.description}>
-                Unfortunately, we ran into an error while sending an email
-                verification link. Please try again later or contact
-                bei2023@gmail.com if this error persists.
-              </p>
-            </div>
-          )}
-          {loadingState === State.SUCCESS && (
-            <div className={styles["right-container"]}>
-              <span className={styles["password-reset"]}>
-                Email has been sent!
-              </span>
-              <p className={styles.description}>
-                We&apos;ve sent an email verification link to your inbox. Please
-                use the link provided in the email to verify your email and
-                proceed.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
+    <div>
+      {loadingState === State.ERROR && (
+        <>
+          <p className={styles["password-reset"]}>Error sending email</p>
+          <p className={styles.description}>
+            Unfortunately, we ran into an error while sending an email
+            verification link. Please try again later or contact
+            bei2023@gmail.com if this error persists.
+          </p>
+        </>
+      )}
+      {loadingState === State.SUCCESS && (
+        <>
+          <p className={styles["password-reset"]}>Email sent!</p>
+          <p className={styles.description}>
+            We&apos;ve sent an email verification link to your inbox. Please use
+            the link provided in the email to verify your email and proceed.
+          </p>
+        </>
+      )}
     </div>
   );
 }

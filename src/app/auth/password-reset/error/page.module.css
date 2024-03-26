@@ -1,0 +1,17 @@
+.password-reset {
+  color: #2b3674;
+  font-size: 32px;
+  font-family: var(--font-poppins);
+  font-weight: 700;
+  word-wrap: break-word;
+  padding-bottom: 2%;
+}
+
+.description {
+  color: #a3aed0;
+  font-size: 13px;
+  font-family: var(--font-poppins);
+  font-weight: 400;
+  word-wrap: break-word;
+  padding-bottom: 7%;
+}
