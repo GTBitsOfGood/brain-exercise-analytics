@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { FormEvent, MouseEvent, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 
@@ -27,13 +27,20 @@ export default function Search({ className, onSubmit }: SearchProps) {
   const [searchInput, setSearchInput] = useState<string>(fullName);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
-  const onSubmitSearch = useCallback(() => {
-    if (showAdvancedSearch) {
-      setShowAdvancedSearch(!showAdvancedSearch);
-    }
-    dispatch(setFullName(searchInput));
-    onSubmit?.();
-  }, [searchInput, showAdvancedSearch, onSubmit, dispatch]);
+  const onSubmitSearch = useCallback(
+    (e?: FormEvent<HTMLFormElement> | MouseEvent<SVGSVGElement>) => {
+      if (e) {
+        e.preventDefault();
+      }
+
+      if (showAdvancedSearch) {
+        setShowAdvancedSearch(!showAdvancedSearch);
+      }
+      dispatch(setFullName(searchInput));
+      onSubmit?.();
+    },
+    [searchInput, showAdvancedSearch, onSubmit, dispatch],
+  );
 
   return (
     <div className={classes(styles.wrapper, className)}>
@@ -44,7 +51,10 @@ export default function Search({ className, onSubmit }: SearchProps) {
         ].join(" ")}
       >
         <div className={styles["search-no-tags"]}>
-          <div className={styles["search-container"]}>
+          <form
+            className={styles["search-container"]}
+            onSubmit={onSubmitSearch}
+          >
             <FontAwesomeIcon
               className={styles["search-icon"]}
               icon={faSearch}
@@ -61,7 +71,7 @@ export default function Search({ className, onSubmit }: SearchProps) {
               }}
               placeholder="Search"
             />
-          </div>
+          </form>
 
           <div className={styles["advanced-filter"]}>
             {!showAdvancedSearch ? (
