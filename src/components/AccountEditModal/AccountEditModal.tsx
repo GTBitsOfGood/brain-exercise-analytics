@@ -3,12 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { RootState } from "@src/redux/rootReducer";
 import { formatPhoneNumber } from "@src/utils/utils";
+import { internalRequest } from "@src/utils/requests";
+import { HttpMethod } from "@/common_utils/types";
+import { BlobServiceClient } from "@azure/storage-blob";
 import { update, logout } from "../../redux/reducers/authReducer/index";
 import styles from "./AccountEditModal.module.css";
 import ActiveIndicatorBox from "../ActiveIndicatorBox/ActiveIndicatorBox";
-import { internalRequest } from "@src/utils/requests";
-import { HttpMethod } from "@/common_utils/types";
-const { BlobServiceClient } = require("@azure/storage-blob");
 
 const Modal = () => {
   const [edit, setEdit] = useState<boolean>(false);
@@ -24,7 +24,7 @@ const Modal = () => {
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
   const [updatedName, setUpdatedName] = useState<string>(
-    `${firstName} ${lastName}`
+    `${firstName} ${lastName}`,
   );
   const [updatedPhoneNumber, setUpdatedPhoneNumber] =
     useState<string>(phoneNumber);
@@ -40,12 +40,16 @@ const Modal = () => {
     return `${month}/${day}/${year}`;
   }
   const [unupdatedBirthDate, setUnupdatedBirthDate] = useState(
-    new Date(birthDate)
+    new Date(birthDate),
   );
   const [updatedBirthDate, setUpdatedBirthDate] = useState(new Date(birthDate));
   const [updatedBirthDateInput, setUpdatedBirthDateInput] = useState(
-    formatDateToString(new Date(birthDate))
+    formatDateToString(new Date(birthDate)),
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [tempImageLink, setTempImageLink] = useState<string | null>(null);
+  const [sasToken, setSasToken] = useState("null");
 
   useEffect(() => {
     if (updatedBirthDateInput) {
@@ -69,6 +73,57 @@ const Modal = () => {
     setEdit(true);
   };
 
+  const storeImageLink = async (newImageLink: string) => {
+    const res = await internalRequest({
+      url: "/api/volunteer/profile-image/image-link",
+      method: HttpMethod.POST,
+      body: { newImageLink, email },
+    });
+    console.log(res);
+  };
+  // CORE IMPLEMENTATION
+  const uploadAzureImage = async () => {
+    try {
+      if (!selectedImage) {
+        console.error("No image selected");
+        return;
+      }
+      const res = await internalRequest({
+        url: "/api/volunteer/profile-image/sas-token",
+        method: HttpMethod.GET,
+        body: {},
+      });
+
+      setSasToken(res.sasToken as string);
+
+      if (!sasToken) {
+        console.error("Error: sasToken is undefined");
+        return;
+      }
+
+      const blobServiceClient = new BlobServiceClient(
+        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`,
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient("profileimage");
+      const blobClient = containerClient.getBlockBlobClient(
+        res.blobName as string,
+      );
+      await blobClient.uploadData(selectedImage);
+
+      return blobClient.url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+  const uploadProfileImage = async () => {
+    // Upload the image as a to Azure Storage Blob
+    const imgURL = await uploadAzureImage();
+    // Store the imageUrl in MongoDB
+    storeImageLink(imgURL);
+    return imgURL;
+  };
+
   const handleSaveChanges = async () => {
     const imgURL = await uploadProfileImage();
     console.log("image url: ", imgURL);
@@ -83,7 +138,7 @@ const Modal = () => {
           ...patientDetails,
         },
         imageLink: imgURL,
-      })
+      }),
     );
     setTempImageLink(null);
     setUnupdatedBirthDate(updatedBirthDate);
@@ -120,13 +175,6 @@ const Modal = () => {
     setUpdatedPhoneNumber(rawValue);
   };
 
-  // IMAGE UPLOAD
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  // const [selectedImage, setSelectedImage] = useState("null");
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [tempImageLink, setTempImageLink] = useState<string | null>(null);
-
-  const [sasToken, setSasToken] = useState("null");
   const openDialog = () => {
     fileInputRef.current?.click();
   };
@@ -145,56 +193,6 @@ const Modal = () => {
       setSelectedImage(selectedFile);
       setTempImageLink(URL.createObjectURL(selectedFile));
     }
-  };
-
-  // CORE IMPLEMENTATION
-  const uploadAzureImage = async () => {
-    try {
-      if (!selectedImage) {
-        console.error("No image selected");
-        return;
-      }
-      const res = await internalRequest({
-        url: "/api/volunteer/profile-image/sas-token",
-        method: HttpMethod.GET,
-        body: {},
-      });
-
-      setSasToken(res.sasToken);
-
-      if (!sasToken) {
-        console.error("Error: sasToken is undefined");
-        return;
-      }
-
-      const blobServiceClient = new BlobServiceClient(
-        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`
-      );
-      const containerClient =
-        blobServiceClient.getContainerClient("profileimage");
-      const blobClient = containerClient.getBlockBlobClient(res.blobName);
-      const response = await blobClient.uploadData(selectedImage);
-      console.log("newSAS:" + blobClient.url);
-
-      return blobClient.url;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
-  const storeImageLink = async (newImageLink) => {
-    const res = await internalRequest({
-      url: "/api/volunteer/profile-image/image-link",
-      method: HttpMethod.POST,
-      body: { newImageLink, email },
-    });
-    console.log(res);
-  };
-  const uploadProfileImage = async () => {
-    // Upload the image as a to Azure Storage Blob
-    const imgURL = await uploadAzureImage();
-    // Store the imageUrl in MongoDB
-    storeImageLink(imgURL);
-    return imgURL;
   };
 
   useEffect(() => {}, []);
