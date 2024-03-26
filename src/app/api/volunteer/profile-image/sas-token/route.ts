@@ -12,15 +12,15 @@ export const GET = APIWrapper({
     requireVolunteer: true,
   },
   handler: async () => {
-    const accountName = "beiaccount";
+    const accountName = process.env.ACCOUNT_NAME;
     // const accountKey =
     //   "w7TfstwMdQh4bVQ7H2fTrlOgX3/5SBNkFunKA1aUm6MAzqY3dPkANcvGN0ISSSbuYTXOog5G4Wi0+AStREzOtw==";
-    const accountKey = process.env.AZURE_ACCOUNT_KEY
+    const accountKey = process.env.AZURE_ACCOUNT_KEY;
     const storageCredential = new StorageSharedKeyCredential(
       accountName,
       accountKey,
     );
-    const containerName = "profileimage";
+    const containerName = process.env.CONTAINER_NAME;
     const blobName = uuidv4();
     const expiryDate = new Date(new Date().getTime() + 86400);
     const permissions = new BlobSASPermissions();
