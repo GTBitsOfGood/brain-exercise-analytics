@@ -5,9 +5,11 @@ import { update } from "@src/redux/reducers/authReducer";
 import NavigationPanel from "@src/components/NavigationPanel/NavigationPanel";
 import AccountEditModal from "@src/components/AccountEditModal/AccountEditModal";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod, IUser } from "@/common_utils/types";
+import { HttpMethod, IAuthUserCookie, IUser } from "@/common_utils/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
+import { getCookie, setCookie } from "cookies-next";
+
 import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -16,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { email } = useSelector((state: RootState) => state.auth);
   useEffect(() => {
     const retrieve = async () => {
-      const response: IUser = await internalRequest({
+      const user: IUser = await internalRequest({
         url: "/api/volunteer",
         method: HttpMethod.GET,
         authRequired: true,
@@ -24,7 +26,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           email,
         },
       });
-      dispatch(update(response));
+      dispatch(update(user));
+
+      // Update cookie if it does not match the retrieved user
+      const authUserCookie = getCookie("authUser");
+      if (authUserCookie) {
+        const parsedCookie = JSON.parse(authUserCookie) as IAuthUserCookie;
+        const { user: authUser, keepLogged } = parsedCookie;
+        if (JSON.stringify(authUser) !== JSON.stringify(user)) {
+          setCookie(
+            "authUser",
+            { user, keepLogged },
+            keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
+          );
+        }
+      }
     };
     try {
       retrieve();
