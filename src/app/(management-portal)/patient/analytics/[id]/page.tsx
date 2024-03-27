@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+import useHashObserver from "@src/hooks/useHashObserver";
 import {
   OverallDashboard,
   MathScreen,
@@ -50,55 +57,8 @@ export default function Page({ params }: { params: { id: string } }) {
   const writingRef = useRef<HTMLDivElement>(null);
   const triviaRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.8,
-    };
-
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute("id");
-          if (id) {
-            document.location.replace(`#${id}`);
-          }
-        }
-      });
-    };
-
-    const observerMath = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-    if (mathRef.current) observerMath.observe(mathRef.current);
-
-    const observerReading = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-    if (readingRef.current) observerReading.observe(readingRef.current);
-
-    const observerWriting = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-    if (writingRef.current) observerWriting.observe(writingRef.current);
-
-    const observerTrivia = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-    if (triviaRef.current) observerTrivia.observe(triviaRef.current);
-
-    return () => {
-      observerMath.disconnect();
-      observerReading.disconnect();
-      observerWriting.disconnect();
-      observerTrivia.disconnect();
-    };
-  }, []);
+  const refs = useMemo(() => [mathRef, readingRef, writingRef, triviaRef], []);
+  useHashObserver(refs);
 
   const [math, setMath] = useState<
     IAggregatedAnalyticsMath["math"] | undefined
