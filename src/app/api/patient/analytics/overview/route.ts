@@ -2,6 +2,8 @@ import APIWrapper from "@server/utils/APIWrapper";
 import { getAggregatedOverallAnalytics } from "@server/mongodb/actions/OverallAnalytics";
 import { DateRangeEnum } from "@/common_utils/types";
 
+export const dynamic = "force-dynamic";
+
 export const GET = APIWrapper({
   config: {
     requireToken: true,

@@ -6,6 +6,8 @@ import {
 } from "@azure/storage-blob";
 import { v4 as uuidv4 } from "uuid";
 
+export const dynamic = "force-dynamic";
+
 export const GET = APIWrapper({
   config: {
     requireToken: true,
