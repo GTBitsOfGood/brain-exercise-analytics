@@ -11,6 +11,8 @@ import { flatten } from "mongo-dot-notation";
 import {
   BlobServiceClient,
   StorageSharedKeyCredential,
+  BlobDeleteOptions,
+  DeleteSnapshotsOptionType,
 } from "@azure/storage-blob";
 import User from "../models/User";
 import { deleteVerificationLogByEmail } from "./VerificationLog";
@@ -214,6 +216,9 @@ const deleteBlob = async (imageUrl: string) => {
   const accountKey = process.env.AZURE_ACCOUNT_KEY;
   const accountName = process.env.AZURE_ACCOUNT_NAME;
   const containerName = process.env.AZURE_CONTAINER_NAME;
+  if (!accountKey || !accountName || !containerName) {
+    throw new Error("Azure account key or name is not defined");
+  }
   const blobName = imageUrl.split("/").slice(4).join("/");
   const sharedKeyCredential = new StorageSharedKeyCredential(
     accountName,
@@ -225,8 +230,8 @@ const deleteBlob = async (imageUrl: string) => {
   );
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blobClient = containerClient.getBlockBlobClient(blobName);
-  const options = {
-    deleteSnapshots: "include",
+  const options: BlobDeleteOptions = {
+    deleteSnapshots: "include" as DeleteSnapshotsOptionType,
   };
   await blobClient.deleteIfExists(options);
 };
@@ -236,7 +241,7 @@ export const postVolunteerImageLink = async (
   newImageLink: string,
 ): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ email });
-  if (user.imageLink) {
+  if (user && user.imageLink) {
     await deleteBlob(user.imageLink);
   }
 

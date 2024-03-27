@@ -110,7 +110,7 @@ export default function Profile() {
       return `https://beiaccount.blob.core.windows.net/profileimage/${res.blobName}`;
     } catch (e) {
       const error = e as Error;
-      throw new Error("Error uploading image:", error.message);
+      throw new Error(`Error uploading image:${error.message}`);
     }
   };
   const uploadProfileImage = async () => {
