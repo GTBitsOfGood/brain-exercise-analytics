@@ -8,10 +8,12 @@ import {
 } from "@/common_utils/types";
 import { PipelineStage } from "mongoose";
 import { flatten } from "mongo-dot-notation";
+import {
+  BlobServiceClient,
+  StorageSharedKeyCredential,
+} from "@azure/storage-blob";
 import User from "../models/User";
 import { deleteVerificationLogByEmail } from "./VerificationLog";
-import { BlobServiceClient, StorageSharedKeyCredential} from "@azure/storage-blob";
-
 
 type VParam = {
   role?: object;
@@ -208,15 +210,36 @@ export const deleteVolunteer = async (email: string): Promise<null> => {
 
   return null;
 };
+const deleteBlob = async (imageUrl: string) => {
+  const accountKey = process.env.AZURE_ACCOUNT_KEY;
+  const accountName = process.env.AZURE_ACCOUNT_NAME;
+  const containerName = process.env.AZURE_CONTAINER_NAME;
+  const blobName = imageUrl.split("/").slice(4).join("/");
+  const sharedKeyCredential = new StorageSharedKeyCredential(
+    accountName,
+    accountKey,
+  );
+  const blobServiceClient = new BlobServiceClient(
+    `https://${accountName}.blob.core.windows.net`,
+    sharedKeyCredential,
+  );
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  const blobClient = containerClient.getBlockBlobClient(blobName);
+  const options = {
+    deleteSnapshots: "include",
+  };
+  await blobClient.deleteIfExists(options);
+};
 
 export const postVolunteerImageLink = async (
   email: string,
   newImageLink: string,
 ): Promise<IUser | null> => {
-  const user = await User.findOne<IUser>({ email });  
+  const user = await User.findOne<IUser>({ email });
   if (user.imageLink) {
-    await deleteAzureBlob(user.imageLink)
+    await deleteBlob(user.imageLink);
   }
+
   const updatedUser: IUser | null = await User.findOneAndUpdate(
     { email },
     { $set: { imageLink: newImageLink } },
@@ -224,24 +247,3 @@ export const postVolunteerImageLink = async (
   );
   return updatedUser;
 };
-
-const deleteAzureBlob =  async (imageUrl:string) => {
-  const accountKey = process.env.AZURE_ACCOUNT_KEY;
-  const accountName = process.env.AZURE_ACCOUNT_NAME;
-  const containerName = process.env.AZURE_CONTAINER_NAME;
-  const blobName = imageUrl.split('/').slice(4).join('/');
-  const sharedKeyCredential = new StorageSharedKeyCredential(
-  accountName,
-  accountKey
-);
-  const blobServiceClient = new BlobServiceClient(
-    `https://${accountName}.blob.core.windows.net`, sharedKeyCredential
-  );
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blobClient = containerClient.getBlockBlobClient(blobName);
-  const options = {
-    deleteSnapshots: 'include' 
-  };
-  await blobClient.deleteIfExists(options);
-
-}

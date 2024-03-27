@@ -38,11 +38,11 @@ export default function Profile() {
     return `${month}/${day}/${year}`;
   }
   const [unupdatedBirthDate, setUnupdatedBirthDate] = useState(
-    new Date(birthDate)
+    new Date(birthDate),
   );
   const [updatedBirthDate, setUpdatedBirthDate] = useState(new Date(birthDate));
   const [updatedBirthDateInput, setUpdatedBirthDateInput] = useState(
-    formatDateToString(new Date(birthDate))
+    formatDateToString(new Date(birthDate)),
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,12 +68,11 @@ export default function Profile() {
   };
 
   const storeImageLink = async (newImageLink: string) => {
-    const res = await internalRequest({
+    await internalRequest({
       url: "/api/volunteer/profile-image/image-link",
       method: HttpMethod.POST,
       body: { newImageLink, email },
     });
-    console.log(res);
   };
   // CORE IMPLEMENTATION
   const uploadAzureImage = async () => {
@@ -93,8 +92,6 @@ export default function Profile() {
           extension: fileExtension,
         },
       });
-      console.log(fileExtension);
-      console.log(res);
 
       setSasToken(res.sasToken);
 
@@ -103,7 +100,7 @@ export default function Profile() {
       }
 
       const blobServiceClient = new BlobServiceClient(
-        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`
+        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`,
       );
       const containerClient =
         blobServiceClient.getContainerClient("profileimage");
@@ -111,22 +108,19 @@ export default function Profile() {
       await blobClient.uploadData(selectedImage);
 
       return `https://beiaccount.blob.core.windows.net/profileimage/${res.blobName}`;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
+    } catch (e) {
+      const error = e as Error;
+      throw new Error("Error uploading image:", error.message);
     }
   };
   const uploadProfileImage = async () => {
-    // Upload the image as a to Azure Storage Blob
     const imgURL = await uploadAzureImage();
-    // Store the imageUrl in MongoDB
     storeImageLink(imgURL);
     return imgURL;
   };
 
   const handleSaveChanges = async () => {
     const imgURL = await uploadProfileImage();
-    console.log("image url: ", imgURL);
     internalRequest({
       url: "/api/volunteer",
       method: HttpMethod.PATCH,
@@ -157,7 +151,7 @@ export default function Profile() {
         email: updatedEmail,
         birthDate: updatedBirthDate,
         imageLink: imgURL,
-      })
+      }),
     );
     setTempImageLink(null);
     setUnupdatedBirthDate(updatedBirthDate);
@@ -212,9 +206,7 @@ export default function Profile() {
       const maxSizeMB = 5;
 
       if (fileSizeInMB > maxSizeMB) {
-        // need to log the error message correctly
-        console.error("Selected file exceeds the maximum size limit of 5 MB");
-        return;
+        throw new Error("Selected file exceeds the maximum size limit of 5 MB");
       }
       setSelectedImage(selectedFile);
       setTempImageLink(URL.createObjectURL(selectedFile));

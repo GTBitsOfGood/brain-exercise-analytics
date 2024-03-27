@@ -27,5 +27,3 @@ export const POST = APIWrapper({
     return user;
   },
 });
-
-
