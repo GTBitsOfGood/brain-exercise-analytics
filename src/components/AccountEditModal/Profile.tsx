@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { formatPhoneNumber } from "@src/utils/utils";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { logout, update } from "@src/redux/reducers/authReducer";
@@ -51,7 +51,6 @@ export default function Profile() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [tempImageLink, setTempImageLink] = useState<string | null>(null);
-  const [sasToken, setSasToken] = useState("null");
 
   useEffect(() => {
     if (updatedBirthDateInput) {
@@ -70,15 +69,8 @@ export default function Profile() {
     setEdit(true);
   };
 
-  const storeImageLink = async (newImageLink: string) => {
-    await internalRequest({
-      url: "/api/volunteer/profile-image/image-link",
-      method: HttpMethod.POST,
-      body: { newImageLink, email },
-    });
-  };
   // CORE IMPLEMENTATION
-  const uploadAzureImage = async () => {
+  const uploadAzureImage = useCallback(async () => {
     try {
       if (!selectedImage) {
         throw new Error("No image selected");
@@ -96,7 +88,7 @@ export default function Profile() {
         },
       });
 
-      setSasToken(res.sasToken);
+      const { sasToken } = res;
 
       if (!sasToken) {
         throw new Error("sasToken is undefined");
@@ -115,15 +107,25 @@ export default function Profile() {
       const error = e as Error;
       throw new Error(`Error uploading image:${error.message}`);
     }
-  };
-  const uploadProfileImage = async () => {
-    const imgURL = await uploadAzureImage();
-    storeImageLink(imgURL);
-    return imgURL;
-  };
+  }, [selectedImage]);
 
-  const handleSaveChanges = async () => {
-    const imgURL = await uploadProfileImage();
+  const uploadProfileImage = useCallback(async () => {
+    const imgURL = await uploadAzureImage();
+
+    // Store the new image link in the MongoDB record and delete the old image from Azure
+    await internalRequest({
+      url: "/api/volunteer/profile-image/image-link",
+      method: HttpMethod.POST,
+      body: { newImageLink: imgURL, email },
+    });
+    return imgURL;
+  }, [uploadAzureImage, email]);
+
+  const handleSaveChanges = useCallback(async () => {
+    if (selectedImage) {
+      await uploadProfileImage();
+    }
+
     const updatedUser = await internalRequest<IUser>({
       url: "/api/volunteer",
       method: HttpMethod.PATCH,
@@ -136,7 +138,6 @@ export default function Profile() {
           phoneNumber: updatedPhoneNumber,
           email: updatedEmail,
           birthDate: updatedBirthDate,
-          imageLink: imgURL,
         },
       },
     })
@@ -160,7 +161,18 @@ export default function Profile() {
     dispatch(update(updatedUser));
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
-  };
+  }, [
+    dispatch,
+    email,
+    router,
+    selectedImage,
+    updatedBirthDate,
+    updatedEmail,
+    updatedFirstName,
+    updatedLastName,
+    updatedPhoneNumber,
+    uploadProfileImage,
+  ]);
 
   const handleCancel = () => {
     setSelectedImage(null);
