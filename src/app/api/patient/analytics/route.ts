@@ -7,6 +7,8 @@ import {
 import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
 import { getUserById } from "@server/mongodb/actions/User";
 
+export const dynamic = "force-dynamic";
+
 export const GET = APIWrapper({
   config: {
     requireToken: true,
