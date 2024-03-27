@@ -28,13 +28,4 @@ export const POST = APIWrapper({
   },
 });
 
-export const PUT = APIWrapper({
-  config: {
-    requireToken: true,
-  },
-  handler: async () => {
-    return {
-      message: "from PUT image link api",
-    };
-  },
-});
+

@@ -11,22 +11,23 @@ export const GET = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async () => {
+  handler: async (req) => {
+    const {searchParams} = new URL(req.url);
+    const extension = searchParams.get("extension")
+    if (!extension) {
+      throw new Error("file extension of image is missing")
+    }
     const accountName = process.env.AZURE_ACCOUNT_NAME as string;
     const accountKey = process.env.AZURE_ACCOUNT_KEY as string;
     const containerName = process.env.AZURE_CONTAINER_NAME as string;
-
+    const expiryDate = new Date(new Date().getTime() + 86400);
     const storageCredential = new StorageSharedKeyCredential(
       accountName,
       accountKey,
     );
-    const blobName = uuidv4();
-    const expiryDate = new Date(new Date().getTime() + 86400);
-    const permissions = new BlobSASPermissions();
+    const blobName = uuidv4() + "." + extension;;
+    let permissions = new BlobSASPermissions();
     permissions.write = true;
-    permissions.read = true;
-    permissions.delete = true;
-
     const sasToken = generateBlobSASQueryParameters(
       {
         containerName,
@@ -37,6 +38,9 @@ export const GET = APIWrapper({
       storageCredential,
     ).toString();
 
-    return { sasToken, blobName };
+
+    return { sasToken, blobName, extension: extension};
   },
 });
+
+

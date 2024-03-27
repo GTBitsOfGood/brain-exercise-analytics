@@ -38,11 +38,11 @@ export default function Profile() {
     return `${month}/${day}/${year}`;
   }
   const [unupdatedBirthDate, setUnupdatedBirthDate] = useState(
-    new Date(birthDate),
+    new Date(birthDate)
   );
   const [updatedBirthDate, setUpdatedBirthDate] = useState(new Date(birthDate));
   const [updatedBirthDateInput, setUpdatedBirthDateInput] = useState(
-    formatDateToString(new Date(birthDate)),
+    formatDateToString(new Date(birthDate))
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -81,12 +81,20 @@ export default function Profile() {
       if (!selectedImage) {
         throw new Error("No image selected");
       }
-      const res = await internalRequest<{ sasToken: string; blobName: string }>(
-        {
-          url: "/api/volunteer/profile-image/sas-token",
-          method: HttpMethod.GET,
+      const fileExtension = selectedImage.name.split(".").pop();
+
+      const res = await internalRequest<{
+        sasToken: string;
+        blobName: string;
+      }>({
+        url: "/api/volunteer/profile-image/sas-token",
+        method: HttpMethod.GET,
+        queryParams: {
+          extension: fileExtension,
         },
-      );
+      });
+      console.log(fileExtension);
+      console.log(res);
 
       setSasToken(res.sasToken);
 
@@ -95,14 +103,14 @@ export default function Profile() {
       }
 
       const blobServiceClient = new BlobServiceClient(
-        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`,
+        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`
       );
       const containerClient =
         blobServiceClient.getContainerClient("profileimage");
       const blobClient = containerClient.getBlockBlobClient(res.blobName);
       await blobClient.uploadData(selectedImage);
 
-      return blobClient.url;
+      return `https://beiaccount.blob.core.windows.net/profileimage/${res.blobName}`;
     } catch (error) {
       console.error("Error uploading image:", error);
       throw error;
@@ -149,7 +157,7 @@ export default function Profile() {
         email: updatedEmail,
         birthDate: updatedBirthDate,
         imageLink: imgURL,
-      }),
+      })
     );
     setTempImageLink(null);
     setUnupdatedBirthDate(updatedBirthDate);
