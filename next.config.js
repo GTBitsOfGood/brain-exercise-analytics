@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverMinification: false,
+  optimization: {
+    minimize: false,
+  },
 };
 
 module.exports = nextConfig;
