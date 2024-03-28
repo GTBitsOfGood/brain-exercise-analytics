@@ -129,7 +129,7 @@ export default function Profile() {
       method: HttpMethod.POST,
       body: { newImageLink: imgURL, email },
     });
-    console.log("here3");
+    console.log("here100");
     return imgURL;
   }, [uploadAzureImage, email]);
 
