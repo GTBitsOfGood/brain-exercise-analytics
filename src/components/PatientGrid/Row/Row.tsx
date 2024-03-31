@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretRight,
@@ -11,6 +10,7 @@ import {
 
 import { classes, transformPhoneNumber } from "@src/utils/utils";
 import { useCallback, useState } from "react";
+import Link from "next/link";
 import styles from "./Row.module.css";
 import { GridRowDef } from "../types";
 
@@ -66,11 +66,6 @@ function ExpandedRow({ row }: { row: GridRowDef }) {
 export function Row({ row }: { row: GridRowDef }) {
   const [view, setView] = useState<boolean>(false);
   const handleClick = useCallback(() => setView((v) => !v), []);
-  const router = useRouter();
-
-  const handleDashboardClick = useCallback(() => {
-    router.push(`/patient/analytics/${row.id}`);
-  }, [router, row.id]);
 
   return (
     <>
@@ -117,9 +112,12 @@ export function Row({ row }: { row: GridRowDef }) {
           </div>
         </td>
         <td className={styles.RowCell}>
-          <div className={styles.DatabaseButton} onClick={handleDashboardClick}>
+          <Link
+            className={styles.DatabaseButton}
+            href={`/patient/analytics/${row.id}`}
+          >
             View
-          </div>
+          </Link>
         </td>
       </tr>
       {view && <ExpandedRow row={row} />}

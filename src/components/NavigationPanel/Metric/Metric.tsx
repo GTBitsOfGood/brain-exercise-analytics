@@ -2,9 +2,10 @@
 
 import React, { useMemo } from "react";
 import { Poppins } from "next/font/google";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { SqrtIcon, BookIcon, QuestionIcon, DocIcon } from "@src/app/icons";
 import useHash from "@src/hooks/useHash";
+import Link from "next/link";
 import styles from "./Metric.module.css";
 
 const poppins = Poppins({
@@ -19,7 +20,6 @@ type MetricProps = {
 };
 
 const Metric = (metricProps: MetricProps) => {
-  const router = useRouter();
   const currentPath = usePathname();
   const hash = useHash();
 
@@ -29,14 +29,6 @@ const Metric = (metricProps: MetricProps) => {
       hash?.toLowerCase() === metricProps.title.toLowerCase(),
     [currentPath, metricProps.title, hash],
   );
-
-  const handleButtonClick = () => {
-    if (currentPath.startsWith("/patient/analytics/")) {
-      router.push(`${currentPath}#${metricProps.title.toLowerCase()}`);
-    } else {
-      router.push(`/patient/analytics#${metricProps.title.toLowerCase()}`);
-    }
-  };
 
   const icon = useMemo(() => {
     switch (metricProps.title) {
@@ -90,9 +82,11 @@ const Metric = (metricProps: MetricProps) => {
   }, [metricProps.title, metricProps.isClickable]);
 
   return (
-    <div
+    <Link
       className={`${styles.wrapper} ${!metricProps.isClickable ? styles.disabled : ""}`}
-      onClick={metricProps.isClickable ? () => handleButtonClick() : undefined}
+      href={
+        metricProps.isClickable ? `#${metricProps.title.toLowerCase()}` : ""
+      }
     >
       <main className={poppins.variable}>
         <div className={styles["text-wrapper"]}></div>
@@ -113,7 +107,7 @@ const Metric = (metricProps: MetricProps) => {
           </div>
         </div>
       </main>
-    </div>
+    </Link>
   );
 };
 

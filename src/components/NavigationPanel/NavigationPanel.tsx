@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
@@ -16,7 +17,6 @@ interface Props {
 const NavigationPanel = ({ onClick }: Props) => {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
 
-  const router = useRouter();
   const currentPath = usePathname();
 
   const isClickable = useMemo(
@@ -77,13 +77,13 @@ const NavigationPanel = ({ onClick }: Props) => {
               Volunteer Management
             </div>
             <div className={styles[`volunteer-patient-container`]}>
-              <div
+              <Link
                 className={
                   styles[
                     `search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`
                   ]
                 }
-                onClick={() => router.push("/volunteer/search")}
+                href="/volunteer/search"
               >
                 <div className={styles["icon-shadow"]}>
                   <SearchIcon className={styles["icon-active"]} />
@@ -91,16 +91,16 @@ const NavigationPanel = ({ onClick }: Props) => {
                 <span className={styles["search-volunteer-text"]}>
                   Search Volunteer
                 </span>
-              </div>
+              </Link>
             </div>
             <div className={styles["metrics-container"]}>
-              <div
+              <Link
                 className={
                   styles[
                     `approval-container-${isApproval ? "active" : "inactive"}`
                   ]
                 }
-                onClick={() => router.push("/volunteer/approval")}
+                href="/volunteer/approval"
               >
                 <div className={styles["icon-shadow"]}>
                   <PersonIcon className={styles["icon-active"]} />
@@ -109,19 +109,19 @@ const NavigationPanel = ({ onClick }: Props) => {
                   <span>Pending Approval</span>
                 </div>
                 <div className={styles["red-bubble"]}>1</div>
-              </div>
+              </Link>
             </div>
           </>
         )}
         <div className={styles["patient-management"]}>Patient Management</div>
         <div className={styles[`search-patient-container`]}>
-          <div
+          <Link
             className={
               styles[
                 `search-patient-${isPatientSearch ? "active" : "inactive"}`
               ]
             }
-            onClick={() => router.push("/patient/search")}
+            href="/patient/search"
           >
             <div className={styles["icon-shadow"]}>
               <SearchIcon className={"icon-active"} />
@@ -129,12 +129,12 @@ const NavigationPanel = ({ onClick }: Props) => {
             <span className={styles["search-patient-text"]}>
               Search Patients
             </span>
-          </div>
+          </Link>
         </div>
         <div className={styles["metrics-container"]}>
-          <div
+          <Link
             className={`${styles[`overall-metrics-container-${isAnalytics ? "active" : "inactive"}`]} ${!isAnalytics ? styles.disabled : ""}`}
-            onClick={() => router.push("#")}
+            href="#"
           >
             <div className={styles["icon-shadow"]}>
               <BarChartIcon
@@ -145,7 +145,7 @@ const NavigationPanel = ({ onClick }: Props) => {
             <div className={styles["overall-metrics"]}>
               <span>Patient Analytics</span>
             </div>
-          </div>
+          </Link>
           <Metric title="Math" isClickable={isClickable} />
           <Metric title="Reading" isClickable={isClickable} />
           <Metric title="Writing" isClickable={isClickable} />
