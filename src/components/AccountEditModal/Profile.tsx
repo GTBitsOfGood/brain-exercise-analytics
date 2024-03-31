@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { formatPhoneNumber } from "@src/utils/utils";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
+import { BlobServiceClient } from "@azure/storage-blob";
 import { logout, update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
 import { internalRequest } from "@src/utils/requests";
@@ -21,14 +22,13 @@ export default function Profile() {
     phoneNumber,
     email,
     birthDate,
+    imageLink,
     chapter,
     role,
     adminDetails: { active },
   } = useSelector((state: RootState) => state.auth);
-  const [updatedFirstName, setUpdatedFirstName] = useState<string>(
-    `${firstName}`,
-  );
-  const [updatedLastName, setUpdatedLastName] = useState<string>(`${lastName}`);
+  const [updatedFirstName, setUpdatedFirstName] = useState<string>(firstName);
+  const [updatedLastName, setUpdatedLastName] = useState<string>(lastName);
   const [updatedPhoneNumber, setUpdatedPhoneNumber] =
     useState<string>(phoneNumber);
   const [updatedEmail, setUpdatedEmail] = useState<string>(email);
@@ -48,6 +48,10 @@ export default function Profile() {
     formatDateToString(new Date(birthDate)),
   );
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [tempImageLink, setTempImageLink] = useState<string | null>(null);
+
   useEffect(() => {
     if (updatedBirthDateInput) {
       const dateArray = updatedBirthDateInput.split("/");
@@ -65,7 +69,63 @@ export default function Profile() {
     setEdit(true);
   };
 
-  const handleSaveChanges = async () => {
+  // CORE IMPLEMENTATION
+  const uploadAzureImage = useCallback(async () => {
+    try {
+      if (!selectedImage) {
+        throw new Error("No image selected");
+      }
+      const fileExtension = selectedImage.name.split(".").pop();
+
+      const res = await internalRequest<{
+        sasToken: string;
+        blobName: string;
+      }>({
+        url: "/api/volunteer/profile-image/sas-token",
+        method: HttpMethod.GET,
+        queryParams: {
+          extension: fileExtension,
+        },
+      });
+
+      const { sasToken } = res;
+
+      if (!sasToken) {
+        throw new Error("sasToken is undefined");
+      }
+
+      const blobServiceClient = new BlobServiceClient(
+        `https://beiaccount.blob.core.windows.net/?${res.sasToken}`,
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient("profileimage");
+      const blobClient = containerClient.getBlockBlobClient(res.blobName);
+      await blobClient.uploadData(selectedImage);
+
+      return `https://beiaccount.blob.core.windows.net/profileimage/${res.blobName}`;
+    } catch (e) {
+      const error = e as Error;
+      throw new Error(`Error uploading image:${error.message}`);
+    }
+  }, [selectedImage]);
+
+  const uploadProfileImage = useCallback(async () => {
+    const imgURL = await uploadAzureImage();
+
+    // Store the new image link in the MongoDB record and delete the old image from Azure
+    await internalRequest({
+      url: "/api/volunteer/profile-image/image-link",
+      method: HttpMethod.POST,
+      body: { newImageLink: imgURL, email },
+    });
+    return imgURL;
+  }, [uploadAzureImage, email]);
+
+  const handleSaveChanges = useCallback(async () => {
+    if (selectedImage) {
+      await uploadProfileImage();
+    }
+
     const updatedUser = await internalRequest<IUser>({
       url: "/api/volunteer",
       method: HttpMethod.PATCH,
@@ -80,15 +140,9 @@ export default function Profile() {
           birthDate: updatedBirthDate,
         },
       },
-    })
-      .then((user) => {
-        console.log("Submmited");
-        return user;
-      })
-      .catch((error) => {
-        console.log("Did not submit", error);
-        throw error;
-      });
+    });
+
+    setTempImageLink(null);
 
     // Logout user if email is changed so they can reauthenticate
     if (updatedEmail !== email) {
@@ -99,9 +153,22 @@ export default function Profile() {
     dispatch(update(updatedUser));
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
-  };
+  }, [
+    dispatch,
+    email,
+    router,
+    selectedImage,
+    updatedBirthDate,
+    updatedEmail,
+    updatedFirstName,
+    updatedLastName,
+    updatedPhoneNumber,
+    uploadProfileImage,
+  ]);
 
   const handleCancel = () => {
+    setSelectedImage(null);
+    setTempImageLink(null);
     setUpdatedFirstName(firstName);
     setUpdatedLastName(lastName);
     setUpdatedPhoneNumber(phoneNumber);
@@ -110,6 +177,7 @@ export default function Profile() {
     setUpdatedBirthDateInput(unupdatedBirthDate.toLocaleDateString("en-US"));
     setEdit(false);
   };
+
   const formatBirthDate = (input: string): string => {
     const numericInput: string = input.replace(/\D/g, "");
     const maxLength = 8;
@@ -123,19 +191,64 @@ export default function Profile() {
     }
     return formattedInput;
   };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\D/g, "");
     if (rawValue.length > 10) return;
     setUpdatedPhoneNumber(rawValue);
   };
 
+  const openDialog = () => {
+    fileInputRef.current?.click();
+  };
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files === null || e.target.files.length < 1) {
+      return;
+    }
+
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      const fileSizeInMB = selectedFile.size / (1024 * 1024);
+      const maxSizeMB = 5;
+
+      if (fileSizeInMB > maxSizeMB) {
+        throw new Error("Selected file exceeds the maximum size limit of 5 MB");
+      }
+      setSelectedImage(selectedFile);
+      setTempImageLink(URL.createObjectURL(selectedFile));
+    }
+  };
+
   return (
     <>
       <div className={styles.header}>
-        <img
-          src="https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/141.jpg"
-          alt="Description of the image"
-        />
+        <div>
+          <div>
+            <img
+              src={tempImageLink || imageLink}
+              alt="Profile Image"
+              className={styles.profileImage}
+              onClick={openDialog}
+              style={{
+                width: "120px",
+                height: "120px",
+                cursor: edit ? "pointer" : "",
+              }}
+            />
+
+            {edit && (
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+            )}
+          </div>
+        </div>
         <div className={styles.myContainer}>
           <div className={styles.first}>
             <label>{`${firstName} ${lastName}`}</label>

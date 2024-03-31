@@ -7,6 +7,8 @@ import {
 } from "@server/mongodb/actions/Volunteer";
 import APIWrapper from "@server/utils/APIWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const GET = APIWrapper({
   config: {
     requireToken: true,
@@ -43,8 +45,7 @@ export const PATCH = APIWrapper({
     }
 
     if (newFields.email !== undefined && email !== newFields.email) {
-      const res = await updateUserEmail(email, newFields.email);
-      console.log(res);
+      await updateUserEmail(email, newFields.email);
     }
 
     const user = await updateVolunteer(email, newFields);
