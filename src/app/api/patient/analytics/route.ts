@@ -1,11 +1,6 @@
 import APIWrapper from "@server/utils/APIWrapper";
-import {
-  AnalyticsSectionEnum,
-  DateRangeEnum,
-  Role,
-} from "@/common_utils/types";
+import { AnalyticsSectionEnum, DateRangeEnum } from "@/common_utils/types";
 import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
-import { getUserById } from "@server/mongodb/actions/User";
 
 export const dynamic = "force-dynamic";
 
@@ -46,14 +41,7 @@ export const GET = APIWrapper({
       ? Object.values(AnalyticsSectionEnum)
       : Array.from(new Set(sections));
 
-    const user = await getUserById(id);
-
-    if (user?.role !== Role.NONPROFIT_PATIENT) {
-      throw new Error("User is not a patient");
-    }
-
-    const name = `${user.firstName} ${user.lastName}`;
-    const data = await getAggregatedAnalytics(id, name, range, updatedSections);
+    const data = await getAggregatedAnalytics([id], range, updatedSections);
 
     return data;
   },

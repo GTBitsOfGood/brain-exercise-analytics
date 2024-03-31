@@ -8,7 +8,7 @@ import {
   DataRecord,
 } from "@/common_utils/types";
 import { getUsersFiltered } from "@server/mongodb/actions/User";
-import { getAggregatedAnalyticsGroup } from "@server/mongodb/actions/AggregatedAnalytics";
+import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
 
 type RequestData = {
   filters: PatientSearchParams;
@@ -87,9 +87,8 @@ export const POST = APIWrapper({
 
     const usersids = users.data.map((element) => element._id);
 
-    const aggregatedDataArray = await getAggregatedAnalyticsGroup(
+    const aggregatedDataArray = await getAggregatedAnalytics(
       usersids,
-      "",
       range,
       updatedSections,
     );

@@ -231,7 +231,7 @@ export interface SearchRequestBody<T extends object> {
 }
 
 export interface SearchResponseBody<T> {
-  data: T;
+  data: T[];
   numRecords: number;
   numPages: number;
   page: number;

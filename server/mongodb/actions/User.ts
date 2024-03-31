@@ -136,7 +136,7 @@ export const getUsersFiltered = async ({
   searchall,
   onlyids,
 }: SearchRequestBody<PatientSearchParams>): Promise<
-  SearchResponseBody<IPatientTableEntry[]> | undefined
+  SearchResponseBody<IPatientTableEntry> | undefined
 > => {
   let numOfItems = 8;
   let newpage = page;
@@ -334,7 +334,5 @@ export const getUsersFiltered = async ({
   ]);
   // console.log(userFiltering[0].data[0]);
 
-  return userFiltering[0] as
-    | SearchResponseBody<IPatientTableEntry[]>
-    | undefined;
+  return userFiltering[0] as SearchResponseBody<IPatientTableEntry> | undefined;
 };

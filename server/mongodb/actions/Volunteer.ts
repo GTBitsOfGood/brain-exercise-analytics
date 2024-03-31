@@ -34,7 +34,7 @@ export const getVolunteersFiltered = async ({
   sortParams,
   allowedRoles,
 }: Body<VolunteerSearchParams>): Promise<
-  SearchResponseBody<IUser[]> | undefined
+  SearchResponseBody<IUser> | undefined
 > => {
   const numOfItems = 8;
 
@@ -178,7 +178,7 @@ export const getVolunteersFiltered = async ({
     },
   ]);
   // console.log(userFiltering[0].data[0]);
-  return userFiltering[0] as SearchResponseBody<IUser[]> | undefined;
+  return userFiltering[0] as SearchResponseBody<IUser> | undefined;
 };
 
 export const getVolunteer = async (email: string): Promise<IUser | null> => {
