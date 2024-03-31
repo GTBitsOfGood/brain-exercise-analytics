@@ -72,7 +72,7 @@ export default function TriviaScreen({
             info="Vidushi"
             data={accuracyData}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -82,7 +82,7 @@ export default function TriviaScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -92,7 +92,7 @@ export default function TriviaScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>
@@ -102,7 +102,6 @@ export default function TriviaScreen({
             title="Current Accuracy"
             text={currentAccuracy}
             Icon={AccuracyIcon}
-            // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}

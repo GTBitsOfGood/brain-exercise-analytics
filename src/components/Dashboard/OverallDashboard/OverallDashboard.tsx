@@ -114,6 +114,7 @@ export default function OverallDashboard(params: Params) {
           highlightLargest
           fullWidth
           style={{ width: "30%" }}
+          gridLines
         />
 
         <div className={styles.lastSession}>
