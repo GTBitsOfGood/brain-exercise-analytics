@@ -22,7 +22,6 @@ export const getVolunteersFiltered = async ({
   params: paramsObject,
   page,
   sortParams,
-  lowerRoles,
 }: SearchRequestBody<VolunteerSearchParams>): Promise<
   SearchResponseBody<IUser[]> | undefined
 > => {
@@ -110,7 +109,7 @@ export const getVolunteersFiltered = async ({
   // }
 
   const matchPipeline = {
-    $match: { $and: [userParamsObject], role: { $in: lowerRoles } },
+    $match: { $and: [userParamsObject] },
   } as PipelineStage.Match;
 
   const sortPipeline = (

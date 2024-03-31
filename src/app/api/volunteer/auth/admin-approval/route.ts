@@ -1,11 +1,10 @@
-import { AdminApprovalStatus, Role } from "@/common_utils/types";
+import { AdminApprovalStatus } from "@/common_utils/types";
 import {
   getUserByEmail,
   updateUserAdminApproval,
 } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 import { sendEmail } from "@server/utils/email";
-import { getLowerAdminRoles } from "@src/utils/utils";
 
 type RequestData = {
   approvedEmail: string;
@@ -17,7 +16,7 @@ export const POST = APIWrapper({
     requireToken: true,
     requireAdmin: true,
   },
-  handler: async (req, currentUser) => {
+  handler: async (req) => {
     const requestData = (await req.json()) as RequestData;
 
     if (
@@ -34,19 +33,10 @@ export const POST = APIWrapper({
       throw new Error("No account associated with the provided email");
     }
 
-    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
-
-    if (!lowerRoles.includes(user.role)) {
-      throw new Error(
-        "This account is not allowed to modify the features of the provided email",
-      );
-    }
-
     const updatedApprovalStatus = requestData.approved
       ? AdminApprovalStatus.APPROVED
       : AdminApprovalStatus.REJECTED;
     const userEmail = requestData.approvedEmail;
-
     await updateUserAdminApproval(userEmail, updatedApprovalStatus);
 
     const emailSubject = requestData.approved

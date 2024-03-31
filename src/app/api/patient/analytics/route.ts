@@ -45,7 +45,6 @@ export const GET = APIWrapper({
       : Array.from(new Set(sections));
 
     const user = await getUserById(id);
-
     if (user?.role !== Role.NONPROFIT_PATIENT) {
       throw new Error("User is not a patient");
     }

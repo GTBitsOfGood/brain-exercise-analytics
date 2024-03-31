@@ -131,21 +131,10 @@ export const getUsersFiltered = async ({
   params: paramsObject,
   page,
   sortParams,
-  searchall,
-  onlyids,
 }: SearchRequestBody<PatientSearchParams>): Promise<
   SearchResponseBody<IPatientTableEntry[]> | undefined
 > => {
-  let numOfItems = 8;
-  let newpage = page;
-
-  if (page === undefined) {
-    newpage = 0;
-  }
-  if (searchall) {
-    numOfItems = Number.MAX_SAFE_INTEGER;
-    newpage = 0;
-  }
+  const numOfItems = 8;
 
   const userParamsObject = {
     role: Role.NONPROFIT_PATIENT,
@@ -226,28 +215,6 @@ export const getUsersFiltered = async ({
     });
   }
 
-  let overallProjects: object = {
-    analyticsRecords: 0,
-    __v: 0,
-  };
-  if (onlyids) {
-    overallProjects = {
-      analyticsRecords: 0,
-      __v: 0,
-      phoneNumber: 0,
-      email: 0,
-      patientDetails: 0,
-      adminDetails: 0,
-      chapter: 0,
-      location: 0,
-      signedUp: 0,
-      verified: 0,
-      approved: 0,
-      role: 0,
-      startDate: 0,
-    };
-  }
-
   const sortPipeline = (
     sortParams
       ? {
@@ -281,7 +248,10 @@ export const getUsersFiltered = async ({
     },
     matchPipeline,
     {
-      $project: overallProjects,
+      $project: {
+        analyticsRecords: 0,
+        __v: 0,
+      },
     },
     sortPipeline,
     {
@@ -290,7 +260,7 @@ export const getUsersFiltered = async ({
           { $count: "totalDocuments" },
           {
             $addFields: {
-              newpage,
+              page,
               totalPages: {
                 $ceil: {
                   $divide: ["$totalDocuments", numOfItems],
@@ -300,7 +270,7 @@ export const getUsersFiltered = async ({
           },
         ],
         data: [
-          { $skip: newpage === undefined ? 0 : numOfItems * newpage },
+          { $skip: page === undefined ? 0 : numOfItems * page },
           { $limit: numOfItems },
         ],
       },
@@ -311,7 +281,7 @@ export const getUsersFiltered = async ({
     {
       $addFields: {
         numRecords: "$metadata.totalDocuments",
-        newpage: "$metadata.page",
+        page: "$metadata.page",
         numPages: "$metadata.totalPages",
       },
     },
@@ -322,7 +292,6 @@ export const getUsersFiltered = async ({
     },
   ]);
   // console.log(userFiltering[0].data[0]);
-
   return userFiltering[0] as
     | SearchResponseBody<IPatientTableEntry[]>
     | undefined;

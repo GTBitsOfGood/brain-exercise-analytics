@@ -37,7 +37,6 @@ export enum Role {
   NONPROFIT_PATIENT = "Nonprofit Patient",
   NONPROFIT_VOLUNTEER = "Nonprofit Volunteer",
   NONPROFIT_ADMIN = "Nonprofit Admin",
-  NONPROFIT_DIRECTOR = "Nonprofit Director",
 }
 
 export enum Days {
@@ -221,13 +220,10 @@ export interface SearchRequestBody<T extends object> {
   params: T;
   page?: number;
   sortParams?: SortField;
-  lowerRoles?: Role[];
-  searchall?: boolean;
-  onlyids?: boolean;
 }
 
 export interface SearchResponseBody<T> {
-  data: T;
+  data: T[];
   numRecords: number;
   numPages: number;
   page: number;
