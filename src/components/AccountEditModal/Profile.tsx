@@ -76,7 +76,6 @@ export default function Profile() {
         throw new Error("No image selected");
       }
       const fileExtension = selectedImage.name.split(".").pop();
-      console.log("here1.1");
 
       const res = await internalRequest<{
         sasToken: string;
@@ -88,40 +87,30 @@ export default function Profile() {
           extension: fileExtension,
         },
       });
-      console.log("here1.2");
 
       const { sasToken } = res;
-      console.log("here1.3", sasToken);
 
       if (!sasToken) {
         throw new Error("sasToken is undefined");
       }
-      console.log("here1.4");
 
       const blobServiceClient = new BlobServiceClient(
         `https://beiaccount.blob.core.windows.net/?${res.sasToken}`,
       );
-      console.log("here1.5");
       const containerClient =
         blobServiceClient.getContainerClient("profileimage");
-      console.log("here1.6");
       const blobClient = containerClient.getBlockBlobClient(res.blobName);
-      console.log("here1.7");
       await blobClient.uploadData(selectedImage);
-      console.log("here1.8");
 
       return `https://beiaccount.blob.core.windows.net/profileimage/${res.blobName}`;
     } catch (e) {
-      console.log("error:", e);
       const error = e as Error;
       throw new Error(`Error uploading image:${error.message}`);
     }
   }, [selectedImage]);
 
   const uploadProfileImage = useCallback(async () => {
-    console.log("here1");
     const imgURL = await uploadAzureImage();
-    console.log("here2");
 
     // Store the new image link in the MongoDB record and delete the old image from Azure
     await internalRequest({
@@ -129,7 +118,6 @@ export default function Profile() {
       method: HttpMethod.POST,
       body: { newImageLink: imgURL, email },
     });
-    console.log("here100");
     return imgURL;
   }, [uploadAzureImage, email]);
 
@@ -152,15 +140,7 @@ export default function Profile() {
           birthDate: updatedBirthDate,
         },
       },
-    })
-      .then((user) => {
-        console.log("Submmited");
-        return user;
-      })
-      .catch((error) => {
-        console.log("Did not submit", error);
-        throw error;
-      });
+    });
 
     setTempImageLink(null);
 

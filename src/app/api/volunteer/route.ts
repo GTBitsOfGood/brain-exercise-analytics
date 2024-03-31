@@ -45,8 +45,7 @@ export const PATCH = APIWrapper({
     }
 
     if (newFields.email !== undefined && email !== newFields.email) {
-      const res = await updateUserEmail(email, newFields.email);
-      console.log(res);
+      await updateUserEmail(email, newFields.email);
     }
 
     const user = await updateVolunteer(email, newFields);

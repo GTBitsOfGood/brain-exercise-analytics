@@ -115,7 +115,6 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     beiChapters,
     volunteerRoles,
   } = useSelector((volunteerSearchState: RootState) => {
-    // console.log(volunteerSearchState);
     return volunteerSearchState.volunteerSearch;
   });
 
