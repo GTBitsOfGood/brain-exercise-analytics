@@ -110,7 +110,8 @@
 .inputFieldRow {
   display: flex;
   flex-direction: row;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 15px;
   width: 100%;
 }
 .header {
@@ -149,6 +150,7 @@
 }
 .third {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 .tag {
