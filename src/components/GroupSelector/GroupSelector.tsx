@@ -1,34 +1,14 @@
 "use client";
 
-import {
-  Select,
-  SelectChangeEvent,
-  MenuItem,
-  MenuProps,
-  SelectProps,
-  SxProps,
-  Theme,
-  styled,
-} from "@mui/material";
+import { Select, MenuItem, styled } from "@mui/material";
 import { Poppins } from "next/font/google";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import React, { ReactNode, useMemo } from "react";
+import React from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { classes } from "@src/utils/utils";
 
-// const options: DropdownOption<string>[] = Object.values(
-//   DateRangeEnum,
-// ).map((range) => ({
-//   value: range,
-//   displayValue: range.toString(),
-// }));
-
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import { SelectChangeEvent } from "@mui/material/Select";
 import styles from "./GroupSelector.module.css";
 
 const poppins = Poppins({
@@ -38,23 +18,6 @@ const poppins = Poppins({
 });
 const poppins500 = Poppins({ subsets: ["latin"], weight: "500" });
 const poppins400 = Poppins({ subsets: ["latin"], weight: "400" });
-interface DropdownOption<T> {
-  value: T;
-  displayValue: string;
-}
-interface DropdownProps<T> {
-  className?: string;
-  options: (DropdownOption<T> | ReactNode)[];
-  value: T;
-  showError: boolean;
-  placeholder?: string;
-  onChange: (e: SelectChangeEvent<T>) => void;
-  sx?: SxProps<Theme>;
-  menuProps?: Partial<MenuProps>;
-  menuItemStyle?: React.CSSProperties;
-  style?: React.CSSProperties;
-  selectProps?: SelectProps;
-}
 
 const StyledSelect = styled(Select)(() => ({
   padding: 0,
@@ -63,7 +26,6 @@ const StyledSelect = styled(Select)(() => ({
   "&.MuiOutlinedInput-root": {
     "& fieldset": {
       border: "0px solid",
-      // borderRadius: "10px",
     },
   },
 }));
@@ -73,7 +35,6 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
     (patientSearchState: RootState) => patientSearchState.patientSearch,
   );
   const {
-    active,
     countries,
     states,
     cities,
@@ -85,20 +46,21 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
     secondaryPhoneNumbers,
     secondaryNames,
   } = ss;
-  console.log(ss);
 
-  const menuItemStyle = {
+  const menuItemStyle: React.CSSProperties = {
     justifyContent: "center",
     color: "#2B3674",
     backgroundColor: "#FCE8DC",
     borderRadius: "10px",
-    marginBottom: "10px",
-    marginLeft: "16px",
-    marginRight: "auto",
+    marginBottom: "5px",
+    marginLeft: "0px",
     width: "fit-content",
+    maxWidth: "auto",
     fontSize: "16px",
     fontFamily: poppins400.style.fontFamily,
     padding: "7px",
+    overflowWrap: "break-word",
+    whiteSpace: "pre-wrap",
   };
   const sx = {
     "&.MuiOutlinedInput-root": {
@@ -110,11 +72,17 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
 
   let options = [];
   options = [
-    ...Array.from(countries).map((v) => `Country: ${v}`),
-    ...Array.from(states).map((v) => `States: ${v}`),
+    ...countries.map((v) => `Country: ${v}`),
+    ...states.map((v) => `State: ${v}`),
+    ...cities.map((v) => `City: ${v}`),
+    ...dateOfBirths.map((v) => `Birthdate: ${v}`),
+    ...emails.map((v) => `Email: ${v}`),
+    ...additionalAffiliations.map((v) => `Additional Affiliation: ${v}`),
+    ...dateOfJoins.map((v) => `Date Joined: ${v}`),
+    ...beiChapters.map((v) => `BEI Chapter: ${v}`),
+    ...secondaryPhoneNumbers.map((v) => `Secondary Phone: ${v}`),
+    ...secondaryNames.map((v) => `Secondary Name: ${v}`),
   ];
-  console.log(countries);
-  console.log(options);
 
   return (
     <div className={classes(styles.container)}>
@@ -158,7 +126,7 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
               key={index}
               value={dropdownOption}
               disabled
-              style={{ opacity: 1 }}
+              style={{ opacity: 1, width: "250px" }}
             >
               <div
                 className={classes(styles.defaultMenuItem, poppins.className)}
