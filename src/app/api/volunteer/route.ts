@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export const GET = APIWrapper({
   config: {
     requireToken: true,
-    requireAdmin: true,
+    requireVolunteer: true,
   },
   handler: async (req, currentUser, updateCookie) => {
     const email: string | null = req.nextUrl.searchParams.get("email");
@@ -43,7 +43,7 @@ type PatchReq = {
 export const PATCH = APIWrapper({
   config: {
     requireToken: true,
-    requireAdmin: true,
+    requireVolunteer: true,
   },
   handler: async (req, currentUser, updateCookie) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;

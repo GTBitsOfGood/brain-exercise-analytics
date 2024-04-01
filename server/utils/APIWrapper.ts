@@ -113,18 +113,6 @@ function APIWrapper(route: Route<unknown>) {
 
       const updateCookie: { user?: IUser; keepLogged?: boolean }[] = [];
       const data = await handler(req, currentUser, updateCookie);
-      let response;
-      if (config?.handleResponse) {
-        response = NextResponse.json(
-          { success: true, payload: null },
-          { status: 200 },
-        );
-      } else {
-        response = NextResponse.json(
-          { success: true, payload: data },
-          { status: 200 },
-        );
-      }
 
       if (
         updateCookie.length > 0 &&
@@ -150,14 +138,18 @@ function APIWrapper(route: Route<unknown>) {
           maxAge: newKeepLogged ? 7 * 24 * 60 * 60 : undefined,
           // httpOnly: true,
         });
-        // response.cookies.set(
-        //   "authUser",
-        //   JSON.stringify({ user: updatedUserRef[0], keepLogged }),
-        //   keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
-        // );
       }
 
-      return response;
+      if (config?.handleResponse) {
+        return NextResponse.json(
+          { success: true, payload: null },
+          { status: 200 },
+        );
+      }
+      return NextResponse.json(
+        { success: true, payload: data },
+        { status: 200 },
+      );
     } catch (e) {
       if (e instanceof mongoose.Error) {
         console.log(e);

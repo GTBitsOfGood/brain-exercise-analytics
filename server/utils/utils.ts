@@ -40,7 +40,7 @@ export function checkValidUserPermissions(
   otherUser: IUser,
 ) {
   if (
-    currentUser._id === otherUser._id ||
+    currentUser._id.toString() === otherUser._id.toString() ||
     getLowerAdminRoles(currentUser.role).includes(otherUser.role)
   ) {
     return true;
