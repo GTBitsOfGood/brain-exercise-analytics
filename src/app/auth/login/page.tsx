@@ -16,7 +16,6 @@ import googleSignIn from "@src/firebase/google_signin";
 import { emailSignIn } from "@src/firebase/email_signin";
 import { HttpMethod, IUser } from "@/common_utils/types";
 
-import { setCookie } from "cookies-next";
 import { update } from "@src/redux/reducers/authReducer";
 import { useDispatch } from "react-redux";
 import styles from "./page.module.css";
@@ -50,13 +49,9 @@ export default function Page() {
         method: HttpMethod.GET,
         queryParams: {
           email: user.email,
+          keepLogged,
         },
       });
-      setCookie(
-        "authUser",
-        { user: userMongo, keepLogged },
-        keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
-      );
       dispatch(update(userMongo));
 
       router.push("/auth/email-verification");

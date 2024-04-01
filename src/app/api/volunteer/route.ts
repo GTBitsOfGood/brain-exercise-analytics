@@ -1,4 +1,4 @@
-import { IUser, RecursivePartial, Role } from "@/common_utils/types";
+import { IUser, RecursivePartial } from "@/common_utils/types";
 import { deleteFirebaseUser, updateUserEmail } from "@server/firebase/utils";
 import {
   deleteVolunteer,
@@ -6,28 +6,30 @@ import {
   updateVolunteer,
 } from "@server/mongodb/actions/Volunteer";
 import APIWrapper from "@server/utils/APIWrapper";
-import { getLowerAdminRoles } from "@src/utils/utils";
+import { checkValidUserPermissions } from "@server/utils/utils";
 
 export const dynamic = "force-dynamic";
 
 export const GET = APIWrapper({
   config: {
     requireToken: true,
-    requireVolunteer: true,
+    requireAdmin: true,
   },
-  handler: async (req, currentUser) => {
+  handler: async (req, currentUser, updateCookie) => {
     const email: string | null = req.nextUrl.searchParams.get("email");
     if (!email) {
       throw new Error("Email parameter is missing");
     }
 
-    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
     const user = await getVolunteer(email);
-    if (user === undefined || !lowerRoles.includes(user!.role)) {
-      throw new Error(
-        "User doesn't exist or you do not have permission to acccess this user",
-      );
+    if (!user) {
+      throw new Error("User does not exist in the database");
     }
+    if (!checkValidUserPermissions(currentUser!, user)) {
+      throw new Error("You do not have permission to acccess this user");
+    }
+
+    updateCookie?.push({ user });
 
     return user;
   },
@@ -41,9 +43,9 @@ type PatchReq = {
 export const PATCH = APIWrapper({
   config: {
     requireToken: true,
-    requireVolunteer: true,
+    requireAdmin: true,
   },
-  handler: async (req, currentUser, updatedUserRef) => {
+  handler: async (req, currentUser, updateCookie) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
     const { email }: { email: string } = reqdata;
     const { newFields } = reqdata;
@@ -52,12 +54,12 @@ export const PATCH = APIWrapper({
       throw new Error("Email parameter is missing");
     }
 
-    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
     const testuser = await getVolunteer(email);
-    if (testuser === undefined || !lowerRoles.includes(testuser!.role)) {
-      throw new Error(
-        "User doesn't exist or you do not have permission to acccess this user",
-      );
+    if (!testuser) {
+      throw new Error("User does not exist in the database");
+    }
+    if (!checkValidUserPermissions(currentUser!, testuser)) {
+      throw new Error("You do not have permission to acccess this user");
     }
 
     if (newFields.email !== null && email === newFields.email) {
@@ -65,7 +67,7 @@ export const PATCH = APIWrapper({
     }
 
     const user = await updateVolunteer(email, newFields);
-    updatedUserRef?.push(user!);
+    updateCookie?.push({ user: user! });
     return user;
   },
 });
@@ -76,7 +78,7 @@ type DeleteReq = {
 export const DELETE = APIWrapper({
   config: {
     requireToken: true,
-    requireVolunteer: true,
+    requireAdmin: true,
   },
   handler: async (req, currentUser) => {
     const reqdata: DeleteReq = (await req.json()) as DeleteReq;
@@ -86,12 +88,12 @@ export const DELETE = APIWrapper({
       throw new Error("Email parameter is missing");
     }
 
-    const lowerRoles: Role[] = getLowerAdminRoles(currentUser!.role);
     const testuser = await getVolunteer(email);
-    if (testuser === undefined || !lowerRoles.includes(testuser!.role)) {
-      throw new Error(
-        "User doesn't exist or you do not have permission to acccess this user",
-      );
+    if (!testuser) {
+      throw new Error("User does not exist in the database");
+    }
+    if (!checkValidUserPermissions(currentUser!, testuser)) {
+      throw new Error("You do not have permission to acccess this user");
     }
 
     await deleteFirebaseUser(email);

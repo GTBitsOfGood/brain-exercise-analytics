@@ -86,7 +86,7 @@ const authReducer = createSlice({
     },
     // Clear the authState
     logout(state) {
-      deleteCookie("authUser", { path: "/" });
+      deleteCookie("authUser");
       setState(state, initialState);
     },
     setFirstTimeLogin(state, action: PayloadAction<boolean>) {

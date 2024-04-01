@@ -1,9 +1,5 @@
 import APIWrapper from "@server/utils/APIWrapper";
-import {
-  VolunteerSearchParams,
-  SearchRequestBody,
-  Role,
-} from "@/common_utils/types";
+import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
 import { getVolunteersFiltered } from "@server/mongodb/actions/Volunteer";
 import { getLowerAdminRoles } from "@src/utils/utils";
 
@@ -32,9 +28,7 @@ export const POST = APIWrapper({
       params,
       page: reqdata.page,
       sortParams: reqdata.sortParams,
-      allowedRoles: currentUser
-        ? getLowerAdminRoles(currentUser.role)
-        : Object.values(Role),
+      allowedRoles: getLowerAdminRoles(currentUser!.role),
     });
     return users;
   },

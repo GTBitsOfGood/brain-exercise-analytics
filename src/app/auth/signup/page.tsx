@@ -5,7 +5,6 @@ import { Error as ErrorIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
-import { setCookie } from "cookies-next";
 import { update } from "@src/redux/reducers/authReducer";
 import { useDispatch } from "react-redux";
 
@@ -51,7 +50,6 @@ export default function Page() {
         },
       });
 
-      setCookie("authUser", { user: userMongo, keepLogged: false });
       dispatch(update(userMongo));
 
       router.push("/auth/email-verification");
