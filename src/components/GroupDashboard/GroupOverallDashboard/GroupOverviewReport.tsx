@@ -50,10 +50,7 @@ export default function GroupOverviewReport(params: Params) {
           Overview
         </p>
         <p style={{ marginLeft: "10px" }}>
-          <GroupSelector
-            selectedValue={params.menuState[0]}
-            setSelectedValue={params.menuState[1]}
-          />
+          <GroupSelector shownValue="Selected Group" />
         </p>
         <div className={styles.dateSelector}>
           <DateSelector

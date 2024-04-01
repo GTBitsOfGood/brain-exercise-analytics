@@ -11,6 +11,8 @@ import { ClearTagIcon } from "@src/app/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { IPatientSearchReducer } from "@/common_utils/types";
+
 import {
   setActive,
   setCountries,
@@ -94,7 +96,19 @@ interface UpdateParamProp {
   onSubmit?: () => void;
   className?: string;
 }
-
+const SetMiddleware = (obj: IPatientSearchReducer) => ({
+  active: obj.active,
+  countries: new Set(obj.countries),
+  states: new Set(obj.states),
+  cities: new Set(obj.cities),
+  dateOfBirths: new Set(obj.dateOfBirths),
+  emails: new Set(obj.emails),
+  additionalAffiliations: new Set(obj.additionalAffiliations),
+  dateOfJoins: new Set(obj.dateOfJoins),
+  beiChapters: new Set(obj.beiChapters),
+  secondaryPhoneNumbers: new Set(obj.secondaryPhoneNumbers),
+  secondaryNames: new Set(obj.secondaryNames),
+});
 export const AdvancedSearch = (props: UpdateParamProp) => {
   const dispatch = useDispatch();
 
@@ -121,8 +135,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     beiChapters,
     secondaryPhoneNumbers,
     secondaryNames,
-  } = useSelector(
-    (patientSearchState: RootState) => patientSearchState.patientSearch,
+  } = SetMiddleware(
+    useSelector(
+      (patientSearchState: RootState) => patientSearchState.patientSearch,
+    ),
   );
 
   const tagsPresent = useMemo(

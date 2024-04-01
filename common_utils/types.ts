@@ -254,16 +254,16 @@ export type PatientSearchParams = {
 export type IPatientSearchReducer = {
   fullName: string;
   active: boolean | undefined;
-  countries: Set<string>;
-  states: Set<string>;
-  cities: Set<string>;
-  dateOfBirths: Set<string>;
-  emails: Set<string>;
-  additionalAffiliations: Set<string>;
-  dateOfJoins: Set<string>;
-  beiChapters: Set<string>;
-  secondaryPhoneNumbers: Set<string>;
-  secondaryNames: Set<string>;
+  countries: Array<string>;
+  states: Array<string>;
+  cities: Array<string>;
+  dateOfBirths: Array<string>;
+  emails: Array<string>;
+  additionalAffiliations: Array<string>;
+  dateOfJoins: Array<string>;
+  beiChapters: Array<string>;
+  secondaryPhoneNumbers: Array<string>;
+  secondaryNames: Array<string>;
 };
 
 export type IVolunteerSearchReducer = {

@@ -6,16 +6,16 @@ import { IPatientSearchReducer } from "@/common_utils/types";
 const initialState: IPatientSearchReducer = {
   fullName: "",
   active: undefined,
-  countries: new Set<string>(),
-  states: new Set<string>(),
-  cities: new Set<string>(),
-  dateOfBirths: new Set<string>(),
-  emails: new Set<string>(),
-  additionalAffiliations: new Set<string>(),
-  dateOfJoins: new Set<string>(),
-  beiChapters: new Set<string>(),
-  secondaryPhoneNumbers: new Set<string>(),
-  secondaryNames: new Set<string>(),
+  countries: new Array<string>(),
+  states: new Array<string>(),
+  cities: new Array<string>(),
+  dateOfBirths: new Array<string>(),
+  emails: new Array<string>(),
+  additionalAffiliations: new Array<string>(),
+  dateOfJoins: new Array<string>(),
+  beiChapters: new Array<string>(),
+  secondaryPhoneNumbers: new Array<string>(),
+  secondaryNames: new Array<string>(),
 };
 
 const patientSearchReducer = createSlice({
@@ -28,34 +28,34 @@ const patientSearchReducer = createSlice({
     setActive(state, action: PayloadAction<boolean | undefined>) {
       state.active = action.payload;
     },
-    setCountries(state, action: PayloadAction<Set<string>>) {
+    setCountries(state, action: PayloadAction<Array<string>>) {
       state.countries = action.payload;
     },
-    setStates(state, action: PayloadAction<Set<string>>) {
+    setStates(state, action: PayloadAction<Array<string>>) {
       state.states = action.payload;
     },
-    setCities(state, action: PayloadAction<Set<string>>) {
+    setCities(state, action: PayloadAction<Array<string>>) {
       state.cities = action.payload;
     },
-    setDateOfBirths(state, action: PayloadAction<Set<string>>) {
+    setDateOfBirths(state, action: PayloadAction<Array<string>>) {
       state.dateOfBirths = action.payload;
     },
-    setEmails(state, action: PayloadAction<Set<string>>) {
+    setEmails(state, action: PayloadAction<Array<string>>) {
       state.emails = action.payload;
     },
-    setAdditionalAffiliations(state, action: PayloadAction<Set<string>>) {
+    setAdditionalAffiliations(state, action: PayloadAction<Array<string>>) {
       state.additionalAffiliations = action.payload;
     },
-    setDateOfJoins(state, action: PayloadAction<Set<string>>) {
+    setDateOfJoins(state, action: PayloadAction<Array<string>>) {
       state.dateOfJoins = action.payload;
     },
-    setBeiChapters(state, action: PayloadAction<Set<string>>) {
+    setBeiChapters(state, action: PayloadAction<Array<string>>) {
       state.beiChapters = action.payload;
     },
-    setSecondaryPhoneNumbers(state, action: PayloadAction<Set<string>>) {
+    setSecondaryPhoneNumbers(state, action: PayloadAction<Array<string>>) {
       state.secondaryPhoneNumbers = action.payload;
     },
-    setSecondaryNames(state, action: PayloadAction<Set<string>>) {
+    setSecondaryNames(state, action: PayloadAction<Array<string>>) {
       state.secondaryNames = action.payload;
     },
     resetFields(state) {
