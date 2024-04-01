@@ -63,10 +63,7 @@ export const getAggregatedAnalytics = async (
     numOfWeeks = 52; // 52
   }
 
-  const userRecords = await User.find<IUser>(
-    { userID: { $in: userIDs } },
-    { weeklyMetrics: { $slice: [1, numOfWeeks] } },
-  )
+  const userRecords = await User.find<IUser>({ _id: { $in: userIDs } })
     .limit(1000)
     .lean();
 

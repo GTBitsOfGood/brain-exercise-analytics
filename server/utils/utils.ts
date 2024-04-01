@@ -1,4 +1,5 @@
-import { DateRangeEnum } from "@/common_utils/types";
+import { DateRangeEnum, IUser } from "@/common_utils/types";
+import { getLowerAdminRoles } from "@src/utils/utils";
 
 export function getCurrentMonday() {
   const date = new Date();
@@ -32,4 +33,17 @@ export function formatDateByRangeEnum(date: Date, range: DateRangeEnum) {
     return `${monthName} ${day}`;
   }
   return `${monthName} ${year}`;
+}
+
+export function checkValidUserPermissions(
+  currentUser: IUser,
+  otherUser: IUser,
+) {
+  if (
+    currentUser._id.toString() === otherUser._id.toString() ||
+    getLowerAdminRoles(currentUser.role).includes(otherUser.role)
+  ) {
+    return true;
+  }
+  return false;
 }

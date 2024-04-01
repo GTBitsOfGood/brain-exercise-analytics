@@ -38,21 +38,23 @@ export const POST = APIWrapper({
     }
 
     const blobName = currentUser!.imageLink.split("/").slice(4).join("/");
-    const sharedKeyCredential = new StorageSharedKeyCredential(
-      accountName,
-      accountKey,
-    );
-    const blobServiceClient = new BlobServiceClient(
-      `https://${accountName}.blob.core.windows.net`,
-      sharedKeyCredential,
-    );
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-    const blobClient = containerClient.getBlockBlobClient(blobName);
-    const options: BlobDeleteOptions = {
-      deleteSnapshots: "include" as DeleteSnapshotsOptionType,
-    };
-    await blobClient.deleteIfExists(options);
-
+    if (blobName !== "") {
+      const sharedKeyCredential = new StorageSharedKeyCredential(
+        accountName,
+        accountKey,
+      );
+      const blobServiceClient = new BlobServiceClient(
+        `https://${accountName}.blob.core.windows.net`,
+        sharedKeyCredential,
+      );
+      const containerClient =
+        blobServiceClient.getContainerClient(containerName);
+      const blobClient = containerClient.getBlockBlobClient(blobName);
+      const options: BlobDeleteOptions = {
+        deleteSnapshots: "include" as DeleteSnapshotsOptionType,
+      };
+      await blobClient.deleteIfExists(options);
+    }
     const user = await updateVolunteer(email, { imageLink: newImageLink });
     return user;
   },

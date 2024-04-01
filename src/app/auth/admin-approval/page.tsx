@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
-import { AdminApprovalStatus, IAuthUserCookie } from "@/common_utils/types";
+import { AdminApprovalStatus, HttpMethod, IUser } from "@/common_utils/types";
+import { internalRequest } from "@src/utils/requests";
+import { useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
 import styles from "./page.module.css";
 
 const Page = () => {
@@ -12,16 +14,22 @@ const Page = () => {
     AdminApprovalStatus | undefined
   >(undefined);
 
+  const { email } = useSelector((rootState: RootState) => rootState.auth);
+
   useEffect(() => {
-    const authUserCookie = getCookie("authUser");
-    if (authUserCookie) {
-      const authUser = (JSON.parse(authUserCookie) as IAuthUserCookie).user;
-      setAdminApprovalStatus(authUser.approved);
-      if (authUser.approved === AdminApprovalStatus.APPROVED) {
+    internalRequest<IUser>({
+      url: "/api/volunteer",
+      method: HttpMethod.GET,
+      queryParams: {
+        email,
+      },
+    }).then((user) => {
+      setAdminApprovalStatus(user.approved);
+      if (user.approved === AdminApprovalStatus.APPROVED) {
         router.push("/patient/search");
       }
-    }
-  }, [router]);
+    });
+  }, [router, email]);
 
   if (!adminApprovalStatus) {
     return null;

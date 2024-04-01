@@ -42,7 +42,11 @@ export function getLowerRoles(role: Role): Role[] {
 
 export function getLowerAdminRoles(role: Role): Role[] {
   const roleIndex = Object.values(Role).indexOf(role);
-  return Object.values(Role).filter(
+  const roles = Object.values(Role).filter(
     (r, i) => i < roleIndex && r !== Role.NONPROFIT_PATIENT,
   );
+  if (role === Role.NONPROFIT_DIRECTOR) {
+    roles.push(Role.NONPROFIT_DIRECTOR);
+  }
+  return roles;
 }

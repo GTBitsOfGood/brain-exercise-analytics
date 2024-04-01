@@ -1,4 +1,3 @@
-import { IUser } from "@/common_utils/types";
 import { volunteerSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 
@@ -18,7 +17,7 @@ export const POST = APIWrapper({
     requireToken: true,
     requireVolunteer: true,
   },
-  handler: async (req: Request, currentUser: IUser | undefined) => {
+  handler: async (req, currentUser, updateCookie) => {
     const signupData = (await req.json()) as SignupData;
 
     if (!signupData) {
@@ -56,6 +55,8 @@ export const POST = APIWrapper({
       signupData.city,
       signupData.chapter,
     );
+
+    updateCookie?.push({ user: newSignUp!, keepLogged: false });
     return newSignUp;
   },
 });
