@@ -20,13 +20,15 @@ const setToArray =
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) => [
+    setToArray,
+    ...getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(setToArray),
+    }),
+  ],
 });
 
 export const persistor = persistStore(store);
