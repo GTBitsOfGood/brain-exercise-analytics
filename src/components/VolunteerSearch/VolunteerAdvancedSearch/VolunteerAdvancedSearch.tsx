@@ -22,7 +22,7 @@ import {
   setBeiChapters,
   setVolunteerRoles,
 } from "@src/redux/reducers/volunteerSearchReducer";
-import { Role } from "@/common_utils/types";
+import { IVolunteerSearchReducer, Role } from "@/common_utils/types";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./VolunteerAdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -91,6 +91,17 @@ interface UpdateParamProp {
   onSubmit?: () => void;
   className?: string;
 }
+const SetMiddleware = (obj: IVolunteerSearchReducer) => ({
+  active: obj.active,
+  countries: new Set(obj.countries),
+  states: new Set(obj.states),
+  cities: new Set(obj.cities),
+  dateOfBirths: new Set(obj.dateOfBirths),
+  emails: new Set(obj.emails),
+  dateOfJoins: new Set(obj.dateOfJoins),
+  beiChapters: new Set(obj.beiChapters),
+  volunteerRoles: new Set(obj.volunteerRoles),
+});
 
 export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   const dispatch = useDispatch();
@@ -114,9 +125,11 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     dateOfJoins,
     beiChapters,
     volunteerRoles,
-  } = useSelector((volunteerSearchState: RootState) => {
-    return volunteerSearchState.volunteerSearch;
-  });
+  } = SetMiddleware(
+    useSelector((volunteerSearchState: RootState) => {
+      return volunteerSearchState.volunteerSearch;
+    }),
+  );
 
   const tagsPresent = useMemo(
     () =>
