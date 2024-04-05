@@ -37,11 +37,9 @@ export const GET = APIWrapper({
     return {
       user: newUser,
       gameDetails: {
+        active: analyticsRecord.active,
         streak: analyticsRecord.streak,
-        math: {
-          difficultyScore:
-            analyticsRecord.lastSessionMetrics.math.finalDifficultyScore,
-        },
+        lastSessionsMetrics: analyticsRecord.lastSessionsMetrics,
       },
     };
   },

@@ -26,14 +26,18 @@ export const modifyMath = async (
   timePerQuestion: number,
   difficultyScore: number,
 ): Promise<IAnalytics | null> => {
+  
+  await checkNewDate(userID);
+  
   const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $set: {
-        "lastSessionMetrics.math.questionsAttempted": questionsAttempted,
-        "lastSessionMetrics.math.questionsCorrect": questionsCorrect,
-        "lastSessionMetrics.math.timePerQuestion": timePerQuestion,
-        "lastSessionMetrics.math.finalDifficultyScore": difficultyScore,
+        "lastSessionsMetrics.0.math.attempted": true,
+        "lastSessionsMetrics.0.math.questionsAttempted": questionsAttempted,
+        "lastSessionsMetrics.0.math.questionsCorrect": questionsCorrect,
+        "lastSessionsMetrics.0.math.timePerQuestion": timePerQuestion,
+        "lastSessionsMetrics.0.math.finalDifficultyScore": difficultyScore,
       },
       $inc: {
         "weeklyMetrics.0.math.sessionsCompleted": 1,
@@ -45,6 +49,8 @@ export const modifyMath = async (
     },
     { new: true },
   );
+  
+  checkSessionComplete(userID);
 
   return data;
 };
@@ -56,13 +62,17 @@ export const modifyTrivia = async (
   questionsCorrect: number,
   timePerQuestion: number,
 ): Promise<IAnalytics | null> => {
+  
+  await checkNewDate(userID);
+  
   const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $set: {
-        "lastSessionMetrics.trivia.questionsAttempted": questionsAttempted,
-        "lastSessionMetrics.trivia.questionsCorrect": questionsCorrect,
-        "lastSessionMetrics.trivia.timePerQuestion": timePerQuestion,
+        "lastSessionsMetrics.0.trivia.attempted": true,
+        "lastSessionsMetrics.0.trivia.questionsAttempted": questionsAttempted,
+        "lastSessionsMetrics.0.trivia.questionsCorrect": questionsCorrect,
+        "lastSessionsMetrics.0.trivia.timePerQuestion": timePerQuestion,
       },
       $inc: {
         "weeklyMetrics.0.trivia.sessionsCompleted": 1,
@@ -73,6 +83,8 @@ export const modifyTrivia = async (
     },
     { new: true },
   );
+  
+  checkSessionComplete(userID);
 
   return data;
 };
@@ -85,15 +97,20 @@ export const modifyReading = async (
   timePerPassage: number,
   wordsPerMinute: number,
 ): Promise<IAnalytics | null> => {
+  
+  await checkNewDate(userID);
+  
   const increment = completed ? 1 : 0;
 
   const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $set: {
-        "lastSessionMetrics.reading.passagesRead": passagesRead,
-        "lastSessionMetrics.reading.timePerPassage": timePerPassage,
-        "lastSessionMetrics.reading.wordsPerMinute": wordsPerMinute,
+        "lastSessionsMetrics.0.reading.attempted": true,
+        "lastSessionsMetrics.0.reading.passagesRead": passagesRead,
+        "lastSessionsMetrics.0.reading.timePerPassage": timePerPassage,
+        "lastSessionsMetrics.0.reading.wordsPerMinute": wordsPerMinute,
+        "lastSessionsMetrics.0.reading.skipped": !completed,
       },
       $inc: {
         "weeklyMetrics.0.reading.sessionsCompleted": increment,
@@ -105,6 +122,8 @@ export const modifyReading = async (
     },
     { new: true },
   );
+  
+  checkSessionComplete(userID);
 
   return data;
 };
@@ -115,14 +134,19 @@ export const modifyWriting = async (
   questionsAnswered: number,
   timePerQuestion: number,
 ): Promise<IAnalytics | null> => {
+  
+  await checkNewDate(userID);
+  
   const increment = completed ? 1 : 0;
 
   const data = await Analytics.findOneAndUpdate<IAnalytics>(
     { userID },
     {
       $set: {
-        "lastSessionMetrics.writing.questionsAnswered": questionsAnswered,
-        "lastSessionMetrics.writing.timePerQuestion": timePerQuestion,
+        "lastSessionsMetrics.0.writing.attempted": true,
+        "lastSessionsMetrics.0.writing.questionsAnswered": questionsAnswered,
+        "lastSessionsMetrics.0.writing.timePerQuestion": timePerQuestion,
+        "lastSessionsMetrics.0.writing.skipped": !completed,
       },
       $inc: {
         "weeklyMetrics.0.writing.sessionsCompleted": increment,
@@ -133,6 +157,9 @@ export const modifyWriting = async (
     },
     { new: true },
   );
+  
+  checkSessionComplete(userID);
+  
 
   return data;
 };
@@ -155,7 +182,7 @@ export const updateSessionComplete = async (
         "weeklyMetrics.0.sessionsCompleted": 1,
       },
       $set: {
-        "lastSessionMetrics.date": today,
+        "lastSessionsMetrics.0.date": today,
       },
     },
     { new: true },
@@ -170,4 +197,97 @@ export const getAnalyticsByUserId = async (
   const analytics = await Analytics.findOne<IAnalytics>({ userID });
 
   return analytics as IAnalytics;
+};
+
+
+const checkNewDate = async(
+  userID: string,
+):Promise<null> => {
+  
+  const analytics = await Analytics.findOne<IAnalytics>({ userID });
+  const today = new Date()
+  
+  console.log(today)
+  if (analytics?.lastSessionsMetrics[0].date.getDay() != today.getDay()
+    || analytics?.lastSessionsMetrics[0].date.getMonth() != today.getMonth()
+    || analytics?.lastSessionsMetrics[0].date.getFullYear() != today.getFullYear()) {
+      
+    
+    
+    await Analytics.findOneAndUpdate(
+      {userID}, 
+      [
+        {
+          $set: {
+            lastSessionsMetrics: {
+              $cond: {
+                if: { $gt: [{ $size: "$lastSessionsMetrics" }, 1] },
+                then: { $slice: ["$lastSessionsMetrics", 1] },
+                else: "$lastSessionsMetrics",
+              }
+            }
+          }
+        },
+        {
+          $set: {
+            lastSessionsMetrics: {
+              $concatArrays: [
+                [{
+                  date: today,
+                  math: {
+                    attempted: false,
+                    questionsAttempted: 0,
+                    questionsCorrect: 0,
+                    finalDifficultyScore: 0,
+                    timePerQuestion: 0,
+                  },
+                  trivia: {
+                    attempted: false,
+                    questionsAttempted: 0,
+                    questionsCorrect: 0,
+                    timePerQuestion: 0,
+                  },
+                  reading: {
+                    attempted: false,
+                    passagesRead: 0,
+                    timePerPassage: 0,
+                    wordsPerMinute: 0,
+                    skipped: true,
+                  },
+                  writing: {
+                    attempted: false,
+                    questionsAnswered: 0,
+                    timePerQuestion: 0,
+                    skipped: true,
+                  },
+                }],
+                "$lastSessionsMetrics"
+              ]
+            }
+          }
+        }
+      ]
+    );
+      
+  }
+  return null;
+};
+
+
+const checkSessionComplete = async(
+  userID: string,
+):Promise<null> => {
+  
+  const analytics = await Analytics.findOne<IAnalytics>({ userID });
+
+  
+  if (analytics?.lastSessionsMetrics[0].math.attempted &&
+      analytics?.lastSessionsMetrics[0].trivia.attempted && 
+      analytics?.lastSessionsMetrics[0].reading.attempted &&
+      analytics?.lastSessionsMetrics[0].writing.attempted) {
+        
+    await updateSessionComplete(userID);
+  }
+  
+  return null;
 };

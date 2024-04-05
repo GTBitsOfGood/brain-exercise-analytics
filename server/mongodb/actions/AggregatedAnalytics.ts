@@ -8,7 +8,7 @@ import {
   AnalyticsSectionEnum,
   IUser,
 } from "@/common_utils/types";
-import { formatDateByRangeEnum } from "@server/utils/utils";
+import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import Analytics from "../models/Analytics";
 import User from "../models/User";
 
@@ -69,6 +69,7 @@ export const getAggregatedAnalytics = async (
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
 
+
   const user = await User.findOne<IUser>({ _id: userID });
 
   if (!res) {
@@ -83,13 +84,19 @@ export const getAggregatedAnalytics = async (
 
   // reversing the list
   const reversedWeeklyMetrics = res.weeklyMetrics.reverse();
-  const paddingDate = new Date(res.weeklyMetrics[0].date);
-
-  let lastDate = new Date(res.weeklyMetrics[0].date);
-  let lastDateMax = new Date(res.weeklyMetrics[0].date);
-
+  
+  let paddingDate = new Date();
+  let lastDate = new Date();
+  let lastDateMax = new Date()
   const dbDateVars = new Set<string>();
+  
+  if (res.weeklyMetrics.length > 0) {
+    paddingDate = new Date(res.weeklyMetrics[0].date);
 
+    lastDate = new Date(res.weeklyMetrics[0].date);
+    lastDateMax = new Date(res.weeklyMetrics[0].date);
+  }
+  
   reversedWeeklyMetrics.forEach((item: IAnalytics["weeklyMetrics"][0]) => {
     let dateVar = formatDateByRangeEnum(item.date, range);
 
@@ -407,15 +414,15 @@ export const getAggregatedAnalytics = async (
           active: res.active,
           streak: res.streak,
           startDate: user?.startDate ?? new Date(),
-          lastSessionDate: res.lastSessionMetrics.date,
+          lastSessionDate: res.lastSessionsMetrics[0].date,
           totalSessionsCompleted: res.totalSessionsCompleted,
           lastSession: {
             mathQuestionsCompleted:
-              res.lastSessionMetrics.math.questionsAttempted,
-            wordsRead: res.lastSessionMetrics.reading.passagesRead,
-            promptsCompleted: res.lastSessionMetrics.writing.questionsAnswered, // writing
+              res.lastSessionsMetrics[0].math.questionsAttempted,
+            wordsRead: res.lastSessionsMetrics[0].reading.passagesRead,
+            promptsCompleted: res.lastSessionsMetrics[0].writing.questionsAnswered, // writing
             triviaQuestionsCompleted:
-              res.lastSessionMetrics.trivia.questionsAttempted,
+              res.lastSessionsMetrics[0].trivia.questionsAttempted,
           },
           name,
         };
@@ -427,13 +434,13 @@ export const getAggregatedAnalytics = async (
           ...result.math,
           lastSession: {
             accuracy:
-              res.lastSessionMetrics.math.questionsAttempted === 0
+              res.lastSessionsMetrics[0].math.questionsAttempted === 0
                 ? 0
-                : res.lastSessionMetrics.math.questionsCorrect /
-                  res.lastSessionMetrics.math.questionsAttempted,
-            difficultyScore: res.lastSessionMetrics.math.finalDifficultyScore,
-            questionsCompleted: res.lastSessionMetrics.math.questionsAttempted,
-            timePerQuestion: res.lastSessionMetrics.math.timePerQuestion,
+                : res.lastSessionsMetrics[0].math.questionsCorrect /
+                  res.lastSessionsMetrics[0].math.questionsAttempted,
+            difficultyScore: res.lastSessionsMetrics[0].math.finalDifficultyScore,
+            questionsCompleted: res.lastSessionsMetrics[0].math.questionsAttempted,
+            timePerQuestion: res.lastSessionsMetrics[0].math.timePerQuestion,
           },
         };
         break;
@@ -443,9 +450,9 @@ export const getAggregatedAnalytics = async (
         finalAggregation.reading = {
           ...result.reading,
           lastSession: {
-            passagesRead: res.lastSessionMetrics.reading.passagesRead,
-            timePerPassage: res.lastSessionMetrics.reading.timePerPassage,
-            completed: res.lastSessionMetrics.reading.questionsAnswered !== 0,
+            passagesRead: res.lastSessionsMetrics[0].reading.passagesRead,
+            timePerPassage: res.lastSessionsMetrics[0].reading.timePerPassage,
+            completed: !res.lastSessionsMetrics[0].reading.skipped,
           },
         };
         break;
@@ -455,9 +462,9 @@ export const getAggregatedAnalytics = async (
         finalAggregation.writing = {
           ...result.writing,
           lastSession: {
-            promptsAnswered: res.lastSessionMetrics.writing.questionsAnswered,
-            timePerPrompt: res.lastSessionMetrics.writing.timePerQuestion,
-            completed: res.lastSessionMetrics.writing.questionsAnswered !== 0,
+            promptsAnswered: res.lastSessionsMetrics[0].writing.questionsAnswered,
+            timePerPrompt: res.lastSessionsMetrics[0].writing.timePerQuestion,
+            completed: !res.lastSessionsMetrics[0].writing.skipped,
           },
         };
         break;
@@ -468,13 +475,13 @@ export const getAggregatedAnalytics = async (
           ...result.trivia,
           lastSession: {
             accuracy:
-              res.lastSessionMetrics.trivia.questionsAttempted === 0
+              res.lastSessionsMetrics[0].trivia.questionsAttempted === 0
                 ? 0
-                : res.lastSessionMetrics.trivia.questionsCorrect /
-                  res.lastSessionMetrics.trivia.questionsAttempted,
+                : res.lastSessionsMetrics[0].trivia.questionsCorrect /
+                  res.lastSessionsMetrics[0].trivia.questionsAttempted,
             questionsCompleted:
-              res.lastSessionMetrics.trivia.questionsAttempted,
-            timePerQuestion: res.lastSessionMetrics.trivia.timePerQuestion,
+              res.lastSessionsMetrics[0].trivia.questionsAttempted,
+            timePerQuestion: res.lastSessionsMetrics[0].trivia.timePerQuestion,
           },
         };
         break;
