@@ -8,7 +8,7 @@ import {
   AnalyticsSectionEnum,
   IUser,
 } from "@/common_utils/types";
-import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
+import { formatDateByRangeEnum } from "@server/utils/utils";
 import Analytics from "../models/Analytics";
 import User from "../models/User";
 
@@ -69,7 +69,6 @@ export const getAggregatedAnalytics = async (
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
 
-
   const user = await User.findOne<IUser>({ _id: userID });
 
   if (!res) {
@@ -84,19 +83,19 @@ export const getAggregatedAnalytics = async (
 
   // reversing the list
   const reversedWeeklyMetrics = res.weeklyMetrics.reverse();
-  
+
   let paddingDate = new Date();
   let lastDate = new Date();
-  let lastDateMax = new Date()
+  let lastDateMax = new Date();
   const dbDateVars = new Set<string>();
-  
+
   if (res.weeklyMetrics.length > 0) {
     paddingDate = new Date(res.weeklyMetrics[0].date);
 
     lastDate = new Date(res.weeklyMetrics[0].date);
     lastDateMax = new Date(res.weeklyMetrics[0].date);
   }
-  
+
   reversedWeeklyMetrics.forEach((item: IAnalytics["weeklyMetrics"][0]) => {
     let dateVar = formatDateByRangeEnum(item.date, range);
 
@@ -420,7 +419,8 @@ export const getAggregatedAnalytics = async (
             mathQuestionsCompleted:
               res.lastSessionsMetrics[0].math.questionsAttempted,
             wordsRead: res.lastSessionsMetrics[0].reading.passagesRead,
-            promptsCompleted: res.lastSessionsMetrics[0].writing.questionsAnswered, // writing
+            promptsCompleted:
+              res.lastSessionsMetrics[0].writing.questionsAnswered, // writing
             triviaQuestionsCompleted:
               res.lastSessionsMetrics[0].trivia.questionsAttempted,
           },
@@ -438,8 +438,10 @@ export const getAggregatedAnalytics = async (
                 ? 0
                 : res.lastSessionsMetrics[0].math.questionsCorrect /
                   res.lastSessionsMetrics[0].math.questionsAttempted,
-            difficultyScore: res.lastSessionsMetrics[0].math.finalDifficultyScore,
-            questionsCompleted: res.lastSessionsMetrics[0].math.questionsAttempted,
+            difficultyScore:
+              res.lastSessionsMetrics[0].math.finalDifficultyScore,
+            questionsCompleted:
+              res.lastSessionsMetrics[0].math.questionsAttempted,
             timePerQuestion: res.lastSessionsMetrics[0].math.timePerQuestion,
           },
         };
@@ -462,7 +464,8 @@ export const getAggregatedAnalytics = async (
         finalAggregation.writing = {
           ...result.writing,
           lastSession: {
-            promptsAnswered: res.lastSessionsMetrics[0].writing.questionsAnswered,
+            promptsAnswered:
+              res.lastSessionsMetrics[0].writing.questionsAnswered,
             timePerPrompt: res.lastSessionsMetrics[0].writing.timePerQuestion,
             completed: !res.lastSessionsMetrics[0].writing.skipped,
           },
