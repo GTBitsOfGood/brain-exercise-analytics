@@ -225,6 +225,9 @@ export interface SearchRequestBody<T extends object> {
   params: T;
   page?: number;
   sortParams?: SortField;
+  lowerRoles?: Role[];
+  searchall?: boolean;
+  onlyids?: boolean;
 }
 
 export interface SearchResponseBody<T> {
