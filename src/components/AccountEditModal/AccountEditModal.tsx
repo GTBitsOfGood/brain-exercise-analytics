@@ -44,7 +44,6 @@ const Modal = () => {
       </div>
       <div className={styles.vl}></div>
       <div className={styles.info}>
-        {/* <span onClick={closeModal}>&times;</span> */}
         {page === Page.PROFILE ? <Profile /> : <Password />}
       </div>
     </div>

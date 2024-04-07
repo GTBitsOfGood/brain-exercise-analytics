@@ -79,20 +79,19 @@ export default function Profile() {
       },
     })
       .then(() => {
-        console.log("Submmited");
+        dispatch(
+          update({
+            firstName: updatedFirstName,
+            lastName: updatedLastName,
+            phoneNumber: updatedPhoneNumber,
+            email: updatedEmail,
+            birthDate: updatedBirthDate,
+          }),
+        );
       })
       .catch((error) => {
-        console.log("Did not submit", error);
+        console.debug("Did not submit", error);
       });
-    dispatch(
-      update({
-        firstName: updatedFirstName,
-        lastName: updatedLastName,
-        phoneNumber: updatedPhoneNumber,
-        email: updatedEmail,
-        birthDate: updatedBirthDate,
-      }),
-    );
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
   };
