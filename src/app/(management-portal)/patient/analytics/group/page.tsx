@@ -137,9 +137,10 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
             sections,
           },
         });
-        return res;
+        return res as T;
       } catch (e) {
-        console.debug(e);
+        // console.debug(e);
+        return {} as T;
       }
     },
     [filters],
