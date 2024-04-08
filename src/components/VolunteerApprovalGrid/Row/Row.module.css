@@ -24,27 +24,16 @@
   text-overflow: ellipsis;
   max-width: 97%;
   font-family: var(--font-poppins);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   padding-left: 7px;
 }
-
 .RowCellContainer::-webkit-scrollbar {
   display: none;
 }
 
-.ExpandedRow {
-  width: 100%;
-  border-radius: 5px;
-  background-color: var(--Selected-Blue, #e7eeff);
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-}
-
 .ExpandedRowContainer {
   width: calc(100% + 20px);
-  border-radius: 5px;
   background-color: var(--Selected-Blue, #e7eeff);
   display: flex;
   border-radius: 5px;
@@ -57,7 +46,7 @@
 .ExpandedRowColumn {
   display: flex;
   color: #2b3674;
-  font-size: 13px;
+  font-size: 14px;
   flex-direction: column;
 }
 
@@ -107,7 +96,7 @@
 
 .actionsContainer > * {
   font-family: var(--font-poppins);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #2b3674;
 

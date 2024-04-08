@@ -4,21 +4,7 @@
   height: 65px;
 }
 
-.nameCellContainer {
-  padding-top: 1%;
-}
-
-.dateCellContainer {
-  padding-top: 1%;
-}
-
-.RowCell {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.RowCell:last-child {
-  border-right: none;
+.row:last-child {
   border-bottom: none;
 }
 
@@ -38,7 +24,7 @@
   text-overflow: ellipsis;
   max-width: 97%;
   font-family: var(--font-poppins);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   padding-left: 7px;
 }
@@ -56,13 +42,13 @@
   padding: 15px;
   column-gap: 13px;
   flex-wrap: wrap;
-  margin: 0 -10px;
+  margin: 0 0 0 -10px;
 }
 
 .ExpandedRowColumn {
   display: flex;
   color: #2b3674;
-  font-size: 13px;
+  font-size: 14px;
   flex-direction: column;
 }
 

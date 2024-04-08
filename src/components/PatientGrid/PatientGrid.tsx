@@ -4,6 +4,8 @@ import { IPatientTableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { useMemo } from "react";
 import { GridColDef } from "@src/utils/types";
+import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
+
 import DataGrid from "../DataGrid/DataGrid";
 import Pagination from "../Pagination/Pagination";
 import styles from "./PatientGrid.module.css";
@@ -69,14 +71,23 @@ function ColumnSizes() {
   return (
     <colgroup>
       <col style={{ width: "2%" }} />
-      <col style={{ width: "10%" }} />
-      <col style={{ width: "10%" }} />
-      <col style={{ width: "11%" }} />
       <col style={{ width: "7%" }} />
-      <col style={{ width: "18%" }} />
-      <col style={{ width: "18%" }} />
+      <col style={{ width: "7%" }} />
+      <col style={{ width: "7%" }} />
+      <col style={{ width: "4%" }} />
+      <col style={{ width: "12%" }} />
+      <col style={{ width: "12%" }} />
       <col style={{ width: "8%" }} />
     </colgroup>
+  );
+}
+
+function Header() {
+  return (
+    <div className={styles["table-header"]}>
+      <TwoVolunteersIcon />
+      <p className={styles["table-header-text"]}>Patient List</p>
+    </div>
   );
 }
 
@@ -111,6 +122,7 @@ export default function PatientGrid(params: PatientGridProps) {
   return (
     <div className={styles.Container}>
       <DataGrid
+        Header={<Header />}
         columns={columns}
         sortField={params.sortField}
         setSortField={params.setSortField}

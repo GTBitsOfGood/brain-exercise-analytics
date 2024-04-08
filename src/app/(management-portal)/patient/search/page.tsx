@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
@@ -119,10 +118,6 @@ export default function Page() {
           styles["table-container-show"],
         )}
       >
-        <div className={styles["table-header"]}>
-          <Dashboard />
-          <p className={styles["table-header-text"]}>Patient Table</p>
-        </div>
         <PatientGrid
           data={filteredUsers}
           sortField={sortField}
