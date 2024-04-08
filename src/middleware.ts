@@ -6,6 +6,7 @@ import {
   AdminApprovalStatus,
   Role,
 } from "@/common_utils/types";
+import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -169,11 +170,14 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  Response.cookies.set(
-    "authUser",
-    JSON.stringify({ user: fetchedUser, keepLogged }),
-    keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
-  );
+  const cookiesConfig: ResponseCookie = {
+    name: "authUser",
+    value: JSON.stringify({ user: fetchedUser, keepLogged }),
+  };
+  if (keepLogged) {
+    cookiesConfig.maxAge = 7 * 24 * 60 * 60;
+  }
+  Response.cookies.set(cookiesConfig);
   return Response;
 }
 

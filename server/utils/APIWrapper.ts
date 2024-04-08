@@ -47,7 +47,6 @@ function APIWrapper(route: Route<unknown>) {
   }
 
   return async (req: NextRequest) => {
-    // await runMiddleware(req, res, cors);
     const { method } = req;
 
     if (!method || !route) {
@@ -78,7 +77,6 @@ function APIWrapper(route: Route<unknown>) {
         const idToken: string | null = req.headers.get("accesstoken");
         try {
           if (idToken === null) {
-            // req.cookies.delete("authUser");
             throw Error("No id token was provided");
           }
           await getAuth().verifyIdToken(idToken);
@@ -136,7 +134,6 @@ function APIWrapper(route: Route<unknown>) {
           name: "authUser",
           value: JSON.stringify({ user: newUser, keepLogged: newKeepLogged }),
           maxAge: newKeepLogged ? 7 * 24 * 60 * 60 : undefined,
-          // httpOnly: true,
         });
       }
 
