@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
 
 import VolunteerApprovalGrid from "@src/components/VolunteerApprovalGrid/VolunteerApprovalGrid";
@@ -119,10 +118,6 @@ export default function Page() {
           styles["table-container-show"],
         )}
       >
-        <div className={styles["table-header"]}>
-          <TwoVolunteersIcon />
-          <p className={styles["table-header-text"]}>Pending Approval</p>
-        </div>
         <VolunteerApprovalGrid
           data={filteredUsers}
           sortField={sortField}

@@ -6,6 +6,7 @@ import Pagination from "@src/components/Pagination/Pagination";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IUser, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
+import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
 import { Row } from "./Row/Row";
@@ -39,6 +40,15 @@ function ColumnSizes() {
       <col style={{ width: "20%" }} />
       <col style={{ width: "13%" }} />
     </colgroup>
+  );
+}
+
+function Header() {
+  return (
+    <div className={styles["table-header"]}>
+      <TwoVolunteersIcon />
+      <p className={styles["table-header-text"]}>Volunteer List</p>
+    </div>
   );
 }
 
@@ -89,6 +99,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
     <div className={styles.volunteerGridWrapper}>
       <div className={styles.volunteerGridTable}>
         <DataGrid
+          Header={<Header />}
           columns={columns}
           sortField={params.sortField}
           setSortField={params.setSortField}

@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
 
 import VolunteerGrid from "@src/components/VolunteerGrid/VolunteerGrid";
@@ -117,10 +116,6 @@ export default function Page() {
           styles["table-container-show"],
         )}
       >
-        <div className={styles["table-header"]}>
-          <TwoVolunteersIcon />
-          <p className={styles["table-header-text"]}>Volunteer List</p>
-        </div>
         <VolunteerGrid
           data={filteredUsers}
           sortField={sortField}
