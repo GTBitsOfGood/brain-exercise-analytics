@@ -1,4 +1,4 @@
-import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classes } from "@src/utils/utils";
 import { SortField } from "@/common_utils/types";
@@ -32,17 +32,14 @@ function SortButton({
   };
 
   return (
-    <div
+    <FontAwesomeIcon
       className={classes(
         styles.SortButton,
         !active && styles.SortButtonInactive,
       )}
       onClick={handleClick}
-    >
-      <FontAwesomeIcon
-        icon={active && !sortField.ascending ? faAngleDown : faAngleUp}
-      />
-    </div>
+      icon={active && !sortField.ascending ? faCaretDown : faCaretUp}
+    />
   );
 }
 

@@ -63,7 +63,7 @@ const columns: GridColDef[] = [
 
   {
     field: "database",
-    headerName: "Database",
+    headerName: "",
     type: "string",
   },
 ];
@@ -75,7 +75,7 @@ function ColumnSizes() {
       <col style={{ width: "7%" }} />
       <col style={{ width: "7%" }} />
       <col style={{ width: "7%" }} />
-      <col style={{ width: "4%" }} />
+      <col style={{ width: "6%" }} />
       <col style={{ width: "12%" }} />
       <col style={{ width: "12%" }} />
       <col style={{ width: "8%" }} />

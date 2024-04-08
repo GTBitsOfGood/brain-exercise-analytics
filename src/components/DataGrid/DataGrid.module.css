@@ -11,14 +11,10 @@
 }
 
 .TopRow {
-  text-align: left;
-  color: var(--secondary-grey-600, #a3aed0);
+  color: #a3aed0;
   font-family: var(--font-poppins);
   font-size: 14px;
   font-weight: 500;
-  position: sticky;
-  top: 0;
-  z-index: 2;
   background-color: white;
   padding: 7px 0px 10px 7px;
   border-right: 3px solid transparent;
@@ -35,7 +31,7 @@
 .TopRowContainer {
   display: flex;
   flex-direction: row;
-  column-gap: 4px;
+  column-gap: 7px;
   align-items: center;
 }
 
@@ -56,9 +52,9 @@
 }
 
 .SortButtonInactive {
-  opacity: 0;
+  opacity: 0.35;
 }
 
 .SortButtonInactive:hover {
-  opacity: 0.75;
+  opacity: 0.65;
 }
