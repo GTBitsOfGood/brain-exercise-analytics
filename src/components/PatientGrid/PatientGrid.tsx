@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { IPatientTableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { useMemo } from "react";
@@ -85,8 +86,16 @@ function ColumnSizes() {
 function Header() {
   return (
     <div className={styles["table-header"]}>
-      <TwoVolunteersIcon />
-      <p className={styles["table-header-text"]}>Patient List</p>
+      <div className={styles["table-header-left"]}>
+        <TwoVolunteersIcon />
+        <p>Patient List</p>
+      </div>
+      <Link
+        className={styles["table-header-database-button"]}
+        href="/patient/analytics/group"
+      >
+        View Group Analytics
+      </Link>
     </div>
   );
 }
