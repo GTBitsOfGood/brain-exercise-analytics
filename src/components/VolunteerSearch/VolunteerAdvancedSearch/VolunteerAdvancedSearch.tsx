@@ -10,19 +10,8 @@ import { classes, transformDate } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import {
-  setActive,
-  setCountries,
-  setStates,
-  setCities,
-  setDateOfBirths,
-  setEmails,
-  setDateOfJoins,
-  setBeiChapters,
-  setVolunteerRoles,
-} from "@src/redux/reducers/volunteerSearchReducer";
-import { Role } from "@/common_utils/types";
+import { update, clear } from "@src/redux/reducers/volunteerSearchReducer";
+import { IVolunteerSearchReducer, Role } from "@/common_utils/types";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./VolunteerAdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -191,23 +180,23 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
 
   const setFinal = () => {
     const dispatchMappings = [
-      { condition: country, action: setCountries, value: countries },
-      { condition: state, action: setStates, value: states },
-      { condition: city, action: setCities, value: cities },
-      { condition: dateOfBirth, action: setDateOfBirths, value: dateOfBirths },
-      { condition: email, action: setEmails, value: emails },
-      { condition: dateOfJoin, action: setDateOfJoins, value: dateOfJoins },
-      { condition: beiChapter, action: setBeiChapters, value: beiChapters },
+      { condition: country, field: "countries", value: countries },
+      { condition: state, field: "states", value: states },
+      { condition: city, field: "cities", value: cities },
+      { condition: dateOfBirth, field: "dateOfBirths", value: dateOfBirths },
+      { condition: email, field: "emails", value: emails },
+      { condition: dateOfJoin, field: "dateOfJoins", value: dateOfJoins },
+      { condition: beiChapter, field: "beiChapters", value: beiChapters },
       {
         condition: volunteerRole,
-        action: setVolunteerRoles,
+        field: "volunteerRoles",
         value: volunteerRoles,
       },
     ];
 
-    dispatchMappings.forEach(({ condition, action, value }) => {
+    dispatchMappings.forEach(({ condition, field, value }) => {
       if (condition) {
-        dispatch(action(checkAndUpdateList(value, condition)));
+        dispatch(update({ [field]: checkAndUpdateList(value, condition) }));
       }
     });
 
@@ -215,17 +204,10 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
       props.onSubmit();
     }
   };
+
   const handleClearAppliedTags = () => {
     if (tagsPresent) {
-      dispatch(setActive(undefined));
-      dispatch(setCountries([]));
-      dispatch(setStates([]));
-      dispatch(setCities([]));
-      dispatch(setBeiChapters([]));
-      dispatch(setDateOfBirths([]));
-      dispatch(setEmails([]));
-      dispatch(setDateOfJoins([]));
-      dispatch(setVolunteerRoles([]));
+      dispatch(clear());
     }
   };
   const handleClearChosenTags = () => {
@@ -269,14 +251,11 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   }));
 
   const curryOnCloseSetTag = useCallback(
-    <T,>(
-      array: Array<T>,
-      action: ActionCreatorWithPayload<Array<T>, string>,
-    ) => {
+    <T,>(array: Array<T>, field: keyof IVolunteerSearchReducer) => {
       return (value: T) => {
         const updatedSet = new Set<T>(array);
         updatedSet.delete(value);
-        dispatch(action(Array.from(updatedSet)));
+        dispatch(update({ [field]: Array.from(updatedSet) }));
       };
     },
     [dispatch],
@@ -291,21 +270,21 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
               <button
                 className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : ""}`}
                 value="undefined"
-                onClick={() => dispatch(setActive(undefined))}
+                onClick={() => dispatch(update({ active: undefined }))}
               >
                 All Volunteers
               </button>
               <button
                 className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : ""}`}
                 value="true"
-                onClick={() => dispatch(setActive(true))}
+                onClick={() => dispatch(update({ active: true }))}
               >
                 Active Volunteers
               </button>
               <button
                 className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : ""}`}
                 value="false"
-                onClick={() => dispatch(setActive(false))}
+                onClick={() => dispatch(update({ active: false }))}
               >
                 Inactive Volunteers
               </button>
@@ -317,7 +296,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="Country"
                       value={currCountry}
-                      handleClose={curryOnCloseSetTag(countries, setCountries)}
+                      handleClose={curryOnCloseSetTag(countries, "countries")}
                     />
                   </div>
                 ))
@@ -329,7 +308,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="State"
                       value={currState}
-                      handleClose={curryOnCloseSetTag(states, setStates)}
+                      handleClose={curryOnCloseSetTag(states, "states")}
                     />
                   </div>
                 ))
@@ -341,7 +320,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="City"
                       value={currCity}
-                      handleClose={curryOnCloseSetTag(cities, setCities)}
+                      handleClose={curryOnCloseSetTag(cities, "cities")}
                     />
                   </div>
                 ))
@@ -358,7 +337,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                       value={currChapter}
                       handleClose={curryOnCloseSetTag(
                         beiChapters,
-                        setBeiChapters,
+                        "beiChapters",
                       )}
                     />
                   </div>
@@ -373,7 +352,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                       value={currDOB}
                       handleClose={curryOnCloseSetTag(
                         dateOfBirths,
-                        setDateOfBirths,
+                        "dateOfBirths",
                       )}
                       transformData={transformDate}
                     />
@@ -387,7 +366,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="Email"
                       value={currEmail}
-                      handleClose={curryOnCloseSetTag(emails, setEmails)}
+                      handleClose={curryOnCloseSetTag(emails, "emails")}
                     />
                   </div>
                 ))
@@ -404,7 +383,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                       value={currDateOfJoin}
                       handleClose={curryOnCloseSetTag(
                         dateOfJoins,
-                        setDateOfJoins,
+                        "dateOfJoins",
                       )}
                       transformData={transformDate}
                     />
@@ -421,7 +400,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                       value={role}
                       handleClose={curryOnCloseSetTag(
                         volunteerRoles,
-                        setVolunteerRoles,
+                        "volunteerRoles",
                       )}
                     />
                   </div>

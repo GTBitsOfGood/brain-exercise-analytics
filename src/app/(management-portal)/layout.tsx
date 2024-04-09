@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { logout, update } from "@src/redux/reducers/authReducer";
+import { update } from "@src/redux/reducers/authReducer";
 import NavigationPanel from "@src/components/NavigationPanel/NavigationPanel";
 import AccountEditModal from "@src/components/AccountEditModal/AccountEditModal";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IUser } from "@/common_utils/types";
 import { useDispatch, useSelector } from "react-redux";
+import useAuth from "@src/hooks/useAuth";
 import { RootState } from "@src/redux/rootReducer";
 
 import Modal from "@src/components/Modal/Modal";
@@ -16,10 +17,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const { email } = useSelector((state: RootState) => state.auth);
+  const { logout } = useAuth();
+
   useEffect(() => {
     const retrieve = async () => {
       if (!email) {
-        dispatch(logout());
+        await logout();
         return;
       }
 
@@ -38,7 +41,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error(error);
     }
-  }, [dispatch, email]);
+  }, [dispatch, logout, email]);
 
   return (
     <div className={styles.wrapper}>

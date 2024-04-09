@@ -9,6 +9,8 @@ import {
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+import Modal from "@src/components/Modal/Modal";
 
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
@@ -18,6 +20,7 @@ import { HttpMethod, IUser } from "@/common_utils/types";
 
 import { update } from "@src/redux/reducers/authReducer";
 import { useDispatch } from "react-redux";
+
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -30,6 +33,7 @@ export default function Page() {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const resetErrors = () => {
     setEmailError("");
@@ -39,6 +43,7 @@ export default function Page() {
 
   const handleSignIn = async (signIn: () => Promise<User | null>) => {
     try {
+      setLoading(true);
       const user = await signIn();
       if (!user || !user.email) {
         throw new Error("Error signing in");
@@ -53,7 +58,6 @@ export default function Page() {
         },
       });
       dispatch(update(userMongo));
-
       router.push("/auth/email-verification");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -75,6 +79,7 @@ export default function Page() {
       } else {
         setShowGeneralError(true);
       }
+      setLoading(false);
     }
   };
 
@@ -110,6 +115,14 @@ export default function Page() {
   return (
     <div>
       <title>Log In | Brain Exercise Initiative</title>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0", width: "100%", left: 0 }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <p className={styles.welcome}>Log in</p>
       <p className={styles.descriptionText}>
         Enter your email and password to sign in!

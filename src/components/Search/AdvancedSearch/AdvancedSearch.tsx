@@ -10,21 +10,9 @@ import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { IPatientSearchReducer } from "@/common_utils/types";
 
-import {
-  setActive,
-  setCountries,
-  setStates,
-  setCities,
-  setDateOfBirths,
-  setEmails,
-  setAdditionalAffiliations,
-  setDateOfJoins,
-  setBeiChapters,
-  setSecondaryPhoneNumbers,
-  setSecondaryNames,
-} from "@src/redux/reducers/patientSearchReducer";
+import { update, clear } from "@src/redux/reducers/patientSearchReducer";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 
 import styles from "./AdvancedSearch.module.css";
@@ -209,33 +197,33 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
   const setFinal = () => {
     const dispatchMappings = [
-      { condition: country, action: setCountries, value: countries },
-      { condition: state, action: setStates, value: states },
-      { condition: city, action: setCities, value: cities },
-      { condition: dateOfBirth, action: setDateOfBirths, value: dateOfBirths },
-      { condition: email, action: setEmails, value: emails },
+      { condition: country, field: "countries", value: countries },
+      { condition: state, field: "states", value: states },
+      { condition: city, field: "cities", value: cities },
+      { condition: dateOfBirth, field: "dateOfBirths", value: dateOfBirths },
+      { condition: email, field: "emails", value: emails },
       {
         condition: additionalAffiliation,
-        action: setAdditionalAffiliations,
+        field: "additionalAffiliations",
         value: additionalAffiliations,
       },
-      { condition: dateOfJoin, action: setDateOfJoins, value: dateOfJoins },
-      { condition: beiChapter, action: setBeiChapters, value: beiChapters },
+      { condition: dateOfJoin, field: "dateOfJoins", value: dateOfJoins },
+      { condition: beiChapter, field: "beiChapters", value: beiChapters },
       {
         condition: secondaryPhoneNumber,
-        action: setSecondaryPhoneNumbers,
+        field: "secondaryPhoneNumbers",
         value: secondaryPhoneNumbers,
       },
       {
         condition: secondaryName,
-        action: setSecondaryNames,
+        field: "secondaryNames",
         value: secondaryNames,
       },
     ];
 
-    dispatchMappings.forEach(({ condition, action, value }) => {
+    dispatchMappings.forEach(({ condition, field, value }) => {
       if (condition) {
-        dispatch(action(checkAndUpdateList(value, condition)));
+        dispatch(update({ [field]: checkAndUpdateList(value, condition) }));
       }
     });
 
@@ -243,19 +231,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       props.onSubmit();
     }
   };
+
   const handleClearAppliedTags = () => {
     if (tagsPresent) {
-      dispatch(setActive(undefined));
-      dispatch(setCountries([]));
-      dispatch(setStates([]));
-      dispatch(setCities([]));
-      dispatch(setBeiChapters([]));
-      dispatch(setDateOfBirths([]));
-      dispatch(setEmails([]));
-      dispatch(setAdditionalAffiliations([]));
-      dispatch(setDateOfJoins([]));
-      dispatch(setSecondaryNames([]));
-      dispatch(setSecondaryPhoneNumbers([]));
+      dispatch(clear());
     }
   };
   const handleClearChosenTags = () => {
@@ -294,14 +273,11 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   );
 
   const curryOnCloseSetTag = useCallback(
-    <T,>(
-      array: Array<T>,
-      action: ActionCreatorWithPayload<Array<T>, string>,
-    ) => {
+    <T,>(array: Array<T>, field: keyof IPatientSearchReducer) => {
       return (value: T) => {
         const updatedSet = new Set<T>(array);
         updatedSet.delete(value);
-        dispatch(action(Array.from(updatedSet)));
+        dispatch(update({ [field]: Array.from(updatedSet) }));
       };
     },
     [dispatch],
@@ -316,21 +292,21 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               <button
                 className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : ""}`}
                 value="undefined"
-                onClick={() => dispatch(setActive(undefined))}
+                onClick={() => dispatch(update({ active: undefined }))}
               >
                 All Patients
               </button>
               <button
                 className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : ""}`}
                 value="true"
-                onClick={() => dispatch(setActive(true))}
+                onClick={() => dispatch(update({ active: true }))}
               >
                 Active Patients
               </button>
               <button
                 className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : ""}`}
                 value="false"
-                onClick={() => dispatch(setActive(false))}
+                onClick={() => dispatch(update({ active: false }))}
               >
                 Inactive Patients
               </button>
@@ -342,7 +318,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="Country"
                       value={currCountry}
-                      handleClose={curryOnCloseSetTag(countries, setCountries)}
+                      handleClose={curryOnCloseSetTag(countries, "countries")}
                     />
                   </div>
                 ))
@@ -354,7 +330,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="State"
                       value={currState}
-                      handleClose={curryOnCloseSetTag(states, setStates)}
+                      handleClose={curryOnCloseSetTag(states, "states")}
                     />
                   </div>
                 ))
@@ -366,7 +342,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="City"
                       value={currCity}
-                      handleClose={curryOnCloseSetTag(cities, setCities)}
+                      handleClose={curryOnCloseSetTag(cities, "cities")}
                     />
                   </div>
                 ))
@@ -383,7 +359,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       value={currChapter}
                       handleClose={curryOnCloseSetTag(
                         beiChapters,
-                        setBeiChapters,
+                        "beiChapters",
                       )}
                     />
                   </div>
@@ -398,7 +374,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       value={currDOB}
                       handleClose={curryOnCloseSetTag(
                         dateOfBirths,
-                        setDateOfBirths,
+                        "dateOfBirths",
                       )}
                       transformData={transformDate}
                     />
@@ -412,7 +388,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                     <Tag
                       title="Email"
                       value={currEmail}
-                      handleClose={curryOnCloseSetTag(emails, setEmails)}
+                      handleClose={curryOnCloseSetTag(emails, "emails")}
                     />
                   </div>
                 ))
@@ -429,7 +405,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       value={currAdditionalAffiliation}
                       handleClose={curryOnCloseSetTag(
                         additionalAffiliations,
-                        setAdditionalAffiliations,
+                        "additionalAffiliations",
                       )}
                     />
                   </div>
@@ -447,7 +423,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       value={currDateOfJoin}
                       handleClose={curryOnCloseSetTag(
                         dateOfJoins,
-                        setDateOfJoins,
+                        "dateOfJoins",
                       )}
                       transformData={transformDate}
                     />
@@ -466,7 +442,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       value={currSecondaryName}
                       handleClose={curryOnCloseSetTag(
                         secondaryNames,
-                        setSecondaryNames,
+                        "secondaryNames",
                       )}
                     />
                   </div>
@@ -484,7 +460,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       value={currSecondaryPhoneNumber}
                       handleClose={curryOnCloseSetTag(
                         secondaryPhoneNumbers,
-                        setSecondaryPhoneNumbers,
+                        "secondaryPhoneNumbers",
                       )}
                       transformData={transformPhoneNumber}
                     />

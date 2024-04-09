@@ -5,6 +5,8 @@ import { Error as ErrorIcon } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Country, State, City } from "country-state-city";
 import { useRouter } from "next/navigation";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+import Modal from "@src/components/Modal/Modal";
 
 import { IUser, HttpMethod, Role } from "@/common_utils/types";
 
@@ -35,6 +37,8 @@ export default function Page() {
   const [roleError, setRoleError] = useState("");
   const [chapterError, setChapterError] = useState("");
   const [showGeneralError, setShowGeneralError] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -89,6 +93,7 @@ export default function Page() {
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
   ) => {
     e.preventDefault();
+    setLoading(true);
     resetErrors();
     if (firstName.trim() === "")
       setFirstNameError("First name can't be blank.");
@@ -114,8 +119,10 @@ export default function Page() {
       (CITIES.length !== 0 && locCity.trim() === "") ||
       role.trim() === "" ||
       chapter.trim() === ""
-    )
+    ) {
+      setLoading(false);
       return;
+    }
     try {
       await internalRequest<IUser>({
         url: "/api/volunteer/auth/signup",
@@ -134,12 +141,21 @@ export default function Page() {
       router.push("/patient/search");
     } catch (error) {
       setShowGeneralError(true);
+      setLoading(false);
     }
   };
 
   return (
     <div>
       <title>Personal Information | Brain Exercise Initiative</title>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0", width: "100%", left: 0 }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <p className={styles.accountRecovery}>Personal Information</p>
       <p className={styles.descriptionText}>
         Fill in your information to complete your sign up

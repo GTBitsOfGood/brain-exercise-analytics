@@ -22,9 +22,12 @@ const generalReducer = createSlice({
     update(state, action: PayloadAction<Partial<IGeneralReducer>>) {
       setState(state, action.payload);
     },
+    clear(state) {
+      setState(state, initialState);
+    },
   },
 });
 
-export const { update } = generalReducer.actions;
+export const { update, clear } = generalReducer.actions;
 
 export default generalReducer.reducer;
