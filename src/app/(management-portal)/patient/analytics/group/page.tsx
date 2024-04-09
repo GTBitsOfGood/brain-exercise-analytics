@@ -26,6 +26,9 @@ import {
   numberOfQuestionData,
 } from "@src/utils/patients";
 
+import Modal from "@src/components/Modal/Modal";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { internalRequest } from "@src/utils/requests";
 import { useSelector } from "react-redux";
@@ -123,9 +126,11 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
     DateRangeEnum.RECENT,
   );
 
-  // TO BE IMPLEMENTED ONCE WE HAVE THE BACKEND ENDPOINT READY
+  const [loading, setLoading] = useState(false);
+
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
+      setLoading(true);
       try {
         const res = await internalRequest({
           url: "/api/patient/analytics/group",
@@ -137,15 +142,16 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
             sections,
           },
         });
+        setLoading(false);
         return res as T;
       } catch (e) {
-        // console.debug(e);
+        setLoading(false);
+        console.debug(e);
         return {} as T;
       }
     },
     [filters],
   );
-  // SAMPLE DATA FOR NOW
 
   const updateAllAnalytics = useCallback(
     async (newDateRange: DateRangeEnum) => {
@@ -221,6 +227,14 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
 
   return (
     <div className={styles.container}>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0" }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <div className={styles.overviewReportContainer}>
         <p className={styles.title}>Patient Group Analytics</p>
       </div>

@@ -110,7 +110,7 @@ export default function Page() {
   ]);
 
   return (
-    <>
+    <div className={styles.container}>
       <Modal
         showModal={loading}
         setShowModal={setLoading}
@@ -119,29 +119,27 @@ export default function Page() {
       >
         <LoadingBox />
       </Modal>
-      <div className={styles.container}>
-        <div className={classes(styles["search-container"])}>
-          <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
-          <div className={styles["search-wrapper"]}>
-            <Search />
-          </div>
-        </div>
-        <div
-          className={classes(
-            styles["table-container"],
-            styles["table-container-show"],
-          )}
-        >
-          <PatientGrid
-            data={filteredUsers}
-            sortField={sortField}
-            setSortField={setSortField}
-            setCurrentPage={setCurrentPage}
-            pageCount={pageCount}
-            currentPage={currentPage}
-          />
+      <div className={classes(styles["search-container"])}>
+        <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
+        <div className={styles["search-wrapper"]}>
+          <Search />
         </div>
       </div>
-    </>
+      <div
+        className={classes(
+          styles["table-container"],
+          styles["table-container-show"],
+        )}
+      >
+        <PatientGrid
+          data={filteredUsers}
+          sortField={sortField}
+          setSortField={setSortField}
+          setCurrentPage={setCurrentPage}
+          pageCount={pageCount}
+          currentPage={currentPage}
+        />
+      </div>
+    </div>
   );
 }

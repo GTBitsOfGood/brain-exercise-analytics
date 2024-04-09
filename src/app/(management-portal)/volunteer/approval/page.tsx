@@ -109,7 +109,7 @@ export default function Page() {
   ]);
 
   return (
-    <>
+    <div className={styles.container}>
       <Modal
         showModal={loading}
         setShowModal={setLoading}
@@ -118,30 +118,28 @@ export default function Page() {
       >
         <LoadingBox />
       </Modal>
-      <div className={styles.container}>
-        <div className={classes(styles["search-container"])}>
-          <p className={styles["intro-text"]}>Search for a volunteer here!</p>
-          <div className={styles["search-wrapper"]}>
-            <VolunteerSearch />
-          </div>
-        </div>
-        <div
-          className={classes(
-            styles["table-container"],
-            styles["table-container-show"],
-          )}
-        >
-          <VolunteerApprovalGrid
-            data={filteredUsers}
-            sortField={sortField}
-            setSortField={setSortField}
-            setCurrentPage={setCurrentPage}
-            pageCount={pageCount}
-            currentPage={currentPage}
-            refreshUsers={fetchUsers}
-          />
+      <div className={classes(styles["search-container"])}>
+        <p className={styles["intro-text"]}>Search for a volunteer here!</p>
+        <div className={styles["search-wrapper"]}>
+          <VolunteerSearch />
         </div>
       </div>
-    </>
+      <div
+        className={classes(
+          styles["table-container"],
+          styles["table-container-show"],
+        )}
+      >
+        <VolunteerApprovalGrid
+          data={filteredUsers}
+          sortField={sortField}
+          setSortField={setSortField}
+          setCurrentPage={setCurrentPage}
+          pageCount={pageCount}
+          currentPage={currentPage}
+          refreshUsers={fetchUsers}
+        />
+      </div>
+    </div>
   );
 }

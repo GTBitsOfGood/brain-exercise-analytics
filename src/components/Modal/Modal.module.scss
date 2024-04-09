@@ -1,9 +1,12 @@
 .modal {
   position: fixed;
+  top: 0;
+  left: 304px;
+  width: calc(100% - 304px);
+
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(100% - 304px);
   height: 100vh;
   z-index: 9;
   background-color: #9ca5c2f0;
