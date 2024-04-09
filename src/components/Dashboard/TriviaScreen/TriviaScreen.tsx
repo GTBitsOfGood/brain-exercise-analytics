@@ -52,7 +52,7 @@ export default function TriviaScreen({
     <div className={styles.container} style={style}>
       <div className={styles.header}>
         <TriviaIcon />
-        <p>TRIVIA</p>
+        <p>Trivia</p>
         <div className={styles.dateSelector}>
           <DateSelector
             selectedValue={menuState[0]}
