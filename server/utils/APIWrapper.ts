@@ -7,6 +7,7 @@ import dbConnect from "@server/mongodb/config";
 import firebaseConfig from "@server/firebase/config";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import { getAuth } from "firebase-admin/auth";
+import { cookies } from "next/headers";
 
 interface RouteConfig {
   requireToken?: boolean;
@@ -21,7 +22,7 @@ interface Route<T> {
   handler: (
     req: NextRequest,
     currentUser?: IUser | undefined,
-    updatedUserRef?: IUser[],
+    updateCookie?: { user?: IUser; keepLogged?: boolean }[],
   ) => Promise<T>;
 }
 
@@ -110,35 +111,45 @@ function APIWrapper(route: Route<unknown>) {
         }
       }
 
-      const updatedUserRef: IUser[] = [];
-      const data = await handler(req, currentUser, updatedUserRef);
-      let response;
+      const updateCookie: { user?: IUser; keepLogged?: boolean }[] = [];
+      const data = await handler(req, currentUser, updateCookie);
+
+      if (
+        updateCookie.length > 0 &&
+        updateCookie[0].user !== undefined &&
+        updateCookie[0].user !== null
+      ) {
+        const newUser = updateCookie[0].user;
+        let newKeepLogged = updateCookie[0].keepLogged;
+        if (newKeepLogged === undefined) {
+          const oldCookie = JSON.parse(
+            req.cookies.get("authUser")?.value ?? "{}",
+          ) as IAuthUserCookie;
+          if (oldCookie.keepLogged !== undefined) {
+            newKeepLogged = oldCookie.keepLogged;
+          } else {
+            newKeepLogged = false;
+          }
+        }
+
+        cookies().set({
+          name: "authUser",
+          value: JSON.stringify({ user: newUser, keepLogged: newKeepLogged }),
+          maxAge: newKeepLogged ? 7 * 24 * 60 * 60 : undefined,
+          // httpOnly: true,
+        });
+      }
+
       if (config?.handleResponse) {
-        response = NextResponse.json(
+        return NextResponse.json(
           { success: true, payload: null },
           { status: 200 },
         );
-      } else {
-        response = NextResponse.json(
-          { success: true, payload: data },
-          { status: 200 },
-        );
       }
-
-      if (updatedUserRef.length === 1) {
-        const { keepLogged = false } = JSON.parse(
-          req.cookies.get("authUser")?.value ?? "{}",
-        ) as IAuthUserCookie;
-
-        req.cookies.get("authUser");
-        response.cookies.set(
-          "authUser",
-          JSON.stringify({ user: updatedUserRef[0], keepLogged }),
-          keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
-        );
-      }
-
-      return response;
+      return NextResponse.json(
+        { success: true, payload: data },
+        { status: 200 },
+      );
     } catch (e) {
       if (e instanceof mongoose.Error) {
         console.log(e);

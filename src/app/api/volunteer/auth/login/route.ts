@@ -10,12 +10,18 @@ export const GET = APIWrapper({
     requireToken: true,
   },
 
-  handler: async (req) => {
+  handler: async (req, _, updateCookie) => {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get("email");
-    if (!email) {
-      throw new Error("Email parameter is missing in the request.");
+    const keepLoggedString = searchParams.get("keepLogged");
+
+    if (
+      !email ||
+      (keepLoggedString !== "true" && keepLoggedString !== "false")
+    ) {
+      throw new Error("Parameter(s) is missing in the request.");
     }
+
     let newUser = await getUserByEmail(email);
     if (newUser === null) {
       newUser = (await User.create({
@@ -25,6 +31,9 @@ export const GET = APIWrapper({
     } else if (newUser.role === Role.NONPROFIT_PATIENT) {
       throw new Error("App users cannot sign up on analytics dashboard");
     }
+
+    const keepLogged = keepLoggedString === "true";
+    updateCookie?.push({ user: newUser, keepLogged });
 
     return newUser;
   },

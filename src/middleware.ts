@@ -4,6 +4,7 @@ import {
   HttpMethod,
   IUser,
   AdminApprovalStatus,
+  Role,
 } from "@/common_utils/types";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -64,7 +65,9 @@ export async function middleware(request: NextRequest) {
     if (
       path.match(
         /\/auth\/(login|signup|email-verification|information|admin-approval)/g,
-      )
+      ) ||
+      (user.role === Role.NONPROFIT_VOLUNTEER &&
+        path.match(/\/volunteer\/(search|approval)/g))
     ) {
       return NextResponse.redirect(
         new URL("/patient/search", request.nextUrl.origin),

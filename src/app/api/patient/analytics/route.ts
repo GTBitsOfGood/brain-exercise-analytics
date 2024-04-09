@@ -41,7 +41,9 @@ export const GET = APIWrapper({
       ? Object.values(AnalyticsSectionEnum)
       : Array.from(new Set(sections));
 
-    const data = await getAggregatedAnalytics([id], range, updatedSections);
+    const data = (
+      await getAggregatedAnalytics([id], range, updatedSections)
+    )[0];
 
     return data;
   },
