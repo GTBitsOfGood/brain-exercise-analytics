@@ -121,14 +121,14 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   const tagsPresent = useMemo(
     () =>
       active !== undefined ||
-      countries.size > 0 ||
-      states.size > 0 ||
-      cities.size > 0 ||
-      dateOfBirths.size > 0 ||
-      emails.size > 0 ||
-      dateOfJoins.size > 0 ||
-      beiChapters.size > 0 ||
-      volunteerRoles.size > 0,
+      countries.length > 0 ||
+      states.length > 0 ||
+      cities.length > 0 ||
+      dateOfBirths.length > 0 ||
+      emails.length > 0 ||
+      dateOfJoins.length > 0 ||
+      beiChapters.length > 0 ||
+      volunteerRoles.length > 0,
     [
       active,
       countries,
@@ -164,12 +164,15 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   );
 
   const checkAndUpdateList = useCallback(
-    <T,>(currentSet: Set<T> | undefined, value: T): Set<T> => {
-      const safeCurrentSet =
-        currentSet instanceof Set ? currentSet : new Set<T>();
-      const updatedSet = new Set<T>(safeCurrentSet);
-      if (value) updatedSet.add(value);
-      return updatedSet;
+    <T,>(currentArray: Array<T>, value: T): Array<T> => {
+      const safeArray =
+        currentArray instanceof Array
+          ? Array.from(new Set(currentArray))
+          : new Array<T>();
+      if (value) {
+        safeArray.push(value);
+      }
+      return Array.from(new Set(safeArray));
     },
     [],
   );
@@ -215,14 +218,14 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   const handleClearAppliedTags = () => {
     if (tagsPresent) {
       dispatch(setActive(undefined));
-      dispatch(setCountries(new Set()));
-      dispatch(setStates(new Set()));
-      dispatch(setCities(new Set()));
-      dispatch(setBeiChapters(new Set()));
-      dispatch(setDateOfBirths(new Set()));
-      dispatch(setEmails(new Set()));
-      dispatch(setDateOfJoins(new Set()));
-      dispatch(setVolunteerRoles(new Set()));
+      dispatch(setCountries([]));
+      dispatch(setStates([]));
+      dispatch(setCities([]));
+      dispatch(setBeiChapters([]));
+      dispatch(setDateOfBirths([]));
+      dispatch(setEmails([]));
+      dispatch(setDateOfJoins([]));
+      dispatch(setVolunteerRoles([]));
     }
   };
   const handleClearChosenTags = () => {
@@ -266,11 +269,14 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   }));
 
   const curryOnCloseSetTag = useCallback(
-    <T,>(set: Set<T>, action: ActionCreatorWithPayload<Set<T>, string>) => {
+    <T,>(
+      array: Array<T>,
+      action: ActionCreatorWithPayload<Array<T>, string>,
+    ) => {
       return (value: T) => {
-        const updatedSet = new Set<T>(set);
+        const updatedSet = new Set<T>(array);
         updatedSet.delete(value);
-        dispatch(action(updatedSet));
+        dispatch(action(Array.from(updatedSet)));
       };
     },
     [dispatch],
@@ -305,8 +311,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
               </button>
             </div>
             {tagsPresent
-              ? countries.size > 0 &&
-                Array.from(countries).map((currCountry) => (
+              ? countries.length > 0 &&
+                countries.map((currCountry) => (
                   <div key={`country-${currCountry}`} className={styles.tags}>
                     <Tag
                       title="Country"
@@ -317,8 +323,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? states.size > 0 &&
-                Array.from(states).map((currState) => (
+              ? states.length > 0 &&
+                states.map((currState) => (
                   <div key={`state-${currState}`} className={styles.tags}>
                     <Tag
                       title="State"
@@ -329,8 +335,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? cities.size > 0 &&
-                Array.from(cities).map((currCity) => (
+              ? cities.length > 0 &&
+                cities.map((currCity) => (
                   <div key={`city-${currCity}`} className={styles.tags}>
                     <Tag
                       title="City"
@@ -341,8 +347,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? beiChapters.size > 0 &&
-                Array.from(beiChapters).map((currChapter) => (
+              ? beiChapters.length > 0 &&
+                beiChapters.map((currChapter) => (
                   <div
                     key={`bei-chapter-${currChapter}`}
                     className={styles.tags}
@@ -359,8 +365,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? dateOfBirths.size > 0 &&
-                Array.from(dateOfBirths).map((currDOB) => (
+              ? dateOfBirths.length > 0 &&
+                dateOfBirths.map((currDOB) => (
                   <div key={`dob-${currDOB}`} className={styles.tags}>
                     <Tag
                       title="Date of Birth"
@@ -375,8 +381,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? emails.size > 0 &&
-                Array.from(emails).map((currEmail) => (
+              ? emails.length > 0 &&
+                emails.map((currEmail) => (
                   <div key={`email-${currEmail}`} className={styles.tags}>
                     <Tag
                       title="Email"
@@ -387,8 +393,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? dateOfJoins.size > 0 &&
-                Array.from(dateOfJoins).map((currDateOfJoin) => (
+              ? dateOfJoins.length > 0 &&
+                dateOfJoins.map((currDateOfJoin) => (
                   <div
                     key={`join-date-${currDateOfJoin}`}
                     className={styles.tags}
@@ -407,8 +413,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
               : null}
 
             {tagsPresent
-              ? volunteerRoles.size > 0 &&
-                Array.from(volunteerRoles).map((role) => (
+              ? volunteerRoles.length > 0 &&
+                volunteerRoles.map((role) => (
                   <div key={`role-${role}`} className={styles.tags}>
                     <Tag
                       title="Role"
