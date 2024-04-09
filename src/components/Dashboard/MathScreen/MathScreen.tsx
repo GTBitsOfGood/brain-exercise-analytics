@@ -65,7 +65,7 @@ const MathScreen = ({
             data={accuracyData}
             fullWidth
             yLabel="Questions"
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <LineChart
             width={325}
@@ -77,7 +77,7 @@ const MathScreen = ({
             info="Vidushi"
             data={difficultyData}
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -88,7 +88,7 @@ const MathScreen = ({
             percentageChange
             yLabel="Questions"
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
           <BarChart
             width={325}
@@ -98,7 +98,7 @@ const MathScreen = ({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>

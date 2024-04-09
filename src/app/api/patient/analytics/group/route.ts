@@ -421,8 +421,6 @@ export const POST = APIWrapper({
       }
     });
 
-    console.log(groupAnalytics.math?.avgQuestionsCompleted);
-
-    return null;
+    return groupAnalytics;
   },
 });

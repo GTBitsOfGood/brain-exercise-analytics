@@ -50,10 +50,7 @@ export default function GroupOverviewReport(params: Params) {
           Overview
         </p>
         <p style={{ marginLeft: "10px" }}>
-          <GroupSelector
-            selectedValue={params.menuState[0]}
-            setSelectedValue={params.menuState[1]}
-          />
+          <GroupSelector shownValue="Selected Group" />
         </p>
         <div className={styles.dateSelector}>
           <DateSelector
@@ -102,27 +99,28 @@ export default function GroupOverviewReport(params: Params) {
           title="Average Questions Completed"
           text={"10"}
           Icon={SqrtIcon}
-          Chip={() => <Chip color="#32D29633">Math</Chip>}
+          Chip={() => <Chip color="#FCDCE2">Math</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Words Read"
           text={"10"}
           Icon={BookIcon}
-          Chip={() => <Chip color="#32D29633">Reading</Chip>}
+          Chip={() => <Chip color="#E8DCFC">Reading</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Prompts Completed"
           text={"5"}
           Icon={DocIcon}
-          Chip={() => <Chip color="#32D29633">Reading</Chip>}
+          Chip={() => <Chip color="#D6F6EA">Writing</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Questions Completed"
           text={"5"}
           Icon={QuestionIcon}
+          Chip={() => <Chip color="#FCE8DC">Trivia</Chip>}
         />
       </div>
     </div>

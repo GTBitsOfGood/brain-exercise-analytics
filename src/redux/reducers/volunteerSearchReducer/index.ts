@@ -6,14 +6,14 @@ import { IVolunteerSearchReducer } from "@/common_utils/types";
 const initialState: IVolunteerSearchReducer = {
   fullName: "",
   active: undefined,
-  countries: new Set<string>(),
-  states: new Set<string>(),
-  cities: new Set<string>(),
-  dateOfBirths: new Set<string>(),
-  emails: new Set<string>(),
-  dateOfJoins: new Set<string>(),
-  beiChapters: new Set<string>(),
-  volunteerRoles: new Set<string>(),
+  countries: new Array<string>(),
+  states: new Array<string>(),
+  cities: new Array<string>(),
+  dateOfBirths: new Array<string>(),
+  emails: new Array<string>(),
+  dateOfJoins: new Array<string>(),
+  beiChapters: new Array<string>(),
+  volunteerRoles: new Array<string>(),
 };
 
 const volunteerSearchReducer = createSlice({
@@ -26,28 +26,28 @@ const volunteerSearchReducer = createSlice({
     setActive(state, action: PayloadAction<boolean | undefined>) {
       state.active = action.payload;
     },
-    setCountries(state, action: PayloadAction<Set<string>>) {
+    setCountries(state, action: PayloadAction<Array<string>>) {
       state.countries = action.payload;
     },
-    setStates(state, action: PayloadAction<Set<string>>) {
+    setStates(state, action: PayloadAction<Array<string>>) {
       state.states = action.payload;
     },
-    setCities(state, action: PayloadAction<Set<string>>) {
+    setCities(state, action: PayloadAction<Array<string>>) {
       state.cities = action.payload;
     },
-    setDateOfBirths(state, action: PayloadAction<Set<string>>) {
+    setDateOfBirths(state, action: PayloadAction<Array<string>>) {
       state.dateOfBirths = action.payload;
     },
-    setEmails(state, action: PayloadAction<Set<string>>) {
+    setEmails(state, action: PayloadAction<Array<string>>) {
       state.emails = action.payload;
     },
-    setDateOfJoins(state, action: PayloadAction<Set<string>>) {
+    setDateOfJoins(state, action: PayloadAction<Array<string>>) {
       state.dateOfJoins = action.payload;
     },
-    setBeiChapters(state, action: PayloadAction<Set<string>>) {
+    setBeiChapters(state, action: PayloadAction<Array<string>>) {
       state.beiChapters = action.payload;
     },
-    setVolunteerRoles(state, action: PayloadAction<Set<string>>) {
+    setVolunteerRoles(state, action: PayloadAction<Array<string>>) {
       state.volunteerRoles = action.payload;
     },
     resetFields(state) {

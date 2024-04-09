@@ -70,6 +70,7 @@ export default function WritingScreen({
             hoverable
             percentageChange
             fullWidth
+            gridLines
           />
           <BarChart
             width={325}
@@ -79,7 +80,7 @@ export default function WritingScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
             info="Some info for testing purposes in bar chart"
           />
           <BarChart
@@ -91,7 +92,7 @@ export default function WritingScreen({
             hoverable
             percentageChange
             fullWidth
-            // style={{ width: "100%", height: "100%" }}
+            gridLines
           />
         </div>
         <div className={styles.textStats}>

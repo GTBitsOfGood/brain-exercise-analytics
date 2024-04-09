@@ -10,12 +10,14 @@ import {
 import {
   AnalyticsSectionEnum,
   DateRangeEnum,
+  HttpMethod,
   IAggregatedAnalyticsAll,
   IAggregatedAnalyticsMath,
   IAggregatedAnalyticsOverall,
   IAggregatedAnalyticsReading,
   IAggregatedAnalyticsTrivia,
   IAggregatedAnalyticsWriting,
+  PatientSearchParams,
 } from "@/common_utils/types";
 import {
   dataBar,
@@ -24,7 +26,10 @@ import {
   numberOfQuestionData,
 } from "@src/utils/patients";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { internalRequest } from "@src/utils/requests";
+import { useSelector } from "react-redux";
+import { RootState } from "@src/redux/rootReducer";
 import styles from "./page.module.scss";
 
 export function Divider({ id }: { id?: string }) {
@@ -42,6 +47,52 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page({ params }: { params: { groupIds: string[] } }) {
+  const {
+    fullName,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    additionalAffiliations,
+    dateOfJoins,
+    beiChapters,
+    secondaryPhoneNumbers,
+    secondaryNames,
+  } = useSelector(
+    (patientSearchState: RootState) => patientSearchState.patientSearch,
+  );
+  const filters: PatientSearchParams = useMemo(
+    () => ({
+      name: fullName,
+      dateOfBirths,
+      emails,
+      additionalAffiliations,
+      secondaryNames,
+      secondaryPhones: secondaryPhoneNumbers,
+      beiChapters,
+      active,
+      countries,
+      states,
+      cities,
+      dateOfJoins,
+    }),
+    [
+      active,
+      additionalAffiliations,
+      beiChapters,
+      cities,
+      countries,
+      dateOfBirths,
+      dateOfJoins,
+      emails,
+      fullName,
+      secondaryNames,
+      secondaryPhoneNumbers,
+      states,
+    ],
+  );
   const [math, setMath] = useState<
     IAggregatedAnalyticsMath["math"] | undefined
   >(undefined);
@@ -74,520 +125,25 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
 
   // TO BE IMPLEMENTED ONCE WE HAVE THE BACKEND ENDPOINT READY
   const retrieveAnalytics = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
-      return {
-        overall: {
-          streakHistory: [],
-          streakLength: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          active: true,
-          streak: [],
-          startDate: new Date("2024-01-23T06:25:16.836Z"),
-          lastSessionDate: new Date("2024-01-23T06:24:14.000Z"),
-          totalSessionsCompleted: 0,
-          lastSession: {
-            mathQuestionsCompleted: 0,
-            wordsRead: 0,
-            promptsCompleted: 0,
-            triviaQuestionsCompleted: 0,
+      try {
+        const res = await internalRequest({
+          url: "/api/patient/analytics/group",
+          method: HttpMethod.POST,
+          authRequired: true,
+          body: {
+            filters,
+            range,
+            sections,
           },
-          name: "John Doe",
-        },
-        math: {
-          avgAccuracy: [
-            {
-              interval: "Feb 19",
-              value: 0.8,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgDifficultyScore: [
-            {
-              interval: "Feb 19",
-              value: 2,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgQuestionsCompleted: [
-            {
-              interval: "Feb 19",
-              value: 5,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgTimePerQuestion: [
-            {
-              interval: "Feb 19",
-              value: 5,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          lastSession: {
-            accuracy: 0,
-            difficultyScore: 0,
-            questionsCompleted: 0,
-            timePerQuestion: 0,
-          },
-        },
-        trivia: {
-          avgAccuracy: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgQuestionsCompleted: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgTimePerQuestion: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          lastSession: {
-            accuracy: 0,
-            questionsCompleted: 0,
-            timePerQuestion: 0,
-          },
-        },
-        reading: {
-          sessionCompletion: [
-            {
-              interval: "Feb 19",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-              stackedValue: 0,
-            },
-          ],
-          avgWordsPerMin: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgPassagesRead: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgTimePerPassage: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          lastSession: {
-            passagesRead: 0,
-            timePerPassage: 0,
-            completed: true,
-          },
-        },
-        writing: {
-          sessionCompletion: [
-            {
-              interval: "Feb 19",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-              stackedValue: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-              stackedValue: 0,
-            },
-          ],
-          avgPromptsAnswered: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          avgTimePerQuestion: [
-            {
-              interval: "Feb 19",
-              value: 0,
-            },
-            {
-              interval: "Feb 12",
-              value: 0,
-            },
-            {
-              interval: "Feb 05",
-              value: 0,
-            },
-            {
-              interval: "Jan 29",
-              value: 0,
-            },
-            {
-              interval: "Jan 22",
-              value: 0,
-            },
-            {
-              interval: "Jan 15",
-              value: 0,
-            },
-            {
-              interval: "Jan 08",
-              value: 0,
-            },
-          ],
-          lastSession: {
-            promptsAnswered: 0,
-            timePerPrompt: 0,
-            completed: false,
-          },
-        },
-      };
+        });
+        return res as T;
+      } catch (e) {
+        // console.debug(e);
+        return {} as T;
+      }
     },
-    [],
+    [filters],
   );
   // SAMPLE DATA FOR NOW
 
@@ -597,6 +153,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
         newDateRange,
         [AnalyticsSectionEnum.OVERALL],
       );
+      console.log(data);
       setMath(data.math);
       setTrivia(data.trivia);
       setReading(data.reading);
