@@ -113,13 +113,14 @@ export default function GroupOverviewReport(params: Params) {
           title="Average Prompts Completed"
           text={"5"}
           Icon={DocIcon}
-          Chip={() => <Chip color="#D6F6EA">Reading</Chip>}
+          Chip={() => <Chip color="#D6F6EA">Writing</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Questions Completed"
           text={"5"}
           Icon={QuestionIcon}
+          Chip={() => <Chip color="#FCE8DC">Trivia</Chip>}
         />
       </div>
     </div>
