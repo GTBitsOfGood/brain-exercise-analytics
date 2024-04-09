@@ -109,6 +109,7 @@ export default function Page() {
 
   return (
     <div>
+      <title>Log In | Brain Exercise Initiative</title>
       <p className={styles.welcome}>Log in</p>
       <p className={styles.descriptionText}>
         Enter your email and password to sign in!

@@ -186,6 +186,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className={styles.container}>
+      <title>Patient Analytics | Brain Exercise Initiative</title>
       <Modal
         showModal={loading}
         setShowModal={setLoading}

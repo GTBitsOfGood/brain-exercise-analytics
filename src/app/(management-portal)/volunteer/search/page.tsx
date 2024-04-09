@@ -108,6 +108,7 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
+      <title>Volunteer Search | Brain Exercise Initiative</title>
       <Modal
         showModal={loading}
         setShowModal={setLoading}

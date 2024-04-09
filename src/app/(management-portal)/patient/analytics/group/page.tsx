@@ -227,6 +227,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
 
   return (
     <div className={styles.container}>
+      <title>Patient Group Analytics | Brain Exercise Initiative</title>
       <Modal
         showModal={loading}
         setShowModal={setLoading}

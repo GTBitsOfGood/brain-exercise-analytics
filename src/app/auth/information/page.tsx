@@ -139,6 +139,7 @@ export default function Page() {
 
   return (
     <div>
+      <title>Personal Information | Brain Exercise Initiative</title>
       <p className={styles.accountRecovery}>Personal Information</p>
       <p className={styles.descriptionText}>
         Fill in your information to complete your sign up
