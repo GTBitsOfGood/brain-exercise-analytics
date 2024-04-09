@@ -18,6 +18,7 @@ import {
 import {
   AnalyticsSectionEnum,
   DateRangeEnum,
+  Days,
   HttpMethod,
   IAggregatedAnalyticsAll,
   IAggregatedAnalyticsMath,
@@ -97,17 +98,22 @@ export default function Page({ params }: { params: { id: string } }) {
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
       setLoading(true);
-      const data = await internalRequest<T>({
-        url: "/api/patient/analytics",
-        method: HttpMethod.GET,
-        queryParams: {
-          id: params.id,
-          range,
-          sections: JSON.stringify(sections),
-        },
-      });
-      setLoading(false);
-      return data;
+      try {
+        const data = await internalRequest<T>({
+          url: "/api/patient/analytics",
+          method: HttpMethod.GET,
+          queryParams: {
+            id: params.id,
+            range,
+            sections: JSON.stringify(sections),
+          },
+        });
+        setLoading(false);
+        return data;
+      } catch {
+        setLoading(false);
+        return {} as IAggregatedAnalyticsAll;
+      }
     },
     [params.id],
   );
@@ -200,7 +206,15 @@ export default function Page({ params }: { params: { id: string } }) {
           menuState={[dashboardMenu, updateAllAnalytics]}
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
-          streak={overall?.streak ?? []}
+          streak={
+            overall?.streak ?? [
+              Days.Sunday,
+              Days.Monday,
+              Days.Tuesday,
+              Days.Thursday,
+              Days.Friday,
+            ]
+          }
           startDate={
             overall?.startDate ? new Date(overall.startDate) : new Date()
           }
