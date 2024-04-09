@@ -10,6 +10,25 @@
   padding: 0 10px;
 }
 
+.noResultsContainer {
+  width: fit-content;
+  align-self: center;
+  margin: 0 auto;
+
+  display: flex;
+  padding: 10px 25px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+
+  color: #2b3674;
+  font-size: 18px;
+  font-weight: 500;
+}
+
 .TopRow {
   color: #a3aed0;
   font-family: var(--font-poppins);

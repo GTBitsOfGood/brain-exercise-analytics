@@ -1,5 +1,6 @@
 import { faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ExclamationOutlinedIcon } from "@src/app/icons";
 import { classes } from "@src/utils/utils";
 import { SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
@@ -51,6 +52,14 @@ export default function DataGrid({
   ColumnSizes,
   Rows,
 }: GridDataParams) {
+  if (Rows.length === 0) {
+    return (
+      <div className={styles.noResultsContainer}>
+        <ExclamationOutlinedIcon />
+        <div>No results found</div>
+      </div>
+    );
+  }
   return (
     <div className={styles.DataGrid}>
       <div className={styles.Container}>

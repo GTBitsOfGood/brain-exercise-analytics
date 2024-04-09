@@ -25,6 +25,8 @@ import TimeIcon from "./TimeIcon";
 import WritingIcon from "./WritingIcon";
 import PencilIcon from "./PencilIcon";
 import SearchIcon from "./SearchIcon";
+import LoadingIcon from "./LoadingIcon";
+import ExclamationOutlinedIcon from "./ExclamationOutlinedIcon";
 
 export {
   BarChartIcon,
@@ -51,7 +53,9 @@ export {
   RootXIcon,
   TimeIcon,
   WritingIcon,
+  LoadingIcon,
   SearchIcon,
   ClearTagIcon,
+  ExclamationOutlinedIcon,
   PencilIcon,
 };

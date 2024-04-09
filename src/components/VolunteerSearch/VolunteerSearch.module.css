@@ -33,6 +33,7 @@
   background-color: #e7eeff;
   border-radius: 8px;
   flex: 34;
+  gap: 10px;
 }
 
 .search-bar {

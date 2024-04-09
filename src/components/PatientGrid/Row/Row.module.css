@@ -65,7 +65,7 @@
   background-color: var(--Selected-Blue, #e7eeff);
   display: flex;
   border-radius: 5px;
-  padding: 15px;
+  padding: 15px 30px;
   column-gap: 13px;
   flex-wrap: wrap;
   margin: 0 0 0 -10px;

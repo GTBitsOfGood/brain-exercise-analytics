@@ -9,6 +9,7 @@ import { HttpMethod, IUser } from "@/common_utils/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 
+import Modal from "@src/components/Modal/Modal";
 import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -38,23 +39,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       console.error(error);
     }
   }, [dispatch, email]);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles["navigation-panel"]}>
         <NavigationPanel onClick={() => setShowModal(!showModal)} />
       </div>
       <div className={styles["rest-of-page"]}>
-        {showModal && (
-          <div className={styles.accountEditModal}>
-            <div
-              className={styles.modalBackground}
-              onClick={() => setShowModal(false)}
-            />
-            <div className={styles.accountEditModalContent}>
-              <AccountEditModal />
-            </div>
-          </div>
-        )}
+        <Modal showModal={showModal} setShowModal={setShowModal}>
+          <AccountEditModal className={styles.accountEditModalContent} />
+        </Modal>
         {children}
       </div>
     </div>
