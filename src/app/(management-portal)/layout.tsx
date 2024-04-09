@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const user: IUser = await internalRequest({
+      const user = await internalRequest<IUser>({
         url: "/api/volunteer",
         method: HttpMethod.GET,
         authRequired: true,

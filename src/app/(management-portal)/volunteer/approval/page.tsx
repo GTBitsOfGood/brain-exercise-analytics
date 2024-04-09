@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
 import VolunteerApprovalGrid from "@src/components/VolunteerApprovalGrid/VolunteerApprovalGrid";
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+import { update } from "@src/redux/reducers/generalReducer";
 import { classes } from "@src/utils/utils";
 
 import { internalRequest } from "@src/utils/requests";
@@ -36,6 +37,7 @@ export default function Page() {
     beiChapters,
     volunteerRoles,
   } = useSelector((state: RootState) => state.volunteerSearch);
+  const dispatch = useDispatch();
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
@@ -71,6 +73,7 @@ export default function Page() {
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      dispatch(update({ pendingApprovals: res?.numRecords }));
       setLoading(false);
     });
   }, [
@@ -86,6 +89,7 @@ export default function Page() {
     volunteerRoles,
     currentPage,
     sortField,
+    dispatch,
   ]);
 
   useEffect(() => {
