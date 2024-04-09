@@ -1,4 +1,4 @@
-import { Dispatch, PayloadAction, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistStore,
   FLUSH,
@@ -10,25 +10,15 @@ import {
 } from "redux-persist";
 import rootReducer from "./rootReducer";
 
-const setToArray =
-  () => (next: Dispatch) => (action: PayloadAction<unknown>) => {
-    if (action.payload instanceof Set) {
-      return next({ ...action, payload: Array.from(action.payload) });
-    }
-    return next(action);
-  };
-
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => [
-    setToArray,
-    ...getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  ],
 });
 
 export const persistor = persistStore(store);
