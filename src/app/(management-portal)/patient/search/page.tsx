@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Dashboard } from "@mui/icons-material";
 import Search from "@src/components/Search/Search";
 
 import PatientGrid from "@src/components/PatientGrid/PatientGrid";
@@ -14,6 +13,8 @@ import {
   IPatientTableEntry,
   SearchResponseBody,
 } from "@/common_utils/types";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+import Modal from "@src/components/Modal/Modal";
 
 import firebaseInit from "@src/firebase/config";
 
@@ -43,8 +44,10 @@ export default function Page() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     internalRequest<SearchResponseBody<IPatientTableEntry>>({
       url: "/api/patient/filter-patient",
       method: HttpMethod.POST,
@@ -69,6 +72,7 @@ export default function Page() {
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      setLoading(false);
     });
   }, [
     fullName,
@@ -107,6 +111,15 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
+      <title>Patient Search | Brain Exercise Initiative</title>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0" }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <div className={classes(styles["search-container"])}>
         <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
         <div className={styles["search-wrapper"]}>
@@ -119,10 +132,6 @@ export default function Page() {
           styles["table-container-show"],
         )}
       >
-        <div className={styles["table-header"]}>
-          <Dashboard />
-          <p className={styles["table-header-text"]}>Patient Table</p>
-        </div>
         <PatientGrid
           data={filteredUsers}
           sortField={sortField}

@@ -435,3 +435,7 @@ export type IAggregatedGroupAnalyticsWriting = {
     >;
   };
 };
+
+export interface IGeneralReducer {
+  pendingApprovals: number;
+}

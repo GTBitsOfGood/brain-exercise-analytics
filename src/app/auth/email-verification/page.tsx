@@ -56,11 +56,16 @@ export default function Page() {
   }, [verifyEmail, email]);
 
   if (loadingState === State.LOADING) {
-    return <div></div>;
+    return (
+      <div>
+        <title>Email Verification | Brain Exercise Initiative</title>
+      </div>
+    );
   }
 
   return (
     <div>
+      <title>Email Verification | Brain Exercise Initiative</title>
       {loadingState === State.ERROR && (
         <>
           <p className={styles["password-reset"]}>Error sending email</p>

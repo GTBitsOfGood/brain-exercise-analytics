@@ -72,6 +72,7 @@ export function Row({ row }: { row: GridRowDef }) {
       <tr className={styles.Row}>
         <td className={styles.RowCell}>
           <button
+            className={styles.caret}
             style={{
               rotate: view ? "90deg" : "0deg",
             }}
@@ -116,7 +117,7 @@ export function Row({ row }: { row: GridRowDef }) {
             className={styles.DatabaseButton}
             href={`/patient/analytics/${row.id}`}
           >
-            View
+            View Analytics
           </Link>
         </td>
       </tr>

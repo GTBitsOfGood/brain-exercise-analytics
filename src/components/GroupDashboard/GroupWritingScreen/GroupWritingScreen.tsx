@@ -36,7 +36,7 @@ export default function GroupWritingScreen({
     <div className={styles.container} style={style}>
       <div className={styles.header}>
         <WritingIcon />
-        <p>WRITING</p>
+        <p>Writing</p>
         <div className={styles.dateSelector}>
           <DateSelector
             selectedValue={menuState[0]}

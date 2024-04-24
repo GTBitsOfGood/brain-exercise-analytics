@@ -1,7 +1,8 @@
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { logout } from "../../redux/reducers/authReducer/index";
+import { CSSProperties, useState } from "react";
+import { classes } from "@src/utils/utils";
+
+import useAuth from "@src/hooks/useAuth";
 import styles from "./AccountEditModal.module.css";
 import Profile from "./Profile";
 import Password from "./Password";
@@ -11,18 +12,23 @@ const enum Page {
   PASSWORD,
 }
 
-const Modal = () => {
+interface Props {
+  className?: string;
+  style?: CSSProperties;
+}
+
+const Modal = ({ className, style }: Props) => {
   const [page, setPage] = useState<Page>(Page.PROFILE);
-  const dispatch = useDispatch();
+  const { logout } = useAuth();
   const router = useRouter();
 
-  const handleLogOut = () => {
-    dispatch(logout());
+  const handleLogOut = async () => {
+    await logout();
     router.push("/auth/login");
   };
 
   return (
-    <div className={styles.container}>
+    <div className={classes(styles.container, className)} style={style}>
       <div className={styles.left}>
         <div
           className={styles.profile}

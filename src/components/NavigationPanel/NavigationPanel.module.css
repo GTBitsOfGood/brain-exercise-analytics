@@ -97,13 +97,15 @@
 .red-bubble {
   background-color: #ea4335;
   color: white;
-  width: 24px;
+  width: fit-content;
+  min-width: 24px;
+  padding: 8px;
   height: 24px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   font-family: var(--font-poppins);
   font-weight: 600;
   margin-left: 10px;
@@ -309,12 +311,13 @@
   padding-left: 5%;
 }
 
-.patient-container {
+.volunteer-container {
   display: flex;
   padding-bottom: 30px;
+  cursor: pointer;
 }
 
-.patient-pfp {
+.volunteer-pfp {
   display: flex;
   width: 65px;
   height: 65px;
@@ -322,7 +325,7 @@
   border-radius: 50%;
 }
 
-.patient-info {
+.volunteer-info {
   display: flex;
   flex-direction: column;
   text-align: left;

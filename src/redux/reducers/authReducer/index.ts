@@ -6,7 +6,6 @@ import {
   RecursivePartial,
   Role,
 } from "@/common_utils/types";
-import { deleteCookie } from "cookies-next";
 
 const initialState: IUser = {
   _id: "",
@@ -85,8 +84,7 @@ const authReducer = createSlice({
       setState(state, action.payload);
     },
     // Clear the authState
-    logout(state) {
-      deleteCookie("authUser");
+    clear(state) {
       setState(state, initialState);
     },
     setFirstTimeLogin(state, action: PayloadAction<boolean>) {
@@ -95,6 +93,6 @@ const authReducer = createSlice({
   },
 });
 
-export const { update, logout, setFirstTimeLogin } = authReducer.actions;
+export const { update, clear, setFirstTimeLogin } = authReducer.actions;
 
 export default authReducer.reducer;

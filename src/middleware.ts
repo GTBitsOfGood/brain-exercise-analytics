@@ -1,11 +1,12 @@
 /* eslint-disable no-dupe-else-if */
 import {
-  IAuthUserCookie,
   HttpMethod,
   IUser,
   AdminApprovalStatus,
   Role,
 } from "@/common_utils/types";
+import { parseAuthCookie, signAuthCookie } from "@server/utils/utils";
+import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -19,10 +20,6 @@ export async function middleware(request: NextRequest) {
       new URL("/auth/login", request.nextUrl.origin),
     );
   }
-
-  const { user = {} as IUser, keepLogged = false } = JSON.parse(
-    request.cookies.get("authUser")?.value ?? "{}",
-  ) as IAuthUserCookie;
 
   /* Unprotected routes; no need to check for user data */
   if (
@@ -50,6 +47,10 @@ export async function middleware(request: NextRequest) {
       new URL("/auth/login", request.nextUrl.origin),
     );
   }
+
+  const { user = {} as IUser, keepLogged = false } = await parseAuthCookie(
+    request.cookies.get("authUser")!.value,
+  );
 
   /*
     If the user is already verified, signed up, and approved:
@@ -169,11 +170,18 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  Response.cookies.set(
-    "authUser",
-    JSON.stringify({ user: fetchedUser, keepLogged }),
-    keepLogged ? { maxAge: 7 * 24 * 60 * 60 } : undefined,
-  );
+  const signedCookieValue = await signAuthCookie({
+    user: fetchedUser,
+    keepLogged,
+  });
+  const cookiesConfig: ResponseCookie = {
+    name: "authUser",
+    value: signedCookieValue,
+  };
+  if (keepLogged) {
+    cookiesConfig.maxAge = 7 * 24 * 60 * 60;
+  }
+  Response.cookies.set(cookiesConfig);
   return Response;
 }
 

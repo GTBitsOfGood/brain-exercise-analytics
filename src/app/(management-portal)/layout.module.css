@@ -22,25 +22,7 @@
   min-height: 100vh;
 }
 
-.accountEditModal {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: calc(100% - 304px);
-  height: 100vh;
-  z-index: 9;
-}
-
-.modalBackground {
-  position: absolute;
-  background-color: #9ca5c2f0;
-  width: 100%;
-  height: 100%;
-}
-
 .accountEditModalContent {
-  width: 80%;
-  height: 80%;
-  z-index: 10;
+  width: 85%;
+  height: 85%;
 }

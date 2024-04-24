@@ -28,6 +28,7 @@
 
 .search-container {
   display: flex;
+  gap: 10px;
   flex-direction: row;
   -ms-flex-align: center;
   background-color: #e7eeff;

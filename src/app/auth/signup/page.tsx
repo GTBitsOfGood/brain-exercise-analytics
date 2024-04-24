@@ -7,6 +7,8 @@ import { FirebaseError } from "firebase/app";
 import { User } from "firebase/auth";
 import { update } from "@src/redux/reducers/authReducer";
 import { useDispatch } from "react-redux";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+import Modal from "@src/components/Modal/Modal";
 
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
@@ -27,6 +29,7 @@ export default function Page() {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const resetErrors = () => {
     setEmailError("");
@@ -37,6 +40,7 @@ export default function Page() {
 
   const handleSignUp = async (signUp: () => Promise<User | null>) => {
     try {
+      setLoading(true);
       const user = await signUp();
       if (!user || !user.email) {
         throw new Error("Error signing up");
@@ -51,7 +55,6 @@ export default function Page() {
       });
 
       dispatch(update(userMongo));
-
       router.push("/auth/email-verification");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -63,6 +66,7 @@ export default function Page() {
             setShowGeneralError(true);
         }
       }
+      setLoading(false);
     }
   };
 
@@ -113,6 +117,15 @@ export default function Page() {
 
   return (
     <div>
+      <title>Sign Up | Brain Exercise Initiative</title>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0", width: "100%", left: 0 }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <p className={styles.signUpLabel}>Create an account</p>
       <p className={styles.descriptionText}>
         Enter your email and password to sign up!

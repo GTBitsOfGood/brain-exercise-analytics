@@ -24,40 +24,29 @@
   text-overflow: ellipsis;
   max-width: 97%;
   font-family: var(--font-poppins);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   padding-left: 7px;
 }
-
 .RowCellContainer::-webkit-scrollbar {
   display: none;
 }
 
-.ExpandedRow {
-  width: 100%;
-  border-radius: 5px;
-  background-color: var(--Selected-Blue, #e7eeff);
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-}
-
 .ExpandedRowContainer {
-  width: 108.2%;
-  border-radius: 5px;
+  width: calc(100% + 20px);
   background-color: var(--Selected-Blue, #e7eeff);
   display: flex;
   border-radius: 5px;
   padding: 15px;
   column-gap: 13px;
   flex-wrap: wrap;
-  margin: 0 0 0 -3.8%;
+  margin: 0 0 0 -10px;
 }
 
 .ExpandedRowColumn {
   display: flex;
   color: #2b3674;
-  font-size: 13px;
+  font-size: 14px;
   flex-direction: column;
 }
 
@@ -107,7 +96,7 @@
 
 .actionsContainer > * {
   font-family: var(--font-poppins);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #2b3674;
 

@@ -32,11 +32,12 @@ const Page = () => {
   }, [router, email]);
 
   if (!adminApprovalStatus) {
-    return null;
+    return <title>Pending Admin Approval | Brain Exercise Initiative</title>;
   }
 
   return (
     <div>
+      <title>Pending Admin Approval | Brain Exercise Initiative</title>
       {adminApprovalStatus === AdminApprovalStatus.PENDING && (
         <>
           <p className={styles["password-reset"]}>
