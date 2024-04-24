@@ -1,13 +1,14 @@
 // Modified API Wrapper Inspired By Nationals NPP Portal: https://github.com/GTBitsOfGood/national-npp/blob/main/server/utils/APIWrapper.ts
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import { IAuthUserCookie, IUser, Role } from "@/common_utils/types";
+import { IUser, Role } from "@/common_utils/types";
 import { getEmailFromIdToken } from "@server/firebase/auth";
 import dbConnect from "@server/mongodb/config";
 import firebaseConfig from "@server/firebase/config";
 import { getUserByEmail } from "@server/mongodb/actions/User";
 import { getAuth } from "firebase-admin/auth";
 import { cookies } from "next/headers";
+import { parseAuthCookie, signAuthCookie } from "./utils";
 
 interface RouteConfig {
   requireToken?: boolean;
@@ -120,9 +121,9 @@ function APIWrapper(route: Route<unknown>) {
         const newUser = updateCookie[0].user;
         let newKeepLogged = updateCookie[0].keepLogged;
         if (newKeepLogged === undefined) {
-          const oldCookie = JSON.parse(
-            req.cookies.get("authUser")?.value ?? "{}",
-          ) as IAuthUserCookie;
+          const oldCookie = await parseAuthCookie(
+            req.cookies.get("authUser")!.value,
+          );
           if (oldCookie.keepLogged !== undefined) {
             newKeepLogged = oldCookie.keepLogged;
           } else {
@@ -130,9 +131,13 @@ function APIWrapper(route: Route<unknown>) {
           }
         }
 
+        const signedCookieValue = await signAuthCookie({
+          user: newUser,
+          keepLogged: newKeepLogged,
+        });
         cookies().set({
           name: "authUser",
-          value: JSON.stringify({ user: newUser, keepLogged: newKeepLogged }),
+          value: signedCookieValue,
           maxAge: newKeepLogged ? 7 * 24 * 60 * 60 : undefined,
         });
       }

@@ -1,5 +1,6 @@
-import { DateRangeEnum, IUser } from "@/common_utils/types";
+import { DateRangeEnum, IAuthUserCookie, IUser } from "@/common_utils/types";
 import { getLowerAdminRoles } from "@src/utils/utils";
+import { SignJWT, jwtVerify } from "jose";
 
 export function getCurrentMonday() {
   const date = new Date();
@@ -46,4 +47,19 @@ export function checkValidUserPermissions(
     return true;
   }
   return false;
+}
+
+export async function parseAuthCookie(cookie: string) {
+  const encoder = new TextEncoder();
+  const jwt = await jwtVerify(cookie, encoder.encode(process.env.JWT_SECRET));
+  return jwt.payload.data as IAuthUserCookie;
+}
+
+export async function signAuthCookie(data: IAuthUserCookie) {
+  const encoder = new TextEncoder();
+  const jwt = await new SignJWT({ data })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("1 week")
+    .sign(encoder.encode(process.env.JWT_SECRET));
+  return jwt;
 }
