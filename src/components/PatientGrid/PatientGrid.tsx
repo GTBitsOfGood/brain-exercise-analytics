@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { IPatientTableEntry, SortField } from "@/common_utils/types";
 import { transformDate } from "@src/utils/utils";
 import { useMemo } from "react";
 import { GridColDef } from "@src/utils/types";
+import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
+
 import DataGrid from "../DataGrid/DataGrid";
 import Pagination from "../Pagination/Pagination";
 import styles from "./PatientGrid.module.css";
@@ -60,7 +63,7 @@ const columns: GridColDef[] = [
 
   {
     field: "database",
-    headerName: "Database",
+    headerName: "",
     type: "string",
   },
 ];
@@ -69,14 +72,31 @@ function ColumnSizes() {
   return (
     <colgroup>
       <col style={{ width: "2%" }} />
-      <col style={{ width: "10%" }} />
-      <col style={{ width: "10%" }} />
-      <col style={{ width: "11%" }} />
       <col style={{ width: "7%" }} />
-      <col style={{ width: "18%" }} />
-      <col style={{ width: "18%" }} />
+      <col style={{ width: "7%" }} />
+      <col style={{ width: "7%" }} />
+      <col style={{ width: "6%" }} />
+      <col style={{ width: "12%" }} />
+      <col style={{ width: "12%" }} />
       <col style={{ width: "8%" }} />
     </colgroup>
+  );
+}
+
+function Header() {
+  return (
+    <div className={styles["table-header"]}>
+      <div className={styles["table-header-left"]}>
+        <TwoVolunteersIcon />
+        <p>Patient List</p>
+      </div>
+      <Link
+        className={styles["table-header-database-button"]}
+        href="/patient/analytics/group"
+      >
+        View Group Analytics
+      </Link>
+    </div>
   );
 }
 
@@ -111,6 +131,7 @@ export default function PatientGrid(params: PatientGridProps) {
   return (
     <div className={styles.Container}>
       <DataGrid
+        Header={<Header />}
         columns={columns}
         sortField={params.sortField}
         setSortField={params.setSortField}

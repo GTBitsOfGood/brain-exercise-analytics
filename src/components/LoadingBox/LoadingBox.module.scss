@@ -1,0 +1,37 @@
+.container {
+  width: 40%;
+  height: 22%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+
+  .box {
+    display: flex;
+    padding: 24px 12px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    .icon {
+      animation: rotation 2s infinite linear;
+
+      @keyframes rotation {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(359deg);
+        }
+      }
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #2b3674;
+    }
+  }
+}

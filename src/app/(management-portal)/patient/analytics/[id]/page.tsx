@@ -18,6 +18,7 @@ import {
 import {
   AnalyticsSectionEnum,
   DateRangeEnum,
+  Days,
   HttpMethod,
   IAggregatedAnalyticsAll,
   IAggregatedAnalyticsMath,
@@ -33,6 +34,8 @@ import {
   numberOfQuestionData,
 } from "@src/utils/patients";
 
+import Modal from "@src/components/Modal/Modal";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import { internalRequest } from "@src/utils/requests";
 
 import styles from "./page.module.scss";
@@ -90,18 +93,27 @@ export default function Page({ params }: { params: { id: string } }) {
     DateRangeEnum.RECENT,
   );
 
+  const [loading, setLoading] = useState(false);
+
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
-      const data = await internalRequest<T>({
-        url: "/api/patient/analytics",
-        method: HttpMethod.GET,
-        queryParams: {
-          id: params.id,
-          range,
-          sections: JSON.stringify(sections),
-        },
-      });
-      return data;
+      setLoading(true);
+      try {
+        const data = await internalRequest<T>({
+          url: "/api/patient/analytics",
+          method: HttpMethod.GET,
+          queryParams: {
+            id: params.id,
+            range,
+            sections: JSON.stringify(sections),
+          },
+        });
+        setLoading(false);
+        return data;
+      } catch {
+        setLoading(false);
+        return {} as IAggregatedAnalyticsAll;
+      }
     },
     [params.id],
   );
@@ -180,12 +192,29 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className={styles.container}>
+      <title>Patient Analytics | Brain Exercise Initiative</title>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0" }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <div className={styles.sectionContainer}>
         <OverallDashboard
           menuState={[dashboardMenu, updateAllAnalytics]}
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
-          streak={overall?.streak ?? []}
+          streak={
+            overall?.streak ?? [
+              Days.Sunday,
+              Days.Monday,
+              Days.Tuesday,
+              Days.Thursday,
+              Days.Friday,
+            ]
+          }
           startDate={
             overall?.startDate ? new Date(overall.startDate) : new Date()
           }

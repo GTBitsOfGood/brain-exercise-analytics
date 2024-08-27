@@ -64,7 +64,7 @@ export default function ReadingScreen({
     <div className={styles.container} style={style}>
       <div className={styles.header}>
         <ReadingIcon />
-        <p>READING</p>
+        <p>Reading</p>
         <div className={styles.dateSelector}>
           <DateSelector
             selectedValue={menuState[0]}

@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
+import { useDispatch, useSelector } from "react-redux";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
-
 import VolunteerApprovalGrid from "@src/components/VolunteerApprovalGrid/VolunteerApprovalGrid";
+import Modal from "@src/components/Modal/Modal";
+import LoadingBox from "@src/components/LoadingBox/LoadingBox";
+import { update } from "@src/redux/reducers/generalReducer";
 import { classes } from "@src/utils/utils";
+
 import { internalRequest } from "@src/utils/requests";
 import {
   AdminApprovalStatus,
@@ -17,7 +19,6 @@ import {
 } from "@/common_utils/types";
 
 import firebaseInit from "@src/firebase/config";
-
 import { RootState } from "@src/redux/rootReducer";
 import styles from "./page.module.css";
 
@@ -36,6 +37,7 @@ export default function Page() {
     beiChapters,
     volunteerRoles,
   } = useSelector((state: RootState) => state.volunteerSearch);
+  const dispatch = useDispatch();
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
@@ -44,8 +46,10 @@ export default function Page() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const fetchUsers = useCallback(() => {
+    setLoading(true);
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
       url: "/api/volunteer/filter-volunteer",
       method: HttpMethod.POST,
@@ -69,6 +73,8 @@ export default function Page() {
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      dispatch(update({ pendingApprovals: res?.numRecords }));
+      setLoading(false);
     });
   }, [
     fullName,
@@ -83,6 +89,7 @@ export default function Page() {
     volunteerRoles,
     currentPage,
     sortField,
+    dispatch,
   ]);
 
   useEffect(() => {
@@ -107,6 +114,15 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
+      <title>Volunteer Approval | Brain Exercise Initiative</title>
+      <Modal
+        showModal={loading}
+        setShowModal={setLoading}
+        style={{ backgroundColor: "#F4F7FEF0" }}
+        disableBackgroundClick
+      >
+        <LoadingBox />
+      </Modal>
       <div className={classes(styles["search-container"])}>
         <p className={styles["intro-text"]}>Search for a volunteer here!</p>
         <div className={styles["search-wrapper"]}>
@@ -119,10 +135,6 @@ export default function Page() {
           styles["table-container-show"],
         )}
       >
-        <div className={styles["table-header"]}>
-          <TwoVolunteersIcon />
-          <p className={styles["table-header-text"]}>Pending Approval</p>
-        </div>
         <VolunteerApprovalGrid
           data={filteredUsers}
           sortField={sortField}

@@ -45,11 +45,16 @@ export default function Page({ params }: PageProps) {
   }, [params.token, verifyEmail]);
 
   if (loadingState === State.LOADING) {
-    return <div></div>;
+    return (
+      <div>
+        <title>Email Verification | Brain Exercise Initiative</title>
+      </div>
+    );
   }
 
   return (
     <div>
+      <title>Email Verification | Brain Exercise Initiative</title>
       {loadingState === State.ERROR && (
         <>
           <p className={styles["password-reset"]}>Error verifying email</p>

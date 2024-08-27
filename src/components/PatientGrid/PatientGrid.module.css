@@ -4,3 +4,42 @@
   align-items: center;
   gap: 20px;
 }
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 15px 10px 30px;
+}
+
+.table-header-left {
+  display: flex;
+  column-gap: 24px;
+  align-items: center;
+}
+
+.table-header-left > p {
+  color: #2b3674;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.table-header-database-button {
+  width: fit-content;
+  padding: 6px 14px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  text-align: center;
+
+  background-color: #008afc;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 600;
+}

@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import useAuth from "@src/hooks/useAuth";
 import { formatPhoneNumber } from "@src/utils/utils";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { RootState } from "@src/redux/rootReducer";
 import { BlobServiceClient } from "@azure/storage-blob";
-import { logout, update } from "@src/redux/reducers/authReducer";
+import { update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IUser } from "@/common_utils/types";
@@ -15,6 +16,7 @@ export default function Profile() {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const router = useRouter();
+  const { logout } = useAuth();
 
   const {
     firstName,
@@ -146,7 +148,7 @@ export default function Profile() {
 
     // Logout user if email is changed so they can reauthenticate
     if (updatedEmail !== email) {
-      dispatch(logout());
+      await logout();
       router.push("/auth/login");
     }
 
@@ -155,6 +157,7 @@ export default function Profile() {
     setEdit(false);
   }, [
     dispatch,
+    logout,
     email,
     router,
     selectedImage,

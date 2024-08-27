@@ -51,20 +51,6 @@
   overflow: auto;
 }
 
-.table-header {
-  display: flex;
-  padding-left: 23px;
-  column-gap: 24px;
-  padding-bottom: 20px;
-  align-items: center;
-}
-
-.table-header > p {
-  color: #2b3674;
-  font-size: 26px;
-  font-weight: 700;
-}
-
 .arrowButton {
   background-color: #ffffff;
   border: 1px solid #c4cdd5;

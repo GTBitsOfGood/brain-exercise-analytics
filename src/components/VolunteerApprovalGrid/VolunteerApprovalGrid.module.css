@@ -10,6 +10,19 @@
   border-collapse: collapse;
 }
 
+.table-header {
+  padding: 25px 30px 5px;
+  display: flex;
+  column-gap: 24px;
+  align-items: center;
+}
+
+.table-header > p {
+  color: #2b3674;
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .topRow {
   background-color: #f4f4f4;
   color: #333;

@@ -1,6 +1,5 @@
 .DataGrid {
   width: 100%;
-  padding: 0 0 10px;
   background-color: white;
   border-radius: 15px;
 }
@@ -8,20 +7,35 @@
 .Container {
   width: 100%;
   height: 100%;
-  padding: 0 60px 0 49px;
+  padding: 0 10px;
+}
+
+.noResultsContainer {
+  width: fit-content;
+  align-self: center;
+  margin: 0 auto;
+
+  display: flex;
+  padding: 10px 25px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+
+  color: #2b3674;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .TopRow {
-  text-align: left;
-  color: var(--secondary-grey-600, #a3aed0);
+  color: #a3aed0;
   font-family: var(--font-poppins);
   font-size: 14px;
   font-weight: 500;
-  position: sticky;
-  top: 0;
-  z-index: 2;
   background-color: white;
-  padding: 45px 0px 10px 7px;
+  padding: 7px 0px 10px 7px;
   border-right: 3px solid transparent;
 
   -webkit-user-select: none; /* Safari */
@@ -36,7 +50,7 @@
 .TopRowContainer {
   display: flex;
   flex-direction: row;
-  column-gap: 4px;
+  column-gap: 7px;
   align-items: center;
 }
 
@@ -44,7 +58,6 @@
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  height: 100px;
 }
 
 .Table > thead {
@@ -58,9 +71,9 @@
 }
 
 .SortButtonInactive {
-  opacity: 0;
+  opacity: 0.35;
 }
 
 .SortButtonInactive:hover {
-  opacity: 0.75;
+  opacity: 0.65;
 }

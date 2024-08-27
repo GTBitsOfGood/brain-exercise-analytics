@@ -16,6 +16,9 @@ interface Props {
 
 const NavigationPanel = ({ onClick }: Props) => {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
+  const pendingApprovals = useSelector<RootState>(
+    (state) => state.generalInfo.pendingApprovals,
+  ) as number;
 
   const currentPath = usePathname();
 
@@ -108,7 +111,7 @@ const NavigationPanel = ({ onClick }: Props) => {
                 <div className={styles["overall-metrics"]}>
                   <span>Pending Approval</span>
                 </div>
-                <div className={styles["red-bubble"]}>1</div>
+                <div className={styles["red-bubble"]}>{pendingApprovals}</div>
               </Link>
             </div>
           </>
@@ -155,13 +158,13 @@ const NavigationPanel = ({ onClick }: Props) => {
 
       <div className={styles.bottomSection}>
         <div className={styles.divider} />
-        <div className={styles["patient-container"]} onClick={onClick}>
+        <div className={styles["volunteer-container"]} onClick={onClick}>
           <img
-            className={styles["patient-pfp"]}
+            className={styles["volunteer-pfp"]}
             src={imageLink || "https://via.placeholder.com/81x81"}
-            alt="Patient Profile Picture"
+            alt="Volunteer Profile Picture"
           />
-          <div className={styles["patient-info"]}>
+          <div className={styles["volunteer-info"]}>
             <span className={styles["user-name"]}>
               {firstName} {lastName}
             </span>

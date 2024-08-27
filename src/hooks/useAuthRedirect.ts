@@ -3,13 +3,14 @@
 /* eslint-disable consistent-return */
 
 import { HttpMethod, IUser } from "@/common_utils/types";
-import { update, logout } from "@src/redux/reducers/authReducer";
+import { update } from "@src/redux/reducers/authReducer";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useAuth from "@src/hooks/useAuth";
 
 export default function useAuthRedirect() {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
@@ -17,6 +18,7 @@ export default function useAuthRedirect() {
   const dispatch = useDispatch();
   const pathName = usePathname();
   const auth = getAuth();
+  const { logout } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [firstRetrieval, setFirstRetrieval] = useState(true);
@@ -40,7 +42,7 @@ export default function useAuthRedirect() {
     async function checkAndRedirect(currentUser: User | null): Promise<void> {
       if (!currentUser) {
         if (pathName !== "/auth/login" && pathName !== "/auth/signup") {
-          dispatch(logout());
+          await logout();
           return navigation.push("/auth/login");
         }
         return setLoading(false);
@@ -78,6 +80,7 @@ export default function useAuthRedirect() {
     return onAuthStateChanged(auth, checkAndRedirect);
   }, [
     user,
+    logout,
     navigation,
     dispatch,
     pathName,

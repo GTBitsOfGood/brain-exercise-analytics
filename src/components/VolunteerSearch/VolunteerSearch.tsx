@@ -4,7 +4,7 @@ import React, { FormEvent, MouseEvent, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 
-import { setFullName } from "@src/redux/reducers/volunteerSearchReducer";
+import { update } from "@src/redux/reducers/volunteerSearchReducer";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -35,7 +35,7 @@ export default function VolunteerSearch({ className, onSubmit }: SearchProps) {
       if (showAdvancedSearch) {
         setShowAdvancedSearch(!showAdvancedSearch);
       }
-      dispatch(setFullName(searchInput));
+      dispatch(update({ fullName: searchInput }));
       onSubmit?.();
     },
     [searchInput, showAdvancedSearch, onSubmit, dispatch],

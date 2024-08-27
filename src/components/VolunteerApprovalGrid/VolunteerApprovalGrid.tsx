@@ -5,9 +5,10 @@ import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
 import { IUser, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
+import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 
-import styles from "./VolunteerApprovalGrid.module.css";
 import { Row } from "./Row/Row";
+import styles from "./VolunteerApprovalGrid.module.css";
 
 interface VolunteerApprovalGridProps {
   data: IUser[];
@@ -39,6 +40,15 @@ function ColumnSizes() {
   );
 }
 
+function Header() {
+  return (
+    <div className={styles["table-header"]}>
+      <TwoVolunteersIcon />
+      <p className={styles["table-header-text"]}>Volunteer List</p>
+    </div>
+  );
+}
+
 export default function VolunteerApprovalGrid(
   params: VolunteerApprovalGridProps,
 ) {
@@ -57,6 +67,7 @@ export default function VolunteerApprovalGrid(
     <div className={styles.volunteerGridWrapper}>
       <div className={styles.volunteerGridTable}>
         <DataGrid
+          Header={<Header />}
           columns={columns}
           sortField={params.sortField}
           setSortField={params.setSortField}
