@@ -319,9 +319,10 @@
 
 .volunteer-pfp {
   display: flex;
-  width: 65px;
-  height: 65px;
-  background-color: black;
+  width: 81.452px;
+  height: 81.452px;
+  aspect-ratio: 1;
+  background-color: white;
   border-radius: 50%;
 }
 
