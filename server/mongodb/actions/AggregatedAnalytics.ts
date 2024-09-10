@@ -64,8 +64,8 @@ export const getAggregatedAnalytics = async (
   }
 
   const userRecords = await User.find<IUser>(
-    { userID: { $in: userIDs } },
-    { weeklyMetrics: { $slice: [1, numOfWeeks] } },
+    { _id: { $in: userIDs } },
+    { weeklyMetrics: { $slice: [0, numOfWeeks] } },
   );
 
   const analyticsRecords = await Analytics.find<IAnalytics>(
@@ -416,34 +416,32 @@ export const getAggregatedAnalytics = async (
     //       (groupSumArray.length === 7 && range === "half") ||
     //       (groupSumArray.length === 13 && range === "year")) {
     //   groupSumArray.pop()
-    // }s
-    console.log("Before final aggregation")
+    // }
+
     const finalAggregation: Partial<IAggregatedAnalyticsAll> = {};
     sections.forEach((type) => {
       switch (type) {
         case AnalyticsSectionEnum.OVERALL: {
-          console.log("second statement")
           if (!result.overall) return;
-          console.log(analyticsRecord)
-          console.log(" \n \n IN BETWEEN \n \n")
-          console.log(user)
+          analyticsRecord.lastSessionMetrics = Array.isArray(analyticsRecord.lastSessionMetrics) ? analyticsRecord.lastSessionMetrics : [analyticsRecord.lastSessionMetrics]
+
           finalAggregation.overall = {
             ...result.overall,
             active: analyticsRecord.active,
             streak: analyticsRecord.streak,
             startDate: user?.startDate ? new Date(user.startDate) : new Date(),
-            lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
+            lastSessionDate: analyticsRecord.lastSessionMetrics[0].date,
             totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
             lastSession: {
               mathQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics[0].math.questionsAttempted,
               wordsRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics[0].reading.passagesRead,
               promptsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].writing
+                analyticsRecord.lastSessionMetrics[0].writing
                   .questionsAnswered, // writing
               triviaQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
+                analyticsRecord.lastSessionMetrics[0].trivia
                   .questionsAttempted,
             },
             name: `${user.firstName} ${user.lastName}`,
@@ -456,20 +454,20 @@ export const getAggregatedAnalytics = async (
             ...result.math,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].math
+                analyticsRecord.lastSessionMetrics[0].math
                   .questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].math
+                  : analyticsRecord.lastSessionMetrics[0].math
                       .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].math
+                    analyticsRecord.lastSessionMetrics[0].math
                       .questionsAttempted,
               difficultyScore:
-                analyticsRecord.lastSessionsMetrics[0].math
+                analyticsRecord.lastSessionMetrics[0].math
                   .finalDifficultyScore,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics[0].math.questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].math.timePerQuestion,
+                analyticsRecord.lastSessionMetrics[0].math.timePerQuestion,
             },
           };
           break;
@@ -480,11 +478,11 @@ export const getAggregatedAnalytics = async (
             ...result.reading,
             lastSession: {
               passagesRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics[0].reading.passagesRead,
               timePerPassage:
-                analyticsRecord.lastSessionsMetrics[0].reading.timePerPassage,
+                analyticsRecord.lastSessionMetrics[0].reading.timePerPassage,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].reading
+                analyticsRecord.lastSessionMetrics[0].reading
                   .questionsAnswered !== 0,
             },
           };
@@ -496,12 +494,12 @@ export const getAggregatedAnalytics = async (
             ...result.writing,
             lastSession: {
               promptsAnswered:
-                analyticsRecord.lastSessionsMetrics[0].writing
+                analyticsRecord.lastSessionMetrics[0].writing
                   .questionsAnswered,
               timePerPrompt:
-                analyticsRecord.lastSessionsMetrics[0].writing.timePerQuestion,
+                analyticsRecord.lastSessionMetrics[0].writing.timePerQuestion,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].writing
+                analyticsRecord.lastSessionMetrics[0].writing
                   .questionsAnswered !== 0,
             },
           };
@@ -513,18 +511,18 @@ export const getAggregatedAnalytics = async (
             ...result.trivia,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].trivia
+                analyticsRecord.lastSessionMetrics[0].trivia
                   .questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].trivia
+                  : analyticsRecord.lastSessionMetrics[0].trivia
                       .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].trivia
+                    analyticsRecord.lastSessionMetrics[0].trivia
                       .questionsAttempted,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
+                analyticsRecord.lastSessionMetrics[0].trivia
                   .questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].trivia.timePerQuestion,
+                analyticsRecord.lastSessionMetrics[0].trivia.timePerQuestion,
             },
           };
           break;

@@ -27,7 +27,7 @@ const AnalyticsSchema = new Schema({
     },
     default: [],
   },
-  lastSessionsMetrics: {
+  lastSessionMetrics: {
     type: [
       {
         date: Date,

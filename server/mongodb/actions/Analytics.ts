@@ -24,25 +24,25 @@ const checkNewDate = async (userID: string): Promise<null> => {
   const today = new Date();
 
   if (
-    analytics?.lastSessionsMetrics[0].date.getDay() !== today.getDay() ||
-    analytics?.lastSessionsMetrics[0].date.getMonth() !== today.getMonth() ||
-    analytics?.lastSessionsMetrics[0].date.getFullYear() !== today.getFullYear()
+    analytics?.lastSessionMetrics[0].date.getDay() !== today.getDay() ||
+    analytics?.lastSessionMetrics[0].date.getMonth() !== today.getMonth() ||
+    analytics?.lastSessionMetrics[0].date.getFullYear() !== today.getFullYear()
   ) {
     await Analytics.findOneAndUpdate({ userID }, [
       {
         $set: {
-          lastSessionsMetrics: {
+          lastSessionMetrics: {
             $cond: {
-              if: { $gt: [{ $size: "$lastSessionsMetrics" }, 1] },
-              then: { $slice: ["$lastSessionsMetrics", 1] },
-              else: "$lastSessionsMetrics",
+              if: { $gt: [{ $size: "$lastSessionMetrics" }, 1] },
+              then: { $slice: ["$lastSessionMetrics", 1] },
+              else: "$lastSessionMetrics",
             },
           },
         },
       },
       {
         $set: {
-          lastSessionsMetrics: {
+          lastSessionMetrics: {
             $concatArrays: [
               [
                 {
@@ -75,7 +75,7 @@ const checkNewDate = async (userID: string): Promise<null> => {
                   },
                 },
               ],
-              "$lastSessionsMetrics",
+              "$lastSessionMetrics",
             ],
           },
         },
@@ -103,7 +103,7 @@ export const updateSessionComplete = async (
         "weeklyMetrics.0.sessionsCompleted": 1,
       },
       $set: {
-        "lastSessionsMetrics.0.date": today,
+        "lastSessionMetrics.0.date": today,
       },
     },
     { new: true },
@@ -117,10 +117,10 @@ const checkSessionComplete = async (userID: string): Promise<null> => {
   const analytics = await Analytics.findOne<IAnalytics>({ userID });
 
   if (
-    analytics?.lastSessionsMetrics[0].math.attempted &&
-    analytics?.lastSessionsMetrics[0].trivia.attempted &&
-    analytics?.lastSessionsMetrics[0].reading.attempted &&
-    analytics?.lastSessionsMetrics[0].writing.attempted
+    analytics?.lastSessionMetrics[0].math.attempted &&
+    analytics?.lastSessionMetrics[0].trivia.attempted &&
+    analytics?.lastSessionMetrics[0].reading.attempted &&
+    analytics?.lastSessionMetrics[0].writing.attempted
   ) {
     await updateSessionComplete(userID);
   }
@@ -142,11 +142,11 @@ export const modifyMath = async (
     { userID },
     {
       $set: {
-        "lastSessionsMetrics.0.math.attempted": true,
-        "lastSessionsMetrics.0.math.questionsAttempted": questionsAttempted,
-        "lastSessionsMetrics.0.math.questionsCorrect": questionsCorrect,
-        "lastSessionsMetrics.0.math.timePerQuestion": timePerQuestion,
-        "lastSessionsMetrics.0.math.finalDifficultyScore": difficultyScore,
+        "lastSessionMetrics.0.math.attempted": true,
+        "lastSessionMetrics.0.math.questionsAttempted": questionsAttempted,
+        "lastSessionMetrics.0.math.questionsCorrect": questionsCorrect,
+        "lastSessionMetrics.0.math.timePerQuestion": timePerQuestion,
+        "lastSessionMetrics.0.math.finalDifficultyScore": difficultyScore,
       },
       $inc: {
         "weeklyMetrics.0.math.sessionsCompleted": 1,
@@ -177,10 +177,10 @@ export const modifyTrivia = async (
     { userID },
     {
       $set: {
-        "lastSessionsMetrics.0.trivia.attempted": true,
-        "lastSessionsMetrics.0.trivia.questionsAttempted": questionsAttempted,
-        "lastSessionsMetrics.0.trivia.questionsCorrect": questionsCorrect,
-        "lastSessionsMetrics.0.trivia.timePerQuestion": timePerQuestion,
+        "lastSessionMetrics.0.trivia.attempted": true,
+        "lastSessionMetrics.0.trivia.questionsAttempted": questionsAttempted,
+        "lastSessionMetrics.0.trivia.questionsCorrect": questionsCorrect,
+        "lastSessionMetrics.0.trivia.timePerQuestion": timePerQuestion,
       },
       $inc: {
         "weeklyMetrics.0.trivia.sessionsCompleted": 1,
@@ -213,11 +213,11 @@ export const modifyReading = async (
     { userID },
     {
       $set: {
-        "lastSessionsMetrics.0.reading.attempted": true,
-        "lastSessionsMetrics.0.reading.passagesRead": passagesRead,
-        "lastSessionsMetrics.0.reading.timePerPassage": timePerPassage,
-        "lastSessionsMetrics.0.reading.wordsPerMinute": wordsPerMinute,
-        "lastSessionsMetrics.0.reading.skipped": !completed,
+        "lastSessionMetrics.0.reading.attempted": true,
+        "lastSessionMetrics.0.reading.passagesRead": passagesRead,
+        "lastSessionMetrics.0.reading.timePerPassage": timePerPassage,
+        "lastSessionMetrics.0.reading.wordsPerMinute": wordsPerMinute,
+        "lastSessionMetrics.0.reading.skipped": !completed,
       },
       $inc: {
         "weeklyMetrics.0.reading.sessionsCompleted": increment,
@@ -249,10 +249,10 @@ export const modifyWriting = async (
     { userID },
     {
       $set: {
-        "lastSessionsMetrics.0.writing.attempted": true,
-        "lastSessionsMetrics.0.writing.questionsAnswered": questionsAnswered,
-        "lastSessionsMetrics.0.writing.timePerQuestion": timePerQuestion,
-        "lastSessionsMetrics.0.writing.skipped": !completed,
+        "lastSessionMetrics.0.writing.attempted": true,
+        "lastSessionMetrics.0.writing.questionsAnswered": questionsAnswered,
+        "lastSessionMetrics.0.writing.timePerQuestion": timePerQuestion,
+        "lastSessionMetrics.0.writing.skipped": !completed,
       },
       $inc: {
         "weeklyMetrics.0.writing.sessionsCompleted": increment,
