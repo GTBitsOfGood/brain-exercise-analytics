@@ -39,7 +39,7 @@ export const GET = APIWrapper({
       gameDetails: {
         active: analyticsRecord.active,
         streak: analyticsRecord.streak,
-        lastSessionMetrics: analyticsRecord.lastSessionMetrics,
+        lastSessionsMetrics: analyticsRecord.lastSessionsMetrics,
       },
     };
   },
