@@ -69,7 +69,7 @@ export const patientSignUp = async (
         firstName: data.firstName,
         lastName: data.lastName,
         phoneNumber: data.phoneNumber,
-        birthDate: data.birthDate,
+        birthDate: new Date(data.birthDate),
         patientDetails: {
           secondaryContactName: data.patientDetails.secondaryContactName,
           secondaryContactPhone: data.patientDetails.secondaryContactPhone,

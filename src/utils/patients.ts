@@ -10,7 +10,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     _id: "1",
     firstName: "John",
     lastName: "Doe",
-    birthDate: new Date("1990-01-01"),
+    birthDate: new Date("1990-01-01").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Jane Doe",
       secondaryContactPhone: "5552221515",
@@ -24,7 +24,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "California",
       city: "Los Angeles",
     },
-    startDate: new Date("2020-05-05"),
+    startDate: new Date("2020-05-05").toLocaleDateString(),
   },
   {
     _id: "2",

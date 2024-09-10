@@ -416,19 +416,22 @@ export const getAggregatedAnalytics = async (
     //       (groupSumArray.length === 7 && range === "half") ||
     //       (groupSumArray.length === 13 && range === "year")) {
     //   groupSumArray.pop()
-    // }
-
+    // }s
+    console.log("Before final aggregation")
     const finalAggregation: Partial<IAggregatedAnalyticsAll> = {};
-
     sections.forEach((type) => {
       switch (type) {
         case AnalyticsSectionEnum.OVERALL: {
+          console.log("second statement")
           if (!result.overall) return;
+          console.log(analyticsRecord)
+          console.log(" \n \n IN BETWEEN \n \n")
+          console.log(user)
           finalAggregation.overall = {
             ...result.overall,
             active: analyticsRecord.active,
             streak: analyticsRecord.streak,
-            startDate: user.startDate ?? new Date(),
+            startDate: user?.startDate ? new Date(user.startDate) : new Date(),
             lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
             totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
             lastSession: {

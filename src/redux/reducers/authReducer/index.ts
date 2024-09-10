@@ -13,8 +13,8 @@ const initialState: IUser = {
   lastName: "",
   email: "",
   phoneNumber: "",
-  startDate: new Date(),
-  birthDate: new Date(),
+  startDate: "",
+  birthDate: "",
   patientDetails: {
     secondaryContactName: "",
     secondaryContactPhone: "",

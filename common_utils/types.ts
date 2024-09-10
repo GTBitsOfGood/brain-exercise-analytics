@@ -82,8 +82,8 @@ export interface IUser {
   lastName: string;
   email: string;
   phoneNumber: string;
-  birthDate: Date;
-  startDate: Date;
+  birthDate: string;
+  startDate: string;
   patientDetails: {
     secondaryContactName: string;
     secondaryContactPhone: string;
@@ -319,7 +319,7 @@ export interface IPatientTableEntry
 }
 
 export interface IVolunteerTableEntry extends IUser {
-  startDate: Date;
+  startDate: string;
 }
 
 /* Single Patient Analytics Types */
