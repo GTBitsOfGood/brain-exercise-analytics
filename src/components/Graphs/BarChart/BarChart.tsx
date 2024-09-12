@@ -105,11 +105,17 @@ export default function BarChart({
   const [popupX, setPopupX] = useState<number | null>(null);
   const [popupY, setPopupY] = useState<number | null>(null);
 
-  const actualChange =
-    newData.length < 2
-      ? null
-      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+  let actualChange = null;
+
+  if (newData.length > 2) {
+    if (newData[newData.length - 2].value === 0) {
+      actualChange = 0;
+    } else {
+      actualChange =
+        newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
+    }
+  }
 
   const windowRef = useRef(null);
 
