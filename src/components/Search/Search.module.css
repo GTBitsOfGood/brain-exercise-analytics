@@ -70,7 +70,8 @@
   flex: 1;
 }
 
-.advanced-filter-hide, .advanced-filter-show {
+.advanced-filter-hide,
+.advanced-filter-show {
   color: #2b3674;
   word-wrap: break-word;
   cursor: pointer;
