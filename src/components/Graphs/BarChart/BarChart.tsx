@@ -29,7 +29,6 @@ interface DataParams extends D3Data {
   highlightLargest?: boolean;
   yLabel?: string;
   children?: ReactNode;
-  gridLines?: boolean;
   info?: string;
 }
 
@@ -60,7 +59,6 @@ export default function BarChart({
   highlightLargest = true,
   fullWidth = false,
   children,
-  gridLines = false,
   info = "",
   yLabel = "",
 }: DataParams) {
@@ -215,63 +213,6 @@ export default function BarChart({
       .tickPadding(15)
       .tickFormat(yAxisFormat);
 
-    if (gridLines) {
-      const yAxisGrid = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(-width + marginLeft + marginRight - 20)
-        .tickFormat(() => "");
-
-      const axisVert = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(0)
-        .tickFormat(() => "");
-
-      const axisHor = d3
-        .axisBottom(
-          d3.scaleLinear(
-            [0, newData.length - 1],
-            [marginLeft, width - marginRight + 20],
-          ),
-        )
-        .ticks(newData.length - 1)
-        .tickSizeOuter(0)
-        .tickSizeInner(0)
-        .tickFormat(() => "");
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
-
-      svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
-    }
-
     svg
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
@@ -313,7 +254,6 @@ export default function BarChart({
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
-    gridLines,
     width,
   ]);
 

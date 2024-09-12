@@ -27,7 +27,6 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   gradient?: boolean;
   info?: string;
-  gridLines?: boolean;
   yLabel?: string;
 }
 
@@ -58,7 +57,6 @@ export default function LineChart({
   fullWidth,
   info = "",
   yLabel = "",
-  gridLines = false,
 }: DataParams) {
   const updateNewData = useCallback(() => {
     const datapoints = 10;
@@ -100,12 +98,17 @@ export default function LineChart({
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState(0);
   const [popupY, setPopupY] = useState(0);
+  let actualChange = null;
 
-  const actualChange =
-    newData.length < 2
-      ? null
-      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+  if (newData.length > 2) {
+    if (newData[newData.length - 2].value === 0) {
+      actualChange = 0;
+    } else {
+      actualChange =
+        newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
+    }
+  }
 
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
@@ -194,62 +197,7 @@ export default function LineChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat(yAxisFormat);
-    if (gridLines) {
-      const yAxisGrid = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(-width + marginLeft + marginRight - 20)
-        .tickFormat(() => "");
 
-      const axisVert = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(0)
-        .tickFormat(() => "");
-
-      const axisHor = d3
-        .axisBottom(
-          d3.scaleLinear(
-            [0, newData.length - 1],
-            [marginLeft, width - marginRight + 20],
-          ),
-        )
-        .ticks(newData.length - 1)
-        .tickSizeOuter(0)
-        .tickSizeInner(0)
-        .tickFormat(() => "");
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
-
-      svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
-    }
     svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom})`)
@@ -288,7 +236,6 @@ export default function LineChart({
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
-    gridLines,
   ]);
 
   useEffect(() => {

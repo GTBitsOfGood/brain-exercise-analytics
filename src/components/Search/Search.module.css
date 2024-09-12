@@ -70,15 +70,21 @@
   flex: 1;
 }
 
-.advanced-filter {
+.advanced-filter-hide, .advanced-filter-show {
   color: #2b3674;
   word-wrap: break-word;
   cursor: pointer;
   min-width: min-content;
   flex: 2;
   display: flex;
-  flex-direction: row-reverse;
-  padding-right: 13px;
+  column-gap: 0px;
+  align-items: center;
+  padding: 5px;
+  border-radius: 25px;
+}
+
+.advanced-filter-show {
+  background-color: #e7eeff;
 }
 
 .tags {
