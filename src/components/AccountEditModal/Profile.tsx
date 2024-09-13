@@ -205,6 +205,7 @@ export default function Profile() {
   const openDialog = () => {
     fileInputRef.current?.click();
   };
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files === null || e.target.files.length < 1) {
@@ -232,7 +233,7 @@ export default function Profile() {
           <div>
             {imageLink ? 
               <img
-                src={imageLink}
+                src={tempImageLink || imageLink}
                 alt="Profile Image"
                 className={styles["profile-image"]}
                 onClick={openDialog}
