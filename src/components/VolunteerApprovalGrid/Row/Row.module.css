@@ -37,7 +37,8 @@
   background-color: var(--Selected-Blue, #e7eeff);
   display: flex;
   border-radius: 5px;
-  column-gap: 13px;
+  padding: 15px;
+  column-gap: 30px;
   flex-wrap: nowrap;
   margin: 0 0 0 -10px;
   padding: var(--24, 24px);
@@ -81,7 +82,7 @@
 
 .Detail {
   display: flex;
-  width: 300px;
+  width: 280px;
 }
 
 .Label {
