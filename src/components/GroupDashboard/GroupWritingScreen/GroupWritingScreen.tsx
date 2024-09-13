@@ -59,7 +59,6 @@ export default function GroupWritingScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
           />
           <BarChart
             width={325}
@@ -69,7 +68,6 @@ export default function GroupWritingScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
             info="Some info for testing purposes in bar chart"
           />
           <BarChart
@@ -81,7 +79,6 @@ export default function GroupWritingScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
           />
         </div>
         <div className={styles.textStats}>

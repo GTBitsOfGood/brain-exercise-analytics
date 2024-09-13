@@ -83,7 +83,6 @@ export default function GroupReadingScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
           />
           <BarChart
             width={325}
@@ -93,7 +92,6 @@ export default function GroupReadingScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
           />
           <LineChart
             width={325}
@@ -105,7 +103,6 @@ export default function GroupReadingScreen({
             info="Vidushi"
             data={readingRate}
             fullWidth
-            gridLines
           />
           <BarChart
             width={325}
@@ -115,7 +112,6 @@ export default function GroupReadingScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
             info="Hey this is just some info I thought you will find interesting."
           />
         </div>

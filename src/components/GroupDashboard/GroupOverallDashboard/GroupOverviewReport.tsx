@@ -81,7 +81,6 @@ export default function GroupOverviewReport(params: Params) {
           title="Average Session Completion History"
           data={params.sessionCompletionHistory}
           highlightLargest
-          gridLines
         />
         <BarChart
           className={styles.graph}
@@ -90,7 +89,6 @@ export default function GroupOverviewReport(params: Params) {
           title="Average Time Spent in App"
           data={params.sessionCompletionHistory}
           highlightLargest
-          gridLines
         />
       </div>
       <div className={styles.bottomContainer}>
