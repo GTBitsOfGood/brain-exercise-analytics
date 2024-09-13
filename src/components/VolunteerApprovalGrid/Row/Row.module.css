@@ -41,7 +41,6 @@
   column-gap: 30px;
   flex-wrap: nowrap;
   margin: 0 0 0 -10px;
-  padding: var(--24, 24px);
   align-items: center;
 }
 
