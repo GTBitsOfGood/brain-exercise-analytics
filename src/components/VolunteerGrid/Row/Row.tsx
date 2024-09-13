@@ -35,7 +35,22 @@ function ExpandedRow({ row }: { row: IUser }) {
       <td colSpan={6}>
         <div className={styles.ExpandedRowContainer}>
           <div className={styles.ExpandedRowColumn}>
-            <ProfilePicIcon />
+          {row.imageLink ? 
+              <img
+                src={row.imageLink}
+                alt="Profile Image"
+                className={styles["profile-image"]}
+                style={{
+                  width: "90px",
+                  height: "90px",
+                }}
+              /> :
+              <div className={styles["profile-image"]} style={{
+                  width: "90px",
+                  height: "90px",
+                }}><ProfilePicIcon/>
+              </div>
+            }
           </div>
           <div className={styles.ExpandedRowColumn}>
             <div className={styles.Header}>Profile Information</div>
