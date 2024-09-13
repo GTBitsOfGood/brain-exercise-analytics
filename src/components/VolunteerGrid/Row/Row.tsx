@@ -8,7 +8,9 @@ import {
   AdminApprovalStatus,
 } from "@/common_utils/types";
 import { SelectChangeEvent } from "@mui/material";
-import Dropdown, { DropdownOption } from "@src/components/Dropdown/Dropdown";
+import ApplyDropdown, {
+  DropdownOption,
+} from "@src/components/Dropdown/ApplyDropdown/ApplyDropdown";
 import { internalRequest } from "@src/utils/requests";
 import {
   classes,
@@ -147,7 +149,7 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
         </td>
         <td className={styles.RowCell}>
           <div className={styles.RowCellContainer}>
-            <Dropdown
+            <ApplyDropdown
               options={roleDropdownOptions}
               value={updatedRole}
               showError={false}
@@ -187,12 +189,21 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
               }}
               menuItemStyle={{
                 justifyContent: "left",
-                fontSize: "12px",
+                fontSize: "14px",
                 color: "#2B3674",
                 fontStyle: "normal",
                 fontWeight: 600,
                 lineHeight: "normal",
               }}
+              applyButtonStyle={{
+                fontSize: "14px",
+                color: "#2B3674",
+                backgroundColor: "#E3EAFC",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "normal",
+              }}
+              categoryName="Role"
             />
           </div>
         </td>
@@ -205,7 +216,7 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
         ) : (
           <td className={styles.RowCell}>
             <div className={styles.RowCellContainer}>
-              <Dropdown
+              <ApplyDropdown
                 options={volunteerStatusOptions}
                 value={updatedActive}
                 showError={false}
@@ -245,12 +256,21 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
                 }}
                 menuItemStyle={{
                   justifyContent: "left",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   color: "#2B3674",
                   fontStyle: "normal",
                   fontWeight: 600,
                   lineHeight: "normal",
                 }}
+                applyButtonStyle={{
+                  fontSize: "14px",
+                  color: "#2B3674",
+                  backgroundColor: "#E3EAFC",
+                  fontStyle: "normal",
+                  fontWeight: 600,
+                  lineHeight: "normal",
+                }}
+                categoryName="Status"
               />
             </div>
           </td>

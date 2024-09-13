@@ -3,7 +3,9 @@
 import { useMemo, useState, useCallback } from "react";
 import { HttpMethod, IUser, Role } from "@/common_utils/types";
 import { SelectChangeEvent } from "@mui/material";
-import Dropdown, { DropdownOption } from "@src/components/Dropdown/Dropdown";
+import ApplyDropdown, {
+  DropdownOption,
+} from "@src/components/Dropdown/ApplyDropdown/ApplyDropdown";
 import { internalRequest } from "@src/utils/requests";
 
 import {
@@ -141,7 +143,7 @@ export function Row({ volunteer, refreshUsers }: Props) {
         </td>
         <td className={styles.RowCell}>
           <div className={styles.RowCellContainer}>
-            <Dropdown
+            <ApplyDropdown
               className={styles.accessLevelContainer}
               options={roleDropdownOptions}
               value={updatedRole}
@@ -182,12 +184,21 @@ export function Row({ volunteer, refreshUsers }: Props) {
               }}
               menuItemStyle={{
                 justifyContent: "left",
-                fontSize: "12px",
+                fontSize: "14px",
                 color: "#2B3674",
                 fontStyle: "normal",
                 fontWeight: 600,
                 lineHeight: "normal",
               }}
+              applyButtonStyle={{
+                fontSize: "14px",
+                color: "#2B3674",
+                backgroundColor: "#E3EAFC",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "normal",
+              }}
+              categoryName="Role"
             />
           </div>
         </td>
