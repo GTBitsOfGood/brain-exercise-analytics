@@ -31,6 +31,7 @@
   height: 58px;
   padding: 16px;
 }
+
 .password {
   color: #2078c1;
   border-radius: 12px;
@@ -119,12 +120,23 @@
   flex-direction: row;
   background-color: white;
   padding-bottom: 4%;
+
+  .profile-image {
+    display: flex;
+    background-color: white;
+    border-radius: 50%;
+  }
 }
 
 .header img {
   border-radius: 10px;
 }
 .myContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--8, 8px);
   background-color: white;
   width: 100%;
   padding-left: 30px;

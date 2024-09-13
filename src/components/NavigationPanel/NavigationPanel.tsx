@@ -161,14 +161,14 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles.divider} />
         <div className={styles["volunteer-container"]} onClick={onClick}>
         
-        {/* <img
-          className={styles["volunteer-pfp"]}
-          src={imageLink || "https://placehold.co/81x81" }
-          alt="Volunteer Profile Picture"
-        /> */}
-        <div className={styles["volunteer-pfp"]}><ProfilePicIcon/></div>
-        
-        
+        {imageLink ? 
+          <img
+            className={styles["volunteer-pfp"]}
+            src={imageLink}
+            alt="Volunteer Profile Picture"
+          /> :
+          <div className={styles["volunteer-pfp"]}><ProfilePicIcon/></div>
+        } 
           
           <div className={styles["volunteer-info"]}>
             <span className={styles["user-name"]}>

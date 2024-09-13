@@ -7,6 +7,7 @@ import { RootState } from "@src/redux/rootReducer";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
+import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IUser } from "@/common_utils/types";
 import styles from "./AccountEditModal.module.css";
@@ -230,9 +231,9 @@ export default function Profile() {
         <div>
           <div>
             <img
-              src={tempImageLink || imageLink}
+              src={imageLink || "https://placehold.co/81x81"}
               alt="Profile Image"
-              className={styles.profileImage}
+              className={styles["profile-image"]}
               onClick={openDialog}
               style={{
                 width: "120px",
@@ -240,6 +241,14 @@ export default function Profile() {
                 cursor: edit ? "pointer" : "",
               }}
             />
+            {/* {imageLink ? 
+              <img
+                className={styles["volunteer-pfp"]}
+                src={imageLink}
+                alt="Volunteer Profile Picture"
+              /> :
+              <div className={styles.profileImage}><ProfilePicIcon/></div>
+            }  */}
 
             {edit && (
               <input
