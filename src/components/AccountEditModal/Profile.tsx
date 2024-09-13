@@ -230,25 +230,27 @@ export default function Profile() {
       <div className={styles.header}>
         <div>
           <div>
-            <img
-              src={imageLink || "https://placehold.co/81x81"}
-              alt="Profile Image"
-              className={styles["profile-image"]}
+            {imageLink ? 
+              <img
+                src={imageLink}
+                alt="Profile Image"
+                className={styles["profile-image"]}
+                onClick={openDialog}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  cursor: edit ? "pointer" : "",
+                }}
+              /> :
+            <div className={styles["profile-image"]} 
               onClick={openDialog}
               style={{
                 width: "120px",
                 height: "120px",
                 cursor: edit ? "pointer" : "",
-              }}
-            />
-            {/* {imageLink ? 
-              <img
-                className={styles["volunteer-pfp"]}
-                src={imageLink}
-                alt="Volunteer Profile Picture"
-              /> :
-              <div className={styles.profileImage}><ProfilePicIcon/></div>
-            }  */}
+              }}><ProfilePicIcon/>
+            </div>
+            } 
 
             {edit && (
               <input
