@@ -37,10 +37,11 @@
   background-color: var(--Selected-Blue, #e7eeff);
   display: flex;
   border-radius: 5px;
-  padding: 15px;
   column-gap: 13px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin: 0 0 0 -10px;
+  padding: var(--24, 24px);
+  align-items: center;
 }
 
 .ExpandedRowColumn {
@@ -48,6 +49,13 @@
   color: #2b3674;
   font-size: 14px;
   flex-direction: column;
+  justify-content: center;
+}
+
+.profile-image {
+  display: flex;
+  background-color: white;
+  border-radius: 50%;
 }
 
 .ExpandedRowColumn > div:first-child {
