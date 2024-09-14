@@ -231,7 +231,7 @@ export default function Profile() {
       <div className={styles.header}>
         <div>
           <div>
-            {imageLink ? 
+            {imageLink ? (
               <img
                 src={tempImageLink || imageLink}
                 alt="Profile Image"
@@ -242,16 +242,20 @@ export default function Profile() {
                   height: "120px",
                   cursor: edit ? "pointer" : "",
                 }}
-              /> :
-            <div className={styles["profile-image"]} 
-              onClick={openDialog}
-              style={{
-                width: "120px",
-                height: "120px",
-                cursor: edit ? "pointer" : "",
-              }}><ProfilePicIcon/>
-            </div>
-            } 
+              />
+            ) : (
+              <div
+                className={styles["profile-image"]}
+                onClick={openDialog}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  cursor: edit ? "pointer" : "",
+                }}
+              >
+                <ProfilePicIcon />
+              </div>
+            )}
 
             {edit && (
               <input

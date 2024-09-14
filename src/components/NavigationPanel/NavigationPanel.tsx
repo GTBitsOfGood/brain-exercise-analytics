@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { Role, IUser } from "@/common_utils/types";
-import { SearchIcon, BarChartIcon, PersonIcon, } from "@src/app/icons";
+import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
 import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
 
 import styles from "./NavigationPanel.module.css";
@@ -160,16 +160,18 @@ const NavigationPanel = ({ onClick }: Props) => {
       <div className={styles.bottomSection}>
         <div className={styles.divider} />
         <div className={styles["volunteer-container"]} onClick={onClick}>
-        
-        {imageLink ? 
-          <img
-            className={styles["volunteer-pfp"]}
-            src={imageLink}
-            alt="Volunteer Profile Picture"
-          /> :
-          <div className={styles["volunteer-pfp"]}><ProfilePicIcon/></div>
-        } 
-          
+          {imageLink ? (
+            <img
+              className={styles["volunteer-pfp"]}
+              src={imageLink}
+              alt="Volunteer Profile Picture"
+            />
+          ) : (
+            <div className={styles["volunteer-pfp"]}>
+              <ProfilePicIcon />
+            </div>
+          )}
+
           <div className={styles["volunteer-info"]}>
             <span className={styles["user-name"]}>
               {firstName} {lastName}
