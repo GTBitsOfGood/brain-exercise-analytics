@@ -17,6 +17,7 @@
   font-family: var(--font-poppins);
   font-weight: 400;
   color: #313144;
+  padding: 6px 0px 6px 0px;
 }
 
 .applyButtonMenuItem {
@@ -46,4 +47,15 @@
   display: flex;
   justify-content: flex-end;
   width: 30px;
+}
+
+.checkIcon svg {
+  height: 16px;
+  width: 16px;
+}
+
+.checkIcon svg g path {
+  height: 12px;
+  width: 12px;
+  fill: #2b3674 !important;
 }

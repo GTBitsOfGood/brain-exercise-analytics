@@ -3,7 +3,7 @@
 import React, { ReactNode, useCallback, useMemo, useState } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import CheckCircle from "@mui/icons-material/CheckCircle";
+import { CheckCircle } from "@src/app/icons";
 import { classes } from "@src/utils/utils";
 import {
   MenuItem,
@@ -146,6 +146,7 @@ export default function ApplyDropdown<T>(props: DropdownProps<T>) {
           PaperProps: {
             sx: {
               maxHeight: 200,
+              borderRadius: "12px",
             },
           },
           ...menuProps,
@@ -184,9 +185,7 @@ export default function ApplyDropdown<T>(props: DropdownProps<T>) {
                 {dropdownOption.displayValue}
               </div>
               <div className={classes(styles.checkIcon)}>
-                {dropdownOption.value === selected && (
-                  <CheckCircle sx={menuItemStyle} />
-                )}
+                {dropdownOption.value === selected && <CheckCircle />}
               </div>
             </MenuItem>
           );
