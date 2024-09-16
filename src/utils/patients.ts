@@ -10,7 +10,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
     _id: "1",
     firstName: "John",
     lastName: "Doe",
-    birthDate: new Date("1990-01-01"),
+    birthDate: new Date("1990-01-01").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Jane Doe",
       secondaryContactPhone: "5552221515",
@@ -24,13 +24,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "California",
       city: "Los Angeles",
     },
-    startDate: new Date("2020-05-05"),
+    startDate: new Date("2020-05-05").toLocaleDateString(),
   },
   {
     _id: "2",
     firstName: "Jane",
     lastName: "Smith",
-    birthDate: new Date("1992-02-02"),
+    birthDate: new Date("1992-02-02").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Ella Smith",
       secondaryContactPhone: "5553347890",
@@ -44,13 +44,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Ontario",
       city: "Toronto",
     },
-    startDate: new Date("2021-01-10"),
+    startDate: new Date("2021-01-10").toLocaleDateString(),
   },
   {
     _id: "3",
     firstName: "Alice",
     lastName: "Johnson",
-    birthDate: new Date("1985-03-03"),
+    birthDate: new Date("1985-03-03").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Michael Johnson",
       secondaryContactPhone: "5554567890",
@@ -64,13 +64,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "England",
       city: "London",
     },
-    startDate: new Date("2021-02-20"),
+    startDate: new Date("2021-02-20").toLocaleDateString(),
   },
   {
     _id: "4",
     firstName: "Bob",
     lastName: "Brown",
-    birthDate: new Date("1987-04-04"),
+    birthDate: new Date("1987-04-04").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Linda Brown",
       secondaryContactPhone: "5555678901",
@@ -84,13 +84,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "New South Wales",
       city: "Sydney",
     },
-    startDate: new Date("2021-03-15"),
+    startDate: new Date("2021-03-15").toLocaleDateString(),
   },
   {
     _id: "5",
     firstName: "Charlie",
     lastName: "Davis",
-    birthDate: new Date("1995-05-05"),
+    birthDate: new Date("1995-05-05").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Sarah Davis",
       secondaryContactPhone: "5556789012",
@@ -104,13 +104,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Maharashtra",
       city: "Mumbai",
     },
-    startDate: new Date("2021-04-22"),
+    startDate: new Date("2021-04-22").toLocaleDateString(),
   },
   {
     _id: "6",
     firstName: "Diana",
     lastName: "Evans",
-    birthDate: new Date("1980-06-06"),
+    birthDate: new Date("1980-06-06").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Peter Evans",
       secondaryContactPhone: "5557890123",
@@ -124,13 +124,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Rio de Janeiro",
       city: "Rio de Janeiro",
     },
-    startDate: new Date("2021-05-30"),
+    startDate: new Date("2021-05-30").toLocaleDateString(),
   },
   {
     _id: "7",
     firstName: "Evan",
     lastName: "Foster",
-    birthDate: new Date("1988-07-07"),
+    birthDate: new Date("1988-07-07").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Julia Foster",
       secondaryContactPhone: "5558901234",
@@ -144,13 +144,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Bavaria",
       city: "Munich",
     },
-    startDate: new Date("2021-07-14"),
+    startDate: new Date("2021-07-14").toLocaleDateString(),
   },
   {
     _id: "8",
     firstName: "Fiona",
     lastName: "Green",
-    birthDate: new Date("1993-08-08"),
+    birthDate: new Date("1993-08-08").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Mark Green",
       secondaryContactPhone: "5559012345",
@@ -164,13 +164,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Gauteng",
       city: "Johannesburg",
     },
-    startDate: new Date("2021-08-28"),
+    startDate: new Date("2021-08-28").toLocaleDateString(),
   },
   {
     _id: "9",
     firstName: "George",
     lastName: "Harris",
-    birthDate: new Date("1975-09-09"),
+    birthDate: new Date("1975-09-09").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Lucy Harris",
       secondaryContactPhone: "5550123456",
@@ -184,13 +184,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Tokyo",
       city: "Tokyo",
     },
-    startDate: new Date("2021-09-12"),
+    startDate: new Date("2021-09-12").toLocaleDateString(),
   },
   {
     _id: "10",
     firstName: "Hannah",
     lastName: "Adams",
-    birthDate: new Date("1997-10-10"),
+    birthDate: new Date("1997-10-10").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Oliver Adams",
       secondaryContactPhone: "5551234567",
@@ -204,13 +204,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Wellington",
       city: "Wellington",
     },
-    startDate: new Date("2021-10-05"),
+    startDate: new Date("2021-10-05").toLocaleDateString(),
   },
   {
     _id: "11",
     firstName: "David",
     lastName: "Johnson",
-    birthDate: new Date("1993-08-12"),
+    birthDate: new Date("1993-08-12").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Emma Johnson",
       secondaryContactPhone: "5558901234",
@@ -225,13 +225,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       city: "New York City",
     },
 
-    startDate: new Date("2021-05-20"),
+    startDate: new Date("2021-05-20").toLocaleDateString(),
   },
   {
     _id: "12",
     firstName: "Sophie",
     lastName: "Brown",
-    birthDate: new Date("1986-11-15"),
+    birthDate: new Date("1986-11-15").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Ryan Brown",
       secondaryContactPhone: "5552345678",
@@ -245,13 +245,13 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Île-de-France",
       city: "Paris",
     },
-    startDate: new Date("2021-06-10"),
+    startDate: new Date("2021-06-10").toLocaleDateString(),
   },
   {
     _id: "13",
     firstName: "Oliver",
     lastName: "White",
-    birthDate: new Date("1990-03-25"),
+    birthDate: new Date("1990-03-25").toLocaleDateString(),
     patientDetails: {
       secondaryContactName: "Ava White",
       secondaryContactPhone: "5553456789",
@@ -265,7 +265,7 @@ export const sampleTableEntries: IPatientTableEntry[] = [
       state: "Berlin",
       city: "Berlin",
     },
-    startDate: new Date("2021-07-15"),
+    startDate: new Date("2021-07-15").toLocaleDateString(),
   },
 ];
 

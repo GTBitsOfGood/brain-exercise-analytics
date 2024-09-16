@@ -49,7 +49,7 @@ export const POST = APIWrapper({
       firstName: signupData.firstName,
       lastName: signupData.lastName,
       phoneNumber: signupData.phoneNumber,
-      birthDate: signupData.birthDate,
+      birthDate: signupData.birthDate.toLocaleDateString(),
       patientDetails: {
         secondaryContactName: signupData.secondaryContactName,
         secondaryContactPhone: signupData.secondaryContactPhone,
