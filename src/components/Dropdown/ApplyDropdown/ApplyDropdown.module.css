@@ -14,7 +14,6 @@
 .defaultMenuItem {
   flex-grow: 1;
   font-size: 14px;
-  font-family: var(--font-poppins);
   font-weight: 400;
   color: #313144;
   padding: 6px 0px 6px 0px;
