@@ -7,7 +7,7 @@ interface SignupData {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  birthDate: Date;
+  birthDate: string;
   secondaryContactName: string;
   secondaryContactPhone: string;
 }
@@ -49,7 +49,7 @@ export const POST = APIWrapper({
       firstName: signupData.firstName,
       lastName: signupData.lastName,
       phoneNumber: signupData.phoneNumber,
-      birthDate: signupData.birthDate.toLocaleDateString(),
+      birthDate: signupData.birthDate,
       patientDetails: {
         secondaryContactName: signupData.secondaryContactName,
         secondaryContactPhone: signupData.secondaryContactPhone,
