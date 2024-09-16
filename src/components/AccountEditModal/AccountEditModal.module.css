@@ -123,6 +123,7 @@
 
   .profile-image {
     display: flex;
+    object-fit: cover;
     background-color: white;
     border-radius: 50%;
   }
