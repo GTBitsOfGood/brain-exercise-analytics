@@ -38,7 +38,7 @@
   display: flex;
   border-radius: 5px;
   padding: 15px;
-  column-gap: 13px;
+  column-gap: 30px;
   flex-wrap: wrap;
   margin: 0 0 0 -10px;
 }
@@ -48,6 +48,7 @@
   color: #2b3674;
   font-size: 14px;
   flex-direction: column;
+  justify-content: center;
 }
 
 .ExpandedRowColumn > div:first-child {
@@ -57,6 +58,13 @@
 
 .ExpandedRowColumn > div {
   margin-bottom: 4px;
+}
+
+.profile-image {
+  display: flex;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 50%;
 }
 
 .Header {
@@ -73,7 +81,7 @@
 
 .Detail {
   display: flex;
-  width: 300px;
+  width: 280px;
 }
 
 .Label {

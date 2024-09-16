@@ -7,6 +7,7 @@ import { RootState } from "@src/redux/rootReducer";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { update } from "@src/redux/reducers/authReducer";
 import { PencilIcon } from "@src/app/icons";
+import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
 import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IUser } from "@/common_utils/types";
 import styles from "./AccountEditModal.module.css";
@@ -204,6 +205,7 @@ export default function Profile() {
   const openDialog = () => {
     fileInputRef.current?.click();
   };
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files === null || e.target.files.length < 1) {
@@ -229,17 +231,31 @@ export default function Profile() {
       <div className={styles.header}>
         <div>
           <div>
-            <img
-              src={tempImageLink || imageLink}
-              alt="Profile Image"
-              className={styles.profileImage}
-              onClick={openDialog}
-              style={{
-                width: "120px",
-                height: "120px",
-                cursor: edit ? "pointer" : "",
-              }}
-            />
+            {imageLink ? (
+              <img
+                src={tempImageLink || imageLink}
+                alt="Profile Image"
+                className={styles["profile-image"]}
+                onClick={openDialog}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  cursor: edit ? "pointer" : "",
+                }}
+              />
+            ) : (
+              <div
+                className={styles["profile-image"]}
+                onClick={openDialog}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  cursor: edit ? "pointer" : "",
+                }}
+              >
+                <ProfilePicIcon />
+              </div>
+            )}
 
             {edit && (
               <input
