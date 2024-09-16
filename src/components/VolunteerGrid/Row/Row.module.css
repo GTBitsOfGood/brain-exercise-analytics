@@ -41,7 +41,7 @@
   border-radius: 5px;
   padding: 15px;
   column-gap: 30px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   margin: 0 0 0 -10px;
 }
 
