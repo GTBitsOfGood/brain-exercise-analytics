@@ -447,3 +447,17 @@ export type IAggregatedGroupAnalyticsWriting = {
 export interface IGeneralReducer {
   pendingApprovals: number;
 }
+
+/* Chapter Interface */
+
+export interface IChapter {
+  name: string;
+  chapterPresident: string;
+  patients: number;
+  yearFounded: number;
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  };
+}
