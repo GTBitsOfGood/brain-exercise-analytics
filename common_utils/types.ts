@@ -448,16 +448,16 @@ export interface IGeneralReducer {
   pendingApprovals: number;
 }
 
-/* Chapter Interface*/
+/* Chapter Interface */
 
 export interface IChapter {
-  name: string,
-  chapterPresident: string,
-  patients: number,
-  yearFounded: number,
+  name: string;
+  chapterPresident: string;
+  patients: number;
+  yearFounded: number;
   location: {
-    country: string,
-    state: string,
-    city: string,
-  },
+    country: string;
+    state: string;
+    city: string;
+  };
 }

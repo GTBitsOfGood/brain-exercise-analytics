@@ -43,12 +43,12 @@ export const getVolunteersFiltered = async ({
     userParamsObject.approved = { $in: paramsObject.approved };
   }
 
-  type AdminRoles = 
-  | Role.NONPROFIT_VOLUNTEER
-  | Role.NONPROFIT_ADMIN
-  | Role.NONPROFIT_CHAPTER_PRESIDENT
-  | Role.NONPROFIT_REGIONAL_COMMITTEE_MEMBER
-  | Role.NONPROFIT_DIRECTOR;
+  type AdminRoles =
+    | Role.NONPROFIT_VOLUNTEER
+    | Role.NONPROFIT_ADMIN
+    | Role.NONPROFIT_CHAPTER_PRESIDENT
+    | Role.NONPROFIT_REGIONAL_COMMITTEE_MEMBER
+    | Role.NONPROFIT_DIRECTOR;
 
   const allowedAdminRoles: AdminRoles[] = allowedRoles.filter(
     (role): role is AdminRoles => role !== Role.NONPROFIT_PATIENT,
@@ -56,12 +56,12 @@ export const getVolunteersFiltered = async ({
 
   userParamsObject.role = {
     $in: paramsObject.roles
-      ? paramsObject.roles.filter(
-          (role): role is AdminRoles => allowedAdminRoles.includes(role as AdminRoles)
+      ? paramsObject.roles.filter((role): role is AdminRoles =>
+          allowedAdminRoles.includes(role as AdminRoles),
         )
       : allowedAdminRoles,
   };
-  console.log(userParamsObject.role)
+  console.log(userParamsObject.role);
 
   if (paramsObject.emails) {
     userParamsObject.email = { $in: paramsObject.emails };
@@ -140,7 +140,6 @@ export const getVolunteersFiltered = async ({
           $sort: { _id: 1 },
         }
   ) as PipelineStage.Sort;
-
 
   // console.log(matchPipeline.$match.$and[0].beiChapter)
   const userFiltering = await User.aggregate([
