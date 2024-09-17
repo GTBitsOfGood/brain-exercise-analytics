@@ -6,12 +6,12 @@ import InputField from "@src/components/InputField/InputField";
 
 import CHAPTERS from "@src/utils/chapters";
 
-import { classes, transformDate } from "@src/utils/utils";
+import { classes, transformDate, getLowerAdminRoles } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { update, clear } from "@src/redux/reducers/volunteerSearchReducer";
-import { IVolunteerSearchReducer, Role } from "@/common_utils/types";
+import { IVolunteerSearchReducer } from "@/common_utils/types";
 import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
 import styles from "./VolunteerAdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -106,6 +106,10 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
   } = useSelector((volunteerSearchState: RootState) => {
     return volunteerSearchState.volunteerSearch;
   });
+
+  const currUserRole = useSelector(
+    (rootState: RootState) => rootState.auth.role,
+  );
 
   const tagsPresent = useMemo(
     () =>
@@ -245,10 +249,14 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     }),
   );
 
-  const ROLES = Object.keys(Role).map((key) => ({
-    value: Role[key as keyof typeof Role],
-    displayValue: Role[key as keyof typeof Role],
-  }));
+  const ROLES = useMemo(
+    () =>
+      getLowerAdminRoles(currUserRole).map((role) => ({
+        value: role,
+        displayValue: role,
+      })),
+    [currUserRole],
+  );
 
   const curryOnCloseSetTag = useCallback(
     <T,>(array: Array<T>, field: keyof IVolunteerSearchReducer) => {

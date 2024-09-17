@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  height: 40px;
+}
+
+.checkMenuItem {
+  display: flex;
+}
+
+.defaultMenuItem {
+  flex-grow: 1;
+  font-size: 14px;
+  font-weight: 400;
+  color: #313144;
+  padding: 6px 75px 6px 0px;
+}
+
+.applyButtonMenuItem {
+  margin: 12px 16px 12px 16px !important;
+  padding: 0px 0px 0px 0px !important;
+  border-radius: 12px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  font-weight: 400;
+  color: #313144;
+}
+
+.applyButton {
+  padding: 0px 10px 0px 10px;
+  border-radius: 12px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkIcon {
+  font-size: 14px;
+  display: flex;
+  justify-content: flex-end;
+  width: 30px;
+}
+
+.checkIcon svg {
+  height: 16px;
+  width: 16px;
+}
+
+.checkIcon svg g path {
+  height: 12px;
+  width: 12px;
+  fill: #2b3674 !important;
+}
