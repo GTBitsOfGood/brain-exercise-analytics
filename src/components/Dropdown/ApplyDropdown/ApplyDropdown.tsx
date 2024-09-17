@@ -145,7 +145,7 @@ export default function ApplyDropdown<T>(props: DropdownProps<T>) {
           disableScrollLock: true,
           PaperProps: {
             sx: {
-              maxHeight: 200,
+              maxHeight: 300,
               borderRadius: "12px",
             },
           },
