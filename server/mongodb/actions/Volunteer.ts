@@ -18,7 +18,7 @@ type VParam = {
   "location.country"?: object;
   "location.state"?: object;
   "location.city"?: object;
-  beiChapter?: object;
+  chapter?: object;
   birthDate?: object;
   email?: object;
   joinDate?: object;
@@ -43,15 +43,25 @@ export const getVolunteersFiltered = async ({
     userParamsObject.approved = { $in: paramsObject.approved };
   }
 
-  const allowedAdminRoles = allowedRoles.filter(
-    (role) => role !== Role.NONPROFIT_PATIENT,
+  type AdminRoles = 
+  | Role.NONPROFIT_VOLUNTEER
+  | Role.NONPROFIT_ADMIN
+  | Role.NONPROFIT_CHAPTER_PRESIDENT
+  | Role.NONPROFIT_REGIONAL_COMMITTEE_MEMBER
+  | Role.NONPROFIT_DIRECTOR;
+
+  const allowedAdminRoles: AdminRoles[] = allowedRoles.filter(
+    (role): role is AdminRoles => role !== Role.NONPROFIT_PATIENT,
   );
 
   userParamsObject.role = {
     $in: paramsObject.roles
-      ? paramsObject.roles.filter((role) => allowedAdminRoles.includes(role))
+      ? paramsObject.roles.filter(
+          (role): role is AdminRoles => allowedAdminRoles.includes(role as AdminRoles)
+        )
       : allowedAdminRoles,
   };
+  console.log(userParamsObject.role)
 
   if (paramsObject.emails) {
     userParamsObject.email = { $in: paramsObject.emails };
@@ -66,7 +76,7 @@ export const getVolunteersFiltered = async ({
     userParamsObject["location.city"] = { $in: paramsObject.cities };
   }
   if (paramsObject.beiChapters) {
-    userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
+    userParamsObject.chapter = { $in: paramsObject.beiChapters };
   }
   if (paramsObject.active !== undefined) {
     userParamsObject["adminDetails.active"] = paramsObject.active;
@@ -131,6 +141,8 @@ export const getVolunteersFiltered = async ({
         }
   ) as PipelineStage.Sort;
 
+
+  // console.log(matchPipeline.$match.$and[0].beiChapter)
   const userFiltering = await User.aggregate([
     matchPipeline,
     {
