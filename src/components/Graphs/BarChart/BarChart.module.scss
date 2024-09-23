@@ -13,6 +13,7 @@
   margin: auto;
   align-items: first baseline;
   height: 1.25em;
+  height: auto;
   .titleText {
     font-family: var(--font-poppins);
     font-weight: 500;
@@ -44,6 +45,7 @@
     cursor: pointer;
   }
   .percentageChange {
+    display: flex;
     font-family: var(--font-inter);
     font-weight: 700;
     margin-left: 12px;

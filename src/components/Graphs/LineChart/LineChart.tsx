@@ -47,8 +47,18 @@ export default function LineChart({
       0.1 *
         ((d3.max(data.map((v) => v.value)) ?? 1) -
           (d3.min(data.map((v) => v.value)) ?? 0)),
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    numDivisions: Math.min(
+      Math.max(
+        (d3.max(data.map((v) => v.value)) ?? 1) +
+          0.1 *
+            ((d3.max(data.map((v) => v.value)) ?? 1) -
+              (d3.min(data.map((v) => v.value)) ?? 0)) +
+          1,
+        2,
+      ),
+      5,
+    ),
+    format: d3.format("d"),
   },
   title,
   hoverable = false,
@@ -108,6 +118,8 @@ export default function LineChart({
         newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
     }
+  } else {
+    actualChange = 0;
   }
 
   function handleMouseMove(e: MouseEvent) {
@@ -225,6 +237,43 @@ export default function LineChart({
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
 
+    const axisVert = d3
+      .axisLeft(y)
+      .tickValues(
+        d3.range(
+          yAxis.min - 1,
+          yAxis.max + 1,
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+        ),
+      )
+      .tickSize(0)
+      .tickFormat(() => "");
+
+    const axisHor = d3
+      .axisBottom(
+        d3.scaleLinear(
+          [0, newData.length - 1],
+          [marginLeft, width - marginRight + 20],
+        ),
+      )
+      .ticks(newData.length - 1)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickFormat(() => "");
+
+    svg
+      .append("g")
+      .attr("class", `y-axis-vert`)
+      .attr("transform", `translate(${marginLeft - 5}, 0)`)
+      .call(axisVert);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(-5, ${height - marginBottom})`)
+      .attr("class", "x-axis-hor")
+      .style("font", `10px ${poppins500.style.fontFamily}`)
+      .call(axisHor);
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     width,
@@ -263,29 +312,39 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <div style={{ display: "inline-flex" }}>
-          <p className={styles.titleText}>{title}</p>
-          {info !== "" && (
-            <div
-              className={styles.info}
-              onClick={() => {
-                setInfoPopup(true);
-              }}
-              ref={infoButtonRef}
-            >
-              <InfoIcon />
-              <PopupModal
-                show={infoPopup}
-                info="Some information about line chart should come here."
-                style={{
-                  position: "fixed",
-                  top: `${popupY}px`,
-                  zIndex: 500,
-                  left: `${popupX}px`,
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            overflowX: "scroll",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <p className={styles.titleText}>{title}</p>
+            {info !== "" && (
+              <div
+                className={styles.info}
+                onClick={() => {
+                  setInfoPopup(true);
                 }}
-              />
-            </div>
-          )}
+                ref={infoButtonRef}
+              >
+                <InfoIcon />
+                <PopupModal
+                  show={infoPopup}
+                  info="Some information about line chart should come here."
+                  style={{
+                    position: "fixed",
+                    top: `${popupY}px`,
+                    zIndex: 500,
+                    left: `${popupX}px`,
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <p
             className={styles.percentageChangeIcon}
             style={{
@@ -300,9 +359,6 @@ export default function LineChart({
               (actualChange < 0
                 ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
                 : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-          </p>
-          <p className={styles.percentageChange}>
-            {actualChange !== null && percentageChange}
           </p>
         </div>
         <div style={{ display: "inline-flex" }}>

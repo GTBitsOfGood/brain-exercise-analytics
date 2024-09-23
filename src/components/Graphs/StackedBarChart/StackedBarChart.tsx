@@ -26,8 +26,8 @@ export default function StackedBarChart({
   yAxis = {
     min: 0,
     max: 1,
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    numDivisions: 2,
+    format: d3.format("d"),
   },
   hoverable = false,
   percentageChange = false,
