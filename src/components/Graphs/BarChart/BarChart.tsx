@@ -56,7 +56,6 @@ export default function BarChart({
   },
   hoverable = false,
   percentageChange = false,
-  highlightLargest = true,
   fullWidth = false,
   children,
   info = "",
@@ -99,7 +98,6 @@ export default function BarChart({
   const marginRight = 25;
   const marginBottom = 40;
   const marginLeft = 35;
-  const [largest, setLargest] = useState(-1);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
@@ -162,24 +160,6 @@ export default function BarChart({
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
-    function indexOfMax() {
-      if (newData.length === 0) {
-        return -1;
-      }
-
-      let max = newData[0].value;
-      let maxIndex = 0;
-
-      for (let i = 1; i < newData.length; i += 1) {
-        if (newData[i].value > max) {
-          maxIndex = i;
-          max = newData[i].value;
-        }
-      }
-
-      return maxIndex;
-    }
-    setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis-hor").remove();
@@ -420,13 +400,7 @@ export default function BarChart({
             newData.map((d, i) => {
               let color;
               if (activeIndex === i) {
-                if (highlightLargest && largest === i) {
-                  color = "#FFF749";
-                } else {
-                  color = "#32a1fc";
-                }
-              } else if (highlightLargest && largest === i) {
-                color = "#FF9FB3";
+                color = "#32a1fc";
               } else {
                 color = "#008AFC";
               }
