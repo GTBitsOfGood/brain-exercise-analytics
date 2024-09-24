@@ -127,7 +127,7 @@ export default function BarChart({
     const range = width - marginRight - marginLeft;
     const itemWidth = range / (data.length - 1);
     const index = Math.floor(
-      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
+      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth
     );
     setActiveIndex(index);
   }
@@ -138,11 +138,11 @@ export default function BarChart({
 
   const x = d3.scaleLinear(
     [0, newData.length - 1],
-    [marginLeft, width - marginRight],
+    [marginLeft, width - marginRight]
   );
   const y = d3.scaleLinear(
     [yAxis.min, yAxis.max],
-    [height - marginBottom, marginTop],
+    [height - marginBottom, marginTop]
   );
 
   useEffect(() => {
@@ -211,8 +211,8 @@ export default function BarChart({
         d3.range(
           yAxis.min > 0 ? yAxis.min : 0,
           yAxis.max + 1,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-        ),
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1)
+        )
       )
       .tickSizeOuter(0)
       .tickSizeInner(0)
@@ -232,7 +232,7 @@ export default function BarChart({
       .append("g")
       .attr(
         "transform",
-        `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
+        `translate(${barWidth / 2}, ${height - marginBottom + 15})`
       )
       .attr("class", "x-axis-bottom")
       .style("font", `10px ${inter500.style.fontFamily}`)
@@ -255,8 +255,8 @@ export default function BarChart({
         d3.range(
           yAxis.min - 1,
           yAxis.max + 1,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-        ),
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1)
+        )
       )
       .tickSize(0)
       .tickFormat(() => "");
@@ -265,8 +265,8 @@ export default function BarChart({
       .axisBottom(
         d3.scaleLinear(
           [0, newData.length - 1],
-          [marginLeft, width - marginRight + 20],
-        ),
+          [marginLeft, width - marginRight + 20]
+        )
       )
       .ticks(newData.length - 1)
       .tickSizeOuter(0)
@@ -418,8 +418,18 @@ export default function BarChart({
         <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
           {children ||
             newData.map((d, i) => {
-              const color =
-                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
+              let color;
+              if (activeIndex === i) {
+                if (highlightLargest && largest === i) {
+                  color = "#FFF749";
+                } else {
+                  color = "#32a1fc";
+                }
+              } else if (highlightLargest && largest === i) {
+                color = "#FF9FB3";
+              } else {
+                color = "#008AFC";
+              }
               return (
                 <Fragment key={i}>
                   <rect
