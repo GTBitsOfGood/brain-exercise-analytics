@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Search from "@src/components/Search/Search";
 
 import ChapterGrid from "@src/components/ChapterGrid/ChapterGrid";
+import { IChapter } from "@/common_utils/types";
 import { classes } from "@src/utils/utils";
 import { internalRequest } from "@src/utils/requests";
 import {
@@ -109,6 +110,20 @@ export default function Page() {
     sortField,
   ]);
 
+  const gatechChapter: IChapter = {
+    name: "Georgia Tech",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }
+
   return (
     <div className={styles.container}>
       <title>Patient Search | Brain Exercise Initiative</title>
@@ -133,7 +148,7 @@ export default function Page() {
         )}
       >
         <ChapterGrid
-          data={filteredUsers}
+          data={[gatechChapter]}
           sortField={sortField}
           setSortField={setSortField}
           setCurrentPage={setCurrentPage}
