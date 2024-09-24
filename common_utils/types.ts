@@ -454,7 +454,9 @@ export interface IChapter {
   name: string;
   chapterPresident: string;
   patients: number;
+  volunteers: number;
   yearFounded: number;
+  active: boolean;
   location: {
     country: string;
     state: string;
