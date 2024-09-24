@@ -26,7 +26,7 @@ export const GET = APIWrapper({
       throw new Error("User does not exist in the database");
     }
     if (!checkValidUserPermissions(currentUser!, user)) {
-      throw new Error("You do not have permission to acccess this user");
+      throw new Error("You do not have permission to access this user");
     }
 
     updateCookie?.push({ user });

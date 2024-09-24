@@ -32,9 +32,7 @@ const ChapterSchema = new Schema({
             city: "",
           }
     }
-
-  
 });
 
-const User = mongoose.models?.User ?? mongoose.model("Chapter", ChapterSchema);
-export default User;
+const Chapter = mongoose.models?.User ?? mongoose.model("Chapter", ChapterSchema);
+export default Chapter;
