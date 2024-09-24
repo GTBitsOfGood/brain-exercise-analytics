@@ -80,6 +80,25 @@ const NavigationPanel = ({ onClick }: Props) => {
             <div className={styles["volunteer-management"]}>
               Volunteer Management
             </div>
+
+            <div className={styles[`volunteer-patient-container`]}>
+              <Link
+                className={
+                  styles[
+                    `search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`
+                  ]
+                }
+                href="/chapter/search"
+              >
+                <div className={styles["icon-shadow"]}>
+                  <SearchIcon className={styles["icon-active"]} />
+                </div>
+                <span className={styles["search-volunteer-text"]}>
+                  Search Chapter
+                </span>
+              </Link>
+            </div>
+
             <div className={styles[`volunteer-patient-container`]}>
               <Link
                 className={

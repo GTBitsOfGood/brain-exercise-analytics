@@ -7,7 +7,7 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IChapter, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
-import styles from "./VolunteerGrid.module.css";
+import styles from "./ChapterGrid.module.css";
 import { Row } from "./Row/Row";
 
 interface ChapterGridProps {
@@ -20,23 +20,23 @@ interface ChapterGridProps {
 }
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "", width: 90 },
-  { field: "firstName", headerName: "Name", sortable: true },
-  { field: "startDate", headerName: "Date Joined", sortable: true },
-  { field: "role", headerName: "Access Level", sortable: true },
-  { field: "adminDetails.active", headerName: "Status", sortable: true },
+  { field: "name", headerName: "Name", sortable: true },
+  { field: "location", headerName: "Location", sortable: true },
+  { field: "yearFounded", headerName: "Year Founded", sortable: true },
+  { field: "volunteers", headerName: "Active Volunteers", sortable: true },
+  { field: "active", headerName: "Status", sortable: true },
   { field: "actions", headerName: "", sortable: false },
 ];
 
 function ColumnSizes() {
   return (
     <colgroup>
-      <col style={{ width: "2%" }} />
+      <col style={{ width: "5%" }} />
       <col style={{ width: "20%" }} />
       <col style={{ width: "15%" }} />
       <col style={{ width: "20%" }} />
       <col style={{ width: "20%" }} />
-      <col style={{ width: "13%" }} />
+      <col style={{ width: "10%" }} />
     </colgroup>
   );
 }
@@ -56,15 +56,14 @@ export default function ChapterGrid(params: ChapterGridProps) {
   const Rows = params.data.map((chapter) => {
     return (
       <Row
-        key={`chapter-${chapter.name}`}
-        chapter={volunteer}
+        chapter={chapter}
       />
     );
   });
 
   return (
-    <div className={styles.volunteerGridWrapper}>
-      <div className={styles.volunteerGridTable}>
+    <div className={styles.chapterGridWrapper}>
+      <div className={styles.chapterGridTable}>
         <DataGrid
           Header={<Header />}
           columns={columns}
@@ -74,9 +73,6 @@ export default function ChapterGrid(params: ChapterGridProps) {
           Rows={Rows}
         />
       </div>
-      {popupOpen && (
-        <Popup onClose={handleClosePopup} onConfirm={handleConfirmDelete} />
-      )}
       <Pagination
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}

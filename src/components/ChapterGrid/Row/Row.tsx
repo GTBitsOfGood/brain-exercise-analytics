@@ -157,7 +157,7 @@ export function Row({ chapter }: Props) {
             className={styles.DatabaseButton}
             href={`/chapter/${chapter.name}`}
             >
-            View Analytics
+            View Profile
           </Link>
         </td>
       </tr>
