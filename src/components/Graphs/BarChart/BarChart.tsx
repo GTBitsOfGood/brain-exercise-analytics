@@ -190,7 +190,7 @@ export default function BarChart({
       .tickValues(
         d3.range(
           yAxis.min > 0 ? yAxis.min : 0,
-          yAxis.max + 1,
+          yAxis.max + 0.000001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
@@ -297,22 +297,24 @@ export default function BarChart({
         height="10"
         fontSize={8}
       >
-        <div
-          style={{
-            textAlign: "center",
-            color: "#2B3674",
-            fontSize: "8px",
-            width: "12px",
-            borderRadius: "var(--12, 12px)",
-            background: "#E3EAFC",
-            height: "12px",
-            position: "relative",
-            bottom: "5%",
-            right: "5%",
-            overflow: "visible",
-          }}
-        >
-          {d.value}
+        <div>
+          <div
+            style={{
+              textAlign: "center",
+              color: "#2B3674",
+              fontSize: "8px",
+              width: "12px",
+              borderRadius: "var(--12, 12px)",
+              background: "#E3EAFC",
+              height: "12px",
+              position: "relative",
+              bottom: "5%",
+              right: "5%",
+              overflow: "visible",
+            }}
+          >
+            {d.value}
+          </div>
         </div>
       </foreignObject>
     );
