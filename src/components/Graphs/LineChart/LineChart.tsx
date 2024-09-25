@@ -37,26 +37,11 @@ export default function LineChart({
   height: providedHeight = 150,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
+    min: Math.floor(d3.min(data.map((v) => v.value)) ?? 0),
+    max: Math.ceil(d3.max(data.map((v) => v.value)) ?? 1),
     numDivisions: Math.min(
-      Math.max(
-        (d3.max(data.map((v) => v.value)) ?? 1) +
-          0.1 *
-            ((d3.max(data.map((v) => v.value)) ?? 1) -
-              (d3.min(data.map((v) => v.value)) ?? 0)) +
-          1,
-        2,
-      ),
       5,
+      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
     ),
     format: d3.format("d"),
   },
@@ -142,7 +127,7 @@ export default function LineChart({
   const windowRef = useRef(null);
 
   const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
+    [yAxis.min > 0 ? yAxis.min : 0, yAxis.max <= 1 ? yAxis.max : yAxis.max + 1],
     [height - marginBottom, marginTop],
   );
 
@@ -200,7 +185,7 @@ export default function LineChart({
       .axisLeft(y)
       .tickValues(
         d3.range(
-          yAxis.min,
+          yAxis.min > 0 ? yAxis.min : 0,
           yAxis.max + 0.000001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
@@ -241,7 +226,7 @@ export default function LineChart({
       .axisLeft(y)
       .tickValues(
         d3.range(
-          yAxis.min - 1,
+          yAxis.min > 0 ? yAxis.min : 0,
           yAxis.max + 1,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),

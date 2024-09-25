@@ -40,18 +40,12 @@ export default function BarChart({
   height: providedHeight = 180,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)) +
-      0.000001,
-    numDivisions: 5,
+    min: Math.ceil(d3.min(data.map((v) => v.value)) ?? 0),
+    max: Math.floor(d3.max(data.map((v) => v.value)) ?? 1),
+    numDivisions: Math.min(
+      5,
+      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    ),
     format: d3.format("d"),
   },
   hoverable = false,
@@ -138,8 +132,15 @@ export default function BarChart({
     [0, newData.length - 1],
     [marginLeft, width - marginRight],
   );
+
   const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
+    [
+      yAxis.min,
+      yAxis.max <= 1 ||
+      (((yAxis.max - yAxis.min) / (yAxis.numDivisions - 1)) * 10) % 10 === 0
+        ? yAxis.max
+        : yAxis.max + 1,
+    ],
     [height - marginBottom, marginTop],
   );
 
@@ -190,7 +191,7 @@ export default function BarChart({
       .tickValues(
         d3.range(
           yAxis.min > 0 ? yAxis.min : 0,
-          yAxis.max + 0.000001,
+          yAxis.max + 1,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
