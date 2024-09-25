@@ -41,7 +41,7 @@ export default function LineChart({
     max: Math.ceil(d3.max(data.map((v) => v.value)) ?? 1),
     numDivisions: Math.min(
       5,
-      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+      Math.ceil(d3.max(data.map((v) => v.value)) ?? 1) + 1,
     ),
     format: d3.format("d"),
   },
