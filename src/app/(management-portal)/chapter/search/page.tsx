@@ -110,7 +110,7 @@ export default function Page() {
     sortField,
   ]);
 
-  const gatechChapter: IChapter = {
+  const filteredChapters: IChapter[] = [{
     name: "Georgia Tech",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
@@ -122,7 +122,7 @@ export default function Page() {
       state: "Georgia",
       city: "Atlanta",
     }
-  }
+  }]
 
   return (
     <div className={styles.container}>
@@ -148,7 +148,7 @@ export default function Page() {
         )}
       >
         <ChapterGrid
-          data={[gatechChapter]}
+          data={filteredChapters}
           sortField={sortField}
           setSortField={setSortField}
           setCurrentPage={setCurrentPage}
