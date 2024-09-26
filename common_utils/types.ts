@@ -322,6 +322,10 @@ export interface IVolunteerTableEntry extends IUser {
   startDate: string;
 }
 
+export interface IChapterTableEntry {
+  name: string;
+}
+
 /* Single Patient Analytics Types */
 
 export interface IAggregatedAnalyticsAll

@@ -23,7 +23,7 @@ export default function ChapterSearch({ className, onSubmit }: SearchProps) {
 
   const { name } = useSelector((state: RootState) => state.chapterSearch);
 
-  const [searchInput, setSearchInput] = useState<string>(fullName);
+  const [searchInput, setSearchInput] = useState<string>(name);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
   const onSubmitSearch = useCallback(

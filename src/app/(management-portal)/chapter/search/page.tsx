@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Search from "@src/components/Search/Search";
-
+import ChapterSearch from "@src/components/ChapterSearch/ChapterSearch";
 import ChapterGrid from "@src/components/ChapterGrid/ChapterGrid";
 import { IChapter } from "@/common_utils/types";
 import { classes } from "@src/utils/utils";
@@ -11,7 +10,7 @@ import { internalRequest } from "@src/utils/requests";
 import {
   SortField,
   HttpMethod,
-  IPatientTableEntry,
+  IChapterTableEntry,
   SearchResponseBody,
 } from "@/common_utils/types";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
@@ -26,22 +25,11 @@ firebaseInit();
 
 export default function Page() {
   const {
-    fullName,
-    active,
-    countries,
-    states,
-    cities,
-    dateOfBirths,
-    emails,
-    additionalAffiliations,
-    dateOfJoins,
-    beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
-  } = useSelector((state: RootState) => state.patientSearch);
+    name
+  } = useSelector((state: RootState) => state.chapterSearch);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
-  const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
+  const [filteredChapters, setFilteredChapters] = useState<IChapterTableEntry[]>([]);
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -49,45 +37,23 @@ export default function Page() {
 
   useEffect(() => {
     setLoading(true);
-    internalRequest<SearchResponseBody<IPatientTableEntry>>({
+    internalRequest<SearchResponseBody<IChapterTableEntry>>({
       url: "/api/patient/filter-patient",
       method: HttpMethod.POST,
       body: {
         params: {
-          name: fullName,
-          dateOfBirths,
-          emails,
-          additionalAffiliations,
-          secondaryNames,
-          secondaryPhoneNumbers,
-          beiChapters,
-          active,
-          countries,
-          states,
-          cities,
-          dateOfJoins,
+          name: name
         },
         page: currentPage,
         sortParams: sortField,
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
-      setFilteredUsers(res?.data ?? []);
+      setFilteredChapters(res?.data ?? []);
       setLoading(false);
     });
   }, [
-    fullName,
-    active,
-    countries,
-    states,
-    cities,
-    dateOfBirths,
-    emails,
-    additionalAffiliations,
-    dateOfJoins,
-    beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
+    name,
     sortField,
     currentPage,
   ]);
@@ -95,22 +61,11 @@ export default function Page() {
   useEffect(() => {
     setCurrentPage(0);
   }, [
-    fullName,
-    active,
-    countries,
-    states,
-    cities,
-    dateOfBirths,
-    emails,
-    additionalAffiliations,
-    dateOfJoins,
-    beiChapters,
-    secondaryPhoneNumbers,
-    secondaryNames,
+    name,
     sortField,
   ]);
 
-  const filteredChapters: IChapter[] = [{
+  const testFilteredChapters: IChapter[] = [{
     name: "Georgia Tech",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
@@ -295,7 +250,7 @@ export default function Page() {
       <div className={classes(styles["search-container"])}>
         <p className={styles["intro-text"]}>Search Chapter at BEI</p>
         <div className={styles["search-wrapper"]}>
-          <Search />
+          <ChapterSearch/>
         </div>
       </div>
       <div

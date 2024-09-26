@@ -41,6 +41,7 @@ const rootReducer = persistReducer(
     auth: authReducer,
     patientSearch: patientSearchReducer,
     volunteerSearch: volunteerSearchReducer,
+    chapterSearch: chapterSearchReducer,
     generalInfo: generalReducer,
   }),
 );
