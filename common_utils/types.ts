@@ -463,3 +463,7 @@ export interface IChapter {
     city: string;
   };
 }
+
+export type IChapterSearchReducer = {
+  name: string;
+};

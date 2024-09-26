@@ -122,11 +122,168 @@ export default function Page() {
       state: "Georgia",
       city: "Atlanta",
     }
+  },
+  {
+    name: "UT Austin",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "Harvard",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "MIT",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "University of Georgia",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "Emory University",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "Georgia State University",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "UCLA",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "Duke University",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "Rice University",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "UC Berkeley",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "University of Connecticut",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "USC",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
+  }, {
+    name: "Oxford",
+    chapterPresident: "Nithya Kasaraneni",
+    patients: 22,
+    volunteers: 130,
+    yearFounded: 2018,
+    active: true,
+    location: {
+      country: "USA",
+      state: "Georgia",
+      city: "Atlanta",
+    }
   }]
 
   return (
     <div className={styles.container}>
-      <title>Patient Search | Brain Exercise Initiative</title>
+      <title>Chapter Search | Brain Exercise Initiative</title>
       <Modal
         showModal={loading}
         setShowModal={setLoading}
@@ -136,7 +293,7 @@ export default function Page() {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
+        <p className={styles["intro-text"]}>Search Chapter at BEI</p>
         <div className={styles["search-wrapper"]}>
           <Search />
         </div>
