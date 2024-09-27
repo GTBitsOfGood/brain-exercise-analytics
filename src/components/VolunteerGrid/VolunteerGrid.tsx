@@ -19,6 +19,11 @@ interface VolunteerGridProps {
   pageCount: number;
   currentPage: number;
   refreshUsers: () => void;
+  chapter?: string;
+}
+
+interface HeaderProps {
+  chapter?: string;
 }
 
 const columns: GridColDef[] = [
@@ -43,11 +48,13 @@ function ColumnSizes() {
   );
 }
 
-function Header() {
+function Header(params: HeaderProps) {
   return (
     <div className={styles["table-header"]}>
       <TwoVolunteersIcon />
-      <p className={styles["table-header-text"]}>Volunteer List</p>
+      <p className={styles["table-header-text"]}>
+        {params.chapter ? `${params.chapter} Chapter / ` : ""}Volunteer List
+      </p>
     </div>
   );
 }
@@ -99,7 +106,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
     <div className={styles.volunteerGridWrapper}>
       <div className={styles.volunteerGridTable}>
         <DataGrid
-          Header={<Header />}
+          Header={<Header chapter={params.chapter} />}
           columns={columns}
           sortField={params.sortField}
           setSortField={params.setSortField}
