@@ -97,6 +97,14 @@ export const getChaptersFiltered = async ({
 
 
 
+    const chapterFiltering = Chapter.aggregate(
+        
+
+    )
+
+
+
+
 
 
 
