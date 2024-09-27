@@ -245,6 +245,18 @@ export interface SearchResponseBody<T> {
   page: number;
 }
 
+
+
+export type ChapterSearchParams = {
+  name?: string;
+  chapterPresident?: string;
+  patients?: number;
+  yearFounded?: string[];
+  countries?: string[]
+  states?: string[];
+  cities?: string[];
+};
+
 /* Patient Search Specific Types */
 
 export type PatientSearchParams = {

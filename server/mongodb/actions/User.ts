@@ -332,7 +332,7 @@ export const getUsersFiltered = async ({
       },
     },
   ]);
-  // console.log(userFiltering[0].data[0]);
+  console.log(userFiltering[0].data[0]);
 
   return userFiltering[0] as SearchResponseBody<IPatientTableEntry> | undefined;
 };

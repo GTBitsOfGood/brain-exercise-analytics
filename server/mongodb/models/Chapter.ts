@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 import { AdminApprovalStatus, Role } from "@/common_utils/types";
+import { unique } from "next/dist/build/utils";
 
 const { Schema } = mongoose;
 
 const ChapterSchema = new Schema({
     name: {
         type: String,
-        default: ""
+        require: true,
+        unique: true,
     },
     chapterPresident: {
         type: mongoose.Schema.Types.ObjectId,
