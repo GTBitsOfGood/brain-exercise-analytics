@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { Role, IUser } from "@/common_utils/types";
 import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
+import HouseIcon from "@src/app/icons/HouseIcon";
 import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
 
 import styles from "./NavigationPanel.module.css";
@@ -94,6 +95,25 @@ const NavigationPanel = ({ onClick }: Props) => {
               Volunteer Management
             </div>
 
+            {user.role === Role.NONPROFIT_CHAPTER_PRESIDENT ? 
+              <div className={styles[`chapter-search-container`]}>
+                <Link
+                  className={
+                    styles[
+                      `search-chapter-${isChapterSearch ? "active" : "inactive"}`
+                    ]
+                  }
+                  href={"/chapter/" + user.chapter}
+                >
+                  <div className={styles["icon-shadow"]}>
+                    <HouseIcon/>
+                  </div>
+                  <span className={styles["search-chapter-text"]}>
+                    My Chapter
+                  </span>
+                </Link>
+              </div>
+            :
             <div className={styles[`chapter-search-container`]}>
               <Link
                 className={
@@ -111,6 +131,7 @@ const NavigationPanel = ({ onClick }: Props) => {
                 </span>
               </Link>
             </div>
+            }
 
             <div className={styles[`volunteer-search-container`]}>
               <Link
