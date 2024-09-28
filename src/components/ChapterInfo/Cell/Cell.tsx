@@ -34,6 +34,7 @@ export function Cell({ cell }: { cell: CellProps }) {
               <FontAwesomeIcon
                 icon={faAngleRight}
                 style={{ color: "#2b3674" }}
+                size="xs"
               />
             </div>
           )}

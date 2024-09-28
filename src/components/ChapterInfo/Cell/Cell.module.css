@@ -3,30 +3,30 @@
   background-color: white;
   display: flex;
   flex-direction: row;
-  padding: 8px;
+  padding: 12px;
   align-items: center;
   gap: 4px;
 }
 
 .cellIcon {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background-color: #e7eeff;
+  background-color: #e3eafc;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0px 5px;
+  margin: 0px 4px;
 }
 
 .cellInfo {
   display: flex;
   flex-direction: column;
-  margin: 0px 5px;
+  margin: 0px 4px;
 }
 
 .cellTitle > p {
-  color: #a3aed0;
+  color: #9ca5c2;
   font-family: var(--font-poppins);
   font-size: 14px;
   font-weight: 500;
@@ -47,6 +47,7 @@
 }
 
 .cellArrow {
+  height: 21px;
 }
 
 .hover:hover {
