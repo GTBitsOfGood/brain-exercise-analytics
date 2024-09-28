@@ -252,7 +252,7 @@ export type ChapterSearchParams = {
   chapterPresident?: string;
   patients?: number;
   yearFounded?: string[];
-  countries?: string[]
+  countries?: string[];
   states?: string[];
   cities?: string[];
 };
