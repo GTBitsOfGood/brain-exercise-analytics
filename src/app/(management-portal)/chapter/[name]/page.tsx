@@ -64,7 +64,6 @@ export default function Page({ params }: { params: { name: string } }) {
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  console.log(decodeURI(params.name));
   const fetchUsers = useCallback(() => {
     setLoading(true);
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({

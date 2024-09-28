@@ -10,12 +10,19 @@ export interface CellProps {
   value?: string;
   icon: JSX.Element;
   link?: string;
+  cellStyle?: React.CSSProperties;
+  iconStyle?: React.CSSProperties;
 }
 
 export function Cell({ cell }: { cell: CellProps }) {
   return (
-    <div className={classes(styles.cell, cell.link && styles.hover)}>
-      <div className={styles.cellIcon}>{cell.icon}</div>
+    <div
+      className={classes(styles.cell, cell.link && styles.hover)}
+      style={cell.cellStyle}
+    >
+      <div className={styles.cellIcon} style={cell.iconStyle}>
+        {cell.icon}
+      </div>
       <div className={styles.cellInfo}>
         <div className={styles.cellTitle}>
           <p>{cell.title}</p>

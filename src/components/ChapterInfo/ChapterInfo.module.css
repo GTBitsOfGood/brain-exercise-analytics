@@ -21,11 +21,6 @@
   margin: 20px 0px;
 }
 
-.chapterImage > div {
-  height: 100%;
-  width: 225px;
-}
-
 .chapterImage:hover {
   cursor: pointer;
 }
