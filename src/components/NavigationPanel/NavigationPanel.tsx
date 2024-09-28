@@ -38,6 +38,11 @@ const NavigationPanel = ({ onClick }: Props) => {
     [currentPath],
   );
 
+  const isChapterSearch = useMemo(
+    () => currentPath.startsWith("/chapter/search"),
+    [currentPath],
+  );
+
   const isApproval = useMemo(
     () => currentPath.startsWith("/volunteer/approval"),
     [currentPath],
@@ -65,8 +70,16 @@ const NavigationPanel = ({ onClick }: Props) => {
         </div>
         <div className={styles["text-wrapper"]}>
           <span className={styles.bei}>Brain Exercise Initiative</span>
-          {user.role !== Role.NONPROFIT_VOLUNTEER ? (
-            <span className={styles["admin-portal"]}>Admin Portal</span>
+          {user.role !== Role.NONPROFIT_VOLUNTEER ? ( 
+            user.role === Role.NONPROFIT_ADMIN ? 
+            <div className={styles["role-container"]}>
+              <div className={styles["admin-portal"]}>Admin Portal</div>
+            </div>
+             :
+            <div className={styles["role-container"]}>
+              <div className={styles["admin-portal"]}>Admin Portal</div>
+              <div className={styles["admin-role"]}>{user.role}</div>
+            </div>
           ) : (
             <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
           )}
@@ -81,11 +94,11 @@ const NavigationPanel = ({ onClick }: Props) => {
               Volunteer Management
             </div>
 
-            <div className={styles[`volunteer-patient-container`]}>
+            <div className={styles[`chapter-search-container`]}>
               <Link
                 className={
                   styles[
-                    `search-volunteer-${isVolunteerSearch ? "active" : "inactive"}`
+                    `search-chapter-${isChapterSearch ? "active" : "inactive"}`
                   ]
                 }
                 href="/chapter/search"
@@ -93,13 +106,13 @@ const NavigationPanel = ({ onClick }: Props) => {
                 <div className={styles["icon-shadow"]}>
                   <SearchIcon className={styles["icon-active"]} />
                 </div>
-                <span className={styles["search-volunteer-text"]}>
+                <span className={styles["search-chapter-text"]}>
                   Search Chapter
                 </span>
               </Link>
             </div>
 
-            <div className={styles[`volunteer-patient-container`]}>
+            <div className={styles[`volunteer-search-container`]}>
               <Link
                 className={
                   styles[
