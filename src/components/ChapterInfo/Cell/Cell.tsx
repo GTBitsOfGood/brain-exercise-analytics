@@ -1,5 +1,8 @@
 "use client";
 
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { classes } from "@src/utils/utils";
 import styles from "./Cell.module.css";
 
 export interface CellProps {
@@ -11,7 +14,7 @@ export interface CellProps {
 
 export function Cell({ cell }: { cell: CellProps }) {
   return (
-    <div className={styles.cell}>
+    <div className={classes(styles.cell, cell.link && styles.hover)}>
       <div className={styles.cellIcon}>{cell.icon}</div>
       <div className={styles.cellInfo}>
         <div className={styles.cellTitle}>
@@ -19,7 +22,14 @@ export function Cell({ cell }: { cell: CellProps }) {
         </div>
         <div className={styles.cellContent}>
           <p className={styles.cellValue}>{cell.value}</p>
-          {cell.link && <div className={styles.cellArrow} />}
+          {cell.link && (
+            <div className={styles.cellArrow}>
+              <FontAwesomeIcon
+                icon={faAngleRight}
+                style={{ color: "#2b3674" }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

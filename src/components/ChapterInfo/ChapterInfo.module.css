@@ -3,6 +3,7 @@
   font-family: var(--font-poppins);
   font-size: 24px;
   font-weight: 600;
+  margin: 20px 0px;
 }
 
 .chapterInfoSubheading > p {
@@ -10,19 +11,28 @@
   font-family: var(--font-poppins);
   font-size: 16px;
   font-weight: 600;
+  margin: 20px 0px;
 }
 
 .chapterSection {
   display: flex;
   flex-direction: row;
+  gap: 8px;
+  margin: 20px 0px;
 }
 
-.chapterImage {
+.chapterImage > div {
+  height: 100%;
+  width: 225px;
+}
+
+.chapterImage:hover {
+  cursor: pointer;
 }
 
 .chapterInfo {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 8px;
 }

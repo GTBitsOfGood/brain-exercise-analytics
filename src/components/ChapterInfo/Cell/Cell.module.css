@@ -4,9 +4,19 @@
   display: flex;
   flex-direction: row;
   padding: 8px;
+  align-items: center;
+  gap: 4px;
 }
 
 .cellIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #a3aed0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 5px;
 }
 
 .cellInfo {
@@ -29,7 +39,6 @@
 .cellValue {
   flex-grow: 1;
   display: inline-block;
-
   color: #2b3674;
   font-family: var(--font-poppins);
   font-size: 14px;
@@ -37,4 +46,8 @@
 }
 
 .cellArrow {
+}
+
+.hover:hover {
+  cursor: pointer;
 }
