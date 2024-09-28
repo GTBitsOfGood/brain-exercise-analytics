@@ -324,7 +324,21 @@ export interface IVolunteerTableEntry extends IUser {
 
 export interface IChapterTableEntry {
   name: string;
+  chapterPresident: string;
+  patients: number;
+  volunteers: number;
+  yearFounded: number;
+  active: boolean;
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  };
 }
+
+export type ChapterSearchParams = {
+  name?: string;
+};
 
 /* Single Patient Analytics Types */
 

@@ -4,14 +4,14 @@ import React, { useCallback, useState } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
 import { internalRequest } from "@src/utils/requests";
-import { HttpMethod, IChapter, SortField } from "@/common_utils/types";
+import { HttpMethod, IChapter, IChapterTableEntry, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./ChapterGrid.module.css";
 import { Row } from "./Row/Row";
 
 interface ChapterGridProps {
-  data: IChapter[];
+  data: IChapterTableEntry[];
   sortField: SortField | undefined;
   setSortField: React.Dispatch<React.SetStateAction<SortField | undefined>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;

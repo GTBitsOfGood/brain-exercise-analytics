@@ -35,28 +35,28 @@ export default function Page() {
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    internalRequest<SearchResponseBody<IChapterTableEntry>>({
-      url: "/api/patient/filter-patient",
-      method: HttpMethod.POST,
-      body: {
-        params: {
-          name: name
-        },
-        page: currentPage,
-        sortParams: sortField,
-      },
-    }).then((res) => {
-      setPageCount(res?.numPages ?? 0);
-      setFilteredChapters(res?.data ?? []);
-      setLoading(false);
-    });
-  }, [
-    name,
-    sortField,
-    currentPage,
-  ]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   internalRequest<SearchResponseBody<IChapterTableEntry>>({
+  //     url: "/api/chapter/filter-chapter",
+  //     method: HttpMethod.POST,
+  //     body: {
+  //       params: {
+  //         name: name
+  //       },
+  //       page: currentPage,
+  //       sortParams: sortField,
+  //     },
+  //   }).then((res) => {
+  //     setPageCount(res?.numPages ?? 0);
+  //     setFilteredChapters(res?.data ?? []);
+  //     setLoading(false);
+  //   });
+  // }, [
+  //   name,
+  //   sortField,
+  //   currentPage,
+  // ]);
 
   useEffect(() => {
     setCurrentPage(0);
@@ -65,7 +65,7 @@ export default function Page() {
     sortField,
   ]);
 
-  const testFilteredChapters: IChapter[] = [{
+  const testFilteredChapters: IChapterTableEntry[] = [{
     name: "Georgia Tech",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
@@ -79,7 +79,7 @@ export default function Page() {
     }
   },
   {
-    name: "UT Austin",
+    name: "Rio de Janeiro Health Institute",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -91,7 +91,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "Harvard",
+    name: "Wellington Health Services",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -103,7 +103,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "MIT",
+    name: "Toronto Central",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -115,7 +115,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "University of Georgia",
+    name: "London Health Sciences Center",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -127,7 +127,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "Emory University",
+    name: "Mumbai Health Forum",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -139,7 +139,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "Georgia State University",
+    name: "Bavarian Medical Society",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -151,7 +151,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "UCLA",
+    name: "Johannesburg Health Chapter",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -163,7 +163,7 @@ export default function Page() {
       city: "Atlanta",
     }
   }, {
-    name: "Duke University",
+    name: "Tokyo Medical Association",
     chapterPresident: "Nithya Kasaraneni",
     patients: 22,
     volunteers: 130,
@@ -174,67 +174,8 @@ export default function Page() {
       state: "Georgia",
       city: "Atlanta",
     }
-  }, {
-    name: "Rice University",
-    chapterPresident: "Nithya Kasaraneni",
-    patients: 22,
-    volunteers: 130,
-    yearFounded: 2018,
-    active: true,
-    location: {
-      country: "USA",
-      state: "Georgia",
-      city: "Atlanta",
-    }
-  }, {
-    name: "UC Berkeley",
-    chapterPresident: "Nithya Kasaraneni",
-    patients: 22,
-    volunteers: 130,
-    yearFounded: 2018,
-    active: true,
-    location: {
-      country: "USA",
-      state: "Georgia",
-      city: "Atlanta",
-    }
-  }, {
-    name: "University of Connecticut",
-    chapterPresident: "Nithya Kasaraneni",
-    patients: 22,
-    volunteers: 130,
-    yearFounded: 2018,
-    active: true,
-    location: {
-      country: "USA",
-      state: "Georgia",
-      city: "Atlanta",
-    }
-  }, {
-    name: "USC",
-    chapterPresident: "Nithya Kasaraneni",
-    patients: 22,
-    volunteers: 130,
-    yearFounded: 2018,
-    active: true,
-    location: {
-      country: "USA",
-      state: "Georgia",
-      city: "Atlanta",
-    }
-  }, {
-    name: "Oxford",
-    chapterPresident: "Nithya Kasaraneni",
-    patients: 22,
-    volunteers: 130,
-    yearFounded: 2018,
-    active: true,
-    location: {
-      country: "USA",
-      state: "Georgia",
-      city: "Atlanta",
-    }
-  }]
+  },
+  ]
 
   return (
     <div className={styles.container}>
@@ -260,7 +201,7 @@ export default function Page() {
         )}
       >
         <ChapterGrid
-          data={filteredChapters}
+          data={testFilteredChapters}
           sortField={sortField}
           setSortField={setSortField}
           setCurrentPage={setCurrentPage}

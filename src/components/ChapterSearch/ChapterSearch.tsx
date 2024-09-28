@@ -4,7 +4,7 @@ import React, { FormEvent, MouseEvent, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 
-import { update } from "@src/redux/reducers/volunteerSearchReducer";
+import { update } from "@src/redux/reducers/chapterSearchReducer";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -24,20 +24,16 @@ export default function ChapterSearch({ className, onSubmit }: SearchProps) {
   const { name } = useSelector((state: RootState) => state.chapterSearch);
 
   const [searchInput, setSearchInput] = useState<string>(name);
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
 
   const onSubmitSearch = useCallback(
     (e?: FormEvent<HTMLFormElement> | MouseEvent<SVGSVGElement>) => {
       if (e) {
         e.preventDefault();
       }
-      if (showAdvancedSearch) {
-        setShowAdvancedSearch(!showAdvancedSearch);
-      }
-      dispatch(update({ fullName: searchInput }));
+      dispatch(update({ name: searchInput }));
       onSubmit?.();
     },
-    [searchInput, showAdvancedSearch, onSubmit, dispatch],
+    [searchInput, onSubmit, dispatch],
   );
 
   return (
@@ -45,7 +41,6 @@ export default function ChapterSearch({ className, onSubmit }: SearchProps) {
       <div
         className={[
           styles.border,
-          showAdvancedSearch && styles["border-change"],
         ].join(" ")}
       >
         <div className={styles["search-no-tags"]}>
@@ -70,28 +65,6 @@ export default function ChapterSearch({ className, onSubmit }: SearchProps) {
               placeholder="Search"
             />
           </form>
-
-          <div className={styles["advanced-filter"]}>
-            {!showAdvancedSearch ? (
-              <FilterAltIcon
-                fontSize="large"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              />
-            ) : (
-              <FilterAltOffIcon
-                fontSize="large"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              />
-            )}
-          </div>
-        </div>
-
-        <div
-          className={classes(
-            styles["advanced-search-container"],
-            showAdvancedSearch && styles["advanced-search-container-show"],
-          )}
-        >
         </div>
       </div>
     </div>

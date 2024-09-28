@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import { IChapter } from "@/common_utils/types";
+import { IChapter, IChapterTableEntry } from "@/common_utils/types";
 import { SelectChangeEvent } from "@mui/material";
 import ApplyDropdown, {
   DropdownOption,
@@ -18,12 +18,11 @@ import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
 import styles from "./Row.module.css";
 import Link from "next/link";
 
 interface Props {
-  chapter: IChapter;
+  chapter: IChapterTableEntry;
 }
 
 export function Row({ chapter }: Props) {
