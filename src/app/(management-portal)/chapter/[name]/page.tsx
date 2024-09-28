@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ChapterInfo from "@src/components/ChapterInfo/ChapterInfo";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
 import VolunteerGrid from "@src/components/VolunteerGrid/VolunteerGrid";
 import Modal from "@src/components/Modal/Modal";
@@ -14,6 +15,7 @@ import {
   HttpMethod,
   IVolunteerTableEntry,
   SearchResponseBody,
+  IChapter,
 } from "@/common_utils/types";
 
 import firebaseInit from "@src/firebase/config";
@@ -21,6 +23,34 @@ import { RootState } from "@src/redux/rootReducer";
 import styles from "./page.module.css";
 
 firebaseInit();
+
+const chapter: IChapter = {
+  name: "Georgia Tech",
+  chapterPresident: "Nithya Kasaraneni",
+  patients: 22,
+  volunteers: 130,
+  yearFounded: 2018,
+  active: true,
+  location: {
+    country: "USA",
+    state: "Georgia",
+    city: "Atlanta",
+  },
+};
+
+export function Divider({ id }: { id?: string }) {
+  return (
+    <div
+      id={id}
+      style={{
+        width: "100%",
+        height: "2px",
+        backgroundColor: "#c8c8c8",
+        margin: "4.2% 0",
+      }}
+    />
+  );
+}
 
 export default function Page({ params }: { params: { name: string } }) {
   const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
@@ -74,6 +104,10 @@ export default function Page({ params }: { params: { name: string } }) {
       >
         <LoadingBox />
       </Modal>
+      <div className={classes(styles["profile-container"])}>
+        <ChapterInfo chapter={chapter} />
+        <Divider />
+      </div>
       <div className={classes(styles["search-container"])}>
         <div className={styles["search-wrapper"]}>
           <VolunteerSearch advancedSearch={false} />

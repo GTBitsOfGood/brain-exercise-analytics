@@ -1,0 +1,40 @@
+.cell {
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+}
+
+.cellIcon {
+}
+
+.cellInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.cellTitle > p {
+  color: #a3aed0;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cellContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.cellValue {
+  flex-grow: 1;
+  display: inline-block;
+
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cellArrow {
+}

@@ -1,0 +1,28 @@
+.chapterInfoHeading > p {
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.chapterInfoSubheading > p {
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chapterSection {
+  display: flex;
+  flex-direction: row;
+}
+
+.chapterImage {
+}
+
+.chapterInfo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+}
