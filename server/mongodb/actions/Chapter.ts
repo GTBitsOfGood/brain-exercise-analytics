@@ -1,11 +1,11 @@
-import { ChapterSearchParams, IChapter, RecursivePartial, SearchResponseBody, SearchRequestBody } from "@/common_utils/types";
+import { ChapterSearchParams, IChapter, RecursivePartial, SearchResponseBody, SearchRequestBody, IChapterTableEntry } from "@/common_utils/types";
 import Chapter from "../models/Chapter";
 import { flatten } from "mongo-dot-notation";
 import { PipelineStage, Promise } from "mongoose";
 
 
 export const getChapterByName = async (name: string): Promise<IChapter | null> => {
-    const chapter = await Chapter.findOne<IChapter>({ name: name });
+    const chapter = await Chapter.findOne<IChapter>({ name });
     return chapter;
   };
 
@@ -20,7 +20,7 @@ export const updateChapter = async (
     newFields: RecursivePartial<IChapter>
 ): Promise<void> => {
     const flattened = flatten(newFields)
-
+    console.log(name)
     const chapter = await Chapter.findOneAndUpdate({ name }, flattened, {
         returnDocument: "after"
     });
@@ -30,12 +30,12 @@ export const updateChapter = async (
 
 type ChapParam = {
     name: object;
-    chapterPresident?: object;
-    patients?: object,
-    yearFounded: object,
-    "location.country"?: object,
-    "location.state"?: object;
-    "location.city"?: object;
+    // chapterPresident?: object;
+    // patients?: object,
+    // yearFounded: object,
+    // "location.country"?: object,
+    // "location.state"?: object;
+    // "location.city"?: object;
 };
 
 
@@ -44,84 +44,104 @@ export const getChaptersFiltered = async ({
     page,
     sortParams,
   }: SearchRequestBody<ChapterSearchParams>) : 
-  Promise<SearchResponseBody<IChapter> | undefined> => {
+  Promise<SearchResponseBody<IChapterTableEntry> | undefined> => {
 
     let newPage = page ?? 0;
+    let numOfItems = 11;
 
     const chapterParamObject = {} as ChapParam;
 
-    if (params.cities) {
-        chapterParamObject["location.city"] = { $in: params.cities };
-    }
-    if (params.states) {
-        chapterParamObject["location.city"] = { $in: params.states };
-    }
-    if (params.countries) {
-        chapterParamObject["location.city"] = { $in: params.countries };
-    }
+    // if (params.cities) {
+    //     chapterParamObject["location.city"] = { $in: params.cities };
+    // }
+    // if (params.states) {
+    //     chapterParamObject["location.city"] = { $in: params.states };
+    // }
+    // if (params.countries) {
+    //     chapterParamObject["location.city"] = { $in: params.countries };
+    // }
+    // if (params.yearFounded) {
+    //     matchPipeline.$match.$and!.push({
+    //         $expr: {
+    //           $in: params.yearFounded
+    //         },
+    //     });
+    // }
 
+    // if (params.patients) {
+    //     matchPipeline.$match.$and!.push({
+    //         $expr: {
+    //             $gt: params.patients
+    //         }
+    //     });
+    // }
+ 
+    if (params.name) {
+      chapterParamObject.name = {$regex: new RegExp(params.name, 'i')}
+    }
 
     const matchPipeline = {
         $match: { $and: [chapterParamObject] },
       } as PipelineStage.Match;
 
-      
-    if (params.yearFounded) {
-        matchPipeline.$match.$and!.push({
-            $expr: {
-              $in: params.yearFounded
-            },
-        });
-    }
 
-    if (params.patients) {
-        matchPipeline.$match.$and!.push({
-            $expr: {
-                $gt: params.patients
+
+
+    const sortPipeline = (
+        sortParams
+          ? {
+              $sort: { [sortParams.field]: sortParams.ascending ? 1 : -1, _id: 1 },
             }
-        });
-    }
- 
-    if (params.name) {
-        matchPipeline.$match.$and?.push({
-            $expr: {
-                $regexMatch: {
-                    input: {
-                        $concat: ["$firstName", " ", "$lastName"],
+          : {
+              $sort: { _id: 1 },
+            }
+      ) as PipelineStage.Sort;
+
+
+
+    const chapterFiltering = await Chapter.aggregate([
+        matchPipeline,
+        sortPipeline,
+        {
+            $facet: {
+              metadata: [
+                { $count: "totalDocuments" },
+                {
+                  $addFields: {
+                    newPage,
+                    totalPages: {
+                      $ceil: {
+                        $divide: ["$totalDocuments", numOfItems],
                       },
-                    regex: new RegExp(params.name, 'i')
-                }
-            }
-        })
-    }
-
-
-
-    const chapterFiltering = Chapter.aggregate(
+                    },
+                  },
+                },
+              ],
+              data: [
+                { $skip: newPage === undefined ? 0 : numOfItems * newPage },
+                { $limit: numOfItems },
+              ],
+            },
+          },
+          {
+            $unwind: "$metadata"
+          },
+          {
+            $addFields: {
+              numRecords: "$metadata.totalDocuments",
+              newpage: "$metadata.page",
+              numPages: "$metadata.totalPages",
+            },
+          },
+        ]);
+        console.log(chapterFiltering)
         
 
-    )
+        
+        return chapterFiltering[0] as SearchResponseBody<IChapterTableEntry> | undefined;
+    };
 
 
 
 
-
-
-
-
-    return
-
-    }
-
-
-
-
-
-
-
-
-
-
-    return
-  }
 

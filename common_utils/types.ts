@@ -257,6 +257,16 @@ export type ChapterSearchParams = {
   cities?: string[];
 };
 
+export interface IChapterTableEntry {
+  name: string;
+  patients: number;
+  yearFounded: number;
+  location: {
+    country: string;
+    state: string;
+  };
+}
+
 /* Patient Search Specific Types */
 
 export type PatientSearchParams = {
