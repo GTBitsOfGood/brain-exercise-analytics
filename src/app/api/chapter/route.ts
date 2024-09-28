@@ -1,6 +1,5 @@
 import { ChapterSearchParams, IChapter, RecursivePartial, SearchRequestBody } from "@/common_utils/types";
 import { deleteChapter, getChapterByName, getChaptersFiltered, updateChapter } from "@server/mongodb/actions/Chapter";
-import Chapter from "@server/mongodb/models/Chapter";
 import APIWrapper from "@server/utils/APIWrapper";
 
 
@@ -32,8 +31,6 @@ export const PATCH = APIWrapper({
     handler: async (req) => {
         const reqData: PatchReq = (await req.json()) as PatchReq
         const { name, newFields }: { name: string, newFields:RecursivePartial<IChapter> } = reqData;
-        console.log(name);
-        console.log(newFields)
 
         if (!name) {
             throw new Error("Name is missing")

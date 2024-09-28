@@ -20,7 +20,6 @@ export const updateChapter = async (
     newFields: RecursivePartial<IChapter>
 ): Promise<void> => {
     const flattened = flatten(newFields)
-    console.log(name)
     const chapter = await Chapter.findOneAndUpdate({ name }, flattened, {
         returnDocument: "after"
     });
@@ -133,9 +132,7 @@ export const getChaptersFiltered = async ({
               numPages: "$metadata.totalPages",
             },
           },
-        ]);
-        console.log(chapterFiltering)
-        
+        ]);        
 
         
         return chapterFiltering[0] as SearchResponseBody<IChapterTableEntry> | undefined;

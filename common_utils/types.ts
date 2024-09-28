@@ -245,7 +245,7 @@ export interface SearchResponseBody<T> {
   page: number;
 }
 
-
+/* Chapter Search Specific Types */
 
 export type ChapterSearchParams = {
   name?: string;
