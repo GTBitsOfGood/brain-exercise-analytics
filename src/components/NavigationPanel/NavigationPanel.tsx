@@ -71,16 +71,17 @@ const NavigationPanel = ({ onClick }: Props) => {
         </div>
         <div className={styles["text-wrapper"]}>
           <span className={styles.bei}>Brain Exercise Initiative</span>
-          {user.role !== Role.NONPROFIT_VOLUNTEER ? ( 
-            user.role === Role.NONPROFIT_ADMIN ? 
-            <div className={styles["role-container"]}>
-              <div className={styles["admin-portal"]}>Admin Portal</div>
-            </div>
-             :
-            <div className={styles["role-container"]}>
-              <div className={styles["admin-portal"]}>Admin Portal</div>
-              <div className={styles["admin-role"]}>{user.role}</div>
-            </div>
+          {user.role !== Role.NONPROFIT_VOLUNTEER ? (
+            user.role === Role.NONPROFIT_ADMIN ? (
+              <div className={styles["role-container"]}>
+                <div className={styles["admin-portal"]}>Admin Portal</div>
+              </div>
+            ) : (
+              <div className={styles["role-container"]}>
+                <div className={styles["admin-portal"]}>Admin Portal</div>
+                <div className={styles["admin-role"]}>{user.role}</div>
+              </div>
+            )
           ) : (
             <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
           )}
@@ -95,7 +96,7 @@ const NavigationPanel = ({ onClick }: Props) => {
               Volunteer Management
             </div>
 
-            {user.role === Role.NONPROFIT_CHAPTER_PRESIDENT ? 
+            {user.role === Role.NONPROFIT_CHAPTER_PRESIDENT ? (
               <div className={styles[`chapter-search-container`]}>
                 <Link
                   className={
@@ -103,35 +104,35 @@ const NavigationPanel = ({ onClick }: Props) => {
                       `search-chapter-${isChapterSearch ? "active" : "inactive"}`
                     ]
                   }
-                  href={"/chapter/" + user.chapter}
+                  href={`/chapter/${user.chapter}`}
                 >
                   <div className={styles["icon-shadow"]}>
-                    <HouseIcon/>
+                    <HouseIcon />
                   </div>
                   <span className={styles["search-chapter-text"]}>
                     My Chapter
                   </span>
                 </Link>
               </div>
-            :
-            <div className={styles[`chapter-search-container`]}>
-              <Link
-                className={
-                  styles[
-                    `search-chapter-${isChapterSearch ? "active" : "inactive"}`
-                  ]
-                }
-                href="/chapter/search"
-              >
-                <div className={styles["icon-shadow"]}>
-                  <SearchIcon className={styles["icon-active"]} />
-                </div>
-                <span className={styles["search-chapter-text"]}>
-                  Search Chapter
-                </span>
-              </Link>
-            </div>
-            }
+            ) : (
+              <div className={styles[`chapter-search-container`]}>
+                <Link
+                  className={
+                    styles[
+                      `search-chapter-${isChapterSearch ? "active" : "inactive"}`
+                    ]
+                  }
+                  href="/chapter/search"
+                >
+                  <div className={styles["icon-shadow"]}>
+                    <SearchIcon className={styles["icon-active"]} />
+                  </div>
+                  <span className={styles["search-chapter-text"]}>
+                    Search Chapter
+                  </span>
+                </Link>
+              </div>
+            )}
 
             <div className={styles[`volunteer-search-container`]}>
               <Link

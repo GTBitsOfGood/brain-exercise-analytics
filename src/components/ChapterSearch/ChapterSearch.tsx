@@ -38,11 +38,7 @@ export default function ChapterSearch({ className, onSubmit }: SearchProps) {
 
   return (
     <div className={classes(styles.wrapper, className)}>
-      <div
-        className={[
-          styles.border,
-        ].join(" ")}
-      >
+      <div className={[styles.border].join(" ")}>
         <div className={styles["search-no-tags"]}>
           <form
             className={styles["search-container"]}

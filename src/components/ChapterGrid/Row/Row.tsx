@@ -18,8 +18,8 @@ import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import styles from "./Row.module.css";
 import Link from "next/link";
+import styles from "./Row.module.css";
 
 interface Props {
   chapter: IChapterTableEntry;
@@ -28,9 +28,7 @@ interface Props {
 export function Row({ chapter }: Props) {
   const [view, setView] = useState<boolean>(false);
   const handleClick = useCallback(() => setView((v) => !v), []);
-  const [updatedActive, setUpdatedActive] = useState(
-    chapter.active,
-  );
+  const [updatedActive, setUpdatedActive] = useState(chapter.active);
 
   // Role of the logged in user
   const currUserRole = useSelector(
@@ -45,7 +43,6 @@ export function Row({ chapter }: Props) {
   return (
     <>
       <tr className={styles.row} key={chapter.name}>
-
         <td className={styles.RowCell}>
           <div
             className={classes(
@@ -155,7 +152,7 @@ export function Row({ chapter }: Props) {
           <Link
             className={styles.DatabaseButton}
             href={`/chapter/${chapter.name}`}
-            >
+          >
             View Profile
           </Link>
         </td>
