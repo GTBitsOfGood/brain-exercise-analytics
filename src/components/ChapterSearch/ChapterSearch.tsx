@@ -7,8 +7,6 @@ import { RootState } from "@src/redux/rootReducer";
 import { update } from "@src/redux/reducers/chapterSearchReducer";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import { classes } from "@src/utils/utils";
 import styles from "./ChapterSearch.module.css";
 import InputField from "../InputField/InputField";

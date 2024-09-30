@@ -1,15 +1,8 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
-import { internalRequest } from "@src/utils/requests";
-import {
-  HttpMethod,
-  IChapter,
-  IChapterTableEntry,
-  SortField,
-} from "@/common_utils/types";
+import { IChapterTableEntry, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./ChapterGrid.module.css";
@@ -58,7 +51,7 @@ function Header() {
 export default function ChapterGrid(params: ChapterGridProps) {
   // Construct Rows from the data
   const Rows = params.data.map((chapter) => {
-    return <Row chapter={chapter} />;
+    return <Row key={chapter.name} chapter={chapter} />;
   });
 
   return (

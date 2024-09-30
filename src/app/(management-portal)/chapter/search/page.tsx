@@ -4,15 +4,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ChapterSearch from "@src/components/ChapterSearch/ChapterSearch";
 import ChapterGrid from "@src/components/ChapterGrid/ChapterGrid";
-import {
-  IChapter,
-  SortField,
-  HttpMethod,
-  IChapterTableEntry,
-  SearchResponseBody,
-} from "@/common_utils/types";
+import { SortField, IChapterTableEntry } from "@/common_utils/types";
 import { classes } from "@src/utils/utils";
-import { internalRequest } from "@src/utils/requests";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import Modal from "@src/components/Modal/Modal";
 
@@ -27,12 +20,13 @@ export default function Page() {
   const { name } = useSelector((state: RootState) => state.chapterSearch);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
-  const [filteredChapters, setFilteredChapters] = useState<
-    IChapterTableEntry[]
-  >([]);
+  // const [filteredChapters, setFilteredChapters] = useState<
+  //   IChapterTableEntry[]
+  // >([]);
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageCount, setPageCount] = useState(0);
+  // const [pageCount, setPageCount] = useState(0);
+  const pageCount = 0;
   const [loading, setLoading] = useState(false);
 
   // useEffect(() => {

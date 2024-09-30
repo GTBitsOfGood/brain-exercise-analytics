@@ -1,23 +1,14 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
-import { IChapter, IChapterTableEntry } from "@/common_utils/types";
+import { useState } from "react";
+import { IChapterTableEntry } from "@/common_utils/types";
 import { SelectChangeEvent } from "@mui/material";
 import ApplyDropdown, {
   DropdownOption,
 } from "@src/components/Dropdown/ApplyDropdown/ApplyDropdown";
-import { internalRequest } from "@src/utils/requests";
-import {
-  classes,
-  getLowerAdminRoles,
-  transformDate,
-  transformPhoneNumber,
-} from "@src/utils/utils";
-import { RootState } from "@src/redux/rootReducer";
-import { useSelector } from "react-redux";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { classes } from "@src/utils/utils";
+
 import Link from "next/link";
 import styles from "./Row.module.css";
 
@@ -26,14 +17,7 @@ interface Props {
 }
 
 export function Row({ chapter }: Props) {
-  const [view, setView] = useState<boolean>(false);
-  const handleClick = useCallback(() => setView((v) => !v), []);
   const [updatedActive, setUpdatedActive] = useState(chapter.active);
-
-  // Role of the logged in user
-  const currUserRole = useSelector(
-    (rootState: RootState) => rootState.auth.role,
-  );
 
   const chapterStatusOptions: DropdownOption<boolean>[] = [
     { value: true, displayValue: "Active" },
