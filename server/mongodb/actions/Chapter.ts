@@ -35,12 +35,6 @@ export const updateChapter = async (
 
 type ChapParam = {
   name: object;
-  // chapterPresident?: object;
-  // patients?: object,
-  // yearFounded: object,
-  // "location.country"?: object,
-  // "location.state"?: object;
-  // "location.city"?: object;
 };
 
 export const getChaptersFiltered = async ({
@@ -54,31 +48,6 @@ export const getChaptersFiltered = async ({
   const numOfItems = 11;
 
   const chapterParamObject = {} as ChapParam;
-
-  // if (params.cities) {
-  //     chapterParamObject["location.city"] = { $in: params.cities };
-  // }
-  // if (params.states) {
-  //     chapterParamObject["location.city"] = { $in: params.states };
-  // }
-  // if (params.countries) {
-  //     chapterParamObject["location.city"] = { $in: params.countries };
-  // }
-  // if (params.yearFounded) {
-  //     matchPipeline.$match.$and!.push({
-  //         $expr: {
-  //           $in: params.yearFounded
-  //         },
-  //     });
-  // }
-
-  // if (params.patients) {
-  //     matchPipeline.$match.$and!.push({
-  //         $expr: {
-  //             $gt: params.patients
-  //         }
-  //     });
-  // }
 
   if (params.name) {
     chapterParamObject.name = { $regex: new RegExp(params.name, "i") };
