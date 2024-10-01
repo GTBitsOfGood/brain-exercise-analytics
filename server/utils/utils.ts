@@ -1,6 +1,7 @@
 import { DateRangeEnum, IAuthUserCookie, IUser } from "@/common_utils/types";
 import { getLowerAdminRoles } from "@src/utils/utils";
 import { SignJWT, jwtVerify } from "jose";
+import { JWTExpired } from "jose/errors";
 
 export function getCurrentMonday() {
   const date = new Date();
@@ -51,8 +52,19 @@ export function checkValidUserPermissions(
 
 export async function parseAuthCookie(cookie: string) {
   const encoder = new TextEncoder();
-  const jwt = await jwtVerify(cookie, encoder.encode(process.env.JWT_SECRET));
-  return jwt.payload.data as IAuthUserCookie;
+  // const jwt = await jwtVerify(cookie, encoder.encode(process.env.JWT_SECRET));
+  // return jwt.payload.data as IAuthUserCookie;
+  try {
+    const jwt = await jwtVerify(cookie, encoder.encode(process.env.JWT_SECRET));
+    return jwt.payload.data as IAuthUserCookie;
+  } catch (error) {
+    if (error instanceof JWTExpired) {
+      console.error("Token expired:", error.message);
+      return { user: {} as IUser, keepLogged: false } as IAuthUserCookie;
+      // Handle token expiration: e.g., redirect to login, refresh the token, etc.
+    }
+    throw error; // Rethrow any other errors
+  }
 }
 
 export async function signAuthCookie(data: IAuthUserCookie) {

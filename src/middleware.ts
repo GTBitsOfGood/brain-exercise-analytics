@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
   // Assume a "Cookie:nextjs=fast" header to be present on the incoming request
   // Getting cookies from the request using the `RequestCookies` API
   const path = request.nextUrl.pathname;
-
   if (path === "/") {
     return NextResponse.redirect(
       new URL("/auth/login", request.nextUrl.origin),
@@ -51,6 +50,18 @@ export async function middleware(request: NextRequest) {
   const { user = {} as IUser, keepLogged = false } = await parseAuthCookie(
     request.cookies.get("authUser")!.value,
   );
+
+  /* Additional logic to handle expired token, which returns an empty user object */
+  if (Object.keys(user).length === 0) {
+    request.cookies.delete("authUser");
+    if (path.match(/\/auth\/(login|signup)/g)) {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(
+      new URL("/auth/login", request.nextUrl.origin),
+    );
+  }
+
 
   /*
     If the user is already verified, signed up, and approved:

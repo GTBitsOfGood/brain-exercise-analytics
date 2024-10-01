@@ -61,7 +61,6 @@ export const getVolunteersFiltered = async ({
         )
       : allowedAdminRoles,
   };
-  console.log(userParamsObject.role);
 
   if (paramsObject.emails) {
     userParamsObject.email = { $in: paramsObject.emails };
