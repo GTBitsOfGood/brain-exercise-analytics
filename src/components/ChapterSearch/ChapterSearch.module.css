@@ -54,16 +54,15 @@
 }
 
 .search-bar-input {
-  height: 51px;
+  height: 51px !important;
   border: none;
   background-color: transparent;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 18px !important;
   font-weight: 400;
 }
 
 .search-icon {
-  /* color: #2b3674; */
   cursor: pointer;
   padding-top: 15px;
   padding-left: 15px;

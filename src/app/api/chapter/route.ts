@@ -18,11 +18,12 @@ export const GET = APIWrapper({
     const { searchParams } = new URL(req.url);
     const name = searchParams.get("name");
 
-    if (!name) {
+    const decodedName = name ? decodeURIComponent(name) : null;
+
+    if (!decodedName) {
       throw new Error("Chapter Name is missing");
     }
-
-    const chapter = await getChapterByName(name);
+    const chapter = await getChapterByName(decodedName);
     return chapter;
   },
 });
@@ -85,7 +86,7 @@ export const POST = APIWrapper({
           val !== undefined &&
           val !== null &&
           (typeof val !== "string" || val.length > 0) &&
-          (val.constructor !== Array || val.length > 0),
+          (!Array.isArray(val) || val.length > 0),
       ),
     );
 

@@ -245,28 +245,6 @@ export interface SearchResponseBody<T> {
   page: number;
 }
 
-/* Chapter Search Specific Types */
-
-export type ChapterSearchParams = {
-  name?: string;
-  chapterPresident?: string;
-  patients?: number;
-  yearFounded?: string[];
-  countries?: string[];
-  states?: string[];
-  cities?: string[];
-};
-
-export interface IChapterTableEntry {
-  name: string;
-  patients: number;
-  yearFounded: number;
-  location: {
-    country: string;
-    state: string;
-  };
-}
-
 /* Patient Search Specific Types */
 
 export type PatientSearchParams = {
@@ -344,6 +322,7 @@ export interface IVolunteerTableEntry extends IUser {
   startDate: string;
 }
 
+/* Chapter Search Types */
 export interface IChapterTableEntry {
   name: string;
   chapterPresident: string;
