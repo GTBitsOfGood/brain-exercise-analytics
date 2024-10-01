@@ -24,17 +24,17 @@ import styles from "./page.module.css";
 
 firebaseInit();
 
-const chapter: IChapter = {
-  name: "Georgia Tech",
-  chapterPresident: "Nithya Kasaraneni",
-  patients: 22,
-  volunteers: 130,
-  yearFounded: 2018,
+const blankChapter: IChapter = {
+  name: "",
+  chapterPresident: "",
+  patients: 0,
+  volunteers: 0,
+  yearFounded: 1999,
   active: true,
   location: {
-    country: "USA",
-    state: "Georgia",
-    city: "Atlanta",
+    country: "",
+    state: "",
+    city: "",
   },
 };
 
@@ -53,6 +53,7 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page({ params }: { params: { name: string } }) {
+  const [chapter, setChapterInfo] = useState<IChapter>(blankChapter);
   const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
@@ -83,6 +84,24 @@ export default function Page({ params }: { params: { name: string } }) {
       setLoading(false);
     });
   }, [fullName, currentPage, sortField, params.name]);
+
+  const fetchChapter = useCallback(() => {
+    setLoading(true);
+    internalRequest<IChapter>({
+      url: "/api/chapter",
+      method: HttpMethod.GET,
+      queryParams: {
+        name: params.name,
+      },
+    }).then((res) => {
+      setChapterInfo(res);
+      setLoading(false);
+    });
+  }, [params.name]);
+
+  useEffect(() => {
+    fetchChapter();
+  }, [fetchChapter]);
 
   useEffect(() => {
     fetchUsers();

@@ -322,6 +322,7 @@ export interface IVolunteerTableEntry extends IUser {
   startDate: string;
 }
 
+/* Chapter Search Types */
 export interface IChapterTableEntry {
   name: string;
   chapterPresident: string;

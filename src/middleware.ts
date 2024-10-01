@@ -62,7 +62,6 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-
   /*
     If the user is already verified, signed up, and approved:
       a. redirect to /patient/search if they are on an auth page
