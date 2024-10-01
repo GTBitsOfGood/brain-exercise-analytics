@@ -17,9 +17,14 @@ import InputField from "../InputField/InputField";
 interface SearchProps {
   className?: string;
   onSubmit?: () => void;
+  advancedSearch?: boolean;
 }
 
-export default function VolunteerSearch({ className, onSubmit }: SearchProps) {
+export default function VolunteerSearch({
+  className,
+  onSubmit,
+  advancedSearch = true,
+}: SearchProps) {
   const dispatch = useDispatch();
 
   const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
@@ -72,19 +77,21 @@ export default function VolunteerSearch({ className, onSubmit }: SearchProps) {
             />
           </form>
 
-          <div className={styles["advanced-filter"]}>
-            {!showAdvancedSearch ? (
-              <FilterAltIcon
-                fontSize="large"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              />
-            ) : (
-              <FilterAltOffIcon
-                fontSize="large"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              />
-            )}
-          </div>
+          {advancedSearch && (
+            <div className={styles["advanced-filter"]}>
+              {!showAdvancedSearch ? (
+                <FilterAltIcon
+                  fontSize="large"
+                  onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+                />
+              ) : (
+                <FilterAltOffIcon
+                  fontSize="large"
+                  onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         <div

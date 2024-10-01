@@ -1,0 +1,34 @@
+.chapterInfoHeading > p {
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 44px;
+}
+
+.chapterInfoSubheading > p {
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 600;
+  margin: 28px 0px;
+}
+
+.chapterSection {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin: 28px 0px;
+}
+
+.chapterImage:hover {
+  cursor: pointer;
+}
+
+.chapterInfo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+}

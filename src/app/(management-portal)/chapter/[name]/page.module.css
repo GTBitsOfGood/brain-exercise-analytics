@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  padding: 5% 2%;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 30px;
+}
+
+.search-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-container-alone {
+  padding-top: 4%;
+}
+
+.intro-text {
+  color: #2b3674;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 36.69px;
+  word-wrap: break-word;
+  padding-bottom: 43px;
+}
+
+.search-wrapper {
+  width: 90%;
+}
+
+.table-container {
+  width: 95%;
+  transition:
+    all 1s ease-in-out,
+    z-index 0s;
+  max-height: 0px;
+  z-index: 1;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.table-container-show {
+  max-height: 10000px;
+  z-index: 1;
+  opacity: 1;
+  overflow: auto;
+}
+
+.arrowButton {
+  background-color: #ffffff;
+  border: 1px solid #c4cdd5;
+  padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modalContent {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-container {
+  width: 95%;
+}

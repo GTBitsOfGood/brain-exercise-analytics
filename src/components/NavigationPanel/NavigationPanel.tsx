@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { Role, IUser } from "@/common_utils/types";
 import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
+import HouseIcon from "@src/app/icons/HouseIcon";
 import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
 
 import styles from "./NavigationPanel.module.css";
@@ -38,6 +39,11 @@ const NavigationPanel = ({ onClick }: Props) => {
     [currentPath],
   );
 
+  const isChapterSearch = useMemo(
+    () => currentPath.startsWith("/chapter/search"),
+    [currentPath],
+  );
+
   const isApproval = useMemo(
     () => currentPath.startsWith("/volunteer/approval"),
     [currentPath],
@@ -65,11 +71,21 @@ const NavigationPanel = ({ onClick }: Props) => {
         </div>
         <div className={styles["text-wrapper"]}>
           <span className={styles.bei}>Brain Exercise Initiative</span>
-          {user.role !== Role.NONPROFIT_VOLUNTEER ? (
-            <span className={styles["admin-portal"]}>Admin Portal</span>
-          ) : (
+          {user.role === Role.NONPROFIT_VOLUNTEER && (
             <span className={styles["volunteer-portal"]}>Volunteer Portal</span>
           )}
+          {user.role === Role.NONPROFIT_ADMIN && (
+            <div className={styles["role-container"]}>
+              <div className={styles["admin-portal"]}>Admin Portal</div>
+            </div>
+          )}
+          {user.role !== Role.NONPROFIT_VOLUNTEER &&
+            user.role !== Role.NONPROFIT_ADMIN && (
+              <div className={styles["role-container"]}>
+                <div className={styles["admin-portal"]}>Admin Portal</div>
+                <div className={styles["admin-role"]}>{user.role}</div>
+              </div>
+            )}
         </div>
         <div className={styles.divider} />
       </div>
@@ -80,7 +96,46 @@ const NavigationPanel = ({ onClick }: Props) => {
             <div className={styles["volunteer-management"]}>
               Volunteer Management
             </div>
-            <div className={styles[`volunteer-patient-container`]}>
+
+            {user.role === Role.NONPROFIT_CHAPTER_PRESIDENT ? (
+              <div className={styles[`chapter-search-container`]}>
+                <Link
+                  className={
+                    styles[
+                      `search-chapter-${isChapterSearch ? "active" : "inactive"}`
+                    ]
+                  }
+                  href={`/chapter/${user.chapter}`}
+                >
+                  <div className={styles["icon-shadow"]}>
+                    <HouseIcon />
+                  </div>
+                  <span className={styles["search-chapter-text"]}>
+                    My Chapter
+                  </span>
+                </Link>
+              </div>
+            ) : (
+              <div className={styles[`chapter-search-container`]}>
+                <Link
+                  className={
+                    styles[
+                      `search-chapter-${isChapterSearch ? "active" : "inactive"}`
+                    ]
+                  }
+                  href="/chapter/search"
+                >
+                  <div className={styles["icon-shadow"]}>
+                    <SearchIcon className={styles["icon-active"]} />
+                  </div>
+                  <span className={styles["search-chapter-text"]}>
+                    Search Chapter
+                  </span>
+                </Link>
+              </div>
+            )}
+
+            <div className={styles[`volunteer-search-container`]}>
               <Link
                 className={
                   styles[

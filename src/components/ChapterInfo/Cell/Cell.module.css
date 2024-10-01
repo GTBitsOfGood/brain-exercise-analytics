@@ -1,0 +1,55 @@
+.cell {
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  padding: 12px;
+  align-items: center;
+  gap: 4px;
+}
+
+.cellIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e3eafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 4px;
+}
+
+.cellInfo {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 4px;
+}
+
+.cellTitle > p {
+  color: #9ca5c2;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cellContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.cellValue {
+  flex-grow: 1;
+  display: inline-block;
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cellArrow {
+  height: 21px;
+}
+
+.hover:hover {
+  cursor: pointer;
+}
