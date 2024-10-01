@@ -8,7 +8,7 @@ import { update } from "@src/redux/reducers/patientSearchReducer";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
+import Switch from "@mui/material/Switch";
 import { classes } from "@src/utils/utils";
 import styles from "./Search.module.css";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
@@ -72,22 +72,19 @@ export default function Search({ className, onSubmit }: SearchProps) {
               placeholder="Search"
             />
           </form>
-
-          <div className={styles["advanced-filter"]}>
-            {!showAdvancedSearch ? (
-              <FilterAltIcon
-                fontSize="large"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              />
-            ) : (
-              <FilterAltOffIcon
-                fontSize="large"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              />
-            )}
+          <div
+            className={
+              showAdvancedSearch
+                ? styles["advanced-filter-show"]
+                : styles["advanced-filter-hide"]
+            }
+          >
+            <FilterAltIcon fontSize="large" />
+            <Switch
+              onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+            />
           </div>
         </div>
-
         <div
           className={classes(
             styles["advanced-search-container"],

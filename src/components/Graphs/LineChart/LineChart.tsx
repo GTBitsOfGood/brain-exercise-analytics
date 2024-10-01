@@ -27,7 +27,6 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   gradient?: boolean;
   info?: string;
-  gridLines?: boolean;
   yLabel?: string;
 }
 
@@ -38,18 +37,13 @@ export default function LineChart({
   height: providedHeight = 150,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    min: Math.floor(d3.min(data.map((v) => v.value)) ?? 0),
+    max: Math.ceil(d3.max(data.map((v) => v.value)) ?? 1),
+    numDivisions: Math.min(
+      5,
+      Math.ceil(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    ),
+    format: d3.format("d"),
   },
   title,
   hoverable = false,
@@ -58,7 +52,6 @@ export default function LineChart({
   fullWidth,
   info = "",
   yLabel = "",
-  gridLines = false,
 }: DataParams) {
   const updateNewData = useCallback(() => {
     const datapoints = 10;
@@ -100,12 +93,19 @@ export default function LineChart({
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState(0);
   const [popupY, setPopupY] = useState(0);
+  let actualChange = null;
 
-  const actualChange =
-    newData.length < 2
-      ? null
-      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+  if (newData.length > 2) {
+    if (newData[newData.length - 2].value === 0) {
+      actualChange = 0;
+    } else {
+      actualChange =
+        newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
+    }
+  } else {
+    actualChange = 0;
+  }
 
   function handleMouseMove(e: MouseEvent) {
     const x = e.pageX;
@@ -127,7 +127,7 @@ export default function LineChart({
   const windowRef = useRef(null);
 
   const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
+    [yAxis.min > 0 ? yAxis.min : 0, yAxis.max <= 1 ? yAxis.max : yAxis.max + 1],
     [height - marginBottom, marginTop],
   );
 
@@ -185,7 +185,7 @@ export default function LineChart({
       .axisLeft(y)
       .tickValues(
         d3.range(
-          yAxis.min,
+          yAxis.min > 0 ? yAxis.min : 0,
           yAxis.max + 0.000001,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
@@ -194,62 +194,7 @@ export default function LineChart({
       .tickSizeInner(0)
       .tickPadding(15)
       .tickFormat(yAxisFormat);
-    if (gridLines) {
-      const yAxisGrid = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(-width + marginLeft + marginRight - 20)
-        .tickFormat(() => "");
 
-      const axisVert = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(0)
-        .tickFormat(() => "");
-
-      const axisHor = d3
-        .axisBottom(
-          d3.scaleLinear(
-            [0, newData.length - 1],
-            [marginLeft, width - marginRight + 20],
-          ),
-        )
-        .ticks(newData.length - 1)
-        .tickSizeOuter(0)
-        .tickSizeInner(0)
-        .tickFormat(() => "");
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
-
-      svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
-    }
     svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom})`)
@@ -277,6 +222,43 @@ export default function LineChart({
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
 
+    const axisVert = d3
+      .axisLeft(y)
+      .tickValues(
+        d3.range(
+          yAxis.min > 0 ? yAxis.min : 0,
+          yAxis.max + 1,
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+        ),
+      )
+      .tickSize(0)
+      .tickFormat(() => "");
+
+    const axisHor = d3
+      .axisBottom(
+        d3.scaleLinear(
+          [0, newData.length - 1],
+          [marginLeft, width - marginRight + 20],
+        ),
+      )
+      .ticks(newData.length - 1)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickFormat(() => "");
+
+    svg
+      .append("g")
+      .attr("class", `y-axis-vert`)
+      .attr("transform", `translate(${marginLeft - 5}, 0)`)
+      .call(axisVert);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(-5, ${height - marginBottom})`)
+      .attr("class", "x-axis-hor")
+      .style("font", `10px ${poppins500.style.fontFamily}`)
+      .call(axisHor);
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     width,
@@ -288,7 +270,6 @@ export default function LineChart({
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
-    gridLines,
   ]);
 
   useEffect(() => {
@@ -316,29 +297,39 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <div style={{ display: "inline-flex" }}>
-          <p className={styles.titleText}>{title}</p>
-          {info !== "" && (
-            <div
-              className={styles.info}
-              onClick={() => {
-                setInfoPopup(true);
-              }}
-              ref={infoButtonRef}
-            >
-              <InfoIcon />
-              <PopupModal
-                show={infoPopup}
-                info="Some information about line chart should come here."
-                style={{
-                  position: "fixed",
-                  top: `${popupY}px`,
-                  zIndex: 500,
-                  left: `${popupX}px`,
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            overflowX: "scroll",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <p className={styles.titleText}>{title}</p>
+            {info !== "" && (
+              <div
+                className={styles.info}
+                onClick={() => {
+                  setInfoPopup(true);
                 }}
-              />
-            </div>
-          )}
+                ref={infoButtonRef}
+              >
+                <InfoIcon />
+                <PopupModal
+                  show={infoPopup}
+                  info="Some information about line chart should come here."
+                  style={{
+                    position: "fixed",
+                    top: `${popupY}px`,
+                    zIndex: 500,
+                    left: `${popupX}px`,
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <p
             className={styles.percentageChangeIcon}
             style={{
@@ -353,9 +344,6 @@ export default function LineChart({
               (actualChange < 0
                 ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
                 : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-          </p>
-          <p className={styles.percentageChange}>
-            {actualChange !== null && percentageChange}
           </p>
         </div>
         <div style={{ display: "inline-flex" }}>

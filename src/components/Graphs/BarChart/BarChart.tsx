@@ -29,7 +29,6 @@ interface DataParams extends D3Data {
   highlightLargest?: boolean;
   yLabel?: string;
   children?: ReactNode;
-  gridLines?: boolean;
   info?: string;
 }
 
@@ -41,26 +40,18 @@ export default function BarChart({
   height: providedHeight = 180,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)) +
-      0.000001,
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    min: Math.ceil(d3.min(data.map((v) => v.value)) ?? 0),
+    max: Math.floor(d3.max(data.map((v) => v.value)) ?? 1),
+    numDivisions: Math.min(
+      5,
+      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    ),
+    format: d3.format("d"),
   },
   hoverable = false,
   percentageChange = false,
-  highlightLargest = true,
   fullWidth = false,
   children,
-  gridLines = false,
   info = "",
   yLabel = "",
 }: DataParams) {
@@ -101,17 +92,22 @@ export default function BarChart({
   const marginRight = 25;
   const marginBottom = 40;
   const marginLeft = 35;
-  const [largest, setLargest] = useState(-1);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
   const [popupY, setPopupY] = useState<number | null>(null);
 
-  const actualChange =
-    newData.length < 2
-      ? null
-      : newData[newData.length - 1].value / newData[newData.length - 2].value -
+  let actualChange = null;
+
+  if (newData.length > 2) {
+    if (newData[newData.length - 2].value === 0) {
+      actualChange = 0;
+    } else {
+      actualChange =
+        newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
+    }
+  }
 
   const windowRef = useRef(null);
 
@@ -136,8 +132,15 @@ export default function BarChart({
     [0, newData.length - 1],
     [marginLeft, width - marginRight],
   );
+
   const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
+    [
+      yAxis.min,
+      yAxis.max <= 1 ||
+      (((yAxis.max - yAxis.min) / (yAxis.numDivisions - 1)) * 10) % 10 === 0
+        ? yAxis.max
+        : yAxis.max + 1,
+    ],
     [height - marginBottom, marginTop],
   );
 
@@ -158,24 +161,6 @@ export default function BarChart({
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
-    function indexOfMax() {
-      if (newData.length === 0) {
-        return -1;
-      }
-
-      let max = newData[0].value;
-      let maxIndex = 0;
-
-      for (let i = 1; i < newData.length; i += 1) {
-        if (newData[i].value > max) {
-          maxIndex = i;
-          max = newData[i].value;
-        }
-      }
-
-      return maxIndex;
-    }
-    setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
     svg.select(".x-axis-hor").remove();
@@ -205,72 +190,15 @@ export default function BarChart({
       .axisLeft(y)
       .tickValues(
         d3.range(
-          yAxis.min,
-          yAxis.max + 0.000001,
+          yAxis.min > 0 ? yAxis.min : 0,
+          yAxis.max + 1,
           (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
         ),
       )
       .tickSizeOuter(0)
       .tickSizeInner(0)
-      .tickPadding(15)
+      .tickPadding(10)
       .tickFormat(yAxisFormat);
-
-    if (gridLines) {
-      const yAxisGrid = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(-width + marginLeft + marginRight - 20)
-        .tickFormat(() => "");
-
-      const axisVert = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(0)
-        .tickFormat(() => "");
-
-      const axisHor = d3
-        .axisBottom(
-          d3.scaleLinear(
-            [0, newData.length - 1],
-            [marginLeft, width - marginRight + 20],
-          ),
-        )
-        .ticks(newData.length - 1)
-        .tickSizeOuter(0)
-        .tickSizeInner(0)
-        .tickFormat(() => "");
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
-
-      svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
-    }
 
     svg
       .append("g")
@@ -302,6 +230,43 @@ export default function BarChart({
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
 
+    const axisVert = d3
+      .axisLeft(y)
+      .tickValues(
+        d3.range(
+          yAxis.min - 1,
+          yAxis.max + 1,
+          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+        ),
+      )
+      .tickSize(0)
+      .tickFormat(() => "");
+
+    const axisHor = d3
+      .axisBottom(
+        d3.scaleLinear(
+          [0, newData.length - 1],
+          [marginLeft, width - marginRight + 20],
+        ),
+      )
+      .ticks(newData.length - 1)
+      .tickSizeOuter(0)
+      .tickSizeInner(0)
+      .tickFormat(() => "");
+
+    svg
+      .append("g")
+      .attr("class", `y-axis-vert`)
+      .attr("transform", `translate(${marginLeft - 5}, 0)`)
+      .call(axisVert);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(-5, ${height - marginBottom})`)
+      .attr("class", "x-axis-hor")
+      .style("font", `10px ${poppins500.style.fontFamily}`)
+      .call(axisHor);
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     newData,
@@ -313,7 +278,6 @@ export default function BarChart({
     yAxis.max,
     yAxis.min,
     yAxis.numDivisions,
-    gridLines,
     width,
   ]);
 
@@ -334,14 +298,24 @@ export default function BarChart({
         height="10"
         fontSize={8}
       >
-        <div
-          style={{
-            textAlign: "center",
-            color: "#A5A5A5",
-            fontSize: 9,
-          }}
-        >
-          {d.value}
+        <div>
+          <div
+            style={{
+              textAlign: "center",
+              color: "#2B3674",
+              fontSize: "8px",
+              width: "12px",
+              borderRadius: "var(--12, 12px)",
+              background: "#E3EAFC",
+              height: "12px",
+              position: "relative",
+              bottom: "5%",
+              right: "5%",
+              overflow: "visible",
+            }}
+          >
+            {d.value}
+          </div>
         </div>
       </foreignObject>
     );
@@ -363,29 +337,39 @@ export default function BarChart({
       }}
     >
       <div className={styles.titleBox}>
-        <div style={{ display: "inline-flex" }}>
-          <p className={styles.titleText}>{title}</p>
-          {info !== "" && (
-            <div
-              className={styles.infoBox}
-              onClick={() => {
-                setInfoPopup(true);
-              }}
-              ref={infoButtonRef}
-            >
-              <InfoIcon />
-              <PopupModal
-                show={infoPopup}
-                info={info}
-                style={{
-                  position: "fixed",
-                  top: `${popupY}px`,
-                  zIndex: 500,
-                  left: `${popupX}px`,
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            overflowX: "scroll",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <p className={styles.titleText}>{title}</p>
+            {info !== "" && (
+              <div
+                className={styles.infoBox}
+                onClick={() => {
+                  setInfoPopup(true);
                 }}
-              />
-            </div>
-          )}
+                ref={infoButtonRef}
+              >
+                <InfoIcon />
+                <PopupModal
+                  show={infoPopup}
+                  info={info}
+                  style={{
+                    position: "fixed",
+                    top: `${popupY}px`,
+                    zIndex: 500,
+                    left: `${popupX}px`,
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <p
             className={styles.percentageChange}
             style={{
@@ -417,8 +401,12 @@ export default function BarChart({
         <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
           {children ||
             newData.map((d, i) => {
-              const color =
-                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
+              let color;
+              if (activeIndex === i) {
+                color = "#32a1fc";
+              } else {
+                color = "#008AFC";
+              }
               return (
                 <Fragment key={i}>
                   <rect

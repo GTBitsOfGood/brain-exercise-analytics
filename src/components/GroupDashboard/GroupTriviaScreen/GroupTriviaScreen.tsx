@@ -72,7 +72,6 @@ export default function GroupTriviaScreen({
             info="Vidushi"
             data={accuracyData}
             fullWidth
-            gridLines
           />
           <BarChart
             width={325}
@@ -82,7 +81,6 @@ export default function GroupTriviaScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
           />
           <BarChart
             width={325}
@@ -92,7 +90,6 @@ export default function GroupTriviaScreen({
             hoverable
             percentageChange
             fullWidth
-            gridLines
           />
         </div>
         <div className={styles.textStats}>
