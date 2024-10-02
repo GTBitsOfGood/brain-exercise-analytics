@@ -51,6 +51,7 @@ export default function Page() {
         method: HttpMethod.GET,
         queryParams: {
           email: user.email,
+          keepLogged: true,
         },
       });
 
