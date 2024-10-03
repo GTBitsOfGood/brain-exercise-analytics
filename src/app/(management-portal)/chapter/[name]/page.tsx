@@ -28,7 +28,8 @@ const blankChapter: IChapter = {
   name: "",
   chapterPresident: "",
   patients: 0,
-  volunteers: 0,
+  activeVolunteers: 0,
+  inactiveVolunteers: 0,
   yearFounded: 1999,
   active: true,
   location: {

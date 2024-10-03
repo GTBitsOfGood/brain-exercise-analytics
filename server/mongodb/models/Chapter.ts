@@ -16,6 +16,14 @@ const ChapterSchema = new Schema({
     type: Number,
     default: 0,
   },
+  activeVolunteers: {
+    type: Number,
+    default: 0,
+  },
+  inactiveVolunteers: {
+    type: Number,
+    default: 0,
+  },
   yearFounded: {
     type: Number,
     default: new Date().getFullYear(),
