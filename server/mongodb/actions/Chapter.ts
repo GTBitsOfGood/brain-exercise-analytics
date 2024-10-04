@@ -10,8 +10,6 @@ import { flatten } from "mongo-dot-notation";
 import { PipelineStage, Promise } from "mongoose";
 import Chapter from "../models/Chapter";
 import User from "../models/User";
-import { SystemSecurityUpdate } from "@mui/icons-material";
-import { Db } from "mongodb";
 
 export const getChapterByName = async (
   name: string,
@@ -111,75 +109,84 @@ export const getChaptersFiltered = async ({
     | undefined;
 };
 export type ChapterStatistics = {
-  activeVolunteers: number,
-  inactiveVolunteers: number,
-  patients: number,
-}
+  activeVolunteers: number;
+  inactiveVolunteers: number;
+  patients: number;
+};
 
-export const aggregatePeople = async (chapterName : string) : Promise<ChapterStatistics | null> => {
-  console.log(chapterName)
-
+export const aggregatePeople = async (
+  chapterName: string,
+): Promise<ChapterStatistics | null> => {
   const chapterStatistics = await User.aggregate([
     {
-        $facet: {
-            activeVolunteers: [
-                { $match : { 
-                    chapter: chapterName, 
-                    role: "Nonprofit Volunteer",
-                    "adminDetails.active": true
-                 } },
-                 {
-                    $count: "activeVolunteers"
-                 }
-            ],
-            inactiveVolunteers: [
-                { $match : { 
-                    chapter: chapterName, 
-                    role: "Nonprofit Volunteer",
-                    "adminDetails.active": false
-                 } },
-                 {
-                  
-                  $count: "inactiveVolunteers"
-                 }
-            ],
-            patients : [
-                {
-                    $match : {
-                        chapter: chapterName,
-                        role: "Nonprofit Patient",
-                    }
-                },
-                {
-                    $count: "patients"
-                }
-            ]
+      $facet: {
+        activeVolunteers: [
+          {
+            $match: {
+              chapter: chapterName,
+              role: "Nonprofit Volunteer",
+              "adminDetails.active": true,
+            },
+          },
+          {
+            $count: "activeVolunteers",
+          },
+        ],
+        inactiveVolunteers: [
+          {
+            $match: {
+              chapter: chapterName,
+              role: "Nonprofit Volunteer",
+              "adminDetails.active": false,
+            },
+          },
+          {
+            $count: "inactiveVolunteers",
+          },
+        ],
+        patients: [
+          {
+            $match: {
+              chapter: chapterName,
+              role: "Nonprofit Patient",
+            },
+          },
+          {
+            $count: "patients",
+          },
+        ],
+      },
+    },
+    {
+      $unwind: {
+        path: "$activeVolunteers",
+        preserveNullAndEmptyArrays: true, // To keep results if count is zero
+      },
+    },
+    {
+      $unwind: {
+        path: "$inactiveVolunteers",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: "$patients",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        activeVolunteers: {
+          $ifNull: ["$activeVolunteers.activeVolunteers", 0],
         },
-      },{
-        $unwind: {
-          path: "$activeVolunteers",
-          preserveNullAndEmptyArrays: true // To keep results if count is zero
-        }
+        inactiveVolunteers: {
+          $ifNull: ["$inactiveVolunteers.inactiveVolunteers", 0],
+        },
+        patients: { $ifNull: ["$patients.patients", 0] },
       },
-      {
-        $unwind: {
-          path: "$inactiveVolunteers",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $unwind: {
-          path: "$patients",
-          preserveNullAndEmptyArrays: true
-        }
-      }, {
-        $project: {
-          activeVolunteers: { $ifNull: ["$activeVolunteers.activeVolunteers", 0] }, 
-          inactiveVolunteers: { $ifNull: ["$inactiveVolunteers.inactiveVolunteers", 0] },
-          patients: { $ifNull: ["$patients.patients", 0] }
-        }
-      },
-]);
+    },
+  ]);
 
-return chapterStatistics[0]
+  return chapterStatistics[0] as ChapterStatistics;
 };

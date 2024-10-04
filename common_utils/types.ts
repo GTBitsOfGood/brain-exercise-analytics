@@ -473,8 +473,8 @@ export interface IChapter {
   name: string;
   chapterPresident: string;
   patients: number;
-  activeVolunteers: number,
-  inactiveVolunteers: number,
+  activeVolunteers: number;
+  inactiveVolunteers: number;
   yearFounded: number;
   active: boolean;
   location: {

@@ -13,9 +13,9 @@ import {
 import APIWrapper from "@server/utils/APIWrapper";
 
 export const GET = APIWrapper({
-  config: { 
+  config: {
     requireToken: true,
-    requireVolunteer: true 
+    requireVolunteer: true,
   },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
@@ -37,9 +37,10 @@ type PatchReq = {
 };
 
 export const PATCH = APIWrapper({
-  config: { 
+  config: {
     requireToken: true,
-    requireAdmin: true },
+    requireAdmin: true,
+  },
   handler: async (req) => {
     const reqData: PatchReq = (await req.json()) as PatchReq;
     const {
@@ -66,9 +67,10 @@ type DeleteReq = {
 };
 
 export const DELETE = APIWrapper({
-  config: { 
+  config: {
     requireToken: true,
-    requireAdmin: true },
+    requireAdmin: true,
+  },
   handler: async (req) => {
     const reqData = (await req.json()) as DeleteReq;
     const { name } = reqData;
@@ -81,12 +83,11 @@ export const DELETE = APIWrapper({
   },
 });
 
-
-
 export const POST = APIWrapper({
-  config: { 
+  config: {
     requireToken: true,
-    requireAdmin: true },
+    requireAdmin: true,
+  },
   handler: async (req) => {
     const reqData =
       (await req.json()) as SearchRequestBody<ChapterSearchParams>;
