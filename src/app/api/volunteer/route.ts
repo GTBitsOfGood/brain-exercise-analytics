@@ -42,8 +42,8 @@ type PatchReq = {
 
 export const PATCH = APIWrapper({
   config: {
-    requireToken: true,
-    requireVolunteer: true,
+    // requireToken: true,
+    // requireVolunteer: true,
   },
   handler: async (req, currentUser, updateCookie) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
@@ -58,16 +58,16 @@ export const PATCH = APIWrapper({
     if (!testuser) {
       throw new Error("User does not exist in the database");
     }
-    if (!checkValidUserPermissions(currentUser!, testuser)) {
-      throw new Error("You do not have permission to acccess this user");
-    }
+    // if (!checkValidUserPermissions(currentUser!, testuser)) {
+    //   throw new Error("You do not have permission to acccess this user");
+    // }
 
-    if (newFields.email !== null && email === newFields.email) {
-      await updateUserEmail(email, newFields.email);
-    }
+    // if (newFields.email !== null && email === newFields.email) {
+    //   await updateUserEmail(email, newFields.email);
+    // }
 
     const user = await updateVolunteer(email, newFields);
-    updateCookie?.push({ user: user! });
+    // updateCookie?.push({ user: user! });
     return user;
   },
 });

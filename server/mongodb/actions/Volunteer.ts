@@ -194,7 +194,6 @@ export const getVolunteersFiltered = async ({
 
 export const getVolunteer = async (email: string): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ email });
-
   return user;
 };
 
@@ -208,87 +207,72 @@ export const updateVolunteer = async (
     returnDocument: "after",
   });
 
-  let updateFilter;
+  const newStats = (await aggregatePeople(user!.chapter)) as ChapterStatistics;
 
   if (newData.chapter && newData.adminDetails?.active !== undefined) {
+    const oldStats = (await aggregatePeople(user!.chapter)) as ChapterStatistics;
+
     const newChapter = await Chapter.findOne({ name: newData.chapter });
     
     if (!newChapter) {
       throw Error("Chapter does not exist")
     }
 
-    const updateOldFilter = newData?.adminDetails.active ? 
-      {
-        $inc: {
-          inactiveVolunteers: -1
+    const updateOldFilter ={
+        $set: {
+          inactiveVolunteers: oldStats.inactiveVolunteers,
+          activeVolunteers: oldStats.activeVolunteers
         }
-      } : {
-      $inc: {
-        activeVolunteers: -1
-      }
-    }
+    };
+    
     await Chapter.updateOne({ name: user?.chapter }, updateOldFilter); //Decrease old chapter count
 
-    const updateNewFilter = newData?.adminDetails.active ? 
-      {
-        $inc: {
-          activeVolunteers: 1
+    const updateNewFilter = {
+        $set: {
+          activeVolunteers: newStats.activeVolunteers,
+          inactiveVolunteers: newStats.inactiveVolunteers
         }
-      } : {
-      $inc: {
-        inactiveVolunteers: 1
-      }
-    }
+    };
+
     await Chapter.updateOne({ name: newData.chapter }, updateNewFilter); //Increase new chapter count
 
   } else if (newData.chapter) {
     const newChapter = await Chapter.findOne({ name: newData.chapter });
+    const oldStats = (await aggregatePeople(user!.chapter)) as ChapterStatistics;
+
 
     if (!newChapter) {
       throw Error("Chapter does not exist")
     }
 
     
-    const updateOldFilter = user?.adminDetails.active? 
-    {
-      $inc: {
-        activeVolunteers: -1
+    const updateOldFilter = {
+      $set: {
+        activeVolunteers: oldStats.activeVolunteers,
+        inactiveVolunteers: oldStats.inactiveVolunteers
       }
-    } : 
-    {
-      $inc: {
-        inactiveVolunteers: -1
-      }
-    }
+    };
+
     await Chapter.updateOne({ name: user?.chapter }, updateOldFilter); //decrease old chapter count
 
-    const updateNewFilter = user?.adminDetails.active ? 
-    {
-      $inc: {
-        activeVolunteers: 1
+    const updateNewFilter = {
+      $set: {
+        activeVolunteers: newStats.activeVolunteers,
+        inactiveVolunteers: newStats.inactiveVolunteers
       }
-    } : 
-    {
-      $inc: {
-        inactiveVolunteers: 1
-      }
-    }
+    };
+
     await Chapter.updateOne({ name: newData.chapter }, updateNewFilter); //increase new chapter count
 
   } else if (newData.adminDetails?.active !== undefined) {
-    updateFilter = user?.adminDetails.active ? 
-    {
-      $inc: {
-        activeVolunteers: 1,
-        inactiveVolunteers: -1
+
+    const updateFilter = {
+      $set: {
+        activeVolunteers: newStats.activeVolunteers,
+        inactiveVolunteers: newStats.inactiveVolunteers
       }
-    } : 
-    {
-      $inc: {
-        activeVolunteers: -1,
-        inactiveVolunteers: 1
-      }
-    }
+    };
+
     await Chapter.updateOne({ name: user?.chapter }, updateFilter);
   }
 
@@ -304,41 +288,24 @@ export const deleteVolunteer = async (email: string): Promise<null> => {
   await deleteVerificationLogByEmail(email);
 
   if (user) {
-    console.log("INSIDE")
     const chapterName = user.chapter;
-    const active = user.adminDetails.active;
     const chapterObject = Chapter.findOne({ name: chapterName });
     const stats = (await aggregatePeople(chapterName)) as ChapterStatistics;
-    console.log(stats)
 
     if (!chapterObject) {
       throw Error("Chapter does not exist")
     }
 
-    let updateFilter;
-    if (active) {
-      console.log(stats.activeVolunteers)
-      console.log(typeof stats.activeVolunteers)
-
-
-      updateFilter = {
+    const updateFilter = {
         $set: {
-          activeVolunteers: (stats.activeVolunteers - 1),
+          activeVolunteers: stats.activeVolunteers,
+          inactiveVolunteers: stats.inactiveVolunteers,
           patients: stats.patients
         }
-      }
-    } else {
-      updateFilter = {
-        $set: {
-          inactiveVolunteers: (stats.inactiveVolunteers - 1),
-          patients: stats.patients
-        }
-      }
     }
+
     await Chapter.updateOne({ name: chapterName }, updateFilter);
-
   }
-
 
   return null;
 };
