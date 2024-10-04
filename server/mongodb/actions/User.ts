@@ -84,17 +84,17 @@ export const patientSignUp = async (
   );
 
 
-  const chapterObject = Chapter.findOne({ name: chapter });
-  if (!chapterObject) {
-    throw Error("Chapter does not exist")
-  }
-  const updateFilter = {
-    $inc: {
-      activeVolunteers: 1
-    }
-  }
+  // const chapterObject = Chapter.findOne({ name: chapter });
+  // if (!chapterObject) {
+  //   throw Error("Chapter does not exist")
+  // }
+  // const updateFilter = {
+  //   $inc: {
+  //     activeVolunteers: 1
+  //   }
+  // }
 
-  await Chapter.updateOne({ name: chapter }, updateFilter);
+  // await Chapter.updateOne({ name: chapter }, updateFilter);
 
   return result;
 };
@@ -129,17 +129,17 @@ export const volunteerSignUp = async (
     { new: true },
   );
 
-  // const chapterObject = Chapter.findOne({ name: chapter });
-  // if (!chapterObject) {
-  //   throw Error("Chapter does not exist")
-  // }
-  // const updateFilter = {
-  //   $inc: {
-  //     activeVolunteers: 1
-  //   }
-  // }
+  const chapterObject = Chapter.findOne({ name: chapter });
+  if (!chapterObject) {
+    throw Error("Chapter does not exist")
+  }
+  const updateFilter = {
+    $inc: {
+      activeVolunteers: 1
+    }
+  }
 
-  // await Chapter.updateOne({ name: chapter }, updateFilter);
+  await Chapter.updateOne({ name: chapter }, updateFilter);
   return result;
 };
 type UParam = {
