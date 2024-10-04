@@ -1,12 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { IChapterTableEntry } from "@/common_utils/types";
 import { SelectChangeEvent } from "@mui/material";
-import ApplyDropdown, {
-  DropdownOption,
-} from "@src/components/Dropdown/ApplyDropdown/ApplyDropdown";
-
 import { classes } from "@src/utils/utils";
 
 import Link from "next/link";
@@ -17,12 +12,12 @@ interface Props {
 }
 
 export function Row({ chapter }: Props) {
-  const [updatedActive, setUpdatedActive] = useState(chapter.active);
+  // const [updatedActive, setUpdatedActive] = useState(chapter.active);
 
-  const chapterStatusOptions: DropdownOption<boolean>[] = [
-    { value: true, displayValue: "Active" },
-    { value: false, displayValue: "Inactive" },
-  ];
+  // const chapterStatusOptions: DropdownOption<boolean>[] = [
+  //   { value: true, displayValue: "Active" },
+  //   { value: false, displayValue: "Inactive" },
+  // ];
 
   return (
     <>
@@ -67,68 +62,18 @@ export function Row({ chapter }: Props) {
               styles.nameCellContainer,
             )}
           >
-            {chapter.volunteers}
+            {chapter.activeVolunteers + chapter.inactiveVolunteers}
           </div>
         </td>
 
         <td className={styles.RowCell}>
-          <div className={styles.RowCellContainer}>
-            <ApplyDropdown
-              options={chapterStatusOptions}
-              value={updatedActive}
-              showError={false}
-              onChange={async (e: SelectChangeEvent<boolean>) => {
-                const newActive = e.target.value as boolean;
-                setUpdatedActive(newActive);
-                // await internalRequest({
-                //   url: "/api/volunteer",
-                //   method: HttpMethod.PATCH,
-                //   body: {
-                //     email: volunteer.email,
-                //     newFields: {
-                //       "adminDetails.active": newActive,
-                //     },
-                //   },
-                // });
-              }}
-              style={{
-                borderRadius: 41,
-                color: "#2B3674",
-                backgroundColor: updatedActive ? "#D6F6EA" : "#FCDCE2",
-                border: "none",
-                width: "min-content",
-                maxWidth: "100%",
-                textAlign: "center",
-                fontSize: "14px",
-                fontStyle: "normal",
-                fontWeight: 600,
-                lineHeight: "normal",
-              }}
-              sx={{
-                "&.MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderRadius: "41px",
-                  },
-                },
-              }}
-              menuItemStyle={{
-                justifyContent: "left",
-                fontSize: "14px",
-                color: "#2B3674",
-                fontStyle: "normal",
-                fontWeight: 600,
-                lineHeight: "normal",
-              }}
-              applyButtonStyle={{
-                fontSize: "14px",
-                color: "#2B3674",
-                backgroundColor: "#E3EAFC",
-                fontStyle: "normal",
-                fontWeight: 600,
-                lineHeight: "normal",
-              }}
-              categoryName="Status"
-            />
+          <div
+            className={classes(
+              styles.RowCellContainer,
+              styles.nameCellContainer,
+            )}
+          >
+            {chapter.patients}
           </div>
         </td>
 

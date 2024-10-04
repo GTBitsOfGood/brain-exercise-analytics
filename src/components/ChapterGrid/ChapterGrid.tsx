@@ -20,21 +20,21 @@ interface ChapterGridProps {
 const columns: GridColDef[] = [
   { field: "name", headerName: "Name", sortable: true },
   { field: "location", headerName: "Location", sortable: true },
-  { field: "yearFounded", headerName: "Year Founded", sortable: true },
-  { field: "volunteers", headerName: "Active Volunteers", sortable: true },
-  { field: "active", headerName: "Status", sortable: true },
+  { field: "founded", headerName: "Founded", sortable: true },
+  { field: "volunteers", headerName: "Volunteers", sortable: true },
+  { field: "patients", headerName: "Patients", sortable: true },
   { field: "actions", headerName: "", sortable: false },
 ];
 
 function ColumnSizes() {
   return (
     <colgroup>
-      <col style={{ width: "25%" }} />
-      <col style={{ width: "15%" }} />
-      <col style={{ width: "15%" }} />
-      <col style={{ width: "15%" }} />
+      <col style={{ width: "30%" }} />
+      <col style={{ width: "20%" }} />
       <col style={{ width: "15%" }} />
       <col style={{ width: "10%" }} />
+      <col style={{ width: "10%" }} />
+      <col style={{ width: "12%" }} />
     </colgroup>
   );
 }
