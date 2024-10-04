@@ -6,7 +6,6 @@ import {
 import Chapter from "@server/mongodb/models/Chapter";
 import User from "@server/mongodb/models/User";
 import APIWrapper from "@server/utils/APIWrapper";
-import { ReturnDocument } from "mongodb";
 import { ObjectId } from "mongoose";
 
 export type PostReq = {
