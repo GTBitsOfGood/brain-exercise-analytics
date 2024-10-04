@@ -9,6 +9,9 @@ import {
 import { flatten } from "mongo-dot-notation";
 import { PipelineStage, Promise } from "mongoose";
 import Chapter from "../models/Chapter";
+import User from "../models/User";
+import { SystemSecurityUpdate } from "@mui/icons-material";
+import { Db } from "mongodb";
 
 export const getChapterByName = async (
   name: string,
@@ -106,4 +109,76 @@ export const getChaptersFiltered = async ({
   return chapterFiltering[0] as
     | SearchResponseBody<IChapterTableEntry>
     | undefined;
+};
+
+
+export const aggregatePeople = async (chapterName : string) => {
+  console.log(chapterName)
+
+  const chapterStatistics = await User.aggregate([
+    {
+        $facet: {
+            activeCount: [
+                { $match : { 
+                    chapter: chapterName, 
+                    role: "Nonprofit Volunteer",
+                    "adminDetails.active": true
+                 } },
+                 {
+                    $count: "activeCount"
+                 }
+            ],
+            inactiveCount: [
+                { $match : { 
+                    chapter: chapterName, 
+                    role: "Nonprofit Volunteer",
+                    "adminDetails.active": false
+                 } },
+                 {
+                  
+                  $count: "inactiveCount"
+                 }
+            ],
+            patientCount : [
+                {
+                    $match : {
+                        chapter: chapterName,
+                        role: "Nonprofit Patient",
+                    }
+                },
+                {
+                    $count: "patientCount"
+                }
+            ]
+        },
+      },{
+        $unwind: {
+          path: "$activeCount",
+          preserveNullAndEmptyArrays: true // To keep results if count is zero
+        }
+      },
+      {
+        $unwind: {
+          path: "$inactiveCount",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $unwind: {
+          path: "$patientCount",
+          preserveNullAndEmptyArrays: true
+        }
+      }, {
+        $project: {
+          activeCount: { $ifNull: ["$activeCount.activeCount", 0] }, 
+          inactiveCount: { $ifNull: ["$inactiveCount.inactiveCount", 0] },
+          patientCount: { $ifNull: ["$patientCount.patientCount", 0] }
+        }
+      },
+      {
+        $unwind: "$activeCount"
+      }
+]);
+
+console.log(chapterStatistics[0]);
 };
