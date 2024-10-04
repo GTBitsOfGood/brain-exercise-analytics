@@ -99,7 +99,6 @@ export const DELETE = APIWrapper({
 
     await deleteFirebaseUser(email);
 
-
     const user = await deleteVolunteer(email);
     return user;
   },
