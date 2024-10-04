@@ -110,25 +110,29 @@ export const getChaptersFiltered = async ({
     | SearchResponseBody<IChapterTableEntry>
     | undefined;
 };
+export type ChapterStatistics = {
+  activeVolunteers: number,
+  inactiveVolunteers: number,
+  patients: number,
+}
 
-
-export const aggregatePeople = async (chapterName : string) => {
+export const aggregatePeople = async (chapterName : string) : Promise<ChapterStatistics | null> => {
   console.log(chapterName)
 
   const chapterStatistics = await User.aggregate([
     {
         $facet: {
-            activeCount: [
+            activeVolunteers: [
                 { $match : { 
                     chapter: chapterName, 
                     role: "Nonprofit Volunteer",
                     "adminDetails.active": true
                  } },
                  {
-                    $count: "activeCount"
+                    $count: "activeVolunteers"
                  }
             ],
-            inactiveCount: [
+            inactiveVolunteers: [
                 { $match : { 
                     chapter: chapterName, 
                     role: "Nonprofit Volunteer",
@@ -136,10 +140,10 @@ export const aggregatePeople = async (chapterName : string) => {
                  } },
                  {
                   
-                  $count: "inactiveCount"
+                  $count: "inactiveVolunteers"
                  }
             ],
-            patientCount : [
+            patients : [
                 {
                     $match : {
                         chapter: chapterName,
@@ -147,38 +151,35 @@ export const aggregatePeople = async (chapterName : string) => {
                     }
                 },
                 {
-                    $count: "patientCount"
+                    $count: "patients"
                 }
             ]
         },
       },{
         $unwind: {
-          path: "$activeCount",
+          path: "$activeVolunteers",
           preserveNullAndEmptyArrays: true // To keep results if count is zero
         }
       },
       {
         $unwind: {
-          path: "$inactiveCount",
+          path: "$inactiveVolunteers",
           preserveNullAndEmptyArrays: true
         }
       },
       {
         $unwind: {
-          path: "$patientCount",
+          path: "$patients",
           preserveNullAndEmptyArrays: true
         }
       }, {
         $project: {
-          activeCount: { $ifNull: ["$activeCount.activeCount", 0] }, 
-          inactiveCount: { $ifNull: ["$inactiveCount.inactiveCount", 0] },
-          patientCount: { $ifNull: ["$patientCount.patientCount", 0] }
+          activeVolunteers: { $ifNull: ["$activeVolunteers.activeVolunteers", 0] }, 
+          inactiveVolunteers: { $ifNull: ["$inactiveVolunteers.inactiveVolunteers", 0] },
+          patients: { $ifNull: ["$patients.patients", 0] }
         }
       },
-      {
-        $unwind: "$activeCount"
-      }
 ]);
 
-console.log(chapterStatistics[0]);
+return chapterStatistics[0]
 };

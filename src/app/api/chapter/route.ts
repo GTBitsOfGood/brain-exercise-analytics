@@ -14,8 +14,9 @@ import APIWrapper from "@server/utils/APIWrapper";
 
 export const GET = APIWrapper({
   config: { 
-    requireToken: true,
-    requireVolunteer: true },
+    // requireToken: true,
+    // requireVolunteer: true 
+  },
   handler: async (req) => {
     const { searchParams } = new URL(req.url);
     const name = searchParams.get("name");

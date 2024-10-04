@@ -11,6 +11,7 @@ import { flatten } from "mongo-dot-notation";
 import User from "../models/User";
 import { deleteVerificationLogByEmail } from "./VerificationLog";
 import Chapter from "../models/Chapter";
+import { aggregatePeople, ChapterStatistics } from "./Chapter";
 
 type VParam = {
   role?: object;
@@ -294,14 +295,21 @@ export const updateVolunteer = async (
   return user;
 };
 
+
 export const deleteVolunteer = async (email: string): Promise<null> => {
-  const user = await User.findOneAndDelete({ email }) as ModifyResult<IUser>;
+  console.log("HIIII")
+  const user = await User.findOneAndDelete({ email }, {returnDocument: 'before'}) as IUser | null;;
+  console.log(user)
+
   await deleteVerificationLogByEmail(email);
 
-  if (user && user.value) {
-    const chapterName = user.value?.chapter;
-    const active = user.value?.adminDetails.active;
+  if (user) {
+    console.log("INSIDE")
+    const chapterName = user.chapter;
+    const active = user.adminDetails.active;
     const chapterObject = Chapter.findOne({ name: chapterName });
+    const stats = (await aggregatePeople(chapterName)) as ChapterStatistics;
+    console.log(stats)
 
     if (!chapterObject) {
       throw Error("Chapter does not exist")
@@ -309,15 +317,21 @@ export const deleteVolunteer = async (email: string): Promise<null> => {
 
     let updateFilter;
     if (active) {
+      console.log(stats.activeVolunteers)
+      console.log(typeof stats.activeVolunteers)
+
+
       updateFilter = {
-        $inc: {
-          activeVolunteers: -1
+        $set: {
+          activeVolunteers: (stats.activeVolunteers - 1),
+          patients: stats.patients
         }
       }
     } else {
       updateFilter = {
-        $inc: {
-          activeVolunteers: -1
+        $set: {
+          inactiveVolunteers: (stats.inactiveVolunteers - 1),
+          patients: stats.patients
         }
       }
     }

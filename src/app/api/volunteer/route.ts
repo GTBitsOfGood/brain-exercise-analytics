@@ -77,12 +77,13 @@ type DeleteReq = {
 };
 export const DELETE = APIWrapper({
   config: {
-    requireToken: true,
-    requireAdmin: true,
+    // requireToken: true,
+    // requireAdmin: true,
   },
   handler: async (req, currentUser) => {
     const reqdata: DeleteReq = (await req.json()) as DeleteReq;
     const { email }: { email: string } = reqdata;
+    console.log(email)
 
     if (!email) {
       throw new Error("Email parameter is missing");
@@ -92,11 +93,14 @@ export const DELETE = APIWrapper({
     if (!testuser) {
       throw new Error("User does not exist in the database");
     }
-    if (!checkValidUserPermissions(currentUser!, testuser)) {
-      throw new Error("You do not have permission to acccess this user");
-    }
+    console.log("HIII")
+    // if (!checkValidUserPermissions(currentUser!, testuser)) {
+    //   throw new Error("You do not have permission to acccess this user");
+    // }
+    console.log("Before firebase")
+    // await deleteFirebaseUser(email);
+    console.log("after firebase")
 
-    await deleteFirebaseUser(email);
     const user = await deleteVolunteer(email);
     return user;
   },
