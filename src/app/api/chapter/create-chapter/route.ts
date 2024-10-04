@@ -61,8 +61,7 @@ export const POST = APIWrapper({
             }
         }
 
-    await Chapter.updateOne({ name: reqData.name }, updateFilter);
-    const newStatsChapter = await Chapter.findOne({ name: reqData.name });
+    const newStatsChapter = await Chapter.findOneAndUpdate({ name: reqData.name }, updateFilter);
     return newStatsChapter;
     },
   });

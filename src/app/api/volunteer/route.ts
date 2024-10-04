@@ -42,8 +42,8 @@ type PatchReq = {
 
 export const PATCH = APIWrapper({
   config: {
-    // requireToken: true,
-    // requireVolunteer: true,
+    requireToken: true,
+    requireVolunteer: true,
   },
   handler: async (req, currentUser, updateCookie) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
@@ -58,16 +58,16 @@ export const PATCH = APIWrapper({
     if (!testuser) {
       throw new Error("User does not exist in the database");
     }
-    // if (!checkValidUserPermissions(currentUser!, testuser)) {
-    //   throw new Error("You do not have permission to acccess this user");
-    // }
+    if (!checkValidUserPermissions(currentUser!, testuser)) {
+      throw new Error("You do not have permission to acccess this user");
+    }
 
-    // if (newFields.email !== null && email === newFields.email) {
-    //   await updateUserEmail(email, newFields.email);
-    // }
+    if (newFields.email !== null && email === newFields.email) {
+      await updateUserEmail(email, newFields.email);
+    }
 
     const user = await updateVolunteer(email, newFields);
-    // updateCookie?.push({ user: user! });
+    updateCookie?.push({ user: user! });
     return user;
   },
 });
@@ -77,13 +77,12 @@ type DeleteReq = {
 };
 export const DELETE = APIWrapper({
   config: {
-    // requireToken: true,
-    // requireAdmin: true,
+    requireToken: true,
+    requireAdmin: true,
   },
   handler: async (req, currentUser) => {
     const reqdata: DeleteReq = (await req.json()) as DeleteReq;
     const { email }: { email: string } = reqdata;
-    console.log(email)
 
     if (!email) {
       throw new Error("Email parameter is missing");
@@ -93,13 +92,13 @@ export const DELETE = APIWrapper({
     if (!testuser) {
       throw new Error("User does not exist in the database");
     }
-    console.log("HIII")
-    // if (!checkValidUserPermissions(currentUser!, testuser)) {
-    //   throw new Error("You do not have permission to acccess this user");
-    // }
-    console.log("Before firebase")
-    // await deleteFirebaseUser(email);
-    console.log("after firebase")
+
+    if (!checkValidUserPermissions(currentUser!, testuser)) {
+      throw new Error("You do not have permission to acccess this user");
+    }
+
+    await deleteFirebaseUser(email);
+
 
     const user = await deleteVolunteer(email);
     return user;
