@@ -2,7 +2,6 @@ import { getAuth, UserRecord } from "firebase-admin/auth";
 
 const getUserByEmail = async (email: string): Promise<UserRecord | null> => {
   const value = await getAuth().getUserByEmail(email);
-
   return value;
 };
 

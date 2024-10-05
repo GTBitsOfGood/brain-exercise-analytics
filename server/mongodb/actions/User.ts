@@ -1,5 +1,6 @@
 import {
   AdminApprovalStatus,
+  IChapter,
   IPatientTableEntry,
   IUser,
   PatientSearchParams,
@@ -9,6 +10,7 @@ import {
 } from "@/common_utils/types";
 import User from "@server/mongodb/models/User";
 import { PipelineStage } from "mongoose";
+import Chapter from "../models/Chapter";
 
 export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ email });
@@ -112,9 +114,22 @@ export const volunteerSignUp = async (
 
     { new: true },
   );
+
+  const chapterObject: IChapter | null = await Chapter.findOne({
+    name: chapter,
+  });
+  if (!chapterObject) {
+    throw Error("Chapter does not exist");
+  }
+  const updateFilter = {
+    $inc: {
+      activeVolunteers: 1,
+    },
+  };
+
+  await Chapter.updateOne({ name: chapter }, updateFilter);
   return result;
 };
-
 type UParam = {
   email?: object;
   role: Role;

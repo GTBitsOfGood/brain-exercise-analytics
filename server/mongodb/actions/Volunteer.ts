@@ -1,4 +1,5 @@
 import {
+  IChapter,
   IUser,
   RecursivePartial,
   Role,
@@ -10,6 +11,8 @@ import { PipelineStage } from "mongoose";
 import { flatten } from "mongo-dot-notation";
 import User from "../models/User";
 import { deleteVerificationLogByEmail } from "./VerificationLog";
+import Chapter from "../models/Chapter";
+import { aggregatePeople, ChapterStatistics } from "./Chapter";
 
 type VParam = {
   role?: object;
@@ -192,7 +195,6 @@ export const getVolunteersFiltered = async ({
 
 export const getVolunteer = async (email: string): Promise<IUser | null> => {
   const user = await User.findOne<IUser>({ email });
-
   return user;
 };
 
@@ -206,12 +208,110 @@ export const updateVolunteer = async (
     returnDocument: "after",
   });
 
+  const newStats = (await aggregatePeople(user!.chapter)) as ChapterStatistics;
+
+  if (newData.chapter && newData.adminDetails?.active !== undefined) {
+    const oldStats = (await aggregatePeople(
+      user!.chapter,
+    )) as ChapterStatistics;
+
+    const newChapter: IChapter | null = await Chapter.findOne({
+      name: newData.chapter,
+    });
+
+    if (!newChapter) {
+      throw Error("Chapter does not exist");
+    }
+
+    const updateOldFilter = {
+      $set: {
+        inactiveVolunteers: oldStats.inactiveVolunteers,
+        activeVolunteers: oldStats.activeVolunteers,
+      },
+    };
+
+    await Chapter.updateOne({ name: user?.chapter }, updateOldFilter); // Decrease old chapter count
+
+    const updateNewFilter = {
+      $set: {
+        activeVolunteers: newStats.activeVolunteers,
+        inactiveVolunteers: newStats.inactiveVolunteers,
+      },
+    };
+
+    await Chapter.updateOne({ name: newData.chapter }, updateNewFilter); // Increase new chapter count
+  } else if (newData.chapter) {
+    const newChapter: IChapter | null = await Chapter.findOne({
+      name: newData.chapter,
+    });
+    const oldStats = (await aggregatePeople(
+      user!.chapter,
+    )) as ChapterStatistics;
+
+    if (!newChapter) {
+      throw Error("Chapter does not exist");
+    }
+
+    const updateOldFilter = {
+      $set: {
+        activeVolunteers: oldStats.activeVolunteers,
+        inactiveVolunteers: oldStats.inactiveVolunteers,
+      },
+    };
+
+    await Chapter.updateOne({ name: user?.chapter }, updateOldFilter); // decrease old chapter count
+
+    const updateNewFilter = {
+      $set: {
+        activeVolunteers: newStats.activeVolunteers,
+        inactiveVolunteers: newStats.inactiveVolunteers,
+      },
+    };
+
+    await Chapter.updateOne({ name: newData.chapter }, updateNewFilter); // increase new chapter count
+  } else if (newData.adminDetails?.active !== undefined) {
+    const updateFilter = {
+      $set: {
+        activeVolunteers: newStats.activeVolunteers,
+        inactiveVolunteers: newStats.inactiveVolunteers,
+      },
+    };
+
+    await Chapter.updateOne({ name: user?.chapter }, updateFilter);
+  }
+
   return user;
 };
 
 export const deleteVolunteer = async (email: string): Promise<null> => {
-  await User.findOneAndDelete({ email });
+  const user: IUser | null = await User.findOneAndDelete(
+    { email },
+    { returnDocument: "before" },
+  );
+
   await deleteVerificationLogByEmail(email);
+
+  if (user) {
+    const chapterName = user.chapter;
+    const chapterObject: IChapter | null = await Chapter.findOne({
+      name: chapterName,
+    });
+    const stats = (await aggregatePeople(chapterName)) as ChapterStatistics;
+
+    if (!chapterObject) {
+      throw Error("Chapter does not exist");
+    }
+
+    const updateFilter = {
+      $set: {
+        activeVolunteers: stats.activeVolunteers,
+        inactiveVolunteers: stats.inactiveVolunteers,
+        patients: stats.patients,
+      },
+    };
+
+    await Chapter.updateOne({ name: chapterName }, updateFilter);
+  }
 
   return null;
 };

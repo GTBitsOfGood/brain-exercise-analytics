@@ -92,11 +92,13 @@ export const DELETE = APIWrapper({
     if (!testuser) {
       throw new Error("User does not exist in the database");
     }
+
     if (!checkValidUserPermissions(currentUser!, testuser)) {
       throw new Error("You do not have permission to acccess this user");
     }
 
     await deleteFirebaseUser(email);
+
     const user = await deleteVolunteer(email);
     return user;
   },

@@ -25,7 +25,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Chapter Size",
-        value: `${params.chapter.volunteers}`,
+        value: `${params.chapter.patients}`,
         icon: <FontAwesomeIcon icon={faUsers} style={{ color: "#008afc" }} />,
       },
       {

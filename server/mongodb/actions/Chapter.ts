@@ -5,10 +5,13 @@ import {
   SearchResponseBody,
   SearchRequestBody,
   IChapterTableEntry,
+  IUser,
+  Role,
 } from "@/common_utils/types";
 import { flatten } from "mongo-dot-notation";
-import { PipelineStage, Promise } from "mongoose";
+import { ObjectId, PipelineStage, Promise } from "mongoose";
 import Chapter from "../models/Chapter";
+import User from "../models/User";
 
 export const getChapterByName = async (
   name: string,
@@ -106,4 +109,154 @@ export const getChaptersFiltered = async ({
   return chapterFiltering[0] as
     | SearchResponseBody<IChapterTableEntry>
     | undefined;
+};
+export type ChapterStatistics = {
+  activeVolunteers: number;
+  inactiveVolunteers: number;
+  patients: number;
+};
+
+export const aggregatePeople = async (
+  chapterName: string,
+): Promise<ChapterStatistics | null> => {
+  const chapterStatistics: ChapterStatistics[] = await User.aggregate([
+    {
+      $facet: {
+        activeVolunteers: [
+          {
+            $match: {
+              chapter: chapterName,
+              role: "Nonprofit Volunteer",
+              "adminDetails.active": true,
+            },
+          },
+          {
+            $count: "activeVolunteers",
+          },
+        ],
+        inactiveVolunteers: [
+          {
+            $match: {
+              chapter: chapterName,
+              role: "Nonprofit Volunteer",
+              "adminDetails.active": false,
+            },
+          },
+          {
+            $count: "inactiveVolunteers",
+          },
+        ],
+        patients: [
+          {
+            $match: {
+              chapter: chapterName,
+              role: "Nonprofit Patient",
+            },
+          },
+          {
+            $count: "patients",
+          },
+        ],
+      },
+    },
+    {
+      $unwind: {
+        path: "$activeVolunteers",
+        preserveNullAndEmptyArrays: true, // To keep results if count is zero
+      },
+    },
+    {
+      $unwind: {
+        path: "$inactiveVolunteers",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: "$patients",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        activeVolunteers: {
+          $ifNull: ["$activeVolunteers.activeVolunteers", 0],
+        },
+        inactiveVolunteers: {
+          $ifNull: ["$inactiveVolunteers.inactiveVolunteers", 0],
+        },
+        patients: { $ifNull: ["$patients.patients", 0] },
+      },
+    },
+  ]);
+
+  await Chapter.findOneAndUpdate(
+    { name: chapterName },
+    {
+      $set: {
+        activeVolunteers: chapterStatistics[0].activeVolunteers,
+        inactiveVolunteers: chapterStatistics[0].inactiveVolunteers,
+        patients: chapterStatistics[0].patients,
+      },
+    },
+    { new: true },
+  );
+
+  return chapterStatistics[0];
+};
+
+export type PostReq = {
+  name: string;
+  chapterPresident: ObjectId;
+  yearFounded: number;
+  country: string;
+  city?: string;
+  state?: string;
+  president: IUser;
+};
+
+export const createChapter = async ({
+  name,
+  chapterPresident,
+  yearFounded,
+  country,
+  state = "",
+  city = "",
+  president,
+}: PostReq): Promise<IChapter> => {
+  await Chapter.create({
+    name,
+    chapterPresident,
+    yearFounded,
+    location: {
+      country,
+      state,
+      city,
+    },
+  });
+
+  await User.findOneAndUpdate<IUser>(
+    { email: president.email },
+    {
+      role: Role.NONPROFIT_CHAPTER_PRESIDENT,
+    },
+  );
+
+  const stats = (await aggregatePeople(name)) as ChapterStatistics;
+
+  const updateFilter = {
+    $set: {
+      activeVolunteers: stats.activeVolunteers,
+      inactiveVolunteers: stats.inactiveVolunteers,
+      patients: stats.patients,
+    },
+  };
+
+  const newStatsChapter: IChapter | null = await Chapter.findOneAndUpdate(
+    { name },
+    updateFilter,
+    { new: true },
+  );
+
+  return newStatsChapter as IChapter;
 };
