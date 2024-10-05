@@ -14,13 +14,51 @@
   padding: 25px 30px 5px;
   display: flex;
   column-gap: 24px;
-  align-items: center;
+  justify-content: space-between;
+  padding: 25px 15px 10px 30px;
 }
 
 .table-header > p {
   color: #2b3674;
   font-size: 24px;
   font-weight: 600;
+}
+
+.table-header-left {
+  display: flex;
+  column-gap: 24px;
+  align-items: center;
+}
+
+.table-header-left > p {
+  color: #2b3674;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.table-header-database-button {
+  width: fit-content;
+  padding: 6px 14px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  text-align: center;
+
+  background-color: #008afc;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.addChapterModalContent {
+  width: 53%;
+  height: 60%;
 }
 
 .topRow {

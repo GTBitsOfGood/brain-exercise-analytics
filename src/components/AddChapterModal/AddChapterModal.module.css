@@ -1,0 +1,118 @@
+.container {
+  display: flex;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  padding: 3% 3%;
+  border-radius: var(--12, 12px);
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  font-family: var(--font-poppins);
+  overflow-y: auto;
+}
+
+.container * {
+  font-family: var(--font-poppins);
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.inputHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  gap: 1fr;
+  margin-bottom: 5%;
+}
+
+.inputField {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 9px;
+  color: #2b3674;
+  width: 70%;
+}
+.inputField input {
+  height: 40px;
+  border-radius: 12px;
+  font-size: 13px;
+  border: 1px solid var(--Dark-Blue-Grey, #9ca5c2);
+}
+.nonEditable {
+  background-color: #e7eeff;
+  padding-left: 15px;
+  border: 0cm;
+  color: #8f9bba;
+  cursor: not-allowed;
+}
+
+.editable {
+  background-color: white;
+  padding-left: 15px;
+  border: 1px solid #979797;
+  color: #2b3674;
+}
+.inputField label {
+  color: var(--Dark-Blue, #2B3674);
+  /* P1 */
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.inputFieldRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+.editButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 42px;
+  padding: 5px;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}
+.submitButton {
+  border-radius: 10px;
+  padding: 15px 30px;
+  border: 0px;
+  font-weight: bold;
+  background-color: #008afc;
+  color: white;
+  cursor: pointer;
+}
+.disabled {
+  background-color: #e3eafc;
+  color: #2b3674;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 3%;
+}
+
+.exit {
+  display: flex;
+  justify-content: flex-start;
+  height: 6%;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}

@@ -7,6 +7,9 @@ import { GridColDef } from "@src/utils/types";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./ChapterGrid.module.css";
 import { Row } from "./Row/Row";
+import AddChapterModal from "@src/components/AddChapterModal/AddChapterModal";
+import Modal from "@src/components/Modal/Modal";
+import { useState } from "react";
 
 interface ChapterGridProps {
   data: IChapterTableEntry[];
@@ -40,10 +43,22 @@ function ColumnSizes() {
 }
 
 function Header() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className={styles["table-header"]}>
-      <TwoVolunteersIcon />
-      <p className={styles["table-header-text"]}>BEI/ Chapter List</p>
+      <div className={styles["table-header-left"]}>
+        <TwoVolunteersIcon />
+        <p className={styles["table-header-text"]}>BEI/ Chapter List</p>
+      </div>
+      <button
+        className={styles["table-header-database-button"]}
+        onClick = {() => setShowModal(!showModal)}
+      >
+        Add Chapter
+      </button>
+      <Modal showModal={showModal} setShowModal={setShowModal}>
+        <AddChapterModal className={styles.addChapterModalContent} showModal={showModal} setShowModal={setShowModal}/>
+      </Modal>
     </div>
   );
 }
