@@ -1,7 +1,6 @@
 "use client";
 
 import { IChapterTableEntry } from "@/common_utils/types";
-import { SelectChangeEvent } from "@mui/material";
 import { classes } from "@src/utils/utils";
 
 import Link from "next/link";
