@@ -37,7 +37,7 @@ export default function Page() {
   const fetchChapters = useCallback(() => {
     setLoading(true);
     internalRequest<SearchResponseBody<IChapterTableEntry>>({
-      url: "/api/chapter",
+      url: "/api/chapter/search-chapter",
       method: HttpMethod.POST,
       body: {
         params: {

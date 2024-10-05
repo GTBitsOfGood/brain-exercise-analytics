@@ -1,16 +1,13 @@
+import { IChapter, IUser, RecursivePartial } from "@/common_utils/types";
 import {
-  ChapterSearchParams,
-  IChapter,
-  RecursivePartial,
-  SearchRequestBody,
-} from "@/common_utils/types";
-import {
+  createChapter,
   deleteChapter,
   getChapterByName,
-  getChaptersFiltered,
   updateChapter,
 } from "@server/mongodb/actions/Chapter";
+import User from "@server/mongodb/models/User";
 import APIWrapper from "@server/utils/APIWrapper";
+import { ObjectId } from "mongoose";
 
 export const GET = APIWrapper({
   config: {
@@ -83,31 +80,44 @@ export const DELETE = APIWrapper({
   },
 });
 
+export type PostReq = {
+  name: string;
+  chapterPresident: ObjectId;
+  yearFounded: number;
+  country: string;
+  city?: string;
+  state?: string;
+};
+
 export const POST = APIWrapper({
   config: {
     requireToken: true,
     requireAdmin: true,
   },
   handler: async (req) => {
-    const reqData =
-      (await req.json()) as SearchRequestBody<ChapterSearchParams>;
+    const reqData = (await req.json()) as PostReq;
 
-    const params = Object.fromEntries(
-      Object.entries(reqData.params).filter(
-        ([, val]) =>
-          val !== undefined &&
-          val !== null &&
-          (typeof val !== "string" || val.length > 0) &&
-          (!Array.isArray(val) || val.length > 0),
-      ),
+    if (
+      !reqData.name ||
+      !reqData.chapterPresident ||
+      !reqData.yearFounded ||
+      !reqData.country
+    ) {
+      throw Error("Required Fields are missing");
+    }
+
+    const president: IUser | null = await User.findById(
+      reqData.chapterPresident,
     );
+    if (!president) {
+      throw Error("Chapter president doesn't exist");
+    }
+    const dupeChapter: IChapter | null = await getChapterByName(reqData.name);
+    if (dupeChapter) {
+      throw Error("Duplicate Chapter name not allowed");
+    }
 
-    const chapters = await getChaptersFiltered({
-      params,
-      page: reqData.page,
-      sortParams: reqData.sortParams,
-    });
-
-    return chapters;
+    const chapter = await createChapter({ ...reqData, president });
+    return chapter;
   },
 });

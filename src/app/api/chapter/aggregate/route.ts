@@ -13,14 +13,13 @@ export const POST = APIWrapper({
     }
 
     const chapter: IChapter | null = await Chapter.findOne({
-      name: chapterName,
+      name: chapterName.chapterName,
     });
 
     if (!chapter) {
       throw Error("No chapter with that name found");
     }
 
-    const chapterStatistics = await aggregatePeople(chapterName.chapterName);
-    return chapterStatistics;
+    await aggregatePeople(chapterName.chapterName);
   },
 });
