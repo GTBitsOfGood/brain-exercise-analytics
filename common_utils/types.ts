@@ -327,8 +327,9 @@ export interface IChapterTableEntry {
   name: string;
   chapterPresident: string;
   patients: number;
-  yearFounded: number;
   activeVolunteers: number;
+  inactiveVolunteers: number;
+  yearFounded: number;
   active: boolean;
   location: {
     country: string;
@@ -473,8 +474,9 @@ export interface IChapter {
   name: string;
   chapterPresident: string;
   patients: number;
-  yearFounded: number;
   activeVolunteers: number;
+  inactiveVolunteers: number;
+  yearFounded: number;
   active: boolean;
   location: {
     country: string;
