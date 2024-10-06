@@ -25,17 +25,17 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Chapter Size",
-        value: `${params.chapter.patients}`,
+        value: `${params.chapter.inactiveVolunteers + params.chapter.activeVolunteers}`,
         icon: <FontAwesomeIcon icon={faUsers} style={{ color: "#008afc" }} />,
       },
       {
         title: "Active Volunteers",
-        value: "0",
+        value: `${params.chapter.activeVolunteers}`,
         icon: <FontAwesomeIcon icon={faUser} style={{ color: "#008afc" }} />,
       },
       {
         title: "Inactive Volunteers",
-        value: "0",
+        value: `${params.chapter.inactiveVolunteers}`,
         icon: <FontAwesomeIcon icon={faUser} style={{ color: "#9CA5C2" }} />,
       },
       {
