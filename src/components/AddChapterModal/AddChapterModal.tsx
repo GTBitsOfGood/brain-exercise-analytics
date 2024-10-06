@@ -78,6 +78,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
     { id: "10", name: "Addie Minstra" },
     { id: "11", name: "Anne Ortha" },
   ];
+  
   const [results, setResults] = useState<{ id: string; name: string }[]>();
   type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
   const handleChange: changeHandler = (e) => {
@@ -85,7 +86,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
     if (!target.value.trim()) return setResults([]);
 
     const filteredValue = profiles.filter((profile) =>
-      profile.name.toLowerCase().startsWith(target.value)
+      profile.name.toLowerCase().startsWith(target.value.toLowerCase())
     );
     setResults(filteredValue);
   };
@@ -131,7 +132,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
           <div className={styles.inputField}>
             <label>Chapter Test Input</label>
             <LiveSearchDropdown
-              results={profiles}
+              results={results}
               value={chapterPresident}
               renderItem={(item) => <p>{item.name}</p>}
               onChange={handleChange}
