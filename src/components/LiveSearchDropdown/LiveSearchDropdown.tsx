@@ -26,7 +26,6 @@ const LiveSearchDropdown = <T extends object>({
   showError,
   error
 }: Props<T>): JSX.Element => {
-  const optionContainer = useRef<HTMLDivElement>(null);
   const [showOptions, setShowOptions] = useState(false);
 
   const handleSelection = (selectedIndex: number) => {

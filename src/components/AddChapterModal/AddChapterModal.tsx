@@ -34,6 +34,8 @@ interface Props {
 const Modal = ({ className, style, showModal, setShowModal}: Props) => {
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterPresident, setChapterPresident] = useState<string>("");
+  const [chapterPresidentID, setChapterPresidentID] = useState<string>("");
+
 
   const [chapterNameError, setChapterNameError] = useState<string>("");
   const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
@@ -84,6 +86,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
   const reset = () => {
     setChapterName("");
     setChapterPresident("");
+    setChapterPresidentID("");
     setLocCountry("")
     setLocState("");
     setLocCity("");
@@ -108,7 +111,6 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
         }
       },
     }).then((res) => {
-      console.log(res)
       setVolunteers(res?.data ?? []);
       setLoading(false)
     });
@@ -152,12 +154,13 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
     }
 
     try {
+      console.log(chapterName, chapterPresident, chapterPresidentID, locCountry)
       await internalRequest<PostReq>({
         url: "/api/chapter",
         method: HttpMethod.POST,
         body: {
           name: chapterName,
-          chapterPresident: chapterPresident,
+          chapterPresident: chapterPresidentID,
           yearFounded: new Date().getFullYear(),
           country: locCountry,
           city: locCity,
@@ -167,7 +170,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
     } catch (error) {
       console.log(error)
     }
-    
+    setShowModal(false);
     reset();
   };
 
@@ -249,7 +252,10 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
               renderItem={(item) => 
                 <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}
               onChange={handleChange}
-              onSelect={(item) => setChapterPresident(item.firstName + " " + item.lastName)}
+              onSelect={(item) => {
+                setChapterPresident(item.firstName + " " + item.lastName)
+                setChapterPresidentID(item._id)}
+              }
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}
             />
