@@ -8,7 +8,8 @@ interface Props<T> {
   renderItem(item: T): JSX.Element;
   onChange?: React.ChangeEventHandler;
   onSelect?: (item: T) => void;
-  value?: string;
+  value: string;
+  setValue: Function;
   placeholder?: string;
   showError?: boolean;
   error?: string;
@@ -18,6 +19,7 @@ const LiveSearchDropdown = <T extends object>({
   options = [],
   renderItem,
   value,
+  setValue,
   onChange,
   onSelect,
   placeholder,
@@ -26,7 +28,6 @@ const LiveSearchDropdown = <T extends object>({
 }: Props<T>): JSX.Element => {
   const optionContainer = useRef<HTMLDivElement>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [defaultValue, setDefaultValue] = useState("");
 
   const handleSelection = (selectedIndex: number) => {
     const selectedItem = options[selectedIndex];
@@ -49,7 +50,7 @@ const LiveSearchDropdown = <T extends object>({
 
   type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
   const handleChange: changeHandler = (e) => {
-    setDefaultValue(e.target.value);
+    setValue(e.target.value);
     onChange && onChange(e);
   };
 
@@ -59,16 +60,12 @@ const LiveSearchDropdown = <T extends object>({
     if (options.length <= 0) setShowOptions(false);
   }, [options]);
 
-  useEffect(() => {
-    if (value) setDefaultValue(value);
-  }, [value]);
-
   return (
     <div className={styles.container}>
       <div tabIndex={1} onBlur={resetSearchComplete} onKeyDown={handleKeyDown} className={styles.dropdown}>
         <InputField
           placeholder={placeholder}
-          value={defaultValue}
+          value={value}
           onChange={handleChange}
           showError={showError}
           error = {error}

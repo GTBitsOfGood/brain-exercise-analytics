@@ -18,6 +18,10 @@ import {
   IVolunteerTableEntry,
   SearchResponseBody,
 } from "@/common_utils/types";
+import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
+import { PostReq } from "@server/mongodb/actions/Chapter";
+import { Today } from "@mui/icons-material";
+
 
 
 interface Props {
@@ -29,11 +33,9 @@ interface Props {
 
 const Modal = ({ className, style, showModal, setShowModal}: Props) => {
   const [chapterName, setChapterName] = useState<string>("");
-  const [chapterRegion, setChapterRegion] = useState<string>("");
   const [chapterPresident, setChapterPresident] = useState<string>("");
 
   const [chapterNameError, setChapterNameError] = useState<string>("");
-  const [chapterRegionError, setChapterRegionError] = useState<string>("");
   const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
 
   const [locCountry, setLocCountry] = useState("");
@@ -73,7 +75,6 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
 
   const resetErrors = () => {
     setChapterNameError("");
-    setChapterRegionError("");
     setChapterPresidentError("");
     setCountryError("");
     setStateError("");
@@ -82,7 +83,6 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
 
   const reset = () => {
     setChapterName("");
-    setChapterRegion("");
     setChapterPresident("");
     setLocCountry("")
     setLocState("");
@@ -135,12 +135,9 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
       setChapterNameError("Chapter name cannot be blank");
       error = true;
     }
-    if (chapterRegion === "") {
-      setChapterRegionError("Chapter region cannot be blank");
-      error = true;
-    }
+
     if (chapterPresident === "") {
-      setChapterPresidentError("Chapter president cannot be blank");
+      setChapterPresidentError("Choose a valid chapter president");
       error = true;
     }
 
@@ -149,21 +146,28 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
       error = true;
     }
 
-    if (locState === "") {
-      setStateError("State cannot be blank");
-      error = true;
-    }
-
-    if (locCity === "") {
-      setCityError("City cannot be blank");
-      error = true;
-    }
-
     if (error) {
+      console.log(error);
       return;
     }
 
-    //await addChapter();
+    try {
+      await internalRequest<PostReq>({
+        url: "/api/chapter",
+        method: HttpMethod.POST,
+        body: {
+          name: chapterName,
+          chapterPresident: chapterPresident,
+          yearFounded: new Date().getFullYear(),
+          country: locCountry,
+          city: locCity,
+          state: locState,
+        },
+      });
+    } catch (error) {
+      console.log(error)
+    }
+    
     reset();
   };
 
@@ -240,6 +244,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
             <LiveSearchDropdown
               options={filteredVolunteers}
               value={chapterPresident}
+              setValue={setChapterPresident}
               placeholder={loading ? "Loading.." : "Enter the name of the chapter president"}
               renderItem={(item) => 
                 <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}

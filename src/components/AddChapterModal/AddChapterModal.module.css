@@ -47,6 +47,7 @@
   gap: 9px;
   color: #2b3674;
   width: 70%;
+  z-index: 999;
 }
 .inputField input {
   height: 40px;
