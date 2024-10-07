@@ -1,12 +1,23 @@
 import { useRouter } from "next/navigation";
-import { CSSProperties, FormEvent, MouseEvent, useState } from "react";
+import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
 import { classes } from "@src/utils/utils";
+import { useSelector } from "react-redux";
+
 
 import useAuth from "@src/hooks/useAuth";
 import styles from "./AddChapterModal.module.css";
 import InputField from "../InputField/InputField";
 import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
+import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 import XIcon from "@/src/app/icons/XIcon"
+import { Country, State, City } from "country-state-city";
+import { RootState } from "@src/redux/rootReducer";
+import { internalRequest } from "@src/utils/requests";
+import {
+  HttpMethod,
+  IVolunteerTableEntry,
+  SearchResponseBody,
+} from "@/common_utils/types";
 
 
 interface Props {
@@ -25,17 +36,93 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
   const [chapterRegionError, setChapterRegionError] = useState<string>("");
   const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
 
+  const [locCountry, setLocCountry] = useState("");
+  const [locState, setLocState] = useState("");
+  const [locCity, setLocCity] = useState("");
+
+  const [countryError, setCountryError] = useState("");
+  const [stateError, setStateError] = useState("");
+  const [cityError, setCityError] = useState("");
+
+  const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
+  const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
+  const [loading, setLoading] = useState(false);
+
+
+  const COUNTRIES = Country.getAllCountries().map((country) => ({
+    value: country.name,
+    displayValue: `${country.name}`,
+  }));
+  const countryCode = Country.getAllCountries().filter(
+    (country) => country.name === locCountry,
+  )[0]?.isoCode;
+
+  const STATES = State.getStatesOfCountry(countryCode).map((state) => ({
+    value: state.name,
+    displayValue: `${state.name}`,
+  }));
+
+  const stateCode = State.getStatesOfCountry(countryCode).filter(
+    (state) => state.name === locState,
+  )[0]?.isoCode;
+
+  const CITIES = City.getCitiesOfState(countryCode, stateCode).map((city) => ({
+    value: city.name,
+    displayValue: `${city.name}`,
+  }));
+
   const resetErrors = () => {
     setChapterNameError("");
     setChapterRegionError("");
     setChapterPresidentError("");
+    setCountryError("");
+    setStateError("");
+    setCityError("");
   };
 
   const reset = () => {
     setChapterName("");
     setChapterRegion("");
     setChapterPresident("");
+    setLocCountry("")
+    setLocState("");
+    setLocCity("");
     resetErrors();
+  };
+
+  // Getting Volunteers
+  const {
+    fullName,
+    volunteerRoles,
+  } = useSelector((state: RootState) => state.volunteerSearch);
+
+  useEffect(() => {
+    setLoading(true)
+    internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+      url: "/api/volunteer/filter-volunteer",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          name: fullName,
+          roles: volunteerRoles,
+        }
+      },
+    }).then((res) => {
+      console.log(res)
+      setVolunteers(res?.data ?? []);
+      setLoading(false)
+    });
+  }, []);
+
+  type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
+  const handleChange: changeHandler = (e) => {
+    const { target } = e;
+    if (!target.value.trim()) return setFilteredVolunteers([]);
+
+    const filteredValue = volunteers?.filter((volunteer) =>
+      (volunteer.firstName + " " + volunteer.lastName).toLowerCase().startsWith(target.value.toLowerCase())
+    );
+    setFilteredVolunteers(filteredValue);
   };
 
   const handleSaveChanges = async (
@@ -57,38 +144,27 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
       error = true;
     }
 
+    if (locCountry === "") {
+      setCountryError("Country cannot be blank");
+      error = true;
+    }
+
+    if (locState === "") {
+      setStateError("State cannot be blank");
+      error = true;
+    }
+
+    if (locCity === "") {
+      setCityError("City cannot be blank");
+      error = true;
+    }
+
     if (error) {
       return;
     }
 
     //await addChapter();
     reset();
-  };
-
-  const profiles = [
-    { id: "1", name: "Allie Grater" },
-    { id: "2", name: "Aida Bugg" },
-    { id: "3", name: "Gabrielle" },
-    { id: "4", name: "Grace" },
-    { id: "5", name: "Hannah" },
-    { id: "6", name: "Heather" },
-    { id: "7", name: "John Doe" },
-    { id: "8", name: "Anne Teak" },
-    { id: "9", name: "Audie Yose" },
-    { id: "10", name: "Addie Minstra" },
-    { id: "11", name: "Anne Ortha" },
-  ];
-  
-  const [results, setResults] = useState<{ id: string; name: string }[]>();
-  type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
-  const handleChange: changeHandler = (e) => {
-    const { target } = e;
-    if (!target.value.trim()) return setResults([]);
-
-    const filteredValue = profiles.filter((profile) =>
-      profile.name.toLowerCase().startsWith(target.value.toLowerCase())
-    );
-    setResults(filteredValue);
   };
 
   return (
@@ -108,35 +184,69 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
               error={chapterNameError}
             />
           </div>
+
           <div className={styles.inputField}>
-            <label>Chapter Region</label>
-            <InputField
-              placeholder="Enter chapter region"
-              value={chapterRegion}
-              onChange={(e) => setChapterRegion(e.target.value)}
-              showError={chapterRegionError !== ""}
-              error={chapterRegionError}
+            <AuthDropdown
+              title="Chapter Location"
+              required={true}
+              placeholder="Select Your Country"
+              options={COUNTRIES}
+              value={locCountry}
+              onChange={(e) => {
+                setLocCountry(e.target.value);
+                setLocState("");
+                setLocCity("");
+                setCountryError("");
+                setStateError("");
+                setCityError("");
+              }}
+              showError={countryError !== ""}
+              error={countryError}
             />
           </div>
+          {locCountry === "" ? null : (
+            <div className={styles.cityStateFields}>
+              <AuthDropdown
+                required={true}
+                placeholder="Select Your State"
+                options={STATES}
+                value={locState}
+                onChange={(e) => {
+                  setLocState(e.target.value);
+                  setLocCity("");
+                  setStateError("");
+                  setCityError("");
+                }}
+                showError={stateError !== ""}
+                error={stateError}
+              />
+              <AuthDropdown
+                required={true}
+                placeholder="Select Your City"
+                options={CITIES}
+                value={locCity}
+                onChange={(e) => {
+                  setLocCity(e.target.value);
+                  setCityError("");
+                }}
+                showError={cityError !== ""}
+                error={cityError}
+              />
+            </div>
+          )}
 
           <div className={styles.inputField}>
             <label>Chapter President</label>
-            <InputField
-              placeholder="Enter the name of the chapter president"
+            <LiveSearchDropdown
+              options={filteredVolunteers}
               value={chapterPresident}
-              onChange={(e) => setChapterPresident(e.target.value)}
+              placeholder={loading ? "Loading.." : "Enter the name of the chapter president"}
+              renderItem={(item) => 
+                <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}
+              onChange={handleChange}
+              onSelect={(item) => setChapterPresident(item.firstName + " " + item.lastName)}
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}
-            />
-          </div>
-          <div className={styles.inputField}>
-            <label>Chapter Test Input</label>
-            <LiveSearchDropdown
-              results={results}
-              value={chapterPresident}
-              renderItem={(item) => <p>{item.name}</p>}
-              onChange={handleChange}
-              onSelect={(item) => setChapterPresident(item.name)}
             />
           </div>
           <div className={styles.buttons}>

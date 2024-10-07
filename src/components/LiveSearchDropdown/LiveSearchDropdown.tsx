@@ -1,62 +1,50 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./LiveSearchDropdown.module.css"
+import InputField from "../InputField/InputField";
+import { Input } from "@mui/material";
 
 interface Props<T> {
-  results?: T[];
+  options?: T[];
   renderItem(item: T): JSX.Element;
   onChange?: React.ChangeEventHandler;
   onSelect?: (item: T) => void;
   value?: string;
+  placeholder?: string;
+  showError?: boolean;
+  error?: string;
 }
 
 const LiveSearchDropdown = <T extends object>({
-  results = [],
+  options = [],
   renderItem,
   value,
   onChange,
   onSelect,
+  placeholder,
+  showError,
+  error
 }: Props<T>): JSX.Element => {
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  const resultContainer = useRef<HTMLDivElement>(null);
-  const [showResults, setShowResults] = useState(false);
+  const optionContainer = useRef<HTMLDivElement>(null);
+  const [showOptions, setShowOptions] = useState(false);
   const [defaultValue, setDefaultValue] = useState("");
 
   const handleSelection = (selectedIndex: number) => {
-    const selectedItem = results[selectedIndex];
+    const selectedItem = options[selectedIndex];
     if (!selectedItem) return resetSearchComplete();
     onSelect && onSelect(selectedItem);
     resetSearchComplete();
   };
 
   const resetSearchComplete = useCallback(() => {
-    setFocusedIndex(-1);
-    setShowResults(false);
+    setShowOptions(false);
   }, []);
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     const { key } = e;
-    let nextIndexCount = 0;
-
-    // move down
-    if (key === "ArrowDown")
-      nextIndexCount = (focusedIndex + 1) % results.length;
-
-    // move up
-    if (key === "ArrowUp")
-      nextIndexCount = (focusedIndex + results.length - 1) % results.length;
-
-    // hide search results
+    // hide search options
     if (key === "Escape") {
       resetSearchComplete();
     }
-
-    // select the current item
-    if (key === "Enter") {
-      e.preventDefault();
-      handleSelection(focusedIndex);
-    }
-
-    setFocusedIndex(nextIndexCount);
   };
 
   type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
@@ -66,18 +54,10 @@ const LiveSearchDropdown = <T extends object>({
   };
 
   useEffect(() => {
-    if (!resultContainer.current) return;
+    if (options.length > 0 && !showOptions) setShowOptions(true);
 
-    resultContainer.current.scrollIntoView({
-      block: "center",
-    });
-  }, [focusedIndex]);
-
-  useEffect(() => {
-    if (results.length > 0 && !showResults) setShowResults(true);
-
-    if (results.length <= 0) setShowResults(false);
-  }, [results]);
+    if (options.length <= 0) setShowOptions(false);
+  }, [options]);
 
   useEffect(() => {
     if (value) setDefaultValue(value);
@@ -85,33 +65,23 @@ const LiveSearchDropdown = <T extends object>({
 
   return (
     <div className={styles.container}>
-      <div
-        tabIndex={1}
-        onBlur={resetSearchComplete}
-        onKeyDown={handleKeyDown}
-        className={styles.dropdown}
-      >
-        <input
+      <div tabIndex={1} onBlur={resetSearchComplete} onKeyDown={handleKeyDown} className={styles.dropdown}>
+        <InputField
+          placeholder={placeholder}
           value={defaultValue}
           onChange={handleChange}
-          type="text"
-          className={styles.input}
-          placeholder="Search your query..."
+          showError={showError}
+          error = {error}
         />
 
-        {/* Search Results Container */}
-        {showResults && (
-          <div className={styles.results}>
-            {results.map((item, index) => {
+        {/* Search options Container */}
+        {showOptions && (
+          <div className={styles.options}>
+            {options.map((item, index) => {
               return (
                 <div
                   key={index}
                   onMouseDown={() => handleSelection(index)}
-                  ref={index === focusedIndex ? resultContainer : null}
-                  style={{
-                    backgroundColor:
-                      index === focusedIndex ? "rgba(0,0,0,0.1)" : "",
-                  }}
                   className={styles.row}
                 >
                   {renderItem(item)}
