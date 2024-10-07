@@ -3,7 +3,6 @@ import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react
 import { classes } from "@src/utils/utils";
 import { useSelector } from "react-redux";
 
-
 import useAuth from "@src/hooks/useAuth";
 import styles from "./AddChapterModal.module.css";
 import InputField from "../InputField/InputField";
@@ -20,18 +19,17 @@ import {
 } from "@/common_utils/types";
 import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
 import { PostReq } from "@server/mongodb/actions/Chapter";
-import { Today } from "@mui/icons-material";
-
-
 
 interface Props {
   className?: string;
   style?: CSSProperties;
   showModal: boolean;
   setShowModal: (newShowModal: boolean) => void;
+  setShowSuccessModal: Function;
+  setChapterCreated: Function;
 }
 
-const Modal = ({ className, style, showModal, setShowModal}: Props) => {
+const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, setChapterCreated}: Props) => {
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterPresident, setChapterPresident] = useState<string>("");
   const [chapterPresidentID, setChapterPresidentID] = useState<string>("");
@@ -51,7 +49,6 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
   const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
   const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
-
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -133,6 +130,7 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
     e.preventDefault();
     resetErrors();
     let error = false;
+
     if (chapterName === "") {
       setChapterNameError("Chapter name cannot be blank");
       error = true;
@@ -170,8 +168,11 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
     } catch (error) {
       console.log(error)
     }
+
     setShowModal(false);
     reset();
+    setChapterCreated(chapterName)
+    setShowSuccessModal(true);
   };
 
   return (
@@ -283,4 +284,4 @@ const Modal = ({ className, style, showModal, setShowModal}: Props) => {
   );
 };
 
-export default Modal;
+export default addChapterModal;

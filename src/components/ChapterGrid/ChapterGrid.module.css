@@ -61,6 +61,11 @@
   height: 70%;
 }
 
+.operationSuccessModal {
+  width: 35%;
+  height: 35%;
+}
+
 .topRow {
   background-color: #f4f4f4;
   color: #333;

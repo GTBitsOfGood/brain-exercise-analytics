@@ -8,8 +8,10 @@ import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./ChapterGrid.module.css";
 import { Row } from "./Row/Row";
 import AddChapterModal from "@src/components/AddChapterModal/AddChapterModal";
+import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
 import Modal from "@src/components/Modal/Modal";
 import { useState } from "react";
+
 
 interface ChapterGridProps {
   data: IChapterTableEntry[];
@@ -44,6 +46,9 @@ function ColumnSizes() {
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [chapterCreated, setChapterCreated] = useState();
+
   return (
     <div className={styles["table-header"]}>
       <div className={styles["table-header-left"]}>
@@ -57,7 +62,14 @@ function Header() {
         Add Chapter
       </button>
       <Modal showModal={showModal} setShowModal={setShowModal}>
-        <AddChapterModal className={styles.addChapterModalContent} showModal={showModal} setShowModal={setShowModal}/>
+        <AddChapterModal className={styles.addChapterModalContent} 
+          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} 
+          setChapterCreated={setChapterCreated}/>
+      </Modal>
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+        <OperationSuccessModal className={styles.operationSuccessModal} 
+          showModal={showSuccessModal} setShowModal={setShowSuccessModal} 
+          title={chapterCreated} subtitle="You have successfully created:" description="Find it in Search Chapter page to add more volunteers and patients."/>
       </Modal>
     </div>
   );
@@ -86,6 +98,7 @@ export default function ChapterGrid(params: ChapterGridProps) {
         pageCount={params.pageCount}
         currentPage={params.currentPage}
       />
+      
     </div>
   );
 }
