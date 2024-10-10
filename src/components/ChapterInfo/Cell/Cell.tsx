@@ -9,16 +9,18 @@ export interface CellProps {
   title: string;
   value?: string;
   icon: JSX.Element;
-  link?: string;
+  link?: any;
   cellStyle?: React.CSSProperties;
   iconStyle?: React.CSSProperties;
 }
 
 export function Cell({ cell }: { cell: CellProps }) {
+
   return (
     <div
       className={classes(styles.cell, cell.link && styles.hover)}
       style={cell.cellStyle}
+      onClick={() => cell.link()}
     >
       <div className={styles.cellIcon} style={cell.iconStyle}>
         {cell.icon}

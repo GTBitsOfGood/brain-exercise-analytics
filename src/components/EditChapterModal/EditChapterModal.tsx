@@ -4,7 +4,7 @@ import { classes } from "@src/utils/utils";
 import { useSelector } from "react-redux";
 
 import useAuth from "@src/hooks/useAuth";
-import styles from "./AddChapterModal.module.css";
+import styles from "./EditChapterModal.module.css";
 import InputField from "../InputField/InputField";
 import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
@@ -105,8 +105,7 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
         params: {
           name: fullName,
           roles: volunteerRoles,
-        },
-        entriesPerPage: 9999,
+        }
       },
     }).then((res) => {
       setVolunteers(res?.data ?? []);

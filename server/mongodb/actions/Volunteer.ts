@@ -36,11 +36,12 @@ export const getVolunteersFiltered = async ({
   page,
   sortParams,
   allowedRoles,
+  entriesPerPage,
 }: Body<VolunteerSearchParams>): Promise<
   SearchResponseBody<IUser> | undefined
 > => {
-  const numOfItems = 8;
-
+  const numOfItems = entriesPerPage || 8;
+  
   const userParamsObject = {} as VParam;
   if (paramsObject.approved !== undefined) {
     userParamsObject.approved = { $in: paramsObject.approved };

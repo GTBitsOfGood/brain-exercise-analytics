@@ -11,8 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import styles from "./ChapterInfo.module.css";
+import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
+import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+import Modal from "@src/components/Modal/Modal";
 
 import { Cell, CellProps } from "./Cell/Cell";
 
@@ -21,7 +24,12 @@ interface ChapterInfoProps {
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [chapterCreated, setChapterCreated] = useState();
+
   const chapterProfile = useMemo<CellProps[]>(() => {
+    
     return [
       {
         title: "Chapter Size",
@@ -71,7 +79,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Edit Chapter Profile",
-        link: "test",
+        link: () => setShowSuccessModal(true),
         icon: <FontAwesomeIcon icon={faWrench} style={{ color: "#008afc" }} />,
       },
       {
@@ -124,6 +132,16 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           ))}
         </div>
       </div>
+      <Modal showModal={showModal} setShowModal={setShowModal}>
+        <EditChapterModal className={styles.addChapterModalContent} 
+          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} 
+          setChapterCreated={setChapterCreated}/>
+      </Modal>
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+        <OperationSuccessModal className={styles.operationSuccessModal} 
+          showModal={showSuccessModal} setShowModal={setShowSuccessModal} 
+          title={chapterCreated} subtitle="You have successfully edited:" description="Find it in Search Chapter page to add more volunteers and patients."/>
+      </Modal>
     </div>
   );
 }
