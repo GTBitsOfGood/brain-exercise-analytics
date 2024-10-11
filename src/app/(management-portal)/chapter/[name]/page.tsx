@@ -16,6 +16,7 @@ import {
   IVolunteerTableEntry,
   SearchResponseBody,
   IChapter,
+  IUser,
 } from "@/common_utils/types";
 
 import firebaseInit from "@src/firebase/config";
@@ -61,6 +62,8 @@ export default function Page({ params }: { params: { name: string } }) {
   const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
     [],
   );
+  const [chapterPresident, setChapterPresident] = useState("");
+
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -86,23 +89,35 @@ export default function Page({ params }: { params: { name: string } }) {
     });
   }, [fullName, currentPage, sortField, params.name]);
 
-  const fetchChapter = useCallback(() => {
-    setLoading(true);
-    internalRequest<IChapter>({
-      url: "/api/chapter",
-      method: HttpMethod.GET,
-      queryParams: {
-        name: params.name,
-      },
-    }).then((res) => {
-      setChapterInfo(res);
-      setLoading(false);
-    });
+
+
+    const fetchChapterAndPresident = useCallback(() => {
+      setLoading(true);
+      internalRequest<IChapter>({
+        url: "/api/chapter",
+        method: HttpMethod.GET,
+        queryParams: {
+          name: params.name,
+        },
+      }).then((res) => {
+        setChapterInfo(res);
+        internalRequest<IUser>({
+          url: "/api/patient/get-patient",
+          method: HttpMethod.GET,
+          queryParams: {
+            id: res.chapterPresident,
+          },
+        }).then((pres) => {
+          setChapterPresident(pres.firstName + " " + pres.lastName);
+          setLoading(false)
+        })
+    });  
   }, [params.name]);
 
+  
   useEffect(() => {
-    fetchChapter();
-  }, [fetchChapter]);
+    fetchChapterAndPresident();
+  }, [fetchChapterAndPresident]);
 
   useEffect(() => {
     fetchUsers();
@@ -112,7 +127,6 @@ export default function Page({ params }: { params: { name: string } }) {
     setCurrentPage(0);
   }, [fullName, sortField]);
   
-
   return (
     <div className={styles.container}>
       <title>Chapter Page | Brain Exercise Initiative</title>
@@ -125,7 +139,7 @@ export default function Page({ params }: { params: { name: string } }) {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["profile-container"])}>
-        <ChapterInfo chapter={chapter} />
+        <ChapterInfo chapter={chapter} chapterPresident={chapterPresident} />
         <Divider />
       </div>
       <div className={classes(styles["search-container"])}>

@@ -45,7 +45,7 @@
 .backButton {
   display: flex;
   flex-direction: row;
-  width: 190px;
+  width: 216px;
   height: 46px;
   padding: 8px 16px 8px 16px;
   gap: 8px;
@@ -56,7 +56,7 @@
 
 .backToSearchText {
   font-weight: 600;
-  padding-top: 3px ;
+  font-size: 20px;
   color: #2B3674;
 }
 

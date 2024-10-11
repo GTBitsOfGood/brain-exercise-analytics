@@ -8,39 +8,21 @@ import {
   faPlus,
   faWrench,
   faHandHoldingHand,
-  faBackward,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IChapter } from "@/common_utils/types";
+import { IChapter, IUser } from "@/common_utils/types";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./ChapterInfo.module.css";
-
 import { Cell, CellProps } from "./Cell/Cell";
-import { getUserById, getUsersFiltered } from "@server/mongodb/actions/User";
 import BackIcon from "@src/app/icons/BackIcon";
-import { Button } from "@mui/material";
 import Link from "next/link";
 
 interface ChapterInfoProps {
   chapter: IChapter;
+  chapterPresident: string;
 }
 
-
 export default function ChapterInfo(params: ChapterInfoProps) {
-  console.log(params)
-  const [chapterPresident, setChapterPresident] = useState('');
-
-  useEffect(() => {
-    // Fetch from the API route you created
-    const getPresident = async () => {
-      const pres = await getUserById(params.chapter.chapterPresident)
-      if (pres) {
-        setChapterPresident(pres?.firstName + pres?.lastName);
-      }
-    };
-
-    getPresident();
-  }, [params.chapter.chapterPresident]);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
@@ -66,7 +48,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       },
       {
         title: "Chapter President",
-        value: `${chapterPresident}`,
+        value: `${params.chapterPresident}`,
         icon: (
           <FontAwesomeIcon icon={faAddressCard} style={{ color: "#008afc" }} />
         ),
