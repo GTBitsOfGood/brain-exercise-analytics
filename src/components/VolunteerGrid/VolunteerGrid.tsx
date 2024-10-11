@@ -61,21 +61,24 @@ function Header(params: HeaderProps) {
 
 export default function VolunteerGrid(params: VolunteerGridProps) {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [deleteVolunteerEmail, setDeleteVolunteerEmail] = useState<
+  const [removeVolunteerEmail, setRemoveVolunteerEmail] = useState<
     string | null
   >(null);
 
   const handleConfirmDelete = async () => {
-    if (deleteVolunteerEmail !== null) {
+    if (removeVolunteerEmail !== null) {
       await internalRequest({
         url: "/api/volunteer",
-        method: HttpMethod.DELETE,
+        method: HttpMethod.PATCH,
         body: {
-          email: deleteVolunteerEmail,
+          email: removeVolunteerEmail,
+          newFields: {
+            chapter: ""
+          }
         },
       });
 
-      setDeleteVolunteerEmail(null);
+      setRemoveVolunteerEmail(null);
       params.refreshUsers();
     }
     setPopupOpen(false);
@@ -83,11 +86,11 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
 
   const handleClosePopup = useCallback(() => {
     setPopupOpen(false);
-    setDeleteVolunteerEmail(null);
+    setRemoveVolunteerEmail(null);
   }, []);
 
   const handleDeleteClick = useCallback(async (email: string) => {
-    setDeleteVolunteerEmail(email);
+    setRemoveVolunteerEmail(email);
     setPopupOpen(true);
   }, []);
 

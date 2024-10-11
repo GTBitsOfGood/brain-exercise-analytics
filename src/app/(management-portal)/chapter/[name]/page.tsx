@@ -111,6 +111,7 @@ export default function Page({ params }: { params: { name: string } }) {
   useEffect(() => {
     setCurrentPage(0);
   }, [fullName, sortField]);
+  
 
   return (
     <div className={styles.container}>

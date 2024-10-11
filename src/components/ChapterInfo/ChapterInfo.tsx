@@ -8,19 +8,40 @@ import {
   faPlus,
   faWrench,
   faHandHoldingHand,
+  faBackward,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./ChapterInfo.module.css";
 
 import { Cell, CellProps } from "./Cell/Cell";
+import { getUserById, getUsersFiltered } from "@server/mongodb/actions/User";
+import BackIcon from "@src/app/icons/BackIcon";
+import { Button } from "@mui/material";
+import Link from "next/link";
 
 interface ChapterInfoProps {
   chapter: IChapter;
 }
 
+
 export default function ChapterInfo(params: ChapterInfoProps) {
+  console.log(params)
+  const [chapterPresident, setChapterPresident] = useState('');
+
+  useEffect(() => {
+    // Fetch from the API route you created
+    const getPresident = async () => {
+      const pres = await getUserById(params.chapter.chapterPresident)
+      if (pres) {
+        setChapterPresident(pres?.firstName + pres?.lastName);
+      }
+    };
+
+    getPresident();
+  }, [params.chapter.chapterPresident]);
+
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
       {
@@ -45,7 +66,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       },
       {
         title: "Chapter President",
-        value: `${params.chapter.chapterPresident}`,
+        value: `${chapterPresident}`,
         icon: (
           <FontAwesomeIcon icon={faAddressCard} style={{ color: "#008afc" }} />
         ),
@@ -89,6 +110,18 @@ export default function ChapterInfo(params: ChapterInfoProps) {
 
   return (
     <div>
+      <div>
+      <Link className={styles.backButton}
+                  href={`/chapter/search`}
+                >
+                  <div className={styles.backToSearchIcon}>
+                    <BackIcon />
+                  </div>
+                  <span className={styles.backToSearchText}>
+                    Back to Search
+                  </span>
+        </Link>
+      </div>
       <div className={styles.chapterInfoHeading}>
         <p>{`${params.chapter.name} Chapter`}</p>
       </div>
