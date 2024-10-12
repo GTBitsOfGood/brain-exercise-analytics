@@ -16,6 +16,8 @@ import styles from "./ChapterInfo.module.css";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
 import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
 import Modal from "@src/components/Modal/Modal";
+import PersonPlusIcon from "@src/app/icons/PersonPlusIcon";
+import RedTrashCan from "@src/app/icons/RedTrashCan";
 
 import { Cell, CellProps } from "./Cell/Cell";
 
@@ -91,6 +93,22 @@ export default function ChapterInfo(params: ChapterInfoProps) {
             style={{ color: "#008afc" }}
           />
         ),
+      },
+      {
+        title: "Add Volunteer",
+        link: "test",
+        icon: (
+          <PersonPlusIcon className=""></PersonPlusIcon>
+        ),
+      },
+      {
+        title: "Delete Chapter",
+        link: "test",
+        icon: (
+          <RedTrashCan></RedTrashCan>
+        ),
+        iconStyle: {backgroundColor: '#FCDCE2'}
+
       },
     ] as CellProps[];
   }, [params.chapter]);
