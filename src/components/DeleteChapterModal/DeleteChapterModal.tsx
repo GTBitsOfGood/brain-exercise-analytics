@@ -6,8 +6,14 @@ import { internalRequest } from "@src/utils/requests";
 import {
   HttpMethod,
   IChapter,
+  IVolunteerTableEntry,
+  SearchResponseBody,
 } from "@/common_utils/types";
 import { DeleteReq } from "@src/app/api/chapter/route";
+import { RootState } from "@src/redux/rootReducer";
+import { useSelector } from "react-redux";
+import { PatchReq } from "@src/app/api/volunteer/route"
+
 
 interface Props {
   className?: string;
@@ -19,6 +25,25 @@ interface Props {
 }
 
 const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter}: Props) => {
+
+  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>([]);
+  const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
+
+  useEffect(() => {
+    internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+      url: "/api/volunteer/filter-volunteer",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          name: fullName,
+          beiChapters: [chapter.name],
+        },
+        entriesPerPage: 9999,
+      },
+    }).then((res) => {
+      setFilteredUsers(res?.data ?? []);
+    })
+  }, [])
 
   const handleSaveChanges = async (
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
@@ -32,6 +57,19 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
         body: {
           name: chapter.name,
         },
+      });
+
+      filteredUsers.forEach(async user => {
+        await internalRequest<PatchReq>({
+          url: "/api/volunteer",
+          method: HttpMethod.PATCH,
+          body: {
+            email: user.email,
+            newFields: {
+              chapter: ""
+            }
+          }
+        });
       });
 
       setShowModal(false);
