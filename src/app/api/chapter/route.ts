@@ -59,7 +59,7 @@ export const PATCH = APIWrapper({
   },
 });
 
-type DeleteReq = {
+export type DeleteReq = {
   name: string;
 };
 

@@ -38,7 +38,17 @@
   height: 70%;
 }
 
-.operationSuccessModal {
+.editOperationSuccessModal {
   width: 45%;
   height: 22%;
+}
+
+.deleteChapterModalContent {
+  width: 35%;
+  height: 30%;
+}
+
+.deleteOperationSuccessModal {
+  width: 35%;
+  height: 25%;
 }

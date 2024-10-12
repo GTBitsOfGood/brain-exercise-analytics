@@ -13,9 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo, useState } from "react";
 import styles from "./ChapterInfo.module.css";
-import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
-import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+
 import Modal from "@src/components/Modal/Modal";
+import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
+import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";
+import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+
 import PersonPlusIcon from "@src/app/icons/PersonPlusIcon";
 import RedTrashCan from "@src/app/icons/RedTrashCan";
 
@@ -26,9 +29,12 @@ interface ChapterInfoProps {
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
-  const [showModal, setShowModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [successLink, setSuccessLink] = useState<string>("");
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditSuccessModal, setShowEditSuccessModal] = useState(false);
+  const [editSuccessLink, setEditSuccessLink] = useState<string>("");
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     
@@ -81,7 +87,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Edit Chapter Profile",
-        link: () => setShowModal(true),
+        link: () => setShowEditModal(true),
         icon: <FontAwesomeIcon icon={faWrench} style={{ color: "#008afc" }} />,
       },
       {
@@ -103,7 +109,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       },
       {
         title: "Delete Chapter",
-        link: "test",
+        link: () => setShowDeleteModal(true),
         icon: (
           <RedTrashCan></RedTrashCan>
         ),
@@ -150,16 +156,29 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           ))}
         </div>
       </div>
-      <Modal showModal={showModal} setShowModal={setShowModal}>
-      <EditChapterModal className={styles.editChapterModalContent} 
-          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} 
-          setSuccessLink={setSuccessLink} chapter={params.chapter}
+      <Modal showModal={showEditModal} setShowModal={setShowEditModal}>
+        <EditChapterModal className={styles.editChapterModalContent} 
+          showModal={showEditModal} setShowModal={setShowEditModal} setShowSuccessModal={setShowEditSuccessModal} 
+          setSuccessLink={setEditSuccessLink} chapter={params.chapter}
           />
       </Modal>
-      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal} link={successLink}>
-        <OperationSuccessModal className={styles.operationSuccessModal} 
-          showModal={showSuccessModal} setShowModal={setShowSuccessModal}
+      <Modal showModal={showEditSuccessModal} setShowModal={setShowEditSuccessModal} link={editSuccessLink}>
+        <OperationSuccessModal className={styles.editOperationSuccessModal} 
+          showModal={showEditSuccessModal} setShowModal={setShowEditSuccessModal}
           subtitle="Chapter Profile has been successfully edited"/>
+      </Modal>
+
+      
+      <Modal showModal={showDeleteModal} setShowModal={setShowDeleteModal}>
+        <DeleteChapterModal className={styles.deleteChapterModalContent} 
+          showModal={showDeleteModal} setShowModal={setShowDeleteModal} setShowSuccessModal={setShowDeleteSuccessModal}
+          chapter={params.chapter}
+          />
+      </Modal>
+      <Modal showModal={showDeleteSuccessModal} setShowModal={setShowDeleteSuccessModal} link={"./search"}>
+        <OperationSuccessModal className={styles.deleteOperationSuccessModal} 
+          showModal={showDeleteSuccessModal} setShowModal={setShowDeleteSuccessModal}
+          title={params.chapter.name} subtitle="You have successfully deleted:"/>
       </Modal>
     </div>
   );
