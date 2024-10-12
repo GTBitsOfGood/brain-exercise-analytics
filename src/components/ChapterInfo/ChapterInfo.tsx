@@ -23,6 +23,7 @@ import PersonPlusIcon from "@src/app/icons/PersonPlusIcon";
 import RedTrashCan from "@src/app/icons/RedTrashCan";
 
 import { Cell, CellProps } from "./Cell/Cell";
+import AddVolunteerModal from "../AddVolunteerModal/AddVolunteerModal";
 
 interface ChapterInfoProps {
   chapter: IChapter;
@@ -35,6 +36,9 @@ export default function ChapterInfo(params: ChapterInfoProps) {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
+
+  const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
+
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     
@@ -102,7 +106,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       },
       {
         title: "Add Volunteer",
-        link: "test",
+        link: () => setShowAddVolunteerModal(true),
         icon: (
           <PersonPlusIcon className=""></PersonPlusIcon>
         ),
@@ -179,6 +183,13 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <OperationSuccessModal className={styles.deleteOperationSuccessModal} 
           showModal={showDeleteSuccessModal} setShowModal={setShowDeleteSuccessModal}
           title={params.chapter.name} subtitle="You have successfully deleted:"/>
+      </Modal>
+
+
+      <Modal showModal={showAddVolunteerModal} setShowModal={setShowAddVolunteerModal}>
+        <AddVolunteerModal className={styles.addVolunteerModalContent} 
+          showModal={showAddVolunteerModal} setShowModal={setShowAddVolunteerModal}
+          />
       </Modal>
     </div>
   );
