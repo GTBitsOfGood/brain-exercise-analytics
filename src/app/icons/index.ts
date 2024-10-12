@@ -27,6 +27,14 @@ import PencilIcon from "./PencilIcon";
 import SearchIcon from "./SearchIcon";
 import LoadingIcon from "./LoadingIcon";
 import ExclamationOutlinedIcon from "./ExclamationOutlinedIcon";
+import UsersThree from "./UsersThree";
+import IdentificationCard from "./IdentificationCard";
+import User from "./User";
+import Person from "./Person";
+import CalendarHeartFill from "./CalendarHeartFill";
+import LocationMarker from "./LocationMarker";
+import Wrench from "./Wrench";
+import HandTransferIcon from "./HandTransferIcon";
 
 export {
   BarChartIcon,
@@ -58,4 +66,12 @@ export {
   ClearTagIcon,
   ExclamationOutlinedIcon,
   PencilIcon,
+  UsersThree,
+  IdentificationCard,
+  User,
+  Person,
+  CalendarHeartFill,
+  LocationMarker,
+  Wrench,
+  HandTransferIcon,
 };
