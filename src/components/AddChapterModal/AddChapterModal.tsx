@@ -13,6 +13,7 @@ import { Country, State, City } from "country-state-city";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import {
+  AdminApprovalStatus,
   HttpMethod,
   IVolunteerTableEntry,
   SearchResponseBody,
@@ -105,6 +106,7 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
         params: {
           name: fullName,
           roles: volunteerRoles,
+          approved: [AdminApprovalStatus.APPROVED],
         },
         entriesPerPage: 9999,
       },

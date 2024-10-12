@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: var(--20, 20px);
+  gap: var(--10, 10px);
   border-radius: var(--12, 12px);
   border: 1px solid #E0E5F2;
   background: var(--white-100, #FFF);

@@ -14,6 +14,7 @@ interface Props {
 }
 
 const Modal = ({ className, style, showModal, setShowModal, subtitle, title, description}: Props) => {
+  
 
   return (
     <div className={classes(styles.container, className)} style={style}>

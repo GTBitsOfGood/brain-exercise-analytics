@@ -26,6 +26,7 @@ interface ChapterInfoProps {
 export default function ChapterInfo(params: ChapterInfoProps) {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successLink, setSuccessLink] = useState<string>("");
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     
@@ -133,12 +134,13 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       </div>
       <Modal showModal={showModal} setShowModal={setShowModal}>
       <EditChapterModal className={styles.editChapterModalContent} 
-          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} chapter={params.chapter}
+          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} 
+          setSuccessLink={setSuccessLink} chapter={params.chapter}
           />
       </Modal>
-      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal} link={successLink}>
         <OperationSuccessModal className={styles.operationSuccessModal} 
-          showModal={showSuccessModal} setShowModal={setShowSuccessModal} 
+          showModal={showSuccessModal} setShowModal={setShowSuccessModal}
           subtitle="Chapter Profile has been successfully edited"/>
       </Modal>
     </div>

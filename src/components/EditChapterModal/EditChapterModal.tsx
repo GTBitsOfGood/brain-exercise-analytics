@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 import styles from "./EditChapterModal.module.css";
 import InputField from "../InputField/InputField";
-import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 import XIcon from "@/src/app/icons/XIcon"
 import { Country, State, City } from "country-state-city";
@@ -24,10 +23,11 @@ interface Props {
   showModal: boolean;
   setShowModal: (newShowModal: boolean) => void;
   setShowSuccessModal: Function;
+  setSuccessLink: Function
   chapter: IChapter;
 }
 
-const editChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter}: Props) => {
+const editChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter, setSuccessLink}: Props) => {
   const [yearFounded, setYearFounded] = useState<string>("");
   const [chapterName, setChapterName] = useState<string>("");
 
@@ -42,9 +42,7 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
   const [stateError, setStateError] = useState("");
   const [cityError, setCityError] = useState("");
 
-  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
-    [],
-  );
+  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>([]);
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -168,8 +166,8 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
 
     setShowModal(false);
     reset();
+    setSuccessLink("/chapter/" + encodeURI(chapterName))
     setShowSuccessModal(true);
-    
   };
 
   return (
