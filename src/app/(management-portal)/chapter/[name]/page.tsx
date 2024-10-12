@@ -64,7 +64,6 @@ export default function Page({ params }: { params: { name: string } }) {
   );
   const [chapterPresident, setChapterPresident] = useState("");
 
-
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -89,32 +88,33 @@ export default function Page({ params }: { params: { name: string } }) {
     });
   }, [fullName, currentPage, sortField, params.name]);
 
-
-
-    const fetchChapterAndPresident = useCallback(() => {
-      setLoading(true);
-      internalRequest<IChapter>({
-        url: "/api/chapter",
+  const fetchChapterAndPresident = useCallback(() => {
+    setLoading(true);
+    internalRequest<IChapter>({
+      url: "/api/chapter",
+      method: HttpMethod.GET,
+      queryParams: {
+        name: params.name,
+      },
+    }).then((res) => {
+      setChapterInfo(res);
+      internalRequest<IUser>({
+        url: "/api/patient/get-patient",
         method: HttpMethod.GET,
         queryParams: {
-          name: params.name,
+          id: res.chapterPresident,
         },
-      }).then((res) => {
-        setChapterInfo(res);
-        internalRequest<IUser>({
-          url: "/api/patient/get-patient",
-          method: HttpMethod.GET,
-          queryParams: {
-            id: res.chapterPresident,
-          },
-        }).then((pres) => {
-          setChapterPresident(pres.firstName + " " + pres.lastName);
-          setLoading(false)
+      })
+        .then((pres) => {
+          setChapterPresident(`${pres.firstName} ${pres.lastName}`);
+          setLoading(false);
         })
-    });  
+        .catch((err) => {
+          console.error(err);
+        });
+    });
   }, [params.name]);
 
-  
   useEffect(() => {
     fetchChapterAndPresident();
   }, [fetchChapterAndPresident]);
@@ -126,7 +126,7 @@ export default function Page({ params }: { params: { name: string } }) {
   useEffect(() => {
     setCurrentPage(0);
   }, [fullName, sortField]);
-  
+
   return (
     <div className={styles.container}>
       <title>Chapter Page | Brain Exercise Initiative</title>

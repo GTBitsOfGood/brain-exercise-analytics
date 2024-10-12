@@ -13,7 +13,8 @@ const Popup = ({
       <div className={styles.popup}>
         <div className={styles.popupTitle}>Remove from Chapter</div>
         <div className={styles.popupContent}>
-          This will remove the volunteer from the chapter. This cannot be undone.
+          This will remove the volunteer from the chapter. This cannot be
+          undone.
         </div>
         <div className={styles.popupActions}>
           <button onClick={onConfirm} className={styles.confirmButton}>

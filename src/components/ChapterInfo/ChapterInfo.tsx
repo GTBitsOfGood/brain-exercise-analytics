@@ -10,12 +10,12 @@ import {
   faHandHoldingHand,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IChapter, IUser } from "@/common_utils/types";
-import { useEffect, useMemo, useState } from "react";
-import styles from "./ChapterInfo.module.css";
-import { Cell, CellProps } from "./Cell/Cell";
+import { IChapter } from "@/common_utils/types";
+import { useMemo } from "react";
 import BackIcon from "@src/app/icons/BackIcon";
 import Link from "next/link";
+import styles from "./ChapterInfo.module.css";
+import { Cell, CellProps } from "./Cell/Cell";
 
 interface ChapterInfoProps {
   chapter: IChapter;
@@ -23,7 +23,6 @@ interface ChapterInfoProps {
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
-
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
       {
@@ -68,7 +67,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         ),
       },
     ] as CellProps[];
-  }, [params.chapter]);
+  }, [params]);
 
   const chapterManagement = useMemo<CellProps[]>(() => {
     return [
@@ -93,15 +92,11 @@ export default function ChapterInfo(params: ChapterInfoProps) {
   return (
     <div>
       <div>
-      <Link className={styles.backButton}
-                  href={`/chapter/search`}
-                >
-                  <div className={styles.backToSearchIcon}>
-                    <BackIcon />
-                  </div>
-                  <span className={styles.backToSearchText}>
-                    Back to Search
-                  </span>
+        <Link className={styles.backButton} href={`/chapter/search`}>
+          <div className={styles.backToSearchIcon}>
+            <BackIcon />
+          </div>
+          <span className={styles.backToSearchText}>Back to Search</span>
         </Link>
       </div>
       <div className={styles.chapterInfoHeading}>

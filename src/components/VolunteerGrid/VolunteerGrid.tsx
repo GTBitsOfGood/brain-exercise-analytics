@@ -73,8 +73,8 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
         body: {
           email: removeVolunteerEmail,
           newFields: {
-            chapter: ""
-          }
+            chapter: "",
+          },
         },
       });
 
