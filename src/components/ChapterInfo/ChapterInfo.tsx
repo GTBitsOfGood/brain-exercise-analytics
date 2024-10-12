@@ -26,7 +26,6 @@ interface ChapterInfoProps {
 export default function ChapterInfo(params: ChapterInfoProps) {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [chapterCreated, setChapterCreated] = useState();
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     
@@ -79,7 +78,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Edit Chapter Profile",
-        link: () => setShowSuccessModal(true),
+        link: () => setShowModal(true),
         icon: <FontAwesomeIcon icon={faWrench} style={{ color: "#008afc" }} />,
       },
       {
@@ -133,14 +132,14 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         </div>
       </div>
       <Modal showModal={showModal} setShowModal={setShowModal}>
-        <EditChapterModal className={styles.addChapterModalContent} 
-          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} 
-          setChapterCreated={setChapterCreated}/>
+      <EditChapterModal className={styles.editChapterModalContent} 
+          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} chapter={params.chapter}
+          />
       </Modal>
       <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal className={styles.operationSuccessModal} 
           showModal={showSuccessModal} setShowModal={setShowSuccessModal} 
-          title={chapterCreated} subtitle="You have successfully edited:" description="Find it in Search Chapter page to add more volunteers and patients."/>
+          subtitle="Chapter Profile has been successfully edited"/>
       </Modal>
     </div>
   );

@@ -32,3 +32,13 @@
   flex-wrap: wrap;
   gap: 12px;
 }
+
+.editChapterModalContent {
+  width: 60%;
+  height: 70%;
+}
+
+.operationSuccessModal {
+  width: 35%;
+  height: 35%;
+}

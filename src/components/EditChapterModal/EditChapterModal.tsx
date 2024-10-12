@@ -1,9 +1,7 @@
-import { useRouter } from "next/navigation";
 import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
 import { classes } from "@src/utils/utils";
 import { useSelector } from "react-redux";
 
-import useAuth from "@src/hooks/useAuth";
 import styles from "./EditChapterModal.module.css";
 import InputField from "../InputField/InputField";
 import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
@@ -14,29 +12,27 @@ import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import {
   HttpMethod,
+  IChapter,
   IVolunteerTableEntry,
   SearchResponseBody,
 } from "@/common_utils/types";
-import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
-import { PostReq } from "@server/mongodb/actions/Chapter";
-
+import { PatchReq } from "@src/app/api/chapter/route";
+import {PatchReq as PatchReqUser} from "@src/app/api/volunteer/route"
 interface Props {
   className?: string;
   style?: CSSProperties;
   showModal: boolean;
   setShowModal: (newShowModal: boolean) => void;
   setShowSuccessModal: Function;
-  setChapterCreated: Function;
+  chapter: IChapter;
 }
 
-const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, setChapterCreated}: Props) => {
+const editChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter}: Props) => {
+  const [yearFounded, setYearFounded] = useState<string>("");
   const [chapterName, setChapterName] = useState<string>("");
-  const [chapterPresident, setChapterPresident] = useState<string>("");
-  const [chapterPresidentID, setChapterPresidentID] = useState<string>("");
 
-
+  const [yearFoundedError, setYearFoundedError] = useState<string>("");
   const [chapterNameError, setChapterNameError] = useState<string>("");
-  const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
 
   const [locCountry, setLocCountry] = useState("");
   const [locState, setLocState] = useState("");
@@ -46,9 +42,9 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   const [stateError, setStateError] = useState("");
   const [cityError, setCityError] = useState("");
 
-  const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
-  const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
-  const [loading, setLoading] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
+    [],
+  );
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -73,56 +69,39 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   }));
 
   const resetErrors = () => {
+    setYearFoundedError("");
     setChapterNameError("");
-    setChapterPresidentError("");
     setCountryError("");
     setStateError("");
     setCityError("");
   };
 
   const reset = () => {
+    setYearFounded("");
     setChapterName("");
-    setChapterPresident("");
-    setChapterPresidentID("");
     setLocCountry("")
     setLocState("");
     setLocCity("");
     resetErrors();
   };
 
-  // Getting Volunteers
-  const {
-    fullName,
-    volunteerRoles,
-  } = useSelector((state: RootState) => state.volunteerSearch);
+  const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
 
   useEffect(() => {
-    setLoading(true)
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
       url: "/api/volunteer/filter-volunteer",
       method: HttpMethod.POST,
       body: {
         params: {
           name: fullName,
-          roles: volunteerRoles,
-        }
+          beiChapters: [chapter.name],
+        },
+        entriesPerPage: 9999,
       },
     }).then((res) => {
-      setVolunteers(res?.data ?? []);
-      setLoading(false)
-    });
-  }, []);
-
-  type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
-  const handleChange: changeHandler = (e) => {
-    const { target } = e;
-    if (!target.value.trim()) return setFilteredVolunteers([]);
-
-    const filteredValue = volunteers?.filter((volunteer) =>
-      (volunteer.firstName + " " + volunteer.lastName).toLowerCase().startsWith(target.value.toLowerCase())
-    );
-    setFilteredVolunteers(filteredValue);
-  };
+      setFilteredUsers(res?.data ?? []);
+    })
+  }, [])
 
   const handleSaveChanges = async (
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
@@ -131,13 +110,14 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
     resetErrors();
     let error = false;
 
-    if (chapterName === "") {
-      setChapterNameError("Chapter name cannot be blank");
+
+    if (yearFounded === "") {
+      setYearFoundedError("Year founded cannot be blank");
       error = true;
     }
 
-    if (chapterPresident === "") {
-      setChapterPresidentError("Choose a valid chapter president");
+    if (chapterName === "") {
+      setChapterNameError("Chapter name cannot be blank");
       error = true;
     }
 
@@ -152,27 +132,44 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
     }
 
     try {
-      console.log(chapterName, chapterPresident, chapterPresidentID, locCountry)
-      await internalRequest<PostReq>({
+      await internalRequest<PatchReq>({
         url: "/api/chapter",
-        method: HttpMethod.POST,
+        method: HttpMethod.PATCH,
         body: {
-          name: chapterName,
-          chapterPresident: chapterPresidentID,
-          yearFounded: new Date().getFullYear(),
-          country: locCountry,
-          city: locCity,
-          state: locState,
-        },
+          name: chapter.name,
+          newFields: {
+            yearFounded: yearFounded,
+            name: chapterName,
+            location: {
+              country: locCountry,
+              state: locState,
+              city: locCity,
+            }
+          }
+        }
       });
+
+      filteredUsers.forEach(async user => {
+        await internalRequest<PatchReqUser>({
+          url: "/api/volunteer",
+          method: HttpMethod.PATCH,
+          body: {
+            email: user.email,
+            newFields: {
+              chapter: chapterName
+            }
+          }
+        });
+      });
+
     } catch (error) {
       console.log(error)
     }
 
     setShowModal(false);
     reset();
-    setChapterCreated(chapterName)
     setShowSuccessModal(true);
+    
   };
 
   return (
@@ -180,12 +177,26 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
       <>
         <form className={styles.inputs} onSubmit={handleSaveChanges}>
           <div className={styles.inputHeader}>
-            <label>Add a New Chapter</label>
+            <label>Edit Chapter Profile</label>
           </div>
+          <div className={styles.inputSubheader}>
+            <label>{chapter.name}</label>
+          </div>
+          <div className={styles.inputField}>
+            <label>Chapter Year Founded</label>
+            <InputField
+              placeholder="Enter new year founded"
+              value={yearFounded}
+              onChange={(e) => setYearFounded(e.target.value)}
+              showError={yearFoundedError !== ""}
+              error={yearFoundedError}
+            />
+          </div>
+
           <div className={styles.inputField}>
             <label>Chapter Name</label>
             <InputField
-              placeholder="Enter a chapter name"
+              placeholder="Enter new chapter name"
               value={chapterName}
               onChange={(e) => setChapterName(e.target.value)}
               showError={chapterNameError !== ""}
@@ -197,7 +208,7 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
             <AuthDropdown
               title="Chapter Location"
               required={true}
-              placeholder="Select Your Country"
+              placeholder="Select your country"
               options={COUNTRIES}
               value={locCountry}
               onChange={(e) => {
@@ -243,24 +254,6 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
             </div>
           )}
 
-          <div className={styles.inputField}>
-            <label>Chapter President</label>
-            <LiveSearchDropdown
-              options={filteredVolunteers}
-              value={chapterPresident}
-              setValue={setChapterPresident}
-              placeholder={loading ? "Loading.." : "Enter the name of the chapter president"}
-              renderItem={(item) => 
-                <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}
-              onChange={handleChange}
-              onSelect={(item) => {
-                setChapterPresident(item.firstName + " " + item.lastName)
-                setChapterPresidentID(item._id)}
-              }
-              showError={chapterPresidentError !== ""}
-              error={chapterPresidentError}
-            />
-          </div>
           <div className={styles.buttons}>
             <button
               type="button"
@@ -284,4 +277,4 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   );
 };
 
-export default addChapterModal;
+export default editChapterModal;

@@ -35,7 +35,7 @@ export const GET = APIWrapper({
   },
 });
 
-type PatchReq = {
+export type PatchReq = {
   email: string;
   newFields: RecursivePartial<IUser>;
 };

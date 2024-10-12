@@ -20,7 +20,9 @@ export function Cell({ cell }: { cell: CellProps }) {
     <div
       className={classes(styles.cell, cell.link && styles.hover)}
       style={cell.cellStyle}
-      onClick={() => cell.link()}
+      onClick={() => {
+        cell.link && cell.link()
+      }}
     >
       <div className={styles.cellIcon} style={cell.iconStyle}>
         {cell.icon}

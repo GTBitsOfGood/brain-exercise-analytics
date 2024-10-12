@@ -28,7 +28,7 @@ export const GET = APIWrapper({
   },
 });
 
-type PatchReq = {
+export type PatchReq = {
   name: string;
   newFields: RecursivePartial<IChapter>;
 };
