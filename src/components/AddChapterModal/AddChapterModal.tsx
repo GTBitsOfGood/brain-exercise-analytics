@@ -1,14 +1,15 @@
-import { useRouter } from "next/navigation";
-import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
+import {
+  CSSProperties,
+  FormEvent,
+  MouseEvent,
+  useState,
+  useEffect,
+} from "react";
 import { classes } from "@src/utils/utils";
 import { useSelector } from "react-redux";
 
-import useAuth from "@src/hooks/useAuth";
-import styles from "./AddChapterModal.module.css";
-import InputField from "../InputField/InputField";
-import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
-import XIcon from "@/src/app/icons/XIcon"
+import XIcon from "@/src/app/icons/XIcon";
 import { Country, State, City } from "country-state-city";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
@@ -16,29 +17,38 @@ import {
   AdminApprovalStatus,
   HttpMethod,
   IVolunteerTableEntry,
-  Role,
+  // Role,
   SearchResponseBody,
 } from "@/common_utils/types";
 import { PostReq } from "@server/mongodb/actions/Chapter";
-import {PatchReq as PatchReqUser} from "@src/app/api/volunteer/route"
-
+// import { PatchReq as PatchReqUser } from "@src/app/api/volunteer/route";
+import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
+import InputField from "../InputField/InputField";
+import styles from "./AddChapterModal.module.css";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
-  showModal: boolean;
-  setShowModal: (newShowModal: boolean) => void;
-  setShowSuccessModal: Function;
-  setChapterCreated: Function;
+  setShowModal: (arg: boolean) => void;
+  setShowSuccessModal: (arg: boolean) => void;
+  setChapterCreated: (arg: string) => void;
 }
 
-const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, setChapterCreated}: Props) => {
+const AddChapterModal = ({
+  className,
+  style,
+  setShowModal,
+  setShowSuccessModal,
+  setChapterCreated,
+}: Props) => {
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterPresident, setChapterPresident] = useState<string>("");
-  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry | null>(null);
+  const [chapterPresidentObject, setChapterPresidentObject] =
+    useState<IVolunteerTableEntry | null>(null);
 
   const [chapterNameError, setChapterNameError] = useState<string>("");
-  const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
+  const [chapterPresidentError, setChapterPresidentError] =
+    useState<string>("");
 
   const [locCountry, setLocCountry] = useState("");
   const [locState, setLocState] = useState("");
@@ -49,7 +59,8 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   const [cityError, setCityError] = useState("");
 
   const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
-  const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
+  const [filteredVolunteers, setFilteredVolunteers] =
+    useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
@@ -85,7 +96,7 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   const reset = () => {
     setChapterName("");
     setChapterPresident("");
-    setLocCountry("")
+    setLocCountry("");
     setLocState("");
     setLocCity("");
     setChapterPresidentObject(null);
@@ -93,13 +104,12 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   };
 
   // Getting Volunteers
-  const {
-    fullName,
-    volunteerRoles,
-  } = useSelector((state: RootState) => state.volunteerSearch);
+  const { fullName, volunteerRoles } = useSelector(
+    (state: RootState) => state.volunteerSearch,
+  );
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
       url: "/api/volunteer/filter-volunteer",
       method: HttpMethod.POST,
@@ -113,17 +123,19 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
       },
     }).then((res) => {
       setVolunteers(res?.data ?? []);
-      setLoading(false)
+      setLoading(false);
     });
   }, []);
 
-  type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
-  const handleChange: changeHandler = (e) => {
+  type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
+  const handleChange: ChangeHandler = (e) => {
     const { target } = e;
     if (!target.value.trim()) return setFilteredVolunteers([]);
 
     const filteredValue = volunteers?.filter((volunteer) =>
-      (volunteer.firstName + " " + volunteer.lastName).toLowerCase().startsWith(target.value.toLowerCase())
+      `${volunteer.firstName} ${volunteer.lastName}`
+        .toLowerCase()
+        .startsWith(target.value.toLowerCase()),
     );
     setFilteredVolunteers(filteredValue);
   };
@@ -176,10 +188,10 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
 
       setShowModal(false);
       reset();
-      setChapterCreated(chapterName)
+      setChapterCreated(chapterName);
       setShowSuccessModal(true);
-    } catch (error) {
-      console.log(error)
+    } catch (errors) {
+      console.log(errors);
     }
   };
 
@@ -257,14 +269,21 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
               options={filteredVolunteers}
               value={chapterPresident}
               setValue={setChapterPresident}
-              placeholder={loading ? "Loading.." : "Enter the name of the chapter president"}
-              renderItem={(item) => 
-                <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}
+              placeholder={
+                loading
+                  ? "Loading.."
+                  : "Enter the name of the chapter president"
+              }
+              renderItem={(item) => (
+                <p className={styles.p}>
+                  {`${item.firstName} ${item.lastName}        ${item.phoneNumber}`}
+                </p>
+              )}
               onChange={handleChange}
               onSelect={(item) => {
-                setChapterPresident(item.firstName + " " + item.lastName)
-                setChapterPresidentObject(item)}
-              }
+                setChapterPresident(`${item.firstName} ${item.lastName}`);
+                setChapterPresidentObject(item);
+              }}
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}
             />
@@ -287,9 +306,11 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
           </div>
         </form>
       </>
-      <button className={styles.exit} onClick={() => setShowModal(false)}><XIcon></XIcon></button>
+      <button className={styles.exit} onClick={() => setShowModal(false)}>
+        <XIcon></XIcon>
+      </button>
     </div>
   );
 };
 
-export default addChapterModal;
+export default AddChapterModal;

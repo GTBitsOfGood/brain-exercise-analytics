@@ -6,8 +6,8 @@
   align-items: center;
   gap: var(--10, 10px);
   border-radius: var(--12, 12px);
-  border: 1px solid #E0E5F2;
-  background: var(--white-100, #FFF);
+  border: 1px solid #e0e5f2;
+  background: var(--white-100, #fff);
   box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
 }
 
@@ -33,7 +33,7 @@
 }
 
 .mediumText {
-  color: var(--Dark-Blue, #2B3674);
+  color: var(--Dark-Blue, #2b3674);
   text-align: center;
   /* H3 */
   font-size: 20px;
@@ -43,7 +43,7 @@
 }
 
 .smallText {
-  color: var(--Dark-Blue, #2B3674);
+  color: var(--Dark-Blue, #2b3674);
   text-align: center;
   /* P2 */
   font-size: 16px;

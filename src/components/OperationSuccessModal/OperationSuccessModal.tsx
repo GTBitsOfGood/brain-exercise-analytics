@@ -1,21 +1,17 @@
 import { CSSProperties } from "react";
 import { classes } from "@src/utils/utils";
-import styles from "./OperationSuccessModal.module.css";
 import CheckCircle from "@src/app/icons/CheckCircle";
+import styles from "./OperationSuccessModal.module.css";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
-  showModal: boolean;
-  setShowModal: (newShowModal: boolean) => void;
   subtitle?: string;
   title?: string;
   description?: string;
 }
 
-const Modal = ({ className, style, showModal, setShowModal, subtitle, title, description}: Props) => {
-  
-
+const Modal = ({ className, style, subtitle, title, description }: Props) => {
   return (
     <div className={classes(styles.container, className)} style={style}>
       <CheckCircle className={styles.checkCircle}></CheckCircle>

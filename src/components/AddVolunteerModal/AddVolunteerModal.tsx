@@ -1,36 +1,39 @@
-import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
-import { classes } from "@src/utils/utils";
-import { useSelector } from "react-redux";
-
-import styles from "./AddVolunteerModal.module.css";
-import InputField from "../InputField/InputField";
-import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
-import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
-import XIcon from "@/src/app/icons/XIcon"
-import { Country, State, City } from "country-state-city";
-import { RootState } from "@src/redux/rootReducer";
-import { internalRequest } from "@src/utils/requests";
 import {
-  AdminApprovalStatus,
-  HttpMethod,
-  IVolunteerTableEntry,
-  SearchResponseBody,
-} from "@/common_utils/types";
+  CSSProperties,
+  // FormEvent,
+  // MouseEvent,
+  // useState,
+  // useEffect,
+} from "react";
+import { classes } from "@src/utils/utils";
+// import { useSelector } from "react-redux";
+
+// import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
+import XIcon from "@/src/app/icons/XIcon";
+// import { RootState } from "@src/redux/rootReducer";
+// import { internalRequest } from "@src/utils/requests";
+// import {
+//   AdminApprovalStatus,
+//   HttpMethod,
+//   IVolunteerTableEntry,
+//   SearchResponseBody,
+// } from "@/common_utils/types";
 // import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
-import { PostReq } from "@server/mongodb/actions/Chapter";
+// import { PostReq } from "@server/mongodb/actions/Chapter";
+// import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
+// import InputField from "../InputField/InputField";
+import styles from "./AddVolunteerModal.module.css";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
-  showModal: boolean;
   setShowModal: (newShowModal: boolean) => void;
 }
 
-const addChapterModal = ({ className, style, showModal, setShowModal}: Props) => {
+const addChapterModal = ({ className, style, setShowModal }: Props) => {
   // const [chapterName, setChapterName] = useState<string>("");
   // const [chapterPresident, setChapterPresident] = useState<string>("");
   // const [chapterPresidentID, setChapterPresidentID] = useState<string>("");
-
 
   // const [chapterNameError, setChapterNameError] = useState<string>("");
   // const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
@@ -278,7 +281,9 @@ const addChapterModal = ({ className, style, showModal, setShowModal}: Props) =>
           </div>
         </form>
       </> */}
-      <button className={styles.exit} onClick={() => setShowModal(false)}><XIcon></XIcon></button>
+      <button className={styles.exit} onClick={() => setShowModal(false)}>
+        <XIcon></XIcon>
+      </button>
     </div>
   );
 };

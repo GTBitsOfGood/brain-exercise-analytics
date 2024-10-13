@@ -39,7 +39,7 @@
 }
 
 .inputSubheader {
-  color: var(--Dark-Blue-Grey, #9CA5C2);
+  color: var(--Dark-Blue-Grey, #9ca5c2);
   /* H2 */
   font-size: 22px;
   font-style: normal;
@@ -49,7 +49,7 @@
 }
 
 .text1 {
-  color: var(--Dark-Blue, #2B3674);
+  color: var(--Dark-Blue, #2b3674);
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
@@ -57,7 +57,7 @@
 }
 
 .text2 {
-  color: var(--Dark-Blue, #2B3674);
+  color: var(--Dark-Blue, #2b3674);
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -101,7 +101,7 @@
   color: #2b3674;
 }
 .inputField label {
-  color: var(--Dark-Blue, #2B3674);
+  color: var(--Dark-Blue, #2b3674);
   /* P1 */
   font-size: 16px;
   font-style: normal;
@@ -162,7 +162,7 @@
   height: 35%;
   width: 50%;
   padding: 3% 3%;
-  border: 1px solid #E0E5F2;
+  border: 1px solid #e0e5f2;
   border-radius: var(--12, 12px);
   box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
   font-family: var(--font-poppins);
@@ -179,7 +179,7 @@
 }
 
 .confirmTitle {
-  color: var(--Dark-Blue, #2B3674);
+  color: var(--Dark-Blue, #2b3674);
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -189,7 +189,7 @@
 }
 
 .confirmDesc {
-  color: #2B3674;
+  color: #2b3674;
   font-size: 14px;
   font-style: normal;
   font-weight: 450;

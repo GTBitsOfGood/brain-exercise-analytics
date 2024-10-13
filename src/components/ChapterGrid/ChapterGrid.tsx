@@ -5,13 +5,12 @@ import Pagination from "@src/components/Pagination/Pagination";
 import { IChapterTableEntry, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
-import styles from "./ChapterGrid.module.css";
-import { Row } from "./Row/Row";
 import AddChapterModal from "@src/components/AddChapterModal/AddChapterModal";
 import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
 import Modal from "@src/components/Modal/Modal";
 import { useState } from "react";
-
+import { Row } from "./Row/Row";
+import styles from "./ChapterGrid.module.css";
 
 interface ChapterGridProps {
   data: IChapterTableEntry[];
@@ -57,19 +56,28 @@ function Header() {
       </div>
       <button
         className={styles["table-header-database-button"]}
-        onClick = {() => setShowModal(!showModal)}
+        onClick={() => setShowModal(!showModal)}
       >
         Add Chapter
       </button>
       <Modal showModal={showModal} setShowModal={setShowModal}>
-        <AddChapterModal className={styles.addChapterModalContent} 
-          showModal={showModal} setShowModal={setShowModal} setShowSuccessModal={setShowSuccessModal} 
-          setChapterCreated={setChapterCreated}/>
+        <AddChapterModal
+          className={styles.addChapterModalContent}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          setShowSuccessModal={setShowSuccessModal}
+          setChapterCreated={setChapterCreated}
+        />
       </Modal>
       <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
-        <OperationSuccessModal className={styles.operationSuccessModal} 
-          showModal={showSuccessModal} setShowModal={setShowSuccessModal} 
-          title={chapterCreated} subtitle="You have successfully created:" description="Find it in Search Chapter page to add more volunteers and patients."/>
+        <OperationSuccessModal
+          className={styles.operationSuccessModal}
+          showModal={showSuccessModal}
+          setShowModal={setShowSuccessModal}
+          title={chapterCreated}
+          subtitle="You have successfully created:"
+          description="Find it in Search Chapter page to add more volunteers and patients."
+        />
       </Modal>
     </div>
   );
@@ -98,7 +106,6 @@ export default function ChapterGrid(params: ChapterGridProps) {
         pageCount={params.pageCount}
         currentPage={params.currentPage}
       />
-      
     </div>
   );
 }

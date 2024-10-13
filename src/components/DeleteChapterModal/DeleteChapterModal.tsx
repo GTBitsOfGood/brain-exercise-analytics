@@ -1,7 +1,12 @@
-import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
+import {
+  CSSProperties,
+  FormEvent,
+  MouseEvent,
+  useState,
+  useEffect,
+} from "react";
 import { classes } from "@src/utils/utils";
 
-import styles from "./DeleteChapterModal.module.css";
 import { internalRequest } from "@src/utils/requests";
 import {
   HttpMethod,
@@ -12,21 +17,27 @@ import {
 import { DeleteReq } from "@src/app/api/chapter/route";
 import { RootState } from "@src/redux/rootReducer";
 import { useSelector } from "react-redux";
-import { PatchReq } from "@src/app/api/volunteer/route"
-
+import { PatchReq } from "@src/app/api/volunteer/route";
+import styles from "./DeleteChapterModal.module.css";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
-  showModal: boolean;
-  setShowModal: (newShowModal: boolean) => void;
-  setShowSuccessModal: Function;
-  chapter: IChapter
+  setShowModal: (arg: boolean) => void;
+  setShowSuccessModal: (arg: boolean) => void;
+  chapter: IChapter;
 }
 
-const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter}: Props) => {
-
-  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>([]);
+const DeleteChapterModal = ({
+  className,
+  style,
+  setShowModal,
+  setShowSuccessModal,
+  chapter,
+}: Props) => {
+  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
+    [],
+  );
   const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
 
   useEffect(() => {
@@ -42,14 +53,14 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
       },
     }).then((res) => {
       setFilteredUsers(res?.data ?? []);
-    })
-  }, [])
+    });
+  }, []);
 
   const handleSaveChanges = async (
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
   ) => {
     e.preventDefault();
-  
+
     try {
       await internalRequest<DeleteReq>({
         url: "/api/chapter",
@@ -59,24 +70,23 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
         },
       });
 
-      filteredUsers.forEach(async user => {
+      filteredUsers.forEach(async (user) => {
         await internalRequest<PatchReq>({
           url: "/api/volunteer",
           method: HttpMethod.PATCH,
           body: {
             email: user.email,
             newFields: {
-              chapter: ""
-            }
-          }
+              chapter: "",
+            },
+          },
         });
       });
 
       setShowModal(false);
       setShowSuccessModal(true);
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -84,11 +94,10 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
     <div className={classes(styles.container, className)} style={style}>
       <>
         <form>
-          <div className={styles.inputHeader}>
-            Delete Chapter
-          </div>
+          <div className={styles.inputHeader}>Delete Chapter</div>
           <div className={styles.description}>
-            Please confirm that you want to delete this chapter. This action cannot be undone.
+            Please confirm that you want to delete this chapter. This action
+            cannot be undone.
           </div>
           <div className={styles.buttons}>
             <button
@@ -112,4 +121,4 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   );
 };
 
-export default addChapterModal;
+export default DeleteChapterModal;

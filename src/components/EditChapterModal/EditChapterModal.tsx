@@ -1,11 +1,15 @@
-import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
+import {
+  CSSProperties,
+  FormEvent,
+  MouseEvent,
+  useState,
+  useEffect,
+} from "react";
 import { classes } from "@src/utils/utils";
 import { useSelector } from "react-redux";
 
-import styles from "./EditChapterModal.module.css";
-import InputField from "../InputField/InputField";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
-import XIcon from "@/src/app/icons/XIcon"
+import XIcon from "@/src/app/icons/XIcon";
 import { Country, State, City } from "country-state-city";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
@@ -16,18 +20,27 @@ import {
   SearchResponseBody,
 } from "@/common_utils/types";
 import { PatchReq } from "@src/app/api/chapter/route";
-import {PatchReq as PatchReqUser} from "@src/app/api/volunteer/route"
+import { PatchReq as PatchReqUser } from "@src/app/api/volunteer/route";
+import InputField from "../InputField/InputField";
+import styles from "./EditChapterModal.module.css";
+
 interface Props {
   className?: string;
   style?: CSSProperties;
-  showModal: boolean;
   setShowModal: (newShowModal: boolean) => void;
-  setShowSuccessModal: Function;
-  setSuccessLink: Function
+  setShowSuccessModal: (arg: boolean) => void;
+  setSuccessLink: (arg: string) => void;
   chapter: IChapter;
 }
 
-const editChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter, setSuccessLink}: Props) => {
+const EditChapterModal = ({
+  className,
+  style,
+  setShowModal,
+  setShowSuccessModal,
+  chapter,
+  setSuccessLink,
+}: Props) => {
   const [yearFounded, setYearFounded] = useState<string>("");
   const [chapterName, setChapterName] = useState<string>("");
 
@@ -42,7 +55,9 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
   const [stateError, setStateError] = useState("");
   const [cityError, setCityError] = useState("");
 
-  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
+    [],
+  );
 
   const COUNTRIES = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -77,7 +92,7 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
   const reset = () => {
     setYearFounded("");
     setChapterName("");
-    setLocCountry("")
+    setLocCountry("");
     setLocState("");
     setLocCity("");
     resetErrors();
@@ -98,8 +113,8 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
       },
     }).then((res) => {
       setFilteredUsers(res?.data ?? []);
-    })
-  }, [])
+    });
+  }, []);
 
   const handleSaveChanges = async (
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
@@ -107,7 +122,6 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
     e.preventDefault();
     resetErrors();
     let error = false;
-
 
     if (yearFounded === "") {
       setYearFoundedError("Year founded cannot be blank");
@@ -136,38 +150,36 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
         body: {
           name: chapter.name,
           newFields: {
-            yearFounded: yearFounded,
+            yearFounded,
             name: chapterName,
             location: {
               country: locCountry,
               state: locState,
               city: locCity,
-            }
-          }
-        }
+            },
+          },
+        },
       });
 
-      filteredUsers.forEach(async user => {
+      filteredUsers.forEach(async (user) => {
         await internalRequest<PatchReqUser>({
           url: "/api/volunteer",
           method: HttpMethod.PATCH,
           body: {
             email: user.email,
             newFields: {
-              chapter: chapterName
-            }
-          }
+              chapter: chapterName,
+            },
+          },
         });
       });
 
-
-    setShowModal(false);
-    reset();
-    setSuccessLink("/chapter/" + encodeURI(chapterName))
-    setShowSuccessModal(true);
-
-    } catch (error) {
-      console.log(error)
+      setShowModal(false);
+      reset();
+      setSuccessLink(`/chapter/${encodeURI(chapterName)}`);
+      setShowSuccessModal(true);
+    } catch (errors) {
+      console.log(errors);
     }
   };
 
@@ -271,9 +283,11 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
           </div>
         </form>
       </>
-      <button className={styles.exit} onClick={() => setShowModal(false)}><XIcon></XIcon></button>
+      <button className={styles.exit} onClick={() => setShowModal(false)}>
+        <XIcon></XIcon>
+      </button>
     </div>
   );
 };
 
-export default editChapterModal;
+export default EditChapterModal;

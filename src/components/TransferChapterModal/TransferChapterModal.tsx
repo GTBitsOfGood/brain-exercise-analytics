@@ -1,9 +1,14 @@
-import { CSSProperties, FormEvent, MouseEvent, useState, useEffect } from "react";
+import {
+  CSSProperties,
+  FormEvent,
+  MouseEvent,
+  useState,
+  useEffect,
+} from "react";
 import { classes } from "@src/utils/utils";
 import { useSelector } from "react-redux";
 
-import styles from "./TransferChapterModal.module.css";
-import XIcon from "@/src/app/icons/XIcon"
+import XIcon from "@/src/app/icons/XIcon";
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import {
@@ -12,31 +17,40 @@ import {
   IChapter,
   IVolunteerTableEntry,
   SearchResponseBody,
+  Role,
 } from "@/common_utils/types";
 import { PatchReq } from "@src/app/api/chapter/route";
-import {PatchReq as PatchReqUser} from "@src/app/api/volunteer/route"
+import { PatchReq as PatchReqUser } from "@src/app/api/volunteer/route";
 import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
-import { Role } from "@/common_utils/types";
+import styles from "./TransferChapterModal.module.css";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
-  showModal: boolean;
   setShowModal: (newShowModal: boolean) => void;
-  setShowSuccessModal: Function;
+  setShowSuccessModal: (arg: boolean) => void;
   chapter: IChapter;
 }
 
-const editChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, chapter}: Props) => {
-
-  const [currChapterPresident, setCurrChapterPresident] = useState<IVolunteerTableEntry[]>();
+const TransferChapterModal = ({
+  className,
+  style,
+  setShowModal,
+  setShowSuccessModal,
+  chapter,
+}: Props) => {
+  // const [currChapterPresident, setCurrChapterPresident] =
+  //   useState<IVolunteerTableEntry[]>();
 
   const [chapterPresident, setChapterPresident] = useState<string>("");
-  const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
-  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry | null>(null);
-  
+  const [chapterPresidentError, setChapterPresidentError] =
+    useState<string>("");
+  const [chapterPresidentObject, setChapterPresidentObject] =
+    useState<IVolunteerTableEntry | null>(null);
+
   const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
-  const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
+  const [filteredVolunteers, setFilteredVolunteers] =
+    useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
 
   const [confirmPopup, setConfirmPopup] = useState(false);
@@ -47,59 +61,58 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
   };
 
   const reset = () => {
-    setChapterPresident("")
-    setChapterPresidentObject(null)
+    setChapterPresident("");
+    setChapterPresidentObject(null);
     resetErrors();
   };
 
-    // Getting Volunteers
-    const {
-      fullName,
-      volunteerRoles,
-    } = useSelector((state: RootState) => state.volunteerSearch);
-  
-    useEffect(() => {
-      // setLoading(true)
-      // internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
-      //   url: "/api/volunteer/internal/get-volunteer",
-      //   method: HttpMethod.POST,
-      //   body: {
-      //     secret: ,
-      //     id: chapter.chapterPresident
-      //   },
-      // }).then((res) => {
-      //   setCurrChapterPresident(res?.data);
-      // });
+  // Getting Volunteers
+  const { fullName, volunteerRoles } = useSelector(
+    (state: RootState) => state.volunteerSearch,
+  );
 
-      internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
-        url: "/api/volunteer/filter-volunteer",
-        method: HttpMethod.POST,
-        body: {
-          params: {
-            name: fullName,
-            roles: volunteerRoles,
-            approved: [AdminApprovalStatus.APPROVED],
-          },
-          entriesPerPage: 9999,
+  useEffect(() => {
+    // setLoading(true)
+    // internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+    //   url: "/api/volunteer/internal/get-volunteer",
+    //   method: HttpMethod.POST,
+    //   body: {
+    //     secret: ,
+    //     id: chapter.chapterPresident
+    //   },
+    // }).then((res) => {
+    //   setCurrChapterPresident(res?.data);
+    // });
+
+    internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+      url: "/api/volunteer/filter-volunteer",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          name: fullName,
+          roles: volunteerRoles,
+          approved: [AdminApprovalStatus.APPROVED],
         },
-      }).then((res) => {
-        setVolunteers(res?.data ?? []);
-        setLoading(false)
-      });
+        entriesPerPage: 9999,
+      },
+    }).then((res) => {
+      setVolunteers(res?.data ?? []);
+      setLoading(false);
+    });
+  }, []);
 
-      
-    }, []);
+  type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
+  const handleChange: ChangeHandler = (e) => {
+    const { target } = e;
+    if (!target.value.trim()) return setFilteredVolunteers([]);
 
-    type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
-    const handleChange: changeHandler = (e) => {
-      const { target } = e;
-      if (!target.value.trim()) return setFilteredVolunteers([]);
-  
-      const filteredValue = volunteers?.filter((volunteer) =>
-        (volunteer.firstName + " " + volunteer.lastName).toLowerCase().startsWith(target.value.toLowerCase())
-      );
-      setFilteredVolunteers(filteredValue);
-    };
+    const filteredValue = volunteers?.filter((volunteer) =>
+      `${volunteer.firstName} ${volunteer.lastName}`
+        .toLowerCase()
+        .startsWith(target.value.toLowerCase()),
+    );
+    setFilteredVolunteers(filteredValue);
+  };
 
   const handleSaveChanges = async (
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
@@ -117,14 +130,14 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
       error = true;
     }
 
-    if (chapterPresidentObject ===  null) {
+    if (chapterPresidentObject === null) {
       setChapterPresidentError("Choose a valid chapter president");
       error = true;
     }
 
     if (error) {
       console.log(error);
-      setConfirmPopupPressed(false)
+      setConfirmPopupPressed(false);
       return;
     }
 
@@ -135,9 +148,9 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
         body: {
           name: chapter.name,
           newFields: {
-            chapterPresident: chapterPresidentObject?._id, 
-          }
-        }
+            chapterPresident: chapterPresidentObject?._id,
+          },
+        },
       });
 
       // await internalRequest<PatchReqUser>({
@@ -158,17 +171,16 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
           email: chapterPresidentObject?.email,
           newFields: {
             chapter: chapter.name,
-            role: Role.NONPROFIT_CHAPTER_PRESIDENT
-          }
-        }
-      })
+            role: Role.NONPROFIT_CHAPTER_PRESIDENT,
+          },
+        },
+      });
 
       setShowModal(false);
       reset();
       setShowSuccessModal(true);
-
-    } catch (error) {
-        console.log(error)
+    } catch (errors) {
+      console.log(errors);
     }
   };
 
@@ -182,7 +194,9 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
           <div className={styles.inputSubheader}>
             <label>{chapter.name}</label>
           </div>
-          <div className={styles.text1}>You're transfering this chapter from:</div>
+          <div className={styles.text1}>
+            You are transfering this chapter from:
+          </div>
           <div className={styles.text2}>Current Chapter President</div>
           <div className={styles.currPresContainer}>
             {/* <div className={styles.text2}>{chapter.chapterPresident}</div>
@@ -196,14 +210,21 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
               options={filteredVolunteers}
               value={chapterPresident}
               setValue={setChapterPresident}
-              placeholder={loading ? "Loading.." : "Enter the name of the chapter president"}
-              renderItem={(item) => 
-                <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}
+              placeholder={
+                loading
+                  ? "Loading.."
+                  : "Enter the name of the chapter president"
+              }
+              renderItem={(item) => (
+                <p className={styles.p}>
+                  {`${item.firstName} ${item.lastName}        ${item.phoneNumber}`}
+                </p>
+              )}
               onChange={handleChange}
               onSelect={(item) => {
-                setChapterPresident(item.firstName + " " + item.lastName)
-                setChapterPresidentObject(item)}
-              }
+                setChapterPresident(`${item.firstName} ${item.lastName}`);
+                setChapterPresidentObject(item);
+              }}
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}
             />
@@ -213,8 +234,8 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
             <button
               type="button"
               onClick={() => {
-                reset()
-                setShowModal(false)
+                reset();
+                setShowModal(false);
               }}
               className={`${styles.submitButton} ${styles.disabled}`}
             >
@@ -224,45 +245,53 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
               type="submit"
               className={styles.submitButton}
               onClick={() => {
-                if (chapterPresident !== "" && chapterPresidentObject !== null) {
-                  setConfirmPopup(true)}
+                if (
+                  chapterPresident !== "" &&
+                  chapterPresidentObject !== null
+                ) {
+                  setConfirmPopup(true);
                 }
-              }
+              }}
             >
               Confirm Chapter Transfer
             </button>
           </div>
-          
-          {confirmPopup && 
-          <div className={styles.confirmPopup}>
-            <div className={styles.confirmTitle}>Leadership Transfer</div>
-            <div className={styles.confirmDesc}>You will lose access to the Chapter President portal after you confirm.</div>
-            <div className={styles.confirmPopupButtons}>
-              <button
-                type="button"
-                onClick={() => setConfirmPopup(false)}
-                className={`${styles.submitButton} ${styles.disabled}`}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className={styles.submitButton}
-                onClick={() => {
-                    setConfirmPopupPressed(true)
-                    handleSaveChanges
-                  }
-                }
-              >
-                Confirm
-              </button>
+
+          {confirmPopup && (
+            <div className={styles.confirmPopup}>
+              <div className={styles.confirmTitle}>Leadership Transfer</div>
+              <div className={styles.confirmDesc}>
+                You will lose access to the Chapter President portal after you
+                confirm.
+              </div>
+              <div className={styles.confirmPopupButtons}>
+                <button
+                  type="button"
+                  onClick={() => setConfirmPopup(false)}
+                  className={`${styles.submitButton} ${styles.disabled}`}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  onClick={() => {
+                    setConfirmPopupPressed(true);
+                    handleSaveChanges;
+                  }}
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
-          </div>}
+          )}
         </form>
       </>
-      <button className={styles.exit} onClick={() => setShowModal(false)}><XIcon></XIcon></button>
+      <button className={styles.exit} onClick={() => setShowModal(false)}>
+        <XIcon></XIcon>
+      </button>
     </div>
   );
 };
 
-export default editChapterModal;
+export default TransferChapterModal;

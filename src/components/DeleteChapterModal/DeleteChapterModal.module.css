@@ -17,7 +17,7 @@
 .inputHeader {
   display: flex;
   flex-direction: row;
-  color: var(--Red, #EA4335);
+  color: var(--Red, #ea4335);
   font-family: var(--font-poppins);
   font-size: 24px;
   font-style: normal;
@@ -28,7 +28,7 @@
 }
 
 .description {
-  color: #2B3674;
+  color: #2b3674;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -50,7 +50,7 @@
   padding: 15px 30px;
   border: 0px;
   font-weight: bold;
-  background-color: var(--Red, #EA4335);
+  background-color: var(--Red, #ea4335);
   color: white;
   cursor: pointer;
 }

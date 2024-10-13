@@ -228,7 +228,7 @@ export function Row({ volunteer, refreshUsers }: Props) {
               className={styles.approveButton}
               onClick={() => handleAdminApproval(volunteer.email, true)}
             >
-              <CheckCircle className={styles.checkCircle}/>
+              <CheckCircle className={styles.checkCircle} />
               Approve
             </button>
             <button

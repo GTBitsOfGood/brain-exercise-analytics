@@ -1,7 +1,6 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import styles from "./LiveSearchDropdown.module.css"
+import { useCallback, useEffect, useState } from "react";
+import styles from "./LiveSearchDropdown.module.css";
 import InputField from "../InputField/InputField";
-import { Input } from "@mui/material";
 
 interface Props<T> {
   options?: T[];
@@ -9,7 +8,7 @@ interface Props<T> {
   onChange?: React.ChangeEventHandler;
   onSelect?: (item: T) => void;
   value: string;
-  setValue: Function;
+  setValue: (arg: string) => void;
   placeholder?: string;
   showError?: boolean;
   error?: string;
@@ -24,20 +23,22 @@ const LiveSearchDropdown = <T extends object>({
   onSelect,
   placeholder,
   showError,
-  error
+  error,
 }: Props<T>): JSX.Element => {
   const [showOptions, setShowOptions] = useState(false);
-
-  const handleSelection = (selectedIndex: number) => {
-    const selectedItem = options[selectedIndex];
-    if (!selectedItem) return resetSearchComplete();
-    onSelect && onSelect(selectedItem);
-    resetSearchComplete();
-  };
 
   const resetSearchComplete = useCallback(() => {
     setShowOptions(false);
   }, []);
+
+  const handleSelection = (selectedIndex: number) => {
+    const selectedItem = options[selectedIndex];
+    if (!selectedItem) return resetSearchComplete();
+    if (onSelect) {
+      onSelect(selectedItem);
+    }
+    resetSearchComplete();
+  };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     const { key } = e;
@@ -47,10 +48,12 @@ const LiveSearchDropdown = <T extends object>({
     }
   };
 
-  type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
-  const handleChange: changeHandler = (e) => {
+  type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
+  const handleChange: ChangeHandler = (e) => {
     setValue(e.target.value);
-    onChange && onChange(e);
+    if (onChange) {
+      onChange(e);
+    }
   };
 
   useEffect(() => {
@@ -61,13 +64,18 @@ const LiveSearchDropdown = <T extends object>({
 
   return (
     <div className={styles.container}>
-      <div tabIndex={1} onBlur={resetSearchComplete} onKeyDown={handleKeyDown} className={styles.dropdown}>
+      <div
+        tabIndex={1}
+        onBlur={resetSearchComplete}
+        onKeyDown={handleKeyDown}
+        className={styles.dropdown}
+      >
         <InputField
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
           showError={showError}
-          error = {error}
+          error={error}
         />
 
         {/* Search options Container */}

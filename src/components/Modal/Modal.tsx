@@ -1,8 +1,8 @@
 import { CSSProperties } from "react";
 import { classes } from "@src/utils/utils";
 
+import { useRouter } from "next/navigation";
 import styles from "./Modal.module.scss";
-import { useRouter } from 'next/navigation'
 
 interface Props {
   showModal: boolean;
@@ -21,9 +21,9 @@ export default function Modal({
   className,
   style,
   children,
-  link
+  link,
 }: Props) {
-  const router = useRouter()
+  const router = useRouter();
   if (!showModal) {
     return null;
   }
@@ -33,12 +33,14 @@ export default function Modal({
         className={styles.modalBackground}
         {...(disableBackgroundClick
           ? {}
-          : { onClick: () => {
-            link && router.push(link)
-            setShowModal(false)
-          }
-
-          })}
+          : {
+              onClick: () => {
+                if (link) {
+                  router.push(link);
+                }
+                setShowModal(false);
+              },
+            })}
       />
       {children}
     </div>

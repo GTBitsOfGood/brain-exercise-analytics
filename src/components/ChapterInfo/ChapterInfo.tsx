@@ -11,8 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
-import { useEffect, useMemo, useState } from "react";
-import styles from "./ChapterInfo.module.css";
+import { useMemo, useState } from "react";
 
 import Modal from "@src/components/Modal/Modal";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
@@ -25,7 +24,7 @@ import RedTrashCan from "@src/app/icons/RedTrashCan";
 import { Cell, CellProps } from "./Cell/Cell";
 import AddVolunteerModal from "../AddVolunteerModal/AddVolunteerModal";
 import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
-import { useRouter } from "next/navigation";
+import styles from "./ChapterInfo.module.css";
 
 interface ChapterInfoProps {
   chapter: IChapter;
@@ -40,12 +39,12 @@ export default function ChapterInfo(params: ChapterInfoProps) {
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
 
   const [showTransferModal, setShowTransferModal] = useState(false);
-  const [showTransferSuccessModal, setShowTransferSuccessModal] = useState(false);
+  const [showTransferSuccessModal, setShowTransferSuccessModal] =
+    useState(false);
 
   const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
-    
     return [
       {
         title: "Chapter Size",
@@ -111,18 +110,13 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       {
         title: "Add Volunteer",
         link: () => setShowAddVolunteerModal(true),
-        icon: (
-          <PersonPlusIcon className=""></PersonPlusIcon>
-        ),
+        icon: <PersonPlusIcon className=""></PersonPlusIcon>,
       },
       {
         title: "Delete Chapter",
         link: () => setShowDeleteModal(true),
-        icon: (
-          <RedTrashCan></RedTrashCan>
-        ),
-        iconStyle: {backgroundColor: '#FCDCE2'}
-
+        icon: <RedTrashCan></RedTrashCan>,
+        iconStyle: { backgroundColor: "#FCDCE2" },
       },
     ] as CellProps[];
   }, [params.chapter]);
@@ -165,48 +159,82 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         </div>
       </div>
       <Modal showModal={showEditModal} setShowModal={setShowEditModal}>
-        <EditChapterModal className={styles.editChapterModalContent} 
-          showModal={showEditModal} setShowModal={setShowEditModal} setShowSuccessModal={setShowEditSuccessModal} 
-          setSuccessLink={setEditSuccessLink} chapter={params.chapter}
-          />
+        <EditChapterModal
+          className={styles.editChapterModalContent}
+          showModal={showEditModal}
+          setShowModal={setShowEditModal}
+          setShowSuccessModal={setShowEditSuccessModal}
+          setSuccessLink={setEditSuccessLink}
+          chapter={params.chapter}
+        />
       </Modal>
-      <Modal showModal={showEditSuccessModal} setShowModal={setShowEditSuccessModal} link={editSuccessLink}>
-        <OperationSuccessModal className={styles.editOperationSuccessModal} 
-          showModal={showEditSuccessModal} setShowModal={setShowEditSuccessModal}
-          subtitle="Chapter Profile has been successfully edited"/>
+      <Modal
+        showModal={showEditSuccessModal}
+        setShowModal={setShowEditSuccessModal}
+        link={editSuccessLink}
+      >
+        <OperationSuccessModal
+          className={styles.editOperationSuccessModal}
+          showModal={showEditSuccessModal}
+          setShowModal={setShowEditSuccessModal}
+          subtitle="Chapter Profile has been successfully edited"
+        />
       </Modal>
-
 
       <Modal showModal={showDeleteModal} setShowModal={setShowDeleteModal}>
-        <DeleteChapterModal className={styles.deleteChapterModalContent} 
-          showModal={showDeleteModal} setShowModal={setShowDeleteModal} setShowSuccessModal={setShowDeleteSuccessModal}
+        <DeleteChapterModal
+          className={styles.deleteChapterModalContent}
+          showModal={showDeleteModal}
+          setShowModal={setShowDeleteModal}
+          setShowSuccessModal={setShowDeleteSuccessModal}
           chapter={params.chapter}
-          />
+        />
       </Modal>
-      <Modal showModal={showDeleteSuccessModal} setShowModal={setShowDeleteSuccessModal} link={"./search"}>
-        <OperationSuccessModal className={styles.deleteOperationSuccessModal} 
-          showModal={showDeleteSuccessModal} setShowModal={setShowDeleteSuccessModal}
-          title={params.chapter.name} subtitle="You have successfully deleted:"/>
+      <Modal
+        showModal={showDeleteSuccessModal}
+        setShowModal={setShowDeleteSuccessModal}
+        link={"./search"}
+      >
+        <OperationSuccessModal
+          className={styles.deleteOperationSuccessModal}
+          showModal={showDeleteSuccessModal}
+          setShowModal={setShowDeleteSuccessModal}
+          title={params.chapter.name}
+          subtitle="You have successfully deleted:"
+        />
       </Modal>
 
-      
       <Modal showModal={showTransferModal} setShowModal={setShowTransferModal}>
-        <TransferChapterModal className={styles.transferChapterModalContent} 
-          showModal={showTransferModal} setShowModal={setShowTransferModal} setShowSuccessModal={setShowTransferSuccessModal}
+        <TransferChapterModal
+          className={styles.transferChapterModalContent}
+          showModal={showTransferModal}
+          setShowModal={setShowTransferModal}
+          setShowSuccessModal={setShowTransferSuccessModal}
           chapter={params.chapter}
-          />
+        />
       </Modal>
-      <Modal showModal={showTransferSuccessModal} setShowModal={setShowTransferSuccessModal} link={"./search"}>
-        <OperationSuccessModal className={styles.transferOperationSuccessModal} 
-          showModal={showTransferSuccessModal} setShowModal={setShowTransferSuccessModal}
-          subtitle="You have successfully transfered your Chapter President role"/>
+      <Modal
+        showModal={showTransferSuccessModal}
+        setShowModal={setShowTransferSuccessModal}
+        link={"./search"}
+      >
+        <OperationSuccessModal
+          className={styles.transferOperationSuccessModal}
+          showModal={showTransferSuccessModal}
+          setShowModal={setShowTransferSuccessModal}
+          subtitle="You have successfully transfered your Chapter President role"
+        />
       </Modal>
 
-
-      <Modal showModal={showAddVolunteerModal} setShowModal={setShowAddVolunteerModal}>
-        <AddVolunteerModal className={styles.addVolunteerModalContent} 
-          showModal={showAddVolunteerModal} setShowModal={setShowAddVolunteerModal}
-          />
+      <Modal
+        showModal={showAddVolunteerModal}
+        setShowModal={setShowAddVolunteerModal}
+      >
+        <AddVolunteerModal
+          className={styles.addVolunteerModalContent}
+          showModal={showAddVolunteerModal}
+          setShowModal={setShowAddVolunteerModal}
+        />
       </Modal>
     </div>
   );
