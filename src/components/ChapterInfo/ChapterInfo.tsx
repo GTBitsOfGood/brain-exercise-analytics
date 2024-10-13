@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./ChapterInfo.module.css";
 
 import Modal from "@src/components/Modal/Modal";
@@ -24,6 +24,8 @@ import RedTrashCan from "@src/app/icons/RedTrashCan";
 
 import { Cell, CellProps } from "./Cell/Cell";
 import AddVolunteerModal from "../AddVolunteerModal/AddVolunteerModal";
+import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
+import { useRouter } from "next/navigation";
 
 interface ChapterInfoProps {
   chapter: IChapter;
@@ -37,8 +39,10 @@ export default function ChapterInfo(params: ChapterInfoProps) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
 
-  const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [showTransferSuccessModal, setShowTransferSuccessModal] = useState(false);
 
+  const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     
@@ -96,7 +100,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       },
       {
         title: "Chapter Transfer",
-        link: "test",
+        link: () => setShowTransferModal(true),
         icon: (
           <FontAwesomeIcon
             icon={faHandHoldingHand}
@@ -172,7 +176,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           subtitle="Chapter Profile has been successfully edited"/>
       </Modal>
 
-      
+
       <Modal showModal={showDeleteModal} setShowModal={setShowDeleteModal}>
         <DeleteChapterModal className={styles.deleteChapterModalContent} 
           showModal={showDeleteModal} setShowModal={setShowDeleteModal} setShowSuccessModal={setShowDeleteSuccessModal}
@@ -183,6 +187,19 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <OperationSuccessModal className={styles.deleteOperationSuccessModal} 
           showModal={showDeleteSuccessModal} setShowModal={setShowDeleteSuccessModal}
           title={params.chapter.name} subtitle="You have successfully deleted:"/>
+      </Modal>
+
+      
+      <Modal showModal={showTransferModal} setShowModal={setShowTransferModal}>
+        <TransferChapterModal className={styles.transferChapterModalContent} 
+          showModal={showTransferModal} setShowModal={setShowTransferModal} setShowSuccessModal={setShowTransferSuccessModal}
+          chapter={params.chapter}
+          />
+      </Modal>
+      <Modal showModal={showTransferSuccessModal} setShowModal={setShowTransferSuccessModal} link={"./search"}>
+        <OperationSuccessModal className={styles.transferOperationSuccessModal} 
+          showModal={showTransferSuccessModal} setShowModal={setShowTransferSuccessModal}
+          subtitle="You have successfully transfered your Chapter President role"/>
       </Modal>
 
 

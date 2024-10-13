@@ -16,10 +16,12 @@ import {
   AdminApprovalStatus,
   HttpMethod,
   IVolunteerTableEntry,
+  Role,
   SearchResponseBody,
 } from "@/common_utils/types";
-import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
 import { PostReq } from "@server/mongodb/actions/Chapter";
+import {PatchReq as PatchReqUser} from "@src/app/api/volunteer/route"
+
 
 interface Props {
   className?: string;
@@ -33,7 +35,7 @@ interface Props {
 const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, setChapterCreated}: Props) => {
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterPresident, setChapterPresident] = useState<string>("");
-  const [chapterPresidentID, setChapterPresidentID] = useState<string>("");
+  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry>();
 
 
   const [chapterNameError, setChapterNameError] = useState<string>("");
@@ -84,7 +86,6 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
   const reset = () => {
     setChapterName("");
     setChapterPresident("");
-    setChapterPresidentID("");
     setLocCountry("")
     setLocState("");
     setLocCity("");
@@ -155,27 +156,26 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
     }
 
     try {
-      console.log(chapterName, chapterPresident, chapterPresidentID, locCountry)
       await internalRequest<PostReq>({
         url: "/api/chapter",
         method: HttpMethod.POST,
         body: {
           name: chapterName,
-          chapterPresident: chapterPresidentID,
+          chapterPresident: chapterPresidentObject?._id,
           yearFounded: new Date().getFullYear(),
           country: locCountry,
           city: locCity,
           state: locState,
         },
       });
+
+      setShowModal(false);
+      reset();
+      setChapterCreated(chapterName)
+      setShowSuccessModal(true);
     } catch (error) {
       console.log(error)
     }
-
-    setShowModal(false);
-    reset();
-    setChapterCreated(chapterName)
-    setShowSuccessModal(true);
   };
 
   return (
@@ -258,7 +258,7 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
               onChange={handleChange}
               onSelect={(item) => {
                 setChapterPresident(item.firstName + " " + item.lastName)
-                setChapterPresidentID(item._id)}
+                setChapterPresidentObject(item)}
               }
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}

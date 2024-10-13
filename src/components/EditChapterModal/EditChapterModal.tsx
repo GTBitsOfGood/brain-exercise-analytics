@@ -160,14 +160,15 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
         });
       });
 
-    } catch (error) {
-      console.log(error)
-    }
 
     setShowModal(false);
     reset();
     setSuccessLink("/chapter/" + encodeURI(chapterName))
     setShowSuccessModal(true);
+
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
