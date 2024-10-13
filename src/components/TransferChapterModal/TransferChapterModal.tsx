@@ -33,11 +33,14 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
 
   const [chapterPresident, setChapterPresident] = useState<string>("");
   const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
-  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry>();
+  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry | null>(null);
   
   const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
   const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
+
+  const [confirmPopup, setConfirmPopup] = useState(false);
+  const [confirmPopupPressed, setConfirmPopupPressed] = useState(false);
 
   const resetErrors = () => {
     setChapterPresidentError("");
@@ -45,7 +48,7 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
 
   const reset = () => {
     setChapterPresident("")
-    console.log(currChapterPresident)
+    setChapterPresidentObject(null)
     resetErrors();
   };
 
@@ -105,13 +108,23 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
     resetErrors();
     let error = false;
 
+    if (!confirmPopupPressed) {
+      error = true;
+    }
+
     if (chapterPresident === "") {
-      setChapterPresidentError("Choose a chapter president");
+      setChapterPresidentError("Chapter president cannot be blank");
+      error = true;
+    }
+
+    if (chapterPresidentObject ===  null) {
+      setChapterPresidentError("Choose a valid chapter president");
       error = true;
     }
 
     if (error) {
       console.log(error);
+      setConfirmPopupPressed(false)
       return;
     }
 
@@ -172,8 +185,8 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
           <div className={styles.text1}>You're transfering this chapter from:</div>
           <div className={styles.text2}>Current Chapter President</div>
           <div className={styles.currPresContainer}>
-            <div className={styles.text2}>{}</div>
-            <div>{chapter.chapterPresident}</div>
+            {/* <div className={styles.text2}>{chapter.chapterPresident}</div>
+            <div>{chapter.chapterPresident.email}</div> */}
           </div>
           <div className={styles.text1}>To:</div>
 
@@ -210,11 +223,41 @@ const editChapterModal = ({ className, style, showModal, setShowModal, setShowSu
             <button
               type="submit"
               className={styles.submitButton}
-              onClick={handleSaveChanges}
+              onClick={() => {
+                if (chapterPresident !== "" && chapterPresidentObject !== null) {
+                  setConfirmPopup(true)}
+                }
+              }
             >
               Confirm Chapter Transfer
             </button>
           </div>
+          
+          {confirmPopup && 
+          <div className={styles.confirmPopup}>
+            <div className={styles.confirmTitle}>Leadership Transfer</div>
+            <div className={styles.confirmDesc}>You will lose access to the Chapter President portal after you confirm.</div>
+            <div className={styles.confirmPopupButtons}>
+              <button
+                type="button"
+                onClick={() => setConfirmPopup(false)}
+                className={`${styles.submitButton} ${styles.disabled}`}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className={styles.submitButton}
+                onClick={() => {
+                    setConfirmPopupPressed(true)
+                    handleSaveChanges
+                  }
+                }
+              >
+                Confirm
+              </button>
+            </div>
+          </div>}
         </form>
       </>
       <button className={styles.exit} onClick={() => setShowModal(false)}><XIcon></XIcon></button>

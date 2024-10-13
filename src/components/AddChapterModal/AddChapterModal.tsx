@@ -35,8 +35,7 @@ interface Props {
 const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuccessModal, setChapterCreated}: Props) => {
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterPresident, setChapterPresident] = useState<string>("");
-  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry>();
-
+  const [chapterPresidentObject, setChapterPresidentObject] = useState<IVolunteerTableEntry | null>(null);
 
   const [chapterNameError, setChapterNameError] = useState<string>("");
   const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
@@ -89,6 +88,7 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
     setLocCountry("")
     setLocState("");
     setLocCity("");
+    setChapterPresidentObject(null);
     resetErrors();
   };
 
@@ -141,6 +141,11 @@ const addChapterModal = ({ className, style, showModal, setShowModal, setShowSuc
     }
 
     if (chapterPresident === "") {
+      setChapterPresidentError("Chapter president cannot be blank");
+      error = true;
+    }
+
+    if (chapterPresidentObject === null) {
       setChapterPresidentError("Choose a valid chapter president");
       error = true;
     }
