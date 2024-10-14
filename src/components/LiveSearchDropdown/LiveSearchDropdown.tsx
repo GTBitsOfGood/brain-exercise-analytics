@@ -33,11 +33,13 @@ const LiveSearchDropdown = <T extends object>({
 
   const handleSelection = (selectedIndex: number) => {
     const selectedItem = options[selectedIndex];
-    if (!selectedItem) return resetSearchComplete();
+    if (!selectedItem) {
+      return resetSearchComplete();
+    }
     if (onSelect) {
       onSelect(selectedItem);
     }
-    resetSearchComplete();
+    return resetSearchComplete();
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {

@@ -137,7 +137,7 @@ const AddChapterModal = ({
         .toLowerCase()
         .startsWith(target.value.toLowerCase()),
     );
-    setFilteredVolunteers(filteredValue);
+    return setFilteredVolunteers(filteredValue);
   };
 
   const handleSaveChanges = async (

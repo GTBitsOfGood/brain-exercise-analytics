@@ -111,7 +111,7 @@ const TransferChapterModal = ({
         .toLowerCase()
         .startsWith(target.value.toLowerCase()),
     );
-    setFilteredVolunteers(filteredValue);
+    return setFilteredVolunteers(filteredValue);
   };
 
   const handleSaveChanges = async (
@@ -277,7 +277,6 @@ const TransferChapterModal = ({
                   className={styles.submitButton}
                   onClick={() => {
                     setConfirmPopupPressed(true);
-                    handleSaveChanges;
                   }}
                 >
                   Confirm
