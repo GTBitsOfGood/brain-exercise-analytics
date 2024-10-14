@@ -1,0 +1,198 @@
+.p {
+  white-space: pre;
+}
+
+.container {
+  display: flex;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  padding: 3% 3%;
+  border-radius: var(--12, 12px);
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  font-family: var(--font-poppins);
+  position: relative;
+}
+
+.container * {
+  font-family: var(--font-poppins);
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  height: 70%;
+}
+
+.inputHeader {
+  display: flex;
+  flex-direction: row;
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: -1%;
+}
+
+.inputSubheader {
+  color: var(--Dark-Blue-Grey, #9ca5c2);
+  /* H2 */
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 2%;
+}
+
+.text1 {
+  color: var(--Dark-Blue, #2b3674);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.text2 {
+  color: var(--Dark-Blue, #2b3674);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.currPresContainer {
+  margin: 3%;
+  display: flex;
+  flex-direction: row;
+  gap: 5%;
+}
+
+.inputField {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 9px;
+  color: #2b3674;
+  width: 70%;
+  z-index: 999;
+}
+.inputField input {
+  height: 40px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.nonEditable {
+  background-color: #e7eeff;
+  padding-left: 15px;
+  border: 0cm;
+  color: #8f9bba;
+  cursor: not-allowed;
+}
+
+.editable {
+  background-color: white;
+  padding-left: 15px;
+  border: 1px solid #979797;
+  color: #2b3674;
+}
+.inputField label {
+  color: var(--Dark-Blue, #2b3674);
+  /* P1 */
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.inputFieldRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+}
+
+.editButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 42px;
+  padding: 5px;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}
+.submitButton {
+  border-radius: 10px;
+  padding: 15px 30px;
+  border: 0px;
+  font-weight: bold;
+  background-color: #008afc;
+  color: white;
+  cursor: pointer;
+}
+.disabled {
+  background-color: #e3eafc;
+  color: #2b3674;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  z-index: -999;
+}
+
+.exit {
+  display: flex;
+  justify-content: flex-start;
+  height: 6%;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.confirmPopup {
+  background-color: white;
+  height: 35%;
+  width: 50%;
+  padding: 3% 3%;
+  border: 1px solid #e0e5f2;
+  border-radius: var(--12, 12px);
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  font-family: var(--font-poppins);
+  position: absolute;
+  bottom: 15%;
+  right: -10%;
+}
+
+.confirmPopupButtons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 3%;
+}
+
+.confirmTitle {
+  color: var(--Dark-Blue, #2b3674);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 27.409px; /* 114.203% */
+  letter-spacing: -0.48px;
+  margin-bottom: 3%;
+}
+
+.confirmDesc {
+  color: #2b3674;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 450;
+  line-height: 27.409px; /* 171.304% */
+  letter-spacing: -0.32px;
+}

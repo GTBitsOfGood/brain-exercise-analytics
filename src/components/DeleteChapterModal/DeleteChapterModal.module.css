@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  padding: 3% 3%;
+  border-radius: var(--12, 12px);
+  box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+  font-family: var(--font-poppins);
+  overflow-y: auto;
+}
+
+.container * {
+  font-family: var(--font-poppins);
+}
+
+.inputHeader {
+  display: flex;
+  flex-direction: row;
+  color: var(--Red, #ea4335);
+  font-family: var(--font-poppins);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 2%;
+  gap: 1fr;
+}
+
+.description {
+  color: #2b3674;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27.409px; /* 171.304% */
+  letter-spacing: -0.32px;
+}
+
+.editButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 42px;
+  padding: 5px;
+  border: 0px;
+  background-color: white;
+  cursor: pointer;
+}
+.submitButton {
+  border-radius: 10px;
+  padding: 15px 30px;
+  border: 0px;
+  font-weight: bold;
+  background-color: var(--Red, #ea4335);
+  color: white;
+  cursor: pointer;
+}
+.disabled {
+  background-color: #e3eafc;
+  color: #2b3674;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 5%;
+}

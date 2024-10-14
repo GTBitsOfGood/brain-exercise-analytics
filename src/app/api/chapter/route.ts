@@ -28,7 +28,7 @@ export const GET = APIWrapper({
   },
 });
 
-type PatchReq = {
+export type PatchReq = {
   name: string;
   newFields: RecursivePartial<IChapter>;
 };
@@ -59,7 +59,7 @@ export const PATCH = APIWrapper({
   },
 });
 
-type DeleteReq = {
+export type DeleteReq = {
   name: string;
 };
 
