@@ -46,7 +46,7 @@ function ColumnSizes() {
 function Header() {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [chapterCreated, setChapterCreated] = useState();
+  const [chapterCreated, setChapterCreated] = useState<string>();
 
   return (
     <div className={styles["table-header"]}>
@@ -63,7 +63,6 @@ function Header() {
       <Modal showModal={showModal} setShowModal={setShowModal}>
         <AddChapterModal
           className={styles.addChapterModalContent}
-          showModal={showModal}
           setShowModal={setShowModal}
           setShowSuccessModal={setShowSuccessModal}
           setChapterCreated={setChapterCreated}
@@ -72,8 +71,6 @@ function Header() {
       <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal
           className={styles.operationSuccessModal}
-          showModal={showSuccessModal}
-          setShowModal={setShowSuccessModal}
           title={chapterCreated}
           subtitle="You have successfully created:"
           description="Find it in Search Chapter page to add more volunteers and patients."

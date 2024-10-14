@@ -161,7 +161,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       <Modal showModal={showEditModal} setShowModal={setShowEditModal}>
         <EditChapterModal
           className={styles.editChapterModalContent}
-          showModal={showEditModal}
           setShowModal={setShowEditModal}
           setShowSuccessModal={setShowEditSuccessModal}
           setSuccessLink={setEditSuccessLink}
@@ -175,8 +174,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       >
         <OperationSuccessModal
           className={styles.editOperationSuccessModal}
-          showModal={showEditSuccessModal}
-          setShowModal={setShowEditSuccessModal}
           subtitle="Chapter Profile has been successfully edited"
         />
       </Modal>
@@ -184,7 +181,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       <Modal showModal={showDeleteModal} setShowModal={setShowDeleteModal}>
         <DeleteChapterModal
           className={styles.deleteChapterModalContent}
-          showModal={showDeleteModal}
           setShowModal={setShowDeleteModal}
           setShowSuccessModal={setShowDeleteSuccessModal}
           chapter={params.chapter}
@@ -197,8 +193,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       >
         <OperationSuccessModal
           className={styles.deleteOperationSuccessModal}
-          showModal={showDeleteSuccessModal}
-          setShowModal={setShowDeleteSuccessModal}
           title={params.chapter.name}
           subtitle="You have successfully deleted:"
         />
@@ -207,7 +201,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       <Modal showModal={showTransferModal} setShowModal={setShowTransferModal}>
         <TransferChapterModal
           className={styles.transferChapterModalContent}
-          showModal={showTransferModal}
           setShowModal={setShowTransferModal}
           setShowSuccessModal={setShowTransferSuccessModal}
           chapter={params.chapter}
@@ -220,8 +213,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       >
         <OperationSuccessModal
           className={styles.transferOperationSuccessModal}
-          showModal={showTransferSuccessModal}
-          setShowModal={setShowTransferSuccessModal}
           subtitle="You have successfully transfered your Chapter President role"
         />
       </Modal>
@@ -232,7 +223,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       >
         <AddVolunteerModal
           className={styles.addVolunteerModalContent}
-          showModal={showAddVolunteerModal}
           setShowModal={setShowAddVolunteerModal}
         />
       </Modal>
