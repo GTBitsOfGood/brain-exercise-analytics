@@ -1,0 +1,82 @@
+/* Popup.module.css */
+
+.popupOverlay {
+  position: fixed;
+  /* top: 18vh;
+  left: 38vw; */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.popup {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 25vw; /* Adjust the width as needed */
+  z-index: 2;
+}
+
+.popupTitle {
+  color: #ea4335;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 27.409px; /* 114.203% */
+  letter-spacing: -0.48px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.popupContent {
+  color: #2b3674;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27.409px; /* 171.304% */
+  letter-spacing: -0.32px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.popupActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirmButton {
+  background-color: rgba(240, 80, 110, 0.2);
+  color: #2b3674;
+  border: none;
+  border-radius: 12px;
+  padding: 5px 15px;
+  cursor: pointer;
+  width: 47%;
+  line-height: 35px;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.cancelButton {
+  background-color: #e3e3e3;
+  color: #2b3674;
+  border: none;
+  border-radius: 12px;
+  padding: 5px 15px;
+  cursor: pointer;
+  width: 47%;
+  line-height: 35px;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}

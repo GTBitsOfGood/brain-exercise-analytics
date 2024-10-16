@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ChapterInfo from "@src/components/ChapterInfo/ChapterInfo";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
-import VolunteerGrid from "@src/components/VolunteerGrid/VolunteerGrid";
+import VolunteerGrid from "@src/components/ChapterVolunteerGrid/VolunteerGrid";
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import { classes } from "@src/utils/utils";

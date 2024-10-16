@@ -304,7 +304,7 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
             )}
             onClick={() => handleDeleteClick(volunteer.email)}
           >
-            Delete Account
+            Remove from Chapter
           </text>
         </td>
       </tr>
