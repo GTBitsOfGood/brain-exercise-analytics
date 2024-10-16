@@ -1,0 +1,120 @@
+.row {
+  border-bottom: 1px solid var(--Light-Blue-Grey, #e3eafc);
+  width: 100%;
+  height: 65px;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.RowCell > button {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.RowCellContainer {
+  width: 100%;
+  color: #2b3674;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 97%;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 7px;
+}
+
+.RowCellContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.ExpandedRowContainer {
+  width: calc(100% + 20px);
+  border-radius: 5px;
+  background-color: var(--Selected-Blue, #e7eeff);
+  display: flex;
+  border-radius: 5px;
+  padding: 15px;
+  column-gap: 30px;
+  flex-wrap: wrap;
+  margin: 0 0 0 -10px;
+}
+
+.ExpandedRowColumn {
+  display: flex;
+  color: #2b3674;
+  font-size: 14px;
+  flex-direction: column;
+}
+
+.ExpandedRowColumn > div:first-child {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ExpandedRowColumn > div {
+  margin-bottom: 4px;
+}
+
+.profile-image {
+  display: flex;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.Header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 2px solid lightgrey;
+}
+
+.DetailRow {
+  display: flex;
+  margin-bottom: 5px;
+  flex-direction: row;
+}
+
+.Detail {
+  display: flex;
+  width: 280px;
+}
+
+.Label {
+  font-weight: bold;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.Content {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.InvitePending {
+  display: inline-flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 41px;
+  background: var(--Light-Orange, #fce8dc);
+  transition: background-color 0.3s; /* Smooth transition for interactions */
+  color: #2b3674;
+  font-family: var(--font-poppins);
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.deleteButton {
+  color: red;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
