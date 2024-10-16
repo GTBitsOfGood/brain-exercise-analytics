@@ -78,6 +78,9 @@ export default function SmallDataBox({
               marginLeft: "10px",
             }}
           >
+            <div>
+              <Chip />
+            </div>
             <div className="titleBox">
               <p
                 style={{
@@ -109,15 +112,6 @@ export default function SmallDataBox({
             </p>
           </div>
         </div>
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: "12px",
-          right: "20px",
-        }}
-      >
-        <Chip />
       </div>
     </div>
   );

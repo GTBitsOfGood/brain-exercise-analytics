@@ -1,10 +1,16 @@
 "use client";
 
-import React, { FormEvent, MouseEvent, useCallback, useState } from "react";
+import React, {
+  FormEvent,
+  MouseEvent,
+  useCallback,
+  useState,
+  useEffect,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 
-import { update } from "@src/redux/reducers/chapterSearchReducer";
+import { update, clear } from "@src/redux/reducers/chapterSearchReducer";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classes } from "@src/utils/utils";
@@ -22,6 +28,11 @@ export default function ChapterSearch({ className, onSubmit }: SearchProps) {
   const { name } = useSelector((state: RootState) => state.chapterSearch);
 
   const [searchInput, setSearchInput] = useState<string>(name);
+
+  useEffect(() => {
+    dispatch(clear());
+    setSearchInput("");
+  }, []);
 
   const onSubmitSearch = useCallback(
     (e?: FormEvent<HTMLFormElement> | MouseEvent<SVGSVGElement>) => {
