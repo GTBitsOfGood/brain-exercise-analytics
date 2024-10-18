@@ -12,7 +12,7 @@ export type PatchReq = {
 export const PATCH = APIWrapper({
   config: {
     requireToken: true,
-    requireVolunteer: true,
+    requireAdmin: true,
   },
   handler: async (req, currentUser, updateCookie) => {
     const reqdata: PatchReq = (await req.json()) as PatchReq;
