@@ -4,6 +4,7 @@
   font-size: 28px;
   font-weight: 700;
   line-height: 44px;
+  margin-top: 10px;
 }
 
 .chapterInfoSubheading > p {
@@ -66,4 +67,35 @@
 .addVolunteerModalContent {
   width: 60%;
   height: 70%;
+  
+/* .backButton {
+  flex-direction: row;
+  color:#2b3674;
+  background-color: pink;
+  border-radius: 12px;
+  margin-left: 20px;
+} */
+
+.backButton {
+  display: flex;
+  flex-direction: row;
+  width: 216px;
+  height: 46px;
+  padding: 8px 16px 8px 16px;
+  gap: 8px;
+  border-radius: 12px;
+  align-items: center;
+  opacity: 0px;
+  background-color: white;
+}
+
+.backToSearchText {
+  font-weight: 600;
+  font-size: 20px;
+  color: #2b3674;
+}
+
+.backToSearchIcon {
+  padding-top: 2px;
+  color: #2b3674;
 }

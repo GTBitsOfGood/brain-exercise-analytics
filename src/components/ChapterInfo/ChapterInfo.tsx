@@ -1,18 +1,17 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
-  faUser,
-  faUsers,
-  faPerson,
-  faAddressCard,
-  faLocationDot,
-  faCalendar,
-  faPlus,
-  faWrench,
-  faHandHoldingHand,
-} from "@fortawesome/free-solid-svg-icons";
+  User,
+  UsersThree,
+  IdentificationCard,
+  Person,
+  CalendarHeartFill,
+  LocationMarker,
+  Wrench,
+  HandTransferIcon,
+} from "@src/app/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo, useState } from "react";
-
 import Modal from "@src/components/Modal/Modal";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
 import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";
@@ -20,7 +19,10 @@ import OperationSuccessModal from "@src/components/OperationSuccessModal/Operati
 
 import PersonPlusIcon from "@src/app/icons/PersonPlusIcon";
 import RedTrashCan from "@src/app/icons/RedTrashCan";
-
+import { useMemo } from "react";
+import BackIcon from "@src/app/icons/BackIcon";
+import Link from "next/link";
+import styles from "./ChapterInfo.module.css";
 import { Cell, CellProps } from "./Cell/Cell";
 import AddVolunteerModal from "../AddVolunteerModal/AddVolunteerModal";
 import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
@@ -28,6 +30,7 @@ import styles from "./ChapterInfo.module.css";
 
 interface ChapterInfoProps {
   chapter: IChapter;
+  chapterPresident: string;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
@@ -48,63 +51,53 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Chapter Size",
-        value: `${params.chapter.patients}`,
-        icon: <FontAwesomeIcon icon={faUsers} style={{ color: "#008afc" }} />,
+        value: `${params.chapter.inactiveVolunteers + params.chapter.activeVolunteers}`,
+        icon: <UsersThree />,
       },
       {
         title: "Active Volunteers",
-        value: "0",
-        icon: <FontAwesomeIcon icon={faUser} style={{ color: "#008afc" }} />,
+        value: `${params.chapter.activeVolunteers}`,
+        icon: <User />,
       },
       {
         title: "Inactive Volunteers",
-        value: "0",
-        icon: <FontAwesomeIcon icon={faUser} style={{ color: "#9CA5C2" }} />,
+        value: `${params.chapter.inactiveVolunteers}`,
+        icon: <User fill="#9CA5C2" />,
       },
       {
         title: "Patients",
         value: `${params.chapter.patients}`,
-        icon: <FontAwesomeIcon icon={faPerson} style={{ color: "#008afc" }} />,
+        icon: <Person />,
       },
       {
         title: "Chapter President",
-        value: `${params.chapter.chapterPresident}`,
-        icon: (
-          <FontAwesomeIcon icon={faAddressCard} style={{ color: "#008afc" }} />
-        ),
+        value: `${params.chapterPresident}`,
+        icon: <IdentificationCard />,
       },
       {
         title: "Year Founded",
         value: `${params.chapter.yearFounded}`,
-        icon: (
-          <FontAwesomeIcon icon={faCalendar} style={{ color: "#008afc" }} />
-        ),
+        icon: <CalendarHeartFill />,
       },
       {
         title: "Chapter Region",
         value: `${params.chapter.location.state}, ${params.chapter.location.country}`,
-        icon: (
-          <FontAwesomeIcon icon={faLocationDot} style={{ color: "#008afc" }} />
-        ),
+        icon: <LocationMarker />,
       },
     ] as CellProps[];
-  }, [params.chapter]);
+  }, [params]);
 
   const chapterManagement = useMemo<CellProps[]>(() => {
     return [
       {
         title: "Edit Chapter Profile",
         link: () => setShowEditModal(true),
-        icon: <FontAwesomeIcon icon={faWrench} style={{ color: "#008afc" }} />,
+        icon: <Wrench />,
       },
       {
         title: "Chapter Transfer",
         link: () => setShowTransferModal(true),
-        icon: (
-          <FontAwesomeIcon
-            icon={faHandHoldingHand}
-            style={{ color: "#008afc" }}
-          />
+        icon: <HandTransferIcon />,
         ),
       },
       {
@@ -123,6 +116,14 @@ export default function ChapterInfo(params: ChapterInfoProps) {
 
   return (
     <div>
+      <div>
+        <Link className={styles.backButton} href={`/chapter/search`}>
+          <div className={styles.backToSearchIcon}>
+            <BackIcon />
+          </div>
+          <span className={styles.backToSearchText}>Back to Search</span>
+        </Link>
+      </div>
       <div className={styles.chapterInfoHeading}>
         <p>{`${params.chapter.name} Chapter`}</p>
       </div>
