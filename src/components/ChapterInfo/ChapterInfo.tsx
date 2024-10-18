@@ -12,12 +12,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo } from "react";
+import BackIcon from "@src/app/icons/BackIcon";
+import Link from "next/link";
 import styles from "./ChapterInfo.module.css";
-
 import { Cell, CellProps } from "./Cell/Cell";
 
 interface ChapterInfoProps {
   chapter: IChapter;
+  chapterPresident: string;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
@@ -25,17 +27,17 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Chapter Size",
-        value: `${params.chapter.patients}`,
+        value: `${params.chapter.inactiveVolunteers + params.chapter.activeVolunteers}`,
         icon: <UsersThree />,
       },
       {
         title: "Active Volunteers",
-        value: "0",
+        value: `${params.chapter.activeVolunteers}`,
         icon: <User />,
       },
       {
         title: "Inactive Volunteers",
-        value: "0",
+        value: `${params.chapter.inactiveVolunteers}`,
         icon: <User fill="#9CA5C2" />,
       },
       {
@@ -45,7 +47,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       },
       {
         title: "Chapter President",
-        value: `${params.chapter.chapterPresident}`,
+        value: `${params.chapterPresident}`,
         icon: <IdentificationCard />,
       },
       {
@@ -59,7 +61,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         icon: <LocationMarker />,
       },
     ] as CellProps[];
-  }, [params.chapter]);
+  }, [params]);
 
   const chapterManagement = useMemo<CellProps[]>(() => {
     return [
@@ -78,6 +80,14 @@ export default function ChapterInfo(params: ChapterInfoProps) {
 
   return (
     <div>
+      <div>
+        <Link className={styles.backButton} href={`/chapter/search`}>
+          <div className={styles.backToSearchIcon}>
+            <BackIcon />
+          </div>
+          <span className={styles.backToSearchText}>Back to Search</span>
+        </Link>
+      </div>
       <div className={styles.chapterInfoHeading}>
         <p>{`${params.chapter.name} Chapter`}</p>
       </div>

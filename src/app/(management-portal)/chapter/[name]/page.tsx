@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ChapterInfo from "@src/components/ChapterInfo/ChapterInfo";
 import VolunteerSearch from "@src/components/VolunteerSearch/VolunteerSearch";
-import VolunteerGrid from "@src/components/VolunteerGrid/VolunteerGrid";
+import VolunteerGrid from "@src/components/ChapterVolunteerGrid/VolunteerGrid";
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import { classes } from "@src/utils/utils";
@@ -16,6 +16,7 @@ import {
   IVolunteerTableEntry,
   SearchResponseBody,
   IChapter,
+  IUser,
 } from "@/common_utils/types";
 
 import firebaseInit from "@src/firebase/config";
@@ -61,6 +62,7 @@ export default function Page({ params }: { params: { name: string } }) {
   const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
     [],
   );
+  const [chapterPresident, setChapterPresident] = useState("");
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -86,7 +88,7 @@ export default function Page({ params }: { params: { name: string } }) {
     });
   }, [fullName, currentPage, sortField, params.name]);
 
-  const fetchChapter = useCallback(() => {
+  const fetchChapterAndPresident = useCallback(() => {
     setLoading(true);
     internalRequest<IChapter>({
       url: "/api/chapter",
@@ -96,13 +98,26 @@ export default function Page({ params }: { params: { name: string } }) {
       },
     }).then((res) => {
       setChapterInfo(res);
-      setLoading(false);
+      internalRequest<IUser>({
+        url: "/api/patient/get-patient",
+        method: HttpMethod.GET,
+        queryParams: {
+          id: res.chapterPresident,
+        },
+      })
+        .then((pres) => {
+          setChapterPresident(`${pres.firstName} ${pres.lastName}`);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     });
   }, [params.name]);
 
   useEffect(() => {
-    fetchChapter();
-  }, [fetchChapter]);
+    fetchChapterAndPresident();
+  }, [fetchChapterAndPresident]);
 
   useEffect(() => {
     fetchUsers();
@@ -124,7 +139,7 @@ export default function Page({ params }: { params: { name: string } }) {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["profile-container"])}>
-        <ChapterInfo chapter={chapter} />
+        <ChapterInfo chapter={chapter} chapterPresident={chapterPresident} />
         <Divider />
       </div>
       <div className={classes(styles["search-container"])}>
