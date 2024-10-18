@@ -125,3 +125,8 @@
 .denyButton {
   background: rgba(240, 80, 110, 0.2);
 }
+
+.checkCircle {
+  width: 22px;
+  height: 22px;
+}

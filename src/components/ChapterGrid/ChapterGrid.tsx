@@ -5,8 +5,12 @@ import Pagination from "@src/components/Pagination/Pagination";
 import { IChapterTableEntry, SortField } from "@/common_utils/types";
 import { GridColDef } from "@src/utils/types";
 import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
-import styles from "./ChapterGrid.module.css";
+import AddChapterModal from "@src/components/AddChapterModal/AddChapterModal";
+import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+import Modal from "@src/components/Modal/Modal";
+import { useState } from "react";
 import { Row } from "./Row/Row";
+import styles from "./ChapterGrid.module.css";
 
 interface ChapterGridProps {
   data: IChapterTableEntry[];
@@ -40,10 +44,38 @@ function ColumnSizes() {
 }
 
 function Header() {
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [chapterCreated, setChapterCreated] = useState<string>();
+
   return (
     <div className={styles["table-header"]}>
-      <TwoVolunteersIcon />
-      <p className={styles["table-header-text"]}>BEI/ Chapter List</p>
+      <div className={styles["table-header-left"]}>
+        <TwoVolunteersIcon />
+        <p className={styles["table-header-text"]}>BEI/ Chapter List</p>
+      </div>
+      <button
+        className={styles["table-header-database-button"]}
+        onClick={() => setShowModal(!showModal)}
+      >
+        Add Chapter
+      </button>
+      <Modal showModal={showModal} setShowModal={setShowModal}>
+        <AddChapterModal
+          className={styles.addChapterModalContent}
+          setShowModal={setShowModal}
+          setShowSuccessModal={setShowSuccessModal}
+          setChapterCreated={setChapterCreated}
+        />
+      </Modal>
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+        <OperationSuccessModal
+          className={styles.operationSuccessModal}
+          title={chapterCreated}
+          subtitle="You have successfully created:"
+          description="Find it in Search Chapter page to add more volunteers and patients."
+        />
+      </Modal>
     </div>
   );
 }

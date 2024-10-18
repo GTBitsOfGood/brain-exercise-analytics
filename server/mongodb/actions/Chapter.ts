@@ -238,6 +238,7 @@ export const createChapter = async ({
   await User.findOneAndUpdate<IUser>(
     { email: president.email },
     {
+      chapter: name,
       role: Role.NONPROFIT_CHAPTER_PRESIDENT,
     },
   );

@@ -34,6 +34,40 @@
   gap: 12px;
 }
 
+.editChapterModalContent {
+  width: 60%;
+  height: 70%;
+}
+
+.editOperationSuccessModal {
+  width: 45%;
+  height: 22%;
+}
+
+.transferChapterModalContent {
+  width: 60%;
+  height: 70%;
+}
+
+.transferOperationSuccessModal {
+  width: 40%;
+  height: 27%;
+}
+
+.deleteChapterModalContent {
+  width: 35%;
+  height: 30%;
+}
+
+.deleteOperationSuccessModal {
+  width: 45%;
+  height: 25%;
+}
+
+.addVolunteerModalContent {
+  width: 60%;
+  height: 70%;
+  
 /* .backButton {
   flex-direction: row;
   color:#2b3674;

@@ -9,7 +9,7 @@ export interface CellProps {
   title: string;
   value?: string;
   icon: JSX.Element;
-  link?: string;
+  link?: () => void;
   cellStyle?: React.CSSProperties;
   iconStyle?: React.CSSProperties;
 }
@@ -19,6 +19,11 @@ export function Cell({ cell }: { cell: CellProps }) {
     <div
       className={classes(styles.cell, cell.link && styles.hover)}
       style={cell.cellStyle}
+      onClick={() => {
+        if (cell.link) {
+          cell.link();
+        }
+      }}
     >
       <div className={styles.cellIcon} style={cell.iconStyle}>
         {cell.icon}

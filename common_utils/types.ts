@@ -232,10 +232,12 @@ export type SortField = {
 export interface SearchRequestBody<T extends object> {
   params: T;
   page?: number;
+  entriesPerPage?: number;
   sortParams?: SortField;
   lowerRoles?: Role[];
   searchall?: boolean;
   onlyids?: boolean;
+  useAllRoles?: boolean;
 }
 
 export interface SearchResponseBody<T> {

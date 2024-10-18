@@ -11,11 +11,22 @@ import {
 } from "@src/app/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
+import { useMemo, useState } from "react";
+import Modal from "@src/components/Modal/Modal";
+import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
+import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";
+import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+
+import PersonPlusIcon from "@src/app/icons/PersonPlusIcon";
+import RedTrashCan from "@src/app/icons/RedTrashCan";
 import { useMemo } from "react";
 import BackIcon from "@src/app/icons/BackIcon";
 import Link from "next/link";
 import styles from "./ChapterInfo.module.css";
 import { Cell, CellProps } from "./Cell/Cell";
+import AddVolunteerModal from "../AddVolunteerModal/AddVolunteerModal";
+import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
+import styles from "./ChapterInfo.module.css";
 
 interface ChapterInfoProps {
   chapter: IChapter;
@@ -23,6 +34,19 @@ interface ChapterInfoProps {
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditSuccessModal, setShowEditSuccessModal] = useState(false);
+  const [editSuccessLink, setEditSuccessLink] = useState<string>("");
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
+
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [showTransferSuccessModal, setShowTransferSuccessModal] =
+    useState(false);
+
+  const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
+
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
       {
@@ -67,13 +91,25 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     return [
       {
         title: "Edit Chapter Profile",
-        link: "test",
+        link: () => setShowEditModal(true),
         icon: <Wrench />,
       },
       {
         title: "Chapter Transfer",
-        link: "test",
+        link: () => setShowTransferModal(true),
         icon: <HandTransferIcon />,
+        ),
+      },
+      {
+        title: "Add Volunteer",
+        link: () => setShowAddVolunteerModal(true),
+        icon: <PersonPlusIcon className=""></PersonPlusIcon>,
+      },
+      {
+        title: "Delete Chapter",
+        link: () => setShowDeleteModal(true),
+        icon: <RedTrashCan></RedTrashCan>,
+        iconStyle: { backgroundColor: "#FCDCE2" },
       },
     ] as CellProps[];
   }, [params.chapter]);
@@ -123,6 +159,74 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           ))}
         </div>
       </div>
+      <Modal showModal={showEditModal} setShowModal={setShowEditModal}>
+        <EditChapterModal
+          className={styles.editChapterModalContent}
+          setShowModal={setShowEditModal}
+          setShowSuccessModal={setShowEditSuccessModal}
+          setSuccessLink={setEditSuccessLink}
+          chapter={params.chapter}
+        />
+      </Modal>
+      <Modal
+        showModal={showEditSuccessModal}
+        setShowModal={setShowEditSuccessModal}
+        link={editSuccessLink}
+      >
+        <OperationSuccessModal
+          className={styles.editOperationSuccessModal}
+          subtitle="Chapter Profile has been successfully edited"
+        />
+      </Modal>
+
+      <Modal showModal={showDeleteModal} setShowModal={setShowDeleteModal}>
+        <DeleteChapterModal
+          className={styles.deleteChapterModalContent}
+          setShowModal={setShowDeleteModal}
+          setShowSuccessModal={setShowDeleteSuccessModal}
+          chapter={params.chapter}
+        />
+      </Modal>
+      <Modal
+        showModal={showDeleteSuccessModal}
+        setShowModal={setShowDeleteSuccessModal}
+        link={"./search"}
+      >
+        <OperationSuccessModal
+          className={styles.deleteOperationSuccessModal}
+          title={params.chapter.name}
+          subtitle="You have successfully deleted:"
+        />
+      </Modal>
+
+      <Modal showModal={showTransferModal} setShowModal={setShowTransferModal}>
+        <TransferChapterModal
+          className={styles.transferChapterModalContent}
+          setShowModal={setShowTransferModal}
+          setShowSuccessModal={setShowTransferSuccessModal}
+          chapter={params.chapter}
+        />
+      </Modal>
+      <Modal
+        showModal={showTransferSuccessModal}
+        setShowModal={setShowTransferSuccessModal}
+        link={"./search"}
+      >
+        <OperationSuccessModal
+          className={styles.transferOperationSuccessModal}
+          subtitle="You have successfully transfered your Chapter President role"
+        />
+      </Modal>
+
+      <Modal
+        showModal={showAddVolunteerModal}
+        setShowModal={setShowAddVolunteerModal}
+      >
+        <AddVolunteerModal
+          className={styles.addVolunteerModalContent}
+          setShowModal={setShowAddVolunteerModal}
+        />
+      </Modal>
     </div>
   );
 }
