@@ -50,6 +50,7 @@
   padding: 8px 16px 8px 16px;
   gap: 8px;
   border-radius: 12px;
+  align-items: center;
   opacity: 0px;
   background-color: white;
 }

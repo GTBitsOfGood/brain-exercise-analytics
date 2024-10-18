@@ -109,7 +109,6 @@ export const POST = APIWrapper({
     const president: IUser | null = await User.findById(
       reqData.chapterPresident,
     );
-
     if (!president) {
       throw Error("Chapter president doesn't exist");
     }
