@@ -11,13 +11,14 @@ import { internalRequest } from "@src/utils/requests";
 import {
   HttpMethod,
   IChapter,
+  IUser,
   IVolunteerTableEntry,
+  Role,
   SearchResponseBody,
 } from "@/common_utils/types";
 import { DeleteReq } from "@src/app/api/chapter/route";
-import { RootState } from "@src/redux/rootReducer";
-import { useSelector } from "react-redux";
 import { PatchReq } from "@src/app/api/volunteer/route";
+import { useRouter } from "next/navigation";
 import styles from "./DeleteChapterModal.module.css";
 
 interface Props {
@@ -35,10 +36,10 @@ const DeleteChapterModal = ({
   setShowSuccessModal,
   chapter,
 }: Props) => {
+  const router = useRouter();
   const [filteredUsers, setFilteredUsers] = useState<IVolunteerTableEntry[]>(
     [],
   );
-  const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
 
   useEffect(() => {
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
@@ -46,10 +47,10 @@ const DeleteChapterModal = ({
       method: HttpMethod.POST,
       body: {
         params: {
-          name: fullName,
           beiChapters: [chapter.name],
         },
         entriesPerPage: 9999,
+        useAllRoles: true,
       },
     }).then((res) => {
       setFilteredUsers(res?.data ?? []);
@@ -72,14 +73,33 @@ const DeleteChapterModal = ({
 
       filteredUsers.forEach(async (user) => {
         await internalRequest<PatchReq>({
-          url: "/api/volunteer",
+          url: "/api/chapter/changeChapter",
           method: HttpMethod.PATCH,
           body: {
             email: user.email,
+            chapter: "",
+          },
+        });
+      });
+
+      await internalRequest<IUser>({
+        url: "/api/patient/get-patient",
+        method: HttpMethod.GET,
+        queryParams: {
+          id: chapter.chapterPresident,
+        },
+      }).then(async (pres) => {
+        internalRequest<IUser>({
+          url: "/api/volunteer",
+          method: HttpMethod.PATCH,
+          body: {
+            email: pres.email,
             newFields: {
-              chapter: "",
+              role: Role.NONPROFIT_VOLUNTEER,
             },
           },
+        }).then(() => {
+          router.push("/patient/search");
         });
       });
 
@@ -96,8 +116,8 @@ const DeleteChapterModal = ({
         <form>
           <div className={styles.inputHeader}>Delete Chapter</div>
           <div className={styles.description}>
-            Please confirm that you want to delete this chapter. This action
-            cannot be undone.
+            Please confirm that you want to delete this chapter and remove the
+            Chapter President. This action cannot be undone.
           </div>
           <div className={styles.buttons}>
             <button

@@ -6,10 +6,8 @@ import {
   useEffect,
 } from "react";
 import { classes } from "@src/utils/utils";
-import { useSelector } from "react-redux";
 
 import XIcon from "@/src/app/icons/XIcon";
-import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import {
   AdminApprovalStatus,
@@ -18,9 +16,11 @@ import {
   IVolunteerTableEntry,
   SearchResponseBody,
   Role,
+  IUser,
 } from "@/common_utils/types";
 import { PatchReq } from "@src/app/api/chapter/route";
 import { PatchReq as PatchReqUser } from "@src/app/api/volunteer/route";
+import { useRouter } from "next/navigation";
 import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
 import styles from "./TransferChapterModal.module.css";
 
@@ -39,8 +39,7 @@ const TransferChapterModal = ({
   setShowSuccessModal,
   chapter,
 }: Props) => {
-  // const [currChapterPresident, setCurrChapterPresident] =
-  //   useState<IVolunteerTableEntry[]>();
+  const router = useRouter();
 
   const [chapterPresident, setChapterPresident] = useState<string>("");
   const [chapterPresidentError, setChapterPresidentError] =
@@ -66,31 +65,13 @@ const TransferChapterModal = ({
     resetErrors();
   };
 
-  // Getting Volunteers
-  const { fullName, volunteerRoles } = useSelector(
-    (state: RootState) => state.volunteerSearch,
-  );
-
   useEffect(() => {
-    // setLoading(true)
-    // internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
-    //   url: "/api/volunteer/internal/get-volunteer",
-    //   method: HttpMethod.POST,
-    //   body: {
-    //     secret: ,
-    //     id: chapter.chapterPresident
-    //   },
-    // }).then((res) => {
-    //   setCurrChapterPresident(res?.data);
-    // });
-
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
       url: "/api/volunteer/filter-volunteer",
       method: HttpMethod.POST,
       body: {
         params: {
-          name: fullName,
-          roles: volunteerRoles,
+          roles: [Role.NONPROFIT_VOLUNTEER],
           approved: [AdminApprovalStatus.APPROVED],
         },
         entriesPerPage: 9999,
@@ -153,17 +134,6 @@ const TransferChapterModal = ({
         },
       });
 
-      // await internalRequest<PatchReqUser>({
-      //   url: "/api/volunteer",
-      //   method: HttpMethod.PATCH,
-      //   body: {
-      //     email: currChapterPresident?[0]?.email,
-      //     newFields: {
-      //       role: Role.NONPROFIT_VOLUNTEER
-      //     }
-      //   }
-      // })
-
       await internalRequest<PatchReqUser>({
         url: "/api/volunteer",
         method: HttpMethod.PATCH,
@@ -174,6 +144,27 @@ const TransferChapterModal = ({
             role: Role.NONPROFIT_CHAPTER_PRESIDENT,
           },
         },
+      });
+
+      await internalRequest<IUser>({
+        url: "/api/patient/get-patient",
+        method: HttpMethod.GET,
+        queryParams: {
+          id: chapter.chapterPresident,
+        },
+      }).then(async (pres) => {
+        internalRequest<IUser>({
+          url: "/api/volunteer",
+          method: HttpMethod.PATCH,
+          body: {
+            email: pres.email,
+            newFields: {
+              role: Role.NONPROFIT_VOLUNTEER,
+            },
+          },
+        }).then(() => {
+          router.push("/patient/search");
+        });
       });
 
       setShowModal(false);
@@ -217,7 +208,7 @@ const TransferChapterModal = ({
               }
               renderItem={(item) => (
                 <p className={styles.p}>
-                  {`${item.firstName} ${item.lastName}        ${item.phoneNumber}`}
+                  {`${item.firstName} ${item.lastName}        ${item.email}`}
                 </p>
               )}
               onChange={handleChange}
@@ -261,8 +252,8 @@ const TransferChapterModal = ({
             <div className={styles.confirmPopup}>
               <div className={styles.confirmTitle}>Leadership Transfer</div>
               <div className={styles.confirmDesc}>
-                You will lose access to the Chapter President portal after you
-                confirm.
+                The current Chapter President will lose access to the Chapter
+                portal after you confirm.
               </div>
               <div className={styles.confirmPopupButtons}>
                 <button

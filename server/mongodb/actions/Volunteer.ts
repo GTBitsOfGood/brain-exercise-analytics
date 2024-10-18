@@ -37,6 +37,7 @@ export const getVolunteersFiltered = async ({
   sortParams,
   allowedRoles,
   entriesPerPage,
+  useAllRoles,
 }: Body<VolunteerSearchParams>): Promise<
   SearchResponseBody<IUser> | undefined
 > => {
@@ -54,7 +55,9 @@ export const getVolunteersFiltered = async ({
     | Role.NONPROFIT_REGIONAL_COMMITTEE_MEMBER
     | Role.NONPROFIT_DIRECTOR;
 
-  const allowedAdminRoles: AdminRoles[] = allowedRoles.filter(
+  type AllRoles = AdminRoles | Role.NONPROFIT_PATIENT;
+
+  const allowedAdminRoles: AllRoles[] = allowedRoles.filter(
     (role): role is AdminRoles => role !== Role.NONPROFIT_PATIENT,
   );
 
@@ -65,6 +68,12 @@ export const getVolunteersFiltered = async ({
         )
       : allowedAdminRoles,
   };
+
+  if (useAllRoles) {
+    userParamsObject.role = {
+      $in: Object.values(Role),
+    };
+  }
 
   if (paramsObject.emails) {
     userParamsObject.email = { $in: paramsObject.emails };

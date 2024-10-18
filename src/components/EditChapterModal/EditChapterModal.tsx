@@ -6,12 +6,10 @@ import {
   useEffect,
 } from "react";
 import { classes } from "@src/utils/utils";
-import { useSelector } from "react-redux";
 
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 import XIcon from "@/src/app/icons/XIcon";
 import { Country, State, City } from "country-state-city";
-import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import {
   HttpMethod,
@@ -41,15 +39,17 @@ const EditChapterModal = ({
   chapter,
   setSuccessLink,
 }: Props) => {
-  const [yearFounded, setYearFounded] = useState<string>("");
-  const [chapterName, setChapterName] = useState<string>("");
+  const [yearFounded, setYearFounded] = useState<string>(
+    String(chapter.yearFounded),
+  );
+  const [chapterName, setChapterName] = useState<string>(chapter.name);
 
   const [yearFoundedError, setYearFoundedError] = useState<string>("");
   const [chapterNameError, setChapterNameError] = useState<string>("");
 
-  const [locCountry, setLocCountry] = useState("");
-  const [locState, setLocState] = useState("");
-  const [locCity, setLocCity] = useState("");
+  const [locCountry, setLocCountry] = useState(chapter.location.country);
+  const [locState, setLocState] = useState(chapter.location.state);
+  const [locCity, setLocCity] = useState(chapter.location.city);
 
   const [countryError, setCountryError] = useState("");
   const [stateError, setStateError] = useState("");
@@ -98,18 +98,16 @@ const EditChapterModal = ({
     resetErrors();
   };
 
-  const { fullName } = useSelector((state: RootState) => state.volunteerSearch);
-
   useEffect(() => {
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
       url: "/api/volunteer/filter-volunteer",
       method: HttpMethod.POST,
       body: {
         params: {
-          name: fullName,
           beiChapters: [chapter.name],
         },
         entriesPerPage: 9999,
+        useAllRoles: true,
       },
     }).then((res) => {
       setFilteredUsers(res?.data ?? []);
@@ -125,6 +123,11 @@ const EditChapterModal = ({
 
     if (yearFounded === "") {
       setYearFoundedError("Year founded cannot be blank");
+      error = true;
+    }
+
+    if (Number.isNaN(Number(yearFounded))) {
+      setYearFoundedError("Year founded must be a number");
       error = true;
     }
 
@@ -163,13 +166,11 @@ const EditChapterModal = ({
 
       filteredUsers.forEach(async (user) => {
         await internalRequest<PatchReqUser>({
-          url: "/api/volunteer",
+          url: "/api/chapter/changeChapter",
           method: HttpMethod.PATCH,
           body: {
             email: user.email,
-            newFields: {
-              chapter: chapterName,
-            },
+            chapter: chapterName,
           },
         });
       });

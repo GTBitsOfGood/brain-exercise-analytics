@@ -30,6 +30,7 @@ export const POST = APIWrapper({
       sortParams: reqdata.sortParams,
       allowedRoles: getLowerAdminRoles(currentUser!.role),
       entriesPerPage: reqdata.entriesPerPage,
+      useAllRoles: reqdata.useAllRoles,
     });
     return users;
   },

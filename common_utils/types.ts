@@ -237,6 +237,7 @@ export interface SearchRequestBody<T extends object> {
   lowerRoles?: Role[];
   searchall?: boolean;
   onlyids?: boolean;
+  useAllRoles?: boolean;
 }
 
 export interface SearchResponseBody<T> {

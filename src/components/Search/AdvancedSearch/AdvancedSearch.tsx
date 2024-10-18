@@ -631,7 +631,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
         <div className={styles.secondaryInfo}>
           <div className={styles.secondaryInfoTitle}>
-            Secondary Contact Person Information
+            Secondary Contact Information
           </div>
           <div
             className={[
@@ -659,7 +659,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
 
         <div className={styles.secondaryInfo}>
           <div className={styles.secondaryInfoTitle}>
-            Secondary Contact Person Information
+            Secondary Contact Information
           </div>
           <div
             className={[

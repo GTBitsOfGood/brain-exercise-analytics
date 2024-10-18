@@ -6,17 +6,16 @@ import {
   useEffect,
 } from "react";
 import { classes } from "@src/utils/utils";
-import { useSelector } from "react-redux";
 
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 import XIcon from "@/src/app/icons/XIcon";
 import { Country, State, City } from "country-state-city";
-import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
 import {
   AdminApprovalStatus,
   HttpMethod,
   IVolunteerTableEntry,
+  Role,
   // Role,
   SearchResponseBody,
 } from "@/common_utils/types";
@@ -103,11 +102,6 @@ const AddChapterModal = ({
     resetErrors();
   };
 
-  // Getting Volunteers
-  const { fullName, volunteerRoles } = useSelector(
-    (state: RootState) => state.volunteerSearch,
-  );
-
   useEffect(() => {
     setLoading(true);
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
@@ -115,8 +109,7 @@ const AddChapterModal = ({
       method: HttpMethod.POST,
       body: {
         params: {
-          name: fullName,
-          roles: volunteerRoles,
+          roles: [Role.NONPROFIT_VOLUNTEER],
           approved: [AdminApprovalStatus.APPROVED],
         },
         entriesPerPage: 9999,
@@ -276,7 +269,7 @@ const AddChapterModal = ({
               }
               renderItem={(item) => (
                 <p className={styles.p}>
-                  {`${item.firstName} ${item.lastName}        ${item.phoneNumber}`}
+                  {`${item.firstName} ${item.lastName}        ${item.email}`}
                 </p>
               )}
               onChange={handleChange}
