@@ -19,14 +19,12 @@ import OperationSuccessModal from "@src/components/OperationSuccessModal/Operati
 
 import PersonPlusIcon from "@src/app/icons/PersonPlusIcon";
 import RedTrashCan from "@src/app/icons/RedTrashCan";
-import { useMemo } from "react";
 import BackIcon from "@src/app/icons/BackIcon";
 import Link from "next/link";
 import styles from "./ChapterInfo.module.css";
 import { Cell, CellProps } from "./Cell/Cell";
 import AddVolunteerModal from "../AddVolunteerModal/AddVolunteerModal";
 import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
-import styles from "./ChapterInfo.module.css";
 
 interface ChapterInfoProps {
   chapter: IChapter;
@@ -98,7 +96,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         title: "Chapter Transfer",
         link: () => setShowTransferModal(true),
         icon: <HandTransferIcon />,
-        ),
       },
       {
         title: "Add Volunteer",
