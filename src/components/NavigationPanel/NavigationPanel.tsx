@@ -1,16 +1,24 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import { Role, IUser } from "@/common_utils/types";
-import { SearchIcon, BarChartIcon, PersonIcon } from "@src/app/icons";
+import {
+  Role,
+  IUser,
+  HttpMethod,
+  SearchResponseBody,
+  IVolunteerTableEntry,
+  AdminApprovalStatus,
+} from "@/common_utils/types";
+import { internalRequest } from "@src/utils/requests";
+import { SearchIcon, BarChartIcon, PersonIcon, InfoIcon } from "@src/app/icons";
 import HouseIcon from "@src/app/icons/HouseIcon";
 import ProfilePicIcon from "@src/app/icons/ProfilePicIcon";
+import { update } from "@src/redux/reducers/generalReducer";
 
 import styles from "./NavigationPanel.module.css";
-import Metric from "./Metric/Metric";
 
 interface Props {
   onClick: () => void;
@@ -22,12 +30,65 @@ const NavigationPanel = ({ onClick }: Props) => {
     (state) => state.generalInfo.pendingApprovals,
   ) as number;
 
-  const currentPath = usePathname();
+  const {
+    fullName,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfBirths,
+    emails,
+    dateOfJoins,
+    beiChapters,
+    volunteerRoles,
+  } = useSelector((state: RootState) => state.volunteerSearch);
 
-  const isClickable = useMemo(
-    () => currentPath.startsWith("/patient/analytics"),
-    [currentPath],
-  );
+  const dispatch = useDispatch();
+
+  const fetchUsers = useCallback(() => {
+    internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+      url: "/api/volunteer/filter-volunteer",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          name: fullName,
+          dateOfBirths,
+          emails,
+          beiChapters,
+          active,
+          countries,
+          states,
+          cities,
+          dateOfJoins,
+          roles: volunteerRoles,
+          approved: [AdminApprovalStatus.PENDING],
+        },
+      },
+    }).then((res) => {
+      dispatch(update({ pendingApprovals: res?.numRecords }));
+    });
+  }, [
+    fullName,
+    dateOfBirths,
+    emails,
+    beiChapters,
+    active,
+    countries,
+    states,
+    cities,
+    dateOfJoins,
+    volunteerRoles,
+    dispatch,
+  ]);
+
+  // fetchUsers on first render
+  useEffect(() => {
+    if (user.role !== Role.NONPROFIT_VOLUNTEER) {
+      fetchUsers();
+    }
+  }, []);
+
+  const currentPath = usePathname();
 
   const isPatientSearch = useMemo(
     () => currentPath.startsWith("/patient/search"),
@@ -203,12 +264,18 @@ const NavigationPanel = ({ onClick }: Props) => {
             </div>
             <div className={styles["overall-metrics"]}>
               <span>Patient Analytics</span>
+              {!isAnalytics && (
+                <div className={styles["info-icon-wrapper"]}>
+                  <div className={styles["info-icon"]}>
+                    <InfoIcon className={styles["info-icon"]} />
+                  </div>
+                  <div className={styles["info-icon-text"]}>
+                    <p>Search a patient to see patient analytics.</p>
+                  </div>
+                </div>
+              )}
             </div>
           </Link>
-          <Metric title="Math" isClickable={isClickable} />
-          <Metric title="Reading" isClickable={isClickable} />
-          <Metric title="Writing" isClickable={isClickable} />
-          <Metric title="Trivia" isClickable={isClickable} />
         </div>
       </div>
 
