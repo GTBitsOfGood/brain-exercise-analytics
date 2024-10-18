@@ -1,14 +1,14 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
-  faUser,
-  faUsers,
-  faPerson,
-  faAddressCard,
-  faLocationDot,
-  faCalendar,
-  faPlus,
-  faWrench,
-  faHandHoldingHand,
-} from "@fortawesome/free-solid-svg-icons";
+  User,
+  UsersThree,
+  IdentificationCard,
+  Person,
+  CalendarHeartFill,
+  LocationMarker,
+  Wrench,
+  HandTransferIcon,
+} from "@src/app/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo } from "react";
@@ -26,43 +26,37 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       {
         title: "Chapter Size",
         value: `${params.chapter.patients}`,
-        icon: <FontAwesomeIcon icon={faUsers} style={{ color: "#008afc" }} />,
+        icon: <UsersThree />,
       },
       {
         title: "Active Volunteers",
         value: "0",
-        icon: <FontAwesomeIcon icon={faUser} style={{ color: "#008afc" }} />,
+        icon: <User />,
       },
       {
         title: "Inactive Volunteers",
         value: "0",
-        icon: <FontAwesomeIcon icon={faUser} style={{ color: "#9CA5C2" }} />,
+        icon: <User fill="#9CA5C2" />,
       },
       {
         title: "Patients",
         value: `${params.chapter.patients}`,
-        icon: <FontAwesomeIcon icon={faPerson} style={{ color: "#008afc" }} />,
+        icon: <Person />,
       },
       {
         title: "Chapter President",
         value: `${params.chapter.chapterPresident}`,
-        icon: (
-          <FontAwesomeIcon icon={faAddressCard} style={{ color: "#008afc" }} />
-        ),
+        icon: <IdentificationCard />,
       },
       {
         title: "Year Founded",
         value: `${params.chapter.yearFounded}`,
-        icon: (
-          <FontAwesomeIcon icon={faCalendar} style={{ color: "#008afc" }} />
-        ),
+        icon: <CalendarHeartFill />,
       },
       {
         title: "Chapter Region",
         value: `${params.chapter.location.state}, ${params.chapter.location.country}`,
-        icon: (
-          <FontAwesomeIcon icon={faLocationDot} style={{ color: "#008afc" }} />
-        ),
+        icon: <LocationMarker />,
       },
     ] as CellProps[];
   }, [params.chapter]);
@@ -72,17 +66,12 @@ export default function ChapterInfo(params: ChapterInfoProps) {
       {
         title: "Edit Chapter Profile",
         link: "test",
-        icon: <FontAwesomeIcon icon={faWrench} style={{ color: "#008afc" }} />,
+        icon: <Wrench />,
       },
       {
         title: "Chapter Transfer",
         link: "test",
-        icon: (
-          <FontAwesomeIcon
-            icon={faHandHoldingHand}
-            style={{ color: "#008afc" }}
-          />
-        ),
+        icon: <HandTransferIcon />,
       },
     ] as CellProps[];
   }, [params.chapter]);
