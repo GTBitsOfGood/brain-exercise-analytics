@@ -83,7 +83,9 @@ const NavigationPanel = ({ onClick }: Props) => {
 
   // fetchUsers on first render
   useEffect(() => {
-    fetchUsers();
+    if (user.role != Role.NONPROFIT_VOLUNTEER) {
+      fetchUsers();
+    }
   }, []);
 
   const currentPath = usePathname();
