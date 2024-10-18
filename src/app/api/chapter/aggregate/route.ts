@@ -4,7 +4,10 @@ import Chapter from "@server/mongodb/models/Chapter";
 import APIWrapper from "@server/utils/APIWrapper";
 
 export const POST = APIWrapper({
-  config: {},
+  config: {
+    requireToken: true,
+    requireAdmin: true,
+  },
   handler: async (req) => {
     const chapterName = (await req.json()) as { chapterName: string };
 

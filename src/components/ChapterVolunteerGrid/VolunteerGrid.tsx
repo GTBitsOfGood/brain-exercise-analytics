@@ -41,8 +41,8 @@ function ColumnSizes() {
       <col style={{ width: "2%" }} />
       <col style={{ width: "20%" }} />
       <col style={{ width: "15%" }} />
-      <col style={{ width: "20%" }} />
       <col style={{ width: "15%" }} />
+      <col style={{ width: "10%" }} />
       <col style={{ width: "13%" }} />
     </colgroup>
   );

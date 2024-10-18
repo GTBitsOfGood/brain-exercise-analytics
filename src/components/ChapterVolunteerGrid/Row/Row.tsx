@@ -295,17 +295,23 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
             </div>
           </td>
         )}
-        <td>
-          <text
+        <td className={styles.RowCell}>
+          <div
             className={classes(
-              styles.RowCell,
               styles.RowCellContainer,
-              styles.deleteButton,
+              styles.nameCellContainer,
             )}
-            onClick={() => handleDeleteClick(volunteer.email)}
+            style={{
+              color: "red",
+            }}
           >
-            Remove from Chapter
-          </text>
+            <text
+              className={classes(styles.deleteButton)}
+              onClick={() => handleDeleteClick(volunteer.email)}
+            >
+              Remove from Chapter
+            </text>
+          </div>
         </td>
       </tr>
       {view && <ExpandedRow row={volunteer} />}
