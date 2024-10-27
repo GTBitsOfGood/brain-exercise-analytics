@@ -41,6 +41,7 @@ export const POST = APIWrapper({
     );
 
     const backlinkUrl = `${process.env.URL}/auth/password-reset/${verificationLog.token}`;
+    console.log(backlinkUrl)
 
     const emailSubject = "Password Reset";
     const emailTemplate = "reset";
