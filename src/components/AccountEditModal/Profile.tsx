@@ -231,7 +231,7 @@ export default function Profile() {
       <div className={styles.header}>
         <div>
           <div>
-            {imageLink ? (
+            {imageLink || tempImageLink ? (
               <img
                 src={tempImageLink || imageLink}
                 alt="Profile Image"
