@@ -27,9 +27,10 @@ interface Props {
   setShowModal: (newShowModal: boolean) => void;
   setShowSuccessModal: (arg: boolean) => void;
   chapter: IChapter,
+  refreshUsers: () => void;
 }
 
-const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, chapter }: Props) => {
+const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, chapter, refreshUsers }: Props) => {
   const [chapterPresident, setChapterPresident] = useState<string>("");
   const [chapterPresidentObject, setChapterPresidentObject] =
     useState<IVolunteerTableEntry | null>(null);
@@ -125,6 +126,7 @@ const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, 
 
     setShowModal(false);
     reset();
+    refreshUsers();
     setShowSuccessModal(true);
   };
 

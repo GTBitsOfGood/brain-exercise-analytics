@@ -11,7 +11,7 @@ const Popup = ({
   return (
     <div className={styles.popupOverlay}>
       <div className={styles.popup}>
-        <div className={styles.popupTitle}>Remove from Chapter</div>
+        <div className={styles.popupTitle}>Delete Account</div>
         <div className={styles.popupContent}>
           Deleting this account will remove all of this user&apos;s information
           from the database. This cannot be undone.

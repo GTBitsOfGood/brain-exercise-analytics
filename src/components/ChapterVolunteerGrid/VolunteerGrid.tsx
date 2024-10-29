@@ -10,8 +10,8 @@ import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
 import { Row } from "./Row/Row";
-import Modal from "@src/components/Modal/Modal";
-import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+import Modal from "../Modal/Modal";
+import OperationSuccessModal from "../OperationSuccessModal/OperationSuccessModal";
 
 interface VolunteerGridProps {
   data: IUser[];
@@ -22,6 +22,7 @@ interface VolunteerGridProps {
   currentPage: number;
   refreshUsers: () => void;
   chapter?: string;
+  
 }
 
 interface HeaderProps {
@@ -67,6 +68,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
     string | null
   >(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+
 
   const handleConfirmDelete = async () => {
     if (removeVolunteerEmail !== null) {
@@ -131,12 +133,12 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
         currentPage={params.currentPage}
       />
       <Modal
-        showModal={true}
+        showModal={showSuccessModal}
         setShowModal={setShowSuccessModal}
       >
         <OperationSuccessModal
           className={styles.operationSuccessModal}
-          subtitle = "Account Successfully Deleted"
+          subtitle = "Volunteer Successfully Removed"
         />
       </Modal>
     </div>

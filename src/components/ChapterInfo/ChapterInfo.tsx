@@ -29,6 +29,7 @@ import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
 interface ChapterInfoProps {
   chapter: IChapter;
   chapterPresident: string;
+  refreshUsers: () => void;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
@@ -225,6 +226,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           setShowModal={setShowAddVolunteerModal}
           setShowSuccessModal={setShowAddVolunteerSuccessModal}
           chapter={params.chapter}
+          refreshUsers={params.refreshUsers}
         />
       </Modal>
       <Modal
