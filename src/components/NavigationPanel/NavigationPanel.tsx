@@ -228,7 +228,7 @@ const NavigationPanel = ({ onClick }: Props) => {
                 <div className={styles["overall-metrics"]}>
                   <span>Pending Approval</span>
                 </div>
-                <div className={styles["red-bubble"]}>{pendingApprovals}</div>
+                {pendingApprovals > 0 && <div className={styles["red-bubble"]}>{pendingApprovals}</div>}
               </Link>
             </div>
           </>
