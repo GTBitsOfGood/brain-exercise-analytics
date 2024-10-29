@@ -10,9 +10,10 @@ interface DataParams {
 const Pagination = (params: DataParams) => {
   const pages = useMemo(() => {
     const forwardPages: number[] = [];
+    const numForwardPages = params.currentPage === 0 ? 4 : 3;
     for (
       let i = params.currentPage + 1;
-      i <= params.pageCount && forwardPages.length !== 4;
+      i <= params.pageCount && forwardPages.length !== numForwardPages;
       i += 1
     ) {
       forwardPages.push(i);
