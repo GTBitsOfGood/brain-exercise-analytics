@@ -66,7 +66,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
   const [deleteVolunteerEmail, setDeleteVolunteerEmail] = useState<
     string | null
   >(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleConfirmDelete = async () => {
     if (deleteVolunteerEmail !== null) {
@@ -83,7 +83,6 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
     }
     setPopupOpen(false);
     setShowSuccessModal(true);
-
   };
 
   const handleClosePopup = useCallback(() => {
@@ -127,13 +126,10 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
         pageCount={params.pageCount}
         currentPage={params.currentPage}
       />
-      <Modal
-        showModal={showSuccessModal}
-        setShowModal={setShowSuccessModal}
-      >
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal
           className={styles.operationSuccessModal}
-          subtitle = "Account Successfully Deleted"
+          subtitle="Account Successfully Deleted"
         />
       </Modal>
     </div>

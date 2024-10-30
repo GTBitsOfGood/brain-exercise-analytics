@@ -45,7 +45,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     useState(false);
 
   const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
-  const [showAddVolunteerSuccessModal, setShowAddVolunteerSuccessModal] = useState(false);
+  const [showAddVolunteerSuccessModal, setShowAddVolunteerSuccessModal] =
+    useState(false);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
@@ -237,7 +238,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           className={styles.addVolunteerOperationSuccessModal}
           subtitle="You have successfully added a volunteer to"
           title={params.chapter.name}
-
         />
       </Modal>
     </div>

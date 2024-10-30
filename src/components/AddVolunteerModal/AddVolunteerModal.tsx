@@ -17,65 +17,72 @@ import {
   SearchResponseBody,
 } from "@/common_utils/types";
 import { PatchReq } from "@src/app/api/volunteer/route";
+import { internalRequest } from "@src/utils/requests";
 import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
 import styles from "./AddVolunteerModal.module.css";
-import { internalRequest } from "@src/utils/requests";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
   setShowModal: (newShowModal: boolean) => void;
   setShowSuccessModal: (arg: boolean) => void;
-  chapter: IChapter,
+  chapter: IChapter;
   refreshUsers: () => void;
 }
 
-const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, chapter, refreshUsers }: Props) => {
-  const [chapterPresident, setChapterPresident] = useState<string>("");
-  const [chapterPresidentObject, setChapterPresidentObject] =
+const AddVolunteerModal = ({
+  className,
+  style,
+  setShowModal,
+  setShowSuccessModal,
+  chapter,
+  refreshUsers,
+}: Props) => {
+  const [newVolunteer, setNewVolunteer] = useState<string>("");
+  const [newVolunteerObject, setNewVolunteerObject] =
     useState<IVolunteerTableEntry | null>(null);
 
-  const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
+  const [newVolunteerError, setNewVolunteerError] =
+    useState<string>("");
 
   const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
   const [filteredVolunteers, setFilteredVolunteers] =
     useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
 
-
   const resetErrors = () => {
-    setChapterPresidentError("");
+    setNewVolunteerError("");
   };
 
   const reset = () => {
-    setChapterPresident("");
-    setChapterPresidentObject(null);
+    setNewVolunteer("");
+    setNewVolunteerObject(null);
     resetErrors();
   };
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
       url: "/api/volunteer/filter-volunteer",
       method: HttpMethod.POST,
       body: {
-        params: { 
-          roles: [Role.NONPROFIT_VOLUNTEER], 
-          approved: [AdminApprovalStatus.APPROVED], 
+        params: {
+          roles: [Role.NONPROFIT_VOLUNTEER],
+          approved: [AdminApprovalStatus.APPROVED],
           beiChapters: [""],
-        }, 
+        },
         entriesPerPage: 9999,
       },
     }).then((res) => {
       setVolunteers(res?.data ?? []);
-      setLoading(false)
+      setLoading(false);
     });
   }, []);
 
   type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
   const handleChange: ChangeHandler = (e) => {
     const { target } = e;
-    setChapterPresidentObject(null);
+    setNewVolunteerObject(null);
 
     if (!target.value.trim()) return setFilteredVolunteers([]);
 
@@ -94,13 +101,13 @@ const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, 
     resetErrors();
     let error = false;
 
-    if (chapterPresident === "") {
-      setChapterPresidentError("Choose a valid volunteer");
+    if (newVolunteer === "") {
+      setNewVolunteerError("Choose a valid volunteer");
       error = true;
     }
 
-    if (chapterPresidentObject === null) {
-      setChapterPresidentError("Choose a valid volunteer");
+    if (newVolunteerObject === null) {
+      setNewVolunteerError("Choose a valid volunteer");
       error = true;
     }
 
@@ -114,14 +121,14 @@ const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, 
         url: "/api/volunteer",
         method: HttpMethod.PATCH,
         body: {
-          email: chapterPresidentObject?.email,
+          email: newVolunteerObject?.email,
           newFields: {
             chapter: chapter.name,
           },
         },
       });
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err);
     }
 
     setShowModal(false);
@@ -145,12 +152,10 @@ const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, 
             <label>Add Volunteer</label>
             <LiveSearchDropdown
               options={filteredVolunteers}
-              value={chapterPresident}
-              setValue={setChapterPresident}
+              value={newVolunteer}
+              setValue={setNewVolunteer}
               placeholder={
-                loading
-                  ? "Loading.."
-                  : "Enter the name of the volunteer"
+                loading ? "Loading.." : "Enter the name of the volunteer"
               }
               renderItem={(item) => (
                 <p className={styles.p}>
@@ -159,11 +164,11 @@ const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, 
               )}
               onChange={handleChange}
               onSelect={(item) => {
-                setChapterPresident(`${item.firstName} ${item.lastName}`);
-                setChapterPresidentObject(item);
+                setNewVolunteer(`${item.firstName} ${item.lastName}`);
+                setNewVolunteerObject(item);
               }}
-              showError={chapterPresidentError !== ""}
-              error={chapterPresidentError}
+              showError={newVolunteerError !== ""}
+              error={newVolunteerError}
             />
           </div>
 
@@ -192,4 +197,4 @@ const addChapterModal = ({ className, style, setShowModal, setShowSuccessModal, 
   );
 };
 
-export default addChapterModal;
+export default AddVolunteerModal;

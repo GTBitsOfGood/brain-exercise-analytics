@@ -54,8 +54,8 @@ function Header() {
 export default function VolunteerApprovalGrid(
   params: VolunteerApprovalGridProps,
 ) {
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [successMessage, setSuccessMessage] = useState("")
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Construct Rows from the volunteers
   const Rows = params.data.map((volunteer) => {
@@ -87,13 +87,10 @@ export default function VolunteerApprovalGrid(
         pageCount={params.pageCount}
         currentPage={params.currentPage}
       />
-      <Modal
-        showModal={showSuccessModal}
-        setShowModal={setShowSuccessModal}
-      >
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal
           className={styles.operationSuccessModal}
-          subtitle = {successMessage}
+          subtitle={successMessage}
         />
       </Modal>
     </div>

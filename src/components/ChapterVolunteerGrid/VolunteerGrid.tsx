@@ -22,7 +22,6 @@ interface VolunteerGridProps {
   currentPage: number;
   refreshUsers: () => void;
   chapter?: string;
-  
 }
 
 interface HeaderProps {
@@ -67,8 +66,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
   const [removeVolunteerEmail, setRemoveVolunteerEmail] = useState<
     string | null
   >(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleConfirmDelete = async () => {
     if (removeVolunteerEmail !== null) {
@@ -85,7 +83,6 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
 
       setRemoveVolunteerEmail(null);
       params.refreshUsers();
-
     }
     setPopupOpen(false);
     setShowSuccessModal(true);
@@ -132,13 +129,10 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
         pageCount={params.pageCount}
         currentPage={params.currentPage}
       />
-      <Modal
-        showModal={showSuccessModal}
-        setShowModal={setShowSuccessModal}
-      >
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal
           className={styles.operationSuccessModal}
-          subtitle = "Volunteer Successfully Removed"
+          subtitle="Volunteer Successfully Removed"
         />
       </Modal>
     </div>

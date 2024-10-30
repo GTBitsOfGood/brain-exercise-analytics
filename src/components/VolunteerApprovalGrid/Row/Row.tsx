@@ -105,7 +105,12 @@ function ExpandedRow({ row }: { row: IUser }) {
   );
 }
 
-export function Row({ volunteer, refreshUsers, setShowModal, setSuccessMessage }: Props) {
+export function Row({
+  volunteer,
+  refreshUsers,
+  setShowModal,
+  setSuccessMessage,
+}: Props) {
   const [view, setView] = useState<boolean>(false);
   const handleClick = useCallback(() => setView((v) => !v), []);
   // Role of user corresponding to the given row
@@ -139,10 +144,10 @@ export function Row({ volunteer, refreshUsers, setShowModal, setSuccessMessage }
     });
     refreshUsers();
     if (approvalStatus) {
-      setSuccessMessage("Volunteer Successfully Approved")
+      setSuccessMessage("Volunteer Successfully Approved");
       setShowModal(true);
     } else {
-      setSuccessMessage("Volunteer Successfully Denied")
+      setSuccessMessage("Volunteer Successfully Denied");
       setShowModal(true);
     }
   };

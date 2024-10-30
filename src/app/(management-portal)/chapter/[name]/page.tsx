@@ -139,7 +139,11 @@ export default function Page({ params }: { params: { name: string } }) {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["profile-container"])}>
-        <ChapterInfo chapter={chapter} chapterPresident={chapterPresident} refreshUsers={fetchUsers}/>
+        <ChapterInfo
+          chapter={chapter}
+          chapterPresident={chapterPresident}
+          refreshUsers={fetchUsers}
+        />
         <Divider />
       </div>
       <div className={classes(styles["search-container"])}>
