@@ -9,7 +9,11 @@ import {
 import styles from "./AccountEditModal.module.css";
 import InputField from "../InputField/InputField";
 
-export default function Password() {
+interface Props {
+  setShowSuccessModal: (args: boolean) => void;
+}
+
+  export default function Password({setShowSuccessModal}: Props) {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
@@ -74,6 +78,7 @@ export default function Password() {
     }
 
     await updatePassword(getAuth().currentUser!, newPassword);
+    setShowSuccessModal(true)
     reset();
   };
 

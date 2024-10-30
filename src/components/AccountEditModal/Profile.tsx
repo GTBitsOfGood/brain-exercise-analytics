@@ -13,7 +13,11 @@ import { HttpMethod, IUser } from "@/common_utils/types";
 import styles from "./AccountEditModal.module.css";
 import Chip from "../Chip/Chip";
 
-export default function Profile() {
+interface Props {
+  setShowSuccessModal: (args: boolean) => void;
+}
+
+export default function Profile({setShowSuccessModal}: Props) {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -145,8 +149,7 @@ export default function Profile() {
       },
     });
 
-    setTempImageLink(null);
-
+    setTempImageLink(null);    
     // Logout user if email is changed so they can reauthenticate
     if (updatedEmail !== email) {
       await logout();
@@ -156,6 +159,7 @@ export default function Profile() {
     dispatch(update(updatedUser));
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
+    setShowSuccessModal(true)
   }, [
     dispatch,
     logout,
