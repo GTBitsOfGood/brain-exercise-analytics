@@ -42,8 +42,7 @@ const AddVolunteerModal = ({
   const [newVolunteerObject, setNewVolunteerObject] =
     useState<IVolunteerTableEntry | null>(null);
 
-  const [newVolunteerError, setNewVolunteerError] =
-    useState<string>("");
+  const [newVolunteerError, setNewVolunteerError] = useState<string>("");
 
   const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
   const [filteredVolunteers, setFilteredVolunteers] =

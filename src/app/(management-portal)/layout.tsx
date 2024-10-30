@@ -11,8 +11,8 @@ import useAuth from "@src/hooks/useAuth";
 import { RootState } from "@src/redux/rootReducer";
 
 import Modal from "@src/components/Modal/Modal";
-import styles from "./layout.module.css";
 import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
+import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [showModal, setShowModal] = useState(false);
@@ -52,12 +52,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
       <div className={styles["rest-of-page"]}>
         <Modal showModal={showModal} setShowModal={setShowModal}>
-          <AccountEditModal className={styles.accountEditModalContent} setShowSuccessModal={setShowSuccessModal}/>
+          <AccountEditModal
+            className={styles.accountEditModalContent}
+            setShowSuccessModal={setShowSuccessModal}
+          />
         </Modal>
-        <Modal
-          showModal={showSuccessModal}
-          setShowModal={setShowSuccessModal}
-        >
+        <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
           <OperationSuccessModal
             className={styles.operationSuccessModal}
             subtitle="Account Successfully Updated"

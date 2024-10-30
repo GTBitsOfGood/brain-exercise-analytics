@@ -13,7 +13,7 @@ interface Props {
   setShowSuccessModal: (args: boolean) => void;
 }
 
-  export default function Password({setShowSuccessModal}: Props) {
+export default function Password({ setShowSuccessModal }: Props) {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
@@ -78,7 +78,7 @@ interface Props {
     }
 
     await updatePassword(getAuth().currentUser!, newPassword);
-    setShowSuccessModal(true)
+    setShowSuccessModal(true);
     reset();
   };
 

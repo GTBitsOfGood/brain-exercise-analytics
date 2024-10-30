@@ -52,8 +52,11 @@ const Modal = ({ className, style, setShowSuccessModal }: Props) => {
       <div className={styles.vl}></div>
       <div className={styles.info}>
         {/* <span onClick={closeModal}>&times;</span> */}
-        {page === Page.PROFILE ? <Profile setShowSuccessModal={setShowSuccessModal}/> 
-          : <Password setShowSuccessModal={setShowSuccessModal}/>}
+        {page === Page.PROFILE ? (
+          <Profile setShowSuccessModal={setShowSuccessModal} />
+        ) : (
+          <Password setShowSuccessModal={setShowSuccessModal} />
+        )}
       </div>
     </div>
   );

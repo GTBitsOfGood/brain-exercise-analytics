@@ -17,7 +17,7 @@ interface Props {
   setShowSuccessModal: (args: boolean) => void;
 }
 
-export default function Profile({setShowSuccessModal}: Props) {
+export default function Profile({ setShowSuccessModal }: Props) {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -149,7 +149,7 @@ export default function Profile({setShowSuccessModal}: Props) {
       },
     });
 
-    setTempImageLink(null);    
+    setTempImageLink(null);
     // Logout user if email is changed so they can reauthenticate
     if (updatedEmail !== email) {
       await logout();
@@ -159,7 +159,7 @@ export default function Profile({setShowSuccessModal}: Props) {
     dispatch(update(updatedUser));
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
-    setShowSuccessModal(true)
+    setShowSuccessModal(true);
   }, [
     dispatch,
     logout,
