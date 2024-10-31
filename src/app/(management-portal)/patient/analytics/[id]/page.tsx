@@ -105,11 +105,11 @@ export default function Page({ params }: { params: { id: string } }) {
         newDateRange,
         [AnalyticsSectionEnum.OVERALL],
       );
-      setMath(data.math);
-      setTrivia(data.trivia);
-      setReading(data.reading);
-      setWriting(data.writing);
-      setOverall(data.overall);
+      setMath(data?.math);
+      setTrivia(data?.trivia);
+      setReading(data?.reading);
+      setWriting(data?.writing);
+      setOverall(data?.overall);
       setDashboardMenu(newDateRange);
       setMathMenu(newDateRange);
       setReadingMenu(newDateRange);

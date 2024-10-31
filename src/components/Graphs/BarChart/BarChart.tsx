@@ -53,7 +53,6 @@ export default function BarChart({
     if (data.length === 0) {
       return [];
     }
-    setDataExists(true);
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
       const tmp = [];
@@ -64,8 +63,8 @@ export default function BarChart({
     }
     return data;
   }, [data]);
-  const [dataExists, setDataExists] = useState(false);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(newData.length == 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));

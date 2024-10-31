@@ -10,13 +10,11 @@ export const GET = APIWrapper({
     requireVolunteer: true,
   },
   handler: async (req) => {
-    console.log("BRTUUGGHHHH HERE IN API")
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     const rangeString = searchParams.get("range");
     const sectionsString = searchParams.get("sections");
-    console.log("UPPPPPP HERE IN API")
 
     if (!id || !rangeString || !sectionsString) {
       throw new Error("ID or Range missing in request");
@@ -43,7 +41,6 @@ export const GET = APIWrapper({
     const updatedSections = sections.includes(AnalyticsSectionEnum.OVERALL)
       ? Object.values(AnalyticsSectionEnum)
       : Array.from(new Set(sections));
-    console.log("RIGH HERE IN API")
     const data = (
       await getAggregatedAnalytics([id], range, updatedSections)
     )[0];
