@@ -27,13 +27,6 @@ import {
   IAggregatedAnalyticsTrivia,
   IAggregatedAnalyticsWriting,
 } from "@/common_utils/types";
-import {
-  dataBar,
-  dataLine,
-  dataStacked,
-  numberOfQuestionData,
-} from "@src/utils/patients";
-
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import { internalRequest } from "@src/utils/requests";
@@ -98,6 +91,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
       setLoading(true);
+      console.log("CALLING API")
       try {
         const data = await internalRequest<T>({
           url: "/api/patient/analytics",
@@ -109,9 +103,11 @@ export default function Page({ params }: { params: { id: string } }) {
           },
         });
         setLoading(false);
+        console.log(data)
         return data;
-      } catch {
+      } catch (error) {
         setLoading(false);
+        console.log(error)
         return {} as IAggregatedAnalyticsAll;
       }
     },
@@ -207,13 +203,7 @@ export default function Page({ params }: { params: { id: string } }) {
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
           streak={
-            overall?.streak ?? [
-              Days.Sunday,
-              Days.Monday,
-              Days.Tuesday,
-              Days.Thursday,
-              Days.Friday,
-            ]
+            overall?.streak ?? []
           }
           startDate={
             overall?.startDate ? new Date(overall.startDate) : new Date()
@@ -231,17 +221,17 @@ export default function Page({ params }: { params: { id: string } }) {
               triviaQuestionsCompleted: 0,
             }
           }
-          sessionCompletionHistory={overall?.streakHistory ?? dataBar}
+          sessionCompletionHistory={overall?.streakHistory ?? []}
         />
       </div>
       <Divider id="math" />
       <div ref={mathRef} id="math" className={styles.sectionContainer}>
         <MathScreen
           menuState={[mathMenu, updateMathAnalytics]}
-          accuracyData={math?.avgAccuracy ?? dataLine}
-          difficultyData={math?.avgDifficultyScore ?? dataLine}
-          numQuestionData={math?.avgQuestionsCompleted ?? numberOfQuestionData}
-          timeData={math?.avgTimePerQuestion ?? dataBar}
+          accuracyData={math?.avgAccuracy ?? []}
+          difficultyData={math?.avgDifficultyScore ?? []}
+          numQuestionData={math?.avgQuestionsCompleted ?? []}
+          timeData={math?.avgTimePerQuestion ?? []}
           currentAccuracy={(math?.lastSession.accuracy ?? 0).toString()}
           currentDifficulty={(
             math?.lastSession.difficultyScore ?? 0
@@ -256,10 +246,10 @@ export default function Page({ params }: { params: { id: string } }) {
       <div ref={readingRef} id="reading" className={styles.sectionContainer}>
         <ReadingScreen
           menuState={[readingMenu, updateReadingAnalytics]}
-          sessionHistory={reading?.sessionCompletion ?? dataStacked}
-          readingRate={reading?.avgTimePerPassage ?? dataLine}
-          avgPassage={reading?.avgPassagesRead ?? dataBar}
-          timeData={reading?.avgWordsPerMin ?? dataBar}
+          sessionHistory={reading?.sessionCompletion ?? []}
+          readingRate={reading?.avgTimePerPassage ?? []}
+          avgPassage={reading?.avgPassagesRead ?? []}
+          timeData={reading?.avgWordsPerMin ?? []}
           totalPassage={(reading?.lastSession.passagesRead ?? 0).toString()}
           currentTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
           completionStatus={reading?.lastSession.completed ?? false}
@@ -269,9 +259,9 @@ export default function Page({ params }: { params: { id: string } }) {
       <div ref={writingRef} id="writing" className={styles.sectionContainer}>
         <WritingScreen
           menuState={[writingMenu, updateWritingAnalytics]}
-          sessionHistory={writing?.sessionCompletion ?? dataStacked}
-          numCompleted={writing?.avgPromptsAnswered ?? dataBar}
-          avgTime={writing?.avgTimePerQuestion ?? dataBar}
+          sessionHistory={writing?.sessionCompletion ?? []}
+          numCompleted={writing?.avgPromptsAnswered ?? []}
+          avgTime={writing?.avgTimePerQuestion ?? []}
           totalPrompts={(writing?.lastSession.promptsAnswered ?? 0).toString()}
           currentTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
           attemptStatus={writing?.lastSession.completed ?? false}
@@ -281,11 +271,11 @@ export default function Page({ params }: { params: { id: string } }) {
       <div ref={triviaRef} id="trivia" className={styles.sectionContainer}>
         <TriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
-          accuracyData={trivia?.avgAccuracy ?? dataLine}
+          accuracyData={trivia?.avgAccuracy ?? []}
           numQuestionData={
-            trivia?.avgQuestionsCompleted ?? numberOfQuestionData
+            trivia?.avgQuestionsCompleted ?? []
           }
-          timeData={trivia?.avgTimePerQuestion ?? dataBar}
+          timeData={trivia?.avgTimePerQuestion ?? []}
           currentAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(
             trivia?.lastSession.questionsCompleted ?? 0

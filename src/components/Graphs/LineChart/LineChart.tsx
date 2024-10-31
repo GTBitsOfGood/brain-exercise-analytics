@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 import { D3Data } from "@src/utils/types";
-import { InfoIcon } from "@src/app/icons";
+import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
 import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./LineChart.module.scss";
@@ -65,6 +65,7 @@ export default function LineChart({
     if (data.length === 0) {
       return [{ interval: "1", value: 1 }];
     }
+    setDataExists(true);
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
       const tmp = [];
@@ -76,6 +77,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(false);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -231,26 +233,26 @@ export default function LineChart({
         .tickSizeInner(0)
         .tickFormat(() => "");
 
-      svg
+      dataExists && svg
         .append("g")
         .attr("class", `y-axis-vert`)
         .attr("transform", `translate(${marginLeft - 5}, 0)`)
         .call(axisVert);
 
-      svg
+      dataExists && svg
         .append("g")
         .attr("class", `y-axis-grid ${styles.yAxis}`)
         .attr("transform", `translate(${marginLeft - 5}, 0)`)
         .call(yAxisGrid);
 
-      svg
+      dataExists && svg
         .append("g")
         .attr("transform", `translate(-5, ${height - marginBottom})`)
         .attr("class", "x-axis-hor")
         .style("font", `10px ${poppins500.style.fontFamily}`)
         .call(axisHor);
     }
-    svg
+    dataExists && svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom})`)
       .attr("class", "x-axis-top")
@@ -259,7 +261,7 @@ export default function LineChart({
       .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
 
-    svg
+    dataExists && svg
       .append("g")
       .attr("transform", `translate(0, ${height - marginBottom + 15})`)
       .attr("class", "x-axis-bottom")
@@ -268,7 +270,7 @@ export default function LineChart({
       .call(xAxisLabelBottom)
       .call((g) => g.select(".domain").remove());
 
-    svg
+    dataExists && svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)
       .attr("class", "y-axis")
@@ -370,53 +372,81 @@ export default function LineChart({
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
         style={{ marginTop: 20 }}
       >
-        {gradient && (
-          <filter id="drop-shadow" height={"180%"}>
-            <feDropShadow
-              dx="0"
-              dy="13"
-              stdDeviation="6"
-              floodColor="rgb(216 211 232)"
+        {
+          !dataExists ? (
+            <>
+              <foreignObject
+                x={width/2 - 95} // Adjust to horizontally center the icon
+                y={height/2.8 - 17}   // Adjust to control vertical positioning
+                width="30"
+                height="30"
+              >
+                  <ExclamationOutlinedIcon />
+                </foreignObject>
+              <text
+                x={width / 2}
+                y={height/2.8}
+                fontFamily= "inter600.style.fontFamily"
+                textAnchor="middle"
+                alignmentBaseline="middle"
+                fontSize="17"
+                fontWeight="500"
+                fill="#2B3674"
+              >
+                No data found
+              </text>
+            </>
+          ) : (
+            <>
+            {gradient && (
+              <filter id="drop-shadow" height={"180%"}>
+                <feDropShadow
+                  dx="0"
+                  dy="13"
+                  stdDeviation="6"
+                  floodColor="rgb(216 211 232)"
+                />
+              </filter>
+            )}
+            <path
+              className={styles.linePath}
+              d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
             />
-          </filter>
+            <g className={styles.svgComp}>
+              <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
+              <circle
+                key={-2}
+                cx={x(newData.length - 1)}
+                cy={y(newData[newData.length - 1].value)}
+                r="2.5"
+              />
+              {newData.map(
+                (d, i) =>
+                  activeIndex === i && (
+                    <Fragment key={i}>
+                      <circle
+                        className={styles.hoverCircle}
+                        cx={x(i)}
+                        cy={y(d.value)}
+                        r="7.5"
+                      />
+                      <foreignObject
+                        x={x(i) - 7.5}
+                        y={y(d.value) - 20}
+                        width="20"
+                        height="10"
+                        fontSize={8}
+                      >
+                        <div style={{ textAlign: "center", color: "#A5A5A5" }}>
+                          {d.value}
+                        </div>
+                      </foreignObject>
+                    </Fragment>
+                  ),
+              )}
+        </g> 
+        </>
         )}
-        <path
-          className={styles.linePath}
-          d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
-        />
-        <g className={styles.svgComp}>
-          <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
-          <circle
-            key={-2}
-            cx={x(newData.length - 1)}
-            cy={y(newData[newData.length - 1].value)}
-            r="2.5"
-          />
-          {newData.map(
-            (d, i) =>
-              activeIndex === i && (
-                <Fragment key={i}>
-                  <circle
-                    className={styles.hoverCircle}
-                    cx={x(i)}
-                    cy={y(d.value)}
-                    r="7.5"
-                  />
-                  <foreignObject
-                    x={x(i) - 7.5}
-                    y={y(d.value) - 20}
-                    width="20"
-                    height="10"
-                    fontSize={8}
-                  >
-                    <div style={{ textAlign: "center", color: "#A5A5A5" }}>
-                      {d.value}
-                    </div>
-                  </foreignObject>
-                </Fragment>
-              ),
-          )}
-        </g>
       </svg>
     </div>
   );

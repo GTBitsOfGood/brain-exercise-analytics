@@ -1,7 +1,7 @@
 "use client";
 
 import { Poppins, Inter } from "next/font/google";
-import { InfoIcon } from "@src/app/icons";
+import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import {
   Fragment,
@@ -69,6 +69,7 @@ export default function BarChart({
     if (data.length === 0) {
       return [{ interval: "1", value: 1 }];
     }
+    setDataExists(true);
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
       const tmp = [];
@@ -79,6 +80,7 @@ export default function BarChart({
     }
     return data;
   }, [data]);
+  const [dataExists, setDataExists] = useState(false);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
@@ -252,19 +254,19 @@ export default function BarChart({
         .tickSizeInner(0)
         .tickFormat(() => "");
 
-      svg
+      dataExists && svg
         .append("g")
         .attr("class", `y-axis-vert`)
         .attr("transform", `translate(${marginLeft - 5}, 0)`)
         .call(axisVert);
 
-      svg
+      dataExists && svg
         .append("g")
         .attr("class", `y-axis-grid ${styles.yAxis}`)
         .attr("transform", `translate(${marginLeft - 5}, 0)`)
         .call(yAxisGrid);
 
-      svg
+      dataExists && svg
         .append("g")
         .attr("transform", `translate(-5, ${height - marginBottom})`)
         .attr("class", "x-axis-hor")
@@ -272,7 +274,7 @@ export default function BarChart({
         .call(axisHor);
     }
 
-    svg
+    dataExists && svg
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
       .attr("class", "x-axis-top")
@@ -281,7 +283,7 @@ export default function BarChart({
       .call(xAxisLabelTop)
       .call((g) => g.select(".domain").remove());
 
-    svg
+    dataExists && svg
       .append("g")
       .attr(
         "transform",
@@ -293,7 +295,7 @@ export default function BarChart({
       .call(xAxisLabelBottom)
       .call((g) => g.select(".domain").remove());
 
-    svg
+    dataExists && svg
       .append("g")
       .attr("transform", `translate(${marginLeft}, 0)`)
       .attr("class", "y-axis")
@@ -414,6 +416,32 @@ export default function BarChart({
         onMouseMove={hoverable ? handleMouseMove : undefined}
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
       >
+        {!dataExists ? (
+        <>
+              <foreignObject
+                x={width/2 - 95} // Adjust to horizontally center the icon
+                y={width/3 - 17}   // Adjust to control vertical positioning
+                width="30"
+                height="30"
+              >
+                  <ExclamationOutlinedIcon />
+                </foreignObject>
+              <text
+                x={width/2}
+                y={width/3}
+                fontFamily= "inter600.style.fontFamily"
+                textAnchor="middle"
+                alignmentBaseline="middle"
+                fontSize="17"
+                fontWeight="500"
+                fill="#2B3674"
+              >
+                No data found
+              </text>
+        </>
+        ) 
+        : 
+        (
         <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
           {children ||
             newData.map((d, i) => {
@@ -450,6 +478,7 @@ export default function BarChart({
             <HoverableNode key={i} i={i} d={d} />
           ))}
         </g>
+      )}
       </svg>
       <div style={{ justifyContent: "center" }}>
         <div>

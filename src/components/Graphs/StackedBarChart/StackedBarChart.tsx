@@ -150,6 +150,8 @@ export default function StackedBarChart({
         ))}
       </BarChart>
       <div className={styles.legendBox}>
+        {
+        data.length !== 0 &&
         <div>
           {legend.map((l) => (
             <div className={styles.legendItem} key={l.text}>
@@ -166,6 +168,7 @@ export default function StackedBarChart({
             </div>
           ))}
         </div>
+      }
       </div>
     </div>
   );
