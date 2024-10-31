@@ -65,7 +65,6 @@ export default function LineChart({
     if (data.length === 0) {
       return [{ interval: "1", value: 1 }];
     }
-    setDataExists(true);
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
       const tmp = [];
@@ -77,7 +76,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(false);
+  const [dataExists, setDataExists] = useState(newData.length == 0);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);

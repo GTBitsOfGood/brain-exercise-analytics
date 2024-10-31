@@ -40,6 +40,8 @@ const MathScreen = ({
   style,
   menuState,
 }: InputProp) => {
+  console.log(accuracyData)
+  console.log(difficultyData)
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>

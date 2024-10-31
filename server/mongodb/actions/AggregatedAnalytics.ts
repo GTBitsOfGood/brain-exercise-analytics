@@ -11,6 +11,9 @@ import {
 import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import Analytics from "../models/Analytics";
 import User from "../models/User";
+import mongoose from "mongoose";
+import { types } from "util";
+import { ObjectId } from "mongodb";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -51,7 +54,7 @@ export const getAggregatedAnalytics = async (
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
 ): Promise<Partial<IAggregatedAnalyticsAll>[]> => {
-  let numOfWeeks = Number.MAX_SAFE_INTEGER;
+  let numOfWeeks = 100;
 
   if (range === DateRangeEnum.RECENT) {
     numOfWeeks = 7;
@@ -63,9 +66,11 @@ export const getAggregatedAnalytics = async (
     numOfWeeks = 52; // 52
   }
 
+
+  const objectIdArray = userIDs.map(id => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
-    { userID: { $in: userIDs } },
-    { weeklyMetrics: { $slice: [1, numOfWeeks] } },
+    { _id: { $in: objectIdArray } },
+    { weeklyMetrics: { $slice: [1, 10] } },
   );
 
   const analyticsRecords = await Analytics.find<IAnalytics>(
@@ -82,7 +87,6 @@ export const getAggregatedAnalytics = async (
   const out: Partial<IAggregatedAnalyticsAll>[] = [];
 
   const lastMonday = new Date(getCurrentMonday().getDate() - 7);
-
   for (let i = 0; i < analyticsRecords.length; i += 1) {
     const analyticsRecord = analyticsRecords[i] as IAnalytics;
     const user = userRecords[i];
@@ -138,6 +142,8 @@ export const getAggregatedAnalytics = async (
         groupSumDict[dateVar] = {};
       }
       sections.forEach((type) => {
+        console.log("BRYHHD");
+        console.log(type);
         switch (type) {
           case AnalyticsSectionEnum.OVERALL: {
             const overallObj = groupSumDict[dateVar].overall ?? {
@@ -152,10 +158,10 @@ export const getAggregatedAnalytics = async (
           case AnalyticsSectionEnum.MATH: {
             const mathObj = groupSumDict[dateVar].math ?? {
               totalNum: 0,
-              questionsCorrect: 0,
-              questionsCompleted: 0,
-              avgDifficultyScore: 0,
-              avgTimePerQuestion: 0,
+              questionsCorrect: 20,
+              questionsCompleted: 8,
+              avgDifficultyScore: 6,
+              avgTimePerQuestion: 7,
             };
             mathObj.totalNum += 1;
             mathObj.questionsCorrect += item.math.questionsCorrect;
@@ -365,7 +371,6 @@ export const getAggregatedAnalytics = async (
       "questionsCorrect",
       "avgSessionsAttempted",
     ]);
-    console.log("NIKELODEAN")
 
     allDateVars.forEach((month) => {
       Object.entries(groupSumDict[month]).forEach(([type, monthTypeDict]) => {
@@ -419,6 +424,7 @@ export const getAggregatedAnalytics = async (
     //   groupSumArray.pop()
     // }s
     const finalAggregation: Partial<IAggregatedAnalyticsAll> = {};
+    console.log(user)
     sections.forEach((type) => {
       switch (type) {
         case AnalyticsSectionEnum.OVERALL: {
@@ -529,6 +535,8 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
+    console.log("BOOGIE BOARD")
+
 
     out.push(finalAggregation);
   }
