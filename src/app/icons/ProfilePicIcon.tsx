@@ -25,7 +25,7 @@ const ProfilePicIcon = ({ className }: { className?: string }) => (
         r="47"
         stroke="lightgrey"
         fill="none"
-        stroke-width="2"
+        strokeWidth="2"
       />
     </svg>
   </>

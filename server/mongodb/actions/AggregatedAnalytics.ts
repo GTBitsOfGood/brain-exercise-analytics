@@ -365,6 +365,7 @@ export const getAggregatedAnalytics = async (
       "questionsCorrect",
       "avgSessionsAttempted",
     ]);
+    console.log("NIKELODEAN")
 
     allDateVars.forEach((month) => {
       Object.entries(groupSumDict[month]).forEach(([type, monthTypeDict]) => {

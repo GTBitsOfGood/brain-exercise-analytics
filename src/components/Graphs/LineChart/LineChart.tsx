@@ -4,7 +4,7 @@ import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
-import { InfoIcon } from "@src/app/icons";
+import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
 import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./LineChart.module.scss";
@@ -54,8 +54,9 @@ export default function LineChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
-      return [{ interval: "1", value: 1 }];
+      return [];
     }
+    setDataExists(true);
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
       const tmp = [];
@@ -67,6 +68,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(false);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -92,7 +94,7 @@ export default function LineChart({
   const [popupY, setPopupY] = useState(0);
 
   const actualChange =
-    newData.length < 2
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Poppins, Inter } from "next/font/google";
-import { InfoIcon } from "@src/app/icons";
+import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
@@ -51,8 +51,9 @@ export default function BarChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
-      return [{ interval: "1", value: 1 }];
+      return [];
     }
+    setDataExists(true);
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
       const tmp = [];
@@ -63,6 +64,7 @@ export default function BarChart({
     }
     return data;
   }, [data]);
+  const [dataExists, setDataExists] = useState(false);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
@@ -408,14 +410,6 @@ export default function BarChart({
               ref={infoButtonRef}
               style={{ position: "relative" }}
             >
-              {/* </div>
-            <div
-              className={styles.infoBox}
-              onClick={() => {
-                setInfoPopup(true);
-              }}
-              ref={infoButtonRef}
-            > */}
               <InfoIcon />
               <PopupModal
                 show={infoPopup}
@@ -465,25 +459,16 @@ export default function BarChart({
           borderRadius: "12px",
         }}
       ></div>
+      {}
       <svg
         ref={windowRef}
         width={width}
         height={height}
         style={{ marginTop: 10 }}
       >
-        {/* <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
-        </g> */}
       </svg>
       <div style={{ justifyContent: "center" }}>
         <div>
-          {/* <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 50,
-              backgroundColor: "#008AFC",
-            }}
-          /> */}
         </div>
       </div>
     </div>
