@@ -10,6 +10,7 @@ import { LineChart, BarChart, SmallDataBox } from "@src/components/Graphs";
 import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./MathScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
+import { addAbortListener } from "events";
 
 interface InputProp {
   id?: string;
@@ -40,8 +41,10 @@ const MathScreen = ({
   style,
   menuState,
 }: InputProp) => {
-  console.log(accuracyData)
-  console.log(difficultyData)
+
+  const modifiedAccuracy = Math.round(+currentAccuracy * 100) + "%";
+  const modifiedTime = totalTime + " seconds";
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -108,14 +111,14 @@ const MathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Current Accuracy"
-            text={currentAccuracy}
+            text={modifiedAccuracy}
             Icon={AccuracyIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Current Difficulty"
-            text={currentDifficulty}
+            text={currentDifficulty + " / 10"}
             Icon={BarChartIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
@@ -129,7 +132,7 @@ const MathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Current Time per Question"
-            text={totalTime}
+            text={modifiedTime}
             Icon={TimeIcon}
             // style={{ width: "80%", margin: "auto" }}
           />

@@ -160,7 +160,7 @@ export default function BarChart({
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[0]);
+      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
 
     const xAxisLabelBottom = d3
       .axisBottom(x)
@@ -168,7 +168,7 @@ export default function BarChart({
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
+      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
 
     const yAxisLabel = d3
       .axisLeft(y)

@@ -67,7 +67,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(newData.length == 0);
+  const [dataExists, setDataExists] = useState(newData.length != 0);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -332,6 +332,7 @@ export default function LineChart({
 
   useEffect(() => {
     setNewData(updateNewData());
+    setDataExists(newData.length !== 0);
   }, [data, updateNewData]);
 
   return (

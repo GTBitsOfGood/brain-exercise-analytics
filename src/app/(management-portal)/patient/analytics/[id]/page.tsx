@@ -76,7 +76,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
       setLoading(true);
-      console.log("CALLING API")
       try {
         const data = await internalRequest<T>({
           url: "/api/patient/analytics",
@@ -88,11 +87,9 @@ export default function Page({ params }: { params: { id: string } }) {
           },
         });
         setLoading(false);
-        console.log(data)
         return data;
       } catch (error) {
         setLoading(false);
-        console.log(error)
         return {} as IAggregatedAnalyticsAll;
       }
     },
