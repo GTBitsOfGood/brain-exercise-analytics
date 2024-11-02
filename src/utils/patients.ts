@@ -274,37 +274,37 @@ export const dataLine = [
     interval: "Aug 17",
     value: 0.4,
   },
-  // {
-  //   interval: "Aug 17",
-  //   value: 0.2,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 0.65,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 0.25,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 0.7,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 0.55,
-  // },
+  {
+    interval: "Aug 17",
+    value: 0.2,
+  },
+  {
+    interval: "Aug 17",
+    value: 0.65,
+  },
+  {
+    interval: "Aug 17",
+    value: 0.25,
+  },
+  {
+    interval: "Aug 17",
+    value: 0.7,
+  },
+  {
+    interval: "Aug 17",
+    value: 0.55,
+  },
 ];
 
 export const dataBar = [
-  // {
-  //   interval: "Aug 17",
-  //   value: 0,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 2,
-  // },
+  {
+    interval: "Aug 17",
+    value: 0,
+  },
+  {
+    interval: "Aug 17",
+    value: 2,
+  },
   {
     interval: "Aug 17",
     value: 1,
@@ -323,67 +323,67 @@ export const dataBar = [
   },
 ];
 export const dataStacked = [
-  // {
-  //   interval: "Aug 17",
-  //   stackedValue: 0.3,
-  //   value: 0.5,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   stackedValue: 0.2,
-  //   value: 0.6,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   stackedValue: 0.2,
-  //   value: 0.7,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   stackedValue: 0.5,
-  //   value: 0.6,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   stackedValue: 0.2,
-  //   value: 0.5,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   stackedValue: 0.0,
-  //   value: 0.8,
-  // },
+  {
+    interval: "Aug 17",
+    stackedValue: 0.3,
+    value: 0.5,
+  },
+  {
+    interval: "Aug 17",
+    stackedValue: 0.2,
+    value: 0.6,
+  },
+  {
+    interval: "Aug 17",
+    stackedValue: 0.2,
+    value: 0.7,
+  },
+  {
+    interval: "Aug 17",
+    stackedValue: 0.5,
+    value: 0.6,
+  },
+  {
+    interval: "Aug 17",
+    stackedValue: 0.2,
+    value: 0.5,
+  },
+  {
+    interval: "Aug 17",
+    stackedValue: 0.0,
+    value: 0.8,
+  },
 ];
 
 export const numberOfQuestionData = [
-  // {
-  //   interval: "Aug 17",
-  //   value: 25,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 30,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 15,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 10,
-  // },
-  // {
-  //   interval: "Aug 17",
-  //   value: 10,
-  // },
-  // {
-  //   interval: "10/25",
-  //   value: 8,
-  // },
-  // {
-  //   interval: "11/01",
-  //   value: 8,
-  // },
+  {
+    interval: "Aug 17",
+    value: 25,
+  },
+  {
+    interval: "Aug 17",
+    value: 30,
+  },
+  {
+    interval: "Aug 17",
+    value: 15,
+  },
+  {
+    interval: "Aug 17",
+    value: 10,
+  },
+  {
+    interval: "Aug 17",
+    value: 10,
+  },
+  {
+    interval: "10/25",
+    value: 8,
+  },
+  {
+    interval: "11/01",
+    value: 8,
+  },
 ];
 
 // export const sampleUsers: IUser[] = [].concat(

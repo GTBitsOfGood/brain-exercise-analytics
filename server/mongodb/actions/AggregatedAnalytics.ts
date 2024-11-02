@@ -432,7 +432,7 @@ export const getAggregatedAnalytics = async (
             streak: analyticsRecord.streak,
             startDate: user?.startDate ? new Date(user.startDate) : new Date(),
             lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
-            totalSessionsCompleted: analyticsRecord.totalSessionsCompleted ?? 0,
+            totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
             lastSession: {
               mathQuestionsCompleted:
                 analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
