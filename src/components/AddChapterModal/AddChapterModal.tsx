@@ -62,10 +62,20 @@ const AddChapterModal = ({
     useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
 
-  const COUNTRIES = Country.getAllCountries().map((country) => ({
-    value: country.name,
-    displayValue: `${country.name}`,
-  }));
+  const COUNTRIES = Country.getAllCountries()
+    .sort((a, b) => {
+      if (a.name === "United States") {
+        return -1;
+      }
+      if (b.name === "United States") {
+        return 1;
+      }
+      return 0;
+    })
+    .map((country) => ({
+      value: country.name,
+      displayValue: `${country.name}`,
+    }));
   const countryCode = Country.getAllCountries().filter(
     (country) => country.name === locCountry,
   )[0]?.isoCode;

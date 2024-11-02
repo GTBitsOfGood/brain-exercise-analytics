@@ -94,6 +94,7 @@ export const volunteerSignUp = async (
   state: string,
   city: string,
   chapter: string,
+  role: string,
 ): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email },
@@ -109,6 +110,7 @@ export const volunteerSignUp = async (
           city,
         },
         chapter,
+        role,
       },
     },
 

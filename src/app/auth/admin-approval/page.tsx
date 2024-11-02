@@ -6,6 +6,7 @@ import { AdminApprovalStatus, HttpMethod, IUser } from "@/common_utils/types";
 import { internalRequest } from "@src/utils/requests";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
+import { deleteCookie } from "cookies-next";
 import styles from "./page.module.css";
 
 const Page = () => {
@@ -28,6 +29,7 @@ const Page = () => {
       if (user.approved === AdminApprovalStatus.APPROVED) {
         router.push("/patient/search");
       }
+      deleteCookie("authUser");
     });
   }, [router, email]);
 

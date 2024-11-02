@@ -50,7 +50,14 @@ const addChapterModal = ({ className, style, setShowModal }: Props) => {
   // const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
   // const [loading, setLoading] = useState(false);
 
-  // const COUNTRIES = Country.getAllCountries().map((country) => ({
+  // const COUNTRIES = Country.getAllCountries().sort((a, b) => {
+  //   if (a.name == "United States") {
+  //     return -1
+  //   } else if (b.name == "United States") {
+  //     return 1
+  //   }
+  //   return 0
+  // }).map((country) => ({
   //   value: country.name,
   //   displayValue: `${country.name}`,
   // }));
