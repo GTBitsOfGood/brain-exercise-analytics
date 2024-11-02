@@ -14,6 +14,7 @@ import User from "../models/User";
 import mongoose from "mongoose";
 import { types } from "util";
 import { ObjectId } from "mongodb";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -54,7 +55,7 @@ export const getAggregatedAnalytics = async (
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
 ): Promise<Partial<IAggregatedAnalyticsAll>[]> => {
-  let numOfWeeks = 100;
+  let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
   if (range === DateRangeEnum.RECENT) {
     numOfWeeks = 7;
@@ -70,7 +71,7 @@ export const getAggregatedAnalytics = async (
   const objectIdArray = userIDs.map(id => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
     { _id: { $in: objectIdArray } },
-    { weeklyMetrics: { $slice: [1, 10] } },
+    { weeklyMetrics: { $slice: [0, numOfWeeks] } },
   );
 
   const analyticsRecords = await Analytics.find<IAnalytics>(
@@ -103,16 +104,16 @@ export const getAggregatedAnalytics = async (
     const paddingDate =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
 
     let lastDate =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
     let lastDateMax =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
 
     const dbDateVars = new Set<string>();
 
@@ -142,8 +143,6 @@ export const getAggregatedAnalytics = async (
         groupSumDict[dateVar] = {};
       }
       sections.forEach((type) => {
-        console.log("BRYHHD");
-        console.log(type);
         switch (type) {
           case AnalyticsSectionEnum.OVERALL: {
             const overallObj = groupSumDict[dateVar].overall ?? {
@@ -158,10 +157,10 @@ export const getAggregatedAnalytics = async (
           case AnalyticsSectionEnum.MATH: {
             const mathObj = groupSumDict[dateVar].math ?? {
               totalNum: 0,
-              questionsCorrect: 20,
-              questionsCompleted: 8,
-              avgDifficultyScore: 6,
-              avgTimePerQuestion: 7,
+              questionsCorrect: 0,
+              questionsCompleted: 0,
+              avgDifficultyScore: 0,
+              avgTimePerQuestion: 0,
             };
             mathObj.totalNum += 1;
             mathObj.questionsCorrect += item.math.questionsCorrect;
@@ -371,7 +370,6 @@ export const getAggregatedAnalytics = async (
       "questionsCorrect",
       "avgSessionsAttempted",
     ]);
-
     allDateVars.forEach((month) => {
       Object.entries(groupSumDict[month]).forEach(([type, monthTypeDict]) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -410,7 +408,7 @@ export const getAggregatedAnalytics = async (
           if (!obj[property as keyof typeof obj]) {
             (obj[property as keyof typeof obj] as DataRecord[]) = [dr];
           } else {
-            (obj[property as keyof typeof obj] as DataRecord[]).push(dr);
+            (obj[property as keyof typeof obj] as DataRecord[]).unshift(dr);
           }
         });
       });
@@ -424,7 +422,6 @@ export const getAggregatedAnalytics = async (
     //   groupSumArray.pop()
     // }s
     const finalAggregation: Partial<IAggregatedAnalyticsAll> = {};
-    console.log(user)
     sections.forEach((type) => {
       switch (type) {
         case AnalyticsSectionEnum.OVERALL: {
@@ -435,7 +432,7 @@ export const getAggregatedAnalytics = async (
             streak: analyticsRecord.streak,
             startDate: user?.startDate ? new Date(user.startDate) : new Date(),
             lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
-            totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
+            totalSessionsCompleted: analyticsRecord.totalSessionsCompleted ?? 0,
             lastSession: {
               mathQuestionsCompleted:
                 analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
@@ -535,7 +532,7 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
-    console.log("BOOGIE BOARD")
+    
 
 
     out.push(finalAggregation);

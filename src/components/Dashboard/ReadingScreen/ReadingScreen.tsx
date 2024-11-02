@@ -135,7 +135,7 @@ export default function ReadingScreen({
           <SmallDataBox
             className={styles.box}
             title="Current Time per Passage"
-            text={currentTime}
+            text={currentTime + " seconds"}
             Icon={TimeIcon}
             // style={{ width: "80%", margin: "auto" }}
           />

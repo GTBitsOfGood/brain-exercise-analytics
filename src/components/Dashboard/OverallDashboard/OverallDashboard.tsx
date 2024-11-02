@@ -42,7 +42,7 @@ interface Params {
 }
 
 const options: Intl.DateTimeFormatOptions = {
-  weekday: "short",
+  day: "numeric",
   year: "numeric",
   month: "short",
 };
@@ -50,7 +50,7 @@ const options: Intl.DateTimeFormatOptions = {
 function formatDate(date: Date) {
   const str = date.toLocaleDateString("en-us", options);
   const arr = str.split(" ");
-  return [arr[2], arr[0], arr[1]].join(" ");
+  return [arr[0], arr[1], arr[2]].join(" ");
 }
 
 export default function OverallDashboard(params: Params) {
