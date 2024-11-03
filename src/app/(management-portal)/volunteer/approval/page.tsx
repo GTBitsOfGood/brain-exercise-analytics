@@ -73,7 +73,7 @@ export default function Page() {
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
-      dispatch(update({ pendingApprovals: res?.numRecords }));
+      dispatch(update({ pendingApprovals: res?.numRecords ?? 0 }));
       setLoading(false);
     });
   }, [

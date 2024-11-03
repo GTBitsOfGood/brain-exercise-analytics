@@ -133,6 +133,8 @@ const AddChapterModal = ({
   type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
   const handleChange: ChangeHandler = (e) => {
     const { target } = e;
+    setChapterPresidentObject(null);
+
     if (!target.value.trim()) return setFilteredVolunteers([]);
 
     const filteredValue = volunteers?.filter((volunteer) =>

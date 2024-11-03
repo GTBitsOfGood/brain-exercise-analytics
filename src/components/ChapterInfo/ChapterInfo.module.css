@@ -65,9 +65,15 @@
 }
 
 .addVolunteerModalContent {
-  width: 60%;
-  height: 70%;
+  width: 50%;
+  height: 45%;
 }
+
+.addVolunteerOperationSuccessModal {
+  width: 35%;
+  height: 30%;
+}
+
 /* .backButton {
   flex-direction: row;
   color:#2b3674;
