@@ -9,12 +9,9 @@ import {
   IUser,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
-import Analytics from "../models/Analytics";
-import User from "../models/User";
 import mongoose from "mongoose";
-import { types } from "util";
-import { ObjectId } from "mongodb";
-import { ConstructionOutlined } from "@mui/icons-material";
+import User from "../models/User";
+import Analytics from "../models/Analytics";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -67,8 +64,7 @@ export const getAggregatedAnalytics = async (
     numOfWeeks = 52; // 52
   }
 
-
-  const objectIdArray = userIDs.map(id => new mongoose.Types.ObjectId(id));
+  const objectIdArray = userIDs.map((id) => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
     { _id: { $in: objectIdArray } },
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
@@ -267,7 +263,10 @@ export const getAggregatedAnalytics = async (
       } else if (range === DateRangeEnum.YEAR) {
         totalWeeks = 12;
       }
-      if (userIDs.length == 1 && analyticsRecords[0].weeklyMetrics.length == 0) {
+      if (
+        userIDs.length === 1 &&
+        (analyticsRecords[0].weeklyMetrics as []).length === 0
+      ) {
         totalWeeks = 0;
       }
 
@@ -535,8 +534,6 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
-    
-
 
     out.push(finalAggregation);
   }

@@ -10,7 +10,6 @@ export const GET = APIWrapper({
     requireVolunteer: true,
   },
   handler: async (req) => {
-
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     const rangeString = searchParams.get("range");

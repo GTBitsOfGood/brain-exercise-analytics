@@ -150,25 +150,24 @@ export default function StackedBarChart({
         ))}
       </BarChart>
       <div className={styles.legendBox}>
-        {
-        data.length !== 0 &&
-        <div>
-          {legend.map((l) => (
-            <div className={styles.legendItem} key={l.text}>
-              <div
-                className={styles.emptyDiv}
-                style={{
-                  width: 14,
-                  height: 14,
-                  borderRadius: 50,
-                  backgroundColor: l.color,
-                }}
-              />
-              <div className={styles.legendText}>{l.text}</div>
-            </div>
-          ))}
-        </div>
-      }
+        {data.length !== 0 && (
+          <div>
+            {legend.map((l) => (
+              <div className={styles.legendItem} key={l.text}>
+                <div
+                  className={styles.emptyDiv}
+                  style={{
+                    width: 14,
+                    height: 14,
+                    borderRadius: 50,
+                    backgroundColor: l.color,
+                  }}
+                />
+                <div className={styles.legendText}>{l.text}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

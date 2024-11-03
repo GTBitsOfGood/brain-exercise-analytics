@@ -80,7 +80,7 @@ export default function BarChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(newData.length != 0);
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
@@ -109,7 +109,7 @@ export default function BarChart({
   const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
-    newData.length < 2 || newData[newData.length - 2].value == 0
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
@@ -253,55 +253,62 @@ export default function BarChart({
         .tickSizeInner(0)
         .tickFormat(() => "");
 
-      dataExists && svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
+      if (dataExists) {
+        svg
+          .append("g")
+          .attr("class", `y-axis-vert`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(axisVert);
 
-      dataExists && svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
+        svg
+          .append("g")
+          .attr("class", `y-axis-grid ${styles.yAxis}`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(yAxisGrid);
 
-      dataExists && svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
+        svg
+          .append("g")
+          .attr("transform", `translate(-5, ${height - marginBottom})`)
+          .attr("class", "x-axis-hor")
+          .style("font", `10px ${poppins500.style.fontFamily}`)
+          .call(axisHor);
+      }
     }
 
-    dataExists && svg
-      .append("g")
-      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
-      .attr("class", "x-axis-top")
-      .style("font", `10px ${poppins500.style.fontFamily}`)
-      .style("color", "#343539")
-      .call(xAxisLabelTop)
-      .call((g) => g.select(".domain").remove());
+    if (dataExists) {
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${barWidth / 2}, ${height - marginBottom})`,
+        )
+        .attr("class", "x-axis-top")
+        .style("font", `10px ${poppins500.style.fontFamily}`)
+        .style("color", "#343539")
+        .call(xAxisLabelTop)
+        .call((g) => g.select(".domain").remove());
 
-    dataExists && svg
-      .append("g")
-      .attr(
-        "transform",
-        `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
-      )
-      .attr("class", "x-axis-bottom")
-      .style("font", `10px ${inter500.style.fontFamily}`)
-      .style("color", "#B0BBD5")
-      .call(xAxisLabelBottom)
-      .call((g) => g.select(".domain").remove());
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
+        )
+        .attr("class", "x-axis-bottom")
+        .style("font", `10px ${inter500.style.fontFamily}`)
+        .style("color", "#B0BBD5")
+        .call(xAxisLabelBottom)
+        .call((g) => g.select(".domain").remove());
 
-    dataExists && svg
-      .append("g")
-      .attr("transform", `translate(${marginLeft}, 0)`)
-      .attr("class", "y-axis")
-      .style("font", `9.5px ${poppins400.style.fontFamily}`)
-      .style("color", "#A5A5A5")
-      .call(yAxisLabel)
-      .call((g) => g.select(".domain").remove());
+      svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .attr("class", "y-axis")
+        .style("font", `9.5px ${poppins400.style.fontFamily}`)
+        .style("color", "#A5A5A5")
+        .call(yAxisLabel)
+        .call((g) => g.select(".domain").remove());
+    }
 
     return () => window.removeEventListener("scroll", onScroll);
   }, [
@@ -316,6 +323,7 @@ export default function BarChart({
     yAxis.numDivisions,
     gridLines,
     width,
+    dataExists,
   ]);
 
   useEffect(() => {
@@ -324,7 +332,7 @@ export default function BarChart({
 
   useEffect(() => {
     setNewData(updateNewData());
-    setDataExists(newData.length != 0);
+    setDataExists(newData.length !== 0);
   }, [data, updateNewData]);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
@@ -416,68 +424,66 @@ export default function BarChart({
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
       >
         {!dataExists ? (
-        <>
-              <foreignObject
-                x={width/2 - 95} // Adjust to horizontally center the icon
-                y={height/2 - 17}   // Adjust to control vertical positioning
-                width="30"
-                height="30"
-              >
-                  <ExclamationOutlinedIcon />
-                </foreignObject>
-              <text
-                x={width/2}
-                y={height/2}
-                fontFamily= "inter600.style.fontFamily"
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                fontSize="17"
-                fontWeight="500"
-                fill="#2B3674"
-              >
-                No data found
-              </text>
-        </>
-        ) 
-        : 
-        (
-        <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
-          {children ||
-            newData.map((d, i) => {
-              const color =
-                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
-              return (
-                <Fragment key={i}>
-                  <rect
-                    x={x(i)}
-                    y={y(d.value)}
-                    width={barWidth}
-                    height={height - y(d.value) - marginBottom}
-                    color={color}
-                    style={{ borderRadius: 10 }}
-                  />
-                  <circle
-                    cx={x(i) + barWidth / 2}
-                    cy={y(d.value)}
-                    r={barWidth / 2}
-                    color={color}
-                  />
-                  <rect
-                    x={x(i)}
-                    y={y(yAxis.min)}
-                    width={barWidth}
-                    height={barWidth / 2}
-                    color="white"
-                    style={{ borderRadius: 10 }}
-                  />
-                </Fragment>
-              );
-            })}
-          {newData.map((d, i) => (
-            <HoverableNode key={i} i={i} d={d} />
-          ))}
-        </g>
-      )}
+          <>
+            <foreignObject
+              x={width / 2 - 95} // Adjust to horizontally center the icon
+              y={height / 2 - 17} // Adjust to control vertical positioning
+              width="30"
+              height="30"
+            >
+              <ExclamationOutlinedIcon />
+            </foreignObject>
+            <text
+              x={width / 2}
+              y={height / 2}
+              fontFamily="inter600.style.fontFamily"
+              textAnchor="middle"
+              alignmentBaseline="middle"
+              fontSize="17"
+              fontWeight="500"
+              fill="#2B3674"
+            >
+              No data found
+            </text>
+          </>
+        ) : (
+          <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
+            {children ||
+              newData.map((d, i) => {
+                const color =
+                  highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
+                return (
+                  <Fragment key={i}>
+                    <rect
+                      x={x(i)}
+                      y={y(d.value)}
+                      width={barWidth}
+                      height={height - y(d.value) - marginBottom}
+                      color={color}
+                      style={{ borderRadius: 10 }}
+                    />
+                    <circle
+                      cx={x(i) + barWidth / 2}
+                      cy={y(d.value)}
+                      r={barWidth / 2}
+                      color={color}
+                    />
+                    <rect
+                      x={x(i)}
+                      y={y(yAxis.min)}
+                      width={barWidth}
+                      height={barWidth / 2}
+                      color="white"
+                      style={{ borderRadius: 10 }}
+                    />
+                  </Fragment>
+                );
+              })}
+            {newData.map((d, i) => (
+              <HoverableNode key={i} i={i} d={d} />
+            ))}
+          </g>
+        )}
       </svg>
       <div style={{ justifyContent: "center" }}>
         <div>

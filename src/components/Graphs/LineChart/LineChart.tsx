@@ -76,7 +76,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(newData.length != 0);
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -103,7 +103,7 @@ export default function LineChart({
   const [popupY, setPopupY] = useState(0);
 
   const actualChange =
-    newData.length < 2 || newData[newData.length - 2].value == 0
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
@@ -187,10 +187,10 @@ export default function LineChart({
       yAxis.max + 0.000001,
       (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
     );
-    
+
     if (yTickValues[0] < 0) {
       yTickValues = yTickValues.slice(1);
-    }    
+    }
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(yTickValues)
@@ -201,9 +201,7 @@ export default function LineChart({
     if (gridLines) {
       const yAxisGrid = d3
         .axisLeft(y)
-        .tickValues(
-          yTickValues
-        )
+        .tickValues(yTickValues)
         .tickSize(-width + marginLeft + marginRight - 20)
         .tickFormat(() => "");
 
@@ -231,51 +229,56 @@ export default function LineChart({
         .tickSizeInner(0)
         .tickFormat(() => "");
 
-      dataExists && svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
+      if (dataExists) {
+        svg
+          .append("g")
+          .attr("class", `y-axis-vert`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(axisVert);
 
-      dataExists && svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
+        svg
+          .append("g")
+          .attr("class", `y-axis-grid ${styles.yAxis}`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(yAxisGrid);
 
-      dataExists && svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
+        svg
+          .append("g")
+          .attr("transform", `translate(-5, ${height - marginBottom})`)
+          .attr("class", "x-axis-hor")
+          .style("font", `10px ${poppins500.style.fontFamily}`)
+          .call(axisHor);
+      }
     }
-    dataExists && svg
-      .append("g")
-      .attr("transform", `translate(0, ${height - marginBottom})`)
-      .attr("class", "x-axis-top")
-      .style("font", `10px ${poppins500.style.fontFamily}`)
-      .style("color", "#343539")
-      .call(xAxisLabelTop)
-      .call((g) => g.select(".domain").remove());
 
-    dataExists && svg
-      .append("g")
-      .attr("transform", `translate(0, ${height - marginBottom + 15})`)
-      .attr("class", "x-axis-bottom")
-      .style("font", `10px ${inter500.style.fontFamily}`)
-      .style("color", "#B0BBD5")
-      .call(xAxisLabelBottom)
-      .call((g) => g.select(".domain").remove());
+    if (dataExists) {
+      svg
+        .append("g")
+        .attr("transform", `translate(0, ${height - marginBottom})`)
+        .attr("class", "x-axis-top")
+        .style("font", `10px ${poppins500.style.fontFamily}`)
+        .style("color", "#343539")
+        .call(xAxisLabelTop)
+        .call((g) => g.select(".domain").remove());
 
-    dataExists && svg
-      .append("g")
-      .attr("transform", `translate(${marginLeft}, 0)`)
-      .attr("class", "y-axis")
-      .style("font", `9.5px ${poppins400.style.fontFamily}`)
-      .style("color", "#A5A5A5")
-      .call(yAxisLabel)
-      .call((g) => g.select(".domain").remove());
+      svg
+        .append("g")
+        .attr("transform", `translate(0, ${height - marginBottom + 15})`)
+        .attr("class", "x-axis-bottom")
+        .style("font", `10px ${inter500.style.fontFamily}`)
+        .style("color", "#B0BBD5")
+        .call(xAxisLabelBottom)
+        .call((g) => g.select(".domain").remove());
+
+      svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .attr("class", "y-axis")
+        .style("font", `9.5px ${poppins400.style.fontFamily}`)
+        .style("color", "#A5A5A5")
+        .call(yAxisLabel)
+        .call((g) => g.select(".domain").remove());
+    }
 
     return () => window.removeEventListener("scroll", onScroll);
   }, [
@@ -289,6 +292,7 @@ export default function LineChart({
     yAxis.min,
     yAxis.numDivisions,
     gridLines,
+    dataExists,
   ]);
 
   useEffect(() => {
@@ -340,6 +344,21 @@ export default function LineChart({
               />
             </div>
           )}
+          <p
+            className={styles.percentageChange}
+            style={{
+              color:
+                actualChange !== null && actualChange < 0
+                  ? "#EA4335"
+                  : "#05CD99",
+            }}
+          >
+            {actualChange !== null &&
+              percentageChange &&
+              (actualChange < 0
+                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+          </p>
         </div>
         <div style={{ display: "inline-flex" }}>
           <p className={styles.labelText}>{yLabel}</p>
@@ -353,50 +372,31 @@ export default function LineChart({
         onMouseLeave={hoverable ? handleMouseLeave : undefined}
         style={{ marginTop: 20 }}
       >
-        {
-          !dataExists ? (
-            <>
-              <foreignObject
-                x={width/2 - 95} // Adjust to horizontally center the icon
-                y={height/2.8 - 17}   // Adjust to control vertical positioning
-                width="30"
-                height="30"
-              >
-                  <ExclamationOutlinedIcon />
-                </foreignObject>
-              <text
-                x={width / 2}
-                y={height/ 2.8}
-                fontFamily= "inter600.style.fontFamily"
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                fontSize="17"
-                fontWeight="500"
-                fill="#2B3674"
-              >
-                No data found
-              </text>
-            </>
-          ) : (
-            <>
-            <p
-            className={styles.percentageChangeIcon}
-            style={{
-              color:
-                actualChange !== null && actualChange < 0
-                  ? "#EA4335"
-                  : "#05CD99",
-            }}
-          >
-            {actualChange !== null &&
-              percentageChange && 
-              (actualChange < 0
-                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-          </p>
-          <p className={styles.percentageChange}>
-            {actualChange !== null && percentageChange}
-          </p>
+        {!dataExists ? (
+          <>
+            <foreignObject
+              x={width / 2 - 95} // Adjust to horizontally center the icon
+              y={height / 2.8 - 17} // Adjust to control vertical positioning
+              width="30"
+              height="30"
+            >
+              <ExclamationOutlinedIcon />
+            </foreignObject>
+            <text
+              x={width / 2}
+              y={height / 2.8}
+              fontFamily="inter600.style.fontFamily"
+              textAnchor="middle"
+              alignmentBaseline="middle"
+              fontSize="17"
+              fontWeight="500"
+              fill="#2B3674"
+            >
+              No data found
+            </text>
+          </>
+        ) : (
+          <>
             {gradient && (
               <filter id="drop-shadow" height={"180%"}>
                 <feDropShadow
@@ -409,10 +409,12 @@ export default function LineChart({
             )}
             <path
               className={styles.linePath}
-              d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
+              d={
+                line(newData.map((d, i) => [i, d.value])) as string | undefined
+              }
             />
             <g className={styles.svgComp}>
-              <circle key={-1} cx={x(0)} cy={y(newData[0]!.value)} r="2.5" />
+              <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
               <circle
                 key={-2}
                 cx={x(newData.length - 1)}
@@ -443,8 +445,8 @@ export default function LineChart({
                     </Fragment>
                   ),
               )}
-        </g> 
-        </>
+            </g>
+          </>
         )}
       </svg>
     </div>
