@@ -19,6 +19,7 @@ import {
 import firebaseInit from "@src/firebase/config";
 import { RootState } from "@src/redux/rootReducer";
 import styles from "./page.module.css";
+import NetlifyLogo from "@src/components/NetlifyLogo/NetlifyLogo";
 
 firebaseInit();
 
@@ -139,6 +140,7 @@ export default function Page() {
           refreshUsers={fetchUsers}
         />
       </div>
+      <div className={styles.netlify}><NetlifyLogo></NetlifyLogo></div>
     </div>
   );
 }
