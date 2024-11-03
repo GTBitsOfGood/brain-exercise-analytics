@@ -285,7 +285,7 @@ const EditChapterModal = ({
               onClick={reset}
               className={`${styles.submitButton} ${styles.disabled}`}
             >
-              Discard
+              Clear
             </button>
             <button
               type="submit"
