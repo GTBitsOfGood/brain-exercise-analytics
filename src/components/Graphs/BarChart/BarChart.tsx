@@ -80,7 +80,7 @@ export default function BarChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(newData.length == 0);
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
@@ -346,7 +346,7 @@ export default function BarChart({
         </div>
       </foreignObject>
     );
-
+    
   return (
     <div
       className={`${className} ${styles.BarChart}`}

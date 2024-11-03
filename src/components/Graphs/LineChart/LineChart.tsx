@@ -63,7 +63,7 @@ export default function LineChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
-      return [{ interval: "1", value: 1 }];
+      return [];
     }
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
@@ -413,7 +413,7 @@ export default function LineChart({
               d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
             />
             <g className={styles.svgComp}>
-              <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
+              <circle key={-1} cx={x(0)} cy={y(newData[0]!.value)} r="2.5" />
               <circle
                 key={-2}
                 cx={x(newData.length - 1)}

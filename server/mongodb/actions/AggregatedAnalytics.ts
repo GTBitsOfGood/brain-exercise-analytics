@@ -71,7 +71,7 @@ export const getAggregatedAnalytics = async (
   const objectIdArray = userIDs.map(id => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
     { _id: { $in: objectIdArray } },
-    { weeklyMetrics: { $slice: [0, numOfWeeks] } },
+    { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
 
   const analyticsRecords = await Analytics.find<IAnalytics>(
@@ -266,6 +266,9 @@ export const getAggregatedAnalytics = async (
         totalWeeks = 13;
       } else if (range === DateRangeEnum.YEAR) {
         totalWeeks = 12;
+      }
+      if (userIDs.length == 1 && analyticsRecords[0].weeklyMetrics.length == 0) {
+        totalWeeks = 0;
       }
 
       while (len < totalWeeks) {
