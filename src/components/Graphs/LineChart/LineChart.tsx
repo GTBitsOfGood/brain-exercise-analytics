@@ -159,15 +159,18 @@ export default function LineChart({
       .tickPadding(15)
       .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
 
+    let yTickValues = d3.range(
+      yAxis.min,
+      yAxis.max + 0.000001,
+      (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+    );
+    
+    if (yTickValues[0] < 0) {
+      yTickValues = yTickValues.slice(1);
+    }    
     const yAxisLabel = d3
       .axisLeft(y)
-      .tickValues(
-        d3.range(
-          yAxis.min,
-          yAxis.max + 0.000001,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-        ),
-      )
+      .tickValues(yTickValues)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
@@ -176,11 +179,7 @@ export default function LineChart({
       const yAxisGrid = d3
         .axisLeft(y)
         .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
+          yTickValues
         )
         .tickSize(-width + marginLeft + marginRight - 20)
         .tickFormat(() => "");
@@ -379,24 +378,6 @@ export default function LineChart({
               />
             </div>
           )}
-          <p
-            className={styles.percentageChangeIcon}
-            style={{
-              color:
-                actualChange !== null && actualChange < 0
-                  ? "#EA4335"
-                  : "#05CD99",
-            }}
-          >
-            {actualChange !== null &&
-              percentageChange &&
-              (actualChange < 0
-                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-          </p>
-          <p className={styles.percentageChange}>
-            {actualChange !== null && percentageChange}
-          </p>
         </div>
         <div style={{ display: "inline-flex" }}>
           <p className={styles.labelText}>{yLabel}</p>
