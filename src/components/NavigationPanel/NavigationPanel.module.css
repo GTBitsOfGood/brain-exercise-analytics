@@ -412,9 +412,15 @@
 
 .volunteer-container {
   display: flex;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
+  padding: 10px;
   cursor: pointer;
   align-items: center;
+  border-radius: 10px;
+}
+
+.volunteer-container:hover {
+  background-color: #f4f7fe;
 }
 
 .volunteer-pfp {
@@ -472,4 +478,8 @@
 .disabled {
   pointer-events: none;
   opacity: 0.6;
+}
+
+.text-hover:hover {
+  color: #008afc;
 }
