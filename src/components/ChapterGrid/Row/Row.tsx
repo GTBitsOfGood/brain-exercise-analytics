@@ -39,7 +39,7 @@ export function Row({ chapter }: Props) {
               styles.nameCellContainer,
             )}
           >
-            {`${chapter.location.state}, ${chapter.location.country}`}
+            {chapter.location.state ? `${chapter.location.state}, ${chapter.location.country}` : chapter.location.country}
           </div>
         </td>
 
