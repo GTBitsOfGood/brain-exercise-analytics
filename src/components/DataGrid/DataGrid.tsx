@@ -39,7 +39,7 @@ function SortButton({
         !active && styles.SortButtonInactive,
       )}
       onClick={handleClick}
-      icon={active && !sortField.ascending ? faCaretDown : faCaretUp}
+      icon={active && !sortField.ascending ? faCaretUp : faCaretDown}
     />
   );
 }
