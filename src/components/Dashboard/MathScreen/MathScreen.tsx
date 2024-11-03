@@ -105,37 +105,37 @@ const MathScreen = ({
           />
         </div>
         <div className={styles.textStatsWithHeader}>
-        <p className={styles.sessionHeading}>Last Session Breakdown</p>
-        <div className={styles.textStats}>
-          <SmallDataBox
-            className={styles.box}
-            title="Current Accuracy"
-            text={modifiedAccuracy}
-            Icon={AccuracyIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <SmallDataBox
-            className={styles.box}
-            title="Current Difficulty"
-            text={currentDifficulty}
-            Icon={BarChartIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <SmallDataBox
-            className={styles.box}
-            title="Number of Question Completed"
-            text={totalQuestions}
-            Icon={QuestionIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <SmallDataBox
-            className={styles.box}
-            title="Current Time per Question"
-            text={modifiedTime}
-            Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-        </div>
+          <p className={styles.sessionHeading}>Last Session Breakdown</p>
+          <div className={styles.textStats}>
+            <SmallDataBox
+              className={styles.box}
+              title="Current Accuracy"
+              text={modifiedAccuracy}
+              Icon={AccuracyIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+            <SmallDataBox
+              className={styles.box}
+              title="Current Difficulty"
+              text={currentDifficulty}
+              Icon={BarChartIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+            <SmallDataBox
+              className={styles.box}
+              title="Number of Question Completed"
+              text={totalQuestions}
+              Icon={QuestionIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+            <SmallDataBox
+              className={styles.box}
+              title="Current Time per Question"
+              text={modifiedTime}
+              Icon={TimeIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+          </div>
         </div>
       </div>
     </div>
