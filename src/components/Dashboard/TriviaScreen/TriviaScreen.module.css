@@ -62,11 +62,11 @@
   }
 }
 
-.body > .box { /* Assuming .box is the class for the custom component */
+.body > .box {
+  /* Assuming .box is the class for the custom component */
   flex: 0 0 calc(50% - 10px); /* Adjust width when needed */
   margin: 5px; /* Optional: add some spacing */
 }
-
 
 .graphs {
   flex: 2;

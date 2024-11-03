@@ -144,12 +144,15 @@ export const getAggregatedAnalytics = async (
             const overallObj = groupSumDict[dateVar].overall ?? {
               totalNum: 0,
               streakLength: 0,
-              totalSessionsCompleted: 0
+              totalSessionsCompleted: 0,
             };
             overallObj.totalNum += 1;
             overallObj.streakLength += item.streakLength;
-            overallObj.totalSessionsCompleted += item.math.sessionsCompleted + item.reading.sessionsCompleted + 
-            item.trivia.sessionsCompleted + item.writing.sessionsCompleted;
+            overallObj.totalSessionsCompleted +=
+              item.math.sessionsCompleted +
+              item.reading.sessionsCompleted +
+              item.trivia.sessionsCompleted +
+              item.writing.sessionsCompleted;
             groupSumDict[dateVar].overall = overallObj;
             break;
           }
@@ -228,7 +231,6 @@ export const getAggregatedAnalytics = async (
       "questionsCompleted",
       "questionsCorrect",
     ]);
-    let sessionsCompletedHistory = 0;
     Object.values(groupSumDict).forEach((monthDict) => {
       Object.values(monthDict).forEach((monthTypeDict) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -405,12 +407,12 @@ export const getAggregatedAnalytics = async (
 
           let dr: DataRecord;
 
-          if (property == "totalSessionsCompleted") {
+          if (property === "totalSessionsCompleted") {
             dr = {
               interval: month,
-              value: monthTypeDict.totalSessionsCompleted
-            }
-            const obj = result["overall"];
+              value: monthTypeDict.totalSessionsCompleted,
+            };
+            const obj = result.overall;
             if (obj) {
               obj.streakHistory.push(dr);
             }
@@ -431,7 +433,7 @@ export const getAggregatedAnalytics = async (
           }
         });
       });
-    }); 
+    });
 
     // if overshoot, remove last element
     // const groupSumArray = Object.values(groupSumDict)
