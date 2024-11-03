@@ -258,11 +258,11 @@ export default function BarChart({
         .attr("transform", `translate(${marginLeft - 5}, 0)`)
         .call(axisVert);
 
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
+      // svg
+      //   .append("g")
+      //   .attr("class", `y-axis-grid ${styles.yAxis}`)
+      //   .attr("transform", `translate(${marginLeft - 5}, 0)`)
+      //   .call(yAxisGrid);
 
       svg
         .append("g")

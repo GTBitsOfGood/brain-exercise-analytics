@@ -48,7 +48,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles["navigation-panel"]}>
-        <NavigationPanel onClick={() => setShowModal(!showModal)} />
+        <NavigationPanel onClick={() => setShowModal(!showModal)} modalOpen={showModal} />
       </div>
       <div className={styles["rest-of-page"]}>
         <Modal showModal={showModal} setShowModal={setShowModal}>

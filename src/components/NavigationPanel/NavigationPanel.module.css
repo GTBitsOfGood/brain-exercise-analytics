@@ -468,3 +468,8 @@
 .bottomSection {
   margin-top: -40px;
 }
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}

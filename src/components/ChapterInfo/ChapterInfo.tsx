@@ -131,7 +131,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <p>Chapter Profile</p>
       </div>
       <div className={styles.chapterSection}>
-        <div className={styles.chapterImage}>
+        {/* <div className={styles.chapterImage}>
           <Cell
             cell={{
               title: "Add Chapter Image",
@@ -141,8 +141,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
               cellStyle: { height: "100%", width: "225px" },
               iconStyle: { backgroundColor: "#008afc" },
             }}
-          />
-        </div>
+          /> */}
+        {/* </div> */}
         <div className={styles.chapterInfo}>
           {chapterProfile.map((cell) => (
             <Cell key={cell.title} cell={cell} />

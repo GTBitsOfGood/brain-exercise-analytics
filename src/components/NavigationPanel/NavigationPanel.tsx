@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useCallback } from "react";
+import React, { useMemo, useEffect, useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -22,10 +22,12 @@ import styles from "./NavigationPanel.module.css";
 
 interface Props {
   onClick: () => void;
+  modalOpen: boolean;
 }
 
-const NavigationPanel = ({ onClick }: Props) => {
+const NavigationPanel = ({ onClick, modalOpen}: Props) => {
   const user = useSelector<RootState>((state) => state.auth) as IUser;
+
   const pendingApprovals = useSelector<RootState>(
     (state) => state.generalInfo.pendingApprovals,
   ) as number;
@@ -120,9 +122,14 @@ const NavigationPanel = ({ onClick }: Props) => {
     IUser
   >((state) => state.auth);
 
+  // const switchModal = () => {
+  //   setIsModalOpen(prevState => !prevState);
+  //   onClick();
+  // };
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.topSection}>
+      <div className={`${styles.topSection} ${modalOpen ? styles.disabled : ""}`}>
         <div className={styles.center}>
           <img
             className={styles["BEI-image"]}
@@ -151,7 +158,7 @@ const NavigationPanel = ({ onClick }: Props) => {
         <div className={styles.divider} />
       </div>
 
-      <div className={styles.middleSection}>
+      <div className={`${styles.middleSection} ${modalOpen ? styles.disabled : ""}`}>
         {user.role !== Role.NONPROFIT_VOLUNTEER && (
           <>
             <div className={styles["volunteer-management"]}>
