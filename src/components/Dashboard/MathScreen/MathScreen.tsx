@@ -104,8 +104,9 @@ const MathScreen = ({
             gridLines
           />
         </div>
+        <div className={styles.textStatsWithHeader}>
+        <p className={styles.sessionHeading}>Last Session Breakdown</p>
         <div className={styles.textStats}>
-          <p className={styles.sessionHeading}>Last Session Breakdown</p>
           <SmallDataBox
             className={styles.box}
             title="Current Accuracy"
@@ -134,6 +135,7 @@ const MathScreen = ({
             Icon={TimeIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
+        </div>
         </div>
       </div>
     </div>
