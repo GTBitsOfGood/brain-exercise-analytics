@@ -62,7 +62,7 @@ export const createUserEmail = async (email: string): Promise<IUser> => {
 };
 
 export const patientSignUp = async (
-  data: Omit<IUser, "chapter" | "location">,
+  data: Omit<IUser, "location">,
 ): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email: data.email },
@@ -71,6 +71,7 @@ export const patientSignUp = async (
         firstName: data.firstName,
         lastName: data.lastName,
         phoneNumber: data.phoneNumber,
+        chapter: data.chapter,
         birthDate: new Date(data.birthDate),
         patientDetails: {
           secondaryContactName: data.patientDetails.secondaryContactName,
@@ -94,6 +95,7 @@ export const volunteerSignUp = async (
   state: string,
   city: string,
   chapter: string,
+  role: string,
 ): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email },
@@ -109,6 +111,7 @@ export const volunteerSignUp = async (
           city,
         },
         chapter,
+        role,
       },
     },
 

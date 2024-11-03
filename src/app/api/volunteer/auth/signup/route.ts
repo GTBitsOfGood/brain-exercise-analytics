@@ -1,3 +1,4 @@
+import { Role } from "@/common_utils/types";
 import { volunteerSignUp } from "@server/mongodb/actions/User";
 import APIWrapper from "@server/utils/APIWrapper";
 
@@ -10,6 +11,7 @@ type SignupData = {
   state: string;
   city: string;
   chapter: string;
+  role?: string;
 };
 
 export const POST = APIWrapper({
@@ -54,6 +56,7 @@ export const POST = APIWrapper({
       signupData.state,
       signupData.city,
       signupData.chapter,
+      signupData.role || Role.NONPROFIT_VOLUNTEER,
     );
 
     updateCookie?.push({ user: newSignUp!, keepLogged: false });

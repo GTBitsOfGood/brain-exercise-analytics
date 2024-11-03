@@ -8,6 +8,7 @@ interface SignupData {
   lastName: string;
   phoneNumber: string;
   birthDate: string;
+  chapter?: string;
   secondaryContactName: string;
   secondaryContactPhone: string;
 }
@@ -50,6 +51,7 @@ export const POST = APIWrapper({
       lastName: signupData.lastName,
       phoneNumber: signupData.phoneNumber,
       birthDate: signupData.birthDate,
+      chapter: signupData.chapter ? signupData.chapter : "",
       patientDetails: {
         secondaryContactName: signupData.secondaryContactName,
         secondaryContactPhone: signupData.secondaryContactPhone,
@@ -57,7 +59,7 @@ export const POST = APIWrapper({
       },
       signedUp: true,
       role: Role.NONPROFIT_PATIENT,
-    } as Omit<IUser, "chapter" | "location">);
+    } as Omit<IUser, "location">);
     return newSignUp;
   },
 });
