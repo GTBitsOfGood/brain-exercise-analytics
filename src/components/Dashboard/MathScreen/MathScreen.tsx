@@ -10,7 +10,6 @@ import { LineChart, BarChart, SmallDataBox } from "@src/components/Graphs";
 import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./MathScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
-import { addAbortListener } from "events";
 
 interface InputProp {
   id?: string;
@@ -41,9 +40,8 @@ const MathScreen = ({
   style,
   menuState,
 }: InputProp) => {
-
-  const modifiedAccuracy = Math.round(+currentAccuracy * 100) + "%";
-  const modifiedTime = totalTime + " seconds";
+  const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
+  const modifiedTime = `${totalTime} seconds`;
 
   return (
     <div className={styles.container} style={style}>

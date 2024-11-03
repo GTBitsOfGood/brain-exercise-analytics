@@ -11,7 +11,6 @@ import {
 import {
   AnalyticsSectionEnum,
   DateRangeEnum,
-  Days,
   HttpMethod,
   IAggregatedAnalyticsAll,
   IAggregatedAnalyticsMath,
@@ -184,9 +183,7 @@ export default function Page({ params }: { params: { id: string } }) {
           menuState={[dashboardMenu, updateAllAnalytics]}
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
-          streak={
-            overall?.streak ?? []
-          }
+          streak={overall?.streak ?? []}
           startDate={
             overall?.startDate ? new Date(overall.startDate) : new Date()
           }
@@ -254,9 +251,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <TriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
           accuracyData={trivia?.avgAccuracy ?? []}
-          numQuestionData={
-            trivia?.avgQuestionsCompleted ?? []
-          }
+          numQuestionData={trivia?.avgQuestionsCompleted ?? []}
           timeData={trivia?.avgTimePerQuestion ?? []}
           currentAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(

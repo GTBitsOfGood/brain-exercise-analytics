@@ -67,7 +67,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(newData.length != 0);
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -164,10 +164,10 @@ export default function LineChart({
       yAxis.max + 0.000001,
       (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
     );
-    
+
     if (yTickValues[0] < 0) {
       yTickValues = yTickValues.slice(1);
-    }    
+    }
     const yAxisLabel = d3
       .axisLeft(y)
       .tickValues(yTickValues)
@@ -178,9 +178,7 @@ export default function LineChart({
     if (gridLines) {
       const yAxisGrid = d3
         .axisLeft(y)
-        .tickValues(
-          yTickValues
-        )
+        .tickValues(yTickValues)
         .tickSize(-width + marginLeft + marginRight - 20)
         .tickFormat(() => "");
 
@@ -323,6 +321,7 @@ export default function LineChart({
     yAxis.min,
     yAxis.numDivisions,
     gridLines,
+    dataExists,
   ]);
 
   useEffect(() => {
@@ -378,6 +377,21 @@ export default function LineChart({
               />
             </div>
           )}
+          <p
+            className={styles.percentageChange}
+            style={{
+              color:
+                actualChange !== null && actualChange < 0
+                  ? "#EA4335"
+                  : "#05CD99",
+            }}
+          >
+            {actualChange !== null &&
+              percentageChange &&
+              (actualChange < 0
+                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+          </p>
         </div>
         <div style={{ display: "inline-flex" }}>
           <p className={styles.labelText}>{yLabel}</p>

@@ -48,10 +48,8 @@ export default function TriviaScreen({
   style,
   menuState,
 }: InputProp) {
-
-  const modifiedAccuracy = Math.round(+currentAccuracy * 100) + "%";
-  const modifiedTime = totalTime + " seconds"
-
+  const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
+  const modifiedTime = `${totalTime} seconds`;
 
   return (
     <div className={styles.container} style={style}>
