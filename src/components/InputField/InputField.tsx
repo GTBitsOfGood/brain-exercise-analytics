@@ -17,6 +17,7 @@ type InputFieldProps = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showError?: boolean;
+  errorOutline?: boolean;
   error?: string;
 };
 
@@ -46,7 +47,9 @@ const InputField = (InputFieldProps: InputFieldProps) => {
         <input
           className={classes(
             styles["input-field"],
-            InputFieldProps.showError ? styles["input-field-error"] : undefined,
+            InputFieldProps.showError || InputFieldProps.errorOutline
+              ? styles["input-field-error"]
+              : undefined,
             InputFieldProps.inputFieldClassName,
             InputFieldProps.type === "password"
               ? styles["password-field"]

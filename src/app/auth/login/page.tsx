@@ -27,6 +27,7 @@ export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [emailErrorOutline, setEmailErrorOutline] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [keepLogged, setKeepLogged] = useState(false);
   const [showGeneralError, setShowGeneralError] = useState(false);
@@ -37,6 +38,7 @@ export default function Page() {
 
   const resetErrors = () => {
     setEmailError("");
+    setEmailErrorOutline(false);
     setPasswordError("");
     setShowGeneralError(false);
   };
@@ -64,14 +66,9 @@ export default function Page() {
         switch (error.code) {
           case "auth/invalid-email":
           case "auth/user-not-found":
-            setEmailError(
-              "Email address not found. Please try again or contact bei2023@gmail.com to retrieve it.",
-            );
-            break;
           case "auth/wrong-password":
-            setPasswordError(
-              "Wrong password. Please try again or click Forgot Password to reset it.",
-            );
+            setEmailErrorOutline(true);
+            setPasswordError("Invalid credentials. Please try again.");
             break;
           default:
             setShowGeneralError(true);
@@ -164,6 +161,7 @@ export default function Page() {
                 setShowGeneralError(false);
               }}
               showError={emailError !== ""}
+              errorOutline={emailErrorOutline}
               error={emailError}
             />
           </div>
