@@ -118,7 +118,7 @@ const MathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Current Difficulty"
-            text={currentDifficulty + " / 10"}
+            text={currentDifficulty}
             Icon={BarChartIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
