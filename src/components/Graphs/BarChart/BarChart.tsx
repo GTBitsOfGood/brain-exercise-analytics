@@ -80,7 +80,7 @@ export default function BarChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
-  const [dataExists, setDataExists] = useState(newData.length !== 0);
+  const [dataExists, setDataExists] = useState(newData.length != 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
@@ -109,7 +109,7 @@ export default function BarChart({
   const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
-    newData.length < 2
+    newData.length < 2 || newData[newData.length - 2].value == 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
@@ -324,6 +324,7 @@ export default function BarChart({
 
   useEffect(() => {
     setNewData(updateNewData());
+    setDataExists(newData.length != 0);
   }, [data, updateNewData]);
 
   const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
@@ -346,7 +347,6 @@ export default function BarChart({
         </div>
       </foreignObject>
     );
-    
   return (
     <div
       className={`${className} ${styles.BarChart}`}
@@ -419,7 +419,7 @@ export default function BarChart({
         <>
               <foreignObject
                 x={width/2 - 95} // Adjust to horizontally center the icon
-                y={width/3 - 17}   // Adjust to control vertical positioning
+                y={height/2 - 17}   // Adjust to control vertical positioning
                 width="30"
                 height="30"
               >
@@ -427,7 +427,7 @@ export default function BarChart({
                 </foreignObject>
               <text
                 x={width/2}
-                y={width/3}
+                y={height/2}
                 fontFamily= "inter600.style.fontFamily"
                 textAnchor="middle"
                 alignmentBaseline="middle"
