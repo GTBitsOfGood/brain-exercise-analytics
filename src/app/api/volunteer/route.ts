@@ -67,7 +67,7 @@ export const PATCH = APIWrapper({
     }
 
     const user = await updateVolunteer(email, newFields);
-    if (newFields.email !== null && email === newFields.email) {
+    if (testuser?._id === currentUser?._id) {
       updateCookie?.push({ user: user! });
     }
     return user;
