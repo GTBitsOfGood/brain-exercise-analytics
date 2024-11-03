@@ -143,6 +143,7 @@ export default function Page({ params }: { params: { name: string } }) {
           chapter={chapter}
           chapterPresident={chapterPresident}
           refreshUsers={fetchUsers}
+          refreshInfo={fetchChapterAndPresident}
         />
         <Divider />
       </div>

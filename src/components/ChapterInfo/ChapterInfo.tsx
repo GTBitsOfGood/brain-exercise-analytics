@@ -11,7 +11,7 @@ import {
 } from "@src/app/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Modal from "@src/components/Modal/Modal";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
 import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";
@@ -30,6 +30,7 @@ interface ChapterInfoProps {
   chapter: IChapter;
   chapterPresident: string;
   refreshUsers: () => void;
+  refreshInfo: () => void;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
@@ -166,6 +167,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           setShowSuccessModal={setShowEditSuccessModal}
           setSuccessLink={setEditSuccessLink}
           chapter={params.chapter}
+          refreshInfo={params.refreshInfo}
         />
       </Modal>
       <Modal

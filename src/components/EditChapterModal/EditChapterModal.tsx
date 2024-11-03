@@ -29,6 +29,7 @@ interface Props {
   setShowSuccessModal: (arg: boolean) => void;
   setSuccessLink: (arg: string) => void;
   chapter: IChapter;
+  refreshInfo: () => void;
 }
 
 const EditChapterModal = ({
@@ -38,6 +39,7 @@ const EditChapterModal = ({
   setShowSuccessModal,
   chapter,
   setSuccessLink,
+  refreshInfo
 }: Props) => {
   const [yearFounded, setYearFounded] = useState<string>(
     String(chapter.yearFounded),
@@ -157,7 +159,7 @@ const EditChapterModal = ({
     }
 
     try {
-      await internalRequest<PatchReq>({
+      const updatedChapter = await internalRequest<PatchReq>({
         url: "/api/chapter",
         method: HttpMethod.PATCH,
         body: {
@@ -187,6 +189,7 @@ const EditChapterModal = ({
 
       setShowModal(false);
       reset();
+      refreshInfo();
       setSuccessLink(`/chapter/${encodeURI(chapterName)}`);
       setShowSuccessModal(true);
     } catch (errors) {
