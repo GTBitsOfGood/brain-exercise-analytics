@@ -1,8 +1,8 @@
 # Brain Exercise Initative 🧠
 
 ## About
-Brain Exercise Initative is a nonprofit focused on preventing memory loss through brain exercise. Through innovative research in Japan, it was found that doing simple math and reading exercises aloud caused improvements in cognitive function. Brain Exercise Initiative builds off of this research, holding brain exercise programs at retirement homes. 
 
+Brain Exercise Initative is a nonprofit focused on preventing memory loss through brain exercise. Through innovative research in Japan, it was found that doing simple math and reading exercises aloud caused improvements in cognitive function. Brain Exercise Initiative builds off of this research, holding brain exercise programs at retirement homes.
 
 ## Getting Started
 
@@ -19,7 +19,6 @@ yarn install
 ### MongoDB
 
 Install [MongoDB Community Server](https://www.mongodb.com/docs/manual/administration/install-community/) to host a local instance of MongoDB. It may also be helpful to download [MongoDB Compass](https://www.mongodb.com/try/download/compass#compass) to view the state of your database.
-
 
 ### Environment Variables
 
