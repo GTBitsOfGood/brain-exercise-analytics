@@ -113,7 +113,7 @@ export default function StackedBarChart({
         fullWidth
         gridLines={gridLines}
       >
-        {data.map((d, i) => (
+        {/* {data.map((d, i) => (
           <Fragment key={i}>
             <rect
               x={x(i)}
@@ -147,7 +147,7 @@ export default function StackedBarChart({
               style={{ borderRadius: 10 }}
             />
           </Fragment>
-        ))}
+        ))} */}
       </BarChart>
       <div className={styles.legendBox}>
         <div>
