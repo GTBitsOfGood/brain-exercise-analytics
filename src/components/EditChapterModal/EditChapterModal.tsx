@@ -138,6 +138,11 @@ const EditChapterModal = ({
       error = true;
     }
 
+    if (parseInt(yearFounded) < 2019 || parseInt(yearFounded) > new Date().getFullYear()) {
+      setYearFoundedError("Year Founded has to be in range 2019 - " + new Date().getFullYear());
+      error = true;
+    }
+
     if (Number.isNaN(Number(yearFounded))) {
       setYearFoundedError("Year founded must be a number");
       error = true;
@@ -159,7 +164,7 @@ const EditChapterModal = ({
     }
 
     try {
-      const updatedChapter = await internalRequest<PatchReq>({
+      await internalRequest<PatchReq>({
         url: "/api/chapter",
         method: HttpMethod.PATCH,
         body: {
