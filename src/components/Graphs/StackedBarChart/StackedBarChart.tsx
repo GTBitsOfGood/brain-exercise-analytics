@@ -1,10 +1,9 @@
 "use client";
 
 import * as d3 from "d3";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { DataRecord, StackedDataRecord } from "@/common_utils/types";
-import BarChart from "../BarChart/BarChart";
 import styles from "./StackedBarChart.module.scss";
 
 interface DataParams extends D3Data {
@@ -73,18 +72,7 @@ export default function StackedBarChart({
   window.addEventListener("resize", resizeOptimised);
 
   const height = Math.max(providedHeight, 80);
-  const marginTop = 20;
-  const marginRight = 25;
-  const marginBottom = 40;
-  const marginLeft = 35;
-  const x = d3.scaleLinear(
-    [0, data.length - 1],
-    [marginLeft, width - marginRight],
-  );
-  const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
-    [height - marginBottom, marginTop],
-  );
+
   useEffect(() => {
     updateSize();
   }, [newData, updateSize]);
@@ -93,13 +81,27 @@ export default function StackedBarChart({
     setNewData(updateNewData());
   }, [data, updateNewData]);
 
+  console.log(
+    title,
+    data,
+    width,
+    height,
+    style,
+    yAxis,
+    hoverable,
+    percentageChange,
+    info,
+    yLabel,
+    gridLines,
+  );
+
   return (
     <div
       className={styles.StackedBarChart}
       style={{ width: fullWidth ? "100%" : "fit-content" }}
       ref={windowSizeRef}
     >
-      <BarChart
+      {/* <BarChart
         title={title}
         data={data}
         width={width}
@@ -112,8 +114,8 @@ export default function StackedBarChart({
         yLabel={yLabel}
         fullWidth
         gridLines={gridLines}
-      >
-        {data.map((d, i) => (
+      > */}
+      {/* {data.map((d, i) => (
           <Fragment key={i}>
             <rect
               x={x(i)}
@@ -147,8 +149,8 @@ export default function StackedBarChart({
               style={{ borderRadius: 10 }}
             />
           </Fragment>
-        ))}
-      </BarChart>
+        ))} */}
+      {/* </BarChart> */}
       <div className={styles.legendBox}>
         <div>
           {legend.map((l) => (

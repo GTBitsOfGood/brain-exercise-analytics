@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
-import useHashObserver from "@src/hooks/useHashObserver";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   OverallDashboard,
   MathScreen,
@@ -55,14 +48,6 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page({ params }: { params: { id: string } }) {
-  const mathRef = useRef<HTMLDivElement>(null);
-  const readingRef = useRef<HTMLDivElement>(null);
-  const writingRef = useRef<HTMLDivElement>(null);
-  const triviaRef = useRef<HTMLDivElement>(null);
-
-  const refs = useMemo(() => [mathRef, readingRef, writingRef, triviaRef], []);
-  useHashObserver(refs);
-
   const [math, setMath] = useState<
     IAggregatedAnalyticsMath["math"] | undefined
   >(undefined);
@@ -235,7 +220,7 @@ export default function Page({ params }: { params: { id: string } }) {
         />
       </div>
       <Divider id="math" />
-      <div ref={mathRef} id="math" className={styles.sectionContainer}>
+      <div id="math" className={styles.sectionContainer}>
         <MathScreen
           menuState={[mathMenu, updateMathAnalytics]}
           accuracyData={math?.avgAccuracy ?? dataLine}
@@ -253,7 +238,7 @@ export default function Page({ params }: { params: { id: string } }) {
         />
       </div>
       <Divider id="reading" />
-      <div ref={readingRef} id="reading" className={styles.sectionContainer}>
+      <div id="reading" className={styles.sectionContainer}>
         <ReadingScreen
           menuState={[readingMenu, updateReadingAnalytics]}
           sessionHistory={reading?.sessionCompletion ?? dataStacked}
@@ -266,7 +251,7 @@ export default function Page({ params }: { params: { id: string } }) {
         />
       </div>
       <Divider id="writing" />
-      <div ref={writingRef} id="writing" className={styles.sectionContainer}>
+      <div id="writing" className={styles.sectionContainer}>
         <WritingScreen
           menuState={[writingMenu, updateWritingAnalytics]}
           sessionHistory={writing?.sessionCompletion ?? dataStacked}
@@ -278,7 +263,7 @@ export default function Page({ params }: { params: { id: string } }) {
         />
       </div>
       <Divider id="trivia" />
-      <div ref={triviaRef} id="trivia" className={styles.sectionContainer}>
+      <div id="trivia" className={styles.sectionContainer}>
         <TriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
           accuracyData={trivia?.avgAccuracy ?? dataLine}

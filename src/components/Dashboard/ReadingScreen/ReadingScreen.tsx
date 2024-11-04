@@ -105,7 +105,6 @@ export default function ReadingScreen({
             title="Average Reading Rate (Words/Min)"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
             info="Vidushi"
             data={readingRate}
             fullWidth

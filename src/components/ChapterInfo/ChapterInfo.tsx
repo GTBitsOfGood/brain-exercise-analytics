@@ -1,4 +1,3 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   User,
   UsersThree,
@@ -9,7 +8,6 @@ import {
   Wrench,
   HandTransferIcon,
 } from "@src/app/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo, useState } from "react";
 import Modal from "@src/components/Modal/Modal";
@@ -131,7 +129,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <p>Chapter Profile</p>
       </div>
       <div className={styles.chapterSection}>
-        <div className={styles.chapterImage}>
+        {/* <div className={styles.chapterImage}>
           <Cell
             cell={{
               title: "Add Chapter Image",
@@ -141,8 +139,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
               cellStyle: { height: "100%", width: "225px" },
               iconStyle: { backgroundColor: "#008afc" },
             }}
-          />
-        </div>
+          /> */}
+        {/* </div> */}
         <div className={styles.chapterInfo}>
           {chapterProfile.map((cell) => (
             <Cell key={cell.title} cell={cell} />
