@@ -8,6 +8,7 @@ import { HttpMethod } from "@/common_utils/types";
 import firebaseInit from "@src/firebase/config";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
+import { deleteCookie } from "cookies-next";
 
 import styles from "./page.module.css";
 
@@ -28,28 +29,32 @@ export default function Page() {
   const router = useRouter();
   const [loadingState, setLoadingState] = useState(State.LOADING);
   const { email } = useSelector((rootState: RootState) => rootState.auth);
+  const [response, setResponse] = useState<Response>();
 
-  const verifyEmail = useCallback(
-    async (emailToVerify: string | null) => {
-      try {
-        const res: Response = await internalRequest({
-          url: "/api/volunteer/auth/email-verification/create",
-          method: HttpMethod.POST,
-          body: {
-            email: emailToVerify,
-          },
-        });
-        if (res.verified === true) {
-          router.push("/auth/information");
-        } else {
-          setLoadingState(State.SUCCESS);
-        }
-      } catch (err) {
-        setLoadingState(State.ERROR);
+  const verifyEmail = useCallback(async (emailToVerify: string | null) => {
+    try {
+      const res: Response = await internalRequest({
+        url: "/api/volunteer/auth/email-verification/create",
+        method: HttpMethod.POST,
+        body: {
+          email: emailToVerify,
+        },
+      });
+      setResponse(res);
+      if (res.verified !== true) {
+        setLoadingState(State.SUCCESS);
+        deleteCookie("authUser");
       }
-    },
-    [router],
-  );
+    } catch (err) {
+      setLoadingState(State.ERROR);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (response?.verified === true) {
+      router.push("/auth/information");
+    }
+  }, [response, router]);
 
   useEffect(() => {
     verifyEmail(email);

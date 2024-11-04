@@ -63,7 +63,6 @@ const MathScreen = ({
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
             info="Vidushi"
             data={accuracyData}
             fullWidth
@@ -76,7 +75,6 @@ const MathScreen = ({
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
             info="Vidushi"
             data={difficultyData}
             fullWidth
@@ -92,6 +90,7 @@ const MathScreen = ({
             yLabel="Questions"
             fullWidth
             gridLines
+            info="test"
           />
           <BarChart
             width={325}
@@ -102,6 +101,7 @@ const MathScreen = ({
             percentageChange
             fullWidth
             gridLines
+            info="Test"
           />
         </div>
         <div className={styles.textStatsWithHeader}>

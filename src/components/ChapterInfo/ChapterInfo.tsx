@@ -1,4 +1,3 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   User,
   UsersThree,
@@ -9,7 +8,6 @@ import {
   Wrench,
   HandTransferIcon,
 } from "@src/app/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo, useState } from "react";
 import Modal from "@src/components/Modal/Modal";
@@ -29,6 +27,7 @@ import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
 interface ChapterInfoProps {
   chapter: IChapter;
   chapterPresident: string;
+  refreshUsers: () => void;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
@@ -44,6 +43,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     useState(false);
 
   const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
+  const [showAddVolunteerSuccessModal, setShowAddVolunteerSuccessModal] =
+    useState(false);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
@@ -128,7 +129,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <p>Chapter Profile</p>
       </div>
       <div className={styles.chapterSection}>
-        <div className={styles.chapterImage}>
+        {/* <div className={styles.chapterImage}>
           <Cell
             cell={{
               title: "Add Chapter Image",
@@ -138,8 +139,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
               cellStyle: { height: "100%", width: "225px" },
               iconStyle: { backgroundColor: "#008afc" },
             }}
-          />
-        </div>
+          /> */}
+        {/* </div> */}
         <div className={styles.chapterInfo}>
           {chapterProfile.map((cell) => (
             <Cell key={cell.title} cell={cell} />
@@ -222,6 +223,19 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <AddVolunteerModal
           className={styles.addVolunteerModalContent}
           setShowModal={setShowAddVolunteerModal}
+          setShowSuccessModal={setShowAddVolunteerSuccessModal}
+          chapter={params.chapter}
+          refreshUsers={params.refreshUsers}
+        />
+      </Modal>
+      <Modal
+        showModal={showAddVolunteerSuccessModal}
+        setShowModal={setShowAddVolunteerSuccessModal}
+      >
+        <OperationSuccessModal
+          className={styles.addVolunteerOperationSuccessModal}
+          subtitle="You have successfully added a volunteer to"
+          title={params.chapter.name}
         />
       </Modal>
     </div>

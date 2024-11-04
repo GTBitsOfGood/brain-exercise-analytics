@@ -1,268 +1,176 @@
 import {
   CSSProperties,
-  // FormEvent,
-  // MouseEvent,
-  // useState,
-  // useEffect,
+  FormEvent,
+  MouseEvent,
+  useState,
+  useEffect,
 } from "react";
 import { classes } from "@src/utils/utils";
-// import { useSelector } from "react-redux";
 
-// import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 import XIcon from "@/src/app/icons/XIcon";
-// import { RootState } from "@src/redux/rootReducer";
-// import { internalRequest } from "@src/utils/requests";
-// import {
-//   AdminApprovalStatus,
-//   HttpMethod,
-//   IVolunteerTableEntry,
-//   SearchResponseBody,
-// } from "@/common_utils/types";
-// import { VolunteerSearchParams, SearchRequestBody } from "@/common_utils/types";
-// import { PostReq } from "@server/mongodb/actions/Chapter";
-// import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
-// import InputField from "../InputField/InputField";
+import {
+  AdminApprovalStatus,
+  HttpMethod,
+  IChapter,
+  IVolunteerTableEntry,
+  Role,
+  SearchResponseBody,
+} from "@/common_utils/types";
+import { PatchReq } from "@src/app/api/volunteer/route";
+import { internalRequest } from "@src/utils/requests";
+import LiveSearchDropdown from "../LiveSearchDropdown/LiveSearchDropdown";
 import styles from "./AddVolunteerModal.module.css";
 
 interface Props {
   className?: string;
   style?: CSSProperties;
   setShowModal: (newShowModal: boolean) => void;
+  setShowSuccessModal: (arg: boolean) => void;
+  chapter: IChapter;
+  refreshUsers: () => void;
 }
 
-const addChapterModal = ({ className, style, setShowModal }: Props) => {
-  // const [chapterName, setChapterName] = useState<string>("");
-  // const [chapterPresident, setChapterPresident] = useState<string>("");
-  // const [chapterPresidentID, setChapterPresidentID] = useState<string>("");
+const AddVolunteerModal = ({
+  className,
+  style,
+  setShowModal,
+  setShowSuccessModal,
+  chapter,
+  refreshUsers,
+}: Props) => {
+  const [newVolunteer, setNewVolunteer] = useState<string>("");
+  const [newVolunteerObject, setNewVolunteerObject] =
+    useState<IVolunteerTableEntry | null>(null);
 
-  // const [chapterNameError, setChapterNameError] = useState<string>("");
-  // const [chapterPresidentError, setChapterPresidentError] = useState<string>("");
+  const [newVolunteerError, setNewVolunteerError] = useState<string>("");
 
-  // const [locCountry, setLocCountry] = useState("");
-  // const [locState, setLocState] = useState("");
-  // const [locCity, setLocCity] = useState("");
+  const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
+  const [filteredVolunteers, setFilteredVolunteers] =
+    useState<IVolunteerTableEntry[]>();
+  const [loading, setLoading] = useState(false);
 
-  // const [countryError, setCountryError] = useState("");
-  // const [stateError, setStateError] = useState("");
-  // const [cityError, setCityError] = useState("");
+  const resetErrors = () => {
+    setNewVolunteerError("");
+  };
 
-  // const [volunteers, setVolunteers] = useState<IVolunteerTableEntry[]>();
-  // const [filteredVolunteers, setFilteredVolunteers] = useState<IVolunteerTableEntry[]>();
-  // const [loading, setLoading] = useState(false);
+  const reset = () => {
+    setNewVolunteer("");
+    setNewVolunteerObject(null);
+    resetErrors();
+  };
 
-  // const COUNTRIES = Country.getAllCountries().map((country) => ({
-  //   value: country.name,
-  //   displayValue: `${country.name}`,
-  // }));
-  // const countryCode = Country.getAllCountries().filter(
-  //   (country) => country.name === locCountry,
-  // )[0]?.isoCode;
+  useEffect(() => {
+    setLoading(true);
+    internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
+      url: "/api/volunteer/filter-volunteer",
+      method: HttpMethod.POST,
+      body: {
+        params: {
+          roles: [Role.NONPROFIT_VOLUNTEER],
+          approved: [AdminApprovalStatus.APPROVED],
+          beiChapters: [""],
+        },
+        entriesPerPage: 9999,
+      },
+    }).then((res) => {
+      setVolunteers(res?.data ?? []);
+      setLoading(false);
+    });
+  }, []);
 
-  // const STATES = State.getStatesOfCountry(countryCode).map((state) => ({
-  //   value: state.name,
-  //   displayValue: `${state.name}`,
-  // }));
+  type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
+  const handleChange: ChangeHandler = (e) => {
+    const { target } = e;
+    setNewVolunteerObject(null);
 
-  // const stateCode = State.getStatesOfCountry(countryCode).filter(
-  //   (state) => state.name === locState,
-  // )[0]?.isoCode;
+    if (!target.value.trim()) return setFilteredVolunteers([]);
 
-  // const CITIES = City.getCitiesOfState(countryCode, stateCode).map((city) => ({
-  //   value: city.name,
-  //   displayValue: `${city.name}`,
-  // }));
+    const filteredValue = volunteers?.filter((volunteer) =>
+      `${volunteer.firstName} ${volunteer.lastName}`
+        .toLowerCase()
+        .startsWith(target.value.toLowerCase()),
+    );
+    return setFilteredVolunteers(filteredValue);
+  };
 
-  // const resetErrors = () => {
-  //   setChapterNameError("");
-  //   setChapterPresidentError("");
-  //   setCountryError("");
-  //   setStateError("");
-  //   setCityError("");
-  // };
+  const handleSaveChanges = async (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
+    resetErrors();
+    let error = false;
 
-  // const reset = () => {
-  //   setChapterName("");
-  //   setChapterPresident("");
-  //   setChapterPresidentID("");
-  //   setLocCountry("")
-  //   setLocState("");
-  //   setLocCity("");
-  //   resetErrors();
-  // };
+    if (newVolunteer === "") {
+      setNewVolunteerError("Choose a valid volunteer");
+      error = true;
+    }
 
-  // // Getting Volunteers
-  // const {
-  //   fullName,
-  //   volunteerRoles,
-  // } = useSelector((state: RootState) => state.volunteerSearch);
+    if (newVolunteerObject === null) {
+      setNewVolunteerError("Choose a valid volunteer");
+      error = true;
+    }
 
-  // useEffect(() => {
-  //   setLoading(true)
-  //   internalRequest<SearchResponseBody<IVolunteerTableEntry>>({
-  //     url: "/api/volunteer/filter-volunteer",
-  //     method: HttpMethod.POST,
-  //     body: {
-  //       params: {
-  //         name: fullName,
-  //         roles: volunteerRoles,
-  //         approved: [AdminApprovalStatus.APPROVED],
-  //       },
-  //       entriesPerPage: 9999,
-  //     },
-  //   }).then((res) => {
-  //     setVolunteers(res?.data ?? []);
-  //     setLoading(false)
-  //   });
-  // }, []);
+    if (error) {
+      console.log(error);
+      return;
+    }
 
-  // type changeHandler = React.ChangeEventHandler<HTMLInputElement>;
-  // const handleChange: changeHandler = (e) => {
-  //   const { target } = e;
-  //   if (!target.value.trim()) return setFilteredVolunteers([]);
+    try {
+      await internalRequest<PatchReq>({
+        url: "/api/volunteer",
+        method: HttpMethod.PATCH,
+        body: {
+          email: newVolunteerObject?.email,
+          newFields: {
+            chapter: chapter.name,
+          },
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
-  //   const filteredValue = volunteers?.filter((volunteer) =>
-  //     (volunteer.firstName + " " + volunteer.lastName).toLowerCase().startsWith(target.value.toLowerCase())
-  //   );
-  //   setFilteredVolunteers(filteredValue);
-  // };
-
-  // const handleSaveChanges = async (
-  //   e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
-  // ) => {
-  //   e.preventDefault();
-  //   resetErrors();
-  //   let error = false;
-
-  //   if (chapterName === "") {
-  //     setChapterNameError("Chapter name cannot be blank");
-  //     error = true;
-  //   }
-
-  //   if (chapterPresident === "") {
-  //     setChapterPresidentError("Choose a valid chapter president");
-  //     error = true;
-  //   }
-
-  //   if (locCountry === "") {
-  //     setCountryError("Country cannot be blank");
-  //     error = true;
-  //   }
-
-  //   if (error) {
-  //     console.log(error);
-  //     return;
-  //   }
-
-  //   try {
-  //     console.log(chapterName, chapterPresident, chapterPresidentID, locCountry)
-  //     await internalRequest<PostReq>({
-  //       url: "/api/chapter",
-  //       method: HttpMethod.POST,
-  //       body: {
-  //         name: chapterName,
-  //         chapterPresident: chapterPresidentID,
-  //         yearFounded: new Date().getFullYear(),
-  //         country: locCountry,
-  //         city: locCity,
-  //         state: locState,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
-  //   setShowModal(false);
-  //   reset();
-  //   setChapterCreated(chapterName)
-  //   setShowSuccessModal(true);
-  // };
+    setShowModal(false);
+    reset();
+    refreshUsers();
+    setShowSuccessModal(true);
+  };
 
   return (
     <div className={classes(styles.container, className)} style={style}>
-      {/* <>
+      <>
         <form className={styles.inputs} onSubmit={handleSaveChanges}>
           <div className={styles.inputHeader}>
-            <label>Add a New Chapter</label>
+            <label>Add Volunteer</label>
           </div>
-          <div className={styles.inputField}>
-            <label>Chapter Name</label>
-            <InputField
-              placeholder="Enter a chapter name"
-              value={chapterName}
-              onChange={(e) => setChapterName(e.target.value)}
-              showError={chapterNameError !== ""}
-              error={chapterNameError}
-            />
+          <div className={styles.inputSubheader}>
+            <label>{chapter.name}</label>
           </div>
 
           <div className={styles.inputField}>
-            <AuthDropdown
-              title="Chapter Location"
-              required={true}
-              placeholder="Select Your Country"
-              options={COUNTRIES}
-              value={locCountry}
-              onChange={(e) => {
-                setLocCountry(e.target.value);
-                setLocState("");
-                setLocCity("");
-                setCountryError("");
-                setStateError("");
-                setCityError("");
-              }}
-              showError={countryError !== ""}
-              error={countryError}
-            />
-          </div>
-          {locCountry === "" ? null : (
-            <div className={styles.cityStateFields}>
-              <AuthDropdown
-                required={true}
-                placeholder="Select Your State"
-                options={STATES}
-                value={locState}
-                onChange={(e) => {
-                  setLocState(e.target.value);
-                  setLocCity("");
-                  setStateError("");
-                  setCityError("");
-                }}
-                showError={stateError !== ""}
-                error={stateError}
-              />
-              <AuthDropdown
-                required={true}
-                placeholder="Select Your City"
-                options={CITIES}
-                value={locCity}
-                onChange={(e) => {
-                  setLocCity(e.target.value);
-                  setCityError("");
-                }}
-                showError={cityError !== ""}
-                error={cityError}
-              />
-            </div>
-          )}
-
-          <div className={styles.inputField}>
-            <label>Chapter President</label>
+            <label>Add Volunteer</label>
             <LiveSearchDropdown
               options={filteredVolunteers}
-              value={chapterPresident}
-              setValue={setChapterPresident}
-              placeholder={loading ? "Loading.." : "Enter the name of the chapter president"}
-              renderItem={(item) => 
-                <p className={styles.p}>{item.firstName + " " + item.lastName + "        " + item.phoneNumber}</p>}
+              value={newVolunteer}
+              setValue={setNewVolunteer}
+              placeholder={
+                loading ? "Loading.." : "Enter the name of the volunteer"
+              }
+              renderItem={(item) => (
+                <p className={styles.p}>
+                  {`${item.firstName} ${item.lastName}        ${item.email}`}
+                </p>
+              )}
               onChange={handleChange}
               onSelect={(item) => {
-                setChapterPresident(item.firstName + " " + item.lastName)
-                setChapterPresidentID(item._id)}
-              }
-              showError={chapterPresidentError !== ""}
-              error={chapterPresidentError}
+                setNewVolunteer(`${item.firstName} ${item.lastName}`);
+                setNewVolunteerObject(item);
+              }}
+              showError={newVolunteerError !== ""}
+              error={newVolunteerError}
             />
           </div>
+
           <div className={styles.buttons}>
             <button
               type="button"
@@ -280,7 +188,7 @@ const addChapterModal = ({ className, style, setShowModal }: Props) => {
             </button>
           </div>
         </form>
-      </> */}
+      </>
       <button className={styles.exit} onClick={() => setShowModal(false)}>
         <XIcon></XIcon>
       </button>
@@ -288,4 +196,4 @@ const addChapterModal = ({ className, style, setShowModal }: Props) => {
   );
 };
 
-export default addChapterModal;
+export default AddVolunteerModal;

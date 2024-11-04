@@ -226,10 +226,20 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     }
   };
 
-  const COUNTRIES = Country.getAllCountries().map((locCountry) => ({
-    value: locCountry.name,
-    displayValue: `${locCountry.name}`,
-  }));
+  const COUNTRIES = Country.getAllCountries()
+    .sort((a, b) => {
+      if (a.name === "United States") {
+        return -1;
+      }
+      if (b.name === "United States") {
+        return 1;
+      }
+      return 0;
+    })
+    .map((locCountry) => ({
+      value: locCountry.name,
+      displayValue: `${locCountry.name}`,
+    }));
   const countryCode = Country.getAllCountries().filter(
     (locCountry) => country === locCountry.name,
   )[0]?.isoCode;

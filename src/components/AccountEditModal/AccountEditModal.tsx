@@ -15,9 +15,10 @@ const enum Page {
 interface Props {
   className?: string;
   style?: CSSProperties;
+  setShowSuccessModal: (args: boolean) => void;
 }
 
-const Modal = ({ className, style }: Props) => {
+const Modal = ({ className, style, setShowSuccessModal }: Props) => {
   const [page, setPage] = useState<Page>(Page.PROFILE);
   const { logout } = useAuth();
   const router = useRouter();
@@ -51,7 +52,11 @@ const Modal = ({ className, style }: Props) => {
       <div className={styles.vl}></div>
       <div className={styles.info}>
         {/* <span onClick={closeModal}>&times;</span> */}
-        {page === Page.PROFILE ? <Profile /> : <Password />}
+        {page === Page.PROFILE ? (
+          <Profile setShowSuccessModal={setShowSuccessModal} />
+        ) : (
+          <Password setShowSuccessModal={setShowSuccessModal} />
+        )}
       </div>
     </div>
   );

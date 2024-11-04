@@ -29,7 +29,7 @@ export const POST = APIWrapper({
         await createAnalyticsID(user._id);
       }),
     );
-    // for (let i = 750; i < 10000; i++) {
+    // for (let i = 1; i < 10000; i++) {
     //   await Promise.all(
     //   sampleUsers.map(async (user: IUser) => {
     //     let deluser = await User.findOneAndDelete({

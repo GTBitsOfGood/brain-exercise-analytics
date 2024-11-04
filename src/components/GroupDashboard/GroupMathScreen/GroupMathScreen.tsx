@@ -60,7 +60,6 @@ const GroupMathScreen = ({
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
             info="Vidushi"
             data={accuracyData}
             fullWidth
@@ -72,7 +71,6 @@ const GroupMathScreen = ({
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
             info="Vidushi"
             data={difficultyData}
             fullWidth

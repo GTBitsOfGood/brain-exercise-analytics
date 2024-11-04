@@ -3,15 +3,7 @@
 import { Poppins, Inter } from "next/font/google";
 import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
-import {
-  Fragment,
-  MouseEvent,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
@@ -28,7 +20,6 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   highlightLargest?: boolean;
   yLabel?: string;
-  children?: ReactNode;
   gridLines?: boolean;
   info?: string;
 }
@@ -41,25 +32,18 @@ export default function BarChart({
   height: providedHeight = 180,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)) +
-      0.000001,
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    min: Math.ceil(0),
+    max: Math.floor(d3.max(data.map((v) => v.value + v.value / 5)) ?? 1),
+    numDivisions: Math.min(
+      5,
+      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    ),
+    format: d3.format("d"),
   },
   hoverable = false,
   percentageChange = false,
   highlightLargest = true,
   fullWidth = false,
-  children,
   gridLines = false,
   info = "",
   yLabel = "",
@@ -67,6 +51,7 @@ export default function BarChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
+      return [];
       return [];
     }
     if (data.length > datapoints) {
@@ -80,6 +65,7 @@ export default function BarChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const [dataExists, setDataExists] = useState(newData.length !== 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
@@ -103,35 +89,18 @@ export default function BarChart({
   const marginBottom = 40;
   const marginLeft = 35;
   const [largest, setLargest] = useState(-1);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
   const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
     newData.length < 2 || newData[newData.length - 2].value === 0
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
 
   const windowRef = useRef(null);
-
-  function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
-    const x = e.pageX;
-    const svg: Element = e.currentTarget as SVGElement;
-    const svgRect = svg.getBoundingClientRect();
-    const xBound = svgRect.x + marginLeft;
-    const range = width - marginRight - marginLeft;
-    const itemWidth = range / (data.length - 1);
-    const index = Math.floor(
-      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
-    );
-    setActiveIndex(index);
-  }
-
-  const handleMouseLeave = () => {
-    setActiveIndex(-1);
-  };
 
   const x = d3.scaleLinear(
     [0, newData.length - 1],
@@ -186,12 +155,15 @@ export default function BarChart({
     svg.select(".x-axis-top").remove();
     svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
+    svg.selectAll(".bar").remove();
+
     const xAxisLabelTop = d3
       .axisBottom(x)
       .ticks(newData.length)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
+      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
       .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
 
     const xAxisLabelBottom = d3
@@ -200,6 +172,7 @@ export default function BarChart({
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
+      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
       .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
 
     const yAxisLabel = d3
@@ -300,14 +273,97 @@ export default function BarChart({
         .call(xAxisLabelBottom)
         .call((g) => g.select(".domain").remove());
 
-      svg
-        .append("g")
-        .attr("transform", `translate(${marginLeft}, 0)`)
-        .attr("class", "y-axis")
-        .style("font", `9.5px ${poppins400.style.fontFamily}`)
-        .style("color", "#A5A5A5")
-        .call(yAxisLabel)
-        .call((g) => g.select(".domain").remove());
+    svg
+      .append("g")
+      .attr("transform", `translate(${marginLeft}, 0)`)
+      .attr("class", "y-axis")
+      .style("font", `9.5px ${poppins400.style.fontFamily}`)
+      .style("color", "#A5A5A5")
+      .call(yAxisLabel)
+      .call((g) => g.select(".domain").remove());
+
+    const barsGroup = svg
+      .selectAll(".bar")
+      .data(newData)
+      .join("g")
+      .attr("class", "bar")
+      .attr("transform", (d, i) => `translate(${x(i)}, 0)`); // Position bars
+
+    const tooltip = d3.select("#tooltip");
+
+    if (hoverable) {
+      barsGroup
+        .append("path")
+        .attr("d", (d) => {
+          const barHeight = height - marginBottom - y(d.value);
+          const radius = barWidth / 2; // Radius for the semi-circle top
+          const x0 = 0;
+          const y0 = y(d.value);
+
+          // Define the path for a rectangle with a semi-circle top
+          if (d.value === 0) {
+            // Render a semi-circle (half-circle) if the value is 0
+            return `
+                  M ${x0},${y0}
+                  A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+              `;
+          }
+          // Render a rectangle with a rounded top if the value is non-zero
+          return `
+                  M ${x0},${y0 + barHeight} 
+                  V ${y0 + radius} 
+                  A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                  V ${y0 + barHeight} 
+                  H ${x0} Z
+              `;
+        })
+        .style("fill", (d, i) =>
+          highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+        )
+        .on("mouseover", (event: MouseEvent, d: DataRecord) => {
+          tooltip.transition().duration(0).style("opacity", 1);
+          tooltip
+            .html(`${d.value}`)
+            .style("left", `${event.pageX + 5}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mousemove", (event: MouseEvent) => {
+          tooltip
+            .style("left", `${event.pageX + 5}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", () => {
+          tooltip.transition().duration(0).style("opacity", 0);
+        });
+    } else {
+      barsGroup
+        .append("path")
+        .attr("d", (d) => {
+          const barHeight = height - marginBottom - y(d.value);
+          const radius = barWidth / 2; // Radius for the semi-circle top
+          const x0 = 0;
+          const y0 = y(d.value);
+
+          // Define the path for a rectangle with a semi-circle top
+          if (d.value === 0) {
+            // Render a semi-circle (half-circle) if the value is 0
+            return `
+                  M ${x0},${y0}
+                  A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+              `;
+          }
+          // Render a rectangle with a rounded top if the value is non-zero
+          return `
+                  M ${x0},${y0 + barHeight} 
+                  V ${y0 + radius} 
+                  A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                  V ${y0 + barHeight} 
+                  H ${x0} Z
+              `;
+        })
+        .style("fill", (d, i) =>
+          highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+        );
     }
 
     return () => window.removeEventListener("scroll", onScroll);
@@ -377,10 +433,14 @@ export default function BarChart({
           {info !== "" && (
             <div
               className={styles.infoBox}
-              onClick={() => {
+              onMouseEnter={() => {
                 setInfoPopup(true);
               }}
+              onMouseLeave={() => {
+                setInfoPopup(false);
+              }}
               ref={infoButtonRef}
+              style={{ position: "relative" }}
             >
               <InfoIcon />
               <PopupModal
@@ -415,6 +475,22 @@ export default function BarChart({
           <p className={styles.labelText}>{yLabel}</p>
         </div>
       </div>
+      <div
+        id="tooltip"
+        style={{
+          fontFamily: poppins500.style.fontFamily,
+          fontWeight: "normal",
+          color: "#2b3674",
+          position: "absolute",
+          opacity: 0,
+          pointerEvents: "none",
+          backgroundColor: "white",
+          border: "1px solid #ccc",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+          borderRadius: "12px",
+        }}
+      ></div>
       <svg
         ref={windowRef}
         width={width}
@@ -486,16 +562,7 @@ export default function BarChart({
         )}
       </svg>
       <div style={{ justifyContent: "center" }}>
-        <div>
-          {/* <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 50,
-              backgroundColor: "#008AFC",
-            }}
-          /> */}
-        </div>
+        <div></div>
       </div>
     </div>
   );

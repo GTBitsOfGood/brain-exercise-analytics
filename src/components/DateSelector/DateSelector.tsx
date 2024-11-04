@@ -29,7 +29,7 @@ function DateSelector({
         setSelectedValue(e.target.value as DateRangeEnum);
       }}
       style={{
-        borderRadius: 0,
+        borderRadius: 12,
         color: "#8d8d8d",
         border: "none",
         width: "130px",
@@ -38,7 +38,7 @@ function DateSelector({
       sx={{
         "&.MuiOutlinedInput-root": {
           "& fieldset": {
-            borderRadius: "0px",
+            borderRadius: "12px",
           },
         },
       }}

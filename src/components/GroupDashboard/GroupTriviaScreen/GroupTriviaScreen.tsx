@@ -68,7 +68,6 @@ export default function GroupTriviaScreen({
             title="Average Trivia Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
             info="Vidushi"
             data={accuracyData}
             fullWidth
