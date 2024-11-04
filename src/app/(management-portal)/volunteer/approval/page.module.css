@@ -42,14 +42,14 @@
   max-height: 0px;
   z-index: 1;
   opacity: 1;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .table-container-show {
   max-height: 10000px;
   z-index: 1;
   opacity: 1;
-  overflow: auto;
+  overflow: visible;
 }
 
 .arrowButton {
