@@ -9,8 +9,9 @@ import {
   IUser,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
-import Analytics from "../models/Analytics";
+import mongoose from "mongoose";
 import User from "../models/User";
+import Analytics from "../models/Analytics";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -63,8 +64,9 @@ export const getAggregatedAnalytics = async (
     numOfWeeks = 52; // 52
   }
 
+  const objectIdArray = userIDs.map((id) => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
-    { userID: { $in: userIDs } },
+    { _id: { $in: objectIdArray } },
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
 
@@ -82,7 +84,6 @@ export const getAggregatedAnalytics = async (
   const out: Partial<IAggregatedAnalyticsAll>[] = [];
 
   const lastMonday = new Date(getCurrentMonday().getDate() - 7);
-
   for (let i = 0; i < analyticsRecords.length; i += 1) {
     const analyticsRecord = analyticsRecords[i] as IAnalytics;
     const user = userRecords[i];
@@ -99,16 +100,16 @@ export const getAggregatedAnalytics = async (
     const paddingDate =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
 
     let lastDate =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
     let lastDateMax =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
 
     const dbDateVars = new Set<string>();
 
@@ -143,9 +144,15 @@ export const getAggregatedAnalytics = async (
             const overallObj = groupSumDict[dateVar].overall ?? {
               totalNum: 0,
               streakLength: 0,
+              totalSessionsCompleted: 0,
             };
             overallObj.totalNum += 1;
             overallObj.streakLength += item.streakLength;
+            overallObj.totalSessionsCompleted +=
+              item.math.sessionsCompleted +
+              item.reading.sessionsCompleted +
+              item.trivia.sessionsCompleted +
+              item.writing.sessionsCompleted;
             groupSumDict[dateVar].overall = overallObj;
             break;
           }
@@ -262,6 +269,12 @@ export const getAggregatedAnalytics = async (
       } else if (range === DateRangeEnum.YEAR) {
         totalWeeks = 12;
       }
+      if (
+        userIDs.length === 1 &&
+        (analyticsRecords[0].weeklyMetrics as []).length === 0
+      ) {
+        totalWeeks = 0;
+      }
 
       while (len < totalWeeks) {
         if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
@@ -365,7 +378,6 @@ export const getAggregatedAnalytics = async (
       "questionsCorrect",
       "avgSessionsAttempted",
     ]);
-
     allDateVars.forEach((month) => {
       Object.entries(groupSumDict[month]).forEach(([type, monthTypeDict]) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -393,7 +405,20 @@ export const getAggregatedAnalytics = async (
             return;
           }
 
-          const dr: DataRecord = {
+          let dr: DataRecord;
+
+          if (property === "totalSessionsCompleted") {
+            dr = {
+              interval: month,
+              value: monthTypeDict.totalSessionsCompleted,
+            };
+            const obj = result.overall;
+            if (obj) {
+              obj.streakHistory.push(dr);
+            }
+          }
+
+          dr = {
             interval: month,
             value: monthTypeDict[property],
           };
@@ -404,7 +429,7 @@ export const getAggregatedAnalytics = async (
           if (!obj[property as keyof typeof obj]) {
             (obj[property as keyof typeof obj] as DataRecord[]) = [dr];
           } else {
-            (obj[property as keyof typeof obj] as DataRecord[]).push(dr);
+            (obj[property as keyof typeof obj] as DataRecord[]).unshift(dr);
           }
         });
       });
@@ -528,7 +553,6 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
-
     out.push(finalAggregation);
   }
 

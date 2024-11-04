@@ -40,7 +40,6 @@ export const GET = APIWrapper({
     const updatedSections = sections.includes(AnalyticsSectionEnum.OVERALL)
       ? Object.values(AnalyticsSectionEnum)
       : Array.from(new Set(sections));
-
     const data = (
       await getAggregatedAnalytics([id], range, updatedSections)
     )[0];

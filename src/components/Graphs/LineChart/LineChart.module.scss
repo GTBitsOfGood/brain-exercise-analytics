@@ -65,29 +65,29 @@
 .linePath {
   fill: none;
   stroke: #008afc;
-  stroke-width: 6;
+  strokewidth: 6;
   border-radius: 10px;
   height: 100%;
   filter: url(#drop-shadow);
 }
 .svgComp {
-  stroke-width: 1.5;
+  strokewidth: 1.5;
   stroke: currentColor;
   fill: white;
   circle {
-    stroke-width: 1;
+    strokewidth: 1;
     color: #008afc;
     fill: #008afc;
   }
   .hoverCircle {
-    stroke-width: 5;
+    strokewidth: 5;
     color: #008afc;
     fill: white;
   }
 }
 
 .yAxis line {
-  stroke-width: 1px;
+  strokewidth: 1px;
   color: #e3eafc;
 }
 .yAxis path {

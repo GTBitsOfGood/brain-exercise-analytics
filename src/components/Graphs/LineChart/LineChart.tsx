@@ -54,7 +54,7 @@ export default function LineChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
-      return [{ interval: "1", value: 1 }];
+      return [];
     }
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
@@ -67,6 +67,7 @@ export default function LineChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const minWidth = 210;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
   const windowSizeRef = useRef<null | HTMLDivElement>(null);
@@ -92,7 +93,7 @@ export default function LineChart({
   const [popupY, setPopupY] = useState(0);
 
   const actualChange =
-    newData.length < 2
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
@@ -158,15 +159,18 @@ export default function LineChart({
       .tickPadding(15)
       .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
 
+    let yTickValues = d3.range(
+      yAxis.min,
+      yAxis.max + 0.000001,
+      (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+    );
+
+    if (yTickValues[0] < 0) {
+      yTickValues = yTickValues.slice(1);
+    }
     const yAxisLabel = d3
       .axisLeft(y)
-      .tickValues(
-        d3.range(
-          yAxis.min,
-          yAxis.max + 0.000001,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-        ),
-      )
+      .tickValues(yTickValues)
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
@@ -174,13 +178,7 @@ export default function LineChart({
     if (gridLines) {
       const yAxisGrid = d3
         .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
+        .tickValues(yTickValues)
         .tickSize(-width + marginLeft + marginRight - 20)
         .tickFormat(() => "");
 
@@ -323,6 +321,7 @@ export default function LineChart({
     yAxis.min,
     yAxis.numDivisions,
     gridLines,
+    dataExists,
   ]);
 
   useEffect(() => {
@@ -331,6 +330,7 @@ export default function LineChart({
 
   useEffect(() => {
     setNewData(updateNewData());
+    setDataExists(newData.length !== 0);
   }, [data, updateNewData]);
 
   return (
@@ -378,7 +378,7 @@ export default function LineChart({
             </div>
           )}
           <p
-            className={styles.percentageChangeIcon}
+            className={styles.percentageChange}
             style={{
               color:
                 actualChange !== null && actualChange < 0
@@ -391,9 +391,6 @@ export default function LineChart({
               (actualChange < 0
                 ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
                 : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
-          </p>
-          <p className={styles.percentageChange}>
-            {actualChange !== null && percentageChange}
           </p>
         </div>
         <div style={{ display: "inline-flex" }}>

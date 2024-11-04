@@ -51,7 +51,7 @@ export default function BarChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
-      return [{ interval: "1", value: 1 }];
+      return [];
     }
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
@@ -64,6 +64,7 @@ export default function BarChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
@@ -91,7 +92,7 @@ export default function BarChart({
   const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
-    newData.length < 2
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
@@ -159,7 +160,7 @@ export default function BarChart({
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[0]);
+      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
 
     const xAxisLabelBottom = d3
       .axisBottom(x)
@@ -167,7 +168,7 @@ export default function BarChart({
       .tickSizeOuter(0)
       .tickSizeInner(0)
       .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
+      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
 
     const yAxisLabel = d3
       .axisLeft(y)
@@ -367,6 +368,7 @@ export default function BarChart({
     yAxis.numDivisions,
     gridLines,
     width,
+    dataExists,
   ]);
 
   useEffect(() => {
@@ -375,6 +377,7 @@ export default function BarChart({
 
   useEffect(() => {
     setNewData(updateNewData());
+    setDataExists(newData.length !== 0);
   }, [data, updateNewData]);
 
   return (
@@ -408,14 +411,6 @@ export default function BarChart({
               ref={infoButtonRef}
               style={{ position: "relative" }}
             >
-              {/* </div>
-            <div
-              className={styles.infoBox}
-              onClick={() => {
-                setInfoPopup(true);
-              }}
-              ref={infoButtonRef}
-            > */}
               <InfoIcon />
               <PopupModal
                 show={infoPopup}
@@ -470,21 +465,9 @@ export default function BarChart({
         width={width}
         height={height}
         style={{ marginTop: 10 }}
-      >
-        {/* <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
-        </g> */}
-      </svg>
+      ></svg>
       <div style={{ justifyContent: "center" }}>
-        <div>
-          {/* <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 50,
-              backgroundColor: "#008AFC",
-            }}
-          /> */}
-        </div>
+        <div></div>
       </div>
     </div>
   );

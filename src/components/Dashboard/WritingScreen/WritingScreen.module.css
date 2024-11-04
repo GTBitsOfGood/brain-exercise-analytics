@@ -36,6 +36,38 @@
   row-gap: 20px;
 }
 
+.textStatsWithHeader {
+  flex: 0.9; /* This can be adjusted based on your layout needs */
+  display: flex; /* Default to flexbox */
+  flex-direction: column; /* Stack children vertically */
+  row-gap: 20px; /* Space between items */
+}
+
+.body {
+  display: flex; /* Main content container */
+  flex-direction: row; /* Align items vertically */
+}
+
+@media (max-width: 1300px) {
+  .textStats {
+    display: grid; /* Switch to grid layout */
+    gap: 10px; /* Space between grid items */
+    width: 100%; /* Ensure it takes full width */
+    margin-bottom: 20px; /* Optional: space below textStats */
+  }
+
+  .body {
+    flex-direction: column-reverse;
+    margin-top: 20px; /* Optional: space between textStats and body */
+  }
+}
+
+.body > .box {
+  /* Assuming .box is the class for the custom component */
+  flex: 0 0 calc(50% - 10px); /* Adjust width when needed */
+  margin: 5px; /* Optional: add some spacing */
+}
+
 .graphs {
   flex: 2;
   display: grid;
