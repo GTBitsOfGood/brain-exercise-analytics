@@ -4,7 +4,6 @@ import * as d3 from "d3";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { DataRecord, StackedDataRecord } from "@/common_utils/types";
-import BarChart from "../BarChart/BarChart";
 import styles from "./StackedBarChart.module.scss";
 
 interface DataParams extends D3Data {
@@ -82,6 +81,20 @@ export default function StackedBarChart({
     setNewData(updateNewData());
   }, [data, updateNewData]);
 
+  console.log(
+    title,
+    data,
+    width,
+    height,
+    style,
+    yAxis,
+    hoverable,
+    percentageChange,
+    info,
+    yLabel,
+    gridLines,
+  );
+
   return (
     <div
       className={styles.StackedBarChart}
@@ -102,7 +115,7 @@ export default function StackedBarChart({
         fullWidth
         gridLines={gridLines}
       > */}
-        {/* {data.map((d, i) => (
+      {/* {data.map((d, i) => (
           <Fragment key={i}>
             <rect
               x={x(i)}
