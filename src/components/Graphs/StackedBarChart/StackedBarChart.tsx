@@ -88,7 +88,7 @@ export default function StackedBarChart({
       style={{ width: fullWidth ? "100%" : "fit-content" }}
       ref={windowSizeRef}
     >
-      <BarChart
+      {/* <BarChart
         title={title}
         data={data}
         width={width}
@@ -101,7 +101,7 @@ export default function StackedBarChart({
         yLabel={yLabel}
         fullWidth
         gridLines={gridLines}
-      >
+      > */}
         {/* {data.map((d, i) => (
           <Fragment key={i}>
             <rect
@@ -137,7 +137,7 @@ export default function StackedBarChart({
             />
           </Fragment>
         ))} */}
-      </BarChart>
+      {/* </BarChart> */}
       <div className={styles.legendBox}>
         <div>
           {legend.map((l) => (
