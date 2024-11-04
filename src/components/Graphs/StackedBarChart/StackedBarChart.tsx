@@ -83,79 +83,80 @@ export default function StackedBarChart({
   }, [data, updateNewData]);
 
   return (
-    <div
-      className={styles.StackedBarChart}
-      style={{ width: fullWidth ? "100%" : "fit-content" }}
-      ref={windowSizeRef}
-    >
-      <BarChart
-        title={title}
-        data={data}
-        width={width}
-        height={height}
-        style={style}
-        yAxis={yAxis}
-        hoverable={hoverable}
-        percentageChange={percentageChange}
-        info={info}
-        yLabel={yLabel}
-        fullWidth
-        gridLines={gridLines}
-      >
-        {/* {data.map((d, i) => (
-          <Fragment key={i}>
-            <rect
-              x={x(i)}
-              y={y(d.value)}
-              width={barWidth}
-              height={height - y(d.value - d.stackedValue) - marginBottom}
-              color={"#FF9FB3"}
-              style={{ borderRadius: 10 }}
-            />
-            <circle
-              cx={x(i) + barWidth / 2}
-              cy={y(d.value)}
-              width={barWidth}
-              r={barWidth / 2}
-              color={d.value === d.stackedValue ? "#008AFC" : "#FF9FB3"}
-            />
-            <rect
-              x={x(i)}
-              y={y(d.stackedValue)}
-              width={barWidth}
-              height={height - y(d.stackedValue) - marginBottom}
-              color={"#008AFC"}
-              style={{ borderRadius: 10 }}
-            />
-            <rect
-              x={x(i)}
-              y={y(yAxis.min)}
-              width={barWidth}
-              height={barWidth / 2}
-              color="white"
-              style={{ borderRadius: 10 }}
-            />
-          </Fragment>
-        ))} */}
-      </BarChart>
-      <div className={styles.legendBox}>
-        <div>
-          {legend.map((l) => (
-            <div className={styles.legendItem} key={l.text}>
-              <div
-                className={styles.emptyDiv}
-                style={{
-                  width: 14,
-                  height: 14,
-                  borderRadius: 50,
-                  backgroundColor: l.color,
-                }}
-              />
-              <div className={styles.legendText}>{l.text}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <></>
+    // <div
+    //   className={styles.StackedBarChart}
+    //   style={{ width: fullWidth ? "100%" : "fit-content" }}
+    //   ref={windowSizeRef}
+    // >
+    //   <BarChart
+    //     title={title}
+    //     data={data}
+    //     width={width}
+    //     height={height}
+    //     style={style}
+    //     yAxis={yAxis}
+    //     hoverable={hoverable}
+    //     percentageChange={percentageChange}
+    //     info={info}
+    //     yLabel={yLabel}
+    //     fullWidth
+    //     gridLines={gridLines}
+    //   >
+    //     {/* {data.map((d, i) => (
+    //       <Fragment key={i}>
+    //         <rect
+    //           x={x(i)}
+    //           y={y(d.value)}
+    //           width={barWidth}
+    //           height={height - y(d.value - d.stackedValue) - marginBottom}
+    //           color={"#FF9FB3"}
+    //           style={{ borderRadius: 10 }}
+    //         />
+    //         <circle
+    //           cx={x(i) + barWidth / 2}
+    //           cy={y(d.value)}
+    //           width={barWidth}
+    //           r={barWidth / 2}
+    //           color={d.value === d.stackedValue ? "#008AFC" : "#FF9FB3"}
+    //         />
+    //         <rect
+    //           x={x(i)}
+    //           y={y(d.stackedValue)}
+    //           width={barWidth}
+    //           height={height - y(d.stackedValue) - marginBottom}
+    //           color={"#008AFC"}
+    //           style={{ borderRadius: 10 }}
+    //         />
+    //         <rect
+    //           x={x(i)}
+    //           y={y(yAxis.min)}
+    //           width={barWidth}
+    //           height={barWidth / 2}
+    //           color="white"
+    //           style={{ borderRadius: 10 }}
+    //         />
+    //       </Fragment>
+    //     ))} */}
+    //   </BarChart>
+    //   <div className={styles.legendBox}>
+    //     <div>
+    //       {legend.map((l) => (
+    //         <div className={styles.legendItem} key={l.text}>
+    //           <div
+    //             className={styles.emptyDiv}
+    //             style={{
+    //               width: 14,
+    //               height: 14,
+    //               borderRadius: 50,
+    //               backgroundColor: l.color,
+    //             }}
+    //           />
+    //           <div className={styles.legendText}>{l.text}</div>
+    //         </div>
+    //       ))}
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
