@@ -4,7 +4,7 @@ import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
-import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
+import { InfoIcon } from "@src/app/icons";
 import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
 import styles from "./LineChart.module.scss";

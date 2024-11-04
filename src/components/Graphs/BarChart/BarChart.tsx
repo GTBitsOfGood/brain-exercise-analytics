@@ -1,7 +1,7 @@
 "use client";
 
 import { Poppins, Inter } from "next/font/google";
-import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
+import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
@@ -460,17 +460,14 @@ export default function BarChart({
           borderRadius: "12px",
         }}
       ></div>
-      {}
       <svg
         ref={windowRef}
         width={width}
         height={height}
         style={{ marginTop: 10 }}
-      >
-      </svg>
+      ></svg>
       <div style={{ justifyContent: "center" }}>
-        <div>
-        </div>
+        <div></div>
       </div>
     </div>
   );
