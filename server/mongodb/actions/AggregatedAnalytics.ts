@@ -77,6 +77,7 @@ export const getAggregatedAnalytics = async (
     .limit(1000)
     .lean();
 
+  console.log(analyticsRecords[0]);
   if (!analyticsRecords) {
     throw new Error("User Analytics record not found");
   }
@@ -292,6 +293,7 @@ export const getAggregatedAnalytics = async (
           Object.entries({
             overall: {
               streakLength: 0,
+              streakHistory: 0,
             },
             math: {
               avgAccuracy: 0,

@@ -54,6 +54,7 @@ function formatDate(date: Date) {
 }
 
 export default function OverallDashboard(params: Params) {
+  console.log(params.sessionCompletionHistory);
   return (
     <div className={styles.OverallDashboard} style={params.style}>
       <div className={styles.titleRow}>

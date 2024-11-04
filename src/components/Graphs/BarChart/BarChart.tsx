@@ -145,214 +145,6 @@ export default function BarChart({
     setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
-    svg.select(".x-axis-hor").remove();
-    svg.select(".y-axis-vert").remove();
-    svg.select(".x-axis-grid").remove();
-    svg.select(".y-axis-grid").remove();
-    svg.select(".x-axis-top").remove();
-    svg.select(".x-axis-bottom").remove();
-    svg.select(".y-axis").remove();
-    svg.selectAll(".bar").remove();
-
-    const xAxisLabelTop = d3
-      .axisBottom(x)
-      .ticks(newData.length)
-      .tickSizeOuter(0)
-      .tickSizeInner(0)
-      .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
-
-    const xAxisLabelBottom = d3
-      .axisBottom(x)
-      .ticks(newData.length)
-      .tickSizeOuter(0)
-      .tickSizeInner(0)
-      .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
-
-    const yAxisLabel = d3
-      .axisLeft(y)
-      .tickValues(
-        d3.range(
-          yAxis.min,
-          yAxis.max + 0.000001,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-        ),
-      )
-      .tickSizeOuter(0)
-      .tickSizeInner(0)
-      .tickPadding(15)
-      .tickFormat(yAxisFormat);
-
-    if (gridLines) {
-      const yAxisGrid = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max + 0.000001,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(-width + marginLeft + marginRight - 20)
-        .tickFormat(() => "");
-
-      const axisVert = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(0)
-        .tickFormat(() => "");
-
-      const axisHor = d3
-        .axisBottom(
-          d3.scaleLinear(
-            [0, newData.length - 1],
-            [marginLeft, width - marginRight + 20],
-          ),
-        )
-        .ticks(newData.length - 1)
-        .tickSizeOuter(0)
-        .tickSizeInner(0)
-        .tickFormat(() => "");
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
-
-      svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
-        .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
-    }
-    svg
-      .append("g")
-      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
-      .attr("class", "x-axis-top")
-      .style("font", `10px ${poppins500.style.fontFamily}`)
-      .style("color", "#343539")
-      .call(xAxisLabelTop)
-      .call((g) => g.select(".domain").remove());
-
-    svg
-      .append("g")
-      .attr(
-        "transform",
-        `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
-      )
-      .attr("class", "x-axis-bottom")
-      .style("font", `10px ${inter500.style.fontFamily}`)
-      .style("color", "#B0BBD5")
-      .call(xAxisLabelBottom)
-      .call((g) => g.select(".domain").remove());
-
-    svg
-      .append("g")
-      .attr("transform", `translate(${marginLeft}, 0)`)
-      .attr("class", "y-axis")
-      .style("font", `9.5px ${poppins400.style.fontFamily}`)
-      .style("color", "#A5A5A5")
-      .call(yAxisLabel)
-      .call((g) => g.select(".domain").remove());
-
-    const barsGroup = svg
-      .selectAll(".bar")
-      .data(newData)
-      .join("g")
-      .attr("class", "bar")
-      .attr("transform", (d, i) => `translate(${x(i)}, 0)`); // Position bars
-
-    const tooltip = d3.select("#tooltip");
-
-    if (hoverable) {
-      barsGroup
-        .append("path")
-        .attr("d", (d) => {
-          const barHeight = height - marginBottom - y(d.value);
-          const radius = barWidth / 2; // Radius for the semi-circle top
-          const x0 = 0;
-          const y0 = y(d.value);
-
-          // Define the path for a rectangle with a semi-circle top
-          if (d.value === 0) {
-            // Render a semi-circle (half-circle) if the value is 0
-            return `
-                  M ${x0},${y0}
-                  A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
-              `;
-          }
-          // Render a rectangle with a rounded top if the value is non-zero
-          return `
-                  M ${x0},${y0 + barHeight} 
-                  V ${y0 + radius} 
-                  A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
-                  V ${y0 + barHeight} 
-                  H ${x0} Z
-              `;
-        })
-        .style("fill", (d, i) =>
-          highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
-        )
-        .on("mouseover", (event: MouseEvent, d: DataRecord) => {
-          tooltip.transition().duration(0).style("opacity", 1);
-          tooltip
-            .html(`${d.value}`)
-            .style("left", `${event.pageX + 5}px`)
-            .style("top", `${event.pageY - 28}px`);
-        })
-        .on("mousemove", (event: MouseEvent) => {
-          tooltip
-            .style("left", `${event.pageX + 5}px`)
-            .style("top", `${event.pageY - 28}px`);
-        })
-        .on("mouseout", () => {
-          tooltip.transition().duration(0).style("opacity", 0);
-        });
-    } else {
-      barsGroup
-        .append("path")
-        .attr("d", (d) => {
-          const barHeight = height - marginBottom - y(d.value);
-          const radius = barWidth / 2; // Radius for the semi-circle top
-          const x0 = 0;
-          const y0 = y(d.value);
-
-          // Define the path for a rectangle with a semi-circle top
-          if (d.value === 0) {
-            // Render a semi-circle (half-circle) if the value is 0
-            return `
-                  M ${x0},${y0}
-                  A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
-              `;
-          }
-          // Render a rectangle with a rounded top if the value is non-zero
-          return `
-                  M ${x0},${y0 + barHeight} 
-                  V ${y0 + radius} 
-                  A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
-                  V ${y0 + barHeight} 
-                  H ${x0} Z
-              `;
-        })
-        .style("fill", (d, i) =>
-          highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
-        );
-    }
 
     if (!dataExists) {
       svg.selectAll("*").remove();
@@ -382,6 +174,219 @@ export default function BarChart({
         .style("font-family", poppins500.style.fontFamily)
         .style("fill", "#2B3674")
         .text("No Data Found");
+    } else {
+      svg.selectAll("*").remove();
+      svg.select(".x-axis-hor").remove();
+      svg.select(".y-axis-vert").remove();
+      svg.select(".x-axis-grid").remove();
+      svg.select(".y-axis-grid").remove();
+      svg.select(".x-axis-top").remove();
+      svg.select(".x-axis-bottom").remove();
+      svg.select(".y-axis").remove();
+      svg.selectAll(".bar").remove();
+
+      const xAxisLabelTop = d3
+        .axisBottom(x)
+        .ticks(newData.length)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickPadding(15)
+        .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
+
+      const xAxisLabelBottom = d3
+        .axisBottom(x)
+        .ticks(newData.length)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickPadding(15)
+        .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
+
+      const yAxisLabel = d3
+        .axisLeft(y)
+        .tickValues(
+          d3.range(
+            yAxis.min,
+            yAxis.max + 0.000001,
+            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+          ),
+        )
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickPadding(15)
+        .tickFormat(yAxisFormat);
+
+      if (gridLines) {
+        const yAxisGrid = d3
+          .axisLeft(y)
+          .tickValues(
+            d3.range(
+              yAxis.min,
+              yAxis.max + 0.000001,
+              (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+            ),
+          )
+          .tickSize(-width + marginLeft + marginRight - 20)
+          .tickFormat(() => "");
+
+        const axisVert = d3
+          .axisLeft(y)
+          .tickValues(
+            d3.range(
+              yAxis.min,
+              yAxis.max,
+              (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+            ),
+          )
+          .tickSize(0)
+          .tickFormat(() => "");
+
+        const axisHor = d3
+          .axisBottom(
+            d3.scaleLinear(
+              [0, newData.length - 1],
+              [marginLeft, width - marginRight + 20],
+            ),
+          )
+          .ticks(newData.length - 1)
+          .tickSizeOuter(0)
+          .tickSizeInner(0)
+          .tickFormat(() => "");
+
+        svg
+          .append("g")
+          .attr("class", `y-axis-vert`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(axisVert);
+
+        svg
+          .append("g")
+          .attr("class", `y-axis-grid ${styles.yAxis}`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(yAxisGrid);
+
+        svg
+          .append("g")
+          .attr("transform", `translate(-5, ${height - marginBottom})`)
+          .attr("class", "x-axis-hor")
+          .style("font", `10px ${poppins500.style.fontFamily}`)
+          .call(axisHor);
+      }
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${barWidth / 2}, ${height - marginBottom})`,
+        )
+        .attr("class", "x-axis-top")
+        .style("font", `10px ${poppins500.style.fontFamily}`)
+        .style("color", "#343539")
+        .call(xAxisLabelTop)
+        .call((g) => g.select(".domain").remove());
+
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
+        )
+        .attr("class", "x-axis-bottom")
+        .style("font", `10px ${inter500.style.fontFamily}`)
+        .style("color", "#B0BBD5")
+        .call(xAxisLabelBottom)
+        .call((g) => g.select(".domain").remove());
+
+      svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .attr("class", "y-axis")
+        .style("font", `9.5px ${poppins400.style.fontFamily}`)
+        .style("color", "#A5A5A5")
+        .call(yAxisLabel)
+        .call((g) => g.select(".domain").remove());
+
+      const barsGroup = svg
+        .selectAll(".bar")
+        .data(newData)
+        .join("g")
+        .attr("class", "bar")
+        .attr("transform", (d, i) => `translate(${x(i)}, 0)`); // Position bars
+
+      const tooltip = d3.select("#tooltip");
+
+      if (hoverable) {
+        barsGroup
+          .append("path")
+          .attr("d", (d) => {
+            const barHeight = height - marginBottom - y(d.value);
+            const radius = barWidth / 2; // Radius for the semi-circle top
+            const x0 = 0;
+            const y0 = y(d.value);
+
+            // Define the path for a rectangle with a semi-circle top
+            if (d.value === 0) {
+              // Render a semi-circle (half-circle) if the value is 0
+              return `
+                    M ${x0},${y0}
+                    A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+                `;
+            }
+            // Render a rectangle with a rounded top if the value is non-zero
+            return `
+                    M ${x0},${y0 + barHeight} 
+                    V ${y0 + radius} 
+                    A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                    V ${y0 + barHeight} 
+                    H ${x0} Z
+                `;
+          })
+          .style("fill", (d, i) =>
+            highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+          )
+          .on("mouseover", (event: MouseEvent, d: DataRecord) => {
+            tooltip.transition().duration(0).style("opacity", 1);
+            tooltip
+              .html(`${d.value}`)
+              .style("left", `${event.pageX + 5}px`)
+              .style("top", `${event.pageY - 28}px`);
+          })
+          .on("mousemove", (event: MouseEvent) => {
+            tooltip
+              .style("left", `${event.pageX + 5}px`)
+              .style("top", `${event.pageY - 28}px`);
+          })
+          .on("mouseout", () => {
+            tooltip.transition().duration(0).style("opacity", 0);
+          });
+      } else {
+        barsGroup
+          .append("path")
+          .attr("d", (d) => {
+            const barHeight = height - marginBottom - y(d.value);
+            const radius = barWidth / 2; // Radius for the semi-circle top
+            const x0 = 0;
+            const y0 = y(d.value);
+
+            // Define the path for a rectangle with a semi-circle top
+            if (d.value === 0) {
+              // Render a semi-circle (half-circle) if the value is 0
+              return `
+                    M ${x0},${y0}
+                    A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+                `;
+            }
+            // Render a rectangle with a rounded top if the value is non-zero
+            return `
+                    M ${x0},${y0 + barHeight} 
+                    V ${y0 + radius} 
+                    A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                    V ${y0 + barHeight} 
+                    H ${x0} Z
+                `;
+          })
+          .style("fill", (d, i) =>
+            highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+          );
+      }
     }
 
     return () => window.removeEventListener("scroll", onScroll);
@@ -406,8 +411,11 @@ export default function BarChart({
 
   useEffect(() => {
     setNewData(updateNewData());
-    setDataExists(newData.length !== 0);
   }, [data, updateNewData]);
+
+  useEffect(() => {
+    setDataExists(newData.length !== 0);
+  }, [newData]);
 
   return (
     <div
