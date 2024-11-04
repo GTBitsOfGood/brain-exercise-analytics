@@ -56,6 +56,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className={styles["rest-of-page"]}>
         <Modal showModal={showModal} setShowModal={setShowModal}>
           <AccountEditModal
+            setShowModal={setShowModal}
             className={styles.accountEditModalContent}
             setShowSuccessModal={setShowSuccessModal}
           />

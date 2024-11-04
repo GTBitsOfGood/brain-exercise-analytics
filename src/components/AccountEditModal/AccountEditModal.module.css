@@ -204,3 +204,13 @@
   justify-content: flex-end;
   gap: 15px;
 }
+
+.close {
+  width: fit-content;
+}
+
+.closeButton {
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+}
