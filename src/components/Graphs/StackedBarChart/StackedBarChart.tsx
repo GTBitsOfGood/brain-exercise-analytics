@@ -1,7 +1,7 @@
 "use client";
 
 import * as d3 from "d3";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { DataRecord, StackedDataRecord } from "@/common_utils/types";
 import BarChart from "../BarChart/BarChart";
@@ -73,18 +73,7 @@ export default function StackedBarChart({
   window.addEventListener("resize", resizeOptimised);
 
   const height = Math.max(providedHeight, 80);
-  const marginTop = 20;
-  const marginRight = 25;
-  const marginBottom = 40;
-  const marginLeft = 35;
-  const x = d3.scaleLinear(
-    [0, data.length - 1],
-    [marginLeft, width - marginRight],
-  );
-  const y = d3.scaleLinear(
-    [yAxis.min, yAxis.max],
-    [height - marginBottom, marginTop],
-  );
+
   useEffect(() => {
     updateSize();
   }, [newData, updateSize]);
