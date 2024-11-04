@@ -2,14 +2,7 @@
 
 import { Poppins, Inter } from "next/font/google";
 import * as d3 from "d3";
-import {
-  Fragment,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { InfoIcon } from "@src/app/icons";
 import { DataRecord } from "@/common_utils/types";
@@ -25,7 +18,6 @@ interface DataParams extends D3Data {
   title: string;
   hoverable?: boolean;
   percentageChange?: boolean;
-  gradient?: boolean;
   info?: string;
   gridLines?: boolean;
   yLabel?: string;
@@ -49,12 +41,11 @@ export default function LineChart({
         ((d3.max(data.map((v) => v.value)) ?? 1) -
           (d3.min(data.map((v) => v.value)) ?? 0)),
     numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    format: (d: d3.NumberValue) => d3.format(".1f")(d),
   },
   title,
   hoverable = false,
   percentageChange = false,
-  gradient = false,
   fullWidth,
   info = "",
   yLabel = "",
@@ -96,7 +87,6 @@ export default function LineChart({
   const marginRight = 20;
   const marginBottom = 65;
   const marginLeft = 40;
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState(0);
   const [popupY, setPopupY] = useState(0);
@@ -106,23 +96,6 @@ export default function LineChart({
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
-
-  function handleMouseMove(e: MouseEvent) {
-    const x = e.pageX;
-    const svg: Element = e.currentTarget as SVGElement;
-    const svgRect = svg.getBoundingClientRect();
-    const xBound = svgRect.x + marginLeft;
-    const range = width - marginRight - marginLeft;
-    const itemWidth = range / (newData.length - 1);
-    const index = Math.floor(
-      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
-    );
-    setActiveIndex(index);
-  }
-
-  const handleMouseLeave = () => {
-    setActiveIndex(-1);
-  };
 
   const windowRef = useRef(null);
 
@@ -165,6 +138,10 @@ export default function LineChart({
     svg.select(".x-axis-top").remove();
     svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
+    svg.select(".path").remove();
+    svg.select(".point").remove();
+    svg.selectAll("*").remove();
+
     const xAxisLabelTop = d3
       .axisBottom(x)
       .ticks(newData.length - 1)
@@ -277,6 +254,63 @@ export default function LineChart({
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
 
+    const d3line = line(newData.map((d, i) => [i, d.value])) as string;
+
+    const tooltip = d3.select("#tooltip");
+    // Draw the line connecting the points
+    svg
+      .append("path")
+      .datum(newData) // Bind data to the path
+      .attr("class", styles.linePath) // Add a class for styling
+      .attr("d", d3line) // Create the line using the defined line function
+      .style("fill", "none") // No fill for the line
+      .style("stroke", "#008AFC") // Line color
+      .style("stroke-width", 5) // Line width
+      .style("stroke-linecap", "round")
+      .style("stroke-linejoin", "round")
+      .style("filter", "url(#drop-shadow)");
+
+    // Draw points as circles on the line
+    if (hoverable) {
+      svg
+        .selectAll(".point")
+        .data(newData)
+        .join("circle")
+        .attr("class", styles.hoverCircle)
+        .attr("cx", (d, i) => x(i)) // X position based on index
+        .attr("cy", (d) => y(d.value)) // Y position based on the value
+        .attr("r", 7) // Radius of the circles
+        .style("fill", "white") // Set fill color to white
+        .style("stroke", "#008AFC") // Set stroke color
+        .style("stroke-width", 5) // Set stroke width
+        .style("opacity", 0) // Initially hidden
+
+        .on(
+          "mouseover",
+          function handleMouseOver(event: MouseEvent, d: DataRecord) {
+            tooltip.transition().duration(0).style("opacity", 1);
+            tooltip
+              .html(`${d.value}`)
+              .style("left", `${event.pageX + 5}px`)
+              .style("top", `${event.pageY - 28}px`);
+
+            // Show the circle when hovered over the line
+            d3.select(this).style("opacity", 1); // Set opacity to 1
+          },
+        )
+        .on("mousemove", (event: MouseEvent) => {
+          tooltip
+            .style("left", `${event.pageX + 5}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", function handleMouseOut() {
+          tooltip.transition().duration(0).style("opacity", 0);
+
+          // Hide the circle when not hovering
+          d3.select(this).style("opacity", 0); // Set opacity back to 0
+        });
+    }
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     width,
@@ -321,10 +355,14 @@ export default function LineChart({
           {info !== "" && (
             <div
               className={styles.info}
-              onClick={() => {
+              onMouseEnter={() => {
                 setInfoPopup(true);
               }}
+              onMouseLeave={() => {
+                setInfoPopup(false);
+              }}
               ref={infoButtonRef}
+              style={{ position: "relative" }}
             >
               <InfoIcon />
               <PopupModal
@@ -362,61 +400,36 @@ export default function LineChart({
           <p className={styles.labelText}>{yLabel}</p>
         </div>
       </div>
+      <div
+        id="tooltip"
+        style={{
+          fontFamily: poppins500.style.fontFamily,
+          fontWeight: "normal",
+          color: "#2b3674",
+          position: "absolute",
+          opacity: 0,
+          pointerEvents: "none",
+          backgroundColor: "white",
+          border: "1px solid #ccc",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+          borderRadius: "12px",
+        }}
+      ></div>
       <svg
         ref={windowRef}
         width={width}
         height={height}
-        onMouseMove={hoverable ? handleMouseMove : undefined}
-        onMouseLeave={hoverable ? handleMouseLeave : undefined}
         style={{ marginTop: 20 }}
       >
-        {gradient && (
-          <filter id="drop-shadow" height={"180%"}>
-            <feDropShadow
-              dx="0"
-              dy="13"
-              stdDeviation="6"
-              floodColor="rgb(216 211 232)"
-            />
-          </filter>
-        )}
-        <path
-          className={styles.linePath}
-          d={line(newData.map((d, i) => [i, d.value])) as string | undefined}
-        />
-        <g className={styles.svgComp}>
-          <circle key={-1} cx={x(0)} cy={y(newData[0].value)} r="2.5" />
-          <circle
-            key={-2}
-            cx={x(newData.length - 1)}
-            cy={y(newData[newData.length - 1].value)}
-            r="2.5"
+        <filter id="drop-shadow" height={"180%"}>
+          <feDropShadow
+            dx="0"
+            dy="13"
+            stdDeviation="6"
+            floodColor="rgb(216 211 232)"
           />
-          {newData.map(
-            (d, i) =>
-              activeIndex === i && (
-                <Fragment key={i}>
-                  <circle
-                    className={styles.hoverCircle}
-                    cx={x(i)}
-                    cy={y(d.value)}
-                    r="7.5"
-                  />
-                  <foreignObject
-                    x={x(i) - 7.5}
-                    y={y(d.value) - 20}
-                    width="20"
-                    height="10"
-                    fontSize={8}
-                  >
-                    <div style={{ textAlign: "center", color: "#A5A5A5" }}>
-                      {d.value}
-                    </div>
-                  </foreignObject>
-                </Fragment>
-              ),
-          )}
-        </g>
+        </filter>
       </svg>
     </div>
   );

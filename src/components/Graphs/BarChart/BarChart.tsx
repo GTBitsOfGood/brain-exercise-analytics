@@ -3,15 +3,7 @@
 import { Poppins, Inter } from "next/font/google";
 import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
-import {
-  Fragment,
-  MouseEvent,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
@@ -28,7 +20,6 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   highlightLargest?: boolean;
   yLabel?: string;
-  children?: ReactNode;
   gridLines?: boolean;
   info?: string;
 }
@@ -41,25 +32,18 @@ export default function BarChart({
   height: providedHeight = 180,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)) +
-      0.000001,
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    min: Math.ceil(0),
+    max: Math.floor(d3.max(data.map((v) => v.value + v.value / 5)) ?? 1),
+    numDivisions: Math.min(
+      5,
+      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    ),
+    format: d3.format("d"),
   },
   hoverable = false,
   percentageChange = false,
   highlightLargest = true,
   fullWidth = false,
-  children,
   gridLines = false,
   info = "",
   yLabel = "",
@@ -102,7 +86,6 @@ export default function BarChart({
   const marginBottom = 40;
   const marginLeft = 35;
   const [largest, setLargest] = useState(-1);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
   const [popupY, setPopupY] = useState<number | null>(null);
@@ -114,23 +97,6 @@ export default function BarChart({
         1;
 
   const windowRef = useRef(null);
-
-  function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
-    const x = e.pageX;
-    const svg: Element = e.currentTarget as SVGElement;
-    const svgRect = svg.getBoundingClientRect();
-    const xBound = svgRect.x + marginLeft;
-    const range = width - marginRight - marginLeft;
-    const itemWidth = range / (data.length - 1);
-    const index = Math.floor(
-      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
-    );
-    setActiveIndex(index);
-  }
-
-  const handleMouseLeave = () => {
-    setActiveIndex(-1);
-  };
 
   const x = d3.scaleLinear(
     [0, newData.length - 1],
@@ -185,6 +151,8 @@ export default function BarChart({
     svg.select(".x-axis-top").remove();
     svg.select(".x-axis-bottom").remove();
     svg.select(".y-axis").remove();
+    svg.selectAll(".bar").remove();
+
     const xAxisLabelTop = d3
       .axisBottom(x)
       .ticks(newData.length)
@@ -258,11 +226,11 @@ export default function BarChart({
         .attr("transform", `translate(${marginLeft - 5}, 0)`)
         .call(axisVert);
 
-      // svg
-      //   .append("g")
-      //   .attr("class", `y-axis-grid ${styles.yAxis}`)
-      //   .attr("transform", `translate(${marginLeft - 5}, 0)`)
-      //   .call(yAxisGrid);
+      svg
+        .append("g")
+        .attr("class", `y-axis-grid ${styles.yAxis}`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(yAxisGrid);
 
       svg
         .append("g")
@@ -302,6 +270,90 @@ export default function BarChart({
       .call(yAxisLabel)
       .call((g) => g.select(".domain").remove());
 
+    const barsGroup = svg
+      .selectAll(".bar")
+      .data(newData)
+      .join("g")
+      .attr("class", "bar")
+      .attr("transform", (d, i) => `translate(${x(i)}, 0)`); // Position bars
+
+    const tooltip = d3.select("#tooltip");
+
+    if (hoverable) {
+      barsGroup
+        .append("path")
+        .attr("d", (d) => {
+          const barHeight = height - marginBottom - y(d.value);
+          const radius = barWidth / 2; // Radius for the semi-circle top
+          const x0 = 0;
+          const y0 = y(d.value);
+
+          // Define the path for a rectangle with a semi-circle top
+          if (d.value === 0) {
+            // Render a semi-circle (half-circle) if the value is 0
+            return `
+                  M ${x0},${y0}
+                  A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+              `;
+          }
+          // Render a rectangle with a rounded top if the value is non-zero
+          return `
+                  M ${x0},${y0 + barHeight} 
+                  V ${y0 + radius} 
+                  A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                  V ${y0 + barHeight} 
+                  H ${x0} Z
+              `;
+        })
+        .style("fill", (d, i) =>
+          highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+        )
+        .on("mouseover", (event: MouseEvent, d: DataRecord) => {
+          tooltip.transition().duration(0).style("opacity", 1);
+          tooltip
+            .html(`${d.value}`)
+            .style("left", `${event.pageX + 5}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mousemove", (event: MouseEvent) => {
+          tooltip
+            .style("left", `${event.pageX + 5}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", () => {
+          tooltip.transition().duration(0).style("opacity", 0);
+        });
+    } else {
+      barsGroup
+        .append("path")
+        .attr("d", (d) => {
+          const barHeight = height - marginBottom - y(d.value);
+          const radius = barWidth / 2; // Radius for the semi-circle top
+          const x0 = 0;
+          const y0 = y(d.value);
+
+          // Define the path for a rectangle with a semi-circle top
+          if (d.value === 0) {
+            // Render a semi-circle (half-circle) if the value is 0
+            return `
+                  M ${x0},${y0}
+                  A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+              `;
+          }
+          // Render a rectangle with a rounded top if the value is non-zero
+          return `
+                  M ${x0},${y0 + barHeight} 
+                  V ${y0 + radius} 
+                  A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                  V ${y0 + barHeight} 
+                  H ${x0} Z
+              `;
+        })
+        .style("fill", (d, i) =>
+          highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+        );
+    }
+
     return () => window.removeEventListener("scroll", onScroll);
   }, [
     newData,
@@ -325,27 +377,6 @@ export default function BarChart({
     setNewData(updateNewData());
   }, [data, updateNewData]);
 
-  const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
-    activeIndex === i && (
-      <foreignObject
-        x={x(i)}
-        y={y(d.value) - 11 - barWidth / 2}
-        width={barWidth}
-        height="10"
-        fontSize={8}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            color: "#A5A5A5",
-            fontSize: 9,
-          }}
-        >
-          {d.value}
-        </div>
-      </foreignObject>
-    );
-
   return (
     <div
       className={`${className} ${styles.BarChart}`}
@@ -368,11 +399,23 @@ export default function BarChart({
           {info !== "" && (
             <div
               className={styles.infoBox}
+              onMouseEnter={() => {
+                setInfoPopup(true);
+              }}
+              onMouseLeave={() => {
+                setInfoPopup(false);
+              }}
+              ref={infoButtonRef}
+              style={{ position: "relative" }}
+            >
+              {/* </div>
+            <div
+              className={styles.infoBox}
               onClick={() => {
                 setInfoPopup(true);
               }}
               ref={infoButtonRef}
-            >
+            > */}
               <InfoIcon />
               <PopupModal
                 show={infoPopup}
@@ -406,50 +449,30 @@ export default function BarChart({
           <p className={styles.labelText}>{yLabel}</p>
         </div>
       </div>
+      <div
+        id="tooltip"
+        style={{
+          fontFamily: poppins500.style.fontFamily,
+          fontWeight: "normal",
+          color: "#2b3674",
+          position: "absolute",
+          opacity: 0,
+          pointerEvents: "none",
+          backgroundColor: "white",
+          border: "1px solid #ccc",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+          borderRadius: "12px",
+        }}
+      ></div>
       <svg
         ref={windowRef}
         width={width}
         height={height}
         style={{ marginTop: 10 }}
-        onMouseMove={hoverable ? handleMouseMove : undefined}
-        onMouseLeave={hoverable ? handleMouseLeave : undefined}
       >
-        <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
-          {children ||
-            newData.map((d, i) => {
-              const color =
-                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
-              return (
-                <Fragment key={i}>
-                  <rect
-                    x={x(i)}
-                    y={y(d.value)}
-                    width={barWidth}
-                    height={height - y(d.value) - marginBottom}
-                    color={color}
-                    style={{ borderRadius: 10 }}
-                  />
-                  <circle
-                    cx={x(i) + barWidth / 2}
-                    cy={y(d.value)}
-                    r={barWidth / 2}
-                    color={color}
-                  />
-                  <rect
-                    x={x(i)}
-                    y={y(yAxis.min)}
-                    width={barWidth}
-                    height={barWidth / 2}
-                    color="white"
-                    style={{ borderRadius: 10 }}
-                  />
-                </Fragment>
-              );
-            })}
-          {newData.map((d, i) => (
-            <HoverableNode key={i} i={i} d={d} />
-          ))}
-        </g>
+        {/* <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
+        </g> */}
       </svg>
       <div style={{ justifyContent: "center" }}>
         <div>

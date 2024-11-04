@@ -1,4 +1,3 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   User,
   UsersThree,
@@ -9,7 +8,6 @@ import {
   Wrench,
   HandTransferIcon,
 } from "@src/app/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
 import { useMemo, useState } from "react";
 import Modal from "@src/components/Modal/Modal";

@@ -1,10 +1,6 @@
 "use client";
 
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   OverallDashboard,
   MathScreen,
@@ -52,7 +48,6 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page({ params }: { params: { id: string } }) {
-
   const [math, setMath] = useState<
     IAggregatedAnalyticsMath["math"] | undefined
   >(undefined);
