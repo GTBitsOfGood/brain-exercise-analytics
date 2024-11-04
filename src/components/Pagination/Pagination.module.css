@@ -15,6 +15,14 @@
   background: #fff;
 }
 
+.dot {
+  padding: 14px 10px;
+  margin: -6px;
+  border-radius: 4px;
+  color: #7f7f7f;
+  font-weight: 300;
+}
+
 .pageButton:hover {
   color: #fff;
   background-color: #038aff;
