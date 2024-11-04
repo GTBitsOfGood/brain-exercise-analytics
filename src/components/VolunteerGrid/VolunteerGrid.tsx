@@ -12,7 +12,6 @@ import Popup from "./Popup/Popup";
 import { Row } from "./Row/Row";
 import Modal from "../Modal/Modal";
 import OperationSuccessModal from "../OperationSuccessModal/OperationSuccessModal";
-import NetlifyLogo from "@src/components/NetlifyLogo/NetlifyLogo";
 
 interface VolunteerGridProps {
   data: IUser[];

@@ -11,7 +11,7 @@ import {
 } from "@src/app/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IChapter } from "@/common_utils/types";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Modal from "@src/components/Modal/Modal";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
 import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";

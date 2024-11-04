@@ -18,13 +18,16 @@ const Pagination = (params: DataParams) => {
     ) {
       forwardPages.push(i);
     }
-    if (params.currentPage < params.pageCount - 2 && forwardPages.includes(params.pageCount) === false) {
-      forwardPages.push(NaN)
+    if (
+      params.currentPage < params.pageCount - 2 &&
+      forwardPages.includes(params.pageCount) === false
+    ) {
+      forwardPages.push(NaN);
       forwardPages.push(params.pageCount);
     }
 
     const backwardPages = [];
-    const numBackPages = params.currentPage >= params.pageCount - 2 ? 3 : 5
+    const numBackPages = params.currentPage >= params.pageCount - 2 ? 3 : 5;
     if (forwardPages.length !== 5) {
       for (
         let i = params.currentPage;
@@ -34,15 +37,15 @@ const Pagination = (params: DataParams) => {
         backwardPages.push(i);
       }
       if (params.currentPage >= 2 && backwardPages.includes(1) === false) {
-        backwardPages.push(NaN)
-        backwardPages.push(1)
+        backwardPages.push(NaN);
+        backwardPages.push(1);
       }
       backwardPages.reverse();
     }
     return [...backwardPages, ...forwardPages];
   }, [params.currentPage, params.pageCount]);
 
-  console.log(pages)
+  console.log(pages);
 
   const goToPreviousPage = () => {
     if (params.currentPage > 0) {
@@ -73,9 +76,9 @@ const Pagination = (params: DataParams) => {
           const isCurrentPage = page === params.currentPage + 1;
           return (
             <>
-              {Number.isNaN(page) ? 
+              {Number.isNaN(page) ? (
                 <div className={styles.dot}></div>
-              :
+              ) : (
                 <button
                   key={index}
                   onClick={() => params.setCurrentPage(Number(page) - 1)}
@@ -83,7 +86,7 @@ const Pagination = (params: DataParams) => {
                 >
                   {page}
                 </button>
-              }
+              )}
             </>
           );
         })}

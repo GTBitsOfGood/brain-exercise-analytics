@@ -55,7 +55,6 @@ export default function Calendar({ value, onChange }: CalendarInputProp) {
             } else {
               onChange(transformDate(val));
             }
-            
           }}
         />
       </div>

@@ -18,8 +18,8 @@ import firebaseInit from "@src/firebase/config";
 
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
-import styles from "./page.module.css";
 import NetlifyLogo from "@src/components/NetlifyLogo/NetlifyLogo";
+import styles from "./page.module.css";
 
 firebaseInit();
 
@@ -94,7 +94,9 @@ export default function Page() {
           currentPage={currentPage}
         />
       </div>
-      <div className={styles.netlify}><NetlifyLogo></NetlifyLogo></div>
+      <div className={styles.netlify}>
+        <NetlifyLogo></NetlifyLogo>
+      </div>
     </div>
   );
 }

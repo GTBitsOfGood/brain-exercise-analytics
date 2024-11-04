@@ -39,7 +39,7 @@ const EditChapterModal = ({
   setShowSuccessModal,
   chapter,
   setSuccessLink,
-  refreshInfo
+  refreshInfo,
 }: Props) => {
   const [yearFounded, setYearFounded] = useState<string>(
     String(chapter.yearFounded),
@@ -138,8 +138,13 @@ const EditChapterModal = ({
       error = true;
     }
 
-    if (parseInt(yearFounded) < 2019 || parseInt(yearFounded) > new Date().getFullYear()) {
-      setYearFoundedError("Year Founded has to be in range 2019 - " + new Date().getFullYear());
+    if (
+      parseInt(yearFounded, 10) < 2019 ||
+      parseInt(yearFounded, 10) > new Date().getFullYear()
+    ) {
+      setYearFoundedError(
+        `Year Founded has to be in range 2019 - ${new Date().getFullYear()}`,
+      );
       error = true;
     }
 
