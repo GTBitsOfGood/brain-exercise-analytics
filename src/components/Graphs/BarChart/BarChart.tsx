@@ -1,7 +1,7 @@
 "use client";
 
 import { Poppins, Inter } from "next/font/google";
-import { ExclamationOutlinedIcon, InfoIcon } from "@src/app/icons";
+import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
@@ -221,26 +221,26 @@ export default function BarChart({
         .tickSizeInner(0)
         .tickFormat(() => "");
 
-          svg
-            .append("g")
-            .attr("class", `y-axis-vert`)
-            .attr("transform", `translate(${marginLeft - 5}, 0)`)
-            .call(axisVert);
-
-          svg
-            .append("g")
-            .attr("class", `y-axis-grid ${styles.yAxis}`)
-            .attr("transform", `translate(${marginLeft - 5}, 0)`)
-            .call(yAxisGrid);
-
-          svg
-            .append("g")
-            .attr("transform", `translate(-5, ${height - marginBottom})`)
-            .attr("class", "x-axis-hor")
-            .style("font", `10px ${poppins500.style.fontFamily}`)
-            .call(axisHor);
-    }
       svg
+        .append("g")
+        .attr("class", `y-axis-vert`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(axisVert);
+
+      svg
+        .append("g")
+        .attr("class", `y-axis-grid ${styles.yAxis}`)
+        .attr("transform", `translate(${marginLeft - 5}, 0)`)
+        .call(yAxisGrid);
+
+      svg
+        .append("g")
+        .attr("transform", `translate(-5, ${height - marginBottom})`)
+        .attr("class", "x-axis-hor")
+        .style("font", `10px ${poppins500.style.fontFamily}`)
+        .call(axisHor);
+    }
+    svg
       .append("g")
       .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
       .attr("class", "x-axis-top")
@@ -354,10 +354,8 @@ export default function BarChart({
         );
     }
 
-
     if (!dataExists) {
       svg.selectAll("*").remove();
-
 
       const iconSVG = `
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 40 40" fill="none">
@@ -491,12 +489,12 @@ export default function BarChart({
           borderRadius: "12px",
         }}
       ></div>
-          <svg
-            ref={windowRef}
-            width={width}
-            height={height}
-            style={{ marginTop: 10 }}
-          ></svg>
+      <svg
+        ref={windowRef}
+        width={width}
+        height={height}
+        style={{ marginTop: 10 }}
+      ></svg>
       <div style={{ justifyContent: "center" }}>
         <div></div>
       </div>
