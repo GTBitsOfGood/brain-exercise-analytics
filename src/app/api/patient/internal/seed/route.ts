@@ -2,6 +2,9 @@ import APIWrapper from "@server/utils/APIWrapper";
 import User from "@server/mongodb/models/User";
 import { IUser } from "@/common_utils/types";
 import { createAnalyticsID } from "@server/mongodb/actions/Analytics";
+import Analytics from "@server/mongodb/models/Analytics";
+import { sampleUsers } from "@src/utils/patients";
+import mongoose from "mongoose";
 
 export const dynamic = "force-dynamic";
 
@@ -29,19 +32,18 @@ export const POST = APIWrapper({
         await createAnalyticsID(user._id);
       }),
     );
-    // for (let i = 1; i < 10000; i++) {
+    // for (let i = 10000; i < 11000; i++) {
     //   await Promise.all(
-    //   sampleUsers.map(async (user: IUser) => {
-    //     let deluser = await User.findOneAndDelete({
-    //       email: user.email + i.toString()
+    //     sampleUsers.map(async (user: IUser) => {
+    //       let deluser = await User.findOneAndDelete<IUser>({
+    //         email: user.email
+    //       })
+    //       if (deluser != undefined) {
+    //         await Analytics.deleteOne({
+    //         userID: new mongoose.Types.ObjectId(deluser._id)
+    //       })
+    //       }
     //     })
-    //     if (deluser != undefined) {
-    //       await Analytics.deleteOne({
-    //       userId: deluser._id
-    //     })
-    //     }
-
-    //   })
     //   )
     // }
 

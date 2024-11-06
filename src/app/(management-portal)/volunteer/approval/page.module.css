@@ -67,6 +67,6 @@
 
 .netlify {
   position: absolute;
-  right: 5%;
-  bottom: 5%;
+  bottom: 20px;
+  right: 40px;
 }
