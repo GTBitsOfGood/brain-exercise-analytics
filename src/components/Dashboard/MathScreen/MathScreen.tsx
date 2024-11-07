@@ -66,7 +66,8 @@ const MathScreen = ({
             info="Vidushi"
             data={accuracyData}
             fullWidth
-            yLabel="Questions"
+            yLabel=""
+            // yLabel="Questions"
             gridLines
           />
           <LineChart
@@ -83,11 +84,12 @@ const MathScreen = ({
           <BarChart
             width={325}
             height={175}
-            title="Average Questions Answered per Session"
+            title="Average Questions Answered per Session sdsdsdsdshdajsdhj asj djas dhj "
             data={numQuestionData}
             hoverable
             percentageChange
-            yLabel="Questions"
+            yLabel=""
+            // yLabel="Questions"
             fullWidth
             gridLines
             info="test"

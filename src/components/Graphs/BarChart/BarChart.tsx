@@ -33,12 +33,22 @@ export default function BarChart({
   style = {},
   yAxis = {
     min: Math.ceil(0),
-    max: Math.floor(d3.max(data.map((v) => v.value + v.value / 5)) ?? 1),
-    numDivisions: Math.min(
-      5,
-      Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    max: Math.max(
+      Math.ceil(d3.max(data.map((v) => v.value + v.value / 5)) ?? 1),
+      1,
     ),
-    format: d3.format("d"),
+    numDivisions: 5,
+    // Math.min(
+    //   5,
+    //   Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    // ),
+    format: (d: d3.NumberValue) => {
+      const numberValue = Number(d); // Convert to a number
+      return Number.isInteger(numberValue)
+        ? numberValue.toString()
+        : d3.format(".1f")(numberValue);
+    },
+    // format: d3.format("d"),
   },
   hoverable = false,
   percentageChange = false,
@@ -345,7 +355,9 @@ export default function BarChart({
           .on("mouseover", (event: MouseEvent, d: DataRecord) => {
             tooltip.transition().duration(0).style("opacity", 1);
             tooltip
-              .html(`${d.value}`)
+              .html(
+                `${Number.isInteger(d.value) ? d.value : d.value.toFixed(2)}`,
+              )
               .style("left", `${event.pageX + 5}px`)
               .style("top", `${event.pageY - 28}px`);
           })
@@ -434,7 +446,7 @@ export default function BarChart({
       }}
     >
       <div className={styles.titleBox}>
-        <div style={{ display: "inline-flex" }}>
+        <div className={styles.leftSide}>
           <p className={styles.titleText}>{title}</p>
           {info !== "" && (
             <div
@@ -461,6 +473,8 @@ export default function BarChart({
               />
             </div>
           )}
+        </div>
+        <div className={styles.rightSide}>
           <p
             className={styles.percentageChange}
             style={{
@@ -468,18 +482,19 @@ export default function BarChart({
                 actualChange !== null && actualChange < 0
                   ? "#EA4335"
                   : "#05CD99",
+              whiteSpace: "nowrap",
             }}
           >
             {actualChange !== null &&
               percentageChange &&
               (actualChange < 0
-                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+                ? `⏷ ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ ${(actualChange * 100).toFixed(2)}%`)}
           </p>
         </div>
-        <div style={{ display: "inline-flex" }}>
-          <p className={styles.labelText}>{yLabel}</p>
-        </div>
+      </div>
+      <div style={{ display: "inline-flex" }}>
+        <p className={styles.labelText}>{yLabel}</p>
       </div>
       <div
         id="tooltip"

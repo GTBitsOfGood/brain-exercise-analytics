@@ -319,7 +319,9 @@ export default function LineChart({
             function handleMouseOver(event: MouseEvent, d: DataRecord) {
               tooltip.transition().duration(0).style("opacity", 1);
               tooltip
-                .html(`${d.value}`)
+                .html(
+                  `${Number.isInteger(d.value) ? d.value : d.value.toFixed(2)}`,
+                )
                 .style("left", `${event.pageX + 5}px`)
                 .style("top", `${event.pageY - 28}px`);
 
@@ -385,11 +387,11 @@ export default function LineChart({
       }}
     >
       <div className={styles.titleBox}>
-        <div style={{ display: "inline-flex" }}>
+        <div className={styles.leftSide}>
           <p className={styles.titleText}>{title}</p>
           {info !== "" && (
             <div
-              className={styles.info}
+              className={styles.infoBox}
               onMouseEnter={() => {
                 setInfoPopup(true);
               }}
@@ -402,7 +404,7 @@ export default function LineChart({
               <InfoIcon />
               <PopupModal
                 show={infoPopup}
-                info="Some information about line chart should come here."
+                info={info}
                 style={{
                   position: "fixed",
                   top: `${popupY}px`,
@@ -412,6 +414,8 @@ export default function LineChart({
               />
             </div>
           )}
+        </div>
+        <div className={styles.rightSide}>
           <p
             className={styles.percentageChange}
             style={{
@@ -419,13 +423,14 @@ export default function LineChart({
                 actualChange !== null && actualChange < 0
                   ? "#EA4335"
                   : "#05CD99",
+              whiteSpace: "nowrap",
             }}
           >
             {actualChange !== null &&
               percentageChange &&
               (actualChange < 0
-                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+                ? `⏷ ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ ${(actualChange * 100).toFixed(2)}%`)}
           </p>
         </div>
         <div style={{ display: "inline-flex" }}>

@@ -77,7 +77,6 @@ export const getAggregatedAnalytics = async (
     .limit(1000)
     .lean();
 
-  console.log(analyticsRecords[0]);
   if (!analyticsRecords) {
     throw new Error("User Analytics record not found");
   }
@@ -397,7 +396,8 @@ export const getAggregatedAnalytics = async (
               if (!obj.sessionCompletion) {
                 obj.sessionCompletion = [dr];
               } else {
-                obj.sessionCompletion.push(dr);
+                obj.sessionCompletion.unshift(dr);
+                // obj.sessionCompletion.push(dr);
               }
             }
             return;
