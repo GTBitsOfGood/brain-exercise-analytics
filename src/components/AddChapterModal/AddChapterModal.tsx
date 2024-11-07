@@ -62,6 +62,8 @@ const AddChapterModal = ({
     useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
 
+  const [resetChangeTriggers, setResetChangeTriggers] = useState(false);
+
   const COUNTRIES = Country.getAllCountries()
     .sort((a, b) => {
       if (a.name === "United States") {
@@ -110,6 +112,7 @@ const AddChapterModal = ({
     setLocCity("");
     setChapterPresidentObject(null);
     resetErrors();
+    setResetChangeTriggers(!resetChangeTriggers);
   };
 
   useEffect(() => {
@@ -150,6 +153,7 @@ const AddChapterModal = ({
   ) => {
     e.preventDefault();
     resetErrors();
+    setResetChangeTriggers(!resetChangeTriggers);
     let error = false;
 
     if (chapterName === "") {
@@ -215,6 +219,9 @@ const AddChapterModal = ({
               onChange={(e) => setChapterName(e.target.value)}
               showError={chapterNameError !== ""}
               error={chapterNameError}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
+              resetChangeTrigger={resetChangeTriggers}
             />
           </div>
 
@@ -235,6 +242,7 @@ const AddChapterModal = ({
               }}
               showError={countryError !== ""}
               error={countryError}
+              resetChangeTriggers={resetChangeTriggers}
             />
           </div>
           {locCountry === "" ? null : (
@@ -252,6 +260,7 @@ const AddChapterModal = ({
                 }}
                 showError={stateError !== ""}
                 error={stateError}
+                resetChangeTriggers={resetChangeTriggers}
               />
               <AuthDropdown
                 required={true}
@@ -264,6 +273,7 @@ const AddChapterModal = ({
                 }}
                 showError={cityError !== ""}
                 error={cityError}
+                resetChangeTriggers={resetChangeTriggers}
               />
             </div>
           )}
@@ -291,6 +301,7 @@ const AddChapterModal = ({
               }}
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}
+              resetChangeTriggers={resetChangeTriggers}
             />
           </div>
           <div className={styles.buttons}>

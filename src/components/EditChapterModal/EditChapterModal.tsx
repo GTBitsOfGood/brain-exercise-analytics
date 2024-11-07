@@ -225,6 +225,8 @@ const EditChapterModal = ({
               onChange={(e) => setYearFounded(e.target.value)}
               showError={yearFoundedError !== ""}
               error={yearFoundedError}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
             />
           </div>
 
@@ -236,6 +238,8 @@ const EditChapterModal = ({
               onChange={(e) => setChapterName(e.target.value)}
               showError={chapterNameError !== ""}
               error={chapterNameError}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
             />
           </div>
 

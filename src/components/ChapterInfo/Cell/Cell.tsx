@@ -12,6 +12,7 @@ export interface CellProps {
   link?: () => void;
   cellStyle?: React.CSSProperties;
   iconStyle?: React.CSSProperties;
+  hoverColor?: string;
 }
 
 export function Cell({ cell }: { cell: CellProps }) {
@@ -29,7 +30,10 @@ export function Cell({ cell }: { cell: CellProps }) {
         {cell.icon}
       </div>
       <div className={styles.cellInfo}>
-        <div className={styles.cellTitle}>
+        <div
+          className={styles.cellTitle}
+          style={{ "--hover-color": cell.hoverColor } as React.CSSProperties}
+        >
           <p>{cell.title}</p>
         </div>
         <div className={styles.cellContent}>

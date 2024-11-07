@@ -8,8 +8,10 @@ import {
   Wrench,
   HandTransferIcon,
 } from "@src/app/icons";
-import { IChapter } from "@/common_utils/types";
+import { IChapter, IUser, Role } from "@/common_utils/types";
+import { RootState } from "@src/redux/rootReducer";
 import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import Modal from "@src/components/Modal/Modal";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
 import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";
@@ -32,6 +34,8 @@ interface ChapterInfoProps {
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
+  const user = useSelector<RootState>((state) => state.auth) as IUser;
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [showEditSuccessModal, setShowEditSuccessModal] = useState(false);
   const [editSuccessLink, setEditSuccessLink] = useState<string>("");
@@ -93,23 +97,32 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         title: "Edit Chapter Profile",
         link: () => setShowEditModal(true),
         icon: <Wrench />,
+        hoverColor: "#2B3674",
       },
       {
         title: "Chapter Transfer",
         link: () => setShowTransferModal(true),
         icon: <HandTransferIcon />,
+        hoverColor: "#2B3674",
       },
       {
         title: "Add Volunteer",
         link: () => setShowAddVolunteerModal(true),
         icon: <PersonPlusIcon className=""></PersonPlusIcon>,
+        hoverColor: "#2B3674",
       },
-      {
-        title: "Delete Chapter",
-        link: () => setShowDeleteModal(true),
-        icon: <RedTrashCan></RedTrashCan>,
-        iconStyle: { backgroundColor: "#FCDCE2" },
-      },
+      ...(user.role === Role.NONPROFIT_DIRECTOR ||
+      user.role === Role.NONPROFIT_ADMIN
+        ? [
+            {
+              title: "Delete Chapter",
+              link: () => setShowDeleteModal(true),
+              icon: <RedTrashCan></RedTrashCan>,
+              iconStyle: { backgroundColor: "#FCDCE2" },
+              hoverColor: "#EA4335",
+            },
+          ]
+        : []),
     ] as CellProps[];
   }, [params.chapter]);
 
