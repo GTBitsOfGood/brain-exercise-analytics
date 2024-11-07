@@ -42,6 +42,10 @@
   align-items: center;
 }
 
+.applyButton:hover {
+  opacity: 50%;
+}
+
 .checkIcon {
   font-size: 14px;
   display: flex;

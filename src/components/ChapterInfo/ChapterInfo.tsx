@@ -100,7 +100,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         hoverColor: "#2B3674",
       },
       {
-        title: "Chapter Transfer",
+        title: "Leadership Transfer",
         link: () => setShowTransferModal(true),
         icon: <HandTransferIcon />,
         hoverColor: "#2B3674",

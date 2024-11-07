@@ -54,6 +54,10 @@
   color: white;
   cursor: pointer;
 }
+
+.submitButton:hover {
+  opacity: 50%;
+}
 .disabled {
   background-color: #e3eafc;
   color: #2b3674;

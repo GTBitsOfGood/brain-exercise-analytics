@@ -67,6 +67,10 @@
   font-weight: 600;
 }
 
+.DatabaseButton:hover {
+  opacity: 50%;
+}
+
 .ExpandedRowContainer {
   width: calc(100% + 20px);
   background-color: var(--Selected-Blue, #e7eeff);
