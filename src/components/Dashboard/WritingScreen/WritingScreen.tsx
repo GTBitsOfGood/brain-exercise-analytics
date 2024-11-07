@@ -7,12 +7,7 @@ import {
 } from "@src/app/icons";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { DateRangeEnum } from "@/common_utils/types";
-import {
-  StackedBarChart,
-  SmallDataBox,
-  BarChart,
-  BooleanBox,
-} from "../../Graphs";
+import { SmallDataBox, BarChart, BooleanBox } from "../../Graphs";
 import styles from "./WritingScreen.module.css";
 
 interface InputProp {
@@ -57,15 +52,15 @@ export default function WritingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
+          <BarChart
             width={325}
             height={210}
             title="Writing Session Completion History"
             data={sessionHistory}
-            legend={[
-              { text: "sessions completed without writing", color: "#FF9FB3" },
-              { text: "sessions completed with writing", color: "#008AFC" },
-            ]}
+            // legend={[
+            //   { text: "sessions completed without writing", color: "#FF9FB3" },
+            //   { text: "sessions completed with writing", color: "#008AFC" },
+            // ]}
             info="Some really extremely interesting information about stacked bar chart."
             hoverable
             percentageChange

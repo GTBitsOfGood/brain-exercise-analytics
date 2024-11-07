@@ -292,6 +292,7 @@ export const getAggregatedAnalytics = async (
           Object.entries({
             overall: {
               streakLength: 0,
+              streakHistory: 0,
             },
             math: {
               avgAccuracy: 0,
@@ -395,7 +396,8 @@ export const getAggregatedAnalytics = async (
               if (!obj.sessionCompletion) {
                 obj.sessionCompletion = [dr];
               } else {
-                obj.sessionCompletion.push(dr);
+                obj.sessionCompletion.unshift(dr);
+                // obj.sessionCompletion.push(dr);
               }
             }
             return;

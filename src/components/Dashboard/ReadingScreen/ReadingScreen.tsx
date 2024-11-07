@@ -3,13 +3,7 @@ import { AttemptIcon, PromptsIcon, TimeIcon } from "@src/app/icons";
 import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./ReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
-import {
-  StackedBarChart,
-  BarChart,
-  SmallDataBox,
-  BooleanBox,
-  LineChart,
-} from "../../Graphs";
+import { BarChart, SmallDataBox, BooleanBox, LineChart } from "../../Graphs";
 
 const ReadingIcon = () => {
   return (
@@ -74,16 +68,16 @@ export default function ReadingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
+          <BarChart
             width={325}
-            height={215}
+            height={210}
             title="Reading Session Completion History"
             data={sessionHistory}
-            legend={[
-              { text: "sessions completed without reading", color: "#FF9FB3" },
-              { text: "sessions completed with reading", color: "#008AFC" },
-            ]}
-            yLabel="Writing"
+            // legend={[
+            //   { text: "sessions completed without reading", color: "#FF9FB3" },
+            //   { text: "sessions completed with reading", color: "#008AFC" },
+            // ]}
+            // yLabel="Writing"
             hoverable
             percentageChange
             fullWidth
