@@ -410,7 +410,8 @@ export const getAggregatedAnalytics = async (
               if (!obj.sessionCompletion) {
                 obj.sessionCompletion = [dr];
               } else {
-                obj.sessionCompletion.push(dr);
+                obj.sessionCompletion.unshift(dr);
+                // obj.sessionCompletion.push(dr);
               }
             }
             return;
