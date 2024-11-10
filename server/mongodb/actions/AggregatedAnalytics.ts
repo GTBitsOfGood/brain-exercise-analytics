@@ -301,39 +301,39 @@ export const getAggregatedAnalytics = async (
 
       const tempDateString = formatDateByRangeEnum(paddingDate, range);
 
-      allDateVars.push(tempDateString);
-      groupSumDict[tempDateString] = Object.fromEntries(
-        Object.entries({
-          overall: {
-            streakLength: 0,
-            streakHistory: 0,
-          },
-          math: {
-            avgAccuracy: 0,
-            avgDifficultyScore: 0,
-            avgQuestionsCompleted: 0,
-            avgTimePerQuestion: 0,
-          },
-          reading: {
-            avgSessionsCompleted: 0,
-            avgSessionsAttempted: 0,
-            avgWordsPerMin: 0,
-            avgPassagesRead: 0,
-            avgTimePerPassage: 0,
-          },
-          writing: {
-            avgSessionsCompleted: 0,
-            avgSessionsAttempted: 0,
-            avgPromptsAnswered: 0,
-            avgTimePerQuestion: 0,
-          },
-          trivia: {
-            avgAccuracy: 0,
-            avgQuestionsCompleted: 0,
-            avgTimePerQuestion: 0,
-          },
-        }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
-      );
+        allDateVars.push(tempDateString);
+        groupSumDict[tempDateString] = Object.fromEntries(
+          Object.entries({
+            overall: {
+              streakLength: 0,
+              streakHistory: 0,
+            },
+            math: {
+              avgAccuracy: 0,
+              avgDifficultyScore: 0,
+              avgQuestionsCompleted: 0,
+              avgTimePerQuestion: 0,
+            },
+            reading: {
+              avgSessionsCompleted: 0,
+              avgSessionsAttempted: 0,
+              avgWordsPerMin: 0,
+              avgPassagesRead: 0,
+              avgTimePerPassage: 0,
+            },
+            writing: {
+              avgSessionsCompleted: 0,
+              avgSessionsAttempted: 0,
+              avgPromptsAnswered: 0,
+              avgTimePerQuestion: 0,
+            },
+            trivia: {
+              avgAccuracy: 0,
+              avgQuestionsCompleted: 0,
+              avgTimePerQuestion: 0,
+            },
+          }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
+        );
 
       len += 1;
     }

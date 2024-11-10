@@ -37,36 +37,37 @@
 }
 
 .textStatsWithHeader {
-  flex: 0.9; /* This can be adjusted based on your layout needs */
-  display: flex; /* Default to flexbox */
-  flex-direction: column; /* Stack children vertically */
-  row-gap: 20px; /* Space between items */
+  min-height: 0; /* Allows it to shrink if content reduces */
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  overflow: hidden; /* Prevents excess space */
 }
 
 .body {
-  display: flex; /* Main content container */
-  flex-direction: row; /* Align items vertically */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Enables wrapping on smaller screens */
 }
 
 @media (max-width: 1300px) {
   .textStats {
-    display: grid; /* Switch to grid layout */
-    grid-template-columns: repeat(2, 1fr); /* Create 2 equal columns */
-    gap: 10px; /* Space between grid items */
-    width: 100%; /* Ensure it takes full width */
-    margin-bottom: 20px; /* Optional: space below textStats */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
   }
 
   .body {
     flex-direction: column-reverse;
-    margin-top: 20px; /* Optional: space between textStats and body */
+    margin-top: 20px;
   }
 }
 
 .body > .box {
-  /* Assuming .box is the class for the custom component */
-  flex: 0 0 calc(50% - 10px); /* Adjust width when needed */
-  margin: 5px; /* Optional: add some spacing */
+  flex: 1 1 calc(50% - 10px); /* Flexible sizing for adaptability */
+  margin: 5px;
 }
 
 .graphs {

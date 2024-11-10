@@ -29,6 +29,7 @@ interface Props {
   setShowSuccessModal: (arg: boolean) => void;
   setSuccessLink: (arg: string) => void;
   chapter: IChapter;
+  refreshInfo: () => void;
 }
 
 const EditChapterModal = ({
@@ -38,6 +39,7 @@ const EditChapterModal = ({
   setShowSuccessModal,
   chapter,
   setSuccessLink,
+  refreshInfo,
 }: Props) => {
   const [yearFounded, setYearFounded] = useState<string>(
     String(chapter.yearFounded),
@@ -136,6 +138,16 @@ const EditChapterModal = ({
       error = true;
     }
 
+    if (
+      parseInt(yearFounded, 10) < 2019 ||
+      parseInt(yearFounded, 10) > new Date().getFullYear()
+    ) {
+      setYearFoundedError(
+        `Year Founded has to be in range 2019 - ${new Date().getFullYear()}`,
+      );
+      error = true;
+    }
+
     if (Number.isNaN(Number(yearFounded))) {
       setYearFoundedError("Year founded must be a number");
       error = true;
@@ -187,6 +199,7 @@ const EditChapterModal = ({
 
       setShowModal(false);
       reset();
+      refreshInfo();
       setSuccessLink(`/chapter/${encodeURI(chapterName)}`);
       setShowSuccessModal(true);
     } catch (errors) {
@@ -282,7 +295,7 @@ const EditChapterModal = ({
               onClick={reset}
               className={`${styles.submitButton} ${styles.disabled}`}
             >
-              Discard
+              Clear
             </button>
             <button
               type="submit"
