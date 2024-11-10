@@ -190,7 +190,7 @@ export default function BarChart({
         .tickSizeOuter(0)
         .tickSizeInner(0)
         .tickPadding(15)
-        .tickFormat((d, i) => {
+        .tickFormat((d) => {
           const index = Math.round(Number(d));
           return newData[index]?.interval?.split(" ")[0] ?? "";
         });
@@ -201,7 +201,7 @@ export default function BarChart({
         .tickSizeOuter(0)
         .tickSizeInner(0)
         .tickPadding(15)
-        .tickFormat((d, i) => {
+        .tickFormat((d) => {
           const index = Math.round(Number(d));
           return newData[index]?.interval?.split(" ")[1] ?? "";
         });

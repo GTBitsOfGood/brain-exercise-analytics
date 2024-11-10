@@ -12,7 +12,6 @@ import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import mongoose from "mongoose";
 import User from "../models/User";
 import Analytics from "../models/Analytics";
-import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -93,7 +92,6 @@ export const getAggregatedAnalytics = async (
 
     let counter = 0;
     const lenOfMetrics = analyticsRecord.weeklyMetrics.length;
-    const groupSize = Math.floor(lenOfMetrics / 12);
 
     // reversing the list
     const reversedWeeklyMetrics = analyticsRecord.weeklyMetrics.reverse();
@@ -107,10 +105,6 @@ export const getAggregatedAnalytics = async (
       reversedWeeklyMetrics.length === 0
         ? lastMonday
         : new Date(reversedWeeklyMetrics[0].date);
-    let lastDateMax =
-      reversedWeeklyMetrics.length === 0
-        ? lastMonday
-        : new Date(reversedWeeklyMetrics[lenOfMetrics - 1].date);
 
     const dbDateVars = new Set<string>();
 
@@ -121,7 +115,6 @@ export const getAggregatedAnalytics = async (
       if (range === DateRangeEnum.HALF && counter % 2 === 1) {
         dateVar = formatDateByRangeEnum(lastDate, range);
       }
-      
 
       if (range === DateRangeEnum.MAX) {
         if (lenOfMetrics > 12) {
@@ -272,13 +265,12 @@ export const getAggregatedAnalytics = async (
     } else if (range === DateRangeEnum.YEAR) {
       totalWeeks = 12;
     } else if (range === DateRangeEnum.MAX) {
-      if (lenOfMetrics == 1) {
-        totalWeeks = 6
+      if (lenOfMetrics === 1) {
+        totalWeeks = 6;
       } else {
-        totalWeeks = 0
+        totalWeeks = 0;
       }
     }
-
 
     if (
       userIDs.length === 1 &&
@@ -288,14 +280,13 @@ export const getAggregatedAnalytics = async (
     }
 
     while (len < totalWeeks) {
-
       if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
         paddingDate.setDate(paddingDate.getDate() - 7);
       } else if (range === DateRangeEnum.HALF) {
         paddingDate.setDate(paddingDate.getDate() - 14);
       } else if (range === DateRangeEnum.YEAR) {
         paddingDate.setMonth(paddingDate.getMonth() - 1);
-      } else if (range == DateRangeEnum.MAX) {
+      } else if (range === DateRangeEnum.MAX) {
         paddingDate.setDate(paddingDate.getDate() - 7);
       }
 

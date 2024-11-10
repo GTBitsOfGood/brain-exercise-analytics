@@ -19,8 +19,11 @@ export function getCurrentSunday() {
   return new Date(date.toDateString());
 }
 
-export function formatDateByRangeEnum(date: Date, range: DateRangeEnum, month?: boolean) {
-  month = month || false
+export function formatDateByRangeEnum(
+  date: Date,
+  range: DateRangeEnum,
+  month?: boolean,
+) {
   const monthName = date.toLocaleString("default", {
     timeZone: "UTC",
     month: "short",
@@ -28,11 +31,14 @@ export function formatDateByRangeEnum(date: Date, range: DateRangeEnum, month?: 
   const day = String(date.getUTCDate()).padStart(2, "0");
   const year = String(date.getUTCFullYear());
 
-
   if (
-    [DateRangeEnum.RECENT, DateRangeEnum.QUARTER, DateRangeEnum.HALF, DateRangeEnum.MAX].includes(
-      range,
-    ) && !month
+    [
+      DateRangeEnum.RECENT,
+      DateRangeEnum.QUARTER,
+      DateRangeEnum.HALF,
+      DateRangeEnum.MAX,
+    ].includes(range) &&
+    !month
   ) {
     return `${monthName} ${day}`;
   }
