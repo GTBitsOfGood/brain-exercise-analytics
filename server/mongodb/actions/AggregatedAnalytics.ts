@@ -12,6 +12,7 @@ import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import mongoose from "mongoose";
 import User from "../models/User";
 import Analytics from "../models/Analytics";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -77,7 +78,6 @@ export const getAggregatedAnalytics = async (
     .limit(1000)
     .lean();
 
-  console.log(analyticsRecords[0]);
   if (!analyticsRecords) {
     throw new Error("User Analytics record not found");
   }
@@ -110,7 +110,7 @@ export const getAggregatedAnalytics = async (
     let lastDateMax =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(reversedWeeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[lenOfMetrics - 1].date);
 
     const dbDateVars = new Set<string>();
 
@@ -121,14 +121,16 @@ export const getAggregatedAnalytics = async (
       if (range === DateRangeEnum.HALF && counter % 2 === 1) {
         dateVar = formatDateByRangeEnum(lastDate, range);
       }
+      
 
-      // group into groups of 12 and put everything into the last object once it goes over
       if (range === DateRangeEnum.MAX) {
-        if (counter % groupSize === 0 && counter < groupSize * 12) {
-          lastDateMax = item.date;
+        if (lenOfMetrics > 12) {
+          dateVar = formatDateByRangeEnum(item.date, range, true);
+        } else {
+          dateVar = formatDateByRangeEnum(item.date, range);
         }
-        dateVar = formatDateByRangeEnum(lastDateMax, range);
       }
+
       counter += 1;
       lastDate = item.date;
 
@@ -232,6 +234,7 @@ export const getAggregatedAnalytics = async (
       "questionsCompleted",
       "questionsCorrect",
     ]);
+
     Object.values(groupSumDict).forEach((monthDict) => {
       Object.values(monthDict).forEach((monthTypeDict) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -261,70 +264,80 @@ export const getAggregatedAnalytics = async (
     const allDateVars = Array.from(dbDateVars).reverse();
 
     // PADDING
-    if (range !== DateRangeEnum.MAX) {
-      let len = Object.keys(groupSumDict).length;
+    let len = Object.keys(groupSumDict).length;
 
-      let totalWeeks = numOfWeeks;
-      if (range === DateRangeEnum.HALF) {
-        totalWeeks = 13;
-      } else if (range === DateRangeEnum.YEAR) {
-        totalWeeks = 12;
-      }
-      if (
-        userIDs.length === 1 &&
-        (analyticsRecords[0].weeklyMetrics as []).length === 0
-      ) {
-        totalWeeks = 0;
-      }
-
-      while (len < totalWeeks) {
-        if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
-          paddingDate.setDate(paddingDate.getDate() - 7);
-        } else if (range === DateRangeEnum.HALF) {
-          paddingDate.setDate(paddingDate.getDate() - 14);
-        } else if (range === DateRangeEnum.YEAR) {
-          paddingDate.setMonth(paddingDate.getMonth() - 1);
-        }
-
-        const tempDateString = formatDateByRangeEnum(paddingDate, range);
-
-        allDateVars.push(tempDateString);
-        groupSumDict[tempDateString] = Object.fromEntries(
-          Object.entries({
-            overall: {
-              streakLength: 0,
-              streakHistory: 0,
-            },
-            math: {
-              avgAccuracy: 0,
-              avgDifficultyScore: 0,
-              avgQuestionsCompleted: 0,
-              avgTimePerQuestion: 0,
-            },
-            reading: {
-              avgSessionsCompleted: 0,
-              avgSessionsAttempted: 0,
-              avgWordsPerMin: 0,
-              avgPassagesRead: 0,
-              avgTimePerPassage: 0,
-            },
-            writing: {
-              avgSessionsCompleted: 0,
-              avgSessionsAttempted: 0,
-              avgPromptsAnswered: 0,
-              avgTimePerQuestion: 0,
-            },
-            trivia: {
-              avgAccuracy: 0,
-              avgQuestionsCompleted: 0,
-              avgTimePerQuestion: 0,
-            },
-          }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
-        );
-
-        len += 1;
+    let totalWeeks = numOfWeeks;
+    if (range === DateRangeEnum.HALF) {
+      totalWeeks = 13;
+    } else if (range === DateRangeEnum.YEAR) {
+      totalWeeks = 12;
+    } else if (range === DateRangeEnum.MAX) {
+      if (lenOfMetrics == 1) {
+        totalWeeks = 6
+      } else {
+        totalWeeks = 0
       }
     }
+
+
+    if (
+      userIDs.length === 1 &&
+      (analyticsRecords[0].weeklyMetrics as []).length === 0
+    ) {
+      totalWeeks = 0;
+    }
+
+    while (len < totalWeeks) {
+
+      if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      } else if (range === DateRangeEnum.HALF) {
+        paddingDate.setDate(paddingDate.getDate() - 14);
+      } else if (range === DateRangeEnum.YEAR) {
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
+      } else if (range == DateRangeEnum.MAX) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      }
+
+      const tempDateString = formatDateByRangeEnum(paddingDate, range);
+
+      allDateVars.push(tempDateString);
+      groupSumDict[tempDateString] = Object.fromEntries(
+        Object.entries({
+          overall: {
+            streakLength: 0,
+            streakHistory: 0,
+          },
+          math: {
+            avgAccuracy: 0,
+            avgDifficultyScore: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+          reading: {
+            avgSessionsCompleted: 0,
+            avgSessionsAttempted: 0,
+            avgWordsPerMin: 0,
+            avgPassagesRead: 0,
+            avgTimePerPassage: 0,
+          },
+          writing: {
+            avgSessionsCompleted: 0,
+            avgSessionsAttempted: 0,
+            avgPromptsAnswered: 0,
+            avgTimePerQuestion: 0,
+          },
+          trivia: {
+            avgAccuracy: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+        }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
+      );
+
+      len += 1;
+    }
+    // }
 
     const result: Result = {};
     sections.forEach((type) => {
@@ -416,7 +429,7 @@ export const getAggregatedAnalytics = async (
             };
             const obj = result.overall;
             if (obj) {
-              obj.streakHistory.push(dr);
+              obj.streakHistory.unshift(dr);
             }
           }
 

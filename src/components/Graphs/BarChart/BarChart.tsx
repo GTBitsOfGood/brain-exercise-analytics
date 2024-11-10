@@ -79,7 +79,6 @@ export default function BarChart({
     resizeRef.current = setTimeout(updateSize, 500);
   };
   window.addEventListener("resize", resizeOptimised);
-
   const height = Math.max(providedHeight, 80);
   const infoButtonRef = useRef(null);
   const marginTop = 20;
@@ -100,7 +99,7 @@ export default function BarChart({
   const windowRef = useRef(null);
 
   const x = d3.scaleLinear(
-    [0, newData.length - 1],
+    [-0.3, newData.length - 0.4], // Changed domain to include padding on both sides
     [marginLeft, width - marginRight],
   );
   const y = d3.scaleLinear(
@@ -191,7 +190,10 @@ export default function BarChart({
         .tickSizeOuter(0)
         .tickSizeInner(0)
         .tickPadding(15)
-        .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[0] ?? "");
+        .tickFormat((d, i) => {
+          const index = Math.round(Number(d));
+          return newData[index]?.interval?.split(" ")[0] ?? "";
+        });
 
       const xAxisLabelBottom = d3
         .axisBottom(x)
@@ -199,7 +201,10 @@ export default function BarChart({
         .tickSizeOuter(0)
         .tickSizeInner(0)
         .tickPadding(15)
-        .tickFormat((d) => newData[d.valueOf()]?.interval?.split(" ")[1] ?? "");
+        .tickFormat((d, i) => {
+          const index = Math.round(Number(d));
+          return newData[index]?.interval?.split(" ")[1] ?? "";
+        });
 
       const yAxisLabel = d3
         .axisLeft(y)
@@ -324,11 +329,11 @@ export default function BarChart({
 
             // Define the path for a rectangle with a semi-circle top
             if (d.value === 0) {
-              // Render a semi-circle (half-circle) if the value is 0
+              const bottomY = height - marginBottom;
               return `
-                    M ${x0},${y0}
-                    A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
-                `;
+                M ${x0},${bottomY}
+                A ${radius},${radius} 0 1 1 ${x0 + barWidth},${bottomY}
+              `;
             }
             // Render a rectangle with a rounded top if the value is non-zero
             return `
