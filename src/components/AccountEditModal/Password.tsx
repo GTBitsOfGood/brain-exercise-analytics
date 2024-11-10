@@ -128,7 +128,7 @@ export default function Password({ setShowSuccessModal }: Props) {
             onClick={reset}
             className={`${styles.submitButton} ${styles.disabled}`}
           >
-            Clear
+            Cancel
           </button>
           <button
             type="submit"

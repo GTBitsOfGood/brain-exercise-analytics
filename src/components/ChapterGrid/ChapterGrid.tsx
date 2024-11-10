@@ -52,7 +52,7 @@ function Header() {
     <div className={styles["table-header"]}>
       <div className={styles["table-header-left"]}>
         <TwoVolunteersIcon />
-        <p className={styles["table-header-text"]}>BEI / Chapter List</p>
+        <p className={styles["table-header-text"]}>BEI/ Chapter List</p>
       </div>
       <button
         className={styles["table-header-database-button"]}

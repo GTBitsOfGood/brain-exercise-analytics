@@ -28,7 +28,6 @@ interface ChapterInfoProps {
   chapter: IChapter;
   chapterPresident: string;
   refreshUsers: () => void;
-  refreshInfo: () => void;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
@@ -165,7 +164,6 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           setShowSuccessModal={setShowEditSuccessModal}
           setSuccessLink={setEditSuccessLink}
           chapter={params.chapter}
-          refreshInfo={params.refreshInfo}
         />
       </Modal>
       <Modal

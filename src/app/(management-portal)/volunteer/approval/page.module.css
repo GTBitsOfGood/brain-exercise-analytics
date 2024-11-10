@@ -6,7 +6,6 @@
   flex-direction: column;
   align-items: center;
   row-gap: 30px;
-  position: relative;
 }
 
 .search-container {
@@ -42,14 +41,14 @@
   max-height: 0px;
   z-index: 1;
   opacity: 1;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .table-container-show {
   max-height: 10000px;
   z-index: 1;
   opacity: 1;
-  overflow: visible;
+  overflow: auto;
 }
 
 .arrowButton {
@@ -63,10 +62,4 @@
 .modalContent {
   width: 100%;
   height: 100%;
-}
-
-.netlify {
-  position: absolute;
-  right: 5%;
-  bottom: 5%;
 }

@@ -62,11 +62,7 @@ export const PATCH = APIWrapper({
       throw new Error("You do not have permission to acccess this user");
     }
 
-    if (
-      newFields.email !== null &&
-      newFields.email !== undefined &&
-      email !== newFields.email
-    ) {
+    if (newFields.email !== null && email === newFields.email) {
       await updateUserEmail(email, newFields.email);
     }
 

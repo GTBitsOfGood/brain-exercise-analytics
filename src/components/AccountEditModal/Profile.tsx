@@ -65,11 +65,7 @@ export default function Profile({ setShowSuccessModal }: Props) {
       if (dateArray.length === 3) {
         const [month, day, year] = dateArray.map(Number);
         const updatedDate = new Date(year, month - 1, day);
-        if (
-          !Number.isNaN(updatedDate.getTime()) &&
-          updatedDate.getFullYear() > 1950 &&
-          updatedDate < new Date()
-        ) {
+        if (!Number.isNaN(updatedDate.getTime())) {
           setUpdatedBirthDate(updatedDate);
         }
       }
