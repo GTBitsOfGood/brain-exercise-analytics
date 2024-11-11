@@ -56,6 +56,10 @@
   font-weight: 600;
 }
 
+.table-header-database-button:hover {
+  opacity: 50%;
+}
+
 .addChapterModalContent {
   width: 60%;
   height: 70%;

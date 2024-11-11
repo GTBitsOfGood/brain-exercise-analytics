@@ -59,7 +59,7 @@ function SelectDropdown<T>({
             width: "100%",
             border: "none",
             borderRadius: 10,
-            backgroundColor: "#F4F7FE",
+            backgroundColor: "transparent",
           }}
           sx={{
             "&.MuiOutlinedInput-root": {
@@ -300,21 +300,21 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <span className={styles.active_patient_box_label}>
             <div className={styles["toggle-button-group"]}>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : styles["inactive-button"]}`}
                 value="undefined"
                 onClick={() => dispatch(update({ active: undefined }))}
               >
                 All Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : styles["inactive-button"]}`}
                 value="true"
                 onClick={() => dispatch(update({ active: true }))}
               >
                 Active Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : styles["inactive-button"]}`}
                 value="false"
                 onClick={() => dispatch(update({ active: false }))}
               >

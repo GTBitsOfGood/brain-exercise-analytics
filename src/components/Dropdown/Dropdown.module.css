@@ -5,7 +5,11 @@
 
 .input-field {
   height: 40px;
+  background-color: var(--dropdown-background-color) !important;
 }
+/* .input-field:hover {
+  background-color: var(--dropdown-hover-color) !important;
+} */
 
 .defaultMenuItem {
   width: 100%;

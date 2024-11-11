@@ -22,6 +22,8 @@ export default function Password({ setShowSuccessModal }: Props) {
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmNewPasswordError, setConfirmNewPasswordError] = useState("");
 
+  const [resetChangeTriggers, setResetChangeTriggers] = useState(false);
+
   const resetErrors = () => {
     setOldPasswordError("");
     setNewPasswordError("");
@@ -33,6 +35,7 @@ export default function Password({ setShowSuccessModal }: Props) {
     setNewPassword("");
     setConfirmNewPassword("");
     resetErrors();
+    setResetChangeTriggers(!resetChangeTriggers);
   };
 
   const handleSaveChanges = async (
@@ -41,6 +44,7 @@ export default function Password({ setShowSuccessModal }: Props) {
     e.preventDefault();
     resetErrors();
     let error = false;
+    setResetChangeTriggers(!resetChangeTriggers);
     if (oldPassword === "") {
       setOldPasswordError("Old password cannot be blank");
       error = true;
@@ -97,6 +101,9 @@ export default function Password({ setShowSuccessModal }: Props) {
             type="password"
             showError={oldPasswordError !== ""}
             error={oldPasswordError}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={resetChangeTriggers}
           />
         </div>
         <div className={styles.inputField}>
@@ -108,6 +115,9 @@ export default function Password({ setShowSuccessModal }: Props) {
             type="password"
             showError={newPasswordError !== ""}
             error={newPasswordError}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={resetChangeTriggers}
           />
         </div>
 
@@ -120,6 +130,9 @@ export default function Password({ setShowSuccessModal }: Props) {
             type="password"
             showError={confirmNewPasswordError !== ""}
             error={confirmNewPasswordError}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={resetChangeTriggers}
           />
         </div>
         <div className={styles.buttons}>

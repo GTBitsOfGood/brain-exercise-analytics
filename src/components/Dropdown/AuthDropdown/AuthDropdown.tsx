@@ -21,6 +21,7 @@ export interface DropdownProps<T> {
   error?: string;
   placeholder?: string;
   onChange: (e: SelectChangeEvent<T>) => void;
+  resetChangeTriggers?: string | boolean;
 }
 
 export default function AuthDropdown<T>(props: DropdownProps<T>) {
@@ -35,6 +36,7 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
     showError,
     error,
     onChange,
+    resetChangeTriggers,
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -70,6 +72,9 @@ export default function AuthDropdown<T>(props: DropdownProps<T>) {
             },
           },
         }}
+        defaultBackgroundColor="#e3eafc"
+        hoverColor="#ffffff"
+        resetChangeTrigger={resetChangeTriggers}
       />
       {showError && error !== undefined && (
         <div className={styles["error-container"]}>

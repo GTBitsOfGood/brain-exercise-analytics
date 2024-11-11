@@ -31,6 +31,9 @@
   font-size: 14px;
   font-weight: 500;
 }
+.cellTitle > p:hover {
+  color: var(--hover-color);
+}
 
 .cellContent {
   display: flex;

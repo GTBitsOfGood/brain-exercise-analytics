@@ -1,6 +1,12 @@
 "use client";
 
-import React, { ReactNode, useCallback, useMemo } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { classes } from "@src/utils/utils";
@@ -40,6 +46,9 @@ export interface DropdownProps<T> {
   menuItemStyle?: React.CSSProperties;
   style?: React.CSSProperties;
   selectProps?: SelectProps;
+  defaultBackgroundColor?: string;
+  hoverColor?: string;
+  resetChangeTrigger?: string | boolean;
 }
 
 const poppins400 = Poppins({
@@ -60,6 +69,8 @@ const StyledSelect = styled(Select)(() => ({
 }));
 
 function Dropdown<T>(props: DropdownProps<T>) {
+  const [changeTriggered, setChangeTriggered] = useState(false);
+
   const {
     className,
     options,
@@ -72,10 +83,18 @@ function Dropdown<T>(props: DropdownProps<T>) {
     menuItemStyle,
     style,
     selectProps,
+    defaultBackgroundColor,
+    hoverColor,
+    resetChangeTrigger,
   } = props;
+
+  useEffect(() => {
+    setChangeTriggered(false);
+  }, [resetChangeTrigger, setChangeTriggered]);
 
   const onSelectChange = useCallback(
     (e: SelectChangeEvent<T>) => {
+      setChangeTriggered(true);
       onChange(e);
     },
     [onChange],
@@ -107,7 +126,17 @@ function Dropdown<T>(props: DropdownProps<T>) {
   );
 
   return (
-    <div className={classes(styles.container, className)}>
+    <div
+      className={classes(styles.container, className)}
+      style={
+        {
+          "--dropdown-background-color": changeTriggered
+            ? ""
+            : defaultBackgroundColor,
+          "--dropdown-hover-color": hoverColor,
+        } as React.CSSProperties
+      }
+    >
       <StyledSelect
         className={styles["input-field"]}
         value={displayValue}

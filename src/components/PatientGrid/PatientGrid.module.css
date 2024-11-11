@@ -43,3 +43,7 @@
   font-size: 14px;
   font-weight: 600;
 }
+
+.table-header-database-button:hover {
+  opacity: 50%;
+}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Error as ErrorIcon,
   RemoveRedEyeOutlined,
@@ -19,10 +19,20 @@ type InputFieldProps = {
   showError?: boolean;
   errorOutline?: boolean;
   error?: string;
+  defaultBackgroundColor?: string;
+  hoverColor?: string;
+  readOnly?: boolean;
+  resetChangeTrigger?: string | boolean;
 };
 
 const InputField = (InputFieldProps: InputFieldProps) => {
   const [passwordOrText, setPasswordOrText] = useState(InputFieldProps.type);
+
+  const [changeTriggered, setChangeTriggered] = useState(false);
+
+  useEffect(() => {
+    setChangeTriggered(false);
+  }, [InputFieldProps.resetChangeTrigger, setChangeTriggered]);
 
   const toggleHidePassword = () => {
     setPasswordOrText(passwordOrText === "text" ? "password" : "text");
@@ -35,7 +45,18 @@ const InputField = (InputFieldProps: InputFieldProps) => {
   );
 
   return (
-    <div className={classes(styles.container, InputFieldProps.className)}>
+    <div
+      className={classes(styles.container, InputFieldProps.className)}
+      style={
+        {
+          "--input-background-color": changeTriggered
+            ? ""
+            : InputFieldProps.defaultBackgroundColor,
+          "--input-hover-color": InputFieldProps.hoverColor,
+          "--input-pointer-events": InputFieldProps.readOnly ? "none" : "",
+        } as React.CSSProperties
+      }
+    >
       {InputFieldProps.title !== undefined ? (
         <div className={styles["label-container"]}>
           <label className={styles["input-label"]}>
@@ -59,7 +80,11 @@ const InputField = (InputFieldProps: InputFieldProps) => {
           required={InputFieldProps.required ?? false}
           placeholder={InputFieldProps.placeholder}
           value={InputFieldProps.value}
-          onChange={InputFieldProps.onChange}
+          onChange={(e) => {
+            setChangeTriggered(true);
+            InputFieldProps.onChange(e);
+          }}
+          readOnly={InputFieldProps.readOnly}
         />
         {InputFieldProps.type !== null &&
           InputFieldProps.type === "password" && (

@@ -12,6 +12,7 @@ interface Props<T> {
   placeholder?: string;
   showError?: boolean;
   error?: string;
+  resetChangeTriggers?: string | boolean;
 }
 
 const LiveSearchDropdown = <T extends object>({
@@ -24,6 +25,7 @@ const LiveSearchDropdown = <T extends object>({
   placeholder,
   showError,
   error,
+  resetChangeTriggers,
 }: Props<T>): JSX.Element => {
   const [showOptions, setShowOptions] = useState(false);
 
@@ -78,6 +80,9 @@ const LiveSearchDropdown = <T extends object>({
           onChange={handleChange}
           showError={showError}
           error={error}
+          defaultBackgroundColor="#e3eafc"
+          hoverColor="#ffffff"
+          resetChangeTrigger={resetChangeTriggers}
         />
 
         {/* Search options Container */}

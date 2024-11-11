@@ -177,7 +177,7 @@ const AddVolunteerModal = ({
               onClick={reset}
               className={`${styles.submitButton} ${styles.disabled}`}
             >
-              Discard
+              Cancel
             </button>
             <button
               type="submit"

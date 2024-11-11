@@ -32,6 +32,13 @@
   display: none;
 }
 
+.RowCellText {
+  width: fit-content;
+}
+.RowCellText:hover {
+  cursor: pointer;
+}
+
 .StatusContainer {
   display: flex;
   justify-content: center;
@@ -58,6 +65,10 @@
   font-family: var(--font-poppins);
   font-size: 14px;
   font-weight: 600;
+}
+
+.DatabaseButton:hover {
+  opacity: 50%;
 }
 
 .ExpandedRowContainer {

@@ -12,6 +12,7 @@ import {
   IVolunteerTableEntry,
   AdminApprovalStatus,
 } from "@/common_utils/types";
+import { classes } from "@src/utils/utils";
 import { internalRequest } from "@src/utils/requests";
 import { SearchIcon, BarChartIcon, PersonIcon, InfoIcon } from "@src/app/icons";
 import HouseIcon from "@src/app/icons/HouseIcon";
@@ -200,7 +201,12 @@ const NavigationPanel = ({ onClick, modalOpen }: Props) => {
                   <div className={styles["icon-shadow"]}>
                     <SearchIcon className={styles["icon-active"]} />
                   </div>
-                  <span className={styles["search-chapter-text"]}>
+                  <span
+                    className={classes(
+                      styles["search-chapter-text"],
+                      styles[`${!isChapterSearch && "text-hover"}`],
+                    )}
+                  >
                     Search Chapter
                   </span>
                 </Link>
@@ -219,7 +225,12 @@ const NavigationPanel = ({ onClick, modalOpen }: Props) => {
                 <div className={styles["icon-shadow"]}>
                   <SearchIcon className={styles["icon-active"]} />
                 </div>
-                <span className={styles["search-volunteer-text"]}>
+                <span
+                  className={classes(
+                    styles["search-volunteer-text"],
+                    styles[`${!isVolunteerSearch && "text-hover"}`],
+                  )}
+                >
                   Search Volunteer
                 </span>
               </Link>
@@ -237,7 +248,9 @@ const NavigationPanel = ({ onClick, modalOpen }: Props) => {
                   <PersonIcon className={styles["icon-active"]} />
                 </div>
                 <div className={styles["overall-metrics"]}>
-                  <span>Pending Approval</span>
+                  <span className={styles[`${!isApproval && "text-hover"}`]}>
+                    Pending Approval
+                  </span>
                 </div>
                 {pendingApprovals > 0 && (
                   <div className={styles["red-bubble"]}>{pendingApprovals}</div>
@@ -259,7 +272,12 @@ const NavigationPanel = ({ onClick, modalOpen }: Props) => {
             <div className={styles["icon-shadow"]}>
               <SearchIcon className={"icon-active"} />
             </div>
-            <span className={styles["search-patient-text"]}>
+            <span
+              className={classes(
+                styles["search-patient-text"],
+                styles[`${!isPatientSearch && "text-hover"}`],
+              )}
+            >
               Search Patients
             </span>
           </Link>
@@ -276,7 +294,9 @@ const NavigationPanel = ({ onClick, modalOpen }: Props) => {
               />
             </div>
             <div className={styles["overall-metrics"]}>
-              <span>Patient Analytics</span>
+              <span className={styles[`${!isAnalytics && "text-hover"}`]}>
+                Patient Analytics
+              </span>
               {!isAnalytics && (
                 <div className={styles["info-icon-wrapper"]}>
                   <div className={styles["info-icon"]}>
