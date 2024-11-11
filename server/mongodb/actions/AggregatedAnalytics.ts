@@ -92,7 +92,6 @@ export const getAggregatedAnalytics = async (
 
     let counter = 0;
     const lenOfMetrics = analyticsRecord.weeklyMetrics.length;
-    const groupSize = Math.floor(lenOfMetrics / 12);
 
     // reversing the list
     const reversedWeeklyMetrics = analyticsRecord.weeklyMetrics.reverse();
@@ -103,10 +102,6 @@ export const getAggregatedAnalytics = async (
         : new Date(reversedWeeklyMetrics[0].date);
 
     let lastDate =
-      reversedWeeklyMetrics.length === 0
-        ? lastMonday
-        : new Date(reversedWeeklyMetrics[0].date);
-    let lastDateMax =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
         : new Date(reversedWeeklyMetrics[0].date);
@@ -121,13 +116,14 @@ export const getAggregatedAnalytics = async (
         dateVar = formatDateByRangeEnum(lastDate, range);
       }
 
-      // group into groups of 12 and put everything into the last object once it goes over
       if (range === DateRangeEnum.MAX) {
-        if (counter % groupSize === 0 && counter < groupSize * 12) {
-          lastDateMax = item.date;
+        if (lenOfMetrics > 12) {
+          dateVar = formatDateByRangeEnum(item.date, range, true);
+        } else {
+          dateVar = formatDateByRangeEnum(item.date, range);
         }
-        dateVar = formatDateByRangeEnum(lastDateMax, range);
       }
+
       counter += 1;
       lastDate = item.date;
 
@@ -231,6 +227,7 @@ export const getAggregatedAnalytics = async (
       "questionsCompleted",
       "questionsCorrect",
     ]);
+
     Object.values(groupSumDict).forEach((monthDict) => {
       Object.values(monthDict).forEach((monthTypeDict) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -260,70 +257,78 @@ export const getAggregatedAnalytics = async (
     const allDateVars = Array.from(dbDateVars).reverse();
 
     // PADDING
-    if (range !== DateRangeEnum.MAX) {
-      let len = Object.keys(groupSumDict).length;
+    let len = Object.keys(groupSumDict).length;
 
-      let totalWeeks = numOfWeeks;
-      if (range === DateRangeEnum.HALF) {
-        totalWeeks = 13;
-      } else if (range === DateRangeEnum.YEAR) {
-        totalWeeks = 12;
-      }
-      if (
-        userIDs.length === 1 &&
-        (analyticsRecords[0].weeklyMetrics as []).length === 0
-      ) {
+    let totalWeeks = numOfWeeks;
+    if (range === DateRangeEnum.HALF) {
+      totalWeeks = 13;
+    } else if (range === DateRangeEnum.YEAR) {
+      totalWeeks = 12;
+    } else if (range === DateRangeEnum.MAX) {
+      if (lenOfMetrics === 1) {
+        totalWeeks = 6;
+      } else {
         totalWeeks = 0;
       }
-
-      while (len < totalWeeks) {
-        if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
-          paddingDate.setDate(paddingDate.getDate() - 7);
-        } else if (range === DateRangeEnum.HALF) {
-          paddingDate.setDate(paddingDate.getDate() - 14);
-        } else if (range === DateRangeEnum.YEAR) {
-          paddingDate.setMonth(paddingDate.getMonth() - 1);
-        }
-
-        const tempDateString = formatDateByRangeEnum(paddingDate, range);
-
-        allDateVars.push(tempDateString);
-        groupSumDict[tempDateString] = Object.fromEntries(
-          Object.entries({
-            overall: {
-              streakLength: 0,
-              streakHistory: 0,
-            },
-            math: {
-              avgAccuracy: 0,
-              avgDifficultyScore: 0,
-              avgQuestionsCompleted: 0,
-              avgTimePerQuestion: 0,
-            },
-            reading: {
-              avgSessionsCompleted: 0,
-              avgSessionsAttempted: 0,
-              avgWordsPerMin: 0,
-              avgPassagesRead: 0,
-              avgTimePerPassage: 0,
-            },
-            writing: {
-              avgSessionsCompleted: 0,
-              avgSessionsAttempted: 0,
-              avgPromptsAnswered: 0,
-              avgTimePerQuestion: 0,
-            },
-            trivia: {
-              avgAccuracy: 0,
-              avgQuestionsCompleted: 0,
-              avgTimePerQuestion: 0,
-            },
-          }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
-        );
-
-        len += 1;
-      }
     }
+
+    if (
+      userIDs.length === 1 &&
+      (analyticsRecords[0].weeklyMetrics as []).length === 0
+    ) {
+      totalWeeks = 0;
+    }
+
+    while (len < totalWeeks) {
+      if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      } else if (range === DateRangeEnum.HALF) {
+        paddingDate.setDate(paddingDate.getDate() - 14);
+      } else if (range === DateRangeEnum.YEAR) {
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
+      } else if (range === DateRangeEnum.MAX) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      }
+
+      const tempDateString = formatDateByRangeEnum(paddingDate, range);
+
+      allDateVars.push(tempDateString);
+      groupSumDict[tempDateString] = Object.fromEntries(
+        Object.entries({
+          overall: {
+            streakLength: 0,
+            streakHistory: 0,
+          },
+          math: {
+            avgAccuracy: 0,
+            avgDifficultyScore: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+          reading: {
+            avgSessionsCompleted: 0,
+            avgSessionsAttempted: 0,
+            avgWordsPerMin: 0,
+            avgPassagesRead: 0,
+            avgTimePerPassage: 0,
+          },
+          writing: {
+            avgSessionsCompleted: 0,
+            avgSessionsAttempted: 0,
+            avgPromptsAnswered: 0,
+            avgTimePerQuestion: 0,
+          },
+          trivia: {
+            avgAccuracy: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+        }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
+      );
+
+      len += 1;
+    }
+    // }
 
     const result: Result = {};
     sections.forEach((type) => {
@@ -416,7 +421,7 @@ export const getAggregatedAnalytics = async (
             };
             const obj = result.overall;
             if (obj) {
-              obj.streakHistory.push(dr);
+              obj.streakHistory.unshift(dr);
             }
           }
 
