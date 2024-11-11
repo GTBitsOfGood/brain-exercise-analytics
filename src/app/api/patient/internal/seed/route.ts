@@ -2,9 +2,6 @@ import APIWrapper from "@server/utils/APIWrapper";
 import User from "@server/mongodb/models/User";
 import { IUser } from "@/common_utils/types";
 import { createAnalyticsID } from "@server/mongodb/actions/Analytics";
-import Analytics from "@server/mongodb/models/Analytics";
-import { sampleUsers } from "@src/utils/patients";
-import mongoose from "mongoose";
 
 export const dynamic = "force-dynamic";
 
