@@ -122,7 +122,7 @@ export default function Page() {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
+        <p className={styles["intro-text"]}>Search for Patients Here!</p>
         <div className={styles["search-wrapper"]}>
           <Search />
         </div>

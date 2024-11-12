@@ -74,7 +74,7 @@ export default function Page() {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>Search Chapter at BEI</p>
+        <p className={styles["intro-text"]}>Search for BEI Chapters Here!</p>
         <div className={styles["search-wrapper"]}>
           <ChapterSearch />
         </div>

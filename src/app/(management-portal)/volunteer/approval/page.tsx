@@ -125,7 +125,7 @@ export default function Page() {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>Search for a volunteer here!</p>
+        <p className={styles["intro-text"]}>Approve/Deny Volunteers Here!</p>
         <div className={styles["search-wrapper"]}>
           <VolunteerSearch />
         </div>
