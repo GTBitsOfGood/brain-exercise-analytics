@@ -11,7 +11,7 @@
   border-radius: var(--12, 12px);
   box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
   font-family: var(--font-poppins);
-  overflow-y: visible;
+  overflow: scroll;
   position: relative;
 }
 
