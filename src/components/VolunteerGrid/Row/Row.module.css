@@ -51,6 +51,8 @@
   column-gap: 30px;
   flex-wrap: wrap;
   margin: 0 0 0 -10px;
+  padding-left: 10px;
+  overflow: hidden;
 }
 
 .ExpandedRowColumn {
