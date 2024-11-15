@@ -40,6 +40,10 @@ const GroupMathScreen = ({
   style,
   menuState,
 }: InputProp) => {
+
+  const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
+  const modifiedTime = `${totalTime} seconds`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -104,7 +108,7 @@ const GroupMathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Average Accuracy"
-            text={currentAccuracy}
+            text={modifiedAccuracy}
             Icon={AccuracyIcon}
           />
           <SmallDataBox
@@ -122,7 +126,7 @@ const GroupMathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Average Time per Question"
-            text={totalTime}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>

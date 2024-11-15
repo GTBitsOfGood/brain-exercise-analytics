@@ -71,20 +71,6 @@ export default function GroupReadingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
-            width={325}
-            height={215}
-            title="Reading Session Completion History"
-            data={sessionHistory}
-            legend={[
-              { text: "sessions completed without reading", color: "#FF9FB3" },
-              { text: "sessions completed with reading", color: "#008AFC" },
-            ]}
-            hoverable
-            percentageChange
-            fullWidth
-            gridLines
-          />
           <BarChart
             width={325}
             height={210}
@@ -129,7 +115,7 @@ export default function GroupReadingScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Time per Passage"
-            text={avgPassageTime}
+            text={`${avgPassageTime} seconds`}
             Icon={TimeIcon}
           />
         </div>

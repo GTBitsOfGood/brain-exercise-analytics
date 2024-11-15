@@ -46,21 +46,6 @@ export default function GroupWritingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
-            width={325}
-            height={210}
-            title="Writing Session Completion History"
-            data={sessionHistory}
-            legend={[
-              { text: "sessions completed without writing", color: "#FF9FB3" },
-              { text: "sessions completed with writing", color: "#008AFC" },
-            ]}
-            info="Some really extremely interesting information about stacked bar chart."
-            hoverable
-            percentageChange
-            fullWidth
-            gridLines
-          />
           <BarChart
             width={325}
             height={210}
@@ -95,7 +80,7 @@ export default function GroupWritingScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Time per Prompt"
-            text={avgTime}
+            text={`${avgTime} seconds`}
             Icon={TimeIcon}
           />
         </div>

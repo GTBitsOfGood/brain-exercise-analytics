@@ -117,7 +117,7 @@ export interface IAnalytics {
   totalSessionsCompleted: number;
   active: boolean;
   streak: Days[];
-  lastSessionsMetrics: [
+  lastSessionMetrics:
     {
       date: Date;
       math: {
@@ -148,7 +148,6 @@ export interface IAnalytics {
         skipped: boolean;
       };
     },
-  ];
   weeklyMetrics: [
     {
       date: Date;

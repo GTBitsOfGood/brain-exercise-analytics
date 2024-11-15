@@ -40,6 +40,7 @@ const MathScreen = ({
   style,
   menuState,
 }: InputProp) => {
+
   const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
   const modifiedTime = `${totalTime} seconds`;
 

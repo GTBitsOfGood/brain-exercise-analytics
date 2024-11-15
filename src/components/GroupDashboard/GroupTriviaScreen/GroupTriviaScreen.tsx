@@ -48,6 +48,8 @@ export default function GroupTriviaScreen({
   style,
   menuState,
 }: InputProp) {
+  const modifiedAccuracy = `${Math.round(+avgAccuracy * 100)}%`;
+  const modifiedTime = `${avgTime} seconds`;
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -99,7 +101,7 @@ export default function GroupTriviaScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Accuracy"
-            text={avgAccuracy}
+            text={modifiedAccuracy}
             Icon={AccuracyIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
@@ -113,7 +115,7 @@ export default function GroupTriviaScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Time per Question"
-            text={avgTime}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>

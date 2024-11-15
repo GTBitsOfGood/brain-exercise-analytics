@@ -221,7 +221,6 @@ export const getAggregatedAnalytics = async (
         }
       });
     });
-
     const excludedProperties = new Set([
       "totalNum",
       "questionsCompleted",
@@ -328,7 +327,7 @@ export const getAggregatedAnalytics = async (
 
       len += 1;
     }
-    // }
+
 
     const result: Result = {};
     sections.forEach((type) => {
@@ -377,6 +376,7 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
+
 
     const excludedProperties2 = new Set([
       "totalNum",
@@ -442,6 +442,7 @@ export const getAggregatedAnalytics = async (
       });
     });
 
+
     // if overshoot, remove last element
     // const groupSumArray = Object.values(groupSumDict)
     // if ((groupSumArray.length === 4 && range === "quarter") ||
@@ -459,18 +460,18 @@ export const getAggregatedAnalytics = async (
             active: analyticsRecord.active,
             streak: analyticsRecord.streak,
             startDate: user?.startDate ? new Date(user.startDate) : new Date(),
-            lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
+            lastSessionDate: analyticsRecord.lastSessionMetrics.date,
             totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
             lastSession: {
               mathQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               wordsRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics.reading.passagesRead,
               promptsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].writing
+                analyticsRecord.lastSessionMetrics.writing
                   .questionsAnswered, // writing
               triviaQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
+                analyticsRecord.lastSessionMetrics.trivia
                   .questionsAttempted,
             },
             name: `${user.firstName} ${user.lastName}`,
@@ -483,20 +484,20 @@ export const getAggregatedAnalytics = async (
             ...result.math,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].math
+                analyticsRecord.lastSessionMetrics.math
                   .questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].math
+                  : analyticsRecord.lastSessionMetrics.math
                       .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].math
+                    analyticsRecord.lastSessionMetrics.math
                       .questionsAttempted,
               difficultyScore:
-                analyticsRecord.lastSessionsMetrics[0].math
+                analyticsRecord.lastSessionMetrics.math
                   .finalDifficultyScore,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].math.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.math.timePerQuestion,
             },
           };
           break;
@@ -507,11 +508,11 @@ export const getAggregatedAnalytics = async (
             ...result.reading,
             lastSession: {
               passagesRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics.reading.passagesRead,
               timePerPassage:
-                analyticsRecord.lastSessionsMetrics[0].reading.timePerPassage,
+                analyticsRecord.lastSessionMetrics.reading.timePerPassage,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].reading
+                analyticsRecord.lastSessionMetrics.reading
                   .questionsAnswered !== 0,
             },
           };
@@ -523,12 +524,12 @@ export const getAggregatedAnalytics = async (
             ...result.writing,
             lastSession: {
               promptsAnswered:
-                analyticsRecord.lastSessionsMetrics[0].writing
+                analyticsRecord.lastSessionMetrics.writing
                   .questionsAnswered,
               timePerPrompt:
-                analyticsRecord.lastSessionsMetrics[0].writing.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.writing.timePerQuestion,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].writing
+                analyticsRecord.lastSessionMetrics.writing
                   .questionsAnswered !== 0,
             },
           };
@@ -540,18 +541,18 @@ export const getAggregatedAnalytics = async (
             ...result.trivia,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].trivia
+                analyticsRecord.lastSessionMetrics.trivia
                   .questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].trivia
+                  : analyticsRecord.lastSessionMetrics.trivia
                       .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].trivia
+                    analyticsRecord.lastSessionMetrics.trivia
                       .questionsAttempted,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
+                analyticsRecord.lastSessionMetrics.trivia
                   .questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].trivia.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.trivia.timePerQuestion,
             },
           };
           break;

@@ -261,17 +261,17 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
               triviaQuestionsCompleted: 0,
             }
           }
-          sessionCompletionHistory={overall?.streakHistory ?? dataBar}
+          sessionCompletionHistory={overall?.streakHistory ?? []}
         />
       </div>
       <Divider id="math" />
       <div className={styles.sectionContainer}>
         <GroupMathScreen
           menuState={[mathMenu, updateMathAnalytics]}
-          accuracyData={math?.avgAccuracy ?? dataLine}
-          difficultyData={math?.avgDifficultyScore ?? dataLine}
-          numQuestionData={math?.avgQuestionsCompleted ?? numberOfQuestionData}
-          timeData={math?.avgTimePerQuestion ?? dataBar}
+          accuracyData={math?.avgAccuracy ?? []}
+          difficultyData={math?.avgDifficultyScore ?? []}
+          numQuestionData={math?.avgQuestionsCompleted ?? []}
+          timeData={math?.avgTimePerQuestion ?? []}
           currentAccuracy={(math?.lastSession.accuracy ?? 0).toString()}
           currentDifficulty={(
             math?.lastSession.difficultyScore ?? 0
@@ -286,10 +286,10 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       <div className={styles.sectionContainer}>
         <GroupReadingScreen
           menuState={[readingMenu, updateReadingAnalytics]}
-          sessionHistory={reading?.sessionCompletion ?? dataStacked}
-          readingRate={reading?.avgTimePerPassage ?? dataLine}
-          avgPassageData={reading?.avgPassagesRead ?? dataBar}
-          timeData={reading?.avgWordsPerMin ?? dataBar}
+          sessionHistory={reading?.sessionCompletion ?? []}
+          readingRate={reading?.avgTimePerPassage ?? []}
+          avgPassageData={reading?.avgPassagesRead ?? []}
+          timeData={reading?.avgWordsPerMin ?? []}
           avgPassageTime={(reading?.lastSession.passagesRead ?? 0).toString()}
           avgTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
         />
@@ -298,9 +298,9 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       <div className={styles.sectionContainer}>
         <GroupWritingScreen
           menuState={[writingMenu, updateWritingAnalytics]}
-          sessionHistory={writing?.sessionCompletion ?? dataStacked}
-          numCompleted={writing?.avgPromptsAnswered ?? dataBar}
-          avgTimeData={writing?.avgTimePerQuestion ?? dataBar}
+          sessionHistory={writing?.sessionCompletion ?? []}
+          numCompleted={writing?.avgPromptsAnswered ?? []}
+          avgTimeData={writing?.avgTimePerQuestion ?? []}
           totalPrompts={(writing?.lastSession.promptsAnswered ?? 0).toString()}
           avgTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
           attemptStatus={writing?.lastSession.completed ?? false}
@@ -310,11 +310,11 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       <div className={styles.sectionContainer}>
         <GroupTriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
-          accuracyData={trivia?.avgAccuracy ?? dataLine}
+          accuracyData={trivia?.avgAccuracy ?? []}
           numQuestionData={
-            trivia?.avgQuestionsCompleted ?? numberOfQuestionData
+            trivia?.avgQuestionsCompleted ?? []
           }
-          timeData={trivia?.avgTimePerQuestion ?? dataBar}
+          timeData={trivia?.avgTimePerQuestion ?? []}
           avgAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(
             trivia?.lastSession.questionsCompleted ?? 0
