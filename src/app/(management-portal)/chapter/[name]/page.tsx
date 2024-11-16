@@ -68,6 +68,7 @@ export default function Page({ params }: { params: { name: string } }) {
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [entriesPerPage, setEntriesPerPage] = useState(8)
+  const [totalEntries, setTotalEntries] = useState(0)
 
   const fetchUsers = useCallback(() => {
     setLoading(true);
@@ -87,6 +88,7 @@ export default function Page({ params }: { params: { name: string } }) {
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      setTotalEntries(res?.numRecords ?? 0)
       setLoading(false);
     });
   }, [fullName, currentPage, sortField, params.name, entriesPerPage]);
@@ -172,6 +174,7 @@ export default function Page({ params }: { params: { name: string } }) {
           chapter={decodeURI(params.name)}
           entriesPerPage={entriesPerPage}
           setEntriesPerPage={setEntriesPerPage}
+          totalEntries={totalEntries}
         />
       </div>
     </div>

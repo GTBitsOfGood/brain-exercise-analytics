@@ -22,6 +22,7 @@ interface PatientGridProps {
   currentPage: number;
   entriesPerPage: number;
   setEntriesPerPage: (arg: number) => void
+  totalEntries: number;
 }
 
 const columns: GridColDef[] = [
@@ -147,6 +148,7 @@ export default function PatientGrid(params: PatientGridProps) {
         currentPage={params.currentPage}
         entriesPerPage={params.entriesPerPage}
         setEntriesPerPage={params.setEntriesPerPage}
+        totalEntries={params.totalEntries}
       />
     </div>
   );

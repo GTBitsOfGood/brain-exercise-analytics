@@ -124,7 +124,7 @@ const Pagination = (params: DataParams) => {
         </div>
         {}
         <div className={styles.pagesInfo}>
-          <p className={styles.pageResults}> Results: {params.totalEntries === 0 ? 0 : params.currentPage * 
+          <p className={styles.pageResults}> Results: {params.currentPage * 
             params.entriesPerPage + 1} - {(params.currentPage + 1) * params.entriesPerPage > params.totalEntries ? 
             params.totalEntries : (params.currentPage + 1) * params.entriesPerPage} of {params.totalEntries}
           </p>
