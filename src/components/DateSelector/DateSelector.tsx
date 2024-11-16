@@ -34,6 +34,7 @@ function DateSelector({
         border: "none",
         width: "130px",
         textAlign: "center",
+        backgroundColor: "white",
       }}
       sx={{
         "&.MuiOutlinedInput-root": {
@@ -48,6 +49,7 @@ function DateSelector({
         fontSize: "12px",
         fontFamily: poppins500.style.fontFamily,
       }}
+      defaultBackgroundColor="#ffffff"
     />
   );
 }

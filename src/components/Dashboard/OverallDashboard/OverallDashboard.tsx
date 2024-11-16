@@ -10,12 +10,13 @@ import {
   QuestionIcon as QI,
   BarChartIcon,
 } from "@src/app/icons";
-import { CSSProperties } from "react";
+import { CSSProperties, useState, useRef, useEffect } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
 import { D3Data } from "@src/utils/types";
 import Chip from "@src/components/Chip/Chip";
 import ActiveIndicatorBox from "@src/components/ActiveIndicatorBox/ActiveIndicatorBox";
 import DateSelector from "@src/components/DateSelector/DateSelector";
+import PopupModal from "@src/components/Graphs/PopupModal/PopupModal";
 import { BarChart, SmallDataBox, WeeklyProgress } from "../../Graphs";
 import styles from "./OverallDashboard.module.scss";
 
@@ -54,6 +55,26 @@ function formatDate(date: Date) {
 }
 
 export default function OverallDashboard(params: Params) {
+  const [infoPopup, setInfoPopup] = useState(false);
+  const infoButtonRef = useRef(null);
+  const [popupX, setPopupX] = useState<number | null>(null);
+  const [popupY, setPopupY] = useState<number | null>(null);
+
+  useEffect(() => {
+    const onScroll = () => setInfoPopup(false);
+    // clean up code
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    if (infoButtonRef.current) {
+      const rect: Element = infoButtonRef.current;
+      const newTop = rect.getBoundingClientRect().y + 30;
+      setPopupY(newTop);
+      const left = rect.getBoundingClientRect().x;
+      setPopupX(left);
+    }
+  }, [setPopupX, setPopupY, setInfoPopup]);
+
   return (
     <div className={styles.OverallDashboard} style={params.style}>
       <div className={styles.titleRow}>
@@ -74,7 +95,31 @@ export default function OverallDashboard(params: Params) {
           active={params.active}
           style={{ marginLeft: "17px", marginRight: "10px" }}
         />
-        <IGI />
+        <div
+          className={styles.infoBox}
+          onMouseEnter={() => {
+            setInfoPopup(true);
+          }}
+          onMouseLeave={() => {
+            setInfoPopup(false);
+          }}
+          ref={infoButtonRef}
+          style={{ position: "relative" }}
+        >
+          <IGI />
+          <PopupModal
+            show={infoPopup}
+            info={
+              "Active means a user has completed at least two sessions each week for the past two weeks."
+            }
+            style={{
+              position: "fixed",
+              top: `${popupY}px`,
+              zIndex: 500,
+              left: `${popupX}px`,
+            }}
+          />
+        </div>
         <div className={styles.dateSelector}>
           <DateSelector
             selectedValue={params.menuState[0]}
