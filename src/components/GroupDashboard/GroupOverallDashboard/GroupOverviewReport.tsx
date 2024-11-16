@@ -40,6 +40,8 @@ interface Params {
 }
 
 export default function GroupOverviewReport(params: Params) {
+
+  console.log(params.sessionCompletionHistory)
   return (
     <div className={styles.OverallDashboard} style={params.style}>
       <div className={styles.titleRow}>

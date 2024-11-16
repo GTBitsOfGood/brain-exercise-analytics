@@ -9,6 +9,7 @@ import {
 } from "@/common_utils/types";
 import { getUsersFiltered } from "@server/mongodb/actions/User";
 import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
+import { group } from "console";
 
 type RequestData = {
   filters: PatientSearchParams;
@@ -137,8 +138,9 @@ export const POST = APIWrapper({
         groupAnalytics.overall.lastSession.triviaQuestionsCompleted +=
           data.overall.lastSession.triviaQuestionsCompleted / usersLength;
 
-        const count = 0;
+        let count = 0;
         data.overall.streakHistory.forEach((element: DataRecord) => {
+
           const modifiedElement = { ...element };
           modifiedElement.value /= usersLength;
 
@@ -148,6 +150,7 @@ export const POST = APIWrapper({
             groupAnalytics.overall!.streakHistory[count].value +=
               modifiedElement.value;
           }
+          count += 1;
         });
 
         if (data.overall.active) {
@@ -426,6 +429,8 @@ export const POST = APIWrapper({
         });
       }
     });
+
+    console.log(groupAnalytics.overall?.streakHistory)
 
     groupAnalytics.activePatients = aggregatedDataObject.activePatients;
     groupAnalytics.totalPatients = aggregatedDataObject.totalPatients;

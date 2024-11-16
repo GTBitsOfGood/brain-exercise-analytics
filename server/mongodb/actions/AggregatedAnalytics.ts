@@ -465,6 +465,7 @@ export const getAggregatedAnalytics = async (
             if (obj) {
               obj.streakHistory.unshift(dr);
             }
+            console.log(dr)
           }
 
           dr = {
@@ -606,7 +607,6 @@ export const getAggregatedAnalytics = async (
 
     out.push(finalAggregation);
   }
-  console.log(userRecords);
   const finalOut: AggregatedAnalyticsResponse = {
     analytics: out,
     totalPatients: userIDs.length,
