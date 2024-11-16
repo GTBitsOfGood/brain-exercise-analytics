@@ -34,6 +34,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [entriesPerPage, setEntriesPerPage] = useState(8)
 
   const fetchChapters = useCallback(() => {
     setLoading(true);
@@ -46,13 +47,14 @@ export default function Page() {
         },
         page: currentPage,
         sortParams: sortField,
+        entriesPerPage: entriesPerPage
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredChapters(res?.data ?? []);
       setLoading(false);
     });
-  }, [name, sortField, currentPage]);
+  }, [name, sortField, currentPage, entriesPerPage]);
 
   useEffect(() => {
     fetchChapters();
@@ -60,7 +62,7 @@ export default function Page() {
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [name, sortField]);
+  }, [name, sortField, entriesPerPage]);
 
   return (
     <div className={styles.container}>
@@ -92,6 +94,8 @@ export default function Page() {
           setCurrentPage={setCurrentPage}
           pageCount={pageCount}
           currentPage={currentPage}
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
         />
       </div>
       <div className={styles.netlify}>

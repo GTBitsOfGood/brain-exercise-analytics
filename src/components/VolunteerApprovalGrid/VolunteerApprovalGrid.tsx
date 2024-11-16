@@ -20,6 +20,8 @@ interface VolunteerApprovalGridProps {
   pageCount: number;
   currentPage: number;
   refreshUsers: () => void;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void
 }
 
 const columns: GridColDef[] = [
@@ -86,6 +88,8 @@ export default function VolunteerApprovalGrid(
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
         currentPage={params.currentPage}
+        entriesPerPage={params.entriesPerPage}
+        setEntriesPerPage={params.setEntriesPerPage}
       />
       <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal

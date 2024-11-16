@@ -20,6 +20,8 @@ interface PatientGridProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
   currentPage: number;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void
 }
 
 const columns: GridColDef[] = [
@@ -143,6 +145,8 @@ export default function PatientGrid(params: PatientGridProps) {
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
         currentPage={params.currentPage}
+        entriesPerPage={params.entriesPerPage}
+        setEntriesPerPage={params.setEntriesPerPage}
       />
     </div>
   );

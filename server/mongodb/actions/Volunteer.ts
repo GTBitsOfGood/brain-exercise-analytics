@@ -41,7 +41,7 @@ export const getVolunteersFiltered = async ({
 }: Body<VolunteerSearchParams>): Promise<
   SearchResponseBody<IUser> | undefined
 > => {
-  const numOfItems = entriesPerPage || 3;
+  const numOfItems = entriesPerPage || 8;
 
   const userParamsObject = {} as VParam;
   if (paramsObject.approved !== undefined) {

@@ -152,10 +152,11 @@ export const getUsersFiltered = async ({
   sortParams,
   searchall,
   onlyids,
+  entriesPerPage
 }: SearchRequestBody<PatientSearchParams>): Promise<
   SearchResponseBody<IPatientTableEntry> | undefined
 > => {
-  let numOfItems = 8;
+  let numOfItems = entriesPerPage || 8;
   let newpage = page;
 
   if (page === undefined) {

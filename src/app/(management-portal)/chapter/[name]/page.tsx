@@ -67,6 +67,7 @@ export default function Page({ params }: { params: { name: string } }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [entriesPerPage, setEntriesPerPage] = useState(8)
 
   const fetchUsers = useCallback(() => {
     setLoading(true);
@@ -80,13 +81,15 @@ export default function Page({ params }: { params: { name: string } }) {
         },
         page: currentPage,
         sortParams: sortField,
+        entriesPerPage: entriesPerPage
+
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
       setLoading(false);
     });
-  }, [fullName, currentPage, sortField, params.name]);
+  }, [fullName, currentPage, sortField, params.name, entriesPerPage]);
 
   const fetchChapterAndPresident = useCallback(() => {
     setLoading(true);
@@ -125,7 +128,7 @@ export default function Page({ params }: { params: { name: string } }) {
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [fullName, sortField]);
+  }, [fullName, sortField, entriesPerPage]);
 
   return (
     <div className={styles.container}>
@@ -167,6 +170,8 @@ export default function Page({ params }: { params: { name: string } }) {
           currentPage={currentPage}
           refreshUsers={fetchUsers}
           chapter={decodeURI(params.name)}
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
         />
       </div>
     </div>

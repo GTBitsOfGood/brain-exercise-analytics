@@ -108,6 +108,7 @@ export default function Page() {
     beiChapters,
     volunteerRoles,
     sortField,
+    entriesPerPage
   ]);
 
   return (
