@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import styles from "./Pagination.module.css";
-import AuthDropdown from "../Dropdown/AuthDropdown/AuthDropdown";
 import ApplyDropdown from "../Dropdown/ApplyDropdown/ApplyDropdown";
 
 
@@ -10,6 +9,7 @@ interface DataParams {
   pageCount: number;
   entriesPerPage: number;
   setEntriesPerPage: (arg: number) => void
+  totalEntries: number
 }
 
 const Pagination = (params: DataParams) => {
@@ -83,6 +83,7 @@ const Pagination = (params: DataParams) => {
     value: 15,
     displayValue: "15",
   }]
+
   return (
     <div className={styles.Container}>
       <div
@@ -123,8 +124,9 @@ const Pagination = (params: DataParams) => {
         </div>
         {}
         <div className={styles.pagesInfo}>
-          <p className={styles.pageResults}> Results: {params.currentPage * params.entriesPerPage + 1} - {(params.currentPage + 1) * params.entriesPerPage}
-            &nbsp; of {params.pageCount*params.entriesPerPage}
+          <p className={styles.pageResults}> Results: {params.totalEntries === 0 ? 0 : params.currentPage * 
+            params.entriesPerPage + 1} - {(params.currentPage + 1) * params.entriesPerPage > params.totalEntries ? 
+            params.totalEntries : (params.currentPage + 1) * params.entriesPerPage} of {params.totalEntries}
           </p>
           <ApplyDropdown
             options={entryAmounts}
