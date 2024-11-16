@@ -34,7 +34,8 @@ interface Params {
     selectedValue: DateRangeEnum,
     setSelectedvalue: (value: DateRangeEnum) => void,
   ];
-
+  totalPatients: Number | String,
+  activePatients: Number | String
   // Need to update with the schema of the response we will get from the backend
 }
 
@@ -62,15 +63,15 @@ export default function GroupOverviewReport(params: Params) {
       <div className={styles.dataGrid}>
         <SmallDataBox
           className={styles.box}
-          title="Total Users"
+          title="Total Patients"
           Icon={PeopleIcon}
-          text="200"
+          text={`${params.totalPatients}`}
         />
         <SmallDataBox
           className={styles.box}
-          title="Active Users"
+          title="Active Patients"
           Icon={PersonIcon}
-          text={"10"}
+          text={`${params.activePatients}`}
         />
       </div>
       <div className={styles.middleContainer}>

@@ -18,6 +18,7 @@ import {
   IAggregatedAnalyticsTrivia,
   IAggregatedAnalyticsWriting,
   PatientSearchParams,
+  PatientStats,
 } from "@/common_utils/types";
 import {
   dataBar,
@@ -112,6 +113,10 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
     IAggregatedAnalyticsOverall["overall"] | undefined
   >(undefined);
 
+  const [totalPatients, setTotalPatients] = useState<Number | String>("---");
+  const [activePatients, setActivePatients] = useState<Number | String>("---");
+
+
   const [dashboardMenu, setDashboardMenu] = useState<DateRangeEnum>(
     DateRangeEnum.RECENT,
   );
@@ -159,6 +164,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
         newDateRange,
         [AnalyticsSectionEnum.OVERALL],
       );
+      console.log(data)
       setMath(data.math);
       setTrivia(data.trivia);
       setReading(data.reading);
@@ -169,6 +175,8 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       setReadingMenu(newDateRange);
       setWritingMenu(newDateRange);
       setTriviaMenu(newDateRange);
+      setTotalPatients(data.totalPatients);
+      setActivePatients(data.activePatients);
     },
     [retrieveAnalytics],
   );
@@ -262,6 +270,8 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
             }
           }
           sessionCompletionHistory={overall?.streakHistory ?? []}
+          totalPatients={totalPatients}
+          activePatients={activePatients}
         />
       </div>
       <Divider id="math" />

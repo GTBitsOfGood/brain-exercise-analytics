@@ -47,6 +47,7 @@ export const POST = APIWrapper({
       ),
     );
 
+
     const enumValues = new Set(Object.values(AnalyticsSectionEnum));
 
     if (!sections || sections.some((section) => !enumValues.has(section))) {
@@ -87,11 +88,16 @@ export const POST = APIWrapper({
 
     const usersids = users.data.map((element) => element._id);
 
-    const aggregatedDataArray = await getAggregatedAnalytics(
+
+    const aggregatedDataObject = await getAggregatedAnalytics(
       usersids,
       range,
       updatedSections,
     );
+
+    const aggregatedDataArray = aggregatedDataObject.analytics;
+
+
 
     aggregatedDataArray.forEach((data) => {
       // for (const userdatadict of users.data) {
@@ -420,6 +426,9 @@ export const POST = APIWrapper({
         });
       }
     });
+
+    groupAnalytics.activePatients = aggregatedDataObject.activePatients;
+    groupAnalytics.totalPatients = aggregatedDataObject.totalPatients;
 
     return groupAnalytics;
   },

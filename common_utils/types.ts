@@ -350,6 +350,7 @@ export interface IAggregatedAnalyticsAll
     IAggregatedAnalyticsMath,
     IAggregatedAnalyticsTrivia,
     IAggregatedAnalyticsReading,
+    PatientStats,
     IAggregatedAnalyticsWriting {}
 
 export interface IAggregatedAnalyticsOverall {
@@ -435,6 +436,7 @@ export interface IAggregatedGroupAnalyticsAll
     IAggregatedGroupAnalyticsMath,
     IAggregatedGroupAnalyticsReading,
     IAggregatedGroupAnalyticsWriting,
+    PatientStats,
     IAggregatedGroupAnalyticsTrivia {}
 
 export type IAggregatedGroupAnalyticsOverall = {
@@ -464,6 +466,12 @@ export type IAggregatedGroupAnalyticsWriting = {
     >;
   };
 };
+
+
+export interface PatientStats {
+  totalPatients: number;
+  activePatients: number;
+}
 
 export interface IGeneralReducer {
   pendingApprovals: number;

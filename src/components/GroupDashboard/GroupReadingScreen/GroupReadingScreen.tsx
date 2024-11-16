@@ -57,6 +57,9 @@ export default function GroupReadingScreen({
   style,
   menuState,
 }: InputProp) {
+
+  const modifiedTime = `${Math.round(+avgTime)} seconds`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -109,13 +112,13 @@ export default function GroupReadingScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Number of Passages Read"
-            text={avgTime}
+            text={avgPassageTime}
             Icon={QuestionIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Passage"
-            text={`${avgPassageTime} seconds`}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>

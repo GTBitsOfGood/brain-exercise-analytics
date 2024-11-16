@@ -42,7 +42,9 @@ const GroupMathScreen = ({
 }: InputProp) => {
 
   const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
-  const modifiedTime = `${totalTime} seconds`;
+  const modifiedTime = `${Math.round(+totalTime)} seconds`;
+  const modifiedQuestionsCompleted = `${Math.round(+totalQuestions)}`;
+  const modifiedDifficulty = `${Math.round(+currentDifficulty)}`;
 
   return (
     <div className={styles.container} style={style}>
@@ -114,13 +116,13 @@ const GroupMathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Average Difficulty"
-            text={currentDifficulty}
+            text={modifiedDifficulty}
             Icon={BarChartIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Number of Question Completed"
-            text={totalQuestions}
+            text={modifiedQuestionsCompleted}
             Icon={QuestionIcon}
           />
           <SmallDataBox

@@ -7,6 +7,7 @@ import {
   DateRangeEnum,
   AnalyticsSectionEnum,
   IUser,
+  AdminApprovalStatus,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import mongoose from "mongoose";
@@ -47,11 +48,17 @@ type Result = Partial<{
   };
 }>;
 
+type AggregatedAnalyticsResponse = {
+  analytics: Partial<IAggregatedAnalyticsAll>[]; // The array list
+  activePatients: number; // The first additional attribute
+  totalPatients: number; // The second additional attribute
+};
+
 export const getAggregatedAnalytics = async (
   userIDs: string[],
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
-): Promise<Partial<IAggregatedAnalyticsAll>[]> => {
+): Promise<AggregatedAnalyticsResponse> => {
   let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
   if (range === DateRangeEnum.RECENT) {
@@ -63,7 +70,6 @@ export const getAggregatedAnalytics = async (
   } else if (range === DateRangeEnum.YEAR) {
     numOfWeeks = 52; // 52
   }
-
   const objectIdArray = userIDs.map((id) => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
     { _id: { $in: objectIdArray } },
@@ -76,6 +82,42 @@ export const getAggregatedAnalytics = async (
   )
     .limit(1000)
     .lean();
+
+  let activeUsers = [];
+  if (userIDs.length > 1) {
+    activeUsers = await User.aggregate([
+      {
+        $match: {
+          _id: { $in: objectIdArray },
+        },
+      },
+      {
+        $lookup: {
+          from: "analytics",
+          localField: "_id",
+          foreignField: "userID",
+          as: "analyticsRecords",
+        },
+      },
+      {
+        $unwind: {
+          path: "$analyticsRecords",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          "analyticsRecords.active": true, 
+        },
+      },
+      {
+        $group: {
+          _id: null, 
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+  }
 
   if (!analyticsRecords) {
     throw new Error("User Analytics record not found");
@@ -561,8 +603,15 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
+
     out.push(finalAggregation);
   }
+  console.log(userRecords);
+  const finalOut: AggregatedAnalyticsResponse = {
+    analytics: out,
+    totalPatients: userIDs.length,
+    activePatients: activeUsers[0]?.count || 0
+  }
 
-  return out;
+  return finalOut;
 };

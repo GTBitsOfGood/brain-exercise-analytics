@@ -32,6 +32,11 @@ export default function GroupWritingScreen({
   style,
   menuState,
 }: InputProp) {
+
+  const modifiedPrompts = `${Math.round(+totalPrompts)}`;
+  const modifiedTime = `${Math.round(+avgTime)} seconds`;
+
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -74,13 +79,13 @@ export default function GroupWritingScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Number of Prompts Completed"
-            text={totalPrompts}
+            text={modifiedPrompts}
             Icon={PromptsIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Prompt"
-            text={`${avgTime} seconds`}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>
