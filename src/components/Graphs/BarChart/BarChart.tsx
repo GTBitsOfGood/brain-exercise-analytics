@@ -356,7 +356,7 @@ export default function BarChart({
                 `;
           })
           .style("fill", (d, i) =>
-            highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+            "#008AFC",
           )
           .on("mouseover", (event: MouseEvent, d: DataRecord) => {
             tooltip.transition().duration(0).style("opacity", 1);
@@ -402,7 +402,7 @@ export default function BarChart({
                 `;
           })
           .style("fill", (d, i) =>
-            highlightLargest && largest === i ? "#FF9FB3" : "#008AFC",
+            "#008AFC",
           );
       }
     }
