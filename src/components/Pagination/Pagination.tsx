@@ -2,14 +2,13 @@ import React, { useMemo } from "react";
 import styles from "./Pagination.module.css";
 import ApplyDropdown from "../Dropdown/ApplyDropdown/ApplyDropdown";
 
-
 interface DataParams {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
   entriesPerPage: number;
-  setEntriesPerPage: (arg: number) => void
-  totalEntries: number
+  setEntriesPerPage: (arg: number) => void;
+  totalEntries: number;
 }
 
 const Pagination = (params: DataParams) => {
@@ -67,22 +66,24 @@ const Pagination = (params: DataParams) => {
     return null;
   }
 
-  const entryAmounts = [{
-    value: 5,
-    displayValue: "5",
-  },
-  {
-    value: 8,
-    displayValue: "8",
-  },
-  {
-    value: 10,
-    displayValue: "10",
-  },
-  {
-    value: 15,
-    displayValue: "15",
-  }]
+  const entryAmounts = [
+    {
+      value: 5,
+      displayValue: "5",
+    },
+    {
+      value: 8,
+      displayValue: "8",
+    },
+    {
+      value: 10,
+      displayValue: "10",
+    },
+    {
+      value: 15,
+      displayValue: "15",
+    },
+  ];
 
   return (
     <div className={styles.Container}>
@@ -121,57 +122,62 @@ const Pagination = (params: DataParams) => {
         >
           &gt;
         </button>
-        </div>
-        {}
-        <div className={styles.pagesInfo}>
-          <p className={styles.pageResults}> Results: {params.currentPage * 
-            params.entriesPerPage + 1} - {(params.currentPage + 1) * params.entriesPerPage > params.totalEntries ? 
-            params.totalEntries : (params.currentPage + 1) * params.entriesPerPage} of {params.totalEntries}
-          </p>
-          <ApplyDropdown
-            options={entryAmounts}
-            value={params.entriesPerPage}
-            onChange={(e) => params.setEntriesPerPage(e.target.value as number)}
-            showError={false}
-            style={{
-              borderRadius: 10,
-              color: "#2B3674",
-              backgroundColor: "#E3EAFC",
-              border: "none",
-              width: "70px",
-              maxWidth: "90%",
-              textAlign: "center",
-              fontSize: "14px",
-              fontStyle: "normal",
-              fontWeight: 600,
-              lineHeight: "normal",
-            }}
-            sx={{
-              "&.MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderRadius: "10px",
-                },
+      </div>
+      {}
+      <div className={styles.pagesInfo}>
+        <p className={styles.pageResults}>
+          {" "}
+          Results: {params.currentPage * params.entriesPerPage + 1} -{" "}
+          {(params.currentPage + 1) * params.entriesPerPage >
+          params.totalEntries
+            ? params.totalEntries
+            : (params.currentPage + 1) * params.entriesPerPage}{" "}
+          of {params.totalEntries}
+        </p>
+        <ApplyDropdown
+          options={entryAmounts}
+          value={params.entriesPerPage}
+          onChange={(e) => params.setEntriesPerPage(e.target.value as number)}
+          showError={false}
+          style={{
+            borderRadius: 10,
+            color: "#2B3674",
+            backgroundColor: "#E3EAFC",
+            border: "none",
+            width: "70px",
+            maxWidth: "90%",
+            textAlign: "center",
+            fontSize: "14px",
+            fontStyle: "normal",
+            fontWeight: 600,
+            lineHeight: "normal",
+          }}
+          sx={{
+            "&.MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderRadius: "10px",
               },
-            }}
-            menuItemStyle={{
-              justifyContent: "left",
-              fontSize: "14px",
-              color: "#2B3674",
-              fontStyle: "normal",
-              fontWeight: 600,
-              lineHeight: "normal",
-            }}
-            applyButtonStyle={{
-              fontSize: "14px",
-              color: "#2B3674",
-              backgroundColor: "#E3EAFC",
-              fontStyle: "normal",
-              fontWeight: 500,
-              lineHeight: "normal",
-            }}
-            categoryName="Entries Per Page"
-          />
-        </div>
+            },
+          }}
+          menuItemStyle={{
+            justifyContent: "left",
+            fontSize: "14px",
+            color: "#2B3674",
+            fontStyle: "normal",
+            fontWeight: 600,
+            lineHeight: "normal",
+          }}
+          applyButtonStyle={{
+            fontSize: "14px",
+            color: "#2B3674",
+            backgroundColor: "#E3EAFC",
+            fontStyle: "normal",
+            fontWeight: 500,
+            lineHeight: "normal",
+          }}
+          categoryName="Entries Per Page"
+        />
+      </div>
     </div>
   );
 };

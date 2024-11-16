@@ -48,7 +48,7 @@ export const getChaptersFiltered = async ({
 }: SearchRequestBody<ChapterSearchParams>): Promise<
   SearchResponseBody<IChapterTableEntry> | undefined
 > => {
-  console.log(entriesPerPage)
+  console.log(entriesPerPage);
   const newPage = page ?? 0;
   const numOfItems = entriesPerPage || 8;
 

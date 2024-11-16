@@ -34,8 +34,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [entriesPerPage, setEntriesPerPage] = useState(8)
-  const [totalEntries, setTotalEntries] = useState(0)
+  const [entriesPerPage, setEntriesPerPage] = useState(8);
+  const [totalEntries, setTotalEntries] = useState(0);
 
   const fetchChapters = useCallback(() => {
     setLoading(true);
@@ -48,12 +48,12 @@ export default function Page() {
         },
         page: currentPage,
         sortParams: sortField,
-        entriesPerPage: entriesPerPage
+        entriesPerPage,
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredChapters(res?.data ?? []);
-      setTotalEntries(res?.numRecords ?? 0)
+      setTotalEntries(res?.numRecords ?? 0);
       setLoading(false);
     });
   }, [name, sortField, currentPage, entriesPerPage]);

@@ -23,7 +23,7 @@ interface VolunteerGridProps {
   refreshUsers: () => void;
   chapter?: string;
   entriesPerPage: number;
-  setEntriesPerPage: (arg: number) => void
+  setEntriesPerPage: (arg: number) => void;
   totalEntries: number;
 }
 

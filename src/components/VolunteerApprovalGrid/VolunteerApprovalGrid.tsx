@@ -21,7 +21,7 @@ interface VolunteerApprovalGridProps {
   currentPage: number;
   refreshUsers: () => void;
   entriesPerPage: number;
-  setEntriesPerPage: (arg: number) => void
+  setEntriesPerPage: (arg: number) => void;
   totalEntries: number;
 }
 

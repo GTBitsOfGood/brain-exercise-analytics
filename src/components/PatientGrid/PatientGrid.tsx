@@ -21,7 +21,7 @@ interface PatientGridProps {
   pageCount: number;
   currentPage: number;
   entriesPerPage: number;
-  setEntriesPerPage: (arg: number) => void
+  setEntriesPerPage: (arg: number) => void;
   totalEntries: number;
 }
 
