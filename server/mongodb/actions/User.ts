@@ -86,6 +86,26 @@ export const patientSignUp = async (
   return result;
 };
 
+export const patientEdit = async (
+  data: Omit<
+    IUser,
+    "chapter" | "location" | "patientDetails" | "new" | "signedUp" | "role"
+  >,
+): Promise<IUser | null> => {
+  const result = await User.findOneAndUpdate<IUser>(
+    { email: data.email },
+    {
+      $set: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phoneNumber: data.phoneNumber,
+        birthDate: new Date(data.birthDate),
+      },
+    },
+  );
+  return result;
+};
+
 export const volunteerSignUp = async (
   email: string,
   firstName: string,
