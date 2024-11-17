@@ -9,7 +9,6 @@ import {
 } from "@/common_utils/types";
 import { getUsersFiltered } from "@server/mongodb/actions/User";
 import { getAggregatedAnalytics } from "@server/mongodb/actions/AggregatedAnalytics";
-import { group } from "console";
 
 type RequestData = {
   filters: PatientSearchParams;
@@ -47,7 +46,6 @@ export const POST = APIWrapper({
           (val.constructor !== Array || val.length > 0),
       ),
     );
-
 
     const enumValues = new Set(Object.values(AnalyticsSectionEnum));
 
@@ -89,7 +87,6 @@ export const POST = APIWrapper({
 
     const usersids = users.data.map((element) => element._id);
 
-
     const aggregatedDataObject = await getAggregatedAnalytics(
       usersids,
       range,
@@ -97,8 +94,6 @@ export const POST = APIWrapper({
     );
 
     const aggregatedDataArray = aggregatedDataObject.analytics;
-
-
 
     aggregatedDataArray.forEach((data) => {
       // for (const userdatadict of users.data) {
@@ -140,7 +135,6 @@ export const POST = APIWrapper({
 
         let count = 0;
         data.overall.streakHistory.forEach((element: DataRecord) => {
-
           const modifiedElement = { ...element };
           modifiedElement.value /= usersLength;
 

@@ -34,17 +34,16 @@ interface Params {
     selectedValue: DateRangeEnum,
     setSelectedvalue: (value: DateRangeEnum) => void,
   ];
-  totalPatients: Number | String,
-  activePatients: Number | String
+  totalPatients: number | string;
+  activePatients: number | string;
   // Need to update with the schema of the response we will get from the backend
 }
 
 export default function GroupOverviewReport(params: Params) {
-
-  const mathQuestionsCompleted = `${+Math.round(params.lastSession.mathQuestionsCompleted)}`
-  const wordsRead = `${+Math.round(params.lastSession.wordsRead)}`
-  const promptsCompleted = `${+Math.round(params.lastSession.promptsCompleted)}`
-  const triviaQuestionsCompleted = `${+Math.round(params.lastSession.triviaQuestionsCompleted)}`
+  const mathQuestionsCompleted = `${+Math.round(params.lastSession.mathQuestionsCompleted)}`;
+  const wordsRead = `${+Math.round(params.lastSession.wordsRead)}`;
+  const promptsCompleted = `${+Math.round(params.lastSession.promptsCompleted)}`;
+  const triviaQuestionsCompleted = `${+Math.round(params.lastSession.triviaQuestionsCompleted)}`;
 
   return (
     <div className={styles.OverallDashboard} style={params.style}>

@@ -2,7 +2,7 @@ import React from "react";
 import { PromptsIcon, TimeIcon, WritingIcon } from "@src/app/icons";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { DateRangeEnum } from "@/common_utils/types";
-import { StackedBarChart, SmallDataBox, BarChart } from "../../Graphs";
+import { SmallDataBox, BarChart } from "../../Graphs";
 import styles from "./GroupWritingScreen.module.css";
 
 interface InputProp {
@@ -24,7 +24,6 @@ interface InputProp {
 }
 
 export default function GroupWritingScreen({
-  sessionHistory,
   numCompleted,
   avgTimeData,
   totalPrompts,
@@ -32,10 +31,8 @@ export default function GroupWritingScreen({
   style,
   menuState,
 }: InputProp) {
-
   const modifiedPrompts = `${Math.round(+totalPrompts)}`;
   const modifiedTime = `${Math.round(+avgTime)} seconds`;
-
 
   return (
     <div className={styles.container} style={style}>

@@ -7,7 +7,6 @@ import {
   DateRangeEnum,
   AnalyticsSectionEnum,
   IUser,
-  AdminApprovalStatus,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
 import mongoose from "mongoose";
@@ -83,7 +82,8 @@ export const getAggregatedAnalytics = async (
     .limit(1000)
     .lean();
 
-  let activeUsers = [];
+  let activeUsers: { count: number }[] = [];
+
   if (userIDs.length > 1) {
     activeUsers = await User.aggregate([
       {
@@ -107,12 +107,12 @@ export const getAggregatedAnalytics = async (
       },
       {
         $match: {
-          "analyticsRecords.active": true, 
+          "analyticsRecords.active": true,
         },
       },
       {
         $group: {
-          _id: null, 
+          _id: null,
           count: { $sum: 1 },
         },
       },
@@ -132,7 +132,6 @@ export const getAggregatedAnalytics = async (
 
     const groupSumDict: Record<string, TempAggData> = {};
 
-    let counter = 0;
     const lenOfMetrics = analyticsRecord.weeklyMetrics.length;
 
     // reversing the list
@@ -142,11 +141,6 @@ export const getAggregatedAnalytics = async (
       reversedWeeklyMetrics.length === 0
         ? lastMonday
         : new Date(reversedWeeklyMetrics[0].date);
-
-    let lastDate =
-      reversedWeeklyMetrics.length === 0
-        ? lastMonday
-        : new Date(reversedWeeklyMetrics[reversedWeeklyMetrics.length- 1].date);
 
     const dbDateVars = new Set<string>();
 
@@ -165,9 +159,6 @@ export const getAggregatedAnalytics = async (
           dateVar = formatDateByRangeEnum(item.date, range);
         }
       }
-
-      counter += 1;
-      lastDate = item.date;
 
       if (!dbDateVars.has(dateVar)) {
         dbDateVars.add(dateVar);
@@ -369,7 +360,6 @@ export const getAggregatedAnalytics = async (
       len += 1;
     }
 
-
     const result: Result = {};
     sections.forEach((type) => {
       switch (type) {
@@ -418,7 +408,6 @@ export const getAggregatedAnalytics = async (
       }
     });
 
-
     const excludedProperties2 = new Set([
       "totalNum",
       "questionsCompleted",
@@ -464,7 +453,6 @@ export const getAggregatedAnalytics = async (
             if (obj) {
               obj.streakHistory.unshift(dr);
             }
-
           }
 
           dr = {
@@ -483,7 +471,6 @@ export const getAggregatedAnalytics = async (
         });
       });
     });
-
 
     // if overshoot, remove last element
     // const groupSumArray = Object.values(groupSumDict)
@@ -510,11 +497,9 @@ export const getAggregatedAnalytics = async (
               wordsRead:
                 analyticsRecord.lastSessionMetrics.reading.passagesRead,
               promptsCompleted:
-                analyticsRecord.lastSessionMetrics.writing
-                  .questionsAnswered, // writing
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered, // writing
               triviaQuestionsCompleted:
-                analyticsRecord.lastSessionMetrics.trivia
-                  .questionsAttempted,
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted,
             },
             name: `${user.firstName} ${user.lastName}`,
           };
@@ -526,16 +511,12 @@ export const getAggregatedAnalytics = async (
             ...result.math,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionMetrics.math
-                  .questionsAttempted === 0
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionMetrics.math
-                      .questionsCorrect /
-                    analyticsRecord.lastSessionMetrics.math
-                      .questionsAttempted,
+                  : analyticsRecord.lastSessionMetrics.math.questionsCorrect /
+                    analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               difficultyScore:
-                analyticsRecord.lastSessionMetrics.math
-                  .finalDifficultyScore,
+                analyticsRecord.lastSessionMetrics.math.finalDifficultyScore,
               questionsCompleted:
                 analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               timePerQuestion:
@@ -554,8 +535,8 @@ export const getAggregatedAnalytics = async (
               timePerPassage:
                 analyticsRecord.lastSessionMetrics.reading.timePerPassage,
               completed:
-                analyticsRecord.lastSessionMetrics.reading
-                  .questionsAnswered !== 0,
+                analyticsRecord.lastSessionMetrics.reading.questionsAnswered !==
+                0,
             },
           };
           break;
@@ -566,13 +547,12 @@ export const getAggregatedAnalytics = async (
             ...result.writing,
             lastSession: {
               promptsAnswered:
-                analyticsRecord.lastSessionMetrics.writing
-                  .questionsAnswered,
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered,
               timePerPrompt:
                 analyticsRecord.lastSessionMetrics.writing.timePerQuestion,
               completed:
-                analyticsRecord.lastSessionMetrics.writing
-                  .questionsAnswered !== 0,
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered !==
+                0,
             },
           };
           break;
@@ -583,16 +563,14 @@ export const getAggregatedAnalytics = async (
             ...result.trivia,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionMetrics.trivia
-                  .questionsAttempted === 0
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted ===
+                0
                   ? 0
-                  : analyticsRecord.lastSessionMetrics.trivia
-                      .questionsCorrect /
+                  : analyticsRecord.lastSessionMetrics.trivia.questionsCorrect /
                     analyticsRecord.lastSessionMetrics.trivia
                       .questionsAttempted,
               questionsCompleted:
-                analyticsRecord.lastSessionMetrics.trivia
-                  .questionsAttempted,
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted,
               timePerQuestion:
                 analyticsRecord.lastSessionMetrics.trivia.timePerQuestion,
             },
@@ -609,8 +587,8 @@ export const getAggregatedAnalytics = async (
   const finalOut: AggregatedAnalyticsResponse = {
     analytics: out,
     totalPatients: userIDs.length,
-    activePatients: activeUsers[0]?.count || 0
-  }
+    activePatients: activeUsers[0]?.count || 0,
+  };
 
   // console.log(finalOut)
 

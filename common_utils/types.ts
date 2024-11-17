@@ -117,37 +117,36 @@ export interface IAnalytics {
   totalSessionsCompleted: number;
   active: boolean;
   streak: Days[];
-  lastSessionMetrics:
-    {
-      date: Date;
-      math: {
-        attempted: boolean;
-        questionsAttempted: number;
-        questionsCorrect: number;
-        finalDifficultyScore: number;
-        timePerQuestion: number;
-      };
-      trivia: {
-        attempted: boolean;
-        questionsAttempted: number;
-        questionsCorrect: number;
-        timePerQuestion: number;
-      };
-      reading: {
-        attempted: boolean;
-        passagesRead: number;
-        timePerPassage: number;
-        wordsPerMinute: number;
-        questionsAnswered: number;
-        skipped: boolean;
-      };
-      writing: {
-        attempted: boolean;
-        questionsAnswered: number;
-        timePerQuestion: number;
-        skipped: boolean;
-      };
-    },
+  lastSessionMetrics: {
+    date: Date;
+    math: {
+      attempted: boolean;
+      questionsAttempted: number;
+      questionsCorrect: number;
+      finalDifficultyScore: number;
+      timePerQuestion: number;
+    };
+    trivia: {
+      attempted: boolean;
+      questionsAttempted: number;
+      questionsCorrect: number;
+      timePerQuestion: number;
+    };
+    reading: {
+      attempted: boolean;
+      passagesRead: number;
+      timePerPassage: number;
+      wordsPerMinute: number;
+      questionsAnswered: number;
+      skipped: boolean;
+    };
+    writing: {
+      attempted: boolean;
+      questionsAnswered: number;
+      timePerQuestion: number;
+      skipped: boolean;
+    };
+  };
   weeklyMetrics: [
     {
       date: Date;
@@ -466,7 +465,6 @@ export type IAggregatedGroupAnalyticsWriting = {
     >;
   };
 };
-
 
 export interface PatientStats {
   totalPatients: number;

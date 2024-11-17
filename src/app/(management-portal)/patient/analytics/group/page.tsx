@@ -18,14 +18,7 @@ import {
   IAggregatedAnalyticsTrivia,
   IAggregatedAnalyticsWriting,
   PatientSearchParams,
-  PatientStats,
 } from "@/common_utils/types";
-import {
-  dataBar,
-  dataLine,
-  dataStacked,
-  numberOfQuestionData,
-} from "@src/utils/patients";
 
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
@@ -113,9 +106,8 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
     IAggregatedAnalyticsOverall["overall"] | undefined
   >(undefined);
 
-  const [totalPatients, setTotalPatients] = useState<Number | String>("---");
-  const [activePatients, setActivePatients] = useState<Number | String>("---");
-
+  const [totalPatients, setTotalPatients] = useState<number | string>("---");
+  const [activePatients, setActivePatients] = useState<number | string>("---");
 
   const [dashboardMenu, setDashboardMenu] = useState<DateRangeEnum>(
     DateRangeEnum.RECENT,
@@ -320,9 +312,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
         <GroupTriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
           accuracyData={trivia?.avgAccuracy ?? []}
-          numQuestionData={
-            trivia?.avgQuestionsCompleted ?? []
-          }
+          numQuestionData={trivia?.avgQuestionsCompleted ?? []}
           timeData={trivia?.avgTimePerQuestion ?? []}
           avgAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(

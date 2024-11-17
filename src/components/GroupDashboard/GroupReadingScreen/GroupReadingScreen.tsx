@@ -3,12 +3,7 @@ import { QuestionIcon, TimeIcon } from "@src/app/icons";
 import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./GroupReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
-import {
-  StackedBarChart,
-  BarChart,
-  SmallDataBox,
-  LineChart,
-} from "../../Graphs";
+import { BarChart, SmallDataBox, LineChart } from "../../Graphs";
 
 const ReadingIcon = () => {
   return (
@@ -48,7 +43,6 @@ interface InputProp {
 }
 
 export default function GroupReadingScreen({
-  sessionHistory,
   readingRate,
   avgPassageData,
   timeData,
@@ -57,7 +51,6 @@ export default function GroupReadingScreen({
   style,
   menuState,
 }: InputProp) {
-
   const modifiedTime = `${Math.round(+avgTime)} seconds`;
 
   return (

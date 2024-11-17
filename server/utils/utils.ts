@@ -33,11 +33,9 @@ export function formatDateByRangeEnum(
   const year = String(date.getUTCFullYear());
 
   if (
-    [
-      DateRangeEnum.RECENT,
-      DateRangeEnum.QUARTER,
-      DateRangeEnum.MAX,
-    ].includes(range) &&
+    [DateRangeEnum.RECENT, DateRangeEnum.QUARTER, DateRangeEnum.MAX].includes(
+      range,
+    ) &&
     !boolMonth
   ) {
     return `${monthName} ${day}`;

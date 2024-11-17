@@ -48,7 +48,6 @@ export default function GroupTriviaScreen({
   style,
   menuState,
 }: InputProp) {
-
   const modifiedAccuracy = `${Math.round(+avgAccuracy * 100)}%`;
   const modifiedTime = `${Math.round(+avgTime)} seconds`;
   const modifiedQuestionsCompleted = `${Math.round(+totalQuestions)}`;

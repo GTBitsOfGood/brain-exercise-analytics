@@ -52,7 +52,6 @@ export default function BarChart({
   },
   hoverable = false,
   percentageChange = false,
-  highlightLargest = true,
   fullWidth = false,
   gridLines = false,
   info = "",
@@ -96,7 +95,6 @@ export default function BarChart({
   const marginRight = 25;
   const marginBottom = 40;
   const marginLeft = 35;
-  const [largest, setLargest] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
   const [popupY, setPopupY] = useState<number | null>(null);
@@ -135,24 +133,6 @@ export default function BarChart({
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
-    function indexOfMax() {
-      if (newData.length === 0) {
-        return -1;
-      }
-
-      let max = newData[0].value;
-      let maxIndex = 0;
-
-      for (let i = 1; i < newData.length; i += 1) {
-        if (newData[i].value > max) {
-          maxIndex = i;
-          max = newData[i].value;
-        }
-      }
-
-      return maxIndex;
-    }
-    setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
 
@@ -355,9 +335,7 @@ export default function BarChart({
                     H ${x0} Z
                 `;
           })
-          .style("fill", (d, i) =>
-            "#008AFC",
-          )
+          .style("fill", () => "#008AFC")
           .on("mouseover", (event: MouseEvent, d: DataRecord) => {
             tooltip.transition().duration(0).style("opacity", 1);
             tooltip
@@ -401,9 +379,7 @@ export default function BarChart({
                     H ${x0} Z
                 `;
           })
-          .style("fill", (d, i) =>
-            "#008AFC",
-          );
+          .style("fill", () => "#008AFC");
       }
     }
 

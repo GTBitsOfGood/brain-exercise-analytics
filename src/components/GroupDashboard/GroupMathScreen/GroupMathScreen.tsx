@@ -40,7 +40,6 @@ const GroupMathScreen = ({
   style,
   menuState,
 }: InputProp) => {
-
   const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
   const modifiedTime = `${Math.round(+totalTime)} seconds`;
   const modifiedQuestionsCompleted = `${Math.round(+totalQuestions)}`;
