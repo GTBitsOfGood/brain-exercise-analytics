@@ -41,7 +41,11 @@ interface Params {
 
 export default function GroupOverviewReport(params: Params) {
 
-  console.log(params.sessionCompletionHistory)
+  const mathQuestionsCompleted = `${+Math.round(params.lastSession.mathQuestionsCompleted)}`
+  const wordsRead = `${+Math.round(params.lastSession.wordsRead)}`
+  const promptsCompleted = `${+Math.round(params.lastSession.promptsCompleted)}`
+  const triviaQuestionsCompleted = `${+Math.round(params.lastSession.triviaQuestionsCompleted)}`
+
   return (
     <div className={styles.OverallDashboard} style={params.style}>
       <div className={styles.titleRow}>
@@ -100,28 +104,28 @@ export default function GroupOverviewReport(params: Params) {
         <SmallDataBox
           className={styles.box}
           title="Average Questions Completed"
-          text={"10"}
+          text={mathQuestionsCompleted}
           Icon={SqrtIcon}
           Chip={() => <Chip color="#FCDCE2">Math</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Words Read"
-          text={"10"}
+          text={wordsRead}
           Icon={BookIcon}
           Chip={() => <Chip color="#E8DCFC">Reading</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Prompts Completed"
-          text={"5"}
+          text={promptsCompleted}
           Icon={DocIcon}
           Chip={() => <Chip color="#D6F6EA">Writing</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Questions Completed"
-          text={"5"}
+          text={triviaQuestionsCompleted}
           Icon={QuestionIcon}
           Chip={() => <Chip color="#FCE8DC">Trivia</Chip>}
         />

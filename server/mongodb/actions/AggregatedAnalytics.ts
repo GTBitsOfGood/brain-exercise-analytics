@@ -146,7 +146,7 @@ export const getAggregatedAnalytics = async (
     let lastDate =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(reversedWeeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[reversedWeeklyMetrics.length- 1].date);
 
     const dbDateVars = new Set<string>();
 
@@ -154,8 +154,8 @@ export const getAggregatedAnalytics = async (
       let dateVar = formatDateByRangeEnum(item.date, range);
 
       // adds to previous date in groups of 2
-      if (range === DateRangeEnum.HALF && counter % 2 === 1) {
-        dateVar = formatDateByRangeEnum(lastDate, range);
+      if (range === DateRangeEnum.HALF) {
+        dateVar = formatDateByRangeEnum(item.date, range, true);
       }
 
       if (range === DateRangeEnum.MAX) {
@@ -302,7 +302,7 @@ export const getAggregatedAnalytics = async (
 
     let totalWeeks = numOfWeeks;
     if (range === DateRangeEnum.HALF) {
-      totalWeeks = 13;
+      totalWeeks = 6;
     } else if (range === DateRangeEnum.YEAR) {
       totalWeeks = 12;
     } else if (range === DateRangeEnum.MAX) {
@@ -324,13 +324,12 @@ export const getAggregatedAnalytics = async (
       if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
         paddingDate.setDate(paddingDate.getDate() - 7);
       } else if (range === DateRangeEnum.HALF) {
-        paddingDate.setDate(paddingDate.getDate() - 14);
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
       } else if (range === DateRangeEnum.YEAR) {
         paddingDate.setMonth(paddingDate.getMonth() - 1);
       } else if (range === DateRangeEnum.MAX) {
         paddingDate.setDate(paddingDate.getDate() - 7);
       }
-
       const tempDateString = formatDateByRangeEnum(paddingDate, range);
 
       allDateVars.push(tempDateString);
@@ -465,7 +464,7 @@ export const getAggregatedAnalytics = async (
             if (obj) {
               obj.streakHistory.unshift(dr);
             }
-            console.log(dr)
+
           }
 
           dr = {
@@ -612,6 +611,8 @@ export const getAggregatedAnalytics = async (
     totalPatients: userIDs.length,
     activePatients: activeUsers[0]?.count || 0
   }
+
+  // console.log(finalOut)
 
   return finalOut;
 };

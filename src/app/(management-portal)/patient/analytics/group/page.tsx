@@ -164,7 +164,6 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
         newDateRange,
         [AnalyticsSectionEnum.OVERALL],
       );
-      console.log(data)
       setMath(data.math);
       setTrivia(data.trivia);
       setReading(data.reading);

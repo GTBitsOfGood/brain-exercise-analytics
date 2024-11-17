@@ -36,7 +36,6 @@ export function formatDateByRangeEnum(
     [
       DateRangeEnum.RECENT,
       DateRangeEnum.QUARTER,
-      DateRangeEnum.HALF,
       DateRangeEnum.MAX,
     ].includes(range) &&
     !boolMonth

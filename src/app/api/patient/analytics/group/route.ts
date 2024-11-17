@@ -430,8 +430,6 @@ export const POST = APIWrapper({
       }
     });
 
-    console.log(groupAnalytics.overall?.streakHistory)
-
     groupAnalytics.activePatients = aggregatedDataObject.activePatients;
     groupAnalytics.totalPatients = aggregatedDataObject.totalPatients;
 

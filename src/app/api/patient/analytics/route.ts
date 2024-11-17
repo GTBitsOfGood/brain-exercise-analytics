@@ -42,7 +42,7 @@ export const GET = APIWrapper({
       : Array.from(new Set(sections));
     const data = (
       await getAggregatedAnalytics([id], range, updatedSections)
-    )[0];
+    ).analytics[0];
 
     return data;
   },
