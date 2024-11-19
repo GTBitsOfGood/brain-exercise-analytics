@@ -13,6 +13,11 @@ import { ObjectId, PipelineStage, Promise } from "mongoose";
 import Chapter from "../models/Chapter";
 import User from "../models/User";
 
+export const getChapters = async (): Promise<IChapter[] | null> => {
+  const chapters = await Chapter.find<IChapter>();
+  return chapters;
+};
+
 export const getChapterByName = async (
   name: string,
 ): Promise<IChapter | null> => {

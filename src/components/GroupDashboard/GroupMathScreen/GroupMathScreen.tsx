@@ -65,7 +65,7 @@ const GroupMathScreen = ({
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info="Number correct on first attempt divided by total"
             data={accuracyData}
             fullWidth
             gridLines
@@ -76,7 +76,7 @@ const GroupMathScreen = ({
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info=""
             data={difficultyData}
             fullWidth
             gridLines
@@ -96,6 +96,7 @@ const GroupMathScreen = ({
             width={325}
             height={175}
             title="Average Time Spent per Question"
+            info="In seconds"
             data={timeData}
             hoverable
             percentageChange

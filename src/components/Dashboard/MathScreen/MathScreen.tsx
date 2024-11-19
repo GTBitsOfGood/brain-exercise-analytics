@@ -63,7 +63,7 @@ const MathScreen = ({
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info="Number correct on first attempt divided by total"
             data={accuracyData}
             fullWidth
             yLabel=""
@@ -76,7 +76,7 @@ const MathScreen = ({
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info=""
             data={difficultyData}
             fullWidth
             gridLines
@@ -84,7 +84,7 @@ const MathScreen = ({
           <BarChart
             width={325}
             height={175}
-            title="Average Questions Answered per Session sdsdsdsdshdajsdhj asj djas dhj "
+            title="Average Questions Answered per Session"
             data={numQuestionData}
             hoverable
             percentageChange
@@ -92,7 +92,7 @@ const MathScreen = ({
             // yLabel="Questions"
             fullWidth
             gridLines
-            info="test"
+            info=""
           />
           <BarChart
             width={325}
@@ -103,7 +103,7 @@ const MathScreen = ({
             percentageChange
             fullWidth
             gridLines
-            info="Test"
+            info="In seconds"
           />
         </div>
         <div className={styles.textStatsWithHeader}>

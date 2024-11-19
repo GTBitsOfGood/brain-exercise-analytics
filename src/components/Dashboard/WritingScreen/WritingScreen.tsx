@@ -61,7 +61,6 @@ export default function WritingScreen({
             //   { text: "sessions completed without writing", color: "#FF9FB3" },
             //   { text: "sessions completed with writing", color: "#008AFC" },
             // ]}
-            info="Some really extremely interesting information about stacked bar chart."
             hoverable
             percentageChange
             fullWidth
@@ -76,14 +75,13 @@ export default function WritingScreen({
             percentageChange
             fullWidth
             gridLines
-            info="Some info for testing purposes in bar chart"
           />
           <BarChart
             width={325}
             height={185}
             title="Average Time Spent Per Prompt"
             data={avgTime}
-            info="Some info for testing purposes in bar chart"
+            info="In seconds"
             hoverable
             percentageChange
             fullWidth

@@ -1,6 +1,12 @@
 "use client";
 
-import React, { FormEvent, MouseEvent, useState } from "react";
+import React, {
+  FormEvent,
+  MouseEvent,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { Error as ErrorIcon } from "@mui/icons-material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Country, State, City } from "country-state-city";
@@ -8,14 +14,14 @@ import { useRouter } from "next/navigation";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import Modal from "@src/components/Modal/Modal";
 
-import { IUser, HttpMethod, Role } from "@/common_utils/types";
+import { IUser, HttpMethod, Role, IChapter } from "@/common_utils/types";
 
 import InputField from "@src/components/InputField/InputField";
 import { internalRequest } from "@src/utils/requests";
 import AuthDropdown from "@src/components/Dropdown/AuthDropdown/AuthDropdown";
 import { formatPhoneNumber } from "@src/utils/utils";
 
-import CHAPTERS from "@src/utils/chapters";
+import { DropdownOption } from "@src/components/Dropdown/Dropdown";
 import styles from "./page.module.css";
 
 export default function Page() {
@@ -37,6 +43,8 @@ export default function Page() {
   const [roleError, setRoleError] = useState("");
   const [chapterError, setChapterError] = useState("");
   const [showGeneralError, setShowGeneralError] = useState(false);
+
+  const [chapters, setChapters] = useState<DropdownOption<string>[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -154,6 +162,28 @@ export default function Page() {
       setLoading(false);
     }
   };
+
+  const loadChapters = useCallback(() => {
+    setLoading(true);
+    internalRequest<IChapter[] | null>({
+      url: "/api/chapter/get-chapters",
+      method: HttpMethod.GET,
+      body: {},
+    }).then((res) => {
+      const chapterDropdown = res
+        ? res.map((chapterVal) => ({
+            value: chapterVal.name,
+            displayValue: chapterVal.name,
+          }))
+        : [];
+      setChapters(chapterDropdown);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadChapters();
+  }, [loadChapters]);
 
   return (
     <div>
@@ -285,7 +315,7 @@ export default function Page() {
               title="Chapter"
               required={true}
               placeholder="Select Your Chaper"
-              options={CHAPTERS}
+              options={chapters}
               value={chapter}
               onChange={(e) => {
                 setChapter(e.target.value);

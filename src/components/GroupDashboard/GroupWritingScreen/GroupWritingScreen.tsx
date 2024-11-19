@@ -57,14 +57,13 @@ export default function GroupWritingScreen({
             percentageChange
             fullWidth
             gridLines
-            info="Some info for testing purposes in bar chart"
           />
           <BarChart
             width={325}
             height={185}
             title="Average Time Spent Per Prompt"
             data={avgTimeData}
-            info="Some info for testing purposes in bar chart"
+            info="In seconds"
             hoverable
             percentageChange
             fullWidth
