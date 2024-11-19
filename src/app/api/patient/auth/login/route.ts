@@ -36,7 +36,7 @@ export const GET = APIWrapper({
 
     return {
       user: newUser,
-      gameDetails: {
+      gameDetails: { 
         active: analyticsRecord.active,
         streak: analyticsRecord.streak,
         lastSessionsMetrics: analyticsRecord.lastSessionMetrics,
