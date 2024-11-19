@@ -1,10 +1,14 @@
 import React, { useMemo } from "react";
 import styles from "./Pagination.module.css";
+import ApplyDropdown from "../Dropdown/ApplyDropdown/ApplyDropdown";
 
 interface DataParams {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void;
+  totalEntries: number;
 }
 
 const Pagination = (params: DataParams) => {
@@ -61,42 +65,119 @@ const Pagination = (params: DataParams) => {
   if (pages.length === 0) {
     return null;
   }
+
+  const entryAmounts = [
+    {
+      value: 5,
+      displayValue: "5",
+    },
+    {
+      value: 8,
+      displayValue: "8",
+    },
+    {
+      value: 10,
+      displayValue: "10",
+    },
+    {
+      value: 15,
+      displayValue: "15",
+    },
+  ];
+
   return (
-    <div
-      className={`${styles.Container} ${params.currentPage === 0 || params.currentPage === pages.length - 1 ? styles.boundary : ""}`}
-    >
-      <button
-        className={`${styles.pageButton} ${params.currentPage + 1 === 1 ? styles.atLimit : ""}`}
-        onClick={goToPreviousPage}
+    <div className={styles.Container}>
+      <div
+        className={`${styles.pageSelect} ${params.currentPage === 0 || params.currentPage === pages.length - 1 ? styles.boundary : ""}`}
       >
-        &lt;
-      </button>
-      <div className={styles.Container}>
-        {pages.map((page, index) => {
-          const isCurrentPage = page === params.currentPage + 1;
-          return (
-            <>
-              {Number.isNaN(page) ? (
-                <div className={styles.dot}></div>
-              ) : (
-                <button
-                  key={index}
-                  onClick={() => params.setCurrentPage(Number(page) - 1)}
-                  className={`${styles.pageButton} ${isCurrentPage ? styles.currentPage : ""}`}
-                >
-                  {page}
-                </button>
-              )}
-            </>
-          );
-        })}
+        <button
+          className={`${styles.pageButton} ${params.currentPage + 1 === 1 ? styles.atLimit : ""}`}
+          onClick={goToPreviousPage}
+        >
+          &lt;
+        </button>
+        <div className={styles.pageSelect}>
+          {pages.map((page, index) => {
+            const isCurrentPage = page === params.currentPage + 1;
+            return (
+              <>
+                {Number.isNaN(page) ? (
+                  <div className={styles.dot}></div>
+                ) : (
+                  <button
+                    key={index}
+                    onClick={() => params.setCurrentPage(Number(page) - 1)}
+                    className={`${styles.pageButton} ${isCurrentPage ? styles.currentPage : ""}`}
+                  >
+                    {page}
+                  </button>
+                )}
+              </>
+            );
+          })}
+        </div>
+        <button
+          className={`${styles.pageButton} ${params.currentPage + 1 === pages[pages.length - 1] ? styles.atLimit : ""}`}
+          onClick={goToNextPage}
+        >
+          &gt;
+        </button>
       </div>
-      <button
-        className={`${styles.pageButton} ${params.currentPage + 1 === pages[pages.length - 1] ? styles.atLimit : ""}`}
-        onClick={goToNextPage}
-      >
-        &gt;
-      </button>
+      {}
+      <div className={styles.pagesInfo}>
+        <p className={styles.pageResults}>
+          {" "}
+          Results: {params.currentPage * params.entriesPerPage + 1} -{" "}
+          {(params.currentPage + 1) * params.entriesPerPage >
+          params.totalEntries
+            ? params.totalEntries
+            : (params.currentPage + 1) * params.entriesPerPage}{" "}
+          of {params.totalEntries}
+        </p>
+        <ApplyDropdown
+          options={entryAmounts}
+          value={params.entriesPerPage}
+          onChange={(e) => params.setEntriesPerPage(e.target.value as number)}
+          showError={false}
+          style={{
+            borderRadius: 10,
+            color: "#2B3674",
+            backgroundColor: "#E3EAFC",
+            border: "none",
+            width: "70px",
+            maxWidth: "90%",
+            textAlign: "center",
+            fontSize: "14px",
+            fontStyle: "normal",
+            fontWeight: 600,
+            lineHeight: "normal",
+          }}
+          sx={{
+            "&.MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderRadius: "10px",
+              },
+            },
+          }}
+          menuItemStyle={{
+            justifyContent: "left",
+            fontSize: "14px",
+            color: "#2B3674",
+            fontStyle: "normal",
+            fontWeight: 600,
+            lineHeight: "normal",
+          }}
+          applyButtonStyle={{
+            fontSize: "14px",
+            color: "#2B3674",
+            backgroundColor: "#E3EAFC",
+            fontStyle: "normal",
+            fontWeight: 500,
+            lineHeight: "normal",
+          }}
+          categoryName="Entries Per Page"
+        />
+      </div>
     </div>
   );
 };

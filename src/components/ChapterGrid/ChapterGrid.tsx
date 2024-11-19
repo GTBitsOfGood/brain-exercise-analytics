@@ -19,6 +19,9 @@ interface ChapterGridProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   pageCount: number;
   currentPage: number;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void;
+  totalEntries: number;
 }
 
 const columns: GridColDef[] = [
@@ -102,6 +105,9 @@ export default function ChapterGrid(params: ChapterGridProps) {
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
         currentPage={params.currentPage}
+        entriesPerPage={params.entriesPerPage}
+        setEntriesPerPage={params.setEntriesPerPage}
+        totalEntries={params.totalEntries}
       />
     </div>
   );

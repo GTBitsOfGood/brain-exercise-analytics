@@ -27,6 +27,7 @@ export const POST = APIWrapper({
       params,
       page: reqdata.page,
       sortParams: reqdata.sortParams,
+      entriesPerPage: reqdata.entriesPerPage,
     });
     return users;
   },

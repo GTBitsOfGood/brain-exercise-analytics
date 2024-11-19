@@ -48,6 +48,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [entriesPerPage, setEntriesPerPage] = useState(8);
+  const [totalEntries, setTotalEntries] = useState(0);
 
   const fetchUsers = useCallback(() => {
     setLoading(true);
@@ -70,10 +72,12 @@ export default function Page() {
         },
         page: currentPage,
         sortParams: sortField,
+        entriesPerPage,
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      setTotalEntries(res?.numRecords ?? 0);
       dispatch(update({ pendingApprovals: res?.numRecords ?? 0 }));
       setLoading(false);
     });
@@ -91,6 +95,7 @@ export default function Page() {
     currentPage,
     sortField,
     dispatch,
+    entriesPerPage,
   ]);
 
   useEffect(() => {
@@ -111,6 +116,7 @@ export default function Page() {
     beiChapters,
     volunteerRoles,
     sortField,
+    entriesPerPage,
   ]);
 
   return (
@@ -144,6 +150,9 @@ export default function Page() {
           pageCount={pageCount}
           currentPage={currentPage}
           refreshUsers={fetchUsers}
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
+          totalEntries={totalEntries}
         />
       </div>
       <div className={styles.netlify}>

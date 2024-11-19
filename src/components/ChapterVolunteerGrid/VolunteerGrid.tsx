@@ -22,6 +22,9 @@ interface VolunteerGridProps {
   currentPage: number;
   refreshUsers: () => void;
   chapter?: string;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void;
+  totalEntries: number;
 }
 
 interface HeaderProps {
@@ -128,6 +131,9 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
         currentPage={params.currentPage}
+        entriesPerPage={params.entriesPerPage}
+        setEntriesPerPage={params.setEntriesPerPage}
+        totalEntries={params.totalEntries}
       />
       <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
         <OperationSuccessModal

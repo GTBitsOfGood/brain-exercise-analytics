@@ -43,12 +43,14 @@ type ChapParam = {
 export const getChaptersFiltered = async ({
   params,
   page,
+  entriesPerPage,
   sortParams,
 }: SearchRequestBody<ChapterSearchParams>): Promise<
   SearchResponseBody<IChapterTableEntry> | undefined
 > => {
+  console.log(entriesPerPage);
   const newPage = page ?? 0;
-  const numOfItems = 11;
+  const numOfItems = entriesPerPage || 8;
 
   const chapterParamObject = {} as ChapParam;
 
