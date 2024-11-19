@@ -30,7 +30,7 @@ export default function OverviewReport(params: Params) {
         >
           <SmallDataBox
             className={styles.box}
-            title="Total Users"
+            title="Total Patients"
             Icon={PeopleIcon}
             text={`${params.totalUsers}`}
           />
@@ -39,7 +39,7 @@ export default function OverviewReport(params: Params) {
             className={styles.graph}
             width={250}
             height={150}
-            title="New Users Over Time"
+            title="New Patients Over Time"
             hoverable
             data={params.activeHistory}
             style={{

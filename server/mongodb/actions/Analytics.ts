@@ -24,9 +24,9 @@ const checkNewDate = async (userID: string): Promise<null> => {
   const today = new Date();
 
   if (
-    analytics?.lastSessionsMetrics[0].date.getDay() !== today.getDay() ||
-    analytics?.lastSessionsMetrics[0].date.getMonth() !== today.getMonth() ||
-    analytics?.lastSessionsMetrics[0].date.getFullYear() !== today.getFullYear()
+    analytics?.lastSessionMetrics.date.getDay() !== today.getDay() ||
+    analytics?.lastSessionMetrics.date.getMonth() !== today.getMonth() ||
+    analytics?.lastSessionMetrics.date.getFullYear() !== today.getFullYear()
   ) {
     await Analytics.findOneAndUpdate({ userID }, [
       {
@@ -117,10 +117,10 @@ const checkSessionComplete = async (userID: string): Promise<null> => {
   const analytics = await Analytics.findOne<IAnalytics>({ userID });
 
   if (
-    analytics?.lastSessionsMetrics[0].math.attempted &&
-    analytics?.lastSessionsMetrics[0].trivia.attempted &&
-    analytics?.lastSessionsMetrics[0].reading.attempted &&
-    analytics?.lastSessionsMetrics[0].writing.attempted
+    analytics?.lastSessionMetrics.math.attempted &&
+    analytics?.lastSessionMetrics.trivia.attempted &&
+    analytics?.lastSessionMetrics.reading.attempted &&
+    analytics?.lastSessionMetrics.writing.attempted
   ) {
     await updateSessionComplete(userID);
   }

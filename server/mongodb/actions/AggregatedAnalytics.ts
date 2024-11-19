@@ -47,11 +47,17 @@ type Result = Partial<{
   };
 }>;
 
+type AggregatedAnalyticsResponse = {
+  analytics: Partial<IAggregatedAnalyticsAll>[]; // The array list
+  activePatients: number; // The first additional attribute
+  totalPatients: number; // The second additional attribute
+};
+
 export const getAggregatedAnalytics = async (
   userIDs: string[],
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
-): Promise<Partial<IAggregatedAnalyticsAll>[]> => {
+): Promise<AggregatedAnalyticsResponse> => {
   let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
   if (range === DateRangeEnum.RECENT) {
@@ -63,7 +69,6 @@ export const getAggregatedAnalytics = async (
   } else if (range === DateRangeEnum.YEAR) {
     numOfWeeks = 52; // 52
   }
-
   const objectIdArray = userIDs.map((id) => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
     { _id: { $in: objectIdArray } },
@@ -76,6 +81,43 @@ export const getAggregatedAnalytics = async (
   )
     .limit(1000)
     .lean();
+
+  let activeUsers: { count: number }[] = [];
+
+  if (userIDs.length > 1) {
+    activeUsers = await User.aggregate([
+      {
+        $match: {
+          _id: { $in: objectIdArray },
+        },
+      },
+      {
+        $lookup: {
+          from: "analytics",
+          localField: "_id",
+          foreignField: "userID",
+          as: "analyticsRecords",
+        },
+      },
+      {
+        $unwind: {
+          path: "$analyticsRecords",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          "analyticsRecords.active": true,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+  }
 
   if (!analyticsRecords) {
     throw new Error("User Analytics record not found");
@@ -90,7 +132,6 @@ export const getAggregatedAnalytics = async (
 
     const groupSumDict: Record<string, TempAggData> = {};
 
-    let counter = 0;
     const lenOfMetrics = analyticsRecord.weeklyMetrics.length;
 
     // reversing the list
@@ -101,19 +142,14 @@ export const getAggregatedAnalytics = async (
         ? lastMonday
         : new Date(reversedWeeklyMetrics[0].date);
 
-    let lastDate =
-      reversedWeeklyMetrics.length === 0
-        ? lastMonday
-        : new Date(reversedWeeklyMetrics[0].date);
-
     const dbDateVars = new Set<string>();
 
     reversedWeeklyMetrics.forEach((item: IAnalytics["weeklyMetrics"][0]) => {
       let dateVar = formatDateByRangeEnum(item.date, range);
 
       // adds to previous date in groups of 2
-      if (range === DateRangeEnum.HALF && counter % 2 === 1) {
-        dateVar = formatDateByRangeEnum(lastDate, range);
+      if (range === DateRangeEnum.HALF) {
+        dateVar = formatDateByRangeEnum(item.date, range, true);
       }
 
       if (range === DateRangeEnum.MAX) {
@@ -123,9 +159,6 @@ export const getAggregatedAnalytics = async (
           dateVar = formatDateByRangeEnum(item.date, range);
         }
       }
-
-      counter += 1;
-      lastDate = item.date;
 
       if (!dbDateVars.has(dateVar)) {
         dbDateVars.add(dateVar);
@@ -221,7 +254,6 @@ export const getAggregatedAnalytics = async (
         }
       });
     });
-
     const excludedProperties = new Set([
       "totalNum",
       "questionsCompleted",
@@ -261,7 +293,7 @@ export const getAggregatedAnalytics = async (
 
     let totalWeeks = numOfWeeks;
     if (range === DateRangeEnum.HALF) {
-      totalWeeks = 13;
+      totalWeeks = 6;
     } else if (range === DateRangeEnum.YEAR) {
       totalWeeks = 12;
     } else if (range === DateRangeEnum.MAX) {
@@ -283,13 +315,12 @@ export const getAggregatedAnalytics = async (
       if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
         paddingDate.setDate(paddingDate.getDate() - 7);
       } else if (range === DateRangeEnum.HALF) {
-        paddingDate.setDate(paddingDate.getDate() - 14);
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
       } else if (range === DateRangeEnum.YEAR) {
         paddingDate.setMonth(paddingDate.getMonth() - 1);
       } else if (range === DateRangeEnum.MAX) {
         paddingDate.setDate(paddingDate.getDate() - 7);
       }
-
       const tempDateString = formatDateByRangeEnum(paddingDate, range);
 
       allDateVars.push(tempDateString);
@@ -328,7 +359,6 @@ export const getAggregatedAnalytics = async (
 
       len += 1;
     }
-    // }
 
     const result: Result = {};
     sections.forEach((type) => {
@@ -459,19 +489,17 @@ export const getAggregatedAnalytics = async (
             active: analyticsRecord.active,
             streak: analyticsRecord.streak,
             startDate: user?.startDate ? new Date(user.startDate) : new Date(),
-            lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
+            lastSessionDate: analyticsRecord.lastSessionMetrics.date,
             totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
             lastSession: {
               mathQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               wordsRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics.reading.passagesRead,
               promptsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].writing
-                  .questionsAnswered, // writing
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered, // writing
               triviaQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
-                  .questionsAttempted,
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted,
             },
             name: `${user.firstName} ${user.lastName}`,
           };
@@ -483,20 +511,16 @@ export const getAggregatedAnalytics = async (
             ...result.math,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].math
-                  .questionsAttempted === 0
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].math
-                      .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].math
-                      .questionsAttempted,
+                  : analyticsRecord.lastSessionMetrics.math.questionsCorrect /
+                    analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               difficultyScore:
-                analyticsRecord.lastSessionsMetrics[0].math
-                  .finalDifficultyScore,
+                analyticsRecord.lastSessionMetrics.math.finalDifficultyScore,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].math.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.math.timePerQuestion,
             },
           };
           break;
@@ -507,12 +531,12 @@ export const getAggregatedAnalytics = async (
             ...result.reading,
             lastSession: {
               passagesRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics.reading.passagesRead,
               timePerPassage:
-                analyticsRecord.lastSessionsMetrics[0].reading.timePerPassage,
+                analyticsRecord.lastSessionMetrics.reading.timePerPassage,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].reading
-                  .questionsAnswered !== 0,
+                analyticsRecord.lastSessionMetrics.reading.questionsAnswered !==
+                0,
             },
           };
           break;
@@ -523,13 +547,12 @@ export const getAggregatedAnalytics = async (
             ...result.writing,
             lastSession: {
               promptsAnswered:
-                analyticsRecord.lastSessionsMetrics[0].writing
-                  .questionsAnswered,
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered,
               timePerPrompt:
-                analyticsRecord.lastSessionsMetrics[0].writing.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.writing.timePerQuestion,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].writing
-                  .questionsAnswered !== 0,
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered !==
+                0,
             },
           };
           break;
@@ -540,18 +563,16 @@ export const getAggregatedAnalytics = async (
             ...result.trivia,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].trivia
-                  .questionsAttempted === 0
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted ===
+                0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].trivia
-                      .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].trivia
+                  : analyticsRecord.lastSessionMetrics.trivia.questionsCorrect /
+                    analyticsRecord.lastSessionMetrics.trivia
                       .questionsAttempted,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
-                  .questionsAttempted,
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].trivia.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.trivia.timePerQuestion,
             },
           };
           break;
@@ -560,8 +581,16 @@ export const getAggregatedAnalytics = async (
           break;
       }
     });
+
     out.push(finalAggregation);
   }
+  const finalOut: AggregatedAnalyticsResponse = {
+    analytics: out,
+    totalPatients: userIDs.length,
+    activePatients: activeUsers[0]?.count || 0,
+  };
 
-  return out;
+  // console.log(finalOut)
+
+  return finalOut;
 };

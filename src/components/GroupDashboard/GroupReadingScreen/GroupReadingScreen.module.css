@@ -38,8 +38,9 @@
 
 .graphs {
   flex: 2;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  /* grid-auto-flow: column; */
   gap: 15px;
 }
 

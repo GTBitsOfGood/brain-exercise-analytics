@@ -2,7 +2,7 @@ import React from "react";
 import { PromptsIcon, TimeIcon, WritingIcon } from "@src/app/icons";
 import DateSelector from "@src/components/DateSelector/DateSelector";
 import { DateRangeEnum } from "@/common_utils/types";
-import { StackedBarChart, SmallDataBox, BarChart } from "../../Graphs";
+import { SmallDataBox, BarChart } from "../../Graphs";
 import styles from "./GroupWritingScreen.module.css";
 
 interface InputProp {
@@ -24,7 +24,6 @@ interface InputProp {
 }
 
 export default function GroupWritingScreen({
-  sessionHistory,
   numCompleted,
   avgTimeData,
   totalPrompts,
@@ -32,6 +31,9 @@ export default function GroupWritingScreen({
   style,
   menuState,
 }: InputProp) {
+  const modifiedPrompts = `${Math.round(+totalPrompts)}`;
+  const modifiedTime = `${Math.round(+avgTime)} seconds`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -46,21 +48,6 @@ export default function GroupWritingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
-            width={325}
-            height={210}
-            title="Writing Session Completion History"
-            data={sessionHistory}
-            legend={[
-              { text: "sessions completed without writing", color: "#FF9FB3" },
-              { text: "sessions completed with writing", color: "#008AFC" },
-            ]}
-            info="Some really extremely interesting information about stacked bar chart."
-            hoverable
-            percentageChange
-            fullWidth
-            gridLines
-          />
           <BarChart
             width={325}
             height={210}
@@ -89,13 +76,13 @@ export default function GroupWritingScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Number of Prompts Completed"
-            text={totalPrompts}
+            text={modifiedPrompts}
             Icon={PromptsIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Prompt"
-            text={avgTime}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>
