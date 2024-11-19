@@ -308,10 +308,12 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [chapters, setChapters] = useState<DropdownOption<string>[]>([]);
 
   const loadChapters = useCallback(() => {
+  }, []);
+
+  useEffect(() => {
     internalRequest<IChapter[] | null>({
       url: "/api/chapter/get-chapters",
       method: HttpMethod.GET,
-      body: {},
     }).then((res) => {
       const chapterDropdown = res
         ? res.map((chapter) => ({
@@ -322,10 +324,6 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       setChapters(chapterDropdown);
     });
   }, []);
-
-  useEffect(() => {
-    loadChapters();
-  }, [loadChapters]);
 
   return (
     <div className={styles.body} style={props.style}>
