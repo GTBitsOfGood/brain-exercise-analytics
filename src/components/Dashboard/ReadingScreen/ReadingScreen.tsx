@@ -96,10 +96,10 @@ export default function ReadingScreen({
           <LineChart
             width={325}
             height={185}
-            title="Average Reading Rate (Words/Min)"
+            title="Average Reading Rate"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info="Words/Min"
             data={readingRate}
             fullWidth
             gridLines
@@ -113,7 +113,7 @@ export default function ReadingScreen({
             percentageChange
             fullWidth
             gridLines
-            info="Hey this is just some info I thought you will find interesting."
+            info="In seconds"
           />
         </div>
         <div className={styles.textStats}>

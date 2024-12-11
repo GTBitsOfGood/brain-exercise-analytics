@@ -27,69 +27,66 @@ const AnalyticsSchema = new Schema({
     },
     default: [],
   },
-  lastSessionsMetrics: {
-    type: [
-      {
-        date: Date,
-        math: {
-          attempted: Boolean,
-          questionsAttempted: Number,
-          questionsCorrect: Number,
-          finalDifficultyScore: Number,
-          timePerQuestion: Number,
-        },
-        trivia: {
-          attempted: Boolean,
-          questionsAttempted: Number,
-          questionsCorrect: Number,
-          timePerQuestion: Number,
-        },
-        reading: {
-          attempted: Boolean,
-          passagesRead: Number,
-          timePerPassage: Number,
-          wordsPerMinute: Number,
-          skipped: Boolean, // should be true even if the user attempts the section but skips without completing
-        },
-        writing: {
-          attempted: Boolean,
-          questionsAnswered: Number,
-          timePerQuestion: Number,
-          skipped: Boolean, // should be true even if the user attempts the section but skips without completing
-        },
+  lastSessionMetrics: {
+    type: {
+      date: Date,
+      math: {
+        attempted: Boolean,
+        questionsAttempted: Number,
+        questionsCorrect: Number,
+        finalDifficultyScore: Number,
+        timePerQuestion: Number,
       },
-    ],
-    default: [
-      {
-        date: Date(),
-        math: {
-          attempted: false,
-          questionsAttempted: 0,
-          questionsCorrect: 0,
-          finalDifficultyScore: 0,
-          timePerQuestion: 0,
-        },
-        trivia: {
-          attempted: false,
-          questionsAttempted: 0,
-          questionsCorrect: 0,
-          timePerQuestion: 0,
-        },
-        reading: {
-          attempted: false,
-          passagesRead: 0,
-          timePerPassage: 0,
-          wordsPerMinute: 0,
-          skipped: true,
-        },
-        writing: {
-          attempted: false,
-          questionsAnswered: 0,
-          timePerQuestion: 0,
-          skipped: true,
-        },
+      trivia: {
+        attempted: Boolean,
+        questionsAttempted: Number,
+        questionsCorrect: Number,
+        timePerQuestion: Number,
       },
-    ],
+      reading: {
+        attempted: Boolean,
+        passagesRead: Number,
+        timePerPassage: Number,
+        wordsPerMinute: Number,
+        skipped: Boolean, // should be true even if the user attempts the section but skips without completing
+      },
+      writing: {
+        attempted: Boolean,
+        questionsAnswered: Number,
+        timePerQuestion: Number,
+        skipped: Boolean, // should be true even if the user attempts the section but skips without completing
+      },
+    },
+
+    default: {
+      date: Date(),
+      math: {
+        attempted: false,
+        questionsAttempted: 0,
+        questionsCorrect: 0,
+        finalDifficultyScore: 0,
+        timePerQuestion: 0,
+      },
+      trivia: {
+        attempted: false,
+        questionsAttempted: 0,
+        questionsCorrect: 0,
+        timePerQuestion: 0,
+      },
+      reading: {
+        attempted: false,
+        passagesRead: 0,
+        timePerPassage: 0,
+        wordsPerMinute: 0,
+        skipped: true,
+      },
+      writing: {
+        attempted: false,
+        questionsAnswered: 0,
+        timePerQuestion: 0,
+        skipped: true,
+      },
+    },
   },
   weeklyMetrics: {
     type: [

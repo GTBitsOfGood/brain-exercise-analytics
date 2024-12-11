@@ -123,6 +123,7 @@ export const getAggregatedAnalytics = async (
     throw new Error("User Analytics record not found");
   }
 
+  console.log("p");
   const out: Partial<IAggregatedAnalyticsAll>[] = [];
 
   const lastMonday = new Date(getCurrentMonday().getDate() - 7);
@@ -254,6 +255,7 @@ export const getAggregatedAnalytics = async (
         }
       });
     });
+    console.log("o");
     const excludedProperties = new Set([
       "totalNum",
       "questionsCompleted",
@@ -286,6 +288,7 @@ export const getAggregatedAnalytics = async (
       });
     });
 
+    console.log("j");
     const allDateVars = Array.from(dbDateVars).reverse();
 
     // PADDING
@@ -408,12 +411,14 @@ export const getAggregatedAnalytics = async (
       }
     });
 
+    console.log("sd");
     const excludedProperties2 = new Set([
       "totalNum",
       "questionsCompleted",
       "questionsCorrect",
       "avgSessionsAttempted",
     ]);
+    console.log("s2");
     allDateVars.forEach((month) => {
       Object.entries(groupSumDict[month]).forEach(([type, monthTypeDict]) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -472,6 +477,7 @@ export const getAggregatedAnalytics = async (
       });
     });
 
+    console.log(analyticsRecord.lastSessionMetrics);
     // if overshoot, remove last element
     // const groupSumArray = Object.values(groupSumDict)
     // if ((groupSumArray.length === 4 && range === "quarter") ||

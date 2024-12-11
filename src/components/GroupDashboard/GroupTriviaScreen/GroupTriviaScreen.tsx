@@ -68,11 +68,11 @@ export default function GroupTriviaScreen({
         <div className={styles.graphs}>
           <LineChart
             width={325}
-            height={175}
+            height={185}
             title="Average Trivia Accuracy"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info="Number of self-reported correct answers"
             data={accuracyData}
             fullWidth
             gridLines
@@ -81,6 +81,7 @@ export default function GroupTriviaScreen({
             width={325}
             height={175}
             title="Average Time Spent per Question"
+            info="In seconds"
             data={timeData}
             hoverable
             percentageChange

@@ -49,8 +49,6 @@ const Pagination = (params: DataParams) => {
     return [...backwardPages, ...forwardPages];
   }, [params.currentPage, params.pageCount]);
 
-  console.log(pages);
-
   const goToPreviousPage = () => {
     if (params.currentPage > 0) {
       params.setCurrentPage(params.currentPage - 1);

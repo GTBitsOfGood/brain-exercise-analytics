@@ -69,7 +69,7 @@ export default function GroupReadingScreen({
         <div className={styles.graphs}>
           <BarChart
             width={325}
-            height={210}
+            height={175}
             title="Average Passages Read Per Session"
             data={avgPassageData}
             hoverable
@@ -80,10 +80,10 @@ export default function GroupReadingScreen({
           <LineChart
             width={325}
             height={185}
-            title="Average Reading Rate (Words/Min)"
+            title="Average Reading Rate"
             hoverable={true}
             percentageChange={true}
-            info="Vidushi"
+            info="Words/Min"
             data={readingRate}
             fullWidth
             gridLines
@@ -97,7 +97,7 @@ export default function GroupReadingScreen({
             percentageChange
             fullWidth
             gridLines
-            info="Hey this is just some info I thought you will find interesting."
+            info="In seconds"
           />
         </div>
         <div className={styles.textStats}>

@@ -1,19 +1,31 @@
-import React, { useState, useCallback, CSSProperties, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  CSSProperties,
+  useMemo,
+  useEffect,
+} from "react";
 
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 
-import CHAPTERS from "@src/utils/chapters";
-
 import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import { IPatientSearchReducer } from "@/common_utils/types";
+import {
+  IPatientSearchReducer,
+  IChapter,
+  HttpMethod,
+} from "@/common_utils/types";
+import { internalRequest } from "@src/utils/requests";
 
 import { update, clear } from "@src/redux/reducers/patientSearchReducer";
-import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
+import Dropdown, {
+  DropdownProps,
+  DropdownOption,
+} from "../../Dropdown/Dropdown";
 
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -292,6 +304,27 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     },
     [dispatch],
   );
+
+  const [chapters, setChapters] = useState<DropdownOption<string>[]>([]);
+
+  const loadChapters = useCallback(() => {
+    internalRequest<IChapter[] | null>({
+      url: "/api/chapter/get-chapters",
+      method: HttpMethod.GET,
+    }).then((res) => {
+      const chapterDropdown = res
+        ? res.map((chapter) => ({
+            value: chapter.name,
+            displayValue: chapter.name,
+          }))
+        : [];
+      setChapters(chapterDropdown);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadChapters();
+  }, [loadChapters]);
 
   return (
     <div className={styles.body} style={props.style}>
@@ -573,7 +606,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             title="BEI Chapter"
             dropdownProps={{
               placeholder: "Select BEI Chapter",
-              options: CHAPTERS,
+              options: chapters,
               value: beiChapter,
               onChange: (e: SelectChangeEvent<unknown>) => {
                 setBeiChapter(e.target.value as string);
