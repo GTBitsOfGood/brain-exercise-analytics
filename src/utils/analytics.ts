@@ -1,0 +1,237 @@
+// export const generateSampleAnalytics = (users) => {
+//   return Array.from({ length: users.length }, (_, i) => ({
+//     userID: users[i]._id,
+//     totalSessionsCompleted: getRandomNumber(5, 50),
+//     active: getRandomBoolean(),
+//     streak: shuffleArray(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]).slice(0, getRandomNumber(0, 7)),
+//     lastSessionMetrics:
+//       {
+//         date: new Date(),
+//         math: {
+//           attempted: getRandomBoolean(),
+//           questionsAttempted: getRandomNumber(0, 20),
+//           questionsCorrect: getRandomNumber(0, 20),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           attempted: getRandomBoolean(),
+//           questionsAttempted: getRandomNumber(0, 20),
+//           questionsCorrect: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           attempted: getRandomBoolean(),
+//           passagesRead: getRandomNumber(0, 5),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//           skipped: getRandomBoolean(),
+//         },
+//         writing: {
+//           attempted: getRandomBoolean(),
+//           questionsAnswered: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 120),
+//           skipped: getRandomBoolean(),
+//         },
+//       },
+//     weeklyMetrics: [
+//       {
+//         date: new Date(new Date().setDate(new Date().getDate() - 7)),
+//         sessionsCompleted: getRandomNumber(0, 10),
+//         streakLength: getRandomNumber(0, 7),
+//         active: getRandomBoolean(),
+//         math: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           passagesRead: getRandomNumber(0, 10),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//         },
+//         writing: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAnswered: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 120),
+//         },
+//       },
+//       {
+//         date: new Date(new Date().setDate(new Date().getDate() - 14)),
+//         sessionsCompleted: getRandomNumber(0, 10),
+//         streakLength: getRandomNumber(0, 7),
+//         active: getRandomBoolean(),
+//         math: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           passagesRead: getRandomNumber(0, 10),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//         },
+//         writing: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAnswered: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 120),
+//         },
+//       },
+//       {
+//         date: new Date(new Date().setDate(new Date().getDate() - 21)),
+//         sessionsCompleted: getRandomNumber(0, 10),
+//         streakLength: getRandomNumber(0, 7),
+//         active: getRandomBoolean(),
+//         math: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           passagesRead: getRandomNumber(0, 10),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//         },
+//         writing: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAnswered: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 120),
+//         },
+//       },
+//       {
+//         date: new Date(new Date().setDate(new Date().getDate() - 28)),
+//         sessionsCompleted: getRandomNumber(0, 10),
+//         streakLength: getRandomNumber(0, 7),
+//         active: getRandomBoolean(),
+//         math: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           passagesRead: getRandomNumber(0, 10),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//         },
+//         writing: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAnswered: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 120),
+//         },
+//       },
+//       {
+//         date: new Date(new Date().setDate(new Date().getDate() - 35)),
+//         sessionsCompleted: getRandomNumber(0, 10),
+//         streakLength: getRandomNumber(0, 7),
+//         active: getRandomBoolean(),
+//         math: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           passagesRead: getRandomNumber(0, 10),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//         },
+//         writing: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAnswered: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 120),
+//         },
+//       },
+//       {
+//         date: new Date(new Date().setDate(new Date().getDate() - 42)),
+//         sessionsCompleted: getRandomNumber(0, 10),
+//         streakLength: getRandomNumber(0, 7),
+//         active: getRandomBoolean(),
+//         math: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           finalDifficultyScore: getRandomNumber(0, 10),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         trivia: {
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAttempted: getRandomNumber(0, 50),
+//           questionsCorrect: getRandomNumber(0, 50),
+//           timePerQuestion: getRandomNumber(0, 60),
+//         },
+//         reading: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           passagesRead: getRandomNumber(0, 10),
+//           timePerPassage: getRandomNumber(0, 300),
+//           wordsPerMinute: getRandomNumber(0, 300),
+//         },
+//         writing: {
+//           sessionsAttempted: getRandomNumber(0, 5),
+//           sessionsCompleted: getRandomNumber(0, 5),
+//           questionsAnswered: getRandomNumber(0, 20),
+//           timePerQuestion: getRandomNumber(0, 120),
+//         },
+//       },
+//     ],
+//   }));
+// };
+
+// Get the generated data
+// const sampleData = generateSampleAnalytics();
+
+// export const generateSampleAnalytics

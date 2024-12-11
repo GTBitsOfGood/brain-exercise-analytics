@@ -1,6 +1,6 @@
 import {
   DashboardIcon as DB,
-  ImportantGrayIcon as IGI,
+  // ImportantGrayIcon as IGI,
   TimeForward as TF,
   LastPage as PF,
   // CalendarIcon as COI,
@@ -9,6 +9,7 @@ import {
   DocIcon as DI,
   QuestionIcon as QI,
   BarChartIcon,
+  InfoIcon,
 } from "@src/app/icons";
 import { CSSProperties, useState, useRef, useEffect } from "react";
 import { DateRangeEnum, Days } from "@/common_utils/types";
@@ -106,7 +107,7 @@ export default function OverallDashboard(params: Params) {
           ref={infoButtonRef}
           style={{ position: "relative" }}
         >
-          <IGI />
+          <InfoIcon />
           <PopupModal
             show={infoPopup}
             info={

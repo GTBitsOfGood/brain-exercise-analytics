@@ -142,7 +142,7 @@ type UParam = {
   "location.state"?: object;
   "location.city"?: object;
   additionalAffiliation?: object;
-  beiChapter?: object;
+  chapter?: object;
   "analyticsRecords.active"?: boolean;
 };
 
@@ -201,7 +201,7 @@ export const getUsersFiltered = async ({
     };
   }
   if (paramsObject.beiChapters) {
-    userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
+    userParamsObject.chapter = { $in: paramsObject.beiChapters };
   }
   if (paramsObject.active !== undefined) {
     userParamsObject["analyticsRecords.active"] = paramsObject.active;

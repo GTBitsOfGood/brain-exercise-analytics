@@ -73,10 +73,12 @@ const TransferChapterModal = ({
         params: {
           roles: [Role.NONPROFIT_VOLUNTEER],
           approved: [AdminApprovalStatus.APPROVED],
+          beiChapters: [chapter.name],
         },
         entriesPerPage: 9999,
       },
     }).then((res) => {
+      console.log(res);
       setVolunteers(res?.data ?? []);
       setLoading(false);
     });

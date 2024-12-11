@@ -75,6 +75,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
       setLoading(true);
+      console.log(params.id);
       try {
         const data = await internalRequest<T>({
           url: "/api/patient/analytics",

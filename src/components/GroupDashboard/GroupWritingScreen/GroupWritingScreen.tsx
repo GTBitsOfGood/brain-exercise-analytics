@@ -50,7 +50,7 @@ export default function GroupWritingScreen({
         <div className={styles.graphs}>
           <BarChart
             width={325}
-            height={210}
+            height={185}
             title="Average Prompts Completed"
             data={numCompleted}
             hoverable

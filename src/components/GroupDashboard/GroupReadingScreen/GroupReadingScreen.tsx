@@ -69,7 +69,7 @@ export default function GroupReadingScreen({
         <div className={styles.graphs}>
           <BarChart
             width={325}
-            height={210}
+            height={175}
             title="Average Passages Read Per Session"
             data={avgPassageData}
             hoverable

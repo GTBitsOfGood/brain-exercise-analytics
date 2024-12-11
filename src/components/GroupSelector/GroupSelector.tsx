@@ -95,7 +95,7 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
           paddingRight: "0px",
           borderColor: "#e0e5f2",
           backgroundColor: "#ffffff",
-          borderRadius: 0,
+          borderRadius: "12px",
           color: "#2B3674",
           border: "none",
           fontSize: "18px",

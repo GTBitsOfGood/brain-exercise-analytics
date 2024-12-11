@@ -68,7 +68,7 @@ export default function GroupTriviaScreen({
         <div className={styles.graphs}>
           <LineChart
             width={325}
-            height={175}
+            height={185}
             title="Average Trivia Accuracy"
             hoverable={true}
             percentageChange={true}

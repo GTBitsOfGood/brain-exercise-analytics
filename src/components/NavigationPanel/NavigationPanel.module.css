@@ -464,8 +464,12 @@
 }
 
 .middleSection {
+  overflow-y: auto; /* Enable scrolling */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+
   flex: 1;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   max-height: calc(100vh - 400px);
   min-width: 250px;
   padding-right: 3%;

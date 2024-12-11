@@ -29,57 +29,57 @@ const checkNewDate = async (userID: string): Promise<null> => {
     analytics?.lastSessionMetrics.date.getFullYear() !== today.getFullYear()
   ) {
     await Analytics.findOneAndUpdate({ userID }, [
-      {
-        $set: {
-          lastSessionsMetrics: {
-            $cond: {
-              if: { $gt: [{ $size: "$lastSessionsMetrics" }, 1] },
-              then: { $slice: ["$lastSessionsMetrics", 1] },
-              else: "$lastSessionsMetrics",
-            },
-          },
-        },
-      },
-      {
-        $set: {
-          lastSessionsMetrics: {
-            $concatArrays: [
-              [
-                {
-                  date: today,
-                  math: {
-                    attempted: false,
-                    questionsAttempted: 0,
-                    questionsCorrect: 0,
-                    finalDifficultyScore: 0,
-                    timePerQuestion: 0,
-                  },
-                  trivia: {
-                    attempted: false,
-                    questionsAttempted: 0,
-                    questionsCorrect: 0,
-                    timePerQuestion: 0,
-                  },
-                  reading: {
-                    attempted: false,
-                    passagesRead: 0,
-                    timePerPassage: 0,
-                    wordsPerMinute: 0,
-                    skipped: true,
-                  },
-                  writing: {
-                    attempted: false,
-                    questionsAnswered: 0,
-                    timePerQuestion: 0,
-                    skipped: true,
-                  },
-                },
-              ],
-              "$lastSessionsMetrics",
-            ],
-          },
-        },
-      },
+      // {
+      //   $set: {
+      //     lastSessionsMetrics: {
+      //       $cond: {
+      //         if: { $gt: [{ $size: "$lastSessionsMetrics" }, 1] },
+      //         then: { $slice: ["$lastSessionsMetrics", 1] },
+      //         else: "$lastSessionsMetrics",
+      //       },
+      //     },
+      //   },
+      // },
+      // {
+      //   $set: {
+      //     lastSessionsMetrics: {
+      //       $concatArrays: [
+      //         [
+      //           {
+      //             date: today,
+      //             math: {
+      //               attempted: false,
+      //               questionsAttempted: 0,
+      //               questionsCorrect: 0,
+      //               finalDifficultyScore: 0,
+      //               timePerQuestion: 0,
+      //             },
+      //             trivia: {
+      //               attempted: false,
+      //               questionsAttempted: 0,
+      //               questionsCorrect: 0,
+      //               timePerQuestion: 0,
+      //             },
+      //             reading: {
+      //               attempted: false,
+      //               passagesRead: 0,
+      //               timePerPassage: 0,
+      //               wordsPerMinute: 0,
+      //               skipped: true,
+      //             },
+      //             writing: {
+      //               attempted: false,
+      //               questionsAnswered: 0,
+      //               timePerQuestion: 0,
+      //               skipped: true,
+      //             },
+      //           },
+      //         ],
+      //         "$lastSessionsMetrics",
+      //       ],
+      //     },
+      //   },
+      // },
     ]);
   }
   return null;
