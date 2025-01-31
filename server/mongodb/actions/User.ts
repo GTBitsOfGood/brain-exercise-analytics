@@ -161,7 +161,7 @@ type UParam = {
   "location.country"?: object;
   "location.state"?: object;
   "location.city"?: object;
-  additionalAffiliation?: object;
+  "patientDetails.additionalAffiliation"?: object;
   chapter?: object;
   "analyticsRecords.active"?: boolean;
 };
@@ -216,8 +216,10 @@ export const getUsersFiltered = async ({
     userParamsObject["location.city"] = { $in: paramsObject.cities };
   }
   if (paramsObject.additionalAffiliations) {
-    userParamsObject.additionalAffiliation = {
-      $in: paramsObject.additionalAffiliations,
+    userParamsObject["patientDetails.additionalAffiliation"] = {
+      $in: paramsObject.additionalAffiliations.map(
+        (additionalAffiliation) => new RegExp(additionalAffiliation, `i`),
+      )
     };
   }
   if (paramsObject.beiChapters) {

@@ -326,6 +326,10 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     loadChapters();
   }, [loadChapters]);
 
+  useEffect(() => {
+    console.log("Redux additionalAffiliations:", additionalAffiliations);
+  }, [additionalAffiliations]);
+
   return (
     <div className={styles.body} style={props.style}>
       <div className={styles.button_row}>
