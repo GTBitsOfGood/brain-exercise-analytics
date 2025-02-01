@@ -192,9 +192,9 @@ export const getUsersFiltered = async ({
   } as UParam;
 
   if (paramsObject.emails) {
-    userParamsObject.email = { $in: paramsObject.emails.map(
-      (email) => new RegExp(email, `i`),
-    ) };
+    userParamsObject.email = {
+      $in: paramsObject.emails.map((email) => new RegExp(email, `i`)),
+    };
   }
   if (paramsObject.secondaryNames) {
     userParamsObject["patientDetails.secondaryContactName"] = {
@@ -221,7 +221,7 @@ export const getUsersFiltered = async ({
     userParamsObject["patientDetails.additionalAffiliation"] = {
       $in: paramsObject.additionalAffiliations.map(
         (additionalAffiliation) => new RegExp(additionalAffiliation, `i`),
-      )
+      ),
     };
   }
   if (paramsObject.beiChapters) {

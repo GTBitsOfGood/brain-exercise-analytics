@@ -34,8 +34,7 @@ const setState = (
     newState.additionalAffiliations ?? state.additionalAffiliations;
   state.dateOfJoins = newState.dateOfJoins ?? state.dateOfJoins;
   state.beiChapters = newState.beiChapters ?? state.beiChapters;
-  state.secondaryPhones =
-    newState.secondaryPhones ?? state.secondaryPhones;
+  state.secondaryPhones = newState.secondaryPhones ?? state.secondaryPhones;
   state.secondaryNames = newState.secondaryNames ?? state.secondaryNames;
 
   return state;
