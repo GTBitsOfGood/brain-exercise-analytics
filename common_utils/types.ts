@@ -273,7 +273,7 @@ export type IPatientSearchReducer = {
   additionalAffiliations: Array<string>;
   dateOfJoins: Array<string>;
   beiChapters: Array<string>;
-  secondaryPhoneNumbers: Array<string>;
+  secondaryPhones: Array<string>;
   secondaryNames: Array<string>;
 };
 

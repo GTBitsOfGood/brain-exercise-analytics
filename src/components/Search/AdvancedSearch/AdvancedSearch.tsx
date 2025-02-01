@@ -107,7 +107,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
   const [dateOfJoin, setDateOfJoin] = useState<string>("");
   const [beiChapter, setBeiChapter] = useState("");
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
+  const [secondaryPhone, setSecondaryPhone] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
 
   const {
@@ -120,7 +120,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
   } = useSelector(
     (patientSearchState: RootState) => patientSearchState.patientSearch,
@@ -137,7 +137,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliations.length > 0 ||
       dateOfJoins.length > 0 ||
       beiChapters.length > 0 ||
-      secondaryPhoneNumbers.length > 0 ||
+      secondaryPhones.length > 0 ||
       secondaryNames.length > 0,
     [
       active,
@@ -149,7 +149,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliations,
       dateOfJoins,
       beiChapters,
-      secondaryPhoneNumbers,
+      secondaryPhones,
       secondaryNames,
     ],
   );
@@ -163,7 +163,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliation !== "" ||
       dateOfJoin !== "" ||
       beiChapter !== "" ||
-      secondaryPhoneNumber !== "" ||
+      secondaryPhone !== "" ||
       secondaryName !== "",
     [
       country,
@@ -174,7 +174,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliation,
       dateOfJoin,
       beiChapter,
-      secondaryPhoneNumber,
+      secondaryPhone,
       secondaryName,
     ],
   );
@@ -203,7 +203,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setDateOfJoin("");
     setBeiChapter("");
     setSecondaryName("");
-    setSecondaryPhoneNumber("");
+    setSecondaryPhone("");
     setBeiChapter("");
   };
 
@@ -222,9 +222,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       { condition: dateOfJoin, field: "dateOfJoins", value: dateOfJoins },
       { condition: beiChapter, field: "beiChapters", value: beiChapters },
       {
-        condition: secondaryPhoneNumber,
-        field: "secondaryPhoneNumbers",
-        value: secondaryPhoneNumbers,
+        condition: secondaryPhone,
+        field: "secondaryPhones",
+        value: secondaryPhones,
       },
       {
         condition: secondaryName,
@@ -327,8 +327,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   }, [loadChapters]);
 
   useEffect(() => {
-    console.log("Redux additionalAffiliations:", additionalAffiliations);
-  }, [additionalAffiliations]);
+    console.log("Redux secondaryPhones:", secondaryPhones);
+  }, [secondaryPhones]);
 
   return (
     <div className={styles.body} style={props.style}>
@@ -496,8 +496,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? secondaryPhoneNumbers.length > 0 &&
-                secondaryPhoneNumbers.map((currSecondaryPhoneNumber) => (
+              ? secondaryPhones.length > 0 &&
+                secondaryPhones.map((currSecondaryPhoneNumber) => (
                   <div
                     key={`phone-number-${currSecondaryPhoneNumber}`}
                     className={styles.tags}
@@ -506,8 +506,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       title="Secondary Phone Number"
                       value={currSecondaryPhoneNumber}
                       handleClose={curryOnCloseSetTag(
-                        secondaryPhoneNumbers,
-                        "secondaryPhoneNumbers",
+                        secondaryPhones,
+                        "secondaryPhones",
                       )}
                       transformData={transformPhoneNumber}
                     />
@@ -661,9 +661,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <InputField
             className={[styles.answer, styles.affiliation_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
+            value={additionalAffiliation}
             placeholder="Enter Additional Affiliation"
             onChange={(e) => setAdditionalAffiliation(e.target.value)}
-            value={additionalAffiliation}
           />
         </div>
         <div
@@ -711,7 +711,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div
             className={[
               styles.question_box,
-              secondaryPhoneNumber && styles.hodingValue,
+              secondaryPhone && styles.hodingValue,
             ].join(" ")}
           >
             <div
@@ -729,8 +729,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               required={false}
               type="tel"
               placeholder="Enter Phone Number"
-              value={secondaryPhoneNumber}
-              onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
+              value={secondaryPhone}
+              onChange={(e) => setSecondaryPhone(e.target.value)}
             />
           </div>
         </div>
