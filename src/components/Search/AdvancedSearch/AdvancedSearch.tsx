@@ -728,7 +728,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               type="tel"
               placeholder="Enter Phone Number"
               value={secondaryPhone}
-              onChange={(e) => setSecondaryPhone(e.target.value)}
+              onChange={(e) => setSecondaryPhone((e.target.value).replace(/[^0-9]/g, ''))}
             />
           </div>
         </div>
