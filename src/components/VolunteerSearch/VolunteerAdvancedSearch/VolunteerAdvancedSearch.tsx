@@ -510,7 +510,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
           <SelectDropdown
             title="State"
             dropdownProps={{
-              placeholder: "Select state",
+              placeholder:
+                countryCode == null ? "Select country first" : "Select state",
               options: STATES,
               value: state,
               onChange: (e: SelectChangeEvent<unknown>) => {
@@ -532,7 +533,8 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
           <SelectDropdown
             title="City"
             dropdownProps={{
-              placeholder: "Select city",
+              placeholder:
+                stateCode == null ? "Select state first" : "Select city",
               options: CITIES,
               value: city,
               onChange: (e: SelectChangeEvent<unknown>) => {

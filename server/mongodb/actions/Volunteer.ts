@@ -76,7 +76,9 @@ export const getVolunteersFiltered = async ({
   }
 
   if (paramsObject.emails) {
-    userParamsObject.email = { $in: paramsObject.emails };
+    userParamsObject.email = {
+      $in: paramsObject.emails.map((email) => new RegExp(email, `i`)),
+    };
   }
   if (paramsObject.countries) {
     userParamsObject["location.country"] = { $in: paramsObject.countries };
