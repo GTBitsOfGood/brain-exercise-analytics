@@ -11,10 +11,12 @@ import useAuth from "@src/hooks/useAuth";
 import { RootState } from "@src/redux/rootReducer";
 
 import Modal from "@src/components/Modal/Modal";
+import OperationSuccessModal from "@src/components/OperationSuccessModal/OperationSuccessModal";
 import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const dispatch = useDispatch();
   const { email } = useSelector((state: RootState) => state.auth);
   const { logout } = useAuth();
@@ -46,11 +48,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles["navigation-panel"]}>
-        <NavigationPanel onClick={() => setShowModal(!showModal)} />
+        <NavigationPanel
+          onClick={() => setShowModal(!showModal)}
+          modalOpen={showModal}
+        />
       </div>
       <div className={styles["rest-of-page"]}>
         <Modal showModal={showModal} setShowModal={setShowModal}>
-          <AccountEditModal className={styles.accountEditModalContent} />
+          <AccountEditModal
+            setShowModal={setShowModal}
+            className={styles.accountEditModalContent}
+            setShowSuccessModal={setShowSuccessModal}
+          />
+        </Modal>
+        <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+          <OperationSuccessModal
+            className={styles.operationSuccessModal}
+            subtitle="Account Successfully Updated"
+          />
         </Modal>
         {children}
       </div>

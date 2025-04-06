@@ -1,18 +1,30 @@
-import React, { useState, useCallback, CSSProperties, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  CSSProperties,
+  useMemo,
+  useEffect,
+} from "react";
 
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 
-import CHAPTERS from "@src/utils/chapters";
-
 import { classes, transformDate, getLowerAdminRoles } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
+import { internalRequest } from "@src/utils/requests";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
 import { update, clear } from "@src/redux/reducers/volunteerSearchReducer";
-import { IVolunteerSearchReducer } from "@/common_utils/types";
-import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
+import {
+  IVolunteerSearchReducer,
+  IChapter,
+  HttpMethod,
+} from "@/common_utils/types";
+import Dropdown, {
+  DropdownProps,
+  DropdownOption,
+} from "../../Dropdown/Dropdown";
 import styles from "./VolunteerAdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
 import CalendarInput from "./CalendarInput";
@@ -226,10 +238,20 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     }
   };
 
-  const COUNTRIES = Country.getAllCountries().map((locCountry) => ({
-    value: locCountry.name,
-    displayValue: `${locCountry.name}`,
-  }));
+  const COUNTRIES = Country.getAllCountries()
+    .sort((a, b) => {
+      if (a.name === "United States") {
+        return -1;
+      }
+      if (b.name === "United States") {
+        return 1;
+      }
+      return 0;
+    })
+    .map((locCountry) => ({
+      value: locCountry.name,
+      displayValue: `${locCountry.name}`,
+    }));
   const countryCode = Country.getAllCountries().filter(
     (locCountry) => country === locCountry.name,
   )[0]?.isoCode;
@@ -268,6 +290,28 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
     },
     [dispatch],
   );
+
+  const [chapters, setChapters] = useState<DropdownOption<string>[]>([]);
+
+  const loadChapters = useCallback(() => {
+    internalRequest<IChapter[] | null>({
+      url: "/api/chapter/get-chapters",
+      method: HttpMethod.GET,
+      body: {},
+    }).then((res) => {
+      const chapterDropdown = res
+        ? res.map((chapter) => ({
+            value: chapter.name,
+            displayValue: chapter.name,
+          }))
+        : [];
+      setChapters(chapterDropdown);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadChapters();
+  }, [loadChapters]);
 
   return (
     <div className={styles.body} style={props.style}>
@@ -510,7 +554,7 @@ export const VolunteerAdvancedSearch = (props: UpdateParamProp) => {
             title="BEI Chapter"
             dropdownProps={{
               placeholder: "Select BEI Chapter",
-              options: CHAPTERS,
+              options: chapters,
               value: beiChapter,
               onChange: (e: SelectChangeEvent<unknown>) => {
                 setBeiChapter(e.target.value as string);

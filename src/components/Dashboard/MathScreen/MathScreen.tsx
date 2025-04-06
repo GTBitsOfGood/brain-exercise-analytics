@@ -40,6 +40,9 @@ const MathScreen = ({
   style,
   menuState,
 }: InputProp) => {
+  const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
+  const modifiedTime = `${totalTime} seconds`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -60,11 +63,11 @@ const MathScreen = ({
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info="Number correct on first attempt divided by total"
             data={accuracyData}
             fullWidth
-            yLabel="Questions"
+            yLabel=""
+            // yLabel="Questions"
             gridLines
           />
           <LineChart
@@ -73,8 +76,7 @@ const MathScreen = ({
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info=""
             data={difficultyData}
             fullWidth
             gridLines
@@ -86,9 +88,11 @@ const MathScreen = ({
             data={numQuestionData}
             hoverable
             percentageChange
-            yLabel="Questions"
+            yLabel=""
+            // yLabel="Questions"
             fullWidth
             gridLines
+            info=""
           />
           <BarChart
             width={325}
@@ -99,38 +103,41 @@ const MathScreen = ({
             percentageChange
             fullWidth
             gridLines
+            info="In seconds"
           />
         </div>
-        <div className={styles.textStats}>
+        <div className={styles.textStatsWithHeader}>
           <p className={styles.sessionHeading}>Last Session Breakdown</p>
-          <SmallDataBox
-            className={styles.box}
-            title="Current Accuracy"
-            text={currentAccuracy}
-            Icon={AccuracyIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <SmallDataBox
-            className={styles.box}
-            title="Current Difficulty"
-            text={currentDifficulty}
-            Icon={BarChartIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <SmallDataBox
-            className={styles.box}
-            title="Number of Question Completed"
-            text={totalQuestions}
-            Icon={QuestionIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
-          <SmallDataBox
-            className={styles.box}
-            title="Current Time per Question"
-            text={totalTime}
-            Icon={TimeIcon}
-            // style={{ width: "80%", margin: "auto" }}
-          />
+          <div className={styles.textStats}>
+            <SmallDataBox
+              className={styles.box}
+              title="Current Accuracy"
+              text={modifiedAccuracy}
+              Icon={AccuracyIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+            <SmallDataBox
+              className={styles.box}
+              title="Current Difficulty"
+              text={currentDifficulty}
+              Icon={BarChartIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+            <SmallDataBox
+              className={styles.box}
+              title="Number of Question Completed"
+              text={totalQuestions}
+              Icon={QuestionIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+            <SmallDataBox
+              className={styles.box}
+              title="Current Time per Question"
+              text={modifiedTime}
+              Icon={TimeIcon}
+              // style={{ width: "80%", margin: "auto" }}
+            />
+          </div>
         </div>
       </div>
     </div>

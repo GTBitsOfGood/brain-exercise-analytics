@@ -9,10 +9,16 @@
 
 .titleBox {
   display: flex;
-  flex-direction: column;
-  margin: auto;
-  align-items: first baseline;
+  flex-direction: row;
+  width: 100%;
   height: 1.25em;
+  justify-content: space-between;
+  p {
+    font-family: var(--font-poppins);
+    font-weight: 500;
+    color: #a3aed0;
+    font-size: 12px;
+  }
   .titleText {
     font-family: var(--font-poppins);
     font-weight: 500;
@@ -44,16 +50,34 @@
     cursor: pointer;
   }
   .percentageChange {
-    font-family: var(--font-inter);
-    font-weight: 700;
-    margin-left: 12px;
-    font-size: 8.73px;
-    white-space: nowrap;
+    display: inline-flex;
+    font-family: var(--font-poppins);
+    font-weight: 500;
+    color: #bdcdff;
+    font-size: 10.2;
   }
+}
+
+.leftSide {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rightSide {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 70px;
+  flex-shrink: 0;
 }
 
 .yAxis line {
   stroke-width: 1px;
+  // strokeWidth: 1px;
   color: #e3eafc;
 }
 .yAxis path {

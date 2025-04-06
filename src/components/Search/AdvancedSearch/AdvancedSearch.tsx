@@ -1,19 +1,31 @@
-import React, { useState, useCallback, CSSProperties, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  CSSProperties,
+  useMemo,
+  useEffect,
+} from "react";
 
 import { SelectChangeEvent } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import InputField from "@src/components/InputField/InputField";
 
-import CHAPTERS from "@src/utils/chapters";
-
 import { classes, transformDate, transformPhoneNumber } from "@src/utils/utils";
 import { ClearTagIcon } from "@src/app/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@src/redux/rootReducer";
-import { IPatientSearchReducer } from "@/common_utils/types";
+import {
+  IPatientSearchReducer,
+  IChapter,
+  HttpMethod,
+} from "@/common_utils/types";
+import { internalRequest } from "@src/utils/requests";
 
 import { update, clear } from "@src/redux/reducers/patientSearchReducer";
-import Dropdown, { DropdownProps } from "../../Dropdown/Dropdown";
+import Dropdown, {
+  DropdownProps,
+  DropdownOption,
+} from "../../Dropdown/Dropdown";
 
 import styles from "./AdvancedSearch.module.css";
 import "react-calendar/dist/Calendar.css";
@@ -59,7 +71,7 @@ function SelectDropdown<T>({
             width: "100%",
             border: "none",
             borderRadius: 10,
-            backgroundColor: "#F4F7FE",
+            backgroundColor: "transparent",
           }}
           sx={{
             "&.MuiOutlinedInput-root": {
@@ -95,7 +107,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
   const [additionalAffiliation, setAdditionalAffiliation] = useState("");
   const [dateOfJoin, setDateOfJoin] = useState<string>("");
   const [beiChapter, setBeiChapter] = useState("");
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
+  const [secondaryPhone, setSecondaryPhone] = useState("");
   const [secondaryName, setSecondaryName] = useState("");
 
   const {
@@ -108,7 +120,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
   } = useSelector(
     (patientSearchState: RootState) => patientSearchState.patientSearch,
@@ -125,7 +137,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliations.length > 0 ||
       dateOfJoins.length > 0 ||
       beiChapters.length > 0 ||
-      secondaryPhoneNumbers.length > 0 ||
+      secondaryPhones.length > 0 ||
       secondaryNames.length > 0,
     [
       active,
@@ -137,7 +149,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliations,
       dateOfJoins,
       beiChapters,
-      secondaryPhoneNumbers,
+      secondaryPhones,
       secondaryNames,
     ],
   );
@@ -151,7 +163,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliation !== "" ||
       dateOfJoin !== "" ||
       beiChapter !== "" ||
-      secondaryPhoneNumber !== "" ||
+      secondaryPhone !== "" ||
       secondaryName !== "",
     [
       country,
@@ -162,7 +174,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       additionalAffiliation,
       dateOfJoin,
       beiChapter,
-      secondaryPhoneNumber,
+      secondaryPhone,
       secondaryName,
     ],
   );
@@ -191,7 +203,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     setDateOfJoin("");
     setBeiChapter("");
     setSecondaryName("");
-    setSecondaryPhoneNumber("");
+    setSecondaryPhone("");
     setBeiChapter("");
   };
 
@@ -210,9 +222,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
       { condition: dateOfJoin, field: "dateOfJoins", value: dateOfJoins },
       { condition: beiChapter, field: "beiChapters", value: beiChapters },
       {
-        condition: secondaryPhoneNumber,
-        field: "secondaryPhoneNumbers",
-        value: secondaryPhoneNumbers,
+        condition: secondaryPhone,
+        field: "secondaryPhones",
+        value: secondaryPhones,
       },
       {
         condition: secondaryName,
@@ -249,10 +261,20 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     }
   };
 
-  const COUNTRIES = Country.getAllCountries().map((locCountry) => ({
-    value: locCountry.name,
-    displayValue: `${locCountry.name}`,
-  }));
+  const COUNTRIES = Country.getAllCountries()
+    .sort((a, b) => {
+      if (a.name === "United States") {
+        return -1;
+      }
+      if (b.name === "United States") {
+        return 1;
+      }
+      return 0;
+    })
+    .map((locCountry) => ({
+      value: locCountry.name,
+      displayValue: `${locCountry.name}`,
+    }));
   const countryCode = Country.getAllCountries().filter(
     (locCountry) => country === locCountry.name,
   )[0]?.isoCode;
@@ -283,6 +305,27 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
     [dispatch],
   );
 
+  const [chapters, setChapters] = useState<DropdownOption<string>[]>([]);
+
+  const loadChapters = useCallback(() => {
+    internalRequest<IChapter[] | null>({
+      url: "/api/chapter/get-chapters",
+      method: HttpMethod.GET,
+    }).then((res) => {
+      const chapterDropdown = res
+        ? res.map((chapter) => ({
+            value: chapter.name,
+            displayValue: chapter.name,
+          }))
+        : [];
+      setChapters(chapterDropdown);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadChapters();
+  }, [loadChapters]);
+
   return (
     <div className={styles.body} style={props.style}>
       <div className={styles.button_row}>
@@ -290,21 +333,21 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <span className={styles.active_patient_box_label}>
             <div className={styles["toggle-button-group"]}>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-left"]} ${active === undefined ? styles["active-button"] : styles["inactive-button"]}`}
                 value="undefined"
                 onClick={() => dispatch(update({ active: undefined }))}
               >
                 All Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${active === true ? styles["active-button"] : styles["inactive-button"]}`}
                 value="true"
                 onClick={() => dispatch(update({ active: true }))}
               >
                 Active Patients
               </button>
               <button
-                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : ""}`}
+                className={`${styles["toggle-button"]} ${styles["toggle-button-right"]} ${active === false ? styles["active-button"] : styles["inactive-button"]}`}
                 value="false"
                 onClick={() => dispatch(update({ active: false }))}
               >
@@ -449,8 +492,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                 ))
               : null}
             {tagsPresent
-              ? secondaryPhoneNumbers.length > 0 &&
-                secondaryPhoneNumbers.map((currSecondaryPhoneNumber) => (
+              ? secondaryPhones.length > 0 &&
+                secondaryPhones.map((currSecondaryPhoneNumber) => (
                   <div
                     key={`phone-number-${currSecondaryPhoneNumber}`}
                     className={styles.tags}
@@ -459,8 +502,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
                       title="Secondary Phone Number"
                       value={currSecondaryPhoneNumber}
                       handleClose={curryOnCloseSetTag(
-                        secondaryPhoneNumbers,
-                        "secondaryPhoneNumbers",
+                        secondaryPhones,
+                        "secondaryPhones",
                       )}
                       transformData={transformPhoneNumber}
                     />
@@ -519,7 +562,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <SelectDropdown
             title="State"
             dropdownProps={{
-              placeholder: "Select state",
+              placeholder:
+                countryCode == null ? "Select country first" : "Select state",
               options: STATES,
               value: state,
               onChange: (e: SelectChangeEvent<unknown>) => {
@@ -541,7 +585,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <SelectDropdown
             title="City"
             dropdownProps={{
-              placeholder: "Select city",
+              placeholder:
+                stateCode == null ? "Select state first" : "Select city",
               options: CITIES,
               value: city,
               onChange: (e: SelectChangeEvent<unknown>) => {
@@ -563,7 +608,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
             title="BEI Chapter"
             dropdownProps={{
               placeholder: "Select BEI Chapter",
-              options: CHAPTERS,
+              options: chapters,
               value: beiChapter,
               onChange: (e: SelectChangeEvent<unknown>) => {
                 setBeiChapter(e.target.value as string);
@@ -614,9 +659,9 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <InputField
             className={[styles.answer, styles.affiliation_answer].join(" ")}
             inputFieldClassName={styles.answerInput}
+            value={additionalAffiliation}
             placeholder="Enter Additional Affiliation"
             onChange={(e) => setAdditionalAffiliation(e.target.value)}
-            value={additionalAffiliation}
           />
         </div>
         <div
@@ -664,7 +709,7 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
           <div
             className={[
               styles.question_box,
-              secondaryPhoneNumber && styles.hodingValue,
+              secondaryPhone && styles.hodingValue,
             ].join(" ")}
           >
             <div
@@ -682,8 +727,8 @@ export const AdvancedSearch = (props: UpdateParamProp) => {
               required={false}
               type="tel"
               placeholder="Enter Phone Number"
-              value={secondaryPhoneNumber}
-              onChange={(e) => setSecondaryPhoneNumber(e.target.value)}
+              value={secondaryPhone}
+              onChange={(e) => setSecondaryPhone(e.target.value)}
             />
           </div>
         </div>

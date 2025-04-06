@@ -41,6 +41,7 @@
   column-gap: 30px;
   flex-wrap: wrap;
   margin: 0 0 0 -10px;
+  overflow: hidden;
 }
 
 .ExpandedRowColumn {
@@ -121,9 +122,15 @@
 .approveButton {
   background: rgba(50, 210, 150, 0.2);
 }
+.approveButton:hover {
+  opacity: 50%;
+}
 
 .denyButton {
   background: rgba(240, 80, 110, 0.2);
+}
+.denyButton:hover {
+  opacity: 50%;
 }
 
 .checkCircle {

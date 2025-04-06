@@ -18,6 +18,7 @@ import firebaseInit from "@src/firebase/config";
 
 import { RootState } from "@src/redux/rootReducer";
 import { internalRequest } from "@src/utils/requests";
+import NetlifyLogo from "@src/components/NetlifyLogo/NetlifyLogo";
 import styles from "./page.module.css";
 
 firebaseInit();
@@ -33,6 +34,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [entriesPerPage, setEntriesPerPage] = useState(8);
+  const [totalEntries, setTotalEntries] = useState(0);
 
   const fetchChapters = useCallback(() => {
     setLoading(true);
@@ -45,13 +48,15 @@ export default function Page() {
         },
         page: currentPage,
         sortParams: sortField,
+        entriesPerPage,
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredChapters(res?.data ?? []);
+      setTotalEntries(res?.numRecords ?? 0);
       setLoading(false);
     });
-  }, [name, sortField, currentPage]);
+  }, [name, sortField, currentPage, entriesPerPage]);
 
   useEffect(() => {
     fetchChapters();
@@ -59,7 +64,7 @@ export default function Page() {
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [name, sortField]);
+  }, [name, sortField, entriesPerPage]);
 
   return (
     <div className={styles.container}>
@@ -73,7 +78,7 @@ export default function Page() {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>Search Chapter at BEI</p>
+        <p className={styles["intro-text"]}>Search for BEI Chapters Here!</p>
         <div className={styles["search-wrapper"]}>
           <ChapterSearch />
         </div>
@@ -91,7 +96,13 @@ export default function Page() {
           setCurrentPage={setCurrentPage}
           pageCount={pageCount}
           currentPage={currentPage}
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
+          totalEntries={totalEntries}
         />
+      </div>
+      <div className={styles.netlify}>
+        <NetlifyLogo></NetlifyLogo>
       </div>
     </div>
   );

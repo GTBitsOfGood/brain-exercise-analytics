@@ -5,6 +5,7 @@
 
 .input-field {
   height: 40px;
+  margin: 1px;
 }
 
 .checkMenuItem {
@@ -40,6 +41,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.applyButton:hover {
+  opacity: 50%;
 }
 
 .checkIcon {

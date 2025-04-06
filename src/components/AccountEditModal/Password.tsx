@@ -9,7 +9,11 @@ import {
 import styles from "./AccountEditModal.module.css";
 import InputField from "../InputField/InputField";
 
-export default function Password() {
+interface Props {
+  setShowSuccessModal: (args: boolean) => void;
+}
+
+export default function Password({ setShowSuccessModal }: Props) {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
@@ -17,6 +21,8 @@ export default function Password() {
   const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmNewPasswordError, setConfirmNewPasswordError] = useState("");
+
+  const [resetChangeTriggers, setResetChangeTriggers] = useState(false);
 
   const resetErrors = () => {
     setOldPasswordError("");
@@ -29,6 +35,7 @@ export default function Password() {
     setNewPassword("");
     setConfirmNewPassword("");
     resetErrors();
+    setResetChangeTriggers(!resetChangeTriggers);
   };
 
   const handleSaveChanges = async (
@@ -37,6 +44,7 @@ export default function Password() {
     e.preventDefault();
     resetErrors();
     let error = false;
+    setResetChangeTriggers(!resetChangeTriggers);
     if (oldPassword === "") {
       setOldPasswordError("Old password cannot be blank");
       error = true;
@@ -74,6 +82,7 @@ export default function Password() {
     }
 
     await updatePassword(getAuth().currentUser!, newPassword);
+    setShowSuccessModal(true);
     reset();
   };
 
@@ -92,6 +101,9 @@ export default function Password() {
             type="password"
             showError={oldPasswordError !== ""}
             error={oldPasswordError}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={resetChangeTriggers}
           />
         </div>
         <div className={styles.inputField}>
@@ -103,6 +115,9 @@ export default function Password() {
             type="password"
             showError={newPasswordError !== ""}
             error={newPasswordError}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={resetChangeTriggers}
           />
         </div>
 
@@ -115,6 +130,9 @@ export default function Password() {
             type="password"
             showError={confirmNewPasswordError !== ""}
             error={confirmNewPasswordError}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={resetChangeTriggers}
           />
         </div>
         <div className={styles.buttons}>
@@ -123,7 +141,7 @@ export default function Password() {
             onClick={reset}
             className={`${styles.submitButton} ${styles.disabled}`}
           >
-            Cancel
+            Clear
           </button>
           <button
             type="submit"

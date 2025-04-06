@@ -75,6 +75,8 @@ export function Row({ row }: { row: GridRowDef }) {
             className={styles.caret}
             style={{
               rotate: view ? "90deg" : "0deg",
+              translate: view ? "0 -20%" : "0 0",
+              scale: 1.15,
             }}
             onClick={handleClick}
           >
@@ -82,10 +84,18 @@ export function Row({ row }: { row: GridRowDef }) {
           </button>
         </td>
         <td className={styles.RowCell}>
-          <div className={styles.RowCellContainer}>{row.firstName}</div>
+          <div className={styles.RowCellContainer}>
+            <p className={styles.RowCellText} onClick={handleClick}>
+              {row.firstName}
+            </p>
+          </div>
         </td>
         <td className={styles.RowCell}>
-          <div className={styles.RowCellContainer}>{row.lastName}</div>
+          <div className={styles.RowCellContainer}>
+            <p className={styles.RowCellText} onClick={handleClick}>
+              {row.lastName}
+            </p>
+          </div>
         </td>
         <td className={styles.RowCell}>
           <div className={styles.RowCellContainer}>{row.dateOfBirth}</div>

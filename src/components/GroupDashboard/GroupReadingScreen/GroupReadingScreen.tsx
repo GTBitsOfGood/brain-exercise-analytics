@@ -3,12 +3,7 @@ import { QuestionIcon, TimeIcon } from "@src/app/icons";
 import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./GroupReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
-import {
-  StackedBarChart,
-  BarChart,
-  SmallDataBox,
-  LineChart,
-} from "../../Graphs";
+import { BarChart, SmallDataBox, LineChart } from "../../Graphs";
 
 const ReadingIcon = () => {
   return (
@@ -48,7 +43,6 @@ interface InputProp {
 }
 
 export default function GroupReadingScreen({
-  sessionHistory,
   readingRate,
   avgPassageData,
   timeData,
@@ -57,6 +51,8 @@ export default function GroupReadingScreen({
   style,
   menuState,
 }: InputProp) {
+  const modifiedTime = `${Math.round(+avgTime)} seconds`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -71,23 +67,9 @@ export default function GroupReadingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
-            width={325}
-            height={215}
-            title="Reading Session Completion History"
-            data={sessionHistory}
-            legend={[
-              { text: "sessions completed without reading", color: "#FF9FB3" },
-              { text: "sessions completed with reading", color: "#008AFC" },
-            ]}
-            hoverable
-            percentageChange
-            fullWidth
-            gridLines
-          />
           <BarChart
             width={325}
-            height={210}
+            height={175}
             title="Average Passages Read Per Session"
             data={avgPassageData}
             hoverable
@@ -98,11 +80,10 @@ export default function GroupReadingScreen({
           <LineChart
             width={325}
             height={185}
-            title="Average Reading Rate (Words/Min)"
+            title="Average Reading Rate"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info="Words/Min"
             data={readingRate}
             fullWidth
             gridLines
@@ -116,7 +97,7 @@ export default function GroupReadingScreen({
             percentageChange
             fullWidth
             gridLines
-            info="Hey this is just some info I thought you will find interesting."
+            info="In seconds"
           />
         </div>
         <div className={styles.textStats}>
@@ -124,13 +105,13 @@ export default function GroupReadingScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Number of Passages Read"
-            text={avgTime}
+            text={avgPassageTime}
             Icon={QuestionIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Passage"
-            text={avgPassageTime}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>

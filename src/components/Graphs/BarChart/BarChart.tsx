@@ -3,15 +3,7 @@
 import { Poppins, Inter } from "next/font/google";
 import { InfoIcon } from "@src/app/icons";
 import * as d3 from "d3";
-import {
-  Fragment,
-  MouseEvent,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { D3Data } from "@src/utils/types";
 import { DataRecord } from "@/common_utils/types";
 import PopupModal from "../PopupModal/PopupModal";
@@ -28,7 +20,6 @@ interface DataParams extends D3Data {
   percentageChange?: boolean;
   highlightLargest?: boolean;
   yLabel?: string;
-  children?: ReactNode;
   gridLines?: boolean;
   info?: string;
 }
@@ -41,25 +32,27 @@ export default function BarChart({
   height: providedHeight = 180,
   style = {},
   yAxis = {
-    min:
-      (d3.min(data.map((v) => v.value)) ?? 0) -
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)),
-    max:
-      (d3.max(data.map((v) => v.value)) ?? 1) +
-      0.1 *
-        ((d3.max(data.map((v) => v.value)) ?? 1) -
-          (d3.min(data.map((v) => v.value)) ?? 0)) +
-      0.000001,
-    numDivisions: Math.round((Math.max(providedHeight, 100) - 35) / 25),
-    format: (d: d3.NumberValue) => d3.format(".2f")(d),
+    min: Math.ceil(0),
+    max: Math.max(
+      Math.ceil(d3.max(data.map((v) => v.value + v.value / 5)) ?? 1),
+      1,
+    ),
+    numDivisions: 5,
+    // Math.min(
+    //   5,
+    //   Math.floor(d3.max(data.map((v) => v.value)) ?? 1) + 1,
+    // ),
+    format: (d: d3.NumberValue) => {
+      const numberValue = Number(d); // Convert to a number
+      return Number.isInteger(numberValue)
+        ? numberValue.toString()
+        : d3.format(".1f")(numberValue);
+    },
+    // format: d3.format("d"),
   },
   hoverable = false,
   percentageChange = false,
-  highlightLargest = true,
   fullWidth = false,
-  children,
   gridLines = false,
   info = "",
   yLabel = "",
@@ -67,7 +60,7 @@ export default function BarChart({
   const updateNewData = useCallback(() => {
     const datapoints = 10;
     if (data.length === 0) {
-      return [{ interval: "1", value: 1 }];
+      return [];
     }
     if (data.length > datapoints) {
       const step = Math.floor(data.length / datapoints);
@@ -80,6 +73,7 @@ export default function BarChart({
     return data;
   }, [data]);
   const [newData, setNewData] = useState<DataRecord[]>(updateNewData());
+  const [dataExists, setDataExists] = useState(newData.length !== 0);
   const barWidth = 12;
   const minWidth = (barWidth + 5) * newData.length + 60;
   const [width, setWidth] = useState(Math.max(providedWidth, minWidth));
@@ -101,36 +95,17 @@ export default function BarChart({
   const marginRight = 25;
   const marginBottom = 40;
   const marginLeft = 35;
-  const [largest, setLargest] = useState(-1);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [infoPopup, setInfoPopup] = useState(false);
   const [popupX, setPopupX] = useState<number | null>(null);
   const [popupY, setPopupY] = useState<number | null>(null);
 
   const actualChange =
-    newData.length < 2
+    newData.length < 2 || newData[newData.length - 2].value === 0
       ? null
       : newData[newData.length - 1].value / newData[newData.length - 2].value -
         1;
 
   const windowRef = useRef(null);
-
-  function handleMouseMove(e: MouseEvent<SVGSVGElement>) {
-    const x = e.pageX;
-    const svg: Element = e.currentTarget as SVGElement;
-    const svgRect = svg.getBoundingClientRect();
-    const xBound = svgRect.x + marginLeft;
-    const range = width - marginRight - marginLeft;
-    const itemWidth = range / (data.length - 1);
-    const index = Math.floor(
-      (x - xBound + Math.floor(itemWidth / 2)) / itemWidth,
-    );
-    setActiveIndex(index);
-  }
-
-  const handleMouseLeave = () => {
-    setActiveIndex(-1);
-  };
 
   const x = d3.scaleLinear(
     [0, newData.length - 1],
@@ -158,65 +133,71 @@ export default function BarChart({
     const yAxisFormat = yAxis?.format
       ? yAxis.format
       : (d: d3.NumberValue) => JSON.stringify(d);
-    function indexOfMax() {
-      if (newData.length === 0) {
-        return -1;
-      }
-
-      let max = newData[0].value;
-      let maxIndex = 0;
-
-      for (let i = 1; i < newData.length; i += 1) {
-        if (newData[i].value > max) {
-          maxIndex = i;
-          max = newData[i].value;
-        }
-      }
-
-      return maxIndex;
-    }
-    setLargest(indexOfMax());
 
     const svg = d3.select(windowRef.current);
-    svg.select(".x-axis-hor").remove();
-    svg.select(".y-axis-vert").remove();
-    svg.select(".x-axis-grid").remove();
-    svg.select(".y-axis-grid").remove();
-    svg.select(".x-axis-top").remove();
-    svg.select(".x-axis-bottom").remove();
-    svg.select(".y-axis").remove();
-    const xAxisLabelTop = d3
-      .axisBottom(x)
-      .ticks(newData.length)
-      .tickSizeOuter(0)
-      .tickSizeInner(0)
-      .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[0]);
 
-    const xAxisLabelBottom = d3
-      .axisBottom(x)
-      .ticks(newData.length)
-      .tickSizeOuter(0)
-      .tickSizeInner(0)
-      .tickPadding(15)
-      .tickFormat((d) => newData[d.valueOf()].interval.split(" ")[1]);
+    if (!dataExists) {
+      svg.selectAll("*").remove();
 
-    const yAxisLabel = d3
-      .axisLeft(y)
-      .tickValues(
-        d3.range(
-          yAxis.min,
-          yAxis.max + 0.000001,
-          (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-        ),
-      )
-      .tickSizeOuter(0)
-      .tickSizeInner(0)
-      .tickPadding(15)
-      .tickFormat(yAxisFormat);
+      const iconSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 40 40" fill="none">
+          <path d="M20.0021 3.33594C29.2071 3.33594 36.6688 10.7976 36.6688 20.0026C36.6688 29.2076 29.2071 36.6693 20.0021 36.6693C10.7971 36.6693 3.33545 29.2076 3.33545 20.0026C3.33545 10.7976 10.7971 3.33594 20.0021 3.33594ZM20.0021 6.66927C16.4659 6.66927 13.0745 8.07403 10.574 10.5745C8.07354 13.075 6.66878 16.4664 6.66878 20.0026C6.66878 23.5388 8.07354 26.9302 10.574 29.4307C13.0745 31.9312 16.4659 33.3359 20.0021 33.3359C23.5383 33.3359 26.9297 31.9312 29.4302 29.4307C31.9307 26.9302 33.3354 23.5388 33.3354 20.0026C33.3354 16.4664 31.9307 13.075 29.4302 10.5745C26.9297 8.07403 23.5383 6.66927 20.0021 6.66927ZM20.0021 25.0026C20.4441 25.0026 20.8681 25.1782 21.1806 25.4908C21.4932 25.8033 21.6688 26.2272 21.6688 26.6693C21.6688 27.1113 21.4932 27.5352 21.1806 27.8478C20.8681 28.1603 20.4441 28.3359 20.0021 28.3359C19.5601 28.3359 19.1362 28.1603 18.8236 27.8478C18.511 27.5352 18.3354 27.1113 18.3354 26.6693C18.3354 26.2272 18.511 25.8033 18.8236 25.4908C19.1362 25.1782 19.5601 25.0026 20.0021 25.0026ZM20.0021 10.0026C20.4441 10.0026 20.8681 10.1782 21.1806 10.4908C21.4932 10.8033 21.6688 11.2272 21.6688 11.6693V21.6693C21.6688 22.1113 21.4932 22.5352 21.1806 22.8478C20.8681 23.1603 20.4441 23.3359 20.0021 23.3359C19.5601 23.3359 19.1362 23.1603 18.8236 22.8478C18.511 22.5352 18.3354 22.1113 18.3354 21.6693V11.6693C18.3354 11.2272 18.511 10.8033 18.8236 10.4908C19.1362 10.1782 19.5601 10.0026 20.0021 10.0026Z" fill="#F30000"/>
+        </svg>
+      `;
+      const iconSize = 30;
 
-    if (gridLines) {
-      const yAxisGrid = d3
+      svg
+        .append("foreignObject")
+        .attr("x", width / 2 - 97)
+        .attr("y", height / 2 - 37) // Position above the "No Data" text
+        .attr("width", iconSize)
+        .attr("height", iconSize)
+        .html(iconSVG);
+
+      svg
+        .append("text")
+        .attr("x", width / 2)
+        .attr("y", height / 2 - 20)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .style("font-size", "16px")
+        .style("font-family", poppins500.style.fontFamily)
+        .style("fill", "#2B3674")
+        .text("No Data Found");
+    } else {
+      svg.selectAll("*").remove();
+      svg.select(".x-axis-hor").remove();
+      svg.select(".y-axis-vert").remove();
+      svg.select(".x-axis-grid").remove();
+      svg.select(".y-axis-grid").remove();
+      svg.select(".x-axis-top").remove();
+      svg.select(".x-axis-bottom").remove();
+      svg.select(".y-axis").remove();
+      svg.selectAll(".bar").remove();
+
+      const xAxisLabelTop = d3
+        .axisBottom(x)
+        .ticks(newData.length)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickPadding(15)
+        .tickFormat((d) => {
+          const index = Math.round(Number(d));
+          return newData[index]?.interval?.split(" ")[0] ?? "";
+        });
+
+      const xAxisLabelBottom = d3
+        .axisBottom(x)
+        .ticks(newData.length)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
+        .tickPadding(15)
+        .tickFormat((d) => {
+          const index = Math.round(Number(d));
+          return newData[index]?.interval?.split(" ")[1] ?? "";
+        });
+
+      const yAxisLabel = d3
         .axisLeft(y)
         .tickValues(
           d3.range(
@@ -225,82 +206,182 @@ export default function BarChart({
             (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
           ),
         )
-        .tickSize(-width + marginLeft + marginRight - 20)
-        .tickFormat(() => "");
-
-      const axisVert = d3
-        .axisLeft(y)
-        .tickValues(
-          d3.range(
-            yAxis.min,
-            yAxis.max,
-            (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
-          ),
-        )
-        .tickSize(0)
-        .tickFormat(() => "");
-
-      const axisHor = d3
-        .axisBottom(
-          d3.scaleLinear(
-            [0, newData.length - 1],
-            [marginLeft, width - marginRight + 20],
-          ),
-        )
-        .ticks(newData.length - 1)
         .tickSizeOuter(0)
         .tickSizeInner(0)
-        .tickFormat(() => "");
+        .tickPadding(15)
+        .tickFormat(yAxisFormat);
 
+      if (gridLines) {
+        const yAxisGrid = d3
+          .axisLeft(y)
+          .tickValues(
+            d3.range(
+              yAxis.min,
+              yAxis.max + 0.000001,
+              (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+            ),
+          )
+          .tickSize(-width + marginLeft + marginRight - 20)
+          .tickFormat(() => "");
+
+        const axisVert = d3
+          .axisLeft(y)
+          .tickValues(
+            d3.range(
+              yAxis.min,
+              yAxis.max,
+              (yAxis.max - yAxis.min) / (yAxis.numDivisions - 1),
+            ),
+          )
+          .tickSize(0)
+          .tickFormat(() => "");
+
+        const axisHor = d3
+          .axisBottom(
+            d3.scaleLinear(
+              [0, newData.length - 1],
+              [marginLeft, width - marginRight + 20],
+            ),
+          )
+          .ticks(newData.length - 1)
+          .tickSizeOuter(0)
+          .tickSizeInner(0)
+          .tickFormat(() => "");
+
+        svg
+          .append("g")
+          .attr("class", `y-axis-vert`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(axisVert);
+
+        svg
+          .append("g")
+          .attr("class", `y-axis-grid ${styles.yAxis}`)
+          .attr("transform", `translate(${marginLeft - 5}, 0)`)
+          .call(yAxisGrid);
+
+        svg
+          .append("g")
+          .attr("transform", `translate(-5, ${height - marginBottom})`)
+          .attr("class", "x-axis-hor")
+          .style("font", `10px ${poppins500.style.fontFamily}`)
+          .call(axisHor);
+      }
       svg
         .append("g")
-        .attr("class", `y-axis-vert`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(axisVert);
-
-      svg
-        .append("g")
-        .attr("class", `y-axis-grid ${styles.yAxis}`)
-        .attr("transform", `translate(${marginLeft - 5}, 0)`)
-        .call(yAxisGrid);
-
-      svg
-        .append("g")
-        .attr("transform", `translate(-5, ${height - marginBottom})`)
-        .attr("class", "x-axis-hor")
+        .attr(
+          "transform",
+          `translate(${barWidth / 2}, ${height - marginBottom})`,
+        )
+        .attr("class", "x-axis-top")
         .style("font", `10px ${poppins500.style.fontFamily}`)
-        .call(axisHor);
+        .style("color", "#343539")
+        .call(xAxisLabelTop)
+        .call((g) => g.select(".domain").remove());
+
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
+        )
+        .attr("class", "x-axis-bottom")
+        .style("font", `10px ${inter500.style.fontFamily}`)
+        .style("color", "#B0BBD5")
+        .call(xAxisLabelBottom)
+        .call((g) => g.select(".domain").remove());
+
+      svg
+        .append("g")
+        .attr("transform", `translate(${marginLeft}, 0)`)
+        .attr("class", "y-axis")
+        .style("font", `9.5px ${poppins400.style.fontFamily}`)
+        .style("color", "#A5A5A5")
+        .call(yAxisLabel)
+        .call((g) => g.select(".domain").remove());
+
+      const barsGroup = svg
+        .selectAll(".bar")
+        .data(newData)
+        .join("g")
+        .attr("class", "bar")
+        .attr("transform", (d, i) => `translate(${x(i)}, 0)`); // Position bars
+
+      const tooltip = d3.select("#tooltip");
+
+      if (hoverable) {
+        barsGroup
+          .append("path")
+          .attr("d", (d) => {
+            const barHeight = height - marginBottom - y(d.value);
+            const radius = barWidth / 2; // Radius for the semi-circle top
+            const x0 = 0;
+            const y0 = y(d.value);
+
+            // Define the path for a rectangle with a semi-circle top
+            if (d.value === 0) {
+              // Render a semi-circle (half-circle) if the value is 0
+              return `
+                    M ${x0},${height - marginBottom}
+                    A ${radius},${radius} 0 1 1 ${x0 + barWidth},${height - marginBottom}
+                `;
+            }
+            // Render a rectangle with a rounded top if the value is non-zero
+            return `
+                    M ${x0},${y0 + barHeight} 
+                    V ${y0 + radius} 
+                    A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                    V ${y0 + barHeight} 
+                    H ${x0} Z
+                `;
+          })
+          .style("fill", () => "#008AFC")
+          .on("mouseover", (event: MouseEvent, d: DataRecord) => {
+            tooltip.transition().duration(0).style("opacity", 1);
+            tooltip
+              .html(
+                `${Number.isInteger(d.value) ? d.value : d.value.toFixed(2)}`,
+              )
+              .style("left", `${event.pageX + 5}px`)
+              .style("top", `${event.pageY - 28}px`);
+          })
+          .on("mousemove", (event: MouseEvent) => {
+            tooltip
+              .style("left", `${event.pageX + 5}px`)
+              .style("top", `${event.pageY - 28}px`);
+          })
+          .on("mouseout", () => {
+            tooltip.transition().duration(0).style("opacity", 0);
+          });
+      } else {
+        barsGroup
+          .append("path")
+          .attr("d", (d) => {
+            const barHeight = height - marginBottom - y(d.value);
+            const radius = barWidth / 2; // Radius for the semi-circle top
+            const x0 = 0;
+            const y0 = y(d.value);
+
+            // Define the path for a rectangle with a semi-circle top
+            if (d.value === 0) {
+              // Render a semi-circle (half-circle) if the value is 0
+              return `
+                    M ${x0},${y0}
+                    A ${radius},${radius} 0 1 1 ${x0 + barWidth},${y0}
+                `;
+            }
+            // Render a rectangle with a rounded top if the value is non-zero
+            return `
+                    M ${x0},${y0 + barHeight} 
+                    V ${y0 + radius} 
+                    A ${radius},${radius} 0 0 1 ${x0 + barWidth},${y0 + radius} 
+                    V ${y0 + barHeight} 
+                    H ${x0} Z
+                `;
+          })
+          .style("fill", () => "#008AFC");
+      }
     }
-
-    svg
-      .append("g")
-      .attr("transform", `translate(${barWidth / 2}, ${height - marginBottom})`)
-      .attr("class", "x-axis-top")
-      .style("font", `10px ${poppins500.style.fontFamily}`)
-      .style("color", "#343539")
-      .call(xAxisLabelTop)
-      .call((g) => g.select(".domain").remove());
-
-    svg
-      .append("g")
-      .attr(
-        "transform",
-        `translate(${barWidth / 2}, ${height - marginBottom + 15})`,
-      )
-      .attr("class", "x-axis-bottom")
-      .style("font", `10px ${inter500.style.fontFamily}`)
-      .style("color", "#B0BBD5")
-      .call(xAxisLabelBottom)
-      .call((g) => g.select(".domain").remove());
-
-    svg
-      .append("g")
-      .attr("transform", `translate(${marginLeft}, 0)`)
-      .attr("class", "y-axis")
-      .style("font", `9.5px ${poppins400.style.fontFamily}`)
-      .style("color", "#A5A5A5")
-      .call(yAxisLabel)
-      .call((g) => g.select(".domain").remove());
 
     return () => window.removeEventListener("scroll", onScroll);
   }, [
@@ -315,6 +396,7 @@ export default function BarChart({
     yAxis.numDivisions,
     gridLines,
     width,
+    dataExists,
   ]);
 
   useEffect(() => {
@@ -325,26 +407,9 @@ export default function BarChart({
     setNewData(updateNewData());
   }, [data, updateNewData]);
 
-  const HoverableNode = ({ i, d }: { i: number; d: D3Data["data"][0] }) =>
-    activeIndex === i && (
-      <foreignObject
-        x={x(i)}
-        y={y(d.value) - 11 - barWidth / 2}
-        width={barWidth}
-        height="10"
-        fontSize={8}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            color: "#A5A5A5",
-            fontSize: 9,
-          }}
-        >
-          {d.value}
-        </div>
-      </foreignObject>
-    );
+  useEffect(() => {
+    setDataExists(newData.length !== 0);
+  }, [newData]);
 
   return (
     <div
@@ -363,15 +428,19 @@ export default function BarChart({
       }}
     >
       <div className={styles.titleBox}>
-        <div style={{ display: "inline-flex" }}>
+        <div className={styles.leftSide}>
           <p className={styles.titleText}>{title}</p>
           {info !== "" && (
             <div
               className={styles.infoBox}
-              onClick={() => {
+              onMouseEnter={() => {
                 setInfoPopup(true);
               }}
+              onMouseLeave={() => {
+                setInfoPopup(false);
+              }}
               ref={infoButtonRef}
+              style={{ position: "relative" }}
             >
               <InfoIcon />
               <PopupModal
@@ -386,6 +455,8 @@ export default function BarChart({
               />
             </div>
           )}
+        </div>
+        <div className={styles.rightSide}>
           <p
             className={styles.percentageChange}
             style={{
@@ -393,75 +464,44 @@ export default function BarChart({
                 actualChange !== null && actualChange < 0
                   ? "#EA4335"
                   : "#05CD99",
+              whiteSpace: "nowrap",
             }}
           >
             {actualChange !== null &&
               percentageChange &&
               (actualChange < 0
-                ? `⏷ \xa0 ${(actualChange * 100).toFixed(2)}%`
-                : `⏶ \xa0 ${(actualChange * 100).toFixed(2)}%`)}
+                ? `⏷ ${(actualChange * 100).toFixed(2)}%`
+                : `⏶ ${(actualChange * 100).toFixed(2)}%`)}
           </p>
         </div>
-        <div style={{ display: "inline-flex" }}>
-          <p className={styles.labelText}>{yLabel}</p>
-        </div>
       </div>
+      <div style={{ display: "inline-flex" }}>
+        <p className={styles.labelText}>{yLabel}</p>
+      </div>
+      <div
+        id="tooltip"
+        style={{
+          fontFamily: poppins500.style.fontFamily,
+          fontWeight: "normal",
+          color: "#2b3674",
+          position: "absolute",
+          opacity: 0,
+          pointerEvents: "none",
+          backgroundColor: "white",
+          border: "1px solid #ccc",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+          borderRadius: "12px",
+        }}
+      ></div>
       <svg
         ref={windowRef}
         width={width}
         height={height}
         style={{ marginTop: 10 }}
-        onMouseMove={hoverable ? handleMouseMove : undefined}
-        onMouseLeave={hoverable ? handleMouseLeave : undefined}
-      >
-        <g fill="currentColor" stroke="currentColor" strokeWidth="1.5">
-          {children ||
-            newData.map((d, i) => {
-              const color =
-                highlightLargest && largest === i ? "#FF9FB3" : "#008AFC";
-              return (
-                <Fragment key={i}>
-                  <rect
-                    x={x(i)}
-                    y={y(d.value)}
-                    width={barWidth}
-                    height={height - y(d.value) - marginBottom}
-                    color={color}
-                    style={{ borderRadius: 10 }}
-                  />
-                  <circle
-                    cx={x(i) + barWidth / 2}
-                    cy={y(d.value)}
-                    r={barWidth / 2}
-                    color={color}
-                  />
-                  <rect
-                    x={x(i)}
-                    y={y(yAxis.min)}
-                    width={barWidth}
-                    height={barWidth / 2}
-                    color="white"
-                    style={{ borderRadius: 10 }}
-                  />
-                </Fragment>
-              );
-            })}
-          {newData.map((d, i) => (
-            <HoverableNode key={i} i={i} d={d} />
-          ))}
-        </g>
-      </svg>
+      ></svg>
       <div style={{ justifyContent: "center" }}>
-        <div>
-          {/* <div
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 50,
-              backgroundColor: "#008AFC",
-            }}
-          /> */}
-        </div>
+        <div></div>
       </div>
     </div>
   );

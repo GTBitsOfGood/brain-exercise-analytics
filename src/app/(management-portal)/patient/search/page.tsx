@@ -19,6 +19,7 @@ import Modal from "@src/components/Modal/Modal";
 import firebaseInit from "@src/firebase/config";
 
 import { RootState } from "@src/redux/rootReducer";
+import NetlifyLogo from "@src/components/NetlifyLogo/NetlifyLogo";
 import styles from "./page.module.css";
 
 firebaseInit();
@@ -35,7 +36,7 @@ export default function Page() {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
 
@@ -45,6 +46,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [entriesPerPage, setEntriesPerPage] = useState(8);
+  const [totalEntries, setTotalEntries] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -58,7 +61,7 @@ export default function Page() {
           emails,
           additionalAffiliations,
           secondaryNames,
-          secondaryPhoneNumbers,
+          secondaryPhones,
           beiChapters,
           active,
           countries,
@@ -68,10 +71,12 @@ export default function Page() {
         },
         page: currentPage,
         sortParams: sortField,
+        entriesPerPage,
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      setTotalEntries(res?.numRecords ?? 0);
       setLoading(false);
     });
   }, [
@@ -85,10 +90,11 @@ export default function Page() {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
     sortField,
     currentPage,
+    entriesPerPage,
   ]);
 
   useEffect(() => {
@@ -104,9 +110,10 @@ export default function Page() {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
     sortField,
+    entriesPerPage,
   ]);
 
   return (
@@ -121,7 +128,7 @@ export default function Page() {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["search-container"])}>
-        <p className={styles["intro-text"]}>Here are Your Patient Finds!</p>
+        <p className={styles["intro-text"]}>Search for Patients Here!</p>
         <div className={styles["search-wrapper"]}>
           <Search />
         </div>
@@ -139,7 +146,13 @@ export default function Page() {
           setCurrentPage={setCurrentPage}
           pageCount={pageCount}
           currentPage={currentPage}
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
+          totalEntries={totalEntries}
         />
+      </div>
+      <div className={styles.netlify}>
+        <NetlifyLogo></NetlifyLogo>
       </div>
     </div>
   );

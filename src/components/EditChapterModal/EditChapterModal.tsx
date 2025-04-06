@@ -29,6 +29,7 @@ interface Props {
   setShowSuccessModal: (arg: boolean) => void;
   setSuccessLink: (arg: string) => void;
   chapter: IChapter;
+  refreshInfo: () => void;
 }
 
 const EditChapterModal = ({
@@ -38,6 +39,7 @@ const EditChapterModal = ({
   setShowSuccessModal,
   chapter,
   setSuccessLink,
+  refreshInfo,
 }: Props) => {
   const [yearFounded, setYearFounded] = useState<string>(
     String(chapter.yearFounded),
@@ -59,10 +61,20 @@ const EditChapterModal = ({
     [],
   );
 
-  const COUNTRIES = Country.getAllCountries().map((country) => ({
-    value: country.name,
-    displayValue: `${country.name}`,
-  }));
+  const COUNTRIES = Country.getAllCountries()
+    .sort((a, b) => {
+      if (a.name === "United States") {
+        return -1;
+      }
+      if (b.name === "United States") {
+        return 1;
+      }
+      return 0;
+    })
+    .map((country) => ({
+      value: country.name,
+      displayValue: `${country.name}`,
+    }));
   const countryCode = Country.getAllCountries().filter(
     (country) => country.name === locCountry,
   )[0]?.isoCode;
@@ -126,6 +138,16 @@ const EditChapterModal = ({
       error = true;
     }
 
+    if (
+      parseInt(yearFounded, 10) < 2019 ||
+      parseInt(yearFounded, 10) > new Date().getFullYear()
+    ) {
+      setYearFoundedError(
+        `Year Founded has to be in range 2019 - ${new Date().getFullYear()}`,
+      );
+      error = true;
+    }
+
     if (Number.isNaN(Number(yearFounded))) {
       setYearFoundedError("Year founded must be a number");
       error = true;
@@ -177,6 +199,7 @@ const EditChapterModal = ({
 
       setShowModal(false);
       reset();
+      refreshInfo();
       setSuccessLink(`/chapter/${encodeURI(chapterName)}`);
       setShowSuccessModal(true);
     } catch (errors) {
@@ -202,6 +225,8 @@ const EditChapterModal = ({
               onChange={(e) => setYearFounded(e.target.value)}
               showError={yearFoundedError !== ""}
               error={yearFoundedError}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
             />
           </div>
 
@@ -213,6 +238,8 @@ const EditChapterModal = ({
               onChange={(e) => setChapterName(e.target.value)}
               showError={chapterNameError !== ""}
               error={chapterNameError}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
             />
           </div>
 
@@ -272,7 +299,7 @@ const EditChapterModal = ({
               onClick={reset}
               className={`${styles.submitButton} ${styles.disabled}`}
             >
-              Discard
+              Clear
             </button>
             <button
               type="submit"

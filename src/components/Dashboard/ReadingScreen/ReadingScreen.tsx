@@ -3,13 +3,7 @@ import { AttemptIcon, PromptsIcon, TimeIcon } from "@src/app/icons";
 import { DateRangeEnum } from "@/common_utils/types";
 import styles from "./ReadingScreen.module.css";
 import DateSelector from "../../DateSelector/DateSelector";
-import {
-  StackedBarChart,
-  BarChart,
-  SmallDataBox,
-  BooleanBox,
-  LineChart,
-} from "../../Graphs";
+import { BarChart, SmallDataBox, BooleanBox, LineChart } from "../../Graphs";
 
 const ReadingIcon = () => {
   return (
@@ -74,16 +68,16 @@ export default function ReadingScreen({
       </div>
       <div className={styles.body}>
         <div className={styles.graphs}>
-          <StackedBarChart
+          <BarChart
             width={325}
-            height={215}
+            height={210}
             title="Reading Session Completion History"
             data={sessionHistory}
-            legend={[
-              { text: "sessions completed without reading", color: "#FF9FB3" },
-              { text: "sessions completed with reading", color: "#008AFC" },
-            ]}
-            yLabel="Writing"
+            // legend={[
+            //   { text: "sessions completed without reading", color: "#FF9FB3" },
+            //   { text: "sessions completed with reading", color: "#008AFC" },
+            // ]}
+            // yLabel="Writing"
             hoverable
             percentageChange
             fullWidth
@@ -102,11 +96,10 @@ export default function ReadingScreen({
           <LineChart
             width={325}
             height={185}
-            title="Average Reading Rate (Words/Min)"
+            title="Average Reading Rate"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info="Words/Min"
             data={readingRate}
             fullWidth
             gridLines
@@ -120,7 +113,7 @@ export default function ReadingScreen({
             percentageChange
             fullWidth
             gridLines
-            info="Hey this is just some info I thought you will find interesting."
+            info="In seconds"
           />
         </div>
         <div className={styles.textStats}>
@@ -135,7 +128,7 @@ export default function ReadingScreen({
           <SmallDataBox
             className={styles.box}
             title="Current Time per Passage"
-            text={currentTime}
+            text={`${currentTime} seconds`}
             Icon={TimeIcon}
             // style={{ width: "80%", margin: "auto" }}
           />

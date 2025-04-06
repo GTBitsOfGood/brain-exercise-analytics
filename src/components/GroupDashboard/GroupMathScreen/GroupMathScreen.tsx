@@ -40,6 +40,11 @@ const GroupMathScreen = ({
   style,
   menuState,
 }: InputProp) => {
+  const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
+  const modifiedTime = `${Math.round(+totalTime)} seconds`;
+  const modifiedQuestionsCompleted = `${Math.round(+totalQuestions)}`;
+  const modifiedDifficulty = `${Math.round(+currentDifficulty)}`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -60,8 +65,7 @@ const GroupMathScreen = ({
             title="Average Math Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info="Number correct on first attempt divided by total"
             data={accuracyData}
             fullWidth
             gridLines
@@ -72,8 +76,7 @@ const GroupMathScreen = ({
             title="Average Math Difficulty"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info=""
             data={difficultyData}
             fullWidth
             gridLines
@@ -93,6 +96,7 @@ const GroupMathScreen = ({
             width={325}
             height={175}
             title="Average Time Spent per Question"
+            info="In seconds"
             data={timeData}
             hoverable
             percentageChange
@@ -106,25 +110,25 @@ const GroupMathScreen = ({
           <SmallDataBox
             className={styles.box}
             title="Average Accuracy"
-            text={currentAccuracy}
+            text={modifiedAccuracy}
             Icon={AccuracyIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Difficulty"
-            text={currentDifficulty}
+            text={modifiedDifficulty}
             Icon={BarChartIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Number of Question Completed"
-            text={totalQuestions}
+            text={modifiedQuestionsCompleted}
             Icon={QuestionIcon}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Question"
-            text={totalTime}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>

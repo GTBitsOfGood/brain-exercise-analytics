@@ -13,6 +13,11 @@ import { ObjectId, PipelineStage, Promise } from "mongoose";
 import Chapter from "../models/Chapter";
 import User from "../models/User";
 
+export const getChapters = async (): Promise<IChapter[] | null> => {
+  const chapters = await Chapter.find<IChapter>();
+  return chapters;
+};
+
 export const getChapterByName = async (
   name: string,
 ): Promise<IChapter | null> => {
@@ -43,12 +48,14 @@ type ChapParam = {
 export const getChaptersFiltered = async ({
   params,
   page,
+  entriesPerPage,
   sortParams,
 }: SearchRequestBody<ChapterSearchParams>): Promise<
   SearchResponseBody<IChapterTableEntry> | undefined
 > => {
+  console.log(entriesPerPage);
   const newPage = page ?? 0;
-  const numOfItems = 11;
+  const numOfItems = entriesPerPage || 8;
 
   const chapterParamObject = {} as ChapParam;
 

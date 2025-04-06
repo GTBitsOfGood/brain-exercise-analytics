@@ -36,6 +36,40 @@
   row-gap: 20px;
 }
 
+.textStatsWithHeader {
+  min-height: 0; /* Allows it to shrink if content reduces */
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  overflow: hidden; /* Prevents excess space */
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Enables wrapping on smaller screens */
+}
+
+@media (max-width: 1300px) {
+  .textStats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .body {
+    flex-direction: column-reverse;
+    margin-top: 20px;
+  }
+}
+
+.body > .box {
+  flex: 1 1 calc(50% - 10px); /* Flexible sizing for adaptability */
+  margin: 5px;
+}
+
 .graphs {
   flex: 2;
   display: grid;

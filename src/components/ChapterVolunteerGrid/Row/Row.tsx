@@ -141,6 +141,8 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
           <button
             style={{
               rotate: view ? "90deg" : "0deg",
+              translate: view ? "0 -20%" : "0 0",
+              scale: 1.15,
             }}
             onClick={handleClick}
           >
@@ -154,7 +156,10 @@ export function Row({ volunteer, handleDeleteClick }: Props) {
               styles.nameCellContainer,
             )}
           >
-            {`${volunteer.firstName} ${volunteer.lastName}`}
+            <p
+              className={styles.RowCellText}
+              onClick={handleClick}
+            >{`${volunteer.firstName} ${volunteer.lastName}`}</p>
           </div>
         </td>
         <td className={styles.RowCell}>

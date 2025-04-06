@@ -1,4 +1,4 @@
-import {
+import React, {
   CSSProperties,
   FormEvent,
   MouseEvent,
@@ -73,10 +73,12 @@ const TransferChapterModal = ({
         params: {
           roles: [Role.NONPROFIT_VOLUNTEER],
           approved: [AdminApprovalStatus.APPROVED],
+          beiChapters: [chapter.name],
         },
         entriesPerPage: 9999,
       },
     }).then((res) => {
+      console.log(res);
       setVolunteers(res?.data ?? []);
       setLoading(false);
     });
@@ -85,6 +87,8 @@ const TransferChapterModal = ({
   type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
   const handleChange: ChangeHandler = (e) => {
     const { target } = e;
+    setChapterPresidentObject(null);
+
     if (!target.value.trim()) return setFilteredVolunteers([]);
 
     const filteredValue = volunteers?.filter((volunteer) =>

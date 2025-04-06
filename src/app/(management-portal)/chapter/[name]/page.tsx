@@ -67,6 +67,8 @@ export default function Page({ params }: { params: { name: string } }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [entriesPerPage, setEntriesPerPage] = useState(8);
+  const [totalEntries, setTotalEntries] = useState(0);
 
   const fetchUsers = useCallback(() => {
     setLoading(true);
@@ -80,13 +82,15 @@ export default function Page({ params }: { params: { name: string } }) {
         },
         page: currentPage,
         sortParams: sortField,
+        entriesPerPage,
       },
     }).then((res) => {
       setPageCount(res?.numPages ?? 0);
       setFilteredUsers(res?.data ?? []);
+      setTotalEntries(res?.numRecords ?? 0);
       setLoading(false);
     });
-  }, [fullName, currentPage, sortField, params.name]);
+  }, [fullName, currentPage, sortField, params.name, entriesPerPage]);
 
   const fetchChapterAndPresident = useCallback(() => {
     setLoading(true);
@@ -125,7 +129,7 @@ export default function Page({ params }: { params: { name: string } }) {
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [fullName, sortField]);
+  }, [fullName, sortField, entriesPerPage]);
 
   return (
     <div className={styles.container}>
@@ -139,7 +143,12 @@ export default function Page({ params }: { params: { name: string } }) {
         <LoadingBox />
       </Modal>
       <div className={classes(styles["profile-container"])}>
-        <ChapterInfo chapter={chapter} chapterPresident={chapterPresident} />
+        <ChapterInfo
+          chapter={chapter}
+          chapterPresident={chapterPresident}
+          refreshUsers={fetchUsers}
+          refreshInfo={fetchChapterAndPresident}
+        />
         <Divider />
       </div>
       <div className={classes(styles["search-container"])}>
@@ -162,6 +171,9 @@ export default function Page({ params }: { params: { name: string } }) {
           currentPage={currentPage}
           refreshUsers={fetchUsers}
           chapter={decodeURI(params.name)}
+          entriesPerPage={entriesPerPage}
+          setEntriesPerPage={setEntriesPerPage}
+          totalEntries={totalEntries}
         />
       </div>
     </div>

@@ -50,7 +50,11 @@ export default function Calendar({ value, onChange }: CalendarInputProp) {
           }}
           onChange={(val) => {
             if (val === null) return;
-            onChange(transformDate(val));
+            if (val.toString() === "Invalid Date") {
+              onChange("");
+            } else {
+              onChange(transformDate(val));
+            }
           }}
         />
       </div>

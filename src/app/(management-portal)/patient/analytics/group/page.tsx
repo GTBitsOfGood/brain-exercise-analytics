@@ -19,12 +19,6 @@ import {
   IAggregatedAnalyticsWriting,
   PatientSearchParams,
 } from "@/common_utils/types";
-import {
-  dataBar,
-  dataLine,
-  dataStacked,
-  numberOfQuestionData,
-} from "@src/utils/patients";
 
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
@@ -61,7 +55,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
   } = useSelector(
     (patientSearchState: RootState) => patientSearchState.patientSearch,
@@ -73,7 +67,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       emails,
       additionalAffiliations,
       secondaryNames,
-      secondaryPhones: secondaryPhoneNumbers,
+      secondaryPhones,
       beiChapters,
       active,
       countries,
@@ -92,7 +86,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       emails,
       fullName,
       secondaryNames,
-      secondaryPhoneNumbers,
+      secondaryPhones,
       states,
     ],
   );
@@ -111,6 +105,9 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
   const [overall, setOverall] = useState<
     IAggregatedAnalyticsOverall["overall"] | undefined
   >(undefined);
+
+  const [totalPatients, setTotalPatients] = useState<number | string>("---");
+  const [activePatients, setActivePatients] = useState<number | string>("---");
 
   const [dashboardMenu, setDashboardMenu] = useState<DateRangeEnum>(
     DateRangeEnum.RECENT,
@@ -169,6 +166,8 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       setReadingMenu(newDateRange);
       setWritingMenu(newDateRange);
       setTriviaMenu(newDateRange);
+      setTotalPatients(data.totalPatients);
+      setActivePatients(data.activePatients);
     },
     [retrieveAnalytics],
   );
@@ -225,6 +224,10 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
     updateAllAnalytics(DateRangeEnum.RECENT);
   }, [params.groupIds, updateAllAnalytics]);
 
+  useEffect(() => {
+    console.log("Filters object:", filters);
+  }, [filters]);
+
   return (
     <div className={styles.container}>
       <title>Patient Group Analytics | Brain Exercise Initiative</title>
@@ -261,17 +264,19 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
               triviaQuestionsCompleted: 0,
             }
           }
-          sessionCompletionHistory={overall?.streakHistory ?? dataBar}
+          sessionCompletionHistory={overall?.streakHistory ?? []}
+          totalPatients={totalPatients}
+          activePatients={activePatients}
         />
       </div>
       <Divider id="math" />
       <div className={styles.sectionContainer}>
         <GroupMathScreen
           menuState={[mathMenu, updateMathAnalytics]}
-          accuracyData={math?.avgAccuracy ?? dataLine}
-          difficultyData={math?.avgDifficultyScore ?? dataLine}
-          numQuestionData={math?.avgQuestionsCompleted ?? numberOfQuestionData}
-          timeData={math?.avgTimePerQuestion ?? dataBar}
+          accuracyData={math?.avgAccuracy ?? []}
+          difficultyData={math?.avgDifficultyScore ?? []}
+          numQuestionData={math?.avgQuestionsCompleted ?? []}
+          timeData={math?.avgTimePerQuestion ?? []}
           currentAccuracy={(math?.lastSession.accuracy ?? 0).toString()}
           currentDifficulty={(
             math?.lastSession.difficultyScore ?? 0
@@ -286,10 +291,10 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       <div className={styles.sectionContainer}>
         <GroupReadingScreen
           menuState={[readingMenu, updateReadingAnalytics]}
-          sessionHistory={reading?.sessionCompletion ?? dataStacked}
-          readingRate={reading?.avgTimePerPassage ?? dataLine}
-          avgPassageData={reading?.avgPassagesRead ?? dataBar}
-          timeData={reading?.avgWordsPerMin ?? dataBar}
+          sessionHistory={reading?.sessionCompletion ?? []}
+          readingRate={reading?.avgTimePerPassage ?? []}
+          avgPassageData={reading?.avgPassagesRead ?? []}
+          timeData={reading?.avgWordsPerMin ?? []}
           avgPassageTime={(reading?.lastSession.passagesRead ?? 0).toString()}
           avgTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
         />
@@ -298,9 +303,9 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       <div className={styles.sectionContainer}>
         <GroupWritingScreen
           menuState={[writingMenu, updateWritingAnalytics]}
-          sessionHistory={writing?.sessionCompletion ?? dataStacked}
-          numCompleted={writing?.avgPromptsAnswered ?? dataBar}
-          avgTimeData={writing?.avgTimePerQuestion ?? dataBar}
+          sessionHistory={writing?.sessionCompletion ?? []}
+          numCompleted={writing?.avgPromptsAnswered ?? []}
+          avgTimeData={writing?.avgTimePerQuestion ?? []}
           totalPrompts={(writing?.lastSession.promptsAnswered ?? 0).toString()}
           avgTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
           attemptStatus={writing?.lastSession.completed ?? false}
@@ -310,11 +315,9 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       <div className={styles.sectionContainer}>
         <GroupTriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
-          accuracyData={trivia?.avgAccuracy ?? dataLine}
-          numQuestionData={
-            trivia?.avgQuestionsCompleted ?? numberOfQuestionData
-          }
-          timeData={trivia?.avgTimePerQuestion ?? dataBar}
+          accuracyData={trivia?.avgAccuracy ?? []}
+          numQuestionData={trivia?.avgQuestionsCompleted ?? []}
+          timeData={trivia?.avgTimePerQuestion ?? []}
           avgAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(
             trivia?.lastSession.questionsCompleted ?? 0

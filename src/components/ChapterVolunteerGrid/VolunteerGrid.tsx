@@ -10,6 +10,8 @@ import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 import styles from "./VolunteerGrid.module.css";
 import Popup from "./Popup/Popup";
 import { Row } from "./Row/Row";
+import Modal from "../Modal/Modal";
+import OperationSuccessModal from "../OperationSuccessModal/OperationSuccessModal";
 
 interface VolunteerGridProps {
   data: IUser[];
@@ -20,6 +22,9 @@ interface VolunteerGridProps {
   currentPage: number;
   refreshUsers: () => void;
   chapter?: string;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void;
+  totalEntries: number;
 }
 
 interface HeaderProps {
@@ -64,6 +69,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
   const [removeVolunteerEmail, setRemoveVolunteerEmail] = useState<
     string | null
   >(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleConfirmDelete = async () => {
     if (removeVolunteerEmail !== null) {
@@ -82,6 +88,7 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
       params.refreshUsers();
     }
     setPopupOpen(false);
+    setShowSuccessModal(true);
   };
 
   const handleClosePopup = useCallback(() => {
@@ -124,7 +131,16 @@ export default function VolunteerGrid(params: VolunteerGridProps) {
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
         currentPage={params.currentPage}
+        entriesPerPage={params.entriesPerPage}
+        setEntriesPerPage={params.setEntriesPerPage}
+        totalEntries={params.totalEntries}
       />
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+        <OperationSuccessModal
+          className={styles.operationSuccessModal}
+          subtitle="Volunteer Successfully Removed"
+        />
+      </Modal>
     </div>
   );
 }

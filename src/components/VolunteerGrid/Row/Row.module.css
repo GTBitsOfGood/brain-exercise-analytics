@@ -33,6 +33,14 @@
   display: none;
 }
 
+.RowCellText {
+  width: fit-content;
+}
+
+.RowCellText:hover {
+  cursor: pointer;
+}
+
 .ExpandedRowContainer {
   width: calc(100% + 20px);
   border-radius: 5px;
@@ -43,6 +51,8 @@
   column-gap: 30px;
   flex-wrap: wrap;
   margin: 0 0 0 -10px;
+  padding-left: 10px;
+  overflow: hidden;
 }
 
 .ExpandedRowColumn {
@@ -117,4 +127,7 @@
   color: red;
   cursor: pointer;
   transition: background-color 0.2s;
+}
+.deleteButton:hover {
+  opacity: 50%;
 }

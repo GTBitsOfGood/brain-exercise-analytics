@@ -93,3 +93,8 @@
 .atLimit {
   visibility: hidden;
 }
+
+.operationSuccessModal {
+  width: 35%;
+  height: 23%;
+}

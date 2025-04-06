@@ -34,11 +34,17 @@ interface Params {
     selectedValue: DateRangeEnum,
     setSelectedvalue: (value: DateRangeEnum) => void,
   ];
-
+  totalPatients: number | string;
+  activePatients: number | string;
   // Need to update with the schema of the response we will get from the backend
 }
 
 export default function GroupOverviewReport(params: Params) {
+  const mathQuestionsCompleted = `${+Math.round(params.lastSession.mathQuestionsCompleted)}`;
+  const wordsRead = `${+Math.round(params.lastSession.wordsRead)}`;
+  const promptsCompleted = `${+Math.round(params.lastSession.promptsCompleted)}`;
+  const triviaQuestionsCompleted = `${+Math.round(params.lastSession.triviaQuestionsCompleted)}`;
+
   return (
     <div className={styles.OverallDashboard} style={params.style}>
       <div className={styles.titleRow}>
@@ -62,15 +68,15 @@ export default function GroupOverviewReport(params: Params) {
       <div className={styles.dataGrid}>
         <SmallDataBox
           className={styles.box}
-          title="Total Users"
+          title="Total Patients"
           Icon={PeopleIcon}
-          text="200"
+          text={`${params.totalPatients}`}
         />
         <SmallDataBox
           className={styles.box}
-          title="Active Users"
+          title="Active Patients"
           Icon={PersonIcon}
-          text={"10"}
+          text={`${params.activePatients}`}
         />
       </div>
       <div className={styles.middleContainer}>
@@ -97,28 +103,28 @@ export default function GroupOverviewReport(params: Params) {
         <SmallDataBox
           className={styles.box}
           title="Average Questions Completed"
-          text={"10"}
+          text={mathQuestionsCompleted}
           Icon={SqrtIcon}
           Chip={() => <Chip color="#FCDCE2">Math</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Words Read"
-          text={"10"}
+          text={wordsRead}
           Icon={BookIcon}
           Chip={() => <Chip color="#E8DCFC">Reading</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Prompts Completed"
-          text={"5"}
+          text={promptsCompleted}
           Icon={DocIcon}
           Chip={() => <Chip color="#D6F6EA">Writing</Chip>}
         />
         <SmallDataBox
           className={styles.box}
           title="Average Questions Completed"
-          text={"5"}
+          text={triviaQuestionsCompleted}
           Icon={QuestionIcon}
           Chip={() => <Chip color="#FCE8DC">Trivia</Chip>}
         />

@@ -1,4 +1,3 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   User,
   UsersThree,
@@ -9,9 +8,10 @@ import {
   Wrench,
   HandTransferIcon,
 } from "@src/app/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IChapter } from "@/common_utils/types";
+import { IChapter, IUser, Role } from "@/common_utils/types";
+import { RootState } from "@src/redux/rootReducer";
 import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import Modal from "@src/components/Modal/Modal";
 import EditChapterModal from "@src/components/EditChapterModal/EditChapterModal";
 import DeleteChapterModal from "@src/components/DeleteChapterModal/DeleteChapterModal";
@@ -29,9 +29,13 @@ import TransferChapterModal from "../TransferChapterModal/TransferChapterModal";
 interface ChapterInfoProps {
   chapter: IChapter;
   chapterPresident: string;
+  refreshUsers: () => void;
+  refreshInfo: () => void;
 }
 
 export default function ChapterInfo(params: ChapterInfoProps) {
+  const user = useSelector<RootState>((state) => state.auth) as IUser;
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [showEditSuccessModal, setShowEditSuccessModal] = useState(false);
   const [editSuccessLink, setEditSuccessLink] = useState<string>("");
@@ -44,6 +48,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
     useState(false);
 
   const [showAddVolunteerModal, setShowAddVolunteerModal] = useState(false);
+  const [showAddVolunteerSuccessModal, setShowAddVolunteerSuccessModal] =
+    useState(false);
 
   const chapterProfile = useMemo<CellProps[]>(() => {
     return [
@@ -91,23 +97,32 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         title: "Edit Chapter Profile",
         link: () => setShowEditModal(true),
         icon: <Wrench />,
+        hoverColor: "#2B3674",
       },
       {
-        title: "Chapter Transfer",
+        title: "Leadership Transfer",
         link: () => setShowTransferModal(true),
         icon: <HandTransferIcon />,
+        hoverColor: "#2B3674",
       },
       {
         title: "Add Volunteer",
         link: () => setShowAddVolunteerModal(true),
         icon: <PersonPlusIcon className=""></PersonPlusIcon>,
+        hoverColor: "#2B3674",
       },
-      {
-        title: "Delete Chapter",
-        link: () => setShowDeleteModal(true),
-        icon: <RedTrashCan></RedTrashCan>,
-        iconStyle: { backgroundColor: "#FCDCE2" },
-      },
+      ...(user.role === Role.NONPROFIT_DIRECTOR ||
+      user.role === Role.NONPROFIT_ADMIN
+        ? [
+            {
+              title: "Delete Chapter",
+              link: () => setShowDeleteModal(true),
+              icon: <RedTrashCan></RedTrashCan>,
+              iconStyle: { backgroundColor: "#FCDCE2" },
+              hoverColor: "#EA4335",
+            },
+          ]
+        : []),
     ] as CellProps[];
   }, [params.chapter]);
 
@@ -128,7 +143,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <p>Chapter Profile</p>
       </div>
       <div className={styles.chapterSection}>
-        <div className={styles.chapterImage}>
+        {/* <div className={styles.chapterImage}>
           <Cell
             cell={{
               title: "Add Chapter Image",
@@ -138,8 +153,8 @@ export default function ChapterInfo(params: ChapterInfoProps) {
               cellStyle: { height: "100%", width: "225px" },
               iconStyle: { backgroundColor: "#008afc" },
             }}
-          />
-        </div>
+          /> */}
+        {/* </div> */}
         <div className={styles.chapterInfo}>
           {chapterProfile.map((cell) => (
             <Cell key={cell.title} cell={cell} />
@@ -163,6 +178,7 @@ export default function ChapterInfo(params: ChapterInfoProps) {
           setShowSuccessModal={setShowEditSuccessModal}
           setSuccessLink={setEditSuccessLink}
           chapter={params.chapter}
+          refreshInfo={params.refreshInfo}
         />
       </Modal>
       <Modal
@@ -222,6 +238,19 @@ export default function ChapterInfo(params: ChapterInfoProps) {
         <AddVolunteerModal
           className={styles.addVolunteerModalContent}
           setShowModal={setShowAddVolunteerModal}
+          setShowSuccessModal={setShowAddVolunteerSuccessModal}
+          chapter={params.chapter}
+          refreshUsers={params.refreshUsers}
+        />
+      </Modal>
+      <Modal
+        showModal={showAddVolunteerSuccessModal}
+        setShowModal={setShowAddVolunteerSuccessModal}
+      >
+        <OperationSuccessModal
+          className={styles.addVolunteerOperationSuccessModal}
+          subtitle="You have successfully added a volunteer to"
+          title={params.chapter.name}
         />
       </Modal>
     </div>

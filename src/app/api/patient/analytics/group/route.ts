@@ -87,11 +87,13 @@ export const POST = APIWrapper({
 
     const usersids = users.data.map((element) => element._id);
 
-    const aggregatedDataArray = await getAggregatedAnalytics(
+    const aggregatedDataObject = await getAggregatedAnalytics(
       usersids,
       range,
       updatedSections,
     );
+
+    const aggregatedDataArray = aggregatedDataObject.analytics;
 
     aggregatedDataArray.forEach((data) => {
       // for (const userdatadict of users.data) {
@@ -131,7 +133,7 @@ export const POST = APIWrapper({
         groupAnalytics.overall.lastSession.triviaQuestionsCompleted +=
           data.overall.lastSession.triviaQuestionsCompleted / usersLength;
 
-        const count = 0;
+        let count = 0;
         data.overall.streakHistory.forEach((element: DataRecord) => {
           const modifiedElement = { ...element };
           modifiedElement.value /= usersLength;
@@ -142,6 +144,7 @@ export const POST = APIWrapper({
             groupAnalytics.overall!.streakHistory[count].value +=
               modifiedElement.value;
           }
+          count += 1;
         });
 
         if (data.overall.active) {
@@ -420,6 +423,9 @@ export const POST = APIWrapper({
         });
       }
     });
+
+    groupAnalytics.activePatients = aggregatedDataObject.activePatients;
+    groupAnalytics.totalPatients = aggregatedDataObject.totalPatients;
 
     return groupAnalytics;
   },

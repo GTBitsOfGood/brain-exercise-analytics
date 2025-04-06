@@ -3,6 +3,7 @@ import { CSSProperties, useState } from "react";
 import { classes } from "@src/utils/utils";
 
 import useAuth from "@src/hooks/useAuth";
+import XIcon from "@/src/app/icons/XIcon";
 import styles from "./AccountEditModal.module.css";
 import Profile from "./Profile";
 import Password from "./Password";
@@ -13,11 +14,18 @@ const enum Page {
 }
 
 interface Props {
+  setShowModal: (args: boolean) => void;
   className?: string;
   style?: CSSProperties;
+  setShowSuccessModal: (args: boolean) => void;
 }
 
-const Modal = ({ className, style }: Props) => {
+const Modal = ({
+  setShowModal,
+  className,
+  style,
+  setShowSuccessModal,
+}: Props) => {
   const [page, setPage] = useState<Page>(Page.PROFILE);
   const { logout } = useAuth();
   const router = useRouter();
@@ -51,7 +59,16 @@ const Modal = ({ className, style }: Props) => {
       <div className={styles.vl}></div>
       <div className={styles.info}>
         {/* <span onClick={closeModal}>&times;</span> */}
-        {page === Page.PROFILE ? <Profile /> : <Password />}
+        {page === Page.PROFILE ? (
+          <Profile setShowSuccessModal={setShowSuccessModal} />
+        ) : (
+          <Password setShowSuccessModal={setShowSuccessModal} />
+        )}
+      </div>
+      <div className={styles.close}>
+        <div className={styles.closeButton} onClick={() => setShowModal(false)}>
+          <XIcon />
+        </div>
       </div>
     </div>
   );

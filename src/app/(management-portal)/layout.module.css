@@ -26,3 +26,13 @@
   width: 85%;
   height: 85%;
 }
+
+.operationSuccessModal {
+  width: 35%;
+  height: 23%;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.8; /* Optional: add a visual indicator */
+}

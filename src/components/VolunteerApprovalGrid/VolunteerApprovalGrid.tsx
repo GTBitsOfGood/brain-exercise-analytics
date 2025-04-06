@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import DataGrid from "@src/components/DataGrid/DataGrid";
 import Pagination from "@src/components/Pagination/Pagination";
 import { IUser, SortField } from "@/common_utils/types";
@@ -9,6 +9,8 @@ import TwoVolunteersIcon from "@src/app/icons/TwoVolunteersIcon";
 
 import { Row } from "./Row/Row";
 import styles from "./VolunteerApprovalGrid.module.css";
+import Modal from "../Modal/Modal";
+import OperationSuccessModal from "../OperationSuccessModal/OperationSuccessModal";
 
 interface VolunteerApprovalGridProps {
   data: IUser[];
@@ -18,6 +20,9 @@ interface VolunteerApprovalGridProps {
   pageCount: number;
   currentPage: number;
   refreshUsers: () => void;
+  entriesPerPage: number;
+  setEntriesPerPage: (arg: number) => void;
+  totalEntries: number;
 }
 
 const columns: GridColDef[] = [
@@ -52,6 +57,9 @@ function Header() {
 export default function VolunteerApprovalGrid(
   params: VolunteerApprovalGridProps,
 ) {
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
   // Construct Rows from the volunteers
   const Rows = params.data.map((volunteer) => {
     return (
@@ -59,6 +67,8 @@ export default function VolunteerApprovalGrid(
         key={`volunteer-${volunteer._id}`}
         volunteer={volunteer}
         refreshUsers={params.refreshUsers}
+        setShowModal={setShowSuccessModal}
+        setSuccessMessage={setSuccessMessage}
       />
     );
   });
@@ -79,7 +89,16 @@ export default function VolunteerApprovalGrid(
         setCurrentPage={params.setCurrentPage}
         pageCount={params.pageCount}
         currentPage={params.currentPage}
+        entriesPerPage={params.entriesPerPage}
+        setEntriesPerPage={params.setEntriesPerPage}
+        totalEntries={params.totalEntries}
       />
+      <Modal showModal={showSuccessModal} setShowModal={setShowSuccessModal}>
+        <OperationSuccessModal
+          className={styles.operationSuccessModal}
+          subtitle={successMessage}
+        />
+      </Modal>
     </div>
   );
 }

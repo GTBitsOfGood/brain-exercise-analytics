@@ -48,6 +48,9 @@ export default function TriviaScreen({
   style,
   menuState,
 }: InputProp) {
+  const modifiedAccuracy = `${Math.round(+currentAccuracy * 100)}%`;
+  const modifiedTime = `${totalTime} seconds`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -68,8 +71,7 @@ export default function TriviaScreen({
             title="Average Trivia Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info="Number of self-reported correct answers"
             data={accuracyData}
             fullWidth
             gridLines
@@ -78,6 +80,7 @@ export default function TriviaScreen({
             width={325}
             height={175}
             title="Average Time Spent per Question"
+            info="In seconds"
             data={timeData}
             hoverable
             percentageChange
@@ -100,7 +103,7 @@ export default function TriviaScreen({
           <SmallDataBox
             className={styles.box}
             title="Current Accuracy"
-            text={currentAccuracy}
+            text={modifiedAccuracy}
             Icon={AccuracyIcon}
           />
           <SmallDataBox
@@ -113,7 +116,7 @@ export default function TriviaScreen({
           <SmallDataBox
             className={styles.box}
             title="Current Time per Question"
-            text={totalTime}
+            text={modifiedTime}
             Icon={TimeIcon}
             // style={{ width: "80%", margin: "auto" }}
           />

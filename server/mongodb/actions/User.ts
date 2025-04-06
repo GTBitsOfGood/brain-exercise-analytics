@@ -62,7 +62,7 @@ export const createUserEmail = async (email: string): Promise<IUser> => {
 };
 
 export const patientSignUp = async (
-  data: Omit<IUser, "chapter" | "location">,
+  data: Omit<IUser, "location">,
 ): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email: data.email },
@@ -71,6 +71,7 @@ export const patientSignUp = async (
         firstName: data.firstName,
         lastName: data.lastName,
         phoneNumber: data.phoneNumber,
+        chapter: data.chapter,
         birthDate: new Date(data.birthDate),
         patientDetails: {
           secondaryContactName: data.patientDetails.secondaryContactName,
@@ -85,6 +86,26 @@ export const patientSignUp = async (
   return result;
 };
 
+export const patientEdit = async (
+  data: Omit<
+    IUser,
+    "chapter" | "location" | "patientDetails" | "new" | "signedUp" | "role"
+  >,
+): Promise<IUser | null> => {
+  const result = await User.findOneAndUpdate<IUser>(
+    { email: data.email },
+    {
+      $set: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phoneNumber: data.phoneNumber,
+        birthDate: new Date(data.birthDate),
+      },
+    },
+  );
+  return result;
+};
+
 export const volunteerSignUp = async (
   email: string,
   firstName: string,
@@ -94,6 +115,7 @@ export const volunteerSignUp = async (
   state: string,
   city: string,
   chapter: string,
+  role: string,
 ): Promise<IUser | null> => {
   const result = await User.findOneAndUpdate<IUser>(
     { email },
@@ -109,6 +131,7 @@ export const volunteerSignUp = async (
           city,
         },
         chapter,
+        role,
       },
     },
 
@@ -118,16 +141,15 @@ export const volunteerSignUp = async (
   const chapterObject: IChapter | null = await Chapter.findOne({
     name: chapter,
   });
-  if (!chapterObject) {
-    throw Error("Chapter does not exist");
-  }
-  const updateFilter = {
-    $inc: {
-      activeVolunteers: 1,
-    },
-  };
+  if (chapterObject) {
+    const updateFilter = {
+      $inc: {
+        activeVolunteers: 1,
+      },
+    };
 
-  await Chapter.updateOne({ name: chapter }, updateFilter);
+    await Chapter.updateOne({ name: chapter }, updateFilter);
+  }
   return result;
 };
 type UParam = {
@@ -139,8 +161,8 @@ type UParam = {
   "location.country"?: object;
   "location.state"?: object;
   "location.city"?: object;
-  additionalAffiliation?: object;
-  beiChapter?: object;
+  "patientDetails.additionalAffiliation"?: object;
+  chapter?: object;
   "analyticsRecords.active"?: boolean;
 };
 
@@ -150,10 +172,11 @@ export const getUsersFiltered = async ({
   sortParams,
   searchall,
   onlyids,
+  entriesPerPage,
 }: SearchRequestBody<PatientSearchParams>): Promise<
   SearchResponseBody<IPatientTableEntry> | undefined
 > => {
-  let numOfItems = 8;
+  let numOfItems = entriesPerPage || 8;
   let newpage = page;
 
   if (page === undefined) {
@@ -169,7 +192,9 @@ export const getUsersFiltered = async ({
   } as UParam;
 
   if (paramsObject.emails) {
-    userParamsObject.email = { $in: paramsObject.emails };
+    userParamsObject.email = {
+      $in: paramsObject.emails.map((email) => new RegExp(email, `i`)),
+    };
   }
   if (paramsObject.secondaryNames) {
     userParamsObject["patientDetails.secondaryContactName"] = {
@@ -193,12 +218,14 @@ export const getUsersFiltered = async ({
     userParamsObject["location.city"] = { $in: paramsObject.cities };
   }
   if (paramsObject.additionalAffiliations) {
-    userParamsObject.additionalAffiliation = {
-      $in: paramsObject.additionalAffiliations,
+    userParamsObject["patientDetails.additionalAffiliation"] = {
+      $in: paramsObject.additionalAffiliations.map(
+        (additionalAffiliation) => new RegExp(additionalAffiliation, `i`),
+      ),
     };
   }
   if (paramsObject.beiChapters) {
-    userParamsObject.beiChapter = { $in: paramsObject.beiChapters };
+    userParamsObject.chapter = { $in: paramsObject.beiChapters };
   }
   if (paramsObject.active !== undefined) {
     userParamsObject["analyticsRecords.active"] = paramsObject.active;

@@ -24,6 +24,7 @@ export const POST = APIWrapper({
     const chapters = await getChaptersFiltered({
       params,
       page: reqData.page,
+      entriesPerPage: reqData.entriesPerPage,
       sortParams: reqData.sortParams,
     });
 

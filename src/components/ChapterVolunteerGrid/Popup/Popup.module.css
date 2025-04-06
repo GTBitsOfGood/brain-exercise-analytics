@@ -65,6 +65,9 @@
   font-style: normal;
   font-weight: 700;
 }
+.confirmButton:hover {
+  opacity: 50%;
+}
 
 .cancelButton {
   background-color: #e3e3e3;
@@ -79,4 +82,7 @@
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+}
+.cancelButton:hover {
+  opacity: 50%;
 }

@@ -12,8 +12,13 @@ import { internalRequest } from "@src/utils/requests";
 import { HttpMethod, IUser } from "@/common_utils/types";
 import styles from "./AccountEditModal.module.css";
 import Chip from "../Chip/Chip";
+import InputField from "../InputField/InputField";
 
-export default function Profile() {
+interface Props {
+  setShowSuccessModal: (args: boolean) => void;
+}
+
+export default function Profile({ setShowSuccessModal }: Props) {
   const [edit, setEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -61,7 +66,11 @@ export default function Profile() {
       if (dateArray.length === 3) {
         const [month, day, year] = dateArray.map(Number);
         const updatedDate = new Date(year, month - 1, day);
-        if (!Number.isNaN(updatedDate.getTime())) {
+        if (
+          !Number.isNaN(updatedDate.getTime()) &&
+          updatedDate.getFullYear() > 1950 &&
+          updatedDate < new Date()
+        ) {
           setUpdatedBirthDate(updatedDate);
         }
       }
@@ -146,7 +155,6 @@ export default function Profile() {
     });
 
     setTempImageLink(null);
-
     // Logout user if email is changed so they can reauthenticate
     if (updatedEmail !== email) {
       await logout();
@@ -156,6 +164,7 @@ export default function Profile() {
     dispatch(update(updatedUser));
     setUnupdatedBirthDate(updatedBirthDate);
     setEdit(false);
+    setShowSuccessModal(true);
   }, [
     dispatch,
     logout,
@@ -231,7 +240,7 @@ export default function Profile() {
       <div className={styles.header}>
         <div>
           <div>
-            {imageLink ? (
+            {imageLink || tempImageLink ? (
               <img
                 src={tempImageLink || imageLink}
                 alt="Profile Image"
@@ -306,29 +315,35 @@ export default function Profile() {
         <div className={styles.inputFieldRow}>
           <div className={styles.inputField}>
             <label>First Name</label>
-            <input
+            <InputField
               placeholder="First Name"
               value={updatedFirstName}
               onChange={(e) => setUpdatedFirstName(e.target.value)}
               className={!edit ? styles.nonEditable : styles.editable}
               readOnly={!edit}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
+              resetChangeTrigger={edit}
             />
           </div>
           <div className={styles.inputField}>
             <label>Last Name</label>
-            <input
+            <InputField
               placeholder="Last Name"
               value={updatedLastName}
               onChange={(e) => setUpdatedLastName(e.target.value)}
               className={!edit ? styles.nonEditable : styles.editable}
               readOnly={!edit}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
+              resetChangeTrigger={edit}
             />
           </div>
         </div>
 
         <div className={styles.inputField}>
           <label>Date of Birth</label>
-          <input
+          <InputField
             placeholder="mm/dd/yyyy"
             value={updatedBirthDateInput}
             onChange={(e) => {
@@ -337,12 +352,15 @@ export default function Profile() {
             }}
             className={!edit ? styles.nonEditable : styles.editable}
             readOnly={!edit}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={edit}
           />
         </div>
 
         <div className={styles.inputField}>
           <label>Phone</label>
-          <input
+          <InputField
             placeholder="(123) 456-7890"
             value={formatPhoneNumber(updatedPhoneNumber) || ""}
             onChange={(e) => {
@@ -350,17 +368,23 @@ export default function Profile() {
             }}
             className={!edit ? styles.nonEditable : styles.editable}
             readOnly={!edit}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={edit}
           />
         </div>
 
         <div className={styles.inputField}>
           <label>Email:</label>
-          <input
+          <InputField
             placeholder="blankemail@gmail"
             value={updatedEmail}
             onChange={(e) => setUpdatedEmail(e.target.value)}
             className={!edit ? styles.nonEditable : styles.editable}
             readOnly={!edit}
+            defaultBackgroundColor="#e3eafc"
+            hoverColor="#ffffff"
+            resetChangeTrigger={edit}
           />
         </div>
         {edit && (

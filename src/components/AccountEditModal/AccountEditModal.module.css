@@ -91,17 +91,15 @@
   border: 1px solid var(--Dark-Blue-Grey, #9ca5c2);
 }
 .nonEditable {
-  background-color: #e7eeff;
-  padding-left: 15px;
-  border: 0cm;
+  /* background-color: #e7eeff; */
+  /* border: 0cm; */
   color: #8f9bba;
   cursor: not-allowed;
 }
 
 .editable {
-  background-color: white;
-  padding-left: 15px;
-  border: 1px solid #979797;
+  /* background-color: white; */
+  /* border: 1px solid #979797; */
   color: #2b3674;
 }
 .inputField label {
@@ -203,4 +201,14 @@
   display: flex;
   justify-content: flex-end;
   gap: 15px;
+}
+
+.close {
+  width: fit-content;
+}
+
+.closeButton {
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
 }

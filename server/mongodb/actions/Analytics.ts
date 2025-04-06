@@ -24,62 +24,62 @@ const checkNewDate = async (userID: string): Promise<null> => {
   const today = new Date();
 
   if (
-    analytics?.lastSessionsMetrics[0].date.getDay() !== today.getDay() ||
-    analytics?.lastSessionsMetrics[0].date.getMonth() !== today.getMonth() ||
-    analytics?.lastSessionsMetrics[0].date.getFullYear() !== today.getFullYear()
+    analytics?.lastSessionMetrics.date.getDay() !== today.getDay() ||
+    analytics?.lastSessionMetrics.date.getMonth() !== today.getMonth() ||
+    analytics?.lastSessionMetrics.date.getFullYear() !== today.getFullYear()
   ) {
     await Analytics.findOneAndUpdate({ userID }, [
-      {
-        $set: {
-          lastSessionsMetrics: {
-            $cond: {
-              if: { $gt: [{ $size: "$lastSessionsMetrics" }, 1] },
-              then: { $slice: ["$lastSessionsMetrics", 1] },
-              else: "$lastSessionsMetrics",
-            },
-          },
-        },
-      },
-      {
-        $set: {
-          lastSessionsMetrics: {
-            $concatArrays: [
-              [
-                {
-                  date: today,
-                  math: {
-                    attempted: false,
-                    questionsAttempted: 0,
-                    questionsCorrect: 0,
-                    finalDifficultyScore: 0,
-                    timePerQuestion: 0,
-                  },
-                  trivia: {
-                    attempted: false,
-                    questionsAttempted: 0,
-                    questionsCorrect: 0,
-                    timePerQuestion: 0,
-                  },
-                  reading: {
-                    attempted: false,
-                    passagesRead: 0,
-                    timePerPassage: 0,
-                    wordsPerMinute: 0,
-                    skipped: true,
-                  },
-                  writing: {
-                    attempted: false,
-                    questionsAnswered: 0,
-                    timePerQuestion: 0,
-                    skipped: true,
-                  },
-                },
-              ],
-              "$lastSessionsMetrics",
-            ],
-          },
-        },
-      },
+      // {
+      //   $set: {
+      //     lastSessionsMetrics: {
+      //       $cond: {
+      //         if: { $gt: [{ $size: "$lastSessionsMetrics" }, 1] },
+      //         then: { $slice: ["$lastSessionsMetrics", 1] },
+      //         else: "$lastSessionsMetrics",
+      //       },
+      //     },
+      //   },
+      // },
+      // {
+      //   $set: {
+      //     lastSessionsMetrics: {
+      //       $concatArrays: [
+      //         [
+      //           {
+      //             date: today,
+      //             math: {
+      //               attempted: false,
+      //               questionsAttempted: 0,
+      //               questionsCorrect: 0,
+      //               finalDifficultyScore: 0,
+      //               timePerQuestion: 0,
+      //             },
+      //             trivia: {
+      //               attempted: false,
+      //               questionsAttempted: 0,
+      //               questionsCorrect: 0,
+      //               timePerQuestion: 0,
+      //             },
+      //             reading: {
+      //               attempted: false,
+      //               passagesRead: 0,
+      //               timePerPassage: 0,
+      //               wordsPerMinute: 0,
+      //               skipped: true,
+      //             },
+      //             writing: {
+      //               attempted: false,
+      //               questionsAnswered: 0,
+      //               timePerQuestion: 0,
+      //               skipped: true,
+      //             },
+      //           },
+      //         ],
+      //         "$lastSessionsMetrics",
+      //       ],
+      //     },
+      //   },
+      // },
     ]);
   }
   return null;
@@ -117,10 +117,10 @@ const checkSessionComplete = async (userID: string): Promise<null> => {
   const analytics = await Analytics.findOne<IAnalytics>({ userID });
 
   if (
-    analytics?.lastSessionsMetrics[0].math.attempted &&
-    analytics?.lastSessionsMetrics[0].trivia.attempted &&
-    analytics?.lastSessionsMetrics[0].reading.attempted &&
-    analytics?.lastSessionsMetrics[0].writing.attempted
+    analytics?.lastSessionMetrics.math.attempted &&
+    analytics?.lastSessionMetrics.trivia.attempted &&
+    analytics?.lastSessionMetrics.reading.attempted &&
+    analytics?.lastSessionMetrics.writing.attempted
   ) {
     await updateSessionComplete(userID);
   }

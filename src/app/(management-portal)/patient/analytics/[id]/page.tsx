@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
-import useHashObserver from "@src/hooks/useHashObserver";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   OverallDashboard,
   MathScreen,
@@ -18,7 +11,6 @@ import {
 import {
   AnalyticsSectionEnum,
   DateRangeEnum,
-  Days,
   HttpMethod,
   IAggregatedAnalyticsAll,
   IAggregatedAnalyticsMath,
@@ -27,13 +19,6 @@ import {
   IAggregatedAnalyticsTrivia,
   IAggregatedAnalyticsWriting,
 } from "@/common_utils/types";
-import {
-  dataBar,
-  dataLine,
-  dataStacked,
-  numberOfQuestionData,
-} from "@src/utils/patients";
-
 import Modal from "@src/components/Modal/Modal";
 import LoadingBox from "@src/components/LoadingBox/LoadingBox";
 import { internalRequest } from "@src/utils/requests";
@@ -55,14 +40,6 @@ export function Divider({ id }: { id?: string }) {
 }
 
 export default function Page({ params }: { params: { id: string } }) {
-  const mathRef = useRef<HTMLDivElement>(null);
-  const readingRef = useRef<HTMLDivElement>(null);
-  const writingRef = useRef<HTMLDivElement>(null);
-  const triviaRef = useRef<HTMLDivElement>(null);
-
-  const refs = useMemo(() => [mathRef, readingRef, writingRef, triviaRef], []);
-  useHashObserver(refs);
-
   const [math, setMath] = useState<
     IAggregatedAnalyticsMath["math"] | undefined
   >(undefined);
@@ -98,6 +75,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const retrieveAnalytics = useCallback(
     async <T,>(range: DateRangeEnum, sections: AnalyticsSectionEnum[]) => {
       setLoading(true);
+      console.log(params.id);
       try {
         const data = await internalRequest<T>({
           url: "/api/patient/analytics",
@@ -110,7 +88,7 @@ export default function Page({ params }: { params: { id: string } }) {
         });
         setLoading(false);
         return data;
-      } catch {
+      } catch (error) {
         setLoading(false);
         return {} as IAggregatedAnalyticsAll;
       }
@@ -124,11 +102,11 @@ export default function Page({ params }: { params: { id: string } }) {
         newDateRange,
         [AnalyticsSectionEnum.OVERALL],
       );
-      setMath(data.math);
-      setTrivia(data.trivia);
-      setReading(data.reading);
-      setWriting(data.writing);
-      setOverall(data.overall);
+      setMath(data?.math);
+      setTrivia(data?.trivia);
+      setReading(data?.reading);
+      setWriting(data?.writing);
+      setOverall(data?.overall);
       setDashboardMenu(newDateRange);
       setMathMenu(newDateRange);
       setReadingMenu(newDateRange);
@@ -206,15 +184,7 @@ export default function Page({ params }: { params: { id: string } }) {
           menuState={[dashboardMenu, updateAllAnalytics]}
           name={overall?.name ?? "Unknown"}
           active={overall?.active ?? false}
-          streak={
-            overall?.streak ?? [
-              Days.Sunday,
-              Days.Monday,
-              Days.Tuesday,
-              Days.Thursday,
-              Days.Friday,
-            ]
-          }
+          streak={overall?.streak ?? []}
           startDate={
             overall?.startDate ? new Date(overall.startDate) : new Date()
           }
@@ -231,17 +201,17 @@ export default function Page({ params }: { params: { id: string } }) {
               triviaQuestionsCompleted: 0,
             }
           }
-          sessionCompletionHistory={overall?.streakHistory ?? dataBar}
+          sessionCompletionHistory={overall?.streakHistory ?? []}
         />
       </div>
       <Divider id="math" />
-      <div ref={mathRef} id="math" className={styles.sectionContainer}>
+      <div id="math" className={styles.sectionContainer}>
         <MathScreen
           menuState={[mathMenu, updateMathAnalytics]}
-          accuracyData={math?.avgAccuracy ?? dataLine}
-          difficultyData={math?.avgDifficultyScore ?? dataLine}
-          numQuestionData={math?.avgQuestionsCompleted ?? numberOfQuestionData}
-          timeData={math?.avgTimePerQuestion ?? dataBar}
+          accuracyData={math?.avgAccuracy ?? []}
+          difficultyData={math?.avgDifficultyScore ?? []}
+          numQuestionData={math?.avgQuestionsCompleted ?? []}
+          timeData={math?.avgTimePerQuestion ?? []}
           currentAccuracy={(math?.lastSession.accuracy ?? 0).toString()}
           currentDifficulty={(
             math?.lastSession.difficultyScore ?? 0
@@ -253,39 +223,37 @@ export default function Page({ params }: { params: { id: string } }) {
         />
       </div>
       <Divider id="reading" />
-      <div ref={readingRef} id="reading" className={styles.sectionContainer}>
+      <div id="reading" className={styles.sectionContainer}>
         <ReadingScreen
           menuState={[readingMenu, updateReadingAnalytics]}
-          sessionHistory={reading?.sessionCompletion ?? dataStacked}
-          readingRate={reading?.avgTimePerPassage ?? dataLine}
-          avgPassage={reading?.avgPassagesRead ?? dataBar}
-          timeData={reading?.avgWordsPerMin ?? dataBar}
+          sessionHistory={reading?.sessionCompletion ?? []}
+          readingRate={reading?.avgTimePerPassage ?? []}
+          avgPassage={reading?.avgPassagesRead ?? []}
+          timeData={reading?.avgWordsPerMin ?? []}
           totalPassage={(reading?.lastSession.passagesRead ?? 0).toString()}
           currentTime={(reading?.lastSession.timePerPassage ?? 0).toString()}
           completionStatus={reading?.lastSession.completed ?? false}
         />
       </div>
       <Divider id="writing" />
-      <div ref={writingRef} id="writing" className={styles.sectionContainer}>
+      <div id="writing" className={styles.sectionContainer}>
         <WritingScreen
           menuState={[writingMenu, updateWritingAnalytics]}
-          sessionHistory={writing?.sessionCompletion ?? dataStacked}
-          numCompleted={writing?.avgPromptsAnswered ?? dataBar}
-          avgTime={writing?.avgTimePerQuestion ?? dataBar}
+          sessionHistory={writing?.sessionCompletion ?? []}
+          numCompleted={writing?.avgPromptsAnswered ?? []}
+          avgTime={writing?.avgTimePerQuestion ?? []}
           totalPrompts={(writing?.lastSession.promptsAnswered ?? 0).toString()}
           currentTime={(writing?.lastSession.timePerPrompt ?? 0).toString()}
           attemptStatus={writing?.lastSession.completed ?? false}
         />
       </div>
       <Divider id="trivia" />
-      <div ref={triviaRef} id="trivia" className={styles.sectionContainer}>
+      <div id="trivia" className={styles.sectionContainer}>
         <TriviaScreen
           menuState={[triviaMenu, updateTriviaAnalytics]}
-          accuracyData={trivia?.avgAccuracy ?? dataLine}
-          numQuestionData={
-            trivia?.avgQuestionsCompleted ?? numberOfQuestionData
-          }
-          timeData={trivia?.avgTimePerQuestion ?? dataBar}
+          accuracyData={trivia?.avgAccuracy ?? []}
+          numQuestionData={trivia?.avgQuestionsCompleted ?? []}
+          timeData={trivia?.avgTimePerQuestion ?? []}
           currentAccuracy={(trivia?.lastSession.accuracy ?? 0).toString()}
           totalQuestions={(
             trivia?.lastSession.questionsCompleted ?? 0

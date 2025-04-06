@@ -29,16 +29,17 @@ function DateSelector({
         setSelectedValue(e.target.value as DateRangeEnum);
       }}
       style={{
-        borderRadius: 0,
+        borderRadius: 12,
         color: "#8d8d8d",
         border: "none",
         width: "130px",
         textAlign: "center",
+        backgroundColor: "white",
       }}
       sx={{
         "&.MuiOutlinedInput-root": {
           "& fieldset": {
-            borderRadius: "0px",
+            borderRadius: "12px",
           },
         },
       }}
@@ -48,6 +49,7 @@ function DateSelector({
         fontSize: "12px",
         fontFamily: poppins500.style.fontFamily,
       }}
+      defaultBackgroundColor="#ffffff"
     />
   );
 }

@@ -9,8 +9,9 @@ import {
   IUser,
 } from "@/common_utils/types";
 import { formatDateByRangeEnum, getCurrentMonday } from "@server/utils/utils";
-import Analytics from "../models/Analytics";
+import mongoose from "mongoose";
 import User from "../models/User";
+import Analytics from "../models/Analytics";
 
 type TempAggData = Partial<{
   [K in AnalyticsSectionEnum]: {
@@ -46,11 +47,17 @@ type Result = Partial<{
   };
 }>;
 
+type AggregatedAnalyticsResponse = {
+  analytics: Partial<IAggregatedAnalyticsAll>[]; // The array list
+  activePatients: number; // The first additional attribute
+  totalPatients: number; // The second additional attribute
+};
+
 export const getAggregatedAnalytics = async (
   userIDs: string[],
   range: DateRangeEnum,
   sections: AnalyticsSectionEnum[],
-): Promise<Partial<IAggregatedAnalyticsAll>[]> => {
+): Promise<AggregatedAnalyticsResponse> => {
   let numOfWeeks = Number.MAX_SAFE_INTEGER;
 
   if (range === DateRangeEnum.RECENT) {
@@ -62,9 +69,9 @@ export const getAggregatedAnalytics = async (
   } else if (range === DateRangeEnum.YEAR) {
     numOfWeeks = 52; // 52
   }
-
+  const objectIdArray = userIDs.map((id) => new mongoose.Types.ObjectId(id));
   const userRecords = await User.find<IUser>(
-    { userID: { $in: userIDs } },
+    { _id: { $in: objectIdArray } },
     { weeklyMetrics: { $slice: [1, numOfWeeks] } },
   );
 
@@ -75,23 +82,58 @@ export const getAggregatedAnalytics = async (
     .limit(1000)
     .lean();
 
+  let activeUsers: { count: number }[] = [];
+
+  if (userIDs.length > 1) {
+    activeUsers = await User.aggregate([
+      {
+        $match: {
+          _id: { $in: objectIdArray },
+        },
+      },
+      {
+        $lookup: {
+          from: "analytics",
+          localField: "_id",
+          foreignField: "userID",
+          as: "analyticsRecords",
+        },
+      },
+      {
+        $unwind: {
+          path: "$analyticsRecords",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          "analyticsRecords.active": true,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+  }
+
   if (!analyticsRecords) {
     throw new Error("User Analytics record not found");
   }
 
+  console.log("p");
   const out: Partial<IAggregatedAnalyticsAll>[] = [];
 
   const lastMonday = new Date(getCurrentMonday().getDate() - 7);
-
   for (let i = 0; i < analyticsRecords.length; i += 1) {
     const analyticsRecord = analyticsRecords[i] as IAnalytics;
     const user = userRecords[i];
 
     const groupSumDict: Record<string, TempAggData> = {};
 
-    let counter = 0;
     const lenOfMetrics = analyticsRecord.weeklyMetrics.length;
-    const groupSize = Math.floor(lenOfMetrics / 12);
 
     // reversing the list
     const reversedWeeklyMetrics = analyticsRecord.weeklyMetrics.reverse();
@@ -99,16 +141,7 @@ export const getAggregatedAnalytics = async (
     const paddingDate =
       reversedWeeklyMetrics.length === 0
         ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
-
-    let lastDate =
-      reversedWeeklyMetrics.length === 0
-        ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
-    let lastDateMax =
-      reversedWeeklyMetrics.length === 0
-        ? lastMonday
-        : new Date(analyticsRecord.weeklyMetrics[0].date);
+        : new Date(reversedWeeklyMetrics[0].date);
 
     const dbDateVars = new Set<string>();
 
@@ -116,19 +149,17 @@ export const getAggregatedAnalytics = async (
       let dateVar = formatDateByRangeEnum(item.date, range);
 
       // adds to previous date in groups of 2
-      if (range === DateRangeEnum.HALF && counter % 2 === 1) {
-        dateVar = formatDateByRangeEnum(lastDate, range);
+      if (range === DateRangeEnum.HALF) {
+        dateVar = formatDateByRangeEnum(item.date, range, true);
       }
 
-      // group into groups of 12 and put everything into the last object once it goes over
       if (range === DateRangeEnum.MAX) {
-        if (counter % groupSize === 0 && counter < groupSize * 12) {
-          lastDateMax = item.date;
+        if (lenOfMetrics > 12) {
+          dateVar = formatDateByRangeEnum(item.date, range, true);
+        } else {
+          dateVar = formatDateByRangeEnum(item.date, range);
         }
-        dateVar = formatDateByRangeEnum(lastDateMax, range);
       }
-      counter += 1;
-      lastDate = item.date;
 
       if (!dbDateVars.has(dateVar)) {
         dbDateVars.add(dateVar);
@@ -143,9 +174,15 @@ export const getAggregatedAnalytics = async (
             const overallObj = groupSumDict[dateVar].overall ?? {
               totalNum: 0,
               streakLength: 0,
+              totalSessionsCompleted: 0,
             };
             overallObj.totalNum += 1;
             overallObj.streakLength += item.streakLength;
+            overallObj.totalSessionsCompleted +=
+              item.math.sessionsCompleted +
+              item.reading.sessionsCompleted +
+              item.trivia.sessionsCompleted +
+              item.writing.sessionsCompleted;
             groupSumDict[dateVar].overall = overallObj;
             break;
           }
@@ -218,12 +255,13 @@ export const getAggregatedAnalytics = async (
         }
       });
     });
-
+    console.log("o");
     const excludedProperties = new Set([
       "totalNum",
       "questionsCompleted",
       "questionsCorrect",
     ]);
+
     Object.values(groupSumDict).forEach((monthDict) => {
       Object.values(monthDict).forEach((monthTypeDict) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -250,65 +288,79 @@ export const getAggregatedAnalytics = async (
       });
     });
 
+    console.log("j");
     const allDateVars = Array.from(dbDateVars).reverse();
 
     // PADDING
-    if (range !== DateRangeEnum.MAX) {
-      let len = Object.keys(groupSumDict).length;
+    let len = Object.keys(groupSumDict).length;
 
-      let totalWeeks = numOfWeeks;
-      if (range === DateRangeEnum.HALF) {
-        totalWeeks = 13;
+    let totalWeeks = numOfWeeks;
+    if (range === DateRangeEnum.HALF) {
+      totalWeeks = 6;
+    } else if (range === DateRangeEnum.YEAR) {
+      totalWeeks = 12;
+    } else if (range === DateRangeEnum.MAX) {
+      if (lenOfMetrics === 1) {
+        totalWeeks = 6;
+      } else {
+        totalWeeks = 0;
+      }
+    }
+
+    if (
+      userIDs.length === 1 &&
+      (analyticsRecords[0].weeklyMetrics as []).length === 0
+    ) {
+      totalWeeks = 0;
+    }
+
+    while (len < totalWeeks) {
+      if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
+      } else if (range === DateRangeEnum.HALF) {
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
       } else if (range === DateRangeEnum.YEAR) {
-        totalWeeks = 12;
+        paddingDate.setMonth(paddingDate.getMonth() - 1);
+      } else if (range === DateRangeEnum.MAX) {
+        paddingDate.setDate(paddingDate.getDate() - 7);
       }
+      const tempDateString = formatDateByRangeEnum(paddingDate, range);
 
-      while (len < totalWeeks) {
-        if (range === DateRangeEnum.RECENT || range === DateRangeEnum.QUARTER) {
-          paddingDate.setDate(paddingDate.getDate() - 7);
-        } else if (range === DateRangeEnum.HALF) {
-          paddingDate.setDate(paddingDate.getDate() - 14);
-        } else if (range === DateRangeEnum.YEAR) {
-          paddingDate.setMonth(paddingDate.getMonth() - 1);
-        }
+      allDateVars.push(tempDateString);
+      groupSumDict[tempDateString] = Object.fromEntries(
+        Object.entries({
+          overall: {
+            streakLength: 0,
+            streakHistory: 0,
+          },
+          math: {
+            avgAccuracy: 0,
+            avgDifficultyScore: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+          reading: {
+            avgSessionsCompleted: 0,
+            avgSessionsAttempted: 0,
+            avgWordsPerMin: 0,
+            avgPassagesRead: 0,
+            avgTimePerPassage: 0,
+          },
+          writing: {
+            avgSessionsCompleted: 0,
+            avgSessionsAttempted: 0,
+            avgPromptsAnswered: 0,
+            avgTimePerQuestion: 0,
+          },
+          trivia: {
+            avgAccuracy: 0,
+            avgQuestionsCompleted: 0,
+            avgTimePerQuestion: 0,
+          },
+        }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
+      );
 
-        const tempDateString = formatDateByRangeEnum(paddingDate, range);
-
-        allDateVars.push(tempDateString);
-        groupSumDict[tempDateString] = Object.fromEntries(
-          Object.entries({
-            overall: {
-              streakLength: 0,
-            },
-            math: {
-              avgAccuracy: 0,
-              avgDifficultyScore: 0,
-              avgQuestionsCompleted: 0,
-              avgTimePerQuestion: 0,
-            },
-            reading: {
-              avgSessionsCompleted: 0,
-              avgSessionsAttempted: 0,
-              avgWordsPerMin: 0,
-              avgPassagesRead: 0,
-              avgTimePerPassage: 0,
-            },
-            writing: {
-              avgSessionsCompleted: 0,
-              avgSessionsAttempted: 0,
-              avgPromptsAnswered: 0,
-              avgTimePerQuestion: 0,
-            },
-            trivia: {
-              avgAccuracy: 0,
-              avgQuestionsCompleted: 0,
-              avgTimePerQuestion: 0,
-            },
-          }).filter(([k]) => sections.includes(k as AnalyticsSectionEnum)),
-        );
-
-        len += 1;
-      }
+      len += 1;
     }
 
     const result: Result = {};
@@ -359,13 +411,14 @@ export const getAggregatedAnalytics = async (
       }
     });
 
+    console.log("sd");
     const excludedProperties2 = new Set([
       "totalNum",
       "questionsCompleted",
       "questionsCorrect",
       "avgSessionsAttempted",
     ]);
-
+    console.log("s2");
     allDateVars.forEach((month) => {
       Object.entries(groupSumDict[month]).forEach(([type, monthTypeDict]) => {
         Object.keys(monthTypeDict).forEach((property) => {
@@ -383,7 +436,8 @@ export const getAggregatedAnalytics = async (
               if (!obj.sessionCompletion) {
                 obj.sessionCompletion = [dr];
               } else {
-                obj.sessionCompletion.push(dr);
+                obj.sessionCompletion.unshift(dr);
+                // obj.sessionCompletion.push(dr);
               }
             }
             return;
@@ -393,7 +447,20 @@ export const getAggregatedAnalytics = async (
             return;
           }
 
-          const dr: DataRecord = {
+          let dr: DataRecord;
+
+          if (property === "totalSessionsCompleted") {
+            dr = {
+              interval: month,
+              value: monthTypeDict.totalSessionsCompleted,
+            };
+            const obj = result.overall;
+            if (obj) {
+              obj.streakHistory.unshift(dr);
+            }
+          }
+
+          dr = {
             interval: month,
             value: monthTypeDict[property],
           };
@@ -404,12 +471,13 @@ export const getAggregatedAnalytics = async (
           if (!obj[property as keyof typeof obj]) {
             (obj[property as keyof typeof obj] as DataRecord[]) = [dr];
           } else {
-            (obj[property as keyof typeof obj] as DataRecord[]).push(dr);
+            (obj[property as keyof typeof obj] as DataRecord[]).unshift(dr);
           }
         });
       });
     });
 
+    console.log(analyticsRecord.lastSessionMetrics);
     // if overshoot, remove last element
     // const groupSumArray = Object.values(groupSumDict)
     // if ((groupSumArray.length === 4 && range === "quarter") ||
@@ -427,19 +495,17 @@ export const getAggregatedAnalytics = async (
             active: analyticsRecord.active,
             streak: analyticsRecord.streak,
             startDate: user?.startDate ? new Date(user.startDate) : new Date(),
-            lastSessionDate: analyticsRecord.lastSessionsMetrics[0].date,
+            lastSessionDate: analyticsRecord.lastSessionMetrics.date,
             totalSessionsCompleted: analyticsRecord.totalSessionsCompleted,
             lastSession: {
               mathQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               wordsRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics.reading.passagesRead,
               promptsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].writing
-                  .questionsAnswered, // writing
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered, // writing
               triviaQuestionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
-                  .questionsAttempted,
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted,
             },
             name: `${user.firstName} ${user.lastName}`,
           };
@@ -451,20 +517,16 @@ export const getAggregatedAnalytics = async (
             ...result.math,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].math
-                  .questionsAttempted === 0
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted === 0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].math
-                      .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].math
-                      .questionsAttempted,
+                  : analyticsRecord.lastSessionMetrics.math.questionsCorrect /
+                    analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               difficultyScore:
-                analyticsRecord.lastSessionsMetrics[0].math
-                  .finalDifficultyScore,
+                analyticsRecord.lastSessionMetrics.math.finalDifficultyScore,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].math.questionsAttempted,
+                analyticsRecord.lastSessionMetrics.math.questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].math.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.math.timePerQuestion,
             },
           };
           break;
@@ -475,12 +537,12 @@ export const getAggregatedAnalytics = async (
             ...result.reading,
             lastSession: {
               passagesRead:
-                analyticsRecord.lastSessionsMetrics[0].reading.passagesRead,
+                analyticsRecord.lastSessionMetrics.reading.passagesRead,
               timePerPassage:
-                analyticsRecord.lastSessionsMetrics[0].reading.timePerPassage,
+                analyticsRecord.lastSessionMetrics.reading.timePerPassage,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].reading
-                  .questionsAnswered !== 0,
+                analyticsRecord.lastSessionMetrics.reading.questionsAnswered !==
+                0,
             },
           };
           break;
@@ -491,13 +553,12 @@ export const getAggregatedAnalytics = async (
             ...result.writing,
             lastSession: {
               promptsAnswered:
-                analyticsRecord.lastSessionsMetrics[0].writing
-                  .questionsAnswered,
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered,
               timePerPrompt:
-                analyticsRecord.lastSessionsMetrics[0].writing.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.writing.timePerQuestion,
               completed:
-                analyticsRecord.lastSessionsMetrics[0].writing
-                  .questionsAnswered !== 0,
+                analyticsRecord.lastSessionMetrics.writing.questionsAnswered !==
+                0,
             },
           };
           break;
@@ -508,18 +569,16 @@ export const getAggregatedAnalytics = async (
             ...result.trivia,
             lastSession: {
               accuracy:
-                analyticsRecord.lastSessionsMetrics[0].trivia
-                  .questionsAttempted === 0
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted ===
+                0
                   ? 0
-                  : analyticsRecord.lastSessionsMetrics[0].trivia
-                      .questionsCorrect /
-                    analyticsRecord.lastSessionsMetrics[0].trivia
+                  : analyticsRecord.lastSessionMetrics.trivia.questionsCorrect /
+                    analyticsRecord.lastSessionMetrics.trivia
                       .questionsAttempted,
               questionsCompleted:
-                analyticsRecord.lastSessionsMetrics[0].trivia
-                  .questionsAttempted,
+                analyticsRecord.lastSessionMetrics.trivia.questionsAttempted,
               timePerQuestion:
-                analyticsRecord.lastSessionsMetrics[0].trivia.timePerQuestion,
+                analyticsRecord.lastSessionMetrics.trivia.timePerQuestion,
             },
           };
           break;
@@ -531,6 +590,13 @@ export const getAggregatedAnalytics = async (
 
     out.push(finalAggregation);
   }
+  const finalOut: AggregatedAnalyticsResponse = {
+    analytics: out,
+    totalPatients: userIDs.length,
+    activePatients: activeUsers[0]?.count || 0,
+  };
 
-  return out;
+  // console.log(finalOut)
+
+  return finalOut;
 };

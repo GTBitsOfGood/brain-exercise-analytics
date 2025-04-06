@@ -24,7 +24,7 @@
 }
 
 .input-field {
-  color: #000000;
+  color: #2b3674;
   width: 100%;
   font-size: 12px;
   font-family: var(--font-poppins);
@@ -37,6 +37,12 @@
   border: 1px #e0e5f2 solid;
   padding-left: 17px;
   padding-right: 43px;
+  background-color: var(--input-background-color);
+  pointer-events: var(--input-pointer-events);
+}
+
+.input-field:hover {
+  background-color: var(--input-hover-color);
 }
 
 .input-field:focus {
@@ -49,7 +55,7 @@
 }
 
 .input-field::placeholder {
-  color: #a3aed0;
+  color: #9ca5c2;
 }
 
 .input-field-error {

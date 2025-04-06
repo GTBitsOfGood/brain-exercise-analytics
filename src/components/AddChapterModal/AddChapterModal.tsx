@@ -62,10 +62,22 @@ const AddChapterModal = ({
     useState<IVolunteerTableEntry[]>();
   const [loading, setLoading] = useState(false);
 
-  const COUNTRIES = Country.getAllCountries().map((country) => ({
-    value: country.name,
-    displayValue: `${country.name}`,
-  }));
+  const [resetChangeTriggers, setResetChangeTriggers] = useState(false);
+
+  const COUNTRIES = Country.getAllCountries()
+    .sort((a, b) => {
+      if (a.name === "United States") {
+        return -1;
+      }
+      if (b.name === "United States") {
+        return 1;
+      }
+      return 0;
+    })
+    .map((country) => ({
+      value: country.name,
+      displayValue: `${country.name}`,
+    }));
   const countryCode = Country.getAllCountries().filter(
     (country) => country.name === locCountry,
   )[0]?.isoCode;
@@ -100,6 +112,7 @@ const AddChapterModal = ({
     setLocCity("");
     setChapterPresidentObject(null);
     resetErrors();
+    setResetChangeTriggers(!resetChangeTriggers);
   };
 
   useEffect(() => {
@@ -123,6 +136,8 @@ const AddChapterModal = ({
   type ChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
   const handleChange: ChangeHandler = (e) => {
     const { target } = e;
+    setChapterPresidentObject(null);
+
     if (!target.value.trim()) return setFilteredVolunteers([]);
 
     const filteredValue = volunteers?.filter((volunteer) =>
@@ -138,6 +153,7 @@ const AddChapterModal = ({
   ) => {
     e.preventDefault();
     resetErrors();
+    setResetChangeTriggers(!resetChangeTriggers);
     let error = false;
 
     if (chapterName === "") {
@@ -203,6 +219,9 @@ const AddChapterModal = ({
               onChange={(e) => setChapterName(e.target.value)}
               showError={chapterNameError !== ""}
               error={chapterNameError}
+              defaultBackgroundColor="#e3eafc"
+              hoverColor="#ffffff"
+              resetChangeTrigger={resetChangeTriggers}
             />
           </div>
 
@@ -223,6 +242,7 @@ const AddChapterModal = ({
               }}
               showError={countryError !== ""}
               error={countryError}
+              resetChangeTriggers={resetChangeTriggers}
             />
           </div>
           {locCountry === "" ? null : (
@@ -240,6 +260,7 @@ const AddChapterModal = ({
                 }}
                 showError={stateError !== ""}
                 error={stateError}
+                resetChangeTriggers={resetChangeTriggers}
               />
               <AuthDropdown
                 required={true}
@@ -252,6 +273,7 @@ const AddChapterModal = ({
                 }}
                 showError={cityError !== ""}
                 error={cityError}
+                resetChangeTriggers={resetChangeTriggers}
               />
             </div>
           )}
@@ -279,6 +301,7 @@ const AddChapterModal = ({
               }}
               showError={chapterPresidentError !== ""}
               error={chapterPresidentError}
+              resetChangeTriggers={resetChangeTriggers}
             />
           </div>
           <div className={styles.buttons}>
@@ -287,7 +310,7 @@ const AddChapterModal = ({
               onClick={reset}
               className={`${styles.submitButton} ${styles.disabled}`}
             >
-              Discard
+              Cancel
             </button>
             <button
               type="submit"

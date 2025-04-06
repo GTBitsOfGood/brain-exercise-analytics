@@ -32,6 +32,13 @@
   display: none;
 }
 
+.RowCellText {
+  width: fit-content;
+}
+.RowCellText:hover {
+  cursor: pointer;
+}
+
 .StatusContainer {
   display: flex;
   justify-content: center;
@@ -60,6 +67,10 @@
   font-weight: 600;
 }
 
+.DatabaseButton:hover {
+  opacity: 50%;
+}
+
 .ExpandedRowContainer {
   width: calc(100% + 20px);
   background-color: var(--Selected-Blue, #e7eeff);
@@ -69,6 +80,7 @@
   column-gap: 13px;
   flex-wrap: wrap;
   margin: 0 0 0 -10px;
+  overflow: hidden;
 }
 
 .ExpandedRowColumn {

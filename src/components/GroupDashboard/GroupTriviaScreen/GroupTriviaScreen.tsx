@@ -48,6 +48,10 @@ export default function GroupTriviaScreen({
   style,
   menuState,
 }: InputProp) {
+  const modifiedAccuracy = `${Math.round(+avgAccuracy * 100)}%`;
+  const modifiedTime = `${Math.round(+avgTime)} seconds`;
+  const modifiedQuestionsCompleted = `${Math.round(+totalQuestions)}`;
+
   return (
     <div className={styles.container} style={style}>
       <div className={styles.header}>
@@ -64,12 +68,11 @@ export default function GroupTriviaScreen({
         <div className={styles.graphs}>
           <LineChart
             width={325}
-            height={175}
+            height={185}
             title="Average Trivia Accuracy"
             hoverable={true}
             percentageChange={true}
-            gradient={true}
-            info="Vidushi"
+            info="Number of self-reported correct answers"
             data={accuracyData}
             fullWidth
             gridLines
@@ -78,6 +81,7 @@ export default function GroupTriviaScreen({
             width={325}
             height={175}
             title="Average Time Spent per Question"
+            info="In seconds"
             data={timeData}
             hoverable
             percentageChange
@@ -100,21 +104,21 @@ export default function GroupTriviaScreen({
           <SmallDataBox
             className={styles.box}
             title="Average Accuracy"
-            text={avgAccuracy}
+            text={modifiedAccuracy}
             Icon={AccuracyIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Number of Question Completed"
-            text={totalQuestions}
+            text={modifiedQuestionsCompleted}
             Icon={QuestionIcon}
             // style={{ width: "80%", margin: "auto" }}
           />
           <SmallDataBox
             className={styles.box}
             title="Average Time per Question"
-            text={avgTime}
+            text={modifiedTime}
             Icon={TimeIcon}
           />
         </div>
