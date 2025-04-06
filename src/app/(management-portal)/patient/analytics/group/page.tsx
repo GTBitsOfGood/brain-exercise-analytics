@@ -55,7 +55,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
   } = useSelector(
     (patientSearchState: RootState) => patientSearchState.patientSearch,
@@ -67,7 +67,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       emails,
       additionalAffiliations,
       secondaryNames,
-      secondaryPhones: secondaryPhoneNumbers,
+      secondaryPhones,
       beiChapters,
       active,
       countries,
@@ -86,7 +86,7 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
       emails,
       fullName,
       secondaryNames,
-      secondaryPhoneNumbers,
+      secondaryPhones,
       states,
     ],
   );
@@ -223,6 +223,10 @@ export default function Page({ params }: { params: { groupIds: string[] } }) {
   useEffect(() => {
     updateAllAnalytics(DateRangeEnum.RECENT);
   }, [params.groupIds, updateAllAnalytics]);
+
+  useEffect(() => {
+    console.log("Filters object:", filters);
+  }, [filters]);
 
   return (
     <div className={styles.container}>

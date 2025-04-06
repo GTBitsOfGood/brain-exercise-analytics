@@ -14,7 +14,7 @@ const initialState: IPatientSearchReducer = {
   additionalAffiliations: new Array<string>(),
   dateOfJoins: new Array<string>(),
   beiChapters: new Array<string>(),
-  secondaryPhoneNumbers: new Array<string>(),
+  secondaryPhones: new Array<string>(),
   secondaryNames: new Array<string>(),
 };
 
@@ -34,8 +34,7 @@ const setState = (
     newState.additionalAffiliations ?? state.additionalAffiliations;
   state.dateOfJoins = newState.dateOfJoins ?? state.dateOfJoins;
   state.beiChapters = newState.beiChapters ?? state.beiChapters;
-  state.secondaryPhoneNumbers =
-    newState.secondaryPhoneNumbers ?? state.secondaryPhoneNumbers;
+  state.secondaryPhones = newState.secondaryPhones ?? state.secondaryPhones;
   state.secondaryNames = newState.secondaryNames ?? state.secondaryNames;
 
   return state;
