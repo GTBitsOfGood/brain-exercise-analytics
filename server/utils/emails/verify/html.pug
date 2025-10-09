@@ -27,11 +27,13 @@ head
       font-size: 64px;
       font-weight: 600;
       margin-bottom: 40px;
+      color: black;
     }
     .verification-text {
       font-size: 36px;
       font-weight: 700;
       margin-bottom: 30px;
+      color: black;
     }
     .verification-button {
       background: #005AA3;
@@ -65,7 +67,7 @@ body
       img(src='https://c.animaapp.com/2gdwBOyI/img/bei-1-1@2x.png')
     .title Email Verification
     .verification-text Please verify your email address by clicking the button below.
-    a.verification-button(href=backlinkUrl) Click here to continue sign up
+    a.verification-button(href=backlinkUrl, style="color: white;") Click here to continue sign up
     .email-text
       | Your email address: 
       span.user-email #{userEmail}
