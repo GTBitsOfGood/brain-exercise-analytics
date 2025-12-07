@@ -43,7 +43,7 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
     additionalAffiliations,
     dateOfJoins,
     beiChapters,
-    secondaryPhoneNumbers,
+    secondaryPhones,
     secondaryNames,
   } = ss;
 
@@ -80,7 +80,7 @@ function GroupSelector({ shownValue }: { shownValue: string }) {
     ...additionalAffiliations.map((v) => `Additional Affiliation: ${v}`),
     ...dateOfJoins.map((v) => `Date Joined: ${v}`),
     ...beiChapters.map((v) => `BEI Chapter: ${v}`),
-    ...secondaryPhoneNumbers.map((v) => `Secondary Phone: ${v}`),
+    ...secondaryPhones.map((v) => `Secondary Phone: ${v}`),
     ...secondaryNames.map((v) => `Secondary Name: ${v}`),
   ];
 
