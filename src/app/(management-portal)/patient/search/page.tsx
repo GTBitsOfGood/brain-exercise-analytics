@@ -35,9 +35,6 @@ export default function Page() {
     emails,
     additionalAffiliations,
     dateOfJoins,
-    // beiChapters,
-    secondaryPhoneNumbers,
-    beiChapters,
     secondaryPhones,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
