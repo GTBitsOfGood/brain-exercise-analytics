@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Search from "@src/components/Search/Search";
 
@@ -35,10 +35,12 @@ export default function Page() {
     emails,
     additionalAffiliations,
     dateOfJoins,
-    beiChapters,
     secondaryPhones,
     secondaryNames,
   } = useSelector((state: RootState) => state.patientSearch);
+
+  const rawChapter = useSelector((state: RootState) => state.auth.chapter);
+  const beiChapters = useMemo(() => [rawChapter], [rawChapter]);
 
   const [sortField, setSortField] = useState<SortField | undefined>(undefined);
   const [filteredUsers, setFilteredUsers] = useState<IPatientTableEntry[]>([]);
